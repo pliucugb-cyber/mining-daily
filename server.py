@@ -52,6 +52,153 @@ AI_QUOTA_PER_DAY = 30
 _ai_state = {'date': '', 'count': 0}
 
 # ============================================================
+# 旧链迁移模式（2026-09-04 加）：LEGACY_REDIRECT=1 时，
+#   - 根路径（/, /index.html）返回紫色"已迁移"提示页（4 秒自动跳 GitHub Pages）
+#   - 其余路径照常服务（这样图标/api 还能 200，不会让浏览器控制台一片红）
+# 用途：让同事点开旧的 *.app.workbuddy.link 链接时自动跳永久地址，
+#   而不需要用户单独通知。本机 / GitHub Pages 部署保留原样。
+# ============================================================
+LEGACY_REDIRECT = os.environ.get('LEGACY_REDIRECT', '').strip() in ('1', 'true', 'yes', 'on')
+LEGACY_NEW_URL = os.environ.get('LEGACY_NEW_URL', 'https://pliucugb-cyber.github.io/mining-daily/').strip() or 'https://pliucugb-cyber.github.io/mining-daily/'
+
+_LEGACY_HTML = r"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6c5ce7">
+<meta name="robots" content="noindex,nofollow">
+<title>矿业新闻日报 · 已迁移至新地址</title>
+<style>
+  :root{
+    --p1:#6c5ce7; --p2:#8b5cf6; --p3:#a78bfa;
+    --ink:#1f1f2e; --muted:#5f5f7a; --bg:#f7f6fc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--ink);
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:24px;
+  }
+  .card{
+    width:100%; max-width:520px; background:#fff; border-radius:18px;
+    box-shadow:0 12px 40px rgba(108,92,231,.18);
+    overflow:hidden;
+  }
+  .hero{
+    background:linear-gradient(135deg,var(--p1) 0%,var(--p2) 100%);
+    color:#fff; padding:24px 26px 22px;
+  }
+  .badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:13px; color:#ffd591;
+    background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.32);
+    padding:5px 12px; border-radius:999px; margin-bottom:12px;
+    backdrop-filter:blur(2px);
+  }
+  .hero h1{font-size:24px; line-height:1.4; font-weight:700; letter-spacing:.5px}
+  .body{padding:22px 26px 24px}
+  .body p{font-size:15px; color:var(--muted); line-height:1.85; margin:8px 0}
+  .body p b{color:var(--ink)}
+  .cta{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    text-decoration:none; margin:20px 0 8px;
+    background:linear-gradient(135deg,var(--p1) 0%,var(--p2) 100%);
+    color:#fff; font-size:17px; font-weight:600;
+    padding:15px 18px; border-radius:12px;
+    box-shadow:0 6px 18px rgba(108,92,231,.32);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .cta:active{transform:translateY(1px); box-shadow:0 3px 10px rgba(108,92,231,.24)}
+  .cta svg{width:18px;height:18px;flex-shrink:0}
+  .url-line{
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    font-size:13px; color:var(--muted); margin-top:6px;
+    word-break:break-all; cursor:pointer;
+  }
+  .url-line code{
+    background:#f3f1ff; color:var(--p1); padding:3px 8px; border-radius:6px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  .url-line:hover code{background:#ece8ff}
+  .auto{text-align:center; font-size:13px; color:var(--muted); margin-top:18px}
+  .auto b{color:var(--p1); font-size:16px; font-weight:600}
+  .auto a{color:var(--p1); text-decoration:none; margin-left:6px}
+  .auto a:hover{text-decoration:underline}
+  .foot{
+    margin-top:18px; padding-top:16px; border-top:1px dashed #eee;
+    font-size:12px; color:#9b9bb0; text-align:center; line-height:1.7;
+  }
+</style>
+</head>
+<body>
+<div class="card" role="alert" aria-live="polite">
+  <div class="hero">
+    <div class="badge">⚠️ 旧地址内容已停用</div>
+    <h1>矿业新闻日报 · 已迁移至新地址</h1>
+  </div>
+  <div class="body">
+    <p>您访问的是 <b>旧地址</b>。该地址上的<b>旧版新闻内容已停止维护、不再更新，也不再展示</b>。</p>
+    <p>最新、完整的矿业新闻日报，请前往 <b>新地址</b> 查看：</p>
+    <a class="cta" id="goBtn" href="__NEW_URL__" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+      前往新版（GitHub Pages）
+    </a>
+    <div class="url-line" onclick="copyUrl()" title="点击复制">
+      新地址：<code id="urlText">__NEW_HOST__</code>
+    </div>
+    <div class="auto">
+      将在 <b id="sec">4</b> 秒后自动跳转…&nbsp;<a href="javascript:void(0)" id="cancelBtn">立即前往</a>
+    </div>
+    <div class="foot">
+      如曾将此页"添加到主屏幕"（PWA），我们一并清理了旧缓存，确保打开即为最新内容。<br>
+      旧链接仅作过渡提醒，长期使用请收藏 <b>新地址</b>。
+    </div>
+  </div>
+</div>
+<script>
+  var NEW_URL = "__NEW_URL__";
+  var sec = 4, timer = null, locked = false;
+  function tick(){
+    sec--;
+    var el = document.getElementById('sec');
+    if(el) el.textContent = sec;
+    if(sec <= 0) doRedirect();
+  }
+  function doRedirect(){
+    if(locked) return; locked = true;
+    if(timer){clearInterval(timer); timer=null;}
+    window.location.replace(NEW_URL);
+  }
+  function copyUrl(){
+    var full = NEW_URL;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(full).then(function(){
+        flashTip('已复制：' + full);
+      }).catch(function(){ flashTip('新地址：' + full); });
+    } else { flashTip('新地址：' + full); }
+  }
+  function flashTip(msg){
+    var c = document.querySelector('.url-line code');
+    if(!c) return;
+    var old = c.textContent; c.textContent = '✓ 已复制';
+    setTimeout(function(){ c.textContent = old; }, 1400);
+  }
+  function cancelAuto(){
+    if(timer){clearInterval(timer); timer=null;}
+    var a = document.getElementById('cancelBtn');
+    if(a){ a.textContent = '已取消，请点击上方按钮'; a.style.color = '#5f5f7a'; }
+  }
+  timer = setInterval(tick, 1000);
+  var btn = document.getElementById('cancelBtn');
+  if(btn) btn.addEventListener('click', function(e){ e.preventDefault(); cancelAuto(); });
+</script>
+</body>
+</html>"""
+
+# ============================================================
 # 新闻数据加载（9/3 备份的 25 条 9 月新闻）
 # ============================================================
 _NEWS_CACHE = None
@@ -348,6 +495,22 @@ class Handler(BaseHTTPRequestHandler):
         u = urlparse(self.path)
         path = u.path
         q = parse_qs(u.query)
+        # ---- 旧链迁移模式（2026-09-04）：根路径返回紫色跳转页，4 秒自动跳新链接 ----
+        if LEGACY_REDIRECT and path in ('/', '', '/index.html'):
+            from urllib.parse import urlparse as _up
+            new_host = _up(LEGACY_NEW_URL).netloc + _up(LEGACY_NEW_URL).path.rstrip('/')
+            html = (_LEGACY_HTML
+                    .replace('__NEW_URL__', LEGACY_NEW_URL)
+                    .replace('__NEW_HOST__', new_host))
+            body = html.encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('Content-Length', str(len(body)))
+            self.send_header('Cache-Control', 'no-store')
+            self.send_header('X-Legacy-Redirect', '1')
+            self.end_headers()
+            self.wfile.write(body)
+            return
         # ---- API 路由 ----
         if path == '/api/health':
             _ai_check_quota()  # 触发日期滚动
