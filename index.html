@@ -1920,6 +1920,21 @@ function renderLmePrices(){
     // 顺序：铜 铝 锌 铅 镍 锡
     var order=['lcpt','lalt','lznt','lldt','lnkt','ltnt'];
     var titles={lcpt:'LME 铜',lalt:'LME 铝',lznt:'LME 锌',lldt:'LME 铅',lnkt:'LME 镍',ltnt:'LME 锡'};
+    // 2026-09-04 修复：卡片直接复用走势图（PRICE_HISTORY）的日K收盘价，
+    // 消除「卡片实时价」与「走势图日K收盘」不一致（同一金属两张价）的观感问题。
+    // 仅当 PRICE_HISTORY 内该品种有≥2 个收盘点时覆盖，否则保留 LME_DATA 原值兜底。
+    (function(){
+      var H=window.PRICE_HISTORY;
+      if(!H||!H.series)return;
+      D.metals.forEach(function(m){
+        var s=H.series[m.slug];
+        if(!s||!s.points||s.points.length<2)return;
+        var n=s.points.length, last=s.points[n-1][1], prev=s.points[n-2][1];
+        if(typeof last!=='number'||typeof prev!=='number'||!prev)return;
+        var chg=last-prev, pct=chg/prev*100;
+        m.price=last; m.chg=chg; m.chg_pct=pct;
+      });
+    })();
     var cards=box.querySelectorAll('.price-card');
     cards.forEach(function(card,idx){
       var key=order[idx];var m=map[key];
@@ -1937,7 +1952,7 @@ function renderLmePrices(){
     var note=document.getElementById('priceStripNote');
     if(note&&D.updated){
       var dt=D.updated.substring(0,10);
-      note.textContent=dt+' 晨间更新 · 沪期主力/SMM·上金所 · LME(USD/吨) · 涨红跌绿 · 点击卡片看近8个交易日走势';
+      note.textContent=dt+' 日K收盘 · 沪期主力/SMM·上金所 · LME(USD/吨，取日K收盘) · 涨红跌绿 · 点击卡片看近8个交易日走势';
     }
   }catch(e){console.warn('renderLmePrices:',e);}
 }
