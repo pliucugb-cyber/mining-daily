@@ -232,6 +232,7 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-fab:hover{transform:translateY(-3px) scale(1.03);padding:0 22px;box-shadow:0 12px 30px rgba(79,70,229,.55)}
 /* 首次进入呼吸提示：柔和脉冲吸引注意，首次打开面板后停止（见 qaFloatToggle / 初始化） */
 .qa-fab.breathe{animation:qaBreath 1.9s ease-in-out infinite}
+.qa-fab.dragging{transition:none;cursor:grabbing!important}
 @keyframes qaBreath{
   0%,100%{box-shadow:0 6px 20px rgba(79,70,229,.42)}
   50%{box-shadow:0 8px 32px 5px rgba(124,58,237,.82)}
@@ -813,7 +814,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
   </div>
 </div>
 <!-- ==================== 左下角问答悬浮球 + 面板（9-04 新增）==================== -->
-<button class="qa-fab" id="qaFab" title="新闻检索 / AI 问答（检索全库新闻，服务在线时可 AI 作答）" onclick="qaFloatToggle()"><span class="qa-fab-ico">🔍</span><span class="qa-fab-txt">搜新闻 / 问 AI</span></button>
+<button class="qa-fab" id="qaFab" title="新闻检索 / AI 问答（可拖动调整位置）" onclick="qaFabClick(event)"><span class="qa-fab-ico">🔍</span><span class="qa-fab-txt">搜新闻 / 问 AI</span></button>
 <div class="qa-float" id="qaFloat">
   <div class="qa-float-head">
     <span class="qa-float-title">💬 新闻问答</span>
@@ -2025,6 +2026,13 @@ function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){retu
   }catch(e){}
   // 恢复用户上次拖拽位置与尺寸，并给头部挂上拖拽监听
   try{qaFloatRestoreSize();qaFloatRestorePos();}catch(e){}
+  // 恢复悬浮球按钮位置并挂载拖动
+  try{qaFabRestorePos();}catch(e){}
+  var _fab=document.getElementById('qaFab');
+  if(_fab){
+    _fab.addEventListener('mousedown',qaFabStartDrag);
+    _fab.addEventListener('touchstart',qaFabStartDrag,{passive:false});
+  }
   var _panel=document.getElementById('qaFloat');
   if(_panel){
     // 拖拽把手扩展到整个面板（除交互元素/缩放柄），详见 qaFloatStartDrag
@@ -2260,6 +2268,65 @@ function qaFloatToggle(){
 function qaFloatClose(){
   var p=document.getElementById('qaFloat');if(p)p.classList.remove('open');
   var b=document.getElementById('qaFab');if(b)b.classList.remove('on');
+}
+// 点击/拖动区分：短距离移动视为点击，否则视为拖动并阻止打开面板
+var QA_FAB_MOVED=false;
+var QA_FAB_DRAG=null;
+function qaFabClick(ev){
+  if(QA_FAB_MOVED){if(ev&&ev.preventDefault)ev.preventDefault();if(ev&&ev.stopPropagation)ev.stopPropagation();return false;}
+  qaFloatToggle();
+}
+function qaFabStartDrag(ev){
+  var b=document.getElementById('qaFab');if(!b)return;
+  if(ev.type==='touchstart'&&ev.touches.length!==1)return;
+  var point=ev.touches?ev.touches[0]:ev;
+  var r=b.getBoundingClientRect();
+  QA_FAB_DRAG={el:b,startX:point.clientX,startY:point.clientY,origLeft:r.left,origBottom:window.innerHeight-r.bottom};
+  QA_FAB_MOVED=false;
+  b.classList.add('dragging');
+  document.addEventListener('mousemove',qaFabDrag);document.addEventListener('mouseup',qaFabStopDrag);
+  document.addEventListener('touchmove',qaFabDrag,{passive:false});document.addEventListener('touchend',qaFabStopDrag);
+  ev.preventDefault();
+}
+function qaFabDrag(ev){
+  if(!QA_FAB_DRAG)return;
+  if(ev.cancelable)ev.preventDefault();
+  var point=ev.touches?ev.touches[0]:ev;
+  var dx=point.clientX-QA_FAB_DRAG.startX, dy=point.clientY-QA_FAB_DRAG.startY;
+  if(Math.abs(dx)<4&&Math.abs(dy)<4)return;
+  QA_FAB_MOVED=true;
+  var b=QA_FAB_DRAG.el, vw=window.innerWidth, vh=window.innerHeight, bw=b.offsetWidth||160, bh=b.offsetHeight||50;
+  var left=Math.min(Math.max(QA_FAB_DRAG.origLeft+dx,0),Math.max(vw-bw,0));
+  var bottom=Math.min(Math.max(QA_FAB_DRAG.origBottom-dy,0),Math.max(vh-bh,0));
+  b.style.left=left+'px'; b.style.bottom=bottom+'px'; b.style.top='auto';
+}
+function qaFabStopDrag(ev){
+  if(!QA_FAB_DRAG)return;
+  var b=QA_FAB_DRAG.el;
+  document.removeEventListener('mousemove',qaFabDrag);document.removeEventListener('mouseup',qaFabStopDrag);
+  document.removeEventListener('touchmove',qaFabDrag,{passive:false});document.removeEventListener('touchend',qaFabStopDrag);
+  if(b)b.classList.remove('dragging');
+  qaFabSavePos();
+  QA_FAB_DRAG=null;
+  // 300ms 后复位移动标记，避免后续 click 被误拦截
+  setTimeout(function(){QA_FAB_MOVED=false;},300);
+}
+function qaFabSavePos(){
+  try{
+    var b=document.getElementById('qaFab');if(!b)return;
+    var r=b.getBoundingClientRect();
+    localStorage.setItem('qaFabPos',JSON.stringify({left:r.left,bottom:window.innerHeight-r.bottom}));
+  }catch(e){}
+}
+function qaFabRestorePos(){
+  try{
+    var raw=localStorage.getItem('qaFabPos');if(!raw)return;
+    var pos=JSON.parse(raw), b=document.getElementById('qaFab');if(!b)return;
+    var vw=window.innerWidth, vh=window.innerHeight, bw=b.offsetWidth||160, bh=b.offsetHeight||50;
+    var left=Math.min(Math.max(pos.left||16,0),Math.max(vw-bw,0));
+    var bottom=Math.min(Math.max(pos.bottom||16,0),Math.max(vh-bh,0));
+    b.style.position='fixed';b.style.left=left+'px';b.style.bottom=bottom+'px';b.style.top='auto';
+  }catch(e){}
 }
 function qaStopBreathe(){
   try{var b=document.getElementById('qaFab');if(b)b.classList.remove('breathe');}catch(e){}
