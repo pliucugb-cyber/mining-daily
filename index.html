@@ -331,6 +331,120 @@ body.dark .tag-chip{background:#243140;color:#94a3b8;border-color:#2c3845}
 body.dark .install-tip{background:#1d3a52}
 body.dark input[type=text],body.dark input[type=search],body.dark .qa-input{background:#243140;border-color:#2c3845;color:#e8eef3}
 body.dark ::selection{background:#2c5f8a;color:#fff}
+/* ==================== 暗色补全（二轮：覆盖剩余 100+ 个类）====================
+   审计方式：提取 <style> 中所有定义了 background/color/border 的亮色规则，与 body.dark
+   规则做差集后逐一补写。装饰色（涨跌红绿、TOP1-3 徽章）与纯状态类不改。 */
+/* ---- 目录 / 头部 / 通用控件 ---- */
+body.dark .toc-all{color:#cfe0ee!important}
+body.dark .date-badge{background:#c0392b;color:#fff}
+body.dark .stat-num.new{color:#ff8a8a}
+body.dark .stat-num.unread{color:#6ab4e0}
+body.dark .btn-restore{background:#4a5765;color:#fff}
+body.dark .btn-restore:hover{background:#5a6875}
+body.dark .btn-filter{background:#263140;color:#cfe0ee}
+body.dark .btn-filter:hover{background:#2f3d4d}
+body.dark .btn-filter.active{background:#3d5a7a;color:#fff}
+body.dark .news-count{color:#93a5b5}
+body.dark .news-item.read .news-title{color:#8b98a5}
+body.dark .news-item.read .dot{background:#4a5765}
+body.dark .badge-new{background:#c0392b;color:#fff}
+body.dark .news-meta .src{color:#45b7a4}
+body.dark .btn-star{color:#5a6875}
+body.dark .btn-star:hover{color:#f5b041}
+body.dark .btn-unread{background:rgba(255,255,255,.06);color:#45b7a4;border-color:#2f8f7d}
+body.dark .btn-unread:hover{background:#2f8f7d;color:#fff;box-shadow:0 2px 4px rgba(47,143,125,.35)}
+body.dark .fold-toggle{background:#1a222c;border-color:#3a4756;color:#8b9bad}
+body.dark .fold-toggle:hover{background:#22303f;color:#cfe0ee;border-color:#3d7ab0}
+body.dark .notice{background:#2b2617;border-color:#5c5228;color:#e0cf90}
+body.dark .notice b{color:#e8cf7a}
+body.dark .sub-cat .icon{color:#6aa9e0}
+/* ---- 金属价格条 ---- */
+body.dark .price-strip-title{color:#9ecbe8}
+body.dark .price-strip-note{color:#8b9bad}
+body.dark .price-cards{scrollbar-color:#3a4756 transparent}
+body.dark .price-cards::-webkit-scrollbar-thumb{background:#3a4756}
+body.dark .pc-chg{color:#93a5b5}
+body.dark .pc-src{color:#7d8b99}
+body.dark .footer{color:#8b9bad}
+/* ---- 找矿专项 ---- */
+body.dark .section-title.special{background:linear-gradient(90deg,#2a2415,#161d26)}
+body.dark .news-item.is-special{background:linear-gradient(90deg,#241f12 0%,#161d26 30%)}
+body.dark .sp-list .news-item.sp-from-archive{background:linear-gradient(90deg,#1b2431 0%,#161d26 60%);border-left-color:#64748b}
+body.dark .sp-list .news-item.sp-from-archive::before{background:#33404f;color:#c3d0dc}
+body.dark .btn-special{background:#3a3120;color:#f0d18a;border-color:#6b5a2e}
+body.dark .btn-special:hover{background:#4a3f28}
+/* ---- 热榜 ---- */
+body.dark .section-title.hotlist{background:linear-gradient(90deg,#2b1a14,#161d26)}
+body.dark .section-title.hotlist .hl-sub{color:#8b9bad}
+body.dark .hot-meta{color:#8b9bad}
+body.dark .hotlist-loading,body.dark .hotlist-empty{color:#8b9bad}
+/* ---- 今日要闻 ---- */
+body.dark .digest-badge{background:#c0392b;color:#fff}
+body.dark .digest-date{color:#8b9bad}
+body.dark .digest-empty{color:#8b9bad}
+/* ---- 价格走势弹层 ---- */
+body.dark .pchart-mask{background:rgba(0,0,0,.68)}
+body.dark .pchart-sub{color:#93a5b5}
+body.dark .pchart-legend{color:#93a5b5}
+body.dark .pchart-up{color:#ff8a8a}
+body.dark .pchart-down{color:#5fd39a}
+/* ---- 问答浮球 / AI 解析 ---- */
+body.dark .qa-msg-meta{color:#8b9bad}
+body.dark .qa-msg-item .qd,body.dark .qa-msg-item .qs{color:#8b9bad}
+body.dark .section-title.ai .ai-sub{color:#8b9bad}
+body.dark .ai-row .ai-label{background:#232a4d;color:#a5b4fc}
+body.dark .ai-row.risk .ai-label{background:#3d1f24;color:#fca5a5}
+body.dark .ai-quota{color:#8b9bad}
+/* ---- 安装引导（PWA） ---- */
+body.dark .section-title.guide{background:linear-gradient(90deg,#0e2a33,#161d26)}
+body.dark .guide-intro{background:#0f2530;color:#7dd3fc}
+body.dark .guide-col{background:#161d26;border-color:#2c3845;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+body.dark .guide-col-body{color:#c3d0dc}
+body.dark .guide-step{background:#1a222c;border-left-color:#64748b}
+body.dark .guide-step strong{color:#e8eef3}
+body.dark .guide-step.gs-mobile{border-left-color:#22d3ee}
+body.dark .guide-step.gs-mobile strong{color:#7dd3fc}
+body.dark .guide-step.gs-pc{border-left-color:#60a5fa}
+body.dark .guide-step.gs-pc strong{color:#93c5fd}
+body.dark .guide-step.gs-warn{background:#3a1d20;border-left-color:#ef4444}
+body.dark .guide-step.gs-warn strong{color:#fca5a5}
+body.dark .guide-step small{color:#8b9bad}
+body.dark .guide-tip{background:#2e2716;border-color:#6b5a2e;color:#f0d18a}
+/* ---- 顶部问答条（qa-strip 全系列） ---- */
+body.dark .qa-strip{background:#161d26;border-color:#2c3845;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+body.dark .qa-title{color:#9ecbe8}
+body.dark .qa-btn{background:#2c5f8a;color:#fff}
+body.dark .qa-btn:hover{background:#3d7ab0}
+body.dark .qa-meta{color:#8b9bad}
+body.dark .qa-sel{background:#1e2733;color:#cfe0ee;border-color:#3a4756}
+body.dark .qa-sel:focus{border-color:#4a9ee0}
+body.dark .qa-chip{background:#1e2733;border-color:#33404f;color:#b8c7d6}
+body.dark .qa-chip:hover{background:#26313f;border-color:#4a5765}
+body.dark .qa-result{border-top-color:#2c3845}
+body.dark .qa-sum{color:#9aabbd}
+body.dark .qa-warn{background:#2e2a16;border-color:#5c5228;color:#e8cf8a}
+body.dark .qa-trend{background:#141b23;border-color:#263140;color:#93a5b5}
+body.dark .qa-item{border-bottom-color:#222c38}
+body.dark .qa-d{color:#8b9bad}
+body.dark .qa-t{color:#a8d4f0}
+body.dark .qa-t:hover{color:#ff8a8a}
+body.dark .qa-s{color:#8b9bad}
+body.dark .qa-m{color:#93a5b5}
+body.dark .qa-empty{color:#8b9bad}
+body.dark .qa-empty b{color:#b8c7d6}
+body.dark .qa-aibox{background:linear-gradient(135deg,#152430,#1a2b38);border-color:#2c4a63;border-left-color:#2c8fd0}
+body.dark .qa-aititle{color:#8fc7ee}
+body.dark .qa-aimeta{color:#8b9bad}
+body.dark .qa-aibody{color:#c3d0dc}
+body.dark .qa-aibody.loading{color:#93a5b5}
+body.dark .qa-aierr{background:#2e1c1e;border-color:#5c3235;color:#f0a8a8}
+body.dark .qa-airefs{border-top-color:#2c4a63;color:#9ab4c9}
+body.dark .qa-airefs a{color:#6ab4e0}
+/* 注：以下为刻意保留亮色的元素，无需暗色对应——均为「彩色底 + 白字」的实心块，
+   在深色背景下本就醒目且不刺眼：.btn-allread(绿) .btn-fav(橙) .btn-history(紫) .qa-fab(紫渐变)
+   .qa-float-head(紫渐变) .qa-btn.qa-ai(蓝渐变) .guide-col-head(青/蓝渐变) .guide-link(深蓝渐变)
+   .badge-strategy(金棕渐变) .hl-tag(橙红渐变) .ai-tag(靛蓝渐变) .install-tip .tip-close(半透明白)
+   .arch-fav / .btn 无背景色声明。审计脚本差集命中属预期。 */
 /* ==================== 移动端细节（2026-09-05 补齐）==================== */
 @media (max-width:600px){
   /* iPhone 全面屏：悬浮球与问答面板避开底部 home 指示条，否则会被压住一截 */
