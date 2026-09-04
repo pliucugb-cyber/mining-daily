@@ -1997,7 +1997,12 @@ function qaTrendText(rows){
 function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 // qaRender 已迁移至悬浮球（qaFloatSearch），不再渲染到主内容区 qaResult
 
-// qaReset 已迁移至悬浮球（qaFloatReset）
+// qaReset 已迁移至悬浮球（qaFloatReset)
+
+// ===== AI 智能问答（2026-09-04 改接 Cloudflare Workers 轻后端）=====
+// 后端仅服务 /api/qa + /api/health（worker/worker.js），DEEPSEEK_API_KEY 存为平台 secret。
+// QA_API_BASE 部署后填真实 worker URL；若未部署/为空，AI 按钮自动显示"不可用"，检索不受影响。
+var QA_API_BASE='https://mining-daily-qa.pliucugb-mining-daily.workers.dev';
 
 (function(){
   qaInitData();
@@ -2094,10 +2099,6 @@ function renderLmePrices(){
     }
   }catch(e){console.warn('renderLmePrices:',e);}
 }
-// ===== AI 智能问答（2026-09-04 改接 Cloudflare Workers 轻后端）=====
-// 后端仅服务 /api/qa + /api/health（worker/worker.js），DEEPSEEK_API_KEY 存为平台 secret。
-// QA_API_BASE 部署后填真实 worker URL；若未部署/为空，AI 按钮自动显示"不可用"，检索不受影响。
-var QA_API_BASE='https://mining-daily-qa.pliucugb-mining-daily.workers.dev';
 var QA_AI_ON=false,QA_AI_BUSY=false,QA_LEFT=0;
 function qaAiProbe(){
   // eslint-disable-next-line no-console
