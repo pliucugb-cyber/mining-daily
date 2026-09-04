@@ -2097,7 +2097,7 @@ function renderLmePrices(){
 // ===== AI 智能问答（2026-09-04 改接 Cloudflare Workers 轻后端）=====
 // 后端仅服务 /api/qa + /api/health（worker/worker.js），DEEPSEEK_API_KEY 存为平台 secret。
 // QA_API_BASE 部署后填真实 worker URL；若未部署/为空，AI 按钮自动显示"不可用"，检索不受影响。
-var QA_API_BASE='https://mining-daily-qa.YOUR-CF-SUBDOMAIN.workers.dev';
+var QA_API_BASE='https://mining-daily-qa.pliucugb-mining-daily.workers.dev';
 var QA_AI_ON=false,QA_AI_BUSY=false,QA_LEFT=0;
 function qaAiProbe(){
   if(!QA_API_BASE||QA_API_BASE.indexOf('YOUR-CF-SUBDOMAIN')>=0){
