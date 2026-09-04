@@ -2,72 +2,115 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>矿业新闻日报 · 链接已更新</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6c5ce7">
+<meta name="robots" content="noindex,nofollow">
+<title>矿业新闻日报 · 已迁移至新地址</title>
 <style>
-  :root{ --gold:#b8860b; --gold2:#d4a017; --ink:#2b2b2b; --muted:#6b6b6b; --bg:#fbf7ee; }
+  :root{
+    --p1:#6c5ce7; --p2:#8b5cf6; --p3:#a78bfa;
+    --ink:#1f1f2e; --muted:#5f5f7a; --bg:#f7f6fc;
+    --warn-bg:#fff5f5; --warn-fg:#fa541c; --warn-bd:#ffd6cc;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-    background:linear-gradient(160deg,#fffdf7 0%,#fbf1dc 100%);
-    color:var(--ink); min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:var(--bg); color:var(--ink);
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
     padding:24px;
   }
   .card{
-    background:#fff; max-width:520px; width:100%; border-radius:18px; padding:30px 26px;
-    box-shadow:0 12px 40px rgba(184,134,11,.16); border:1px solid #f0e4c8;
+    width:100%; max-width:520px; background:#fff; border-radius:18px;
+    box-shadow:0 12px 40px rgba(108,92,231,.18);
+    overflow:hidden;
+  }
+  .hero{
+    background:linear-gradient(135deg,var(--p1) 0%,var(--p2) 100%);
+    color:#fff; padding:24px 26px 22px;
   }
   .badge{
-    display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--gold);
-    background:#fff7e6; border:1px solid #f3e2b8; padding:5px 12px; border-radius:999px; margin-bottom:16px;
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:13px; color:#ffd591;
+    background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.32);
+    padding:5px 12px; border-radius:999px; margin-bottom:12px;
+    backdrop-filter:blur(2px);
   }
-  h1{font-size:22px; line-height:1.4; margin-bottom:10px}
-  h1 .em{color:var(--gold)}
-  p{font-size:15px; color:var(--muted); line-height:1.75; margin:10px 0}
-  .reason{
-    background:#fbf7ee; border-left:4px solid var(--gold2); border-radius:8px;
-    padding:12px 14px; font-size:14px; color:#5a4a2a; margin:16px 0;
+  .hero h1{font-size:24px; line-height:1.4; font-weight:700; letter-spacing:.5px}
+
+  .body{padding:22px 26px 24px}
+  .body p{font-size:15px; color:var(--muted); line-height:1.85; margin:8px 0}
+  .body p b{color:var(--ink)}
+
+  .cta{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    text-decoration:none; margin:20px 0 8px;
+    background:linear-gradient(135deg,var(--p1) 0%,var(--p2) 100%);
+    color:#fff; font-size:17px; font-weight:600;
+    padding:15px 18px; border-radius:12px;
+    box-shadow:0 6px 18px rgba(108,92,231,.32);
+    transition:transform .12s ease, box-shadow .12s ease;
   }
-  .reason b{color:var(--ink)}
-  .newlink{
-    display:block; text-decoration:none; margin:18px 0 6px;
-    background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 100%);
-    color:#fff; text-align:center; font-size:17px; font-weight:600;
-    padding:15px 18px; border-radius:12px; box-shadow:0 6px 18px rgba(184,134,11,.32);
-    transition:transform .12s ease;
+  .cta:active{transform:translateY(1px); box-shadow:0 3px 10px rgba(108,92,231,.24)}
+  .cta svg{width:18px;height:18px;flex-shrink:0}
+
+  .url-line{
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    font-size:13px; color:var(--muted); margin-top:6px;
+    word-break:break-all; cursor:pointer;
   }
-  .newlink:active{transform:translateY(1px)}
-  .url{
-    display:block; text-align:center; font-size:13px; color:var(--muted);
-    word-break:break-all; margin-top:6px; text-decoration:underline; cursor:pointer;
+  .url-line code{
+    background:#f3f1ff; color:var(--p1); padding:3px 8px; border-radius:6px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
-  .count{text-align:center; font-size:13px; color:var(--muted); margin-top:16px}
-  .count b{color:var(--gold); font-size:16px}
-  .foot{text-align:center; font-size:12px; color:#aaa; margin-top:18px}
+  .url-line:hover code{background:#ece8ff}
+
+  .auto{
+    text-align:center; font-size:13px; color:var(--muted); margin-top:18px;
+  }
+  .auto b{color:var(--p1); font-size:16px; font-weight:600}
+  .auto a{color:var(--p1); text-decoration:none; margin-left:6px}
+  .auto a:hover{text-decoration:underline}
+
+  .foot{
+    margin-top:18px; padding-top:16px; border-top:1px dashed #eee;
+    font-size:12px; color:#9b9bb0; text-align:center; line-height:1.7;
+  }
 </style>
 </head>
 <body>
-  <div class="card">
-    <div class="badge">📣 链接已迁移</div>
-    <h1>矿业新闻日报已迁至<span class="em">永久新链接</span></h1>
-    <p>原来的链接已停用。请收藏下方新地址——它绑定账号、<b>换电脑也不会变</b>。</p>
+<div class="card" role="alert" aria-live="polite">
+  <div class="hero">
+    <div class="badge">⚠️ 旧地址内容已停用</div>
+    <h1>矿业新闻日报 · 已迁移至新地址</h1>
+  </div>
 
-    <div class="reason">
-      <b>为什么要换？</b><br>
-      旧链接绑定在具体部署环境上，换设备或重装后地址会变化，同事收藏的入口会失效；
-      新链接基于 GitHub Pages，绑定你的账号，<b>一次收藏、长期有效</b>。
+  <div class="body">
+    <p>您访问的是 <b>旧地址</b>。该地址上的<b>旧版新闻内容已停止维护、不再更新，也不再展示</b>。</p>
+    <p>最新、完整的矿业新闻日报，请前往 <b>新地址</b> 查看：</p>
+
+    <a class="cta" id="goBtn" href="https://pliucugb-cyber.github.io/mining-daily/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+      前往新版（GitHub Pages）
+    </a>
+    <div class="url-line" onclick="copyUrl()" title="点击复制">
+      新地址：<code id="urlText">pliucugb-cyber.github.io/mining-daily</code>
     </div>
 
-    <a class="newlink" id="goBtn" href="https://pliucugb-cyber.github.io/mining-daily/">立即前往新链接 →</a>
-    <span class="url" onclick="copyUrl()" id="urlText">https://pliucugb-cyber.github.io/mining-daily/</span>
+    <div class="auto">
+      将在 <b id="sec">4</b> 秒后自动跳转…&nbsp;<a href="javascript:void(0)" id="cancelBtn">立即前往</a>
+    </div>
 
-    <div class="count">页面将在 <b id="sec">6</b> 秒后自动跳转…&nbsp;&nbsp;<a href="javascript:stopAuto()">取消</a></div>
-    <div class="foot">矿业新闻日报 · 空-天-地-井勘查技术体系资讯</div>
+    <div class="foot">
+      如曾将此页"添加到主屏幕"（PWA），我们一并清理了旧缓存，确保打开即为最新内容。<br>
+      旧链接仅作过渡提醒，长期使用请收藏 <b>新地址</b>。
+    </div>
   </div>
+</div>
 
 <script>
   var NEW_URL = "https://pliucugb-cyber.github.io/mining-daily/";
-  var sec = 6, timer = null, locked = false;
+  var sec = 4, timer = null, locked = false;
   function tick(){
     sec--;
     var el = document.getElementById('sec');
@@ -76,18 +119,32 @@
   }
   function doRedirect(){
     if(locked) return; locked = true;
-    if(timer) clearInterval(timer);
+    if(timer){clearInterval(timer); timer=null;}
     window.location.replace(NEW_URL);
   }
-  function stopAuto(){ if(timer){clearInterval(timer); timer=null;} var c=document.querySelector('.count'); if(c) c.innerHTML='已取消自动跳转，请点击上方按钮前往。'; }
   function copyUrl(){
-    var t = document.getElementById('urlText').textContent.trim();
-    if(navigator.clipboard){ navigator.clipboard.writeText(t).then(function(){ alert('已复制新链接：\n'+t); }); }
-    else { alert('新链接：\n'+t); }
+    var t = (document.getElementById('urlText').textContent || '').trim();
+    var full = NEW_URL;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(full).then(function(){
+        flashTip('已复制：' + full);
+      }).catch(function(){ flashTip('新地址：' + full); });
+    } else { flashTip('新地址：' + full); }
+  }
+  function flashTip(msg){
+    var c = document.querySelector('.url-line code');
+    if(!c) return;
+    var old = c.textContent; c.textContent = '✓ 已复制';
+    setTimeout(function(){ c.textContent = old; }, 1400);
+  }
+  function cancelAuto(){
+    if(timer){clearInterval(timer); timer=null;}
+    var a = document.getElementById('cancelBtn');
+    if(a){ a.textContent = '已取消，请点击上方按钮'; a.style.color = '#5f5f7a'; }
   }
   timer = setInterval(tick, 1000);
-  // 兜底：若 8 秒后仍未跳转（被拦截），确保按钮可用
-  setTimeout(function(){ if(!locked && sec>0){ /* 等待自动跳转 */ } }, 8000);
+  var btn = document.getElementById('cancelBtn');
+  if(btn) btn.addEventListener('click', function(e){ e.preventDefault(); cancelAuto(); });
 </script>
 </body>
 </html>
