@@ -174,6 +174,66 @@ body.dark .hotlist-list li.hot-item:hover{background:#243140}
 body.dark .hot-rank{background:#2c3845;color:#c9d6e2}
 body.dark .hot-title{color:#8fb5dc}
 body.dark .hot-title:hover{color:#ff7a7a}
+/* ==================== 价格卡点击 + 走势图弹层（9-04 新增）==================== */
+.price-card[data-slug]{cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.price-card[data-slug]:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(26,58,92,.14);border-color:#1a3a5c}
+.price-card[data-slug]:hover::after{content:'📈 走势';position:absolute;right:4px;top:3px;font-size:9px;color:#7f8c8d}
+.pchart-mask{position:fixed;inset:0;background:rgba(15,30,48,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}
+.pchart-modal{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 12px 48px rgba(0,0,0,.3)}
+.pchart-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;border-bottom:1px solid #eef2f5}
+.pchart-name{font-size:16px;font-weight:800;color:#1a3a5c}
+.pchart-sub{font-size:11.5px;color:#7f8c8d;margin-left:8px;font-weight:400}
+.pchart-close{border:none;background:#f0f3f6;color:#5a6b7a;width:28px;height:28px;border-radius:50%;font-size:15px;cursor:pointer;flex-shrink:0}
+.pchart-close:hover{background:#e2e8ee;color:#1a3a5c}
+.pchart-body{padding:12px 18px 16px}
+.pchart-legend{display:flex;gap:14px;font-size:11.5px;color:#7f8c8d;margin-bottom:6px;flex-wrap:wrap}
+.pchart-legend b{font-weight:700}
+.pchart-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.pchart-table th,.pchart-table td{padding:4px 6px;text-align:right;border-bottom:1px solid #f0f3f6}
+.pchart-table th{color:#95a5a6;font-weight:600;font-size:11px}
+.pchart-table td:first-child,.pchart-table th:first-child{text-align:left}
+.pchart-up{color:#e74c3c;font-weight:600}
+.pchart-down{color:#27ae60;font-weight:600}
+body.dark .pchart-modal{background:#1e2733}
+body.dark .pchart-name{color:#e8eef3}
+body.dark .pchart-head{border-bottom-color:#2c3845}
+body.dark .pchart-table th,body.dark .pchart-table td{border-bottom-color:#2c3845}
+body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
+/* ==================== 左下角问答悬浮球 + 面板（9-04 新增）==================== */
+.qa-fab{position:fixed;left:16px;bottom:16px;z-index:998;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:23px;box-shadow:0 6px 20px rgba(79,70,229,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.qa-fab:hover{transform:scale(1.08)}
+.qa-fab.on{background:linear-gradient(135deg,#334155,#475569)}
+.qa-float{position:fixed;left:16px;bottom:78px;z-index:999;width:min(380px,calc(100vw - 32px));max-height:min(600px,calc(100vh - 110px));background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:none;flex-direction:column;overflow:hidden}
+.qa-float.open{display:flex}
+.qa-float-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff}
+.qa-float-title{font-size:14px;font-weight:800}
+.qa-float-head .pchart-close{background:rgba(255,255,255,.2);color:#fff}
+.qa-float-body{flex:1;overflow-y:auto;padding:12px;background:#f7f9fb}
+.qa-msg{margin-bottom:10px;max-width:92%}
+.qa-msg.user{margin-left:auto}
+.qa-msg-bubble{padding:8px 11px;border-radius:10px;font-size:12.5px;line-height:1.55;word-break:break-word}
+.qa-msg.ai .qa-msg-bubble{background:#fff;border:1px solid #e8eef3;color:#1a3a5c;border-top-left-radius:3px}
+.qa-msg.user .qa-msg-bubble{background:#4f46e5;color:#fff;border-top-right-radius:3px}
+.qa-msg-meta{font-size:10.5px;color:#95a5a6;margin-top:3px}
+.qa-msg.ai .qa-msg-meta{text-align:left}
+.qa-msg.user .qa-msg-meta{text-align:right}
+.qa-msg-item{display:block;padding:5px 0;border-bottom:1px dashed #eef2f5;color:#1a3a5c;text-decoration:none;font-size:12px;line-height:1.45}
+.qa-msg-item:hover{color:#4f46e5}
+.qa-msg-item .qd{color:#95a5a6;font-size:11px;margin-right:5px}
+.qa-msg-item .qs{color:#95a5a6;font-size:11px;margin-left:5px}
+.qa-float-foot{display:flex;gap:6px;padding:10px;border-top:1px solid #eef2f5;background:#fff}
+.qa-float-input{flex:1;border:1px solid #dbe2ea;border-radius:8px;padding:8px 10px;font-size:13px;outline:none}
+.qa-float-input:focus{border-color:#4f46e5}
+.qa-float-btn{border:none;border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;background:#eef2f5;color:#1a3a5c}
+.qa-float-btn.primary{background:#4f46e5;color:#fff}
+.qa-float-btn:disabled{opacity:.5;cursor:not-allowed}
+body.dark .qa-float{background:#1e2733}
+body.dark .qa-float-body{background:#161d26}
+body.dark .qa-msg.ai .qa-msg-bubble{background:#243140;border-color:#2c3845;color:#e8eef3}
+body.dark .qa-float-foot{background:#1e2733;border-top-color:#2c3845}
+body.dark .qa-float-input{background:#243140;border-color:#2c3845;color:#e8eef3}
+body.dark .qa-msg-item{color:#8fb5dc}
+body.dark .qa-float-btn{background:#2c3845;color:#c9d6e2}
 /* ==================== AI 深度解析（9-04 新增）==================== */
 .section-title.ai{background:linear-gradient(90deg,#eef2ff,#fff);border-bottom:2px solid #6366f1}
 .section-title.ai .ai-tag{display:inline-block;background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:10px;margin-left:4px;letter-spacing:.5px}
@@ -357,9 +417,7 @@ body{padding-left:0;padding-top:56px}
 <body>
 <nav class="toc-sidebar" id="tocSidebar">
 <div class="toc-title">📑 目录导航</div>
-<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})">📋 全部内容 <span class="toc-count" id="tocAllCount">48</span>
-<div class="toc-main-item" data-target="hotListSection" onclick="scrollToSection('hotListSection',this)" style="color:#c0392b">🔥 矿业热榜 <span class="toc-count" id="tocHotCount" style="background:#fff5f0;color:#c0392b">TOP3</span></div></div>
-<div class="toc-main-item" data-target="aiSection" onclick="scrollToSection('aiSection',this)" style="color:#4f46e5">🤖 AI 解析 <span class="toc-count" id="tocAiCount" style="background:#eef2ff;color:#4f46e5">—</span></div>
+<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})">📋 全部内容 <span class="toc-count" id="tocAllCount">48</span></div>
 <div class="toc-main-item" data-target="specialSection" onclick="scrollToSection('specialSection',this)" style="color:#b45009">⛏️ 找矿专项 <span class="toc-count" id="tocSpecialCount" style="background:#fdf3d7;color:#b45009">0</span></div>
 <div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)">🔥 今日新增 <span class="toc-count" id="tocTodayCount">9</span></div>
 <div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)">📰 往期内容 <span class="toc-count" id="tocArchiveCount">39</span></div>
@@ -378,10 +436,10 @@ body{padding-left:0;padding-top:56px}
 <div class="price-strip" id="priceStrip">
 <div class="price-strip-head">
 <span class="price-strip-title">📊 金属价格</span>
-<span class="price-strip-note" id="priceStripNote">2026-09-04 更新 · 第一行 沪期主力/SMM·上金所（人民币） · 第二行 LME 美元/吨 · 涨红跌绿</span>
+<span class="price-strip-note" id="priceStripNote">2026-09-04 更新 · 第一行 沪期主力/SMM·上金所（人民币） · 第二行 LME 美元/吨 · 涨红跌绿 · 点击卡片看近7日走势</span>
 </div>
-<div class="price-cards" id="priceCardsShfe"><div class="price-card up" data-slug=""><div class="pc-name">沪铜 <span class="pc-tag">SHFE</span></div><div class="pc-value">108,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +240 (+0.22%)</div></div><div class="price-card up" data-slug=""><div class="pc-name">沪铝 <span class="pc-tag">SHFE</span></div><div class="pc-value">24,290</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +15 (+0.06%)</div></div><div class="price-card up" data-slug=""><div class="pc-name">沪铅 <span class="pc-tag">SHFE</span></div><div class="pc-value">16,130</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +15 (+0.09%)</div></div><div class="price-card up" data-slug=""><div class="pc-name">沪锌 <span class="pc-tag">SHFE</span></div><div class="pc-value">26,745</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +115 (+0.43%)</div></div><div class="price-card up" data-slug=""><div class="pc-name">沪锡 <span class="pc-tag">SHFE</span></div><div class="pc-value">416,460</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +1,160 (+0.28%)</div></div><div class="price-card down" data-slug=""><div class="pc-name">沪镍 <span class="pc-tag">SHFE</span></div><div class="pc-value">127,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -930 (-0.72%)</div></div><div class="price-card up" data-slug=""><div class="pc-name">上海金 <span class="pc-tag">Au99.99</span></div><div class="pc-value">964.40</div><div class="pc-unit">元/克</div><div class="pc-chg">&#9650; +0.72%</div></div><div class="price-card up" data-slug=""><div class="pc-name">白银 <span class="pc-tag">Ag(T+D)</span></div><div class="pc-value">16,229</div><div class="pc-unit">元/千克</div><div class="pc-chg">&#9650; +1.53%</div></div><div class="price-card down" data-slug=""><div class="pc-name">碳酸锂 <span class="pc-tag">主力连续</span></div><div class="pc-value">141,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -11,360 (-7.41%)</div></div><div class="price-card " data-slug=""><div class="pc-name">电解钴 <span class="pc-tag">SMM 09-03</span></div><div class="pc-value">304,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">上日 304,940（SMM 未更新）</div></div></div>
-<div class="price-cards" id="priceCardsLme" style="margin-top:6px;border-top:1px dashed #dbe2ea;padding-top:6px"><div class="price-card "><div class="pc-name">LME 铜 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div class="price-card "><div class="pc-name">LME 铝 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div class="price-card "><div class="pc-name">LME 锌 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div class="price-card "><div class="pc-name">LME 铅 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div class="price-card "><div class="pc-name">LME 镍 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div class="price-card "><div class="pc-name">LME 锡 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div></div>
+<div class="price-cards" id="priceCardsShfe"><div data-slug="cum" class="price-card up"><div class="pc-name">沪铜 <span class="pc-tag">SHFE</span></div><div class="pc-value">108,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +240 (+0.22%)</div></div><div data-slug="alm" class="price-card up"><div class="pc-name">沪铝 <span class="pc-tag">SHFE</span></div><div class="pc-value">24,290</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +15 (+0.06%)</div></div><div data-slug="pbm" class="price-card up"><div class="pc-name">沪铅 <span class="pc-tag">SHFE</span></div><div class="pc-value">16,130</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +15 (+0.09%)</div></div><div data-slug="znm" class="price-card up"><div class="pc-name">沪锌 <span class="pc-tag">SHFE</span></div><div class="pc-value">26,745</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +115 (+0.43%)</div></div><div data-slug="snm" class="price-card up"><div class="pc-name">沪锡 <span class="pc-tag">SHFE</span></div><div class="pc-value">416,460</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +1,160 (+0.28%)</div></div><div data-slug="nim" class="price-card down"><div class="pc-name">沪镍 <span class="pc-tag">SHFE</span></div><div class="pc-value">127,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -930 (-0.72%)</div></div><div data-slug="au9999" class="price-card up"><div class="pc-name">上海金 <span class="pc-tag">Au99.99</span></div><div class="pc-value">964.40</div><div class="pc-unit">元/克</div><div class="pc-chg">&#9650; +0.72%</div></div><div data-slug="agtd" class="price-card up"><div class="pc-name">白银 <span class="pc-tag">Ag(T+D)</span></div><div class="pc-value">16,229</div><div class="pc-unit">元/千克</div><div class="pc-chg">&#9650; +1.53%</div></div><div data-slug="lcm" class="price-card down"><div class="pc-name">碳酸锂 <span class="pc-tag">主力连续</span></div><div class="pc-value">141,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -11,360 (-7.41%)</div></div><div class="price-card "><div class="pc-name">电解钴 <span class="pc-tag">SMM 09-03</span></div><div class="pc-value">304,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">上日 304,940（SMM 未更新）</div></div></div>
+<div class="price-cards" id="priceCardsLme" style="margin-top:6px;border-top:1px dashed #dbe2ea;padding-top:6px"><div data-slug="lcpt" class="price-card "><div class="pc-name">LME 铜 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lalt" class="price-card "><div class="pc-name">LME 铝 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lznt" class="price-card "><div class="pc-name">LME 锌 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lldt" class="price-card "><div class="pc-name">LME 铅 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lnkt" class="price-card "><div class="pc-name">LME 镍 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="ltnt" class="price-card "><div class="pc-name">LME 锡 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div></div>
 </div>
 <div class="qa-strip" id="qaStrip">
   <div class="qa-head">
@@ -566,8 +624,37 @@ body{padding-left:0;padding-top:56px}
 </div>
 </div>
 <!-- 全库新闻数据（供问答检索条使用；文件缺失时自动降级为页面内检索，不影响日报本身） -->
+<!-- ==================== 价格走势图弹层（9-04 新增）==================== -->
+<div class="pchart-mask" id="pchartMask" style="display:none" onclick="if(event.target===this)pcChartClose()">
+  <div class="pchart-modal">
+    <div class="pchart-head">
+      <div><span class="pchart-name" id="pchartName">—</span><span class="pchart-sub" id="pchartSub"></span></div>
+      <button class="pchart-close" onclick="pcChartClose()">✕</button>
+    </div>
+    <div class="pchart-body">
+      <div class="pchart-legend" id="pchartLegend"></div>
+      <div id="pchartSvg"></div>
+      <table class="pchart-table" id="pchartTable"></table>
+    </div>
+  </div>
+</div>
+<!-- ==================== 左下角问答悬浮球 + 面板（9-04 新增）==================== -->
+<button class="qa-fab" id="qaFab" title="新闻问答（检索全库新闻，服务在线时可 AI 作答）" onclick="qaFloatToggle()">💬</button>
+<div class="qa-float" id="qaFloat">
+  <div class="qa-float-head">
+    <span class="qa-float-title">💬 新闻问答</span>
+    <button class="pchart-close" onclick="qaFloatToggle()">✕</button>
+  </div>
+  <div class="qa-float-body" id="qaFloatBody"></div>
+  <div class="qa-float-foot">
+    <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="问点什么：稀土政策 / 锂价走势…" autocomplete="off">
+    <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词">检索</button>
+    <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答（需后端服务）">AI</button>
+  </div>
+</div>
 <script src="news-data.js"></script>
 <script src="lme-data.js"></script>
+<script src="price-history.js"></script>
 <script>
 
 
@@ -1635,7 +1722,7 @@ function renderLmePrices(){
     var note=document.getElementById('priceStripNote');
     if(note&&D.updated){
       var dt=D.updated.substring(0,10);
-      note.textContent=dt+' 晨间更新 · 沪期主力/SMM·上金所 · LME(USD/吨) · 涨红跌绿';
+      note.textContent=dt+' 晨间更新 · 沪期主力/SMM·上金所 · LME(USD/吨) · 涨红跌绿 · 点击卡片看近7日走势';
     }
   }catch(e){console.warn('renderLmePrices:',e);}
 }
@@ -1728,6 +1815,188 @@ function qaAskAI(){
       if(b&&QA_AI_ON){b.disabled=false;b.textContent='✨ AI 回答';}
     });
 }
+// ===== 价格卡走势图（9-04 新增，数据源 price-history.js，由 fetch_price_history.py 每日更新）=====
+// 设计：缺数据时优雅降级提示，不影响行情卡本身；涨红跌绿配色
+function pcSeries(slug){
+  try{var H=window.PRICE_HISTORY;if(!H||!H.series)return null;return H.series[slug]||null;}catch(e){return null;}
+}
+function pcFmt(v){return Number(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function pcChartOpen(slug){
+  var mask=document.getElementById('pchartMask');if(!mask)return;
+  var nameEl=document.getElementById('pchartName'),subEl=document.getElementById('pchartSub'),
+      svgEl=document.getElementById('pchartSvg'),tb=document.getElementById('pchartTable'),
+      lg=document.getElementById('pchartLegend');
+  var s=pcSeries(slug);
+  if(!s||!s.points||s.points.length<2){
+    nameEl.textContent='走势暂缺';
+    subEl.textContent='';
+    lg.innerHTML='<span>该品种暂无连续日K数据（电解钴为 SMM 现货报价无连续盘；其余品种由每日抓取累积，个别时段可能缺失）。</span>';
+    svgEl.innerHTML='';tb.innerHTML='';
+    mask.style.display='flex';return;
+  }
+  var H=window.PRICE_HISTORY,pts=s.points.slice(-8),n=pts.length;
+  var closes=pts.map(function(p){return p[1];});
+  var first=closes[0],last=closes[n-1];
+  var up=last>=first,color=up?'#e74c3c':'#27ae60';
+  var pct=first?((last-first)/first*100):0;
+  var hi=Math.max.apply(null,closes),lo=Math.min.apply(null,closes);
+  nameEl.textContent=s.name;
+  subEl.textContent=s.unit+' · 近'+n+'个交易日 · 东方财富日K · 更新于 '+(H.updated||'');
+  lg.innerHTML='<span>最新 <b style="color:'+color+'">'+pcFmt(last)+'</b></span>'
+    +'<span>区间涨跌 <b style="color:'+color+'">'+(up?'+':'')+pct.toFixed(2)+'%</b></span>'
+    +'<span>区间最高 <b>'+pcFmt(hi)+'</b></span>'
+    +'<span>区间最低 <b>'+pcFmt(lo)+'</b></span>';
+  // ---- SVG 折线 ----
+  var W=580,Hh=235,L=58,R=14,T=18,B=30;
+  var span=(hi-lo)||1;lo-=span*0.08;hi+=span*0.08;span=hi-lo;
+  function X(i){return L+i*(W-L-R)/(n-1);}
+  function Y(v){return T+(1-(v-lo)/span)*(Hh-T-B);}
+  var poly='',dots='',grid='',xlab='';
+  [hi,lo].forEach(function(v,i2){
+    grid+='<line x1="'+L+'" y1="'+Y(v)+'" x2="'+(W-R)+'" y2="'+Y(v)+'" stroke="#eef2f5" stroke-width="1"/>'
+        +'<text x="'+(L-6)+'" y="'+(Y(v)+3.5)+'" text-anchor="end" font-size="10" fill="#95a5a6">'+pcFmt(v)+'</text>';
+  });
+  closes.forEach(function(v,i2){
+    poly+=(i2?' ':'')+X(i2).toFixed(1)+','+Y(v).toFixed(1);
+    dots+='<circle cx="'+X(i2).toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="3.2" fill="#fff" stroke="'+color+'" stroke-width="2"><title>'+pts[i2][0]+'  收 '+pcFmt(v)+'</title></circle>';
+  });
+  pts.forEach(function(p,i2){
+    if(i2===0||i2===n-1||i2===Math.floor((n-1)/2))
+      xlab+='<text x="'+X(i2).toFixed(1)+'" y="'+(Hh-8)+'" text-anchor="middle" font-size="10" fill="#7f8c8d">'+p[0].slice(5)+'</text>';
+  });
+  var area='M'+X(0).toFixed(1)+','+Y(closes[0]).toFixed(1)+' '+closes.map(function(v,i2){return 'L'+X(i2).toFixed(1)+','+Y(v).toFixed(1);}).join(' ')
+          +' L'+X(n-1).toFixed(1)+','+(Hh-B)+' L'+X(0).toFixed(1)+','+(Hh-B)+' Z';
+  svgEl.innerHTML='<svg viewBox="0 0 '+W+' '+Hh+'" width="100%" style="display:block" role="img" aria-label="'+s.name+'近'+n+'日收盘价走势">'
+    +'<defs><linearGradient id="pcGrad" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0" stop-color="'+color+'" stop-opacity="0.18"/><stop offset="1" stop-color="'+color+'" stop-opacity="0.02"/></linearGradient></defs>'
+    +grid+'<path d="'+area+'" fill="url(#pcGrad)"/>'
+    +'<polyline points="'+poly+'" fill="none" stroke="'+color+'" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>'
+    +dots+xlab+'</svg>';
+  // ---- 明细表（最新在上）----
+  var h='<tr><th>日期</th><th>收盘</th><th>日涨跌</th></tr>';
+  for(var i=n-1;i>=0;i--){
+    var chg=i>0?((closes[i]-closes[i-1])/closes[i-1]*100):null;
+    h+='<tr><td>'+pts[i][0]+'</td><td>'+pcFmt(closes[i])+'</td><td>'
+      +(chg==null?'<span style="color:#95a5a6">—</span>'
+                 :'<span class="'+(chg>=0?'pchart-up':'pchart-down')+'">'+(chg>=0?'+':'')+chg.toFixed(2)+'%</span>')
+      +'</td></tr>';
+  }
+  tb.innerHTML=h;
+  mask.style.display='flex';
+}
+function pcChartClose(){var m=document.getElementById('pchartMask');if(m)m.style.display='none';}
+(function(){
+  document.querySelectorAll('.price-cards').forEach(function(box){
+    box.addEventListener('click',function(e){
+      var card=e.target?e.target.closest('.price-card'):null;if(!card)return;
+      var slug=card.getAttribute('data-slug');if(slug)pcChartOpen(slug);
+    });
+  });
+})();
+// ===== 左下角问答悬浮球（9-04 新增，复用全库 QA_ROWS 与 /api/qa 能力）=====
+var QA_FLOAT_BUSY=false;
+function qaFloatToggle(){
+  var p=document.getElementById('qaFloat'),b=document.getElementById('qaFab');
+  if(!p)return;
+  var open=p.classList.toggle('open');
+  if(b)b.classList.toggle('on',open);
+  if(open){var i=document.getElementById('qaFloatInput');if(i)setTimeout(function(){i.focus();},80);}
+}
+function qaFloatClose(){
+  var p=document.getElementById('qaFloat');if(p)p.classList.remove('open');
+  var b=document.getElementById('qaFab');if(b)b.classList.remove('on');
+}
+function qaFloatScroll(){
+  var b=document.getElementById('qaFloatBody');if(b)b.scrollTop=b.scrollHeight;
+}
+function qaFloatAdd(role,html,meta){
+  var body=document.getElementById('qaFloatBody');if(!body)return null;
+  var d=document.createElement('div');d.className='qa-msg '+role;
+  var m=meta?'<div class="qa-msg-meta">'+qaEsc(meta)+'</div>':'';
+  d.innerHTML='<div class="qa-msg-bubble">'+html+'</div>'+m;
+  body.appendChild(d);qaFloatScroll();return d;
+}
+function qaFloatSearch(){
+  var inp=document.getElementById('qaFloatInput');if(!inp)return;
+  var q=(inp.value||'').trim();if(!q)return;
+  qaFloatAdd('user',qaEsc(q),'');
+  inp.value='';
+  var words=q.split(/\s+/).filter(Boolean);
+  var hits=qaFilter(QA_ROWS,words,'','','','and'),relaxed=false;
+  if(!hits.length&&words.length>1){hits=qaFilter(QA_ROWS,words,'','','','or');relaxed=true;}
+  var html='';
+  if(!hits.length){
+    html='<div>全库未检索到匹配内容。<b>这不等于「没有发生」</b>——本库由日报每日追加，存在抓取缺口。建议减少关键词或换更通用的说法。</div>';
+  }else{
+    html='<div style="margin-bottom:4px">命中 <b>'+hits.length+'</b> 条'+(relaxed?'（已放宽为任一词命中）':'（同时含）')+'，最新 8 条：</div>';
+    var lim=Math.min(hits.length,8);
+    for(var i=0;i<lim;i++){
+      var r=hits[i];
+      html+='<a class="qa-msg-item" href="'+qaEsc(r.u)+'" target="_blank" rel="noopener"><span class="qd">'+qaEsc(r.d||'????-??-??')+'</span>'+qaEsc(r.t)+'<span class="qs">'+qaEsc(r.s||'')+'</span></a>';
+    }
+    if(hits.length>lim)html+='<div style="margin-top:4px;color:#95a5a6">共 '+hits.length+' 条，可到页顶「新闻问答」条查看全部并按矿种/主题/时间筛选。</div>';
+  }
+  qaFloatAdd('ai',html,'全库 '+QA_ROWS.length+' 条 · 检索于本地，不经任何服务');
+}
+function qaFloatAsk(){
+  if(QA_FLOAT_BUSY)return;
+  var inp=document.getElementById('qaFloatInput'),btn=document.getElementById('qaFloatAi');
+  var q=inp?(inp.value||'').trim():'';
+  if(!q){qaFloatAdd('ai','请先输入问题，例如「最近有哪些稀土政策」「锂价为什么大跌」。','');return;}
+  if(!QA_AI_ON){
+    qaFloatAdd('ai','AI 服务当前不可用（可能为纯静态部署，或服务端未配置 <code>DEEPSEEK_API_KEY</code>）。<br>关键词检索不受影响——直接点「检索」即可。','');
+    return;
+  }
+  QA_FLOAT_BUSY=true;
+  if(btn){btn.disabled=true;btn.textContent='思考中…';}
+  qaFloatAdd('user',qaEsc(q),'');
+  if(inp)inp.value='';
+  var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…','');
+  fetch('api/qa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})})
+    .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d||{}};},function(){return {ok:false,d:{}};});})
+    .then(function(res){
+      var d=res.d,bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
+      var text='';
+      if(!res.ok||d.error)text='<div style="color:#e74c3c">'+qaEsc(d.error||'请求失败，请稍后重试。')+'</div>';
+      else{
+        text=qaEsc(d.answer||'（模型未返回内容）');
+        var m=[];
+        if(d.matched)m.push('相关 '+d.matched+' 条');
+        if(d.cited)m.push('已读 '+d.cited+' 条');
+        if(d.secs)m.push(d.secs+' 秒');
+        if(typeof d.left!=='undefined')m.push('剩余 '+d.left+' 次');
+        if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=m.join(' · ');}
+        var h='';(d.refs||[]).forEach(function(r2){if(r2&&r2.u)h+='<a class="qa-msg-item" href="'+qaEsc(r2.u)+'" target="_blank" rel="noopener"><span class="qd">'+qaEsc(r2.d)+'</span>'+qaEsc(r2.t)+'</a>';});
+        if(h)text+='<div style="margin-top:6px;color:#5b7a94;font-size:11px">参考条目：</div>'+h;
+      }
+      if(bubble)bubble.innerHTML=text;
+      qaFloatScroll();
+    })
+    .catch(function(e){
+      var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
+      if(bubble)bubble.innerHTML='<div style="color:#e74c3c">无法连接问答服务（'+qaEsc((e&&e.message)||e||'网络错误')+'）。纯静态部署没有 AI 能力，关键词「检索」不受影响。</div>';
+      qaFloatScroll();
+    })
+    .then(function(){
+      QA_FLOAT_BUSY=false;
+      if(btn){btn.disabled=false;btn.textContent='AI';}
+    });
+}
+(function(){
+  var inp=document.getElementById('qaFloatInput');
+  if(inp){
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){e.preventDefault();qaFloatSearch();}
+      if(e.key==='Escape')qaFloatClose();
+    });
+  }
+  var sb=document.getElementById('qaFloatSearch');if(sb)sb.addEventListener('click',qaFloatSearch);
+  var ab=document.getElementById('qaFloatAi');if(ab)ab.addEventListener('click',qaFloatAsk);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&!document.getElementById('qaFloat').classList.contains('open'))return;
+    if(e.key==='Escape'){pcChartClose();qaFloatClose();}
+  });
+})();
 
 
 </script>
