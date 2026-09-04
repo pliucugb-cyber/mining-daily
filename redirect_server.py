@@ -80,18 +80,13 @@ PAGE = u"""<!DOCTYPE html>
 <script>
 (function(){
   var NEW = "__NEW__";
-  var left = 5, finished = false;
+  var left = 5, redirected = false;
   var cdEl = document.getElementById('cd');
-  var timer = setInterval(function(){
-    left--;
-    if (cdEl) cdEl.textContent = left;
-    if (left <= 0) { clearInterval(timer); go(); }
-  }, 1000);
 
+  // 倒计时归零后真正执行跳转的函数（旧版误调用了未定义的 go()，导致永不跳转）
   function jump(){
-    if (finished) return;
-    finished = true;
-    clearInterval(timer);
+    if (redirected) return;
+    redirected = true;
     // 旧站点注册过 Service Worker 并有缓存；同事若把它装成 PWA，
     // 残留的 SW 会让旧内容"复活"。跳转前主动注销并清空缓存。
     try {
@@ -108,6 +103,12 @@ PAGE = u"""<!DOCTYPE html>
     } catch(e) {}
     setTimeout(function(){ window.location.href = NEW; }, 350);
   }
+
+  setInterval(function(){
+    left--;
+    if (cdEl) cdEl.textContent = (left > 0 ? left : 0);
+    if (left <= 0) jump();
+  }, 1000);
 
   var goBtn = document.getElementById('go');
   if (goBtn) goBtn.addEventListener('click', function(ev){ ev.preventDefault(); jump(); });
