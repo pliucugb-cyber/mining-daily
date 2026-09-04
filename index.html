@@ -552,57 +552,22 @@ body{padding-left:0;padding-top:56px}
   border:1px solid #eef2f5;
 }
 }
-/* ===== 新闻问答检索条（2026-09-01 新增）===== */
-.qa-strip{background:#fff;border:1px solid #e3eaf0;border-radius:10px;margin:12px 0;padding:12px 14px;box-shadow:0 1px 3px rgba(26,58,92,.06)}
-.qa-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.qa-icon{font-size:17px;line-height:1}
-.qa-title{font-size:14px;font-weight:700;color:#1a3a5c;white-space:nowrap}
-.qa-input{flex:1;min-width:170px;padding:8px 12px;border:1px solid #cfd8e3;border-radius:7px;font-size:14px;outline:none;transition:border-color .15s,box-shadow .15s}
-.qa-input:focus{border-color:#2980b9;box-shadow:0 0 0 2px rgba(41,128,185,.12)}
-.qa-btn{padding:8px 16px;background:#1a3a5c;color:#fff;border:none;border-radius:7px;font-size:13px;cursor:pointer;white-space:nowrap}
-.qa-btn:hover{background:#2c5f8a}
-.qa-meta{font-size:12px;color:#7b8a99;white-space:nowrap}
-.qa-filters{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;align-items:center}
-.qa-sel{padding:5px 9px;border:1px solid #cfd8e3;border-radius:6px;font-size:12px;background:#fff;color:#3a4a5a;cursor:pointer;outline:none;max-width:130px}
-.qa-sel:focus{border-color:#2980b9}
-.qa-chip{padding:5px 11px;border:1px solid #dfe6ec;background:#f4f7fa;border-radius:14px;font-size:12px;color:#4a5a6a;cursor:pointer;white-space:nowrap}
-.qa-chip:hover{background:#e8eef4;border-color:#c5d2de}
-.qa-chip.on{background:#2980b9;color:#fff;border-color:#2980b9}
-.qa-result{margin-top:11px;border-top:1px dashed #e3eaf0;padding-top:11px;max-height:430px;overflow-y:auto}
-.qa-sum{font-size:12px;color:#5b6b7a;margin-bottom:8px;line-height:1.7}
-.qa-warn{background:#fff8e6;border:1px solid #ffe9a8;color:#8a6d1f;padding:7px 11px;border-radius:6px;font-size:12px;margin-bottom:9px;line-height:1.6}
-.qa-trend{margin:0 0 9px;padding:8px 10px;background:#f7fafc;border:1px solid #eef2f5;border-radius:6px;font-size:11px;color:#6b7a89;font-family:Consolas,Monaco,monospace;line-height:1.55;white-space:pre;overflow-x:auto}
-.qa-item{padding:7px 0;border-bottom:1px solid #f2f6f9}
-.qa-item:last-child{border-bottom:none}
-.qa-line{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
-.qa-d{font-size:11px;color:#8899aa;white-space:nowrap;font-family:Consolas,Monaco,monospace}
-.qa-t{font-size:13.5px;color:#1a3a5c;text-decoration:none;flex:1;min-width:190px;line-height:1.5}
-.qa-t:hover{color:#c0392b;text-decoration:underline}
-.qa-s{font-size:11px;color:#7b8a99;white-space:nowrap}
-.qa-m{font-size:12px;color:#6b7a89;line-height:1.6;margin-top:3px}
-.qa-empty{padding:18px 4px;text-align:center;color:#8b9aa8;font-size:13px;line-height:1.7}
-.qa-empty b{color:#5b6b7a}
-/* ===== AI 智能问答（2026-09-02 新增，需后端 server.py 提供 /api/qa）===== */
-.qa-btn.qa-ai{background:linear-gradient(135deg,#1a6fb5,#2c8fd0);margin-left:2px}
-.qa-btn.qa-ai:hover{background:linear-gradient(135deg,#155d99,#2578b3)}
-.qa-btn:disabled{opacity:.55;cursor:not-allowed}
-.qa-aibox{margin:11px 0 2px;padding:12px 14px;background:linear-gradient(135deg,#f2f8ff,#f9fcff);border:1px solid #c3ddf2;border-left:4px solid #1a6fb5;border-radius:8px}
-.qa-aihead{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px}
-.qa-aititle{font-size:14px;font-weight:700;color:#12496f}
-.qa-aimeta{font-size:11px;color:#5b7a94}
-.qa-aibody{font-size:13.5px;line-height:1.9;color:#22394d;white-space:pre-wrap;word-break:break-word}
-.qa-aibody.loading{color:#6b8299;font-size:13px}
-.qa-aierr{background:#fff6f6;border:1px solid #f0cccc;border-left:3px solid #c0392b;color:#8e3b3b;padding:10px 12px;border-radius:6px;font-size:13px;line-height:1.75}
-.qa-airefs{margin-top:10px;padding-top:8px;border-top:1px dashed #cfe2f2;font-size:12px;color:#4a6b85;line-height:1.85}
-.qa-airefs a{color:#1a5f8f;text-decoration:none}
-.qa-airefs a:hover{text-decoration:underline}
+/* ===== 悬浮球内筛选条（2026-09-04 由页顶新闻问答迁移而来）===== */
+.qa-float-filters{display:flex;flex-wrap:wrap;gap:5px;padding:9px 11px;border-bottom:1px solid #eef2f5;background:#f3f6fa}
+.qa-fsel{flex:1;min-width:0;padding:5px 6px;border:1px solid #d5deea;border-radius:6px;font-size:11.5px;background:#fff;color:#33414f;cursor:pointer;outline:none}
+.qa-fsel:focus{border-color:#4f46e5}
+.qa-fsel-btns{display:flex;gap:5px;flex:1 1 100%}
+.qa-fchip{flex:1;padding:5px 8px;border:1px solid #dfe6ec;background:#fff;border-radius:14px;font-size:11.5px;color:#4a5a6a;cursor:pointer;white-space:nowrap}
+.qa-fchip:hover{background:#eef2f7;border-color:#c5d2de}
+.qa-fchip.on{background:#4f46e5;color:#fff;border-color:#4f46e5}
+.qa-trend{margin:6px 0;padding:6px 8px;background:#f7fafc;border:1px solid #eef2f5;border-radius:6px;font-size:11px;color:#6b7a89;font-family:Consolas,Monaco,monospace;line-height:1.5;white-space:pre;overflow-x:auto}
+body.dark .qa-float-filters{background:#1a232f;border-bottom-color:#2c3845}
+body.dark .qa-fsel{background:#243140;border-color:#2c3845;color:#c9d6e2}
+body.dark .qa-fchip{background:#243140;border-color:#2c3845;color:#c9d6e2}
+body.dark .qa-fchip.on{background:#4f46e5;color:#fff}
+body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 @media(max-width:600px){
-  .qa-input{min-width:100%;order:3}
-  .qa-btn{order:4}
-  .qa-btn.qa-ai{order:5;margin-left:0}
-  .qa-result{max-height:340px}
-  .qa-sel{max-width:none;flex:1}
-  .qa-aibox{padding:10px 11px}
+  .qa-fsel-btns{margin-top:1px}
 }
 /* ===== 矿业热榜手机版（9-03 新增） ===== */
 @media(max-width:600px){
@@ -668,37 +633,7 @@ body{padding-left:0;padding-top:56px}
 <div class="price-cards" id="priceCardsShfe"><div data-slug="cum" class="price-card up"><div class="pc-name">沪铜 <span class="pc-tag">SHFE</span></div><div class="pc-value">108,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +240 (+0.22%)</div></div><div data-slug="alm" class="price-card up"><div class="pc-name">沪铝 <span class="pc-tag">SHFE</span></div><div class="pc-value">24,290</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +15 (+0.06%)</div></div><div data-slug="pbm" class="price-card up"><div class="pc-name">沪铅 <span class="pc-tag">SHFE</span></div><div class="pc-value">16,130</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +15 (+0.09%)</div></div><div data-slug="znm" class="price-card up"><div class="pc-name">沪锌 <span class="pc-tag">SHFE</span></div><div class="pc-value">26,745</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +115 (+0.43%)</div></div><div data-slug="snm" class="price-card up"><div class="pc-name">沪锡 <span class="pc-tag">SHFE</span></div><div class="pc-value">416,460</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +1,160 (+0.28%)</div></div><div data-slug="nim" class="price-card down"><div class="pc-name">沪镍 <span class="pc-tag">SHFE</span></div><div class="pc-value">127,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -930 (-0.72%)</div></div><div data-slug="au9999" class="price-card up"><div class="pc-name">上海金 <span class="pc-tag">Au99.99</span></div><div class="pc-value">964.40</div><div class="pc-unit">元/克</div><div class="pc-chg">&#9650; +0.72%</div></div><div data-slug="agtd" class="price-card up"><div class="pc-name">白银 <span class="pc-tag">Ag(T+D)</span></div><div class="pc-value">16,229</div><div class="pc-unit">元/千克</div><div class="pc-chg">&#9650; +1.53%</div></div><div data-slug="lcm" class="price-card down"><div class="pc-name">碳酸锂 <span class="pc-tag">主力连续</span></div><div class="pc-value">141,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -11,360 (-7.41%)</div></div><div class="price-card "><div class="pc-name">电解钴 <span class="pc-tag">SMM 09-03</span></div><div class="pc-value">304,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">上日 304,940（SMM 未更新）</div></div></div>
 <div class="price-cards" id="priceCardsLme" style="margin-top:6px;border-top:1px dashed #dbe2ea;padding-top:6px"><div data-slug="lcpt" class="price-card "><div class="pc-name">LME 铜 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lalt" class="price-card "><div class="pc-name">LME 铝 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lznt" class="price-card "><div class="pc-name">LME 锌 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lldt" class="price-card "><div class="pc-name">LME 铅 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lnkt" class="price-card "><div class="pc-name">LME 镍 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="ltnt" class="price-card "><div class="pc-name">LME 锡 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div></div>
 </div>
-<div class="qa-strip" id="qaStrip">
-  <div class="qa-head">
-    <span class="qa-icon">🔍</span>
-    <span class="qa-title">新闻问答</span>
-    <input type="text" id="qaInput" class="qa-input" placeholder="搜新闻：稀土 政策 / 锂 价格 / 自然资源部（空格＝同时含）" autocomplete="off">
-    <button class="qa-btn" id="qaBtn">搜索</button>
-    <button class="qa-btn qa-ai" id="qaAiBtn" title="让 AI 读完相关新闻后组织语言作答（Ctrl+Enter）" disabled>✨ AI 检测中…</button>
-    <span class="qa-meta" id="qaMeta"></span>
-  </div>
-  <div class="qa-filters">
-    <select class="qa-sel" id="qaMineral"><option value="">矿种（全部）</option></select>
-    <select class="qa-sel" id="qaTopic"><option value="">主题（全部）</option></select>
-    <select class="qa-sel" id="qaRange">
-      <option value="0">时间（全部）</option>
-      <option value="3">最近 3 天</option>
-      <option value="7">最近 7 天</option>
-      <option value="30">最近 30 天</option>
-    </select>
-    <button class="qa-chip" id="qaTrendBtn">📈 时间分布</button>
-    <button class="qa-chip" id="qaReset">重置</button>
-  </div>
-  <div class="qa-aibox" id="qaAiBox" style="display:none">
-    <div class="qa-aihead">
-      <span class="qa-aititle">✨ AI 回答</span>
-      <span class="qa-aimeta" id="qaAiMeta"></span>
-    </div>
-    <div class="qa-aibody" id="qaAiBody"></div>
-    <div class="qa-airefs" id="qaAiRefs"></div>
-  </div>
-  <div class="qa-result" id="qaResult" style="display:none"></div>
-</div>
+<!-- 新闻问答检索条已迁移至左下角悬浮球（2026-09-04）：矿种/主题/时间筛选与趋势图均在悬浮面板内 -->
 <div class="stats-bar">
 <div class="stat-item"><span class="stat-num new" id="newCount">0</span> 今日新增</div>
 <div class="stat-item"><span class="stat-num unread" id="unreadCount">0</span> 条未读</div>
@@ -871,6 +806,20 @@ body{padding-left:0;padding-top:56px}
   <div class="qa-float-head">
     <span class="qa-float-title">💬 新闻问答</span>
     <button class="pchart-close" onclick="qaFloatToggle()">✕</button>
+  </div>
+  <div class="qa-float-filters">
+    <select class="qa-fsel" id="qaFloatMineral" aria-label="按矿种筛选"><option value="">矿种·全部</option></select>
+    <select class="qa-fsel" id="qaFloatTopic" aria-label="按主题筛选"><option value="">主题·全部</option></select>
+    <select class="qa-fsel" id="qaFloatRange" aria-label="按时间筛选">
+      <option value="0">时间·全部</option>
+      <option value="3">近 3 天</option>
+      <option value="7">近 7 天</option>
+      <option value="30">近 30 天</option>
+    </select>
+    <div class="qa-fsel-btns">
+      <button class="qa-fchip" id="qaFloatTrend" type="button" aria-pressed="false">📈 分布</button>
+      <button class="qa-fchip" id="qaFloatReset" type="button">重置</button>
+    </div>
   </div>
   <div class="qa-float-body" id="qaFloatBody"></div>
   <div class="qa-float-foot">
@@ -1906,13 +1855,9 @@ function qaInitData(){
   }else{QA_ROWS=qaFromDom();QA_SRC='dom';QA_UPDATED='';}
   var cnt={};
   QA_ROWS.forEach(function(r){(r.g||[]).forEach(function(t){cnt[t]=(cnt[t]||0)+1;});});
-  var ms=document.getElementById('qaMineral'),ts=document.getElementById('qaTopic');
+  var ms=document.getElementById('qaFloatMineral'),ts=document.getElementById('qaFloatTopic');
   QA_MINERALS.forEach(function(m){if(cnt[m]){var o=document.createElement('option');o.value=m;o.textContent=m+' ('+cnt[m]+')';if(ms)ms.appendChild(o);}});
   QA_TOPICS.forEach(function(t){if(cnt[t]){var o=document.createElement('option');o.value=t;o.textContent=t+' ('+cnt[t]+')';if(ts)ts.appendChild(o);}});
-  var meta=document.getElementById('qaMeta');
-  if(meta)meta.textContent=(QA_SRC==='full')
-    ?('全库 '+QA_ROWS.length+' 条'+(QA_UPDATED?' · 更新于 '+QA_UPDATED:''))
-    :('页面内 '+QA_ROWS.length+' 条');
 }
 function qaHay(r){return [r.t||'',r.m||'',r.s||'',r.c||'',(r.g||[]).join(' ')].join(' ');}
 function qaFilter(rows,words,mineral,topic,from,mode){
@@ -1940,77 +1885,21 @@ function qaTrendText(rows){
   }).join('\n');
 }
 function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-function qaRender(){
-  var box=document.getElementById('qaResult');
-  if(!box)return;
-  var inp=document.getElementById('qaInput');
-  var kw=inp?(inp.value||'').trim():'';
-  var mineral=(document.getElementById('qaMineral')||{}).value||'';
-  var topic=(document.getElementById('qaTopic')||{}).value||'';
-  var range=parseInt((document.getElementById('qaRange')||{}).value,10)||0;
-  if(!kw&&!mineral&&!topic&&!range){box.style.display='none';box.innerHTML='';return;}
-  box.style.display='';
-  var words=kw?kw.split(/\s+/).filter(Boolean):[],from='';
-  if(range>0){
-    var max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>max)max=r.d;});
-    if(max){var dt=new Date(max+'T00:00:00');dt.setDate(dt.getDate()-range+1);from=dt.toISOString().slice(0,10);}
-  }
-  var hits=qaFilter(QA_ROWS,words,mineral,topic,from,'and'),relaxed=false;
-  if(!hits.length&&words.length>1){        // 精确无果自动放宽，避免空手而归
-    hits=qaFilter(QA_ROWS,words,mineral,topic,from,'or');
-    if(hits.length)relaxed=true;
-  }
-  var html='';
-  if(QA_SRC==='dom')html+='<div class="qa-warn">当前为<b>页面内检索</b>（全库数据文件未随页面加载，仅覆盖本页可见新闻）。关键词搜索不受影响，矿种/主题筛选可能不完整。</div>';
-  if(!hits.length){
-    html+='<div class="qa-empty">库中未检索到匹配内容。<br><b>这不等于「没有发生」</b>——本库由日报每日追加，存在抓取缺口。<br>建议：减少关键词，或换更通用的说法（如「价格」→「报价/指数」）。</div>';
-  }else{
-    var cond=[];
-    if(words.length)cond.push('关键词「'+qaEsc(kw)+'」'+(relaxed?'（已放宽为任一词）':'（同时含）'));
-    if(mineral)cond.push('矿种='+qaEsc(mineral));
-    if(topic)cond.push('主题='+qaEsc(topic));
-    if(from)cond.push(from+' 起');
-    html+='<div class="qa-sum">命中 <b>'+hits.length+'</b> 条'+(cond.length?'　'+cond.join('　'):'')+'</div>';
-    if(QA_TREND)html+='<div class="qa-trend">'+qaEsc(qaTrendText(hits))+'</div>';
-    var lim=Math.min(hits.length,60);
-    for(var i=0;i<lim;i++){
-      var r=hits[i];
-      html+='<div class="qa-item"><div class="qa-line">'
-        +'<span class="qa-d">'+qaEsc(r.d||'????-??-??')+'</span>'
-        +'<a class="qa-t" href="'+qaEsc(r.u)+'" target="_blank" rel="noopener">'+qaEsc(r.t)+'</a>'
-        +'<span class="qa-s">'+qaEsc(r.s)+'</span></div>'
-        +(r.m?'<div class="qa-m">'+qaEsc(r.m)+'</div>':'')+'</div>';
-    }
-    if(hits.length>lim)html+='<div class="qa-sum">仅显示最新 '+lim+' 条，共 '+hits.length+' 条；缩小范围可查看全部。</div>';
-  }
-  box.innerHTML=html;
-}
-function qaReset(){
-  var i=document.getElementById('qaInput');if(i)i.value='';
-  ['qaMineral','qaTopic'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
-  var rg=document.getElementById('qaRange');if(rg)rg.value='0';
-  QA_TREND=false;
-  var tb=document.getElementById('qaTrendBtn');if(tb)tb.classList.remove('on');
-  qaRender();
-}
+// qaRender 已迁移至悬浮球（qaFloatSearch），不再渲染到主内容区 qaResult
+
+// qaReset 已迁移至悬浮球（qaFloatReset）
+
 (function(){
   qaInitData();
   renderDigest();
-  var inp=document.getElementById('qaInput'),timer=null;
-  if(inp){
-    inp.addEventListener('input',function(){clearTimeout(timer);timer=setTimeout(qaRender,220);});
-    inp.addEventListener('keydown',function(e){
-      if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();clearTimeout(timer);qaAskAI();return;}
-      if(e.key==='Enter'){clearTimeout(timer);qaRender();}
-      if(e.key==='Escape'){inp.value='';qaRender();inp.blur();}
-    });
-  }
-  var btn=document.getElementById('qaBtn');if(btn)btn.addEventListener('click',qaRender);
-  ['qaMineral','qaTopic','qaRange'].forEach(function(id){var e=document.getElementById(id);if(e)e.addEventListener('change',qaRender);});
-  var tb=document.getElementById('qaTrendBtn');
-  if(tb)tb.addEventListener('click',function(){QA_TREND=!QA_TREND;tb.classList.toggle('on',QA_TREND);qaRender();});
-  var rs=document.getElementById('qaReset');if(rs)rs.addEventListener('click',qaReset);
-  var ab=document.getElementById('qaAiBtn');if(ab)ab.addEventListener('click',qaAskAI);
+  // 悬浮球筛选：矿种 / 主题 / 时间变化即触发检索（实时）
+  ['qaFloatMineral','qaFloatTopic'].forEach(function(id){
+    var e=document.getElementById(id);if(e)e.addEventListener('change',qaFloatSearch);
+  });
+  var rg=document.getElementById('qaFloatRange');if(rg)rg.addEventListener('change',qaFloatSearch);
+  var tb=document.getElementById('qaFloatTrend');
+  if(tb)tb.addEventListener('click',function(){QA_TREND=!QA_TREND;tb.classList.toggle('on',QA_TREND);tb.setAttribute('aria-pressed',QA_TREND?'true':'false');qaFloatSearch();});
+  var rs=document.getElementById('qaFloatReset');if(rs)rs.addEventListener('click',qaFloatReset);
   qaAiProbe();
   renderLmePrices();
 })();
@@ -2060,7 +1949,7 @@ function qaAiProbe(){
   fetch('api/health?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
     .then(function(d){
       if(!d||!d.ok)return;
-      var b=document.getElementById('qaAiBtn');
+      var b=document.getElementById('qaFloatAi');
       if(b){
         if(!d.has_key){
           b.disabled=true;b.textContent='✨ AI 待配置';
@@ -2074,7 +1963,7 @@ function qaAiProbe(){
     })
     .catch(function(){
       // 探测失败（纯静态部署或网络异常）→ 按钮变"不可用"，让用户清楚知道不是网页坏了
-      var b=document.getElementById('qaAiBtn');
+      var b=document.getElementById('qaFloatAi');
       if(b){b.disabled=true;b.textContent='✨ AI 不可用';
         b.title='未检测到 AI 服务（可能当前是纯静态部署）';}
     });
@@ -2083,64 +1972,8 @@ function qaAiQuota(){
   fetch('api/quota',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
     .then(function(d){if(d&&typeof d.left!=='undefined')QA_LEFT=d.left;}).catch(function(){});
 }
-function qaAskAI(){
-  if(QA_AI_BUSY)return;
-  var inp=document.getElementById('qaInput'),q=inp?(inp.value||'').trim():'';
-  var box=document.getElementById('qaAiBox'),body=document.getElementById('qaAiBody'),
-      refs=document.getElementById('qaAiRefs'),meta=document.getElementById('qaAiMeta');
-  if(!box||!body)return;
-  if(!q){
-    box.style.display='';body.className='qa-aibody';
-    body.innerHTML='<div class="qa-aierr">请先输入问题（例如「最近有哪些稀土政策」「锂价走势如何」），再点「✨ AI 回答」。</div>';
-    if(refs)refs.innerHTML='';if(meta)meta.textContent='';
-    return;
-  }
-  QA_AI_BUSY=true;
-  var btn=document.getElementById('qaAiBtn');
-  if(btn){btn.disabled=true;btn.textContent='思考中…';}
-  box.style.display='';body.className='qa-aibody loading';
-  body.textContent='正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…';
-  if(refs)refs.innerHTML='';if(meta)meta.textContent='';
-  fetch('api/qa',{method:'POST',headers:{'Content-Type':'application/json'},
-                  body:JSON.stringify({question:q})})
-    .then(function(r){
-      return r.json().then(function(d){return {ok:r.ok,code:r.status,d:d||{}};},
-                           function(){return {ok:false,code:r.status,d:{}};});
-    })
-    .then(function(res){
-      var d=res.d;
-      if(!res.ok||d.error){
-        body.className='qa-aibody';
-        body.innerHTML='<div class="qa-aierr">'+qaEsc(d.error||('请求失败（HTTP '+res.code+'）'))+'</div>';
-        if(typeof d.left!=='undefined')QA_LEFT=d.left;
-        return;
-      }
-      body.className='qa-aibody';
-      body.textContent=d.answer||'（模型未返回内容）';
-      var m=[];
-      if(d.matched)m.push('相关 '+d.matched+' 条');
-      if(d.cited)m.push('已读 '+d.cited+' 条');
-      if(d.secs)m.push(d.secs+' 秒');
-      if(typeof d.left!=='undefined'){m.push('剩余 '+d.left+' 次');QA_LEFT=d.left;}
-      if(meta)meta.textContent=m.join(' · ');
-      var h='';
-      (d.refs||[]).forEach(function(r){
-        if(r&&r.u)h+='<div>· '+qaEsc(r.d)+'　<a href="'+qaEsc(r.u)+'" target="_blank" rel="noopener">'+qaEsc(r.t)+'</a></div>';
-      });
-      if(h&&refs)refs.innerHTML='<div style="color:#5b7a94;margin-bottom:3px">参考条目：</div>'+h;
-    })
-    .catch(function(e){
-      body.className='qa-aibody';
-      body.innerHTML='<div class="qa-aierr">无法连接问答服务（'+
-        qaEsc((e&&e.message)||e||'网络错误')+'）。<br>请确认本页是通过 Python 服务打开的——'+
-        '纯静态部署没有 AI 能力，普通检索不受影响。</div>';
-    })
-    .then(function(){
-      QA_AI_BUSY=false;
-      var b=document.getElementById('qaAiBtn');
-      if(b&&QA_AI_ON){b.disabled=false;b.textContent='✨ AI 回答';}
-    });
-}
+// qaAskAI 已删除：主内容区 AI box 随「新闻问答」检索条一并移除；悬浮球的 AI 回答由 qaFloatAsk 接管
+
 // ===== 价格卡走势图（9-04 新增，数据源 price-history.js，由 fetch_price_history.py 每日更新）=====
 // 设计：缺数据时优雅降级提示，不影响行情卡本身；涨红跌绿配色
 function pcSeries(slug){
@@ -2295,23 +2128,39 @@ function qaFloatAdd(role,html,meta){
 }
 function qaFloatSearch(){
   var inp=document.getElementById('qaFloatInput');if(!inp)return;
-  var q=(inp.value||'').trim();if(!q)return;
-  qaFloatAdd('user',qaEsc(q),'');
-  inp.value='';
-  var words=q.split(/\s+/).filter(Boolean);
-  var hits=qaFilter(QA_ROWS,words,'','','','and'),relaxed=false;
-  if(!hits.length&&words.length>1){hits=qaFilter(QA_ROWS,words,'','','','or');relaxed=true;}
+  var q=(inp.value||'').trim();
+  var mineral=(document.getElementById('qaFloatMineral')||{}).value||'';
+  var topic=(document.getElementById('qaFloatTopic')||{}).value||'';
+  var range=parseInt((document.getElementById('qaFloatRange')||{}).value,10)||0;
+  if(q){qaFloatAdd('user',qaEsc(q),'');inp.value='';}
+  if(!q&&!mineral&&!topic&&!range){
+    qaFloatAdd('ai','请选择矿种 / 主题 / 时间，或输入关键词后点「检索」。','');
+    return;
+  }
+  var words=q?q.split(/\s+/).filter(Boolean):[],from='';
+  if(range>0){
+    var max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>max)max=r.d;});
+    if(max){var dt=new Date(max+'T00:00:00');dt.setDate(dt.getDate()-range+1);from=dt.toISOString().slice(0,10);}
+  }
+  var hits=qaFilter(QA_ROWS,words,mineral,topic,from,'and'),relaxed=false;
+  if(!hits.length&&words.length>1){hits=qaFilter(QA_ROWS,words,mineral,topic,from,'or');relaxed=true;}
   var html='';
   if(!hits.length){
     html='<div>全库未检索到匹配内容。<b>这不等于「没有发生」</b>——本库由日报每日追加，存在抓取缺口。建议减少关键词或换更通用的说法。</div>';
   }else{
-    html='<div style="margin-bottom:4px">命中 <b>'+hits.length+'</b> 条'+(relaxed?'（已放宽为任一词命中）':'（同时含）')+'，最新 8 条：</div>';
+    var cond=[];
+    if(words.length)cond.push('关键词「'+qaEsc(q)+'」'+(relaxed?'（已放宽为任一词）':'（同时含）'));
+    if(mineral)cond.push('矿种='+qaEsc(mineral));
+    if(topic)cond.push('主题='+qaEsc(topic));
+    if(from)cond.push(from+' 起');
+    html='<div>命中 <b>'+hits.length+'</b> 条'+(cond.length?'　'+cond.join('　'):'')+'，最新 8 条：</div>';
+    if(QA_TREND)html+='<div class="qa-trend">'+qaEsc(qaTrendText(hits))+'</div>';
     var lim=Math.min(hits.length,8);
     for(var i=0;i<lim;i++){
       var r=hits[i];
       html+='<a class="qa-msg-item" href="'+qaEsc(r.u)+'" target="_blank" rel="noopener"><span class="qd">'+qaEsc(r.d||'????-??-??')+'</span>'+qaEsc(r.t)+'<span class="qs">'+qaEsc(r.s||'')+'</span></a>';
     }
-    if(hits.length>lim)html+='<div style="margin-top:4px;color:#6b7a89">共 '+hits.length+' 条，可到页顶「新闻问答」条查看全部并按矿种/主题/时间筛选。</div>';
+    if(hits.length>lim)html+='<div style="margin-top:4px;color:#6b7a89">共 '+hits.length+' 条，可缩小矿种 / 主题 / 时间范围查看全部。</div>';
   }
   qaFloatAdd('ai',html,'全库 '+QA_ROWS.length+' 条 · 检索于本地，不经任何服务');
 }
@@ -2359,7 +2208,18 @@ function qaFloatAsk(){
       if(btn){btn.disabled=false;btn.textContent='AI';}
     });
 }
+function qaFloatReset(){
+  var i=document.getElementById('qaFloatInput');if(i)i.value='';
+  ['qaFloatMineral','qaFloatTopic'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  var rg=document.getElementById('qaFloatRange');if(rg)rg.value='0';
+  QA_TREND=false;
+  var tb=document.getElementById('qaFloatTrend');if(tb){tb.classList.remove('on');tb.setAttribute('aria-pressed','false');}
+}
 (function(){
+  var fb=document.getElementById('qaFloatBody');
+  if(fb&&!fb.children.length){
+    qaFloatAdd('ai','全库 '+QA_ROWS.length+' 条新闻可检索。输入关键词，或先选矿种 / 主题 / 时间再点「检索」。','本地检索 · 零依赖');
+  }
   var inp=document.getElementById('qaFloatInput');
   if(inp){
     inp.addEventListener('keydown',function(e){
