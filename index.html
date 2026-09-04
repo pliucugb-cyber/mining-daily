@@ -2488,6 +2488,48 @@ function qaFloatSearch(){
   }
   qaFloatAdd('ai',html,'全库 '+QA_ROWS.length+' 条 · 检索于本地，不经任何服务');
 }
+// 本地关键词兜底库：后端不可达时，仍能给出基于通用矿业知识的回答
+var QA_AI_FALLBACK=[
+  [['铜','Cu'],'铜（Cu）是有色金属中的重要品种，广泛应用于电力、建筑、交通等领域。'],
+  [['铝','Al','铝土矿'],'铝（Al）具有轻质、耐腐蚀等特性，广泛应用于航空航天、汽车制造、包装容器等领域。中国铝土矿资源对外依存度较高，广西、河南、贵州、山西是主要产区。'],
+  [['锌','Zn'],'锌（Zn）主要用于镀锌钢板、合金制造和电池。'],
+  [['铅','Pb'],'铅（Pb）主要用于铅酸蓄电池、辐射防护材料。'],
+  [['镍','Ni'],'镍（Ni）是不锈钢和动力电池的关键金属，新能源车带动需求快速增长。'],
+  [['锡','Sn'],'锡（Sn）主要用于焊锡和电子封装，半导体景气度直接影响其需求。'],
+  [['锂','Li'],'锂（Li）被称为"白色石油"，是新能源动力电池的核心原材料。中国是全球最大锂消费国。'],
+  [['稀土'],'稀土是 17 种金属元素的统称，中国是全球最大的稀土生产国和供应国。'],
+  [['金','黄金'],'黄金兼具商品、货币、避险三重属性，央行购金、地缘冲突是金价的核心驱动。'],
+  [['铁矿','铁矿石'],'铁矿石是钢铁工业的核心原料，中国是全球最大进口国，对外依存度高。'],
+  [['新一轮','找矿','突破','战略'],'新一轮找矿突破战略行动已取得阶段性成果：铜、铝、锂、钴、镍等关键矿产新增资源量稳步提升。'],
+  [['关键矿产','战略性矿产'],'关键矿产对国家经济安全和国防至关重要，中国"十四五"明确将 24 种矿产列为战略性矿产。'],
+  [['勘查','勘探'],'矿产勘查分为预查、普查、详查、勘探 4 个阶段，铝土矿等矿种勘查深度按 DZ/T 0202-2020 等规范执行。'],
+  [['矿权','采矿权','探矿权'],'矿业权包括探矿权和采矿权，出让方式分招拍挂与协议出让。'],
+  [['DZ/T','规范','标准'],'地质矿产领域现行重要标准：DZ/T 0202-2020（铝土矿）、DZ/T 0204-2020（铜铅锌银）、DZ/T 0205-2020（稀有金属）等。'],
+];
+function qaAiLocalAnswer(q,ctx){
+  var text='';
+  // 1) 若有相关新闻，基于新闻生成摘要
+  if(ctx&&ctx.length){
+    var byDate=ctx.slice(0,5);
+    text='根据本地新闻库中 '+ctx.length+' 条相关条目，整理要点如下：\n\n';
+    var pts=[];
+    byDate.forEach(function(r,i){
+      pts.push((i+1)+'. ['+(r.d||'')+'] '+(r.t||'')+(r.s?'（'+r.s+'）':''));
+    });
+    text+=pts.join('\n')+'\n\n';
+  }
+  // 2) 关键词兜底
+  for(var i=0;i<QA_AI_FALLBACK.length;i++){
+    var kws=QA_AI_FALLBACK[i][0],ans=QA_AI_FALLBACK[i][1];
+    for(var j=0;j<kws.length;j++){
+      if(q.indexOf(kws[j])>=0){text+=ans;break;}
+    }
+  }
+  if(!text){
+    text='关于「'+q+'」，本地暂未匹配到精确答案。可尝试关键词：铜/铝/锌/铅/镍/锡/锂/稀土/找矿/矿权。';
+  }
+  return text;
+}
 function qaFloatAsk(){
   if(QA_FLOAT_BUSY)return;
   var inp=document.getElementById('qaFloatInput'),btn=document.getElementById('qaFloatAi');
@@ -2517,8 +2559,12 @@ function qaFloatAsk(){
   if(_minSel){_ctx=_ctx.filter(function(r){return (r.t||'').indexOf(_minSel)>=0;});}
   var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…','');
   if(!QA_API_BASE||QA_API_BASE.indexOf('YOUR-CF-SUBDOMAIN')>=0){
-    if(msg){var _b=msg.querySelector('.qa-msg-bubble');if(_b)_b.innerHTML='<div style="color:#e74c3c">AI 后端地址尚未配置：请在 index.html 顶部把 QA_API_BASE 改成 worker 的真实 URL。</div>';}
+    // 未配置后端：直接走本地兜底，不让用户看到错误
+    var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
+    if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">'+qaEsc(qaAiLocalAnswer(q,_ctx))+'</div>';
+    if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 未配置 AI 后端';}
     QA_FLOAT_BUSY=false;if(btn){btn.disabled=false;btn.textContent='AI';}
+    qaFloatScroll();
     return;
   }
   fetch(QA_API_BASE+'/api/qa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:_ctx})})
@@ -2542,14 +2588,12 @@ function qaFloatAsk(){
       qaFloatScroll();
     })
     .catch(function(e){
+      // 后端连不上：用本地检索结果 + 关键词库兜底，保证用户仍能得到回答
       var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
-      var hint='无法连接 AI 问答服务（'+qaEsc((e&&e.message)||e||'网络错误')+'）。';
-      if(String(e&&e.message||e).indexOf('fetch')>=0||String(e&&e.message||e).indexOf('Failed')>=0){
-        hint+='常见原因：本地代理（Clash/V2Ray 等）或公司网络拦截了 <code>workers.dev</code>。可尝试关闭代理、换手机流量，或改用国内云函数后端。';
-      }else{
-        hint+='纯静态部署没有 AI 能力，关键词「检索」不受影响。';
-      }
-      if(bubble)bubble.innerHTML='<div style="color:#e74c3c">'+hint+'</div>';
+      var localAns=qaAiLocalAnswer(q,_ctx);
+      var hint='\n\n[AI 后端当前无法连接（'+qaEsc((e&&e.message)||e||'网络错误')+'），已切换为本地知识库回答]';
+      if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">'+qaEsc(localAns)+'<span style="color:#e74c3c">'+hint+'</span></div>';
+      if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 全库 '+QA_ROWS.length+' 条';}
       qaFloatScroll();
     })
     .then(function(){
