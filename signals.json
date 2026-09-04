@@ -1,68 +1,68 @@
 {
-"date": "2026-09-03",
-"has_history": true,
-"history_days": 1,
-"metals": [
-{
-"symbol": "Cu",
-"name": "铜",
-"signal": "数据不足",
-"position": "-",
-"ma5": null,
-"ma10": null,
-"ma20": null,
-"note": "历史不足，暂无法研判"
-},
-{
-"symbol": "Al",
-"name": "铝",
-"signal": "数据不足",
-"position": "-",
-"ma5": null,
-"ma10": null,
-"ma20": null,
-"note": "历史不足，暂无法研判"
-},
-{
-"symbol": "Zn",
-"name": "锌",
-"signal": "数据不足",
-"position": "-",
-"ma5": null,
-"ma10": null,
-"ma20": null,
-"note": "历史不足，暂无法研判"
-},
-{
-"symbol": "Pb",
-"name": "铅",
-"signal": "数据不足",
-"position": "-",
-"ma5": null,
-"ma10": null,
-"ma20": null,
-"note": "历史不足，暂无法研判"
-},
-{
-"symbol": "Ni",
-"name": "镍",
-"signal": "数据不足",
-"position": "-",
-"ma5": null,
-"ma10": null,
-"ma20": null,
-"note": "历史不足，暂无法研判"
-},
-{
-"symbol": "Sn",
-"name": "锡",
-"signal": "数据不足",
-"position": "-",
-"ma5": null,
-"ma10": null,
-"ma20": null,
-"note": "历史不足，暂无法研判"
-}
-],
-"summary": "基于 LME 历史均差与周期位置研判，详见各金属卡片"
+  "date": "2026-09-04",
+  "has_history": true,
+  "history_days": 2,
+  "metals": [
+    {
+      "symbol": "Cu",
+      "name": "铜",
+      "signal": "偏强",
+      "position": "3日趋势：+1.31%（较前一日 +0.63%）",
+      "ma5": null,
+      "ma10": null,
+      "ma20": null,
+      "note": "连续三日上行，短期偏强"
+    },
+    {
+      "symbol": "Al",
+      "name": "铝",
+      "signal": "偏强",
+      "position": "3日趋势：+1.33%（较前一日 +0.58%）",
+      "ma5": null,
+      "ma10": null,
+      "ma20": null,
+      "note": "稳步小幅上行，走势偏强"
+    },
+    {
+      "symbol": "Zn",
+      "name": "锌",
+      "signal": "偏强",
+      "position": "3日趋势：+1.25%（较前一日 +0.98%）",
+      "ma5": null,
+      "ma10": null,
+      "ma20": null,
+      "note": "三日累计涨约1.3%，今日领涨"
+    },
+    {
+      "symbol": "Pb",
+      "name": "铅",
+      "signal": "中性",
+      "position": "3日趋势：-0.03%（较前一日 +0.76%）",
+      "ma5": null,
+      "ma10": null,
+      "ma20": null,
+      "note": "区间震荡，方向不明"
+    },
+    {
+      "symbol": "Ni",
+      "name": "镍",
+      "signal": "中性",
+      "position": "3日趋势：+0.78%（较前一日 -0.94%）",
+      "ma5": null,
+      "ma10": null,
+      "ma20": null,
+      "note": "冲高回落，震荡格局"
+    },
+    {
+      "symbol": "Sn",
+      "name": "锡",
+      "signal": "中性",
+      "position": "3日趋势：+0.79%（较前一日 +0.71%）",
+      "ma5": null,
+      "ma10": null,
+      "ma20": null,
+      "note": "缓步上行，重心小幅上移"
+    }
+  ],
+  "summary": "LME 铜/铝/锌/锡三日累计上行约 0.8%~1.3%，铅镍震荡；样本仅 3 天，MA 研判待积累。"
 }

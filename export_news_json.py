@@ -24,7 +24,7 @@ import json
 import hashlib
 import datetime
 
-BASE_DIR = r'C:\Users\windows\WorkBuddy\2026-08-25-21-20-31\output\mining-daily'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 INDEX_PATH = os.path.join(BASE_DIR, 'index.html')
 JSON_PATH = os.path.join(BASE_DIR, 'mining_news.json')
 DATA_DIR = os.path.join(BASE_DIR, 'data')          # 月度分片累积库
