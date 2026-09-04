@@ -1,0 +1,68 @@
+{
+"date": "2026-09-03",
+"has_history": true,
+"history_days": 1,
+"metals": [
+{
+"symbol": "Cu",
+"name": "铜",
+"signal": "数据不足",
+"position": "-",
+"ma5": null,
+"ma10": null,
+"ma20": null,
+"note": "历史不足，暂无法研判"
+},
+{
+"symbol": "Al",
+"name": "铝",
+"signal": "数据不足",
+"position": "-",
+"ma5": null,
+"ma10": null,
+"ma20": null,
+"note": "历史不足，暂无法研判"
+},
+{
+"symbol": "Zn",
+"name": "锌",
+"signal": "数据不足",
+"position": "-",
+"ma5": null,
+"ma10": null,
+"ma20": null,
+"note": "历史不足，暂无法研判"
+},
+{
+"symbol": "Pb",
+"name": "铅",
+"signal": "数据不足",
+"position": "-",
+"ma5": null,
+"ma10": null,
+"ma20": null,
+"note": "历史不足，暂无法研判"
+},
+{
+"symbol": "Ni",
+"name": "镍",
+"signal": "数据不足",
+"position": "-",
+"ma5": null,
+"ma10": null,
+"ma20": null,
+"note": "历史不足，暂无法研判"
+},
+{
+"symbol": "Sn",
+"name": "锡",
+"signal": "数据不足",
+"position": "-",
+"ma5": null,
+"ma10": null,
+"ma20": null,
+"note": "历史不足，暂无法研判"
+}
+],
+"summary": "基于 LME 历史均差与周期位置研判，详见各金属卡片"
+}

@@ -1,0 +1,35 @@
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+
+# ===== 含密钥，禁止提交（DeepSeek API key 在 qa_config.json 里）=====
+qa_config.json
+
+# ===== 部署/运行时产生的缓存（按日期、机器相关，非源码）=====
+data/ai_analysis_*.json
+
+# ===== 本地临时/诊断目录（约 4.6M 杂项，冒烟测试在下面例外保留）=====
+tmp/*
+!tmp/smoke_ai.js
+
+# ===== 备份 / 打包产物 =====
+*.zip
+*.bak
+*.bak-*
+index_old_*.html
+index.html.bak-*
+
+# ===== 页面拼装时的零碎草稿（_ 前缀）=====
+_*.txt
+
+# ===== 一次性产物 =====
+test.txt
+screenshots/
+online.html
+
+# ===== 系统 / 编辑器 =====
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
