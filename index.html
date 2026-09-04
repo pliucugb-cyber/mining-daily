@@ -2117,7 +2117,12 @@ function qaAiProbe(){
   console.log('[qaAiProbe] probing',QA_API_BASE+'/api/health');
   fetch(QA_API_BASE+'/api/health?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
     .then(function(d){
-      if(!d||!d.ok)return;
+      // 严格校验：防止公司代理/浏览器扩展返回伪造 200 响应（如 Server:GitHub.com, CORS:*）
+      if(!d||typeof d!=='object'||d.ok!==true||typeof d.has_key!=='boolean'||d.model!=='deepseek-chat'){
+        // eslint-disable-next-line no-console
+        console.warn('[qaAiProbe] unexpected health response:',d);
+        return;
+      }
       var b=document.getElementById('qaFloatAi');
       if(b){
         if(!d.has_key){
@@ -2488,10 +2493,9 @@ function qaFloatAsk(){
   var inp=document.getElementById('qaFloatInput'),btn=document.getElementById('qaFloatAi');
   var q=inp?(inp.value||'').trim():'';
   if(!q){qaFloatAdd('ai','请先输入问题，例如「最近有哪些稀土政策」「锂价为什么大跌」。','');return;}
-  if(!QA_AI_ON){
-    qaFloatAdd('ai','AI 服务当前不可用（可能为纯静态部署，或服务端未配置 <code>DEEPSEEK_API_KEY</code>）。<br>关键词检索不受影响——直接点「检索」即可。','');
-    return;
-  }
+  // 2026-09-05 修复：不再因为 QA_AI_ON 预探测失败就拒绝用户。
+  // 公司代理/扩展可能伪造 health 响应导致 QA_AI_ON=false，但 /api/qa 其实可通。
+  // 因此点 AI 时直接尝试请求后端；若真不可用，catch 会给出真实错误提示。
   QA_FLOAT_BUSY=true;
   if(btn){btn.disabled=true;btn.textContent='思考中…';}
   qaFloatAdd('user',qaEsc(q),'');
