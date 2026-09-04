@@ -227,8 +227,16 @@ body.dark .pchart-head{border-bottom-color:#2c3845}
 body.dark .pchart-table th,body.dark .pchart-table td{border-bottom-color:#2c3845}
 body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 /* ==================== 左下角问答悬浮球 + 面板（9-04 新增）==================== */
-.qa-fab{position:fixed;left:16px;bottom:16px;z-index:998;height:50px;max-width:calc(100vw - 32px);padding:0 18px;border:none;border-radius:999px;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:15px;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 20px rgba(79,70,229,.42);display:flex;align-items:center;gap:8px;white-space:nowrap;transition:transform .15s,box-shadow .15s}
-.qa-fab:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(79,70,229,.5)}
+.qa-fab{position:fixed;left:16px;bottom:16px;z-index:998;height:50px;max-width:calc(100vw - 32px);padding:0 18px;border:none;border-radius:999px;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:15px;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 20px rgba(79,70,229,.42);display:flex;align-items:center;gap:8px;white-space:nowrap;transition:transform .15s,box-shadow .15s,padding .15s}
+/* 悬停：轻微上浮+加宽，呈现“可搜索”的引导感 */
+.qa-fab:hover{transform:translateY(-3px) scale(1.03);padding:0 22px;box-shadow:0 12px 30px rgba(79,70,229,.55)}
+/* 首次进入呼吸提示：柔和脉冲吸引注意，首次打开面板后停止（见 qaFloatToggle / 初始化） */
+.qa-fab.breathe{animation:qaBreath 1.9s ease-in-out infinite}
+@keyframes qaBreath{
+  0%,100%{box-shadow:0 6px 20px rgba(79,70,229,.42)}
+  50%{box-shadow:0 8px 32px 5px rgba(124,58,237,.82)}
+}
+@media (prefers-reduced-motion:reduce){.qa-fab.breathe{animation:none}}
 .qa-fab:active{transform:translateY(0)}
 .qa-fab .qa-fab-ico{font-size:18px;line-height:1;display:inline-block}
 .qa-fab .qa-fab-txt{display:inline-block}
@@ -2002,6 +2010,18 @@ function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){retu
   var rs=document.getElementById('qaFloatReset');if(rs)rs.addEventListener('click',qaFloatReset);
   qaAiProbe();
   renderLmePrices();
+  // 首次进入：未打开过悬浮球且未启用“减少动态效果”时，播放呼吸提示吸引注意
+  try{
+    var _reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var _seen=window.localStorage&&localStorage.getItem('qaFabSeen');
+    if(!_seen&&!_reduce){
+      var _fb=document.getElementById('qaFab');
+      if(_fb){
+        _fb.classList.add('breathe');
+        setTimeout(function(){if(_fb.classList.contains('breathe'))qaStopBreathe();},9000);
+      }
+    }
+  }catch(e){}
 })();
 // ===== LME 6 大基本金属价格（2026-09-02 新增，数据源 lme-data.js，由 fetch_lme.py 每日更新）=====
 // 设计：lme-data.js 加载失败或数据缺失时显示"暂不可用"，不影响 SHFE 主行
@@ -2225,11 +2245,15 @@ function qaFloatToggle(){
   if(!p)return;
   var open=p.classList.toggle('open');
   if(b)b.classList.toggle('on',open);
-  if(open){var i=document.getElementById('qaFloatInput');if(i)setTimeout(function(){i.focus();},80);}
+  if(open){var i=document.getElementById('qaFloatInput');if(i)setTimeout(function(){i.focus();},80);qaStopBreathe();}
 }
 function qaFloatClose(){
   var p=document.getElementById('qaFloat');if(p)p.classList.remove('open');
   var b=document.getElementById('qaFab');if(b)b.classList.remove('on');
+}
+function qaStopBreathe(){
+  try{var b=document.getElementById('qaFab');if(b)b.classList.remove('breathe');}catch(e){}
+  try{if(window.localStorage)localStorage.setItem('qaFabSeen','1');}catch(e){}
 }
 function qaFloatScroll(){
   var b=document.getElementById('qaFloatBody');if(b)b.scrollTop=b.scrollHeight;
