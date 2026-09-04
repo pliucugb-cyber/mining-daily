@@ -2,8 +2,12 @@
 // 2026-09-04 修复：改为 network-first（HTML 永远优先拿线上最新版，离线才用缓存）
 // + 缓存版本号 bump + activate 时清掉所有旧缓存 + 新 SW 激活后通知页面自动刷新
 // 这样任何访客无需手动 Ctrl+F5 即可看到最新内容。
-const CACHE_NAME = 'mining-daily-v3';
-const urlsToCache = ['/', '/index.html', '/news-data.js', '/lme-data.js'];
+const CACHE_NAME = 'mining-daily-v4';
+// price-history.js（价格走势数据）2026-09-05 补入预缓存
+const urlsToCache = ['/', '/index.html', '/news-data.js', '/lme-data.js', '/price-history.js'];
+// 每日更新内容的数据文件：必须 network-first。
+// 若走 stale-while-revalidate，当天首次打开会先渲染昨天缓存的新闻/行情，要刷新一次才更新
+const DATA_FILES = ['/news-data.js', '/lme-data.js', '/price-history.js'];
 
 self.addEventListener('install', event => {
   // 强制新 SW 立即激活，不等旧标签页关闭
@@ -39,8 +43,8 @@ self.addEventListener('fetch', event => {
                  url.pathname === '/' ||
                  url.pathname.endsWith('.html');
 
-  if (isHtml) {
-    // HTML：network-first —— 永远优先拿线上最新版，失败才用缓存（离线兜底）
+  // HTML 与每日数据文件：network-first —— 永远优先拿线上最新版，失败才用缓存（离线兜底）
+  if (isHtml || DATA_FILES.indexOf(url.pathname) >= 0) {
     event.respondWith(
       fetch(req).then(res => {
         if (res && res.ok && res.type === 'basic') {

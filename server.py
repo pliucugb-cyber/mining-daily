@@ -15,6 +15,7 @@
   /api/ai-analyze   GET  AI 深度解析（deepseek 调用，每日配额 30/机，结果缓存到 data/ai_analysis_<date>.json）
 """
 import json
+import glob
 import os
 import re
 import time
@@ -26,7 +27,19 @@ from urllib.parse import urlparse, parse_qs
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(ROOT, 'data')
-NEWS_FILE = os.path.join(DATA_DIR, 'news_2026-09.json')
+# 注意：不要硬编码月份文件名（原 news_2026-09.json 会在 10 月起读空导致热榜/AI 全挂），
+# 改为运行时取 data/ 下月份最大的那份
+NEWS_FILE = None
+
+
+def _latest_news_file():
+    """返回 data/ 下最新的 news_YYYY-MM.json（按文件名排序取最大月份）"""
+    try:
+        files = sorted(f for f in glob.glob(os.path.join(DATA_DIR, 'news_*.json'))
+                       if re.search(r'news_\d{4}-\d{2}\.json$', f))
+        return files[-1] if files else None
+    except Exception:
+        return None
 
 # ============================================================
 # DeepSeek AI 配置（环境变量 DEEPSEEK_API_KEY，无 key 时降级为占位）
@@ -55,19 +68,43 @@ _ai_state = {'date': '', 'count': 0}
 # 新闻数据加载（9/3 备份的 25 条 9 月新闻）
 # ============================================================
 _NEWS_CACHE = None
+_NEWS_MTIME = 0
+
+
+def _read_json(rel):
+    """读取项目根下的 JSON 数据文件（相对路径，禁止跳出 ROOT）"""
+    try:
+        full = os.path.normpath(os.path.join(ROOT, rel))
+        if os.path.relpath(full, ROOT).startswith('..'):
+            return None
+        with open(full, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return None
 
 
 def load_news():
-    global _NEWS_CACHE
-    if _NEWS_CACHE is not None:
+    """按文件修改时间缓存：导出脚本更新数据后无需重启服务即可生效"""
+    global _NEWS_CACHE, _NEWS_MTIME, NEWS_FILE
+    f = _latest_news_file()
+    if not f:
+        return _NEWS_CACHE or []
+    try:
+        mt = os.path.getmtime(f)
+    except Exception:
+        mt = 0
+    if _NEWS_CACHE is not None and mt == _NEWS_MTIME:
         return _NEWS_CACHE
     try:
-        with open(NEWS_FILE, 'r', encoding='utf-8') as f:
-            d = json.load(f)
+        with open(f, 'r', encoding='utf-8') as fh:
+            d = json.load(fh)
         _NEWS_CACHE = d.get('news') or []
+        _NEWS_MTIME = mt
+        NEWS_FILE = f
     except Exception as e:
         print(f'[load_news] failed: {e}')
-        _NEWS_CACHE = []
+        if _NEWS_CACHE is None:
+            _NEWS_CACHE = []
     return _NEWS_CACHE
 
 
@@ -306,20 +343,27 @@ class Handler(BaseHTTPRequestHandler):
         # 默认首页
         if path == '/' or path == '':
             path = '/index.html'
-        # 防止路径穿越
-        rel = path.lstrip('/')
+        # 防止路径穿越：先规范化再判断（2026-09-05 修复）
+        # 旧实现用未规范化的 rel 做黑名单/前缀判断，`/./qa_config.json`、`/x/../qa_config.json`
+        # 这类带 . 与 .. 段的路径可绕过黑名单直接读到敏感文件
+        rel = os.path.normpath(path.lstrip('/')).replace('\\', '/')
+        if rel.startswith('../') or rel == '..' or rel.startswith('/'):
+            self.send_error(403)
+            return
         # ---- 静态文件黑名单（2026-09-04 修复：qa_config.json 曾被当静态文件公网暴露密钥）----
-        # 拦截：qa_config.json / *.py / *.env / *.log / *.bak* / __pycache__ / 以 _ 开头的工作文件
+        # 拦截：qa_config.json / *.py / *.env / *.log / *.bak* / __pycache__ / 以 _ 或 . 开头的文件与目录
+        # （含 .git 目录：此前 /.git/config 可直接下载，等于泄露完整源码与提交历史）
         _lower = rel.lower()
+        _parts = _lower.split('/')
         if (_lower == 'qa_config.json'
                 or _lower.endswith(('.py', '.env', '.log'))
                 or '.bak' in _lower
                 or '__pycache__' in _lower
-                or _lower.startswith('_')):
+                or any(p.startswith('.') or p.startswith('_') for p in _parts)):
             self.send_error(404)
             return
         full = os.path.normpath(os.path.join(ROOT, rel))
-        if not full.startswith(ROOT):
+        if os.path.relpath(full, ROOT).startswith('..'):
             self.send_error(403)
             return
         if not os.path.isfile(full):
@@ -374,34 +418,40 @@ class Handler(BaseHTTPRequestHandler):
                 'hot': _compute_hot_news(datetime.now().strftime('%Y-%m-%d'), 3),
             })
         if path == '/api/morning-report':
+            # 2026-09-05 修复：原为硬编码占位文案，改读真实晨报数据
+            real = _read_json('morning_report.json') or {}
             today = datetime.now().strftime('%Y-%m-%d')
-            return self._json({
+            return self._json(real if real else {
                 'date': today,
                 'title': today + ' 矿业晨报',
-                'sections': [
-                    {'h': '市场动态', 'b': '今日铜铝锌铅镍锡 LME 价格小幅震荡，整体持稳。'},
-                    {'h': '政策聚焦', 'b': '新一轮找矿突破战略行动持续推进，关键矿产保障能力稳步提升。'},
-                    {'h': '行业要闻', 'b': '重点关注自然资源部、中国地质调查局新发布的勘查成果与矿权出让公告。'},
-                ],
+                'sections': [],
+                'note': 'morning_report.json 不可用',
             })
         if path == '/api/anomalies':
-            return self._json({'has_anomaly': False, 'anomalies': []})
+            # 2026-09-05 修复：原为永远返回空的占位，改读真实异动告警
+            alerts = _read_json('alerts.json') or {}
+            items = alerts.get('alerts') or alerts.get('items') or []
+            return self._json({'has_anomaly': bool(items), 'anomalies': items})
         if path == '/api/price-history':
+            # 2026-09-05 修复：原实现用 random 随机游走伪造价格序列（违反"未编造"原则），
+            # 改为读 fetch_price_history.py 产出的真实日 K（price_history_detail.json）
             metal = (q.get('metal') or ['lcpt'])[0]
-            days = int((q.get('days') or ['5'])[0])
-            days = max(1, min(days, 30))
-            # 简单模拟：固定基准价 + 随机游走（占位）
-            base = {'lcpt': 14363, 'lalt': 3315, 'lznt': 3895,
-                    'lldt': 1898, 'lnkt': 16930, 'ltnt': 54300}.get(metal, 10000)
-            import random
-            random.seed(metal)
-            series = []
-            cur = base
-            for i in range(days):
-                cur = cur + random.uniform(-base * 0.005, base * 0.005)
-                d = (datetime.now() - timedelta(days=days - 1 - i)).strftime('%Y-%m-%d')
-                series.append({'d': d, 'p': round(cur, 2)})
-            return self._json({'metal': metal, 'days': days, 'series': series})
+            try:
+                days = int((q.get('days') or ['8'])[0])
+            except Exception:
+                days = 8
+            days = max(1, min(days, 60))
+            detail = _read_json('price_history_detail.json') or {}
+            series = ((detail.get('series') or {}).get(metal) or {}).get('points') or []
+            pts = series[-days:]
+            return self._json({
+                'metal': metal,
+                'name': ((detail.get('series') or {}).get(metal) or {}).get('name', ''),
+                'unit': ((detail.get('series') or {}).get(metal) or {}).get('unit', ''),
+                'days': days,
+                'source': 'fetch_price_history.py',
+                'series': [{'d': d, 'p': p} for d, p in pts],
+            })
         if path == '/api/ai-analyze':
             today = datetime.now().strftime('%Y-%m-%d')
             cache_path = os.path.join(DATA_DIR, f'ai_analysis_{today}.json')
@@ -493,15 +543,20 @@ class Handler(BaseHTTPRequestHandler):
 # ============================================================
 def main():
     port = int(os.environ.get('PORT', '3000'))
+    # 默认只监听本机：避免办公网内任何人都可访问并消耗 AI 配额。
+    # 确实需要手机/PWA 同局域网访问时，设置环境变量 HOST=0.0.0.0 启动。
+    host = os.environ.get('HOST', '127.0.0.1')
     n = len(load_news())
     print('========================================================')
-    print('  矿业日报服务已启动（2026-09-04 重建版）')
-    print('  监听      0.0.0.0:%d' % port)
+    print('  矿业日报服务已启动（2026-09-05 安全加固版）')
+    print('  监听      %s:%d' % (host, port))
+    if host == '0.0.0.0':
+        print('  ⚠ 当前监听所有网卡，局域网内任何人可访问')
     print('  新闻条目  %d 条' % n)
     print('  热榜算法  来源权威×10 + 时效衰减 + 关键词加分')
     print('  AI 问答   已就绪（关键词匹配版，不依赖 API key）')
     print('========================================================')
-    srv = ThreadingHTTPServer(('0.0.0.0', port), Handler)
+    srv = ThreadingHTTPServer((host, port), Handler)
     try:
         srv.serve_forever()
     except KeyboardInterrupt:
