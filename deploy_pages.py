@@ -104,7 +104,7 @@ def main():
     #    刻意不做"先清空再全量复制"：那样每轮都会删除十几个文件，
     #    既触发批量删除确认、也让 git 每次都认为全部文件变动。
     #    只删除确实已不在清单里的文件，日常运行删除数为 0。
-    keep = set(REQUIRED + OPTIONAL)
+    keep = set(REQUIRED + OPTIONAL + ['.nojekyll'])
     for name in os.listdir(WORK):
         if name == '.git' or name in keep:
             continue
@@ -125,6 +125,16 @@ def main():
         shutil.copy2(src, dst)
         copied.append(f)
     log('[deploy_pages] 已复制 %d 个文件：%s' % (len(copied), ', '.join(copied)))
+
+    # 4.5) .nojekyll —— 跳过 GitHub Pages 的 Jekyll 构建
+    #   Pages 默认对站点跑 Jekyll：会忽略下划线开头的文件/目录，还可能把 {{ }} 当 Liquid 模板处理。
+    #   本项目是已经构建好的纯静态文件，跳过构建更稳妥、发布也更快。
+    #   注意：这个文件只放在 gh-pages 分支里，不放项目根 —— 项目根的 server.py 按安全约定
+    #   会拦截以 . 开头的静态路径，放那边反而访问不到。
+    nojekyll = os.path.join(WORK, '.nojekyll')
+    if not os.path.exists(nojekyll):
+        with open(nojekyll, 'w') as f:
+            f.write('')
 
     # 5) 提交（工作区有变更才提交）
     run('git add -A', cwd=WORK)
