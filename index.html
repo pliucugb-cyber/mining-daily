@@ -1814,6 +1814,34 @@ if('serviceWorker' in navigator){
 // 数据源双通道：① window.NEWS_DATA（news-data.js 全库）② 从页面 DOM 提取（兜底，100% 可用）
 var QA_MINERALS='铜 镍 铅 锌 铝 金 银 稀土 钨 钼 锡 锑 锂 钴 钛 铀 锰 钒 铬 镁 铌 钽 镓 锗 铟 铼 镉 铋 硒 碲 铂 钯 铁'.split(' ');
 var QA_TOPICS='政策 找矿 矿权 市场 技术 安全 国际'.split(' ');
+// 2026-09-04 方案B 消歧：单字矿种（金/银/铁/钨/钼…）正文子串易误命中
+// 「有色金属/资金/金融/关键金属」等无关词，故这些矿种的正文匹配须出现在
+// 矿产语境词中才算命中；多字矿种直接用朴素子串，误命中风险低。
+var QA_BODY_TERMS={
+  '金':['黄金','金价','金矿','沪金','现货金','伦敦金','金条','足金','金资源','黄金股','金价的','金企','黄金业','黄金价格','金价创','金矿股','金矿权','采金','产金','黄金产','黄金需'],
+  '银':['白银','银价','银矿','沪银','现货银','银条','足银','银资源','银精矿','采银','产银'],
+  '铁':['铁矿石','铁精矿','铁矿山','铁矿','生铁','铸铁','铁精粉','铁合金','铁业','铁精','铁选','采铁','产铁','铁资源','铁砂'],
+  '钨':['钨矿','钨价','钨精矿','钨资源','黑钨','白钨','采钨','产钨'],
+  '钼':['钼矿','钼价','钼精矿','钼资源','采钼','产钼'],
+  '锡':['锡价','锡矿','锡资源','锡精矿','采锡','产锡'],
+  '锑':['锑矿','锑价','锑资源','锑精矿','采锑','产锑'],
+  '钛':['钛矿','钛价','钛资源','钛精矿','海绵钛','采钛','产钛'],
+  '铀':['铀矿','铀价','铀资源','采铀','产铀','铀浓缩'],
+  '锰':['锰矿','锰价','锰资源','锰精矿','采锰','产锰'],
+  '钒':['钒矿','钒价','钒资源','钒钛','采钒','产钒'],
+  '铬':['铬矿','铬价','铬资源','铬铁','采铬','产铬'],
+  '镁':['镁矿','镁价','镁资源','镁砂','采镁','产镁','镁合金'],
+  '镓':['镓矿','镓价','镓资源','采镓','产镓'],
+  '锗':['锗矿','锗价','锗资源','采锗','产锗'],
+  '铟':['铟矿','铟价','铟资源','采铟','产铟'],
+  '铼':['铼矿','铼价','铼资源','采铼','产铼'],
+  '镉':['镉矿','镉价','镉资源','采镉','产镉'],
+  '铋':['铋矿','铋价','铋资源','采铋','产铋'],
+  '硒':['硒矿','硒价','硒资源','采硒','产硒'],
+  '碲':['碲矿','碲价','碲资源','采碲','产碲'],
+  '铂':['铂矿','铂价','铂金','铂资源','采铂','产铂'],
+  '钯':['钯矿','钯价','钯金','钯资源','采钯','产钯']
+};
 var QA_ROWS=[],QA_SRC='',QA_UPDATED='',QA_TREND=false;
 
 function qaReportDate(){
@@ -1854,16 +1882,36 @@ function qaInitData(){
     QA_ROWS=window.NEWS_DATA.news;QA_SRC='full';QA_UPDATED=window.NEWS_DATA.updated||'';
   }else{QA_ROWS=qaFromDom();QA_SRC='dom';QA_UPDATED='';}
   var cnt={};
-  QA_ROWS.forEach(function(r){(r.g||[]).forEach(function(t){cnt[t]=(cnt[t]||0)+1;});});
+  QA_ROWS.forEach(function(r){
+    // 2026-09-04 方案B：矿种/主题计数改为「标签命中 OR 正文命中(消歧后)」去重计数，
+    // 与 qaFilter 的筛选口径一致，下拉括号数字即真实筛出条数。
+    QA_MINERALS.forEach(function(m){if(qaMineralHit(r,m))cnt[m]=(cnt[m]||0)+1;});
+    QA_TOPICS.forEach(function(t){if((r.g||[]).indexOf(t)>=0||qaHay(r).indexOf(t)>=0)cnt[t]=(cnt[t]||0)+1;});
+  });
   var ms=document.getElementById('qaFloatMineral'),ts=document.getElementById('qaFloatTopic');
   QA_MINERALS.forEach(function(m){if(cnt[m]){var o=document.createElement('option');o.value=m;o.textContent=m+' ('+cnt[m]+')';if(ms)ms.appendChild(o);}});
   QA_TOPICS.forEach(function(t){if(cnt[t]){var o=document.createElement('option');o.value=t;o.textContent=t+' ('+cnt[t]+')';if(ts)ts.appendChild(o);}});
 }
 function qaHay(r){return [r.t||'',r.m||'',r.s||'',r.c||'',(r.g||[]).join(' ')].join(' ');}
+// 矿种命中：标签含 X 直接命中；否则看正文——单字矿种须落在矿产语境词中（QA_BODY_TERMS），
+// 多字矿种用朴素子串，避免「金」误中「有色金属/资金」之类无关词。
+function qaMineralHit(r,key){
+  if((r.g||[]).indexOf(key)>=0)return true;
+  var hay=qaHay(r);
+  if(hay.indexOf(key)<0)return false;
+  var terms=QA_BODY_TERMS[key];
+  if(!terms)return true;
+  return terms.some(function(t){return hay.indexOf(t)>=0;});
+}
 function qaFilter(rows,words,mineral,topic,from,mode){
   return rows.filter(function(r){
-    if(mineral&&(r.g||[]).indexOf(mineral)<0)return false;
-    if(topic&&(r.g||[]).indexOf(topic)<0)return false;
+    // 2026-09-04 方案B：矿种筛选改为「标签含 X OR 正文含 X(单字矿种须落在矿产语境词)」，
+    // 消除纯标签匹配导致的漏筛；同时对单字矿种做消歧，避免「金」误中「有色金属/资金」。
+    if(mineral&&!qaMineralHit(r,mineral))return false;
+    if(topic){
+      var tTag=(r.g||[]).indexOf(topic)>=0, tBody=qaHay(r).indexOf(topic)>=0;
+      if(!tTag&&!tBody)return false;
+    }
     if(from&&(!r.d||r.d<from))return false;
     if(words.length){
       var hay=qaHay(r);
