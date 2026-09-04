@@ -1125,6 +1125,9 @@ document.addEventListener('click',e=>{
   }
   const a=e.target.closest('a[href]');
   if(a){
+    // 「今日要闻」摘要条链接：直接跳转原网页（新标签页），不走站内 iframe 浮窗
+    // ——政府类网站多带 X-Frame-Options 防嵌入，浮窗内常打不开（2026-09-04 用户反馈）
+    if(a.classList.contains('digest-link'))return;
     const item=a.closest('.news-item');
     if(item&&item.dataset.url)markRead(item.dataset.url);
     // 外链处理策略（2026-08-29 统一版 — 手机/电脑都按服务端预检标记分流）：
