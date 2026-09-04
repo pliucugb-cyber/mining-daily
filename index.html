@@ -1842,6 +1842,53 @@ var QA_BODY_TERMS={
   '铂':['铂矿','铂价','铂金','铂资源','采铂','产铂'],
   '钯':['钯矿','钯价','钯金','钯资源','采钯','产钯']
 };
+// 方案C（2026-09-04）：中文同义/分词映射。纯子串匹配下「铝矿」捞不到「铝土矿」（"铝""土""矿"都不连续）。
+// 把互为同义的矿种/商品词放进同组，搜任一词时扩展到整组做 OR 子串匹配，双向互通。
+// 仅对落在表内的词生效；未收录的词（如单字「金」）仍走朴素子串，不影响既有逻辑。
+var QA_ALIAS=[
+  ['铝矿','铝土矿'],
+  ['铁矿','铁矿石','铁精矿','铁矿山'],
+  ['铜矿','铜精矿','铜矿石'],
+  ['金矿','金矿石','黄金矿'],
+  ['锂矿','锂辉石','锂云母','盐湖锂','锂精矿'],
+  ['铅锌','铅锌矿'],
+  ['镍矿','镍精矿','镍矿石'],
+  ['钴矿','钴','钴精矿'],
+  ['锡矿','锡','锡精矿'],
+  ['稀土','稀土矿','稀土资源'],
+  ['钼矿','钼','钼精矿'],
+  ['钨矿','钨','钨精矿'],
+  ['萤石','萤石矿'],
+  ['石墨','石墨矿'],
+  ['磷矿','磷矿石'],
+  ['钾','钾盐','钾肥','钾矿'],
+  ['镁矿','镁','镁砂'],
+  ['锰矿','锰','锰精矿'],
+  ['钒矿','钒','钒钛'],
+  ['铬矿','铬','铬铁'],
+  ['锗矿','锗'],
+  ['镓矿','镓'],
+  ['铟矿','铟'],
+  ['铼矿','铼'],
+  ['镉矿','镉'],
+  ['铋矿','铋'],
+  ['硒矿','硒'],
+  ['碲矿','碲'],
+  ['铀矿','铀'],
+  ['锑矿','锑'],
+  ['钛矿','钛','海绵钛'],
+  ['找矿','地质找矿','找矿突破'],
+  ['矿权','矿业权'],
+  ['锂价','碳酸锂','氢氧化锂','锂盐'],
+  ['铜价','铜','铜价'],
+  ['铝价','铝','铝价'],
+  ['金矿股','黄金股','黄金板块']
+];
+// 构建扁平查表：词 → 该组全部词（用于搜索时扩展）
+var QA_ALIAS_MAP={};
+QA_ALIAS.forEach(function(g){g.forEach(function(w){QA_ALIAS_MAP[w]=g;});});
+// 搜索词扩展：在表中则展开为整组，否则原词（仍是长度1的数组）
+function qaExpand(w){return QA_ALIAS_MAP[w]?QA_ALIAS_MAP[w]:[w];}
 var QA_ROWS=[],QA_SRC='',QA_UPDATED='',QA_TREND=false;
 
 function qaReportDate(){
@@ -1915,8 +1962,10 @@ function qaFilter(rows,words,mineral,topic,from,mode){
     if(from&&(!r.d||r.d<from))return false;
     if(words.length){
       var hay=qaHay(r);
-      var ok=(mode==='or')?words.some(function(w){return hay.indexOf(w)>=0;})
-                          :words.every(function(w){return hay.indexOf(w)>=0;});
+      // 方案C：每个关键词 w 扩展为其同义词组，hay 含任一同义词即算该词命中（保留 and/or 语义）
+      var ok=(mode==='or')
+        ?words.some(function(w){return qaExpand(w).some(function(a){return hay.indexOf(a)>=0;});})
+        :words.every(function(w){return qaExpand(w).some(function(a){return hay.indexOf(a)>=0;});});
       if(!ok)return false;
     }
     return true;
