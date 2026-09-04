@@ -227,8 +227,11 @@ body.dark .pchart-head{border-bottom-color:#2c3845}
 body.dark .pchart-table th,body.dark .pchart-table td{border-bottom-color:#2c3845}
 body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 /* ==================== 左下角问答悬浮球 + 面板（9-04 新增）==================== */
-.qa-fab{position:fixed;left:16px;bottom:16px;z-index:998;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:23px;box-shadow:0 6px 20px rgba(79,70,229,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s}
-.qa-fab:hover{transform:scale(1.08)}
+.qa-fab{position:fixed;left:16px;bottom:16px;z-index:998;height:50px;max-width:calc(100vw - 32px);padding:0 18px;border:none;border-radius:999px;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:15px;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 20px rgba(79,70,229,.42);display:flex;align-items:center;gap:8px;white-space:nowrap;transition:transform .15s,box-shadow .15s}
+.qa-fab:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(79,70,229,.5)}
+.qa-fab:active{transform:translateY(0)}
+.qa-fab .qa-fab-ico{font-size:18px;line-height:1;display:inline-block}
+.qa-fab .qa-fab-txt{display:inline-block}
 .qa-fab.on{background:linear-gradient(135deg,#334155,#475569)}
 .qa-float{position:fixed;left:16px;bottom:78px;z-index:999;width:min(380px,calc(100vw - 32px));max-height:min(600px,calc(100vh - 110px));background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:none;flex-direction:column;overflow:hidden}
 .qa-float.open{display:flex}
@@ -801,7 +804,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
   </div>
 </div>
 <!-- ==================== 左下角问答悬浮球 + 面板（9-04 新增）==================== -->
-<button class="qa-fab" id="qaFab" title="新闻问答（检索全库新闻，服务在线时可 AI 作答）" onclick="qaFloatToggle()">💬</button>
+<button class="qa-fab" id="qaFab" title="新闻检索 / AI 问答（检索全库新闻，服务在线时可 AI 作答）" onclick="qaFloatToggle()"><span class="qa-fab-ico">🔍</span><span class="qa-fab-txt">搜新闻 / 问 AI</span></button>
 <div class="qa-float" id="qaFloat">
   <div class="qa-float-head">
     <span class="qa-float-title">💬 新闻问答</span>
