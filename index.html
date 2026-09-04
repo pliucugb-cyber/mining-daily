@@ -1,0 +1,2419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a3a5c">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192-maskable.png" purpose="maskable">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512-maskable.png" purpose="maskable">
+<title>矿业新闻日报 2026-09-04</title>
+<style>
+
+
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;color:#2c3e50;line-height:1.6;padding-left:200px}
+/* 目录导航 - 桌面端：左侧悬浮侧栏；移动端：顶部水平滚动条 */
+.toc-sidebar{position:fixed;left:18px;top:88px;width:168px;background:#fff;border-radius:10px;padding:14px 12px;box-shadow:0 2px 10px rgba(0,0,0,.08);z-index:99;max-height:calc(100vh - 120px);overflow-y:auto}
+.toc-title{font-size:12px;font-weight:700;color:#6b7a89;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #eef2f5;letter-spacing:1px}
+.toc-main-item{font-size:13.5px;font-weight:700;color:#1a3a5c;padding:9px 11px;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:.2s;margin-bottom:4px}
+.toc-main-item:hover{background:#f4f6f9}
+.toc-main-item.active{background:#1a3a5c;color:#fff;box-shadow:0 2px 6px rgba(26,58,92,.3)}
+.toc-main-item.active .toc-count{color:#1a3a5c;background:#fff}
+.toc-count{font-size:11px;color:#7f8c8d;background:#eef2f5;padding:2px 7px;border-radius:10px;font-weight:600;min-width:22px;text-align:center}
+.toc-back-top{font-size:12px;color:#2980b9;padding:8px 11px;cursor:pointer;border-radius:6px;text-align:center;margin-top:6px;border-top:1px solid #f4f6f8;padding-top:10px}
+.toc-back-top:hover{background:#eef4fa}
+.toc-all{color:#34495e!important}
+.container{max-width:860px;margin:0 auto;padding:16px}
+/* 头部 */
+.header{background:linear-gradient(135deg,#1a3a5c 0%,#2c5f8a 100%);color:#fff;border-radius:12px;padding:24px 20px;margin-bottom:14px}
+.header h1{font-size:22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.date-badge{background:#e74c3c;color:#fff;font-size:13px;padding:3px 10px;border-radius:20px;font-weight:600;white-space:nowrap}
+.header .sub{font-size:13px;opacity:.85;margin-top:6px}
+/* 统计栏 */
+.stats-bar{background:#fff;border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.stat-item{font-size:14px;display:flex;align-items:center;gap:5px}
+.stat-num{font-weight:700;font-size:18px}
+.stat-num.new{color:#e74c3c}
+.stat-num.unread{color:#2980b9}
+.btn{border:none;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:500;transition:.2s}
+.btn-allread{background:#27ae60;color:#fff;margin-left:auto}
+.btn-allread:hover{background:#219a52}
+.btn-restore{background:#95a5a6;color:#fff}
+.btn-restore:hover{background:#7f8c8d}
+.btn-unread{background:#e0e7ee;color:#2c3e50}
+.btn-unread:hover{background:#cfd8e3}
+.btn-unread.active{background:#2980b9;color:#fff}
+.btn-filter{background:#ecf0f1;color:#2c3e50}
+.btn-filter.active{background:#34495e;color:#fff}
+/* 区块 */
+.section{background:#fff;border-radius:10px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow:hidden;scroll-margin-top:80px}
+.section-title{padding:14px 18px;font-size:18px;font-weight:700;color:#1a3a5c;border-bottom:2px solid #eef2f5;display:flex;align-items:center;gap:8px;scroll-margin-top:80px}
+.section-title .icon{font-size:20px}
+.section-title.today{background:linear-gradient(90deg,#fff5f5,#fff);border-bottom:2px solid #f5c6cb}
+.news-count{font-size:13px;color:#6b7a89;font-weight:400;margin-left:auto}
+/* 新闻条目 */
+.news-item{padding:13px 18px;border-bottom:1px solid #f4f6f8;transition:opacity .3s;position:relative}
+.news-item:last-child{border-bottom:none}
+.news-item.read{opacity:.45}
+.news-item.read .news-title{color:#7f8c8d}
+.news-head{display:flex;align-items:flex-start;gap:8px}
+.dot{width:9px;height:9px;border-radius:50%;background:#2980b9;flex-shrink:0;margin-top:7px}
+.news-item.read .dot{background:#bdc3c7}
+.badge-new{background:#e74c3c;color:#fff;font-size:11px;padding:1px 7px;border-radius:4px;font-weight:600;flex-shrink:0;margin-top:4px;animation:pulse 1.5s infinite}
+.badge-orig-date{background:#f0f4f8;color:#6b7280;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500;flex-shrink:0;margin-top:4px;white-space:nowrap}
+.badge-ext{background:#fff7ed;color:#b45309;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500;flex-shrink:0;margin-top:4px;white-space:nowrap;border:1px solid #fed7aa}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.news-title{color:#1a5276;text-decoration:none;font-weight:600;font-size:15px;line-height:1.45}
+.news-title:hover{text-decoration:underline}
+.news-meta{font-size:12.5px;color:#7f8c8d;margin:4px 0 4px 17px}
+.news-meta .src{color:#16a085;font-weight:600}
+.news-summary{font-size:13.5px;color:#5d6d7e;margin:2px 0 8px 17px}
+.btn-read{display:inline-block;font-size:12.5px;color:#c0392b;text-decoration:none;border:1px solid #e74c3c;border-radius:5px;padding:3px 10px;margin-left:17px;transition:.2s}
+.btn-read:hover{background:#e74c3c;color:#fff}
+/* 自动关键词标签（重点提示词，JS注入）*/
+.news-tags{display:flex;flex-wrap:wrap;gap:5px;margin:5px 0 0 17px}
+.tag-chip{font-size:11px;font-weight:600;padding:1px 8px;border-radius:9px;line-height:1.6;letter-spacing:.3px;white-space:nowrap;cursor:pointer;user-select:none;transition:.15s}
+.tag-chip:hover{filter:brightness(.92)}
+.tag-chip.chip-active{box-shadow:0 0 0 2px currentColor;font-weight:700}
+/* 收藏星标 */
+.btn-star{position:absolute;top:8px;right:12px;background:none;border:none;font-size:18px;cursor:pointer;color:#d5d8dc;transition:.2s;padding:2px 4px;line-height:1;z-index:5}
+.btn-star:hover{color:#f39c12;transform:scale(1.15)}
+.news-item.favorited{box-shadow:inset 3px 0 0 #f39c12}
+.news-item.favorited .btn-star{color:#f39c12}
+/* 单条恢复未读按钮（按条操作）*/
+.btn-unread{display:inline-block;font-size:12px;color:#16a085;text-decoration:none;border:1px solid #16a085;border-radius:5px;padding:2px 9px;margin-left:8px;cursor:pointer;background:rgba(255,255,255,.7);transition:.2s;vertical-align:middle;font-family:inherit}
+.btn-unread:hover{background:#16a085;color:#fff;transform:translateY(-1px);box-shadow:0 2px 4px rgba(22,160,133,.3)}
+.news-item:not(.read) .btn-unread{display:none}
+/* 往期内容：超过7天的旧闻默认折叠 */
+.fold-toggle{margin:10px 16px;padding:8px 12px;background:#f8f9fa;border:1px dashed #b0bec5;border-radius:8px;font-size:12.5px;color:#78909c;cursor:pointer;text-align:center;transition:.2s;user-select:none}
+.fold-toggle:hover{background:#eef4fa;color:#1a3a5c;border-color:#2980b9}
+/* 已归档收藏（新闻已滚出页面，从localStorage渲染） */
+.arch-fav{border-left:none}
+.arch-fav .dot{background:#f39c12}
+/* 收藏/历史按钮 */
+.btn-fav{background:#f39c12;color:#fff}
+.btn-fav:hover{background:#e67e22}
+.btn-fav.active{background:#e67e22}
+.btn-history{background:#8e44ad;color:#fff}
+.btn-history:hover{background:#7d3c98}
+.btn-history.active{background:#7d3c98}
+/* 提示条 */
+.notice{background:#fef9e7;border:1px solid #f7dc6f;border-radius:8px;padding:10px 14px;font-size:13px;color:#7d6608;margin-bottom:14px}
+.notice b{color:#b7950b}
+/* "安装成App"引导条（header内，静态常显双端简版文案；✕仅本次会话隐藏，刷新重现） */
+.install-tip{margin-top:12px;background:rgba(255,255,255,.13);border:1px dashed rgba(255,255,255,.5);border-radius:8px;padding:8px 12px;font-size:12.5px;display:none;align-items:center;gap:10px;color:#fff;line-height:1.8}
+.install-tip.show{display:flex}
+.install-tip .tip-close{margin-left:auto;cursor:pointer;font-size:13px;line-height:1;padding:4px 9px;border-radius:5px;background:rgba(255,255,255,.18);color:#fff;flex-shrink:0;transition:.2s;border:none;font-family:inherit;align-self:center}
+.install-tip .tip-close:hover{background:rgba(255,255,255,.35)}
+
+/* ===== 金属价格栏 ===== */
+.price-strip{background:#fff;border-radius:12px;padding:14px 16px 12px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.price-strip-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.price-strip-title{font-size:15px;font-weight:700;color:#1a3a5c}
+.price-strip-note{font-size:11px;color:#6b7a89}
+.price-cards{display:flex;gap:9px;overflow-x:auto;padding-bottom:5px;scrollbar-width:thin;scrollbar-color:#c8d6e5 transparent}
+.price-cards::-webkit-scrollbar{height:5px}
+.price-cards::-webkit-scrollbar-thumb{background:#c8d6e5;border-radius:3px}
+.price-card{min-width:104px;flex-shrink:0;background:#f8fafc;border:1px solid #e8eef3;border-radius:10px;padding:9px 11px 8px;position:relative;overflow:hidden}
+.price-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#95a5a6}
+.price-card.up::before{background:#e74c3c}
+.price-card.down::before{background:#27ae60}
+/* 键盘可达：Tab 聚焦时给出可见焦点环（2026-09-05 补） */
+.price-card[data-slug]{cursor:pointer}
+.price-card[data-slug]:focus-visible{outline:2px solid #2d6da3;outline-offset:2px}
+.pc-name{font-size:12px;color:#5d6d7e;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.pc-name .pc-tag{font-size:9px;color:#aeb6bf;font-weight:400}
+.pc-value{font-size:16.5px;font-weight:700;color:#1a3a5c;margin-top:3px;font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+.pc-unit{font-size:10px;color:#6b7a89;margin-top:-1px}
+.pc-chg{font-size:11px;font-weight:700;margin-top:4px;color:#7f8c8d;font-variant-numeric:tabular-nums}
+.price-card.up .pc-chg{color:#e74c3c}
+.price-card.down .pc-chg{color:#27ae60}
+.pc-src{font-size:9.5px;color:#b3bcc5;margin-top:2px}
+.footer{text-align:center;font-size:12px;color:#6b7a89;padding:18px 0 30px}
+.hidden{display:none!important}
+/* 分类小标题 */
+.sub-cat{padding:14px 18px 12px 22px;font-size:16px;font-weight:700;color:#1a3a5c;background:linear-gradient(90deg,#eef4fa 0%,#f8fafc 100%);border-left:5px solid #2980b9;margin:8px 14px 0;border-radius:0 6px 6px 0;letter-spacing:.3px;scroll-margin-top:80px}
+.sub-cat .icon{display:inline-block;margin-right:4px;color:#2980b9}
+.sub-cat .sub-count{font-size:13px;color:#2980b9;font-weight:600;margin-left:6px;background:#fff;padding:1px 8px;border-radius:10px;border:1px solid #cce0ed}
+/* ===== 新一轮找矿突破战略行动·专项 ===== */
+.section-title.special{background:linear-gradient(90deg,#fffbeb,#fff);border-bottom:2px solid #d4a017}
+.sp-cat{padding:14px 18px 12px 22px;font-size:15.5px;font-weight:700;color:#7c5a00;background:linear-gradient(90deg,#fdf6e3 0%,#f8fafc 100%);border-left:5px solid #d4a017;margin:8px 14px 0;border-radius:0 6px 6px 0;letter-spacing:.3px;scroll-margin-top:80px;display:flex;align-items:center}
+.sp-cat .sub-count{font-size:12.5px;color:#b45309;font-weight:600;margin-left:6px;background:#fff;padding:1px 8px;border-radius:10px;border:1px solid #f0d488}
+.badge-strategy{background:linear-gradient(135deg,#b45309,#d4a017);color:#fff;font-size:11px;padding:1px 7px;border-radius:4px;font-weight:700;flex-shrink:0;margin-top:4px;letter-spacing:.5px}
+.news-item.is-special{background:linear-gradient(90deg,#fffdf5 0%,#fff 30%)}
+.sp-list .news-item.sp-from-archive{background:linear-gradient(90deg,#f8fafc 0%,#fff 60%);border-left:3px solid #94a3b8;position:relative}
+.sp-list .news-item.sp-from-archive::before{content:"往期";position:absolute;top:6px;right:8px;font-size:10px;background:#e2e8f0;color:#475569;padding:1px 6px;border-radius:8px;font-weight:600;letter-spacing:.3px}
+.btn-special{background:#f5e6bc;color:#92400e;border:1px solid #e6c86e}
+.btn-special:hover{background:#eed9a4}
+.btn-special.active{background:#b45309;color:#fff;border-color:#b45309}
+/* ===== 矿业热榜（9-03 新增，类似今日头条右侧编号榜） ===== */
+.section-title.hotlist{background:linear-gradient(90deg,#fff5f0,#fff);border-bottom:2px solid #ff6b3d}
+.section-title.hotlist .hl-tag{display:inline-block;background:linear-gradient(135deg,#ff6b3d,#e74c3c);color:#fff;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:10px;margin-left:4px;letter-spacing:.5px}
+.section-title.hotlist .hl-sub{font-size:12px;color:#9aa7b3;font-weight:400;margin-left:auto}
+.hotlist-list{margin:6px 14px 14px;padding:0;list-style:none;background:#fff;border:1px solid #eef2f7;border-radius:9px;overflow:hidden}
+.hotlist-list li.hot-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:1px solid #f4f6f8;transition:background .15s}
+.hotlist-list li.hot-item:last-child{border-bottom:none}
+.hotlist-list li.hot-item:hover{background:#fafcff}
+.hot-rank{min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:6px;background:#eef2f5;color:#5a6b7a;font-size:13px;font-weight:700;flex-shrink:0;font-family:'Helvetica Neue',Arial,sans-serif}
+.hotlist-list li.hot-item.top1 .hot-rank{background:linear-gradient(135deg,#ff6b3d,#e74c3c);color:#fff}
+.hotlist-list li.hot-item.top2 .hot-rank{background:linear-gradient(135deg,#ff9966,#ff6b3d);color:#fff}
+.hotlist-list li.hot-item.top3 .hot-rank{background:linear-gradient(135deg,#ffb088,#ff9966);color:#fff}
+.hot-body{flex:1;min-width:0}
+.hot-title{display:block;font-size:14.5px;font-weight:500;color:#0e3d6b;text-decoration:none;line-height:1.45;border-bottom:1px dashed transparent;transition:color .15s,border-color .15s;word-break:break-word}
+.hot-title:hover{color:#e74c3c;border-bottom-color:#e74c3c}
+.hot-meta{font-size:11.5px;color:#9aa7b3;margin-top:4px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hot-fire{display:inline-block;font-size:11px;color:#fff;background:linear-gradient(135deg,#ff9966,#ff6b3d);padding:1px 6px;border-radius:4px;font-weight:700;flex-shrink:0}
+.hotlist-loading{padding:18px;text-align:center;color:#9aa7b3;font-size:13px}
+.hotlist-empty{padding:18px;text-align:center;color:#9aa7b3;font-size:13px}
+body.dark .hotlist-list{background:#1e2733;border-color:#2c3845}
+body.dark .hotlist-list li.hot-item{border-bottom-color:#2c3845}
+body.dark .hotlist-list li.hot-item:hover{background:#243140}
+body.dark .hot-rank{background:#2c3845;color:#c9d6e2}
+body.dark .hot-title{color:#8fb5dc}
+body.dark .hot-title:hover{color:#ff7a7a}
+/* ==================== 今日要闻摘要条（9-04 新增，仿早报要闻样式）==================== */
+.digest-strip{background:#fff;border:1px solid #eef2f7;border-radius:12px;padding:12px 16px 10px;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.digest-head{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}
+.digest-badge{background:#e74c3c;color:#fff;font-size:13px;font-weight:800;padding:2px 9px;border-radius:5px;letter-spacing:1px;flex-shrink:0}
+.digest-title{font-size:19px;font-weight:800;color:#1a3a5c;letter-spacing:1px}
+.digest-date{font-size:12.5px;color:#6b7a89;font-weight:400;margin-left:auto}
+.digest-list{list-style:none;margin:0;padding:0}
+.digest-list li{position:relative;padding:5px 0 5px 16px;font-size:14px;line-height:1.55;border-bottom:1px dashed #f0f3f6}
+.digest-list li:last-child{border-bottom:none}
+.digest-list li::before{content:'';position:absolute;left:3px;top:14px;width:5px;height:5px;border-radius:50%;background:#c0392b}
+.digest-list a{color:#1a3a5c;text-decoration:none;transition:color .15s}
+.digest-list a:hover{color:#e74c3c}
+.digest-link{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.digest-empty{padding:6px 0 2px;color:#9aa7b3;font-size:13px}
+body.dark .digest-strip{background:#1e2733;border-color:#2c3845}
+body.dark .digest-title{color:#e8eef3}
+body.dark .digest-list li{border-bottom-color:#2c3845}
+body.dark .digest-list a{color:#8fb5dc}
+body.dark .digest-list a:hover{color:#ff7a7a}
+@media(max-width:600px){
+  .digest-strip{padding:10px 12px 8px}
+  .digest-title{font-size:17px}
+  .digest-list li{font-size:13.5px}
+}
+/* ==================== 价格卡点击 + 走势图弹层（9-04 新增）==================== */
+.price-card[data-slug]{cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.price-card[data-slug]:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(26,58,92,.14);border-color:#1a3a5c}
+.price-card[data-slug]:hover::after{content:'📈 走势';position:absolute;right:4px;top:3px;font-size:9px;color:#7f8c8d}
+.pchart-mask{position:fixed;inset:0;background:rgba(15,30,48,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}
+.pchart-modal{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 12px 48px rgba(0,0,0,.3)}
+.pchart-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;border-bottom:1px solid #eef2f5}
+.pchart-name{font-size:16px;font-weight:800;color:#1a3a5c}
+.pchart-sub{font-size:11.5px;color:#7f8c8d;margin-left:8px;font-weight:400}
+.pchart-close{border:none;background:#f0f3f6;color:#5a6b7a;width:28px;height:28px;border-radius:50%;font-size:15px;cursor:pointer;flex-shrink:0}
+.pchart-close:hover{background:#e2e8ee;color:#1a3a5c}
+.pchart-body{padding:12px 18px 16px}
+.pchart-legend{display:flex;gap:14px;font-size:11.5px;color:#7f8c8d;margin-bottom:6px;flex-wrap:wrap}
+.pchart-legend b{font-weight:700}
+.pchart-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.pchart-table th,.pchart-table td{padding:4px 6px;text-align:right;border-bottom:1px solid #f0f3f6}
+.pchart-table th{color:#6b7a89;font-weight:600;font-size:11px}
+.pchart-table td:first-child,.pchart-table th:first-child{text-align:left}
+.pchart-up{color:#e74c3c;font-weight:600}
+.pchart-down{color:#27ae60;font-weight:600}
+body.dark .pchart-modal{background:#1e2733}
+body.dark .pchart-name{color:#e8eef3}
+body.dark .pchart-head{border-bottom-color:#2c3845}
+body.dark .pchart-table th,body.dark .pchart-table td{border-bottom-color:#2c3845}
+body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
+/* ==================== 左下角问答悬浮球 + 面板（9-04 新增）==================== */
+.qa-fab{position:fixed;left:16px;bottom:16px;z-index:998;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:23px;box-shadow:0 6px 20px rgba(79,70,229,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.qa-fab:hover{transform:scale(1.08)}
+.qa-fab.on{background:linear-gradient(135deg,#334155,#475569)}
+.qa-float{position:fixed;left:16px;bottom:78px;z-index:999;width:min(380px,calc(100vw - 32px));max-height:min(600px,calc(100vh - 110px));background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:none;flex-direction:column;overflow:hidden}
+.qa-float.open{display:flex}
+.qa-float-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff}
+.qa-float-title{font-size:14px;font-weight:800}
+.qa-float-head .pchart-close{background:rgba(255,255,255,.2);color:#fff}
+.qa-float-body{flex:1;overflow-y:auto;padding:12px;background:#f7f9fb}
+.qa-msg{margin-bottom:10px;max-width:92%}
+.qa-msg.user{margin-left:auto}
+.qa-msg-bubble{padding:8px 11px;border-radius:10px;font-size:12.5px;line-height:1.55;word-break:break-word}
+.qa-msg.ai .qa-msg-bubble{background:#fff;border:1px solid #e8eef3;color:#1a3a5c;border-top-left-radius:3px}
+.qa-msg.user .qa-msg-bubble{background:#4f46e5;color:#fff;border-top-right-radius:3px}
+.qa-msg-meta{font-size:10.5px;color:#6b7a89;margin-top:3px}
+.qa-msg.ai .qa-msg-meta{text-align:left}
+.qa-msg.user .qa-msg-meta{text-align:right}
+.qa-msg-item{display:block;padding:5px 0;border-bottom:1px dashed #eef2f5;color:#1a3a5c;text-decoration:none;font-size:12px;line-height:1.45}
+.qa-msg-item:hover{color:#4f46e5}
+.qa-msg-item .qd{color:#6b7a89;font-size:11px;margin-right:5px}
+.qa-msg-item .qs{color:#6b7a89;font-size:11px;margin-left:5px}
+.qa-float-foot{display:flex;gap:6px;padding:10px;border-top:1px solid #eef2f5;background:#fff}
+.qa-float-input{flex:1;border:1px solid #dbe2ea;border-radius:8px;padding:8px 10px;font-size:13px;outline:none}
+.qa-float-input:focus{border-color:#4f46e5}
+.qa-float-btn{border:none;border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;background:#eef2f5;color:#1a3a5c}
+.qa-float-btn.primary{background:#4f46e5;color:#fff}
+.qa-float-btn:disabled{opacity:.5;cursor:not-allowed}
+body.dark .qa-float{background:#1e2733}
+body.dark .qa-float-body{background:#161d26}
+body.dark .qa-msg.ai .qa-msg-bubble{background:#243140;border-color:#2c3845;color:#e8eef3}
+body.dark .qa-float-foot{background:#1e2733;border-top-color:#2c3845}
+body.dark .qa-float-input{background:#243140;border-color:#2c3845;color:#e8eef3}
+body.dark .qa-msg-item{color:#8fb5dc}
+body.dark .qa-float-btn{background:#2c3845;color:#c9d6e2}
+/* ==================== AI 深度解析（9-04 新增）==================== */
+.section-title.ai{background:linear-gradient(90deg,#eef2ff,#fff);border-bottom:2px solid #6366f1}
+.section-title.ai .ai-tag{display:inline-block;background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:10px;margin-left:4px;letter-spacing:.5px}
+.section-title.ai .ai-sub{font-size:12px;color:#9aa7b3;font-weight:400;margin-left:auto}
+.ai-list{margin:6px 14px 14px;display:flex;flex-direction:column;gap:8px}
+.ai-item{background:#fff;border:1px solid #e0e7ff;border-left:4px solid #6366f1;border-radius:8px;padding:10px 14px;transition:all .2s}
+.ai-item:hover{box-shadow:0 2px 8px rgba(99,102,241,.12);border-color:#a5b4fc}
+.ai-item-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
+.ai-item-src{flex-shrink:0;font-size:11px;background:#eef2ff;color:#4f46e5;padding:2px 7px;border-radius:4px;font-weight:600;margin-top:2px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ai-item-title{font-size:14.5px;font-weight:700;color:#1a3a5c;line-height:1.4;flex:1}
+.ai-item-title:hover{color:#4f46e5}
+.ai-item-rows{display:grid;gap:3px;padding-left:2px}
+.ai-row{display:flex;gap:8px;font-size:12.5px;line-height:1.6;color:#475569}
+.ai-row .ai-label{flex-shrink:0;display:inline-block;font-size:11px;padding:1px 6px;border-radius:3px;font-weight:700;margin-top:2px;background:#eef2ff;color:#4f46e5;min-width:30px;text-align:center}
+.ai-row.risk .ai-label{background:#fef2f2;color:#dc2626}
+.ai-row .ai-text{flex:1}
+.ai-loading,.ai-empty,.ai-disabled{padding:18px;text-align:center;color:#9aa7b3;font-size:13px;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1}
+.ai-disabled{color:#64748b}
+.ai-disabled code{background:#e2e8f0;padding:1px 5px;border-radius:3px;font-family:Consolas,monospace;font-size:12px;color:#475569}
+.ai-quota{font-size:11.5px;color:#9aa7b3;margin-top:6px;text-align:right}
+body.dark .ai-item{background:#1e2733;border-color:#2c3845;border-left-color:#6366f1}
+body.dark .ai-item-title{color:#c9d6e2}
+body.dark .ai-item-src{background:#312e81;color:#c7d2fe}
+body.dark .ai-row{color:#94a3b8}
+body.dark .ai-loading,body.dark .ai-empty,body.dark .ai-disabled{background:#1e2733;border-color:#2c3845;color:#64748b}
+/* ==================== 暗色模式基础层 + 主题切换按钮（2026-09-05 补齐）====================
+   此前 body.dark 只覆盖热榜/要闻/走势弹层/问答球/AI 解析这些后加的模块，
+   页面骨架（背景、区块、新闻条目、价格卡、侧栏、按钮）缺配套样式，
+   暗色下会大面积白底黑字 —— 这里补齐基础层，并新增右上角切换按钮。 */
+.header{position:relative}
+.theme-toggle{position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:16px;line-height:1;cursor:pointer;transition:.2s}
+.theme-toggle:hover{background:rgba(255,255,255,.32)}
+.theme-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
+body.dark .theme-toggle{background:rgba(0,0,0,.28)}
+body.dark .theme-toggle:hover{background:rgba(0,0,0,.45)}
+body.dark{background:#0f151c;color:#e8eef3}
+body.dark .header{background:linear-gradient(135deg,#14293f 0%,#1d4364 100%)}
+body.dark .toc-sidebar{background:#161d26;border:1px solid #2c3845;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+body.dark .toc-title{color:#7f8c9b;border-bottom-color:#2c3845}
+body.dark .toc-main-item{color:#c9d6e2}
+body.dark .toc-main-item:hover{background:#243140}
+body.dark .toc-main-item.active{background:#2c5f8a}
+body.dark .toc-count{color:#94a3b8;background:#243140}
+body.dark .toc-main-item.active .toc-count{color:#1a3a5c;background:#fff}
+body.dark .toc-back-top{color:#8fb5dc;border-top-color:#2c3845}
+body.dark .toc-back-top:hover{background:#243140}
+body.dark .stats-bar,body.dark .section,body.dark .price-strip{background:#161d26;border-color:#2c3845;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+body.dark .section-title{color:#e8eef3;border-bottom-color:#2c3845}
+body.dark .section-title.today{background:linear-gradient(90deg,#2a1f24,#161d26);border-bottom-color:#4a2f33}
+body.dark .news-item{border-bottom-color:#232d39}
+body.dark .news-title{color:#8fb5dc}
+body.dark .news-meta{color:#8296a8}
+body.dark .news-summary{color:#a8bacb}
+body.dark .badge-orig-date{background:#243140;color:#94a3b8}
+body.dark .badge-ext{background:#33261a;color:#d9a05b;border-color:#5a4326}
+body.dark .btn-read{color:#ff8a80;border-color:#a33d33}
+body.dark .btn-read:hover{background:#c0392b;color:#fff;border-color:#c0392b}
+body.dark .sub-cat{color:#c9d6e2}
+body.dark .sub-cat .sub-count{background:#243140;color:#8fb5dc;border-color:#2c3845}
+body.dark .sp-cat .sub-count{background:#33261a;color:#d9a05b;border-color:#5a4326}
+body.dark .price-card{background:#1e2733;border-color:#2c3845}
+body.dark .pc-name{color:#c9d6e2}
+body.dark .pc-value{color:#e8eef3}
+body.dark .pc-unit{color:#8296a8}
+body.dark .pc-tag{background:#243140;color:#94a3b8}
+body.dark .stat-item{color:#a8bacb}
+body.dark .tag-chip{background:#243140;color:#94a3b8;border-color:#2c3845}
+body.dark .install-tip{background:#1d3a52}
+body.dark input[type=text],body.dark input[type=search],body.dark .qa-input{background:#243140;border-color:#2c3845;color:#e8eef3}
+body.dark ::selection{background:#2c5f8a;color:#fff}
+/* ==================== 暗色补全（二轮：覆盖剩余 100+ 个类）====================
+   审计方式：提取 <style> 中所有定义了 background/color/border 的亮色规则，与 body.dark
+   规则做差集后逐一补写。装饰色（涨跌红绿、TOP1-3 徽章）与纯状态类不改。 */
+/* ---- 目录 / 头部 / 通用控件 ---- */
+body.dark .toc-all{color:#cfe0ee!important}
+body.dark .date-badge{background:#c0392b;color:#fff}
+body.dark .stat-num.new{color:#ff8a8a}
+body.dark .stat-num.unread{color:#6ab4e0}
+body.dark .btn-restore{background:#4a5765;color:#fff}
+body.dark .btn-restore:hover{background:#5a6875}
+body.dark .btn-filter{background:#263140;color:#cfe0ee}
+body.dark .btn-filter:hover{background:#2f3d4d}
+body.dark .btn-filter.active{background:#3d5a7a;color:#fff}
+body.dark .news-count{color:#93a5b5}
+body.dark .news-item.read .news-title{color:#8b98a5}
+body.dark .news-item.read .dot{background:#4a5765}
+body.dark .badge-new{background:#c0392b;color:#fff}
+body.dark .news-meta .src{color:#45b7a4}
+body.dark .btn-star{color:#5a6875}
+body.dark .btn-star:hover{color:#f5b041}
+body.dark .btn-unread{background:rgba(255,255,255,.06);color:#45b7a4;border-color:#2f8f7d}
+body.dark .btn-unread:hover{background:#2f8f7d;color:#fff;box-shadow:0 2px 4px rgba(47,143,125,.35)}
+body.dark .fold-toggle{background:#1a222c;border-color:#3a4756;color:#8b9bad}
+body.dark .fold-toggle:hover{background:#22303f;color:#cfe0ee;border-color:#3d7ab0}
+body.dark .notice{background:#2b2617;border-color:#5c5228;color:#e0cf90}
+body.dark .notice b{color:#e8cf7a}
+body.dark .sub-cat .icon{color:#6aa9e0}
+/* ---- 金属价格条 ---- */
+body.dark .price-strip-title{color:#9ecbe8}
+body.dark .price-strip-note{color:#8b9bad}
+body.dark .price-cards{scrollbar-color:#3a4756 transparent}
+body.dark .price-cards::-webkit-scrollbar-thumb{background:#3a4756}
+body.dark .pc-chg{color:#93a5b5}
+body.dark .pc-src{color:#7d8b99}
+body.dark .footer{color:#8b9bad}
+/* ---- 找矿专项 ---- */
+body.dark .section-title.special{background:linear-gradient(90deg,#2a2415,#161d26)}
+body.dark .news-item.is-special{background:linear-gradient(90deg,#241f12 0%,#161d26 30%)}
+body.dark .sp-list .news-item.sp-from-archive{background:linear-gradient(90deg,#1b2431 0%,#161d26 60%);border-left-color:#64748b}
+body.dark .sp-list .news-item.sp-from-archive::before{background:#33404f;color:#c3d0dc}
+body.dark .btn-special{background:#3a3120;color:#f0d18a;border-color:#6b5a2e}
+body.dark .btn-special:hover{background:#4a3f28}
+/* ---- 热榜 ---- */
+body.dark .section-title.hotlist{background:linear-gradient(90deg,#2b1a14,#161d26)}
+body.dark .section-title.hotlist .hl-sub{color:#8b9bad}
+body.dark .hot-meta{color:#8b9bad}
+body.dark .hotlist-loading,body.dark .hotlist-empty{color:#8b9bad}
+/* ---- 今日要闻 ---- */
+body.dark .digest-badge{background:#c0392b;color:#fff}
+body.dark .digest-date{color:#8b9bad}
+body.dark .digest-empty{color:#8b9bad}
+/* ---- 价格走势弹层 ---- */
+body.dark .pchart-mask{background:rgba(0,0,0,.68)}
+body.dark .pchart-sub{color:#93a5b5}
+body.dark .pchart-legend{color:#93a5b5}
+body.dark .pchart-up{color:#ff8a8a}
+body.dark .pchart-down{color:#5fd39a}
+/* ---- 问答浮球 / AI 解析 ---- */
+body.dark .qa-msg-meta{color:#8b9bad}
+body.dark .qa-msg-item .qd,body.dark .qa-msg-item .qs{color:#8b9bad}
+body.dark .section-title.ai .ai-sub{color:#8b9bad}
+body.dark .ai-row .ai-label{background:#232a4d;color:#a5b4fc}
+body.dark .ai-row.risk .ai-label{background:#3d1f24;color:#fca5a5}
+body.dark .ai-quota{color:#8b9bad}
+/* ---- 安装引导（PWA） ---- */
+body.dark .section-title.guide{background:linear-gradient(90deg,#0e2a33,#161d26)}
+body.dark .guide-intro{background:#0f2530;color:#7dd3fc}
+body.dark .guide-col{background:#161d26;border-color:#2c3845;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+body.dark .guide-col-body{color:#c3d0dc}
+body.dark .guide-step{background:#1a222c;border-left-color:#64748b}
+body.dark .guide-step strong{color:#e8eef3}
+body.dark .guide-step.gs-mobile{border-left-color:#22d3ee}
+body.dark .guide-step.gs-mobile strong{color:#7dd3fc}
+body.dark .guide-step.gs-pc{border-left-color:#60a5fa}
+body.dark .guide-step.gs-pc strong{color:#93c5fd}
+body.dark .guide-step.gs-warn{background:#3a1d20;border-left-color:#ef4444}
+body.dark .guide-step.gs-warn strong{color:#fca5a5}
+body.dark .guide-step small{color:#8b9bad}
+body.dark .guide-tip{background:#2e2716;border-color:#6b5a2e;color:#f0d18a}
+/* ---- 顶部问答条（qa-strip 全系列） ---- */
+body.dark .qa-strip{background:#161d26;border-color:#2c3845;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+body.dark .qa-title{color:#9ecbe8}
+body.dark .qa-btn{background:#2c5f8a;color:#fff}
+body.dark .qa-btn:hover{background:#3d7ab0}
+body.dark .qa-meta{color:#8b9bad}
+body.dark .qa-sel{background:#1e2733;color:#cfe0ee;border-color:#3a4756}
+body.dark .qa-sel:focus{border-color:#4a9ee0}
+body.dark .qa-chip{background:#1e2733;border-color:#33404f;color:#b8c7d6}
+body.dark .qa-chip:hover{background:#26313f;border-color:#4a5765}
+body.dark .qa-result{border-top-color:#2c3845}
+body.dark .qa-sum{color:#9aabbd}
+body.dark .qa-warn{background:#2e2a16;border-color:#5c5228;color:#e8cf8a}
+body.dark .qa-trend{background:#141b23;border-color:#263140;color:#93a5b5}
+body.dark .qa-item{border-bottom-color:#222c38}
+body.dark .qa-d{color:#8b9bad}
+body.dark .qa-t{color:#a8d4f0}
+body.dark .qa-t:hover{color:#ff8a8a}
+body.dark .qa-s{color:#8b9bad}
+body.dark .qa-m{color:#93a5b5}
+body.dark .qa-empty{color:#8b9bad}
+body.dark .qa-empty b{color:#b8c7d6}
+body.dark .qa-aibox{background:linear-gradient(135deg,#152430,#1a2b38);border-color:#2c4a63;border-left-color:#2c8fd0}
+body.dark .qa-aititle{color:#8fc7ee}
+body.dark .qa-aimeta{color:#8b9bad}
+body.dark .qa-aibody{color:#c3d0dc}
+body.dark .qa-aibody.loading{color:#93a5b5}
+body.dark .qa-aierr{background:#2e1c1e;border-color:#5c3235;color:#f0a8a8}
+body.dark .qa-airefs{border-top-color:#2c4a63;color:#9ab4c9}
+body.dark .qa-airefs a{color:#6ab4e0}
+/* 注：以下为刻意保留亮色的元素，无需暗色对应——均为「彩色底 + 白字」的实心块，
+   在深色背景下本就醒目且不刺眼：.btn-allread(绿) .btn-fav(橙) .btn-history(紫) .qa-fab(紫渐变)
+   .qa-float-head(紫渐变) .qa-btn.qa-ai(蓝渐变) .guide-col-head(青/蓝渐变) .guide-link(深蓝渐变)
+   .badge-strategy(金棕渐变) .hl-tag(橙红渐变) .ai-tag(靛蓝渐变) .install-tip .tip-close(半透明白)
+   .arch-fav / .btn 无背景色声明。审计脚本差集命中属预期。 */
+/* ==================== 移动端细节（2026-09-05 补齐）==================== */
+@media (max-width:600px){
+  /* iPhone 全面屏：悬浮球与问答面板避开底部 home 指示条，否则会被压住一截 */
+  .qa-fab{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  .qa-float{bottom:calc(78px + env(safe-area-inset-bottom,0px));max-height:calc(100vh - 110px - env(safe-area-inset-bottom,0px))}
+  /* 触摸目标补到 44px：原关闭按钮 28px、收藏星标约 26px，手指很难点准 */
+  .pchart-close{width:44px;height:44px;font-size:19px}
+  .btn-star{padding:9px 10px;font-size:19px}
+  .pchart-mask{padding:10px}
+  .pchart-modal{max-height:92vh;border-radius:12px}
+  .theme-toggle{top:12px;right:12px;width:40px;height:40px;font-size:17px}
+}
+/* 桌面端关闭按钮也稍作放大，兼顾触控笔记本 */
+@media (min-width:601px){
+  .pchart-close{width:34px;height:34px;font-size:17px}
+}
+@media(max-width:600px){
+  .section-title.ai .ai-sub{display:none}
+  .ai-item{padding:9px 11px}
+  .ai-item-title{font-size:13.5px}
+  .ai-item-src{font-size:10px;max-width:80px}
+  .ai-row{font-size:12px}
+}
+/* ==================== 详细安装指引区（installGuideSection）==================== */
+.section-title.guide{background:linear-gradient(90deg,#ecfeff,#fff);border-bottom:2px solid #06b6d4}
+.guide-intro{padding:10px 18px 12px;font-size:13px;color:#0e7490;line-height:1.7;background:#f0f9ff;border-left:4px solid #06b6d4;margin:0 14px 4px;border-radius:0 6px 6px 0}
+.guide-cols{display:flex;gap:14px;padding:14px 16px;flex-wrap:wrap}
+.guide-col{flex:1;min-width:300px;background:#fff;border:1px solid #e2e8f0;border-radius:9px;overflow:hidden;box-shadow:0 1px 3px rgba(15,118,110,.05)}
+.guide-col-head{padding:12px 16px;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}
+.guide-col.mobile .guide-col-head{background:linear-gradient(135deg,#0e7490,#0891b2)}
+.guide-col.pc .guide-col-head{background:linear-gradient(135deg,#1e40af,#1e3a8a)}
+.guide-col-body{padding:14px 16px;font-size:13.5px;color:#334155;line-height:1.7}
+.guide-step{padding:10px 12px;margin-bottom:8px;background:#f8fafc;border-left:3px solid #94a3b8;border-radius:0 6px 6px 0}
+.guide-step strong{display:block;color:#0f172a;margin-bottom:4px;font-size:13.5px}
+.guide-step.gs-mobile{border-left-color:#0e7490}
+.guide-step.gs-mobile strong{color:#0e7490}
+.guide-step.gs-pc{border-left-color:#1e40af}
+.guide-step.gs-pc strong{color:#1e40af}
+.guide-step.gs-warn{background:#fef2f2;border-left-color:#dc2626}
+.guide-step.gs-warn strong{color:#dc2626}
+.guide-step small{color:#64748b;font-size:12.5px;display:block;margin-top:3px}
+.guide-tip{margin:10px 14px 0;padding:10px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;font-size:12.5px;color:#78350f;line-height:1.65}
+.guide-link{display:block;margin:12px 16px 4px;padding:12px 14px;background:linear-gradient(90deg,#1a3a5c,#2c5f8a);color:#fff;border-radius:8px;text-align:center;font-weight:700;font-size:15px;word-break:break-all}
+.guide-link:hover{opacity:.92;text-decoration:none}
+@media(max-width:600px){
+.sp-cat{font-size:14px;padding:12px 14px 10px 18px}
+.guide-cols{flex-direction:column;padding:10px 12px}
+.guide-col{min-width:0}
+.guide-col-body{font-size:13px;padding:12px}
+.guide-intro{font-size:12.5px;padding:8px 12px 10px;margin:0 10px 4px}
+.guide-link{font-size:13.5px}
+}
+@media(max-width:600px){
+.header{padding:18px 14px}.header h1{font-size:18px}
+.install-tip{font-size:11.5px;padding:7px 10px}
+.news-title{font-size:14px}.news-summary{font-size:12.5px}
+.stats-bar{gap:8px}.btn-allread{margin-left:0}
+.sub-cat{font-size:15px;padding:12px 14px 10px 18px}
+.section-title{font-size:16px;padding:12px 14px}
+.price-card{min-width:92px;padding:8px 9px 7px}
+.pc-value{font-size:15px}
+.price-strip{padding:12px 12px 10px}
+/* 移动端：星标从右上角绝对定位改为与"查看原文"按钮同行 */
+.btn-star{position:static;display:inline-block;margin-left:10px;font-size:17px;vertical-align:middle;color:#bdc3c7;transform:none}
+.news-item{padding-right:18px}
+.news-summary{margin-bottom:8px}
+.btn-unread{display:inline-block;font-size:11.5px;padding:2px 7px;margin-left:6px}
+.news-tags{margin-left:14px;gap:4px}
+.tag-chip{font-size:10px;padding:1px 7px}
+}
+@media(max-width:1100px){
+body{padding-left:0;padding-top:56px}
+.toc-sidebar{
+  left:0;right:0;top:0;
+  width:100%;
+  max-width:100%;
+  max-height:none;
+  border-radius:0;
+  padding:8px 10px;
+  display:flex;
+  flex-direction:row;
+  gap:6px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  box-shadow:0 1px 6px rgba(0,0,0,.1);
+}
+.toc-sidebar::-webkit-scrollbar{display:none}
+.toc-title{display:none}
+.toc-main-item{
+  flex-shrink:0;
+  white-space:nowrap;
+  padding:7px 13px;
+  margin-bottom:0;
+  font-size:13px;
+  border:1px solid #eef2f5;
+}
+.toc-main-item.active{border-color:#1a3a5c}
+.toc-main-item .toc-count{display:none}
+.toc-back-top{
+  flex-shrink:0;
+  margin-top:0;
+  padding:7px 13px;
+  border-top:none;
+  border:1px solid #eef2f5;
+}
+}
+/* ===== 新闻问答检索条（2026-09-01 新增）===== */
+.qa-strip{background:#fff;border:1px solid #e3eaf0;border-radius:10px;margin:12px 0;padding:12px 14px;box-shadow:0 1px 3px rgba(26,58,92,.06)}
+.qa-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.qa-icon{font-size:17px;line-height:1}
+.qa-title{font-size:14px;font-weight:700;color:#1a3a5c;white-space:nowrap}
+.qa-input{flex:1;min-width:170px;padding:8px 12px;border:1px solid #cfd8e3;border-radius:7px;font-size:14px;outline:none;transition:border-color .15s,box-shadow .15s}
+.qa-input:focus{border-color:#2980b9;box-shadow:0 0 0 2px rgba(41,128,185,.12)}
+.qa-btn{padding:8px 16px;background:#1a3a5c;color:#fff;border:none;border-radius:7px;font-size:13px;cursor:pointer;white-space:nowrap}
+.qa-btn:hover{background:#2c5f8a}
+.qa-meta{font-size:12px;color:#7b8a99;white-space:nowrap}
+.qa-filters{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;align-items:center}
+.qa-sel{padding:5px 9px;border:1px solid #cfd8e3;border-radius:6px;font-size:12px;background:#fff;color:#3a4a5a;cursor:pointer;outline:none;max-width:130px}
+.qa-sel:focus{border-color:#2980b9}
+.qa-chip{padding:5px 11px;border:1px solid #dfe6ec;background:#f4f7fa;border-radius:14px;font-size:12px;color:#4a5a6a;cursor:pointer;white-space:nowrap}
+.qa-chip:hover{background:#e8eef4;border-color:#c5d2de}
+.qa-chip.on{background:#2980b9;color:#fff;border-color:#2980b9}
+.qa-result{margin-top:11px;border-top:1px dashed #e3eaf0;padding-top:11px;max-height:430px;overflow-y:auto}
+.qa-sum{font-size:12px;color:#5b6b7a;margin-bottom:8px;line-height:1.7}
+.qa-warn{background:#fff8e6;border:1px solid #ffe9a8;color:#8a6d1f;padding:7px 11px;border-radius:6px;font-size:12px;margin-bottom:9px;line-height:1.6}
+.qa-trend{margin:0 0 9px;padding:8px 10px;background:#f7fafc;border:1px solid #eef2f5;border-radius:6px;font-size:11px;color:#6b7a89;font-family:Consolas,Monaco,monospace;line-height:1.55;white-space:pre;overflow-x:auto}
+.qa-item{padding:7px 0;border-bottom:1px solid #f2f6f9}
+.qa-item:last-child{border-bottom:none}
+.qa-line{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.qa-d{font-size:11px;color:#8899aa;white-space:nowrap;font-family:Consolas,Monaco,monospace}
+.qa-t{font-size:13.5px;color:#1a3a5c;text-decoration:none;flex:1;min-width:190px;line-height:1.5}
+.qa-t:hover{color:#c0392b;text-decoration:underline}
+.qa-s{font-size:11px;color:#7b8a99;white-space:nowrap}
+.qa-m{font-size:12px;color:#6b7a89;line-height:1.6;margin-top:3px}
+.qa-empty{padding:18px 4px;text-align:center;color:#8b9aa8;font-size:13px;line-height:1.7}
+.qa-empty b{color:#5b6b7a}
+/* ===== AI 智能问答（2026-09-02 新增，需后端 server.py 提供 /api/qa）===== */
+.qa-btn.qa-ai{background:linear-gradient(135deg,#1a6fb5,#2c8fd0);margin-left:2px}
+.qa-btn.qa-ai:hover{background:linear-gradient(135deg,#155d99,#2578b3)}
+.qa-btn:disabled{opacity:.55;cursor:not-allowed}
+.qa-aibox{margin:11px 0 2px;padding:12px 14px;background:linear-gradient(135deg,#f2f8ff,#f9fcff);border:1px solid #c3ddf2;border-left:4px solid #1a6fb5;border-radius:8px}
+.qa-aihead{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px}
+.qa-aititle{font-size:14px;font-weight:700;color:#12496f}
+.qa-aimeta{font-size:11px;color:#5b7a94}
+.qa-aibody{font-size:13.5px;line-height:1.9;color:#22394d;white-space:pre-wrap;word-break:break-word}
+.qa-aibody.loading{color:#6b8299;font-size:13px}
+.qa-aierr{background:#fff6f6;border:1px solid #f0cccc;border-left:3px solid #c0392b;color:#8e3b3b;padding:10px 12px;border-radius:6px;font-size:13px;line-height:1.75}
+.qa-airefs{margin-top:10px;padding-top:8px;border-top:1px dashed #cfe2f2;font-size:12px;color:#4a6b85;line-height:1.85}
+.qa-airefs a{color:#1a5f8f;text-decoration:none}
+.qa-airefs a:hover{text-decoration:underline}
+@media(max-width:600px){
+  .qa-input{min-width:100%;order:3}
+  .qa-btn{order:4}
+  .qa-btn.qa-ai{order:5;margin-left:0}
+  .qa-result{max-height:340px}
+  .qa-sel{max-width:none;flex:1}
+  .qa-aibox{padding:10px 11px}
+}
+/* ===== 矿业热榜手机版（9-03 新增） ===== */
+@media(max-width:600px){
+  .section-title.hotlist .hl-tag{font-size:10.5px;padding:1px 7px}
+  .section-title.hotlist .hl-sub{display:none}
+  .hotlist-list{margin:6px 10px 12px}
+  .hotlist-list li.hot-item{padding:10px 12px;gap:9px;-webkit-tap-highlight-color:rgba(231,76,60,.16)}
+  .hot-rank{min-width:24px;height:24px;line-height:24px;font-size:12px}
+  .hot-title{font-size:14px;line-height:1.5}
+  .hot-meta{font-size:11px}
+}
+</style>
+</head>
+<body>
+<script>
+/* 主题初始化（2026-09-05 新增）：同步执行，尽量在首次绘制前定好明暗，避免刷新闪白。
+   优先读用户手动选择（localStorage md_theme），未选择过则跟随系统 prefers-color-scheme。 */
+(function(){
+  try{
+    var m = localStorage.getItem('md_theme');
+    if(!m){
+      m = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(m === 'dark') document.body.classList.add('dark');
+  }catch(e){}
+})();
+</script>
+<nav class="toc-sidebar" id="tocSidebar">
+<div class="toc-title">📑 目录导航</div>
+<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})">📋 全部内容 <span class="toc-count" id="tocAllCount">48</span></div>
+<div class="toc-main-item" data-target="specialSection" onclick="scrollToSection('specialSection',this)" style="color:#b45009">⛏️ 找矿专项 <span class="toc-count" id="tocSpecialCount" style="background:#fdf3d7;color:#b45009">0</span></div>
+<div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)">🔥 今日新增 <span class="toc-count" id="tocTodayCount">9</span></div>
+<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)">📰 往期内容 <span class="toc-count" id="tocArchiveCount">39</span></div>
+<div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#f39c12">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12">0</span></div>
+<div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#8e44ad">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad">0</span></div>
+<div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490">📘</span></div>
+<div class="toc-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ 返回顶部</div>
+</nav>
+<div class="container">
+
+<div class="header">
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式">🌙</button>
+<h1>⛏️ 矿业新闻日报 <span class="date-badge">2026年09月04日 星期五</span></h1>
+<div class="sub">每日 9:00 起自动更新（约 9:30 前出今日版本） · 11个信息源 · 聚焦有色金属 · 部门内部参考 · 点击标题查看原文</div>
+<div class="install-tip show" id="installTip"><span id="installTipText">📲 手机：浏览器菜单选「<b>添加到桌面 / 添加书签</b>」（微信内先点右上角「···」→ 浏览器中打开）<br>💻 电脑：点 Edge/Chrome 地址栏右侧「<b>安装</b>」图标 → 变成独立窗口软件 ｜ <a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#7dd3fc;text-decoration:underline">查看详细说明 ↓</a></span><button class="tip-close" onclick="dismissInstallTip()" title="我知道了">✕</button></div>
+</div>
+<!-- ==================== 今日要闻（9-04 新增，每日自动提取 3~5 条关键信息）==================== -->
+<div class="digest-strip" id="digestStrip">
+  <div class="digest-head">
+    <span class="digest-badge">今日</span>
+    <span class="digest-title">要闻</span>
+    <span class="digest-date" id="digestDate"></span>
+  </div>
+  <ul class="digest-list" id="digestList">
+    <li class="digest-empty">要闻提取中…</li>
+  </ul>
+</div>
+<div class="price-strip" id="priceStrip">
+<div class="price-strip-head">
+<span class="price-strip-title">📊 金属价格</span>
+<span class="price-strip-note" id="priceStripNote">2026-09-04 更新 · 第一行 沪期主力/SMM·上金所（人民币） · 第二行 LME 美元/吨 · 涨红跌绿 · 点击卡片看近8个交易日走势</span>
+</div>
+<div class="price-cards" id="priceCardsShfe"><div data-slug="cum" class="price-card up"><div class="pc-name">沪铜 <span class="pc-tag">SHFE</span></div><div class="pc-value">108,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +240 (+0.22%)</div></div><div data-slug="alm" class="price-card up"><div class="pc-name">沪铝 <span class="pc-tag">SHFE</span></div><div class="pc-value">24,290</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +15 (+0.06%)</div></div><div data-slug="pbm" class="price-card up"><div class="pc-name">沪铅 <span class="pc-tag">SHFE</span></div><div class="pc-value">16,130</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +15 (+0.09%)</div></div><div data-slug="znm" class="price-card up"><div class="pc-name">沪锌 <span class="pc-tag">SHFE</span></div><div class="pc-value">26,745</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +115 (+0.43%)</div></div><div data-slug="snm" class="price-card up"><div class="pc-name">沪锡 <span class="pc-tag">SHFE</span></div><div class="pc-value">416,460</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +1,160 (+0.28%)</div></div><div data-slug="nim" class="price-card down"><div class="pc-name">沪镍 <span class="pc-tag">SHFE</span></div><div class="pc-value">127,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -930 (-0.72%)</div></div><div data-slug="au9999" class="price-card up"><div class="pc-name">上海金 <span class="pc-tag">Au99.99</span></div><div class="pc-value">964.40</div><div class="pc-unit">元/克</div><div class="pc-chg">&#9650; +0.72%</div></div><div data-slug="agtd" class="price-card up"><div class="pc-name">白银 <span class="pc-tag">Ag(T+D)</span></div><div class="pc-value">16,229</div><div class="pc-unit">元/千克</div><div class="pc-chg">&#9650; +1.53%</div></div><div data-slug="lcm" class="price-card down"><div class="pc-name">碳酸锂 <span class="pc-tag">主力连续</span></div><div class="pc-value">141,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -11,360 (-7.41%)</div></div><div class="price-card "><div class="pc-name">电解钴 <span class="pc-tag">SMM 09-03</span></div><div class="pc-value">304,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">上日 304,940（SMM 未更新）</div></div></div>
+<div class="price-cards" id="priceCardsLme" style="margin-top:6px;border-top:1px dashed #dbe2ea;padding-top:6px"><div data-slug="lcpt" class="price-card "><div class="pc-name">LME 铜 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lalt" class="price-card "><div class="pc-name">LME 铝 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lznt" class="price-card "><div class="pc-name">LME 锌 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lldt" class="price-card "><div class="pc-name">LME 铅 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lnkt" class="price-card "><div class="pc-name">LME 镍 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="ltnt" class="price-card "><div class="pc-name">LME 锡 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div></div>
+</div>
+<div class="qa-strip" id="qaStrip">
+  <div class="qa-head">
+    <span class="qa-icon">🔍</span>
+    <span class="qa-title">新闻问答</span>
+    <input type="text" id="qaInput" class="qa-input" placeholder="搜新闻：稀土 政策 / 锂 价格 / 自然资源部（空格＝同时含）" autocomplete="off">
+    <button class="qa-btn" id="qaBtn">搜索</button>
+    <button class="qa-btn qa-ai" id="qaAiBtn" title="让 AI 读完相关新闻后组织语言作答（Ctrl+Enter）" disabled>✨ AI 检测中…</button>
+    <span class="qa-meta" id="qaMeta"></span>
+  </div>
+  <div class="qa-filters">
+    <select class="qa-sel" id="qaMineral"><option value="">矿种（全部）</option></select>
+    <select class="qa-sel" id="qaTopic"><option value="">主题（全部）</option></select>
+    <select class="qa-sel" id="qaRange">
+      <option value="0">时间（全部）</option>
+      <option value="3">最近 3 天</option>
+      <option value="7">最近 7 天</option>
+      <option value="30">最近 30 天</option>
+    </select>
+    <button class="qa-chip" id="qaTrendBtn">📈 时间分布</button>
+    <button class="qa-chip" id="qaReset">重置</button>
+  </div>
+  <div class="qa-aibox" id="qaAiBox" style="display:none">
+    <div class="qa-aihead">
+      <span class="qa-aititle">✨ AI 回答</span>
+      <span class="qa-aimeta" id="qaAiMeta"></span>
+    </div>
+    <div class="qa-aibody" id="qaAiBody"></div>
+    <div class="qa-airefs" id="qaAiRefs"></div>
+  </div>
+  <div class="qa-result" id="qaResult" style="display:none"></div>
+</div>
+<div class="stats-bar">
+<div class="stat-item"><span class="stat-num new" id="newCount">0</span> 今日新增</div>
+<div class="stat-item"><span class="stat-num unread" id="unreadCount">0</span> 条未读</div>
+<button class="btn btn-filter" id="filterBtn" onclick="toggleFilter()">只看新增</button>
+<button class="btn btn-unread" id="unreadBtn" onclick="toggleUnreadFilter()" title="只看未读新闻，已读自动隐藏" style="margin-left:8px">📭 未读 <span id="unreadBtnCount">0</span></button>
+<button class="btn btn-special" id="specialBtn" onclick="toggleSpecialFilter()" title="只看与新一轮找矿突破战略行动相关的新闻" style="margin-left:8px">⛏️ 专项 <span id="specialCountNum">0</span></button>
+<button class="btn btn-restore" onclick="clearAllRead()" title="一键清除所有已读记录，全部恢复为未读状态" style="margin-left:8px">↻ 全部恢复未读</button>
+<button class="btn btn-fav" id="favBtn" onclick="toggleFavFilter()" style="margin-left:8px">★ 收藏 <span id="favCount">0</span></button>
+<button class="btn btn-history" id="historyBtn" onclick="toggleHistoryFilter()">📋 历史 <span id="historyCount">0</span></button>
+<button class="btn btn-allread" onclick="markAllRead()">✓ 全部标为已读</button>
+</div>
+<!-- ==================== 矿业热榜（2026-09-03 新增，类似今日头条热榜） ==================== -->
+<div class="section hotlist-section" id="hotListSection">
+  <div class="section-title hotlist"><span class="icon">🔥</span> 矿业热榜 <span class="hl-tag">TOP 3</span> <span class="hl-sub">按来源权威 × 时效 × 关键词</span> <span class="news-count" id="hotListCount">加载中…</span></div>
+  <ol class="hotlist-list" id="hotListBody">
+    <li class="hotlist-loading">热榜加载中…</li>
+  </ol>
+</div>
+<!-- ==================== AI 深度解析（9-04 新增，依赖 DEEPSEEK_API_KEY） ==================== -->
+<div class="section ai-section" id="aiSection">
+  <div class="section-title ai"><span class="icon">🤖</span> AI 深度解析 <span class="ai-tag">deepseek-chat</span> <span class="ai-sub">今日 9 条新闻的智能解读</span> <span class="news-count" id="aiCount">加载中…</span></div>
+  <div class="ai-list" id="aiBody">
+    <div class="ai-loading">🤖 AI 解析加载中…</div>
+  </div>
+</div>
+<!-- ==================== 新一轮找矿突破战略行动·专项 ==================== -->
+<div class="section" id="specialSection">
+<div class="section-title special"><span class="icon">⛏️</span> 新一轮找矿突破战略行动 · 专项<span class="news-count" id="specialCount"></span></div>
+<div class="sp-cat">📌 政策与部署<span class="sub-count" id="spCount-policy">0条</span></div>
+<div class="sp-list" id="spList-policy">
+</div>
+<div class="sp-cat">🏔️ 找矿成果与新发现<span class="sub-count" id="spCount-result">0条</span></div>
+<div class="sp-list" id="spList-result">
+</div>
+<div class="sp-cat">🔬 勘查技术与装备<span class="sub-count" id="spCount-tech">0条</span></div>
+<div class="sp-list" id="spList-tech">
+</div>
+<div class="sp-cat">🌏 战略矿产与资源安全<span class="sub-count" id="spCount-security">0条</span></div>
+<div class="sp-list" id="spList-security">
+
+</div>
+<!-- ==================== 今日新增 ==================== -->
+<!-- ==================== 今日新增（2026-09-04 抓取） ==================== -->
+<div class="section" id="todaySection">
+<div class="section-title today"><span class="icon">🔥</span> 今日新增（2026-09-04 抓取）<span class="news-count" id="todayCount">9条</span></div>
+<div class="sub-cat">💼 矿权交易<span class="sub-count">2条新增</span></div>
+<div class="news-item is-new" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" target="_blank">新疆皮山县库尔良铜矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">新疆维吾尔自治区自然资源厅委托自治区公共资源交易中心挂牌出让皮山县库尔良铜矿勘查探矿权，区块面积39.42平方千米，起始价118.27万元，出让收益率1.2%，拟出让年限5年，挂牌期2026年10月21日至11月4日。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" target="_blank">内蒙古巴林右旗巴彦琥硕银矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">赤峰市自然资源局委托赤峰市公共资源交易中心网上挂牌出让巴彦琥硕银矿勘查探矿权（赤公矿交告〔2026〕001号），区块面积6.30平方千米，起始价38万元，出让收益率2.3%，拟出让年限5年，挂牌期2026年10月23日至11月6日。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" target="_blank">查看原文 →</a></div><div class="sub-cat">🔍 找矿成果与勘查技术<span class="sub-count">1条新增</span></div>
+<div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" target="_blank">澳大利亚延达尔金矿勘探取得新发现</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">盖特维矿业（Gateway Mining）宣布西澳延达尔（Yandal）金矿项目考扎（Cowza）探区取得重大高品位原生金矿发现，钻孔在104米深处见矿41米、金品位2克/吨；连同赛利亚南、沃德靶区，延达尔构造带延伸长度已超13公里，后续将开展金刚石钻探。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" target="_blank">查看原文 →</a></div><div class="sub-cat">🏭 行业动态<span class="sub-count">3条新增</span></div>
+<div class="news-item is-new" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html" target="_blank">薪火代代传——驰宏锌锗以“0.3克锗精神”续写科研攻坚答卷</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-03</div><div class="news-summary">从1958年乌蒙山简陋实验室提取0.3克金属锗起步，驰宏锌锗现年产锗产品含锗65吨、稳居全球原生锗产业第一梯队；自主研发的沉锗工艺为全球独有，并正以一步法直接蒸馏技术填补国内低品位锗料高效处置空白。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html" target="_blank">2026矿冶科技集团有限公司科技创新大会在京召开</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-03</div><div class="news-summary">矿冶集团科技创新大会8月28日在京召开，部署“十五五”时期集团科技创新重点任务，发布集团志《走向辉煌（2016—2026）》与“十五五”品牌战略规划，并同期举办采矿工程、选矿工程、冶金环境、新材料4个分论坛。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html" target="_blank">有色企业紧急捐款驰援西藏吉隆灾区</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-03</div><div class="news-summary">尼泊尔侧泥石流灾害造成西藏日喀则吉隆口岸重大人员伤亡后，有色企业紧急驰援：中国铝业携中国铜业捐赠2000万元，中国黄金集团1500万元，魏桥创业1000万元，紫金矿业1000万元，用于抢险救援与灾后重建。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html" target="_blank">查看原文 →</a></div><div class="sub-cat">🌐 国际矿业动态<span class="sub-count">3条新增</span></div>
+<div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" target="_blank">政府干预关键矿产“前所未有”</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">据Mining.com报道，各国政府正从单纯贷款转向股权、保底价与长期承购等商业投资模式直接介入采矿与关键矿产交易；美国2月启动120亿美元“金库计划”，快市统计2025年1月以来矿产相关协议约160个、总额近400亿美元，激励与禁购并举的模式被指“前所未有”。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm" target="_blank">国际贵金属价格回升</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">周三国际矿产品价格多数下跌、贵金属普遍上涨：纽约金收于4387.8美元/盎司涨1.36%，银65.32美元/盎司涨1.95%，钯涨2.25%；LME铜14236美元/吨涨0.35%，铝3292.5美元/吨涨0.61%，镍16890美元/吨涨1.35%，铅、锌、锡小幅走低；铀（U3O8）收89.50美元/磅。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm" target="_blank">格陵兰资源公司获最高1.2亿美元融资意向 推进马尔姆杰格钼镁项目</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">加拿大初级矿业公司格陵兰资源收到北欧投资银行（NIB）最高1.2亿美元融资意向书，为加拿大EDC牵头2.75亿美元支持的补充；马尔姆杰格钼镁项目已完成最终可行性研究，钼金属储量5.71亿磅，前10年年均产钼精矿3280万磅，约为欧盟年消费量的25%。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm" target="_blank">查看原文 →</a></div></div>
+<!-- ==================== 往期内容 ==================== -->
+<div class="section" id="archiveSection">
+<div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近7天）<span class="news-count" id="archiveCount">39条</span></div>
+<div class="fold-toggle" id="foldToggle" style="display:none" onclick="toggleOldFold()">▸ 展开更早内容</div>
+<div class="sub-cat">💼 矿权交易<span class="sub-count">5条</span></div>
+<div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" target="_blank">湖北省通山县泉塘王矿区金矿勘查网上挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">湖北省自然资源厅打包出让通山县泉塘王矿区金矿南段和北段勘查探矿权，矿种为金矿，南段3.9平方千米、北段5.9平方千米，起始价59.04万元，出让收益率2.3%。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260903_10305004.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260903_10305004.htm" target="_blank">云南省广南县董平金矿勘探探矿权转让公示</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-02</div><div class="news-summary">文山州自然资源局公示广南县董平金矿勘探探矿权转让，转让人为云南金龙矿业，受让人为广南广钰矿业，勘查面积9.44平方千米，转让方式为出售。</div><a class="btn-read" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260903_10305004.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260901_10302816.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260901_10302816.htm" target="_blank">湖北省大冶市铜山口外围铜多金属矿勘查网上挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 08-31</div><div class="news-summary">湖北大冶铜山口外围铜多金属矿勘查探矿权网上挂牌出让，属长江中下游铜铁金成矿带重点接续区。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260901_10302816.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260901_10302808.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260901_10302808.htm" target="_blank">内蒙古翁牛特旗红石砬子铜多金属勘探探矿权转让公示</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 08-31</div><div class="news-summary">内蒙古翁牛特旗红石砬子铜多金属矿勘探探矿权转让公示，涉及大兴安岭中南段有色金属成矿带。</div><a class="btn-read" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260901_10302808.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202608/t20260828_10300653.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202608/t20260828_10300653.htm" target="_blank">湖南省株洲市芦淞区长垅矿区金矿普查探矿权网上挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 08-28</div><div class="news-summary">湖南省株洲市芦淞区长垅矿区金矿普查探矿权以网上挂牌方式公开出让，主矿种为金矿，助力区域金矿勘查开发。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202608/t20260828_10300653.htm" target="_blank">查看原文 →</a></div>
+<div class="sub-cat">🏭 行业动态<span class="sub-count">18条</span></div>
+<div class="news-item" data-url="https://www.cngold.org.cn/news/show-9524.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9524.html" target="_blank">周洲出席中吉商务与投资论坛 中国黄金集团深耕中亚矿业合作</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">中国黄金集团董事长周洲出席中吉商务与投资论坛，强调吉尔吉斯斯坦是集团推进全球资源布局的重要地区，持续推进库鲁-捷盖列克铜金矿、布丘克金矿等项目建设和运营。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9524.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html" target="_blank">云铝股份交出历史最好半年成绩单 营收增长20.3%利润增长175%</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">云铝股份上半年营收349.81亿元同比增长20.3%，利润总额104.54亿元同比增长175%，电解铝板块半年利润创历史最好，氧化铝、炭素产量超额完成，合金产品出口实现突破。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html" target="_blank">洛阳铜加工产出首根镁合金铸锭 镁板全流程工艺贯通</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">中铝洛阳铜加工变形镁合金板材生产线一期镁熔铸试生产成功，产出首根合格镁合金铸锭，标志镁板全流程生产工艺全线贯通，具备规模化生产能力。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html" target="_blank">株冶集团奋力推进"三化两型"建设 铅锌冶炼绿色智能升级</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">株冶集团推进绿色化、智能化、融合化建设，30万吨锌冶炼基地单位能耗降22%，建成铜铅锌联合冶炼与多源固废协同利用示范工程，铟回收率超行业均值10个百分点。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html" target="_blank">西安矿产中心科技成果获陕西省科学技术进步奖三等奖</a></div><div class="news-meta"><span class="src">中国地质调查局</span> · 09-02</div><div class="news-summary">中国地质调查局西安矿产资源调查中心成果获陕西省科技进步奖三等奖，聚焦秦岭矿集区矿渣型泥石流灾害防治与生态修复，成果在汉中、安康等矿集区落地应用。</div><a class="btn-read" href="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html" target="_blank">查看原文 →</a><div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html" target="_blank">中国恩菲实施的非洲首例井下无人驾驶电机车项目通过验收并进入常态化运行</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">非洲首例井下无人驾驶电机车项目通过验收，标志我国智能矿山装备与技术在海外矿山实现常态化应用。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61881.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61881.html" target="_blank">上半年铜陵有色净利润同比翻倍</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">铜陵有色上半年经营业绩大幅增长，净利润同比翻倍，反映铜冶炼与加工环节盈利显著修复。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61881.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61891.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61891.html" target="_blank">陕西黄金集团西安秦金项目获陕西省科技厅立项</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">陕西黄金集团西安秦金项目获省级科技立项，聚焦黄金资源综合利用与绿色冶炼技术攻关。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61891.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473665" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473665" target="_blank">一座钼矿何以在林海深处绘就“共生图景”</a></div><div class="news-meta"><span class="src">中国有色网</span> · 09-02</div><div class="news-summary">报道一座位于林区的钼矿如何在开发过程中统筹生态保护与资源利用，探索绿色矿山与生态修复协同路径。</div><a class="btn-read" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473665" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473653" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473653" target="_blank">英国加码投资关键矿产本土供应链建设</a></div><div class="news-meta"><span class="src">中国有色网</span> · 09-02</div><div class="news-summary">英国加大对关键矿产本土供应链的投资力度，旨在降低对外依赖、提升战略性矿产保障能力。</div><a class="btn-read" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473653" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473599" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473599" target="_blank">7月份锂行业运行情况</a></div><div class="news-meta"><span class="src">中国有色网</span> · 09-02</div><div class="news-summary">发布7月份锂行业运行数据，涉及碳酸锂产量、库存与消费情况，反映锂产业链供需边际变化。</div><a class="btn-read" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473599" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cngold.org.cn/news/show-9500.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">2026年上半年我国黄金产量152.908吨，同比下降14.62%，黄金消费量511.412吨，同比增长1.23%</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">上半年国内黄金产量同比下降14.62%至152.908吨，黄金消费量511.412吨、同比增长1.23%，产消缺口进一步扩大。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cngold.org.cn/news/show-9503.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9503.html" target="_blank">中国黄金集团与中国地质大学（武汉）举行工作会商</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">校企双方围绕科技创新、人才培养与地质勘查成果转化开展会商，推动产学研深度融合。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9503.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cngold.org.cn/news/show-9505.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9505.html" target="_blank">持续增厚股东回报 紫金矿业公布111亿元中期分红方案</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">紫金矿业公布111亿元中期分红方案，在铜金价格高位背景下持续提升股东回报。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9505.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61849.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61849.html" target="_blank">新疆有色集团持续推进关键金属增储上产（续）</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 08-28</div><div class="news-summary">新疆有色集团聚焦铜、镍、锂等关键金属，持续推进增储上产国家级研发项目后续成果转化，攻关硬岩矿产与共伴生资源综合利用。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61849.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61851.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61851.html" target="_blank">东方测控与中铁资源签署战略合作协议 携手推进矿山智能化高质量发展</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 08-28</div><div class="news-summary">东方测控与中铁资源签署战略合作协议，双方将围绕矿山智能化建设开展深度合作，携手推进矿山智能化高质量发展。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61851.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cngold.org.cn/news/show-9510.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9510.html" target="_blank">中国黄金协会发布严正声明 谴责非法黄金交易行为</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 08-28</div><div class="news-summary">中国黄金协会发布严正声明，强烈谴责非法黄金交易、违规黄金衍生品炒作等行为，提示行业及消费者注意风险。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9510.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cngold.org.cn/news/show-9515.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9515.html" target="_blank">深化产融协同 共促黄金市场高质量发展——中国黄金协会赴上海黄金交易所拜访交流</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 08-24</div><div class="news-summary">8月21日，中国黄金协会党委书记、副会长严弟勇带队赴上海黄金交易所拜访，与上金所总裁孔燕座谈。双方明确将健全长效合作机制，在产业调研、风险防控、政策研究、行业交流等领域协同发力，以深度产融融合助力行业提质升级、共促黄金市场稳健高质量发展。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9515.html" target="_blank">查看原文 →</a></div>
+<div class="sub-cat">🔍 找矿成果与勘查技术<span class="sub-count">7条</span></div>
+<div class="news-item" data-url="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" target="_blank">新一轮找矿突破战略行动再获标志性成果 安徽茶亭铜金矿勘查取得重大突破</a></div><div class="news-meta"><span class="src">自然资源部</span> · 09-02</div><div class="news-summary">自然资源部发布新一轮找矿突破战略行动最新标志性成果，安徽茶亭铜金矿勘查取得重大突破，为长江中下游成矿带找矿提供新的资源接续。</div><a class="btn-read" href="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260902_867767.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260902_867767.html" target="_blank">绿色矿业｜六大场景解锁我国绿色勘查新路径</a></div><div class="news-meta"><span class="src">中国地质调查局</span> · 09-02</div><div class="news-summary">系统梳理我国绿色勘查在六大典型场景下的技术路径与装备应用，推动勘查全过程减扰动、低排放、可恢复。</div><a class="btn-read" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260902_867767.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260901_867682.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260901_867682.html" target="_blank">星-空-地-井协同勘查技术助力冈底斯找矿取得新突破</a></div><div class="news-meta"><span class="src">中国地质调查局</span> · 09-01</div><div class="news-summary">通过卫星遥感、航空物探、地面调查与钻探验证四位一体协同，冈底斯成矿带深部找矿取得新进展，验证星-空-地-井一体化勘查技术体系的有效性。</div><a class="btn-read" href="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260901_867682.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.geosociety.org.cn/?v1=v14&v4=v16&v2=6a967e1769a02&v3=v41" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.geosociety.org.cn/?v1=v14&v4=v16&v2=6a967e1769a02&v3=v41" target="_blank">《中国矿产地质志研编与重大创新》成果通过权威评审</a></div><div class="news-meta"><span class="src">中国地质学会</span> · 09-02</div><div class="news-summary">中国矿产地质志研编成果通过权威评审，系统总结全国成矿规律与找矿方向，为新一轮找矿突破战略行动提供基础支撑。</div><a class="btn-read" href="https://www.geosociety.org.cn/?v1=v14&v4=v16&v2=6a967e1769a02&v3=v41" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a866ecaf3741&v3=v41" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a866ecaf3741&v3=v41" target="_blank">四川省地质学会战略性矿产资源勘查领域产业科技专家服务团组建</a></div><div class="news-meta"><span class="src">中国地质学会</span> · 09-02</div><div class="news-summary">四川省地质学会组建战略性矿产资源勘查领域产业科技专家服务团，推动产学研协同与找矿技术成果转化。</div><a class="btn-read" href="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a866ecaf3741&v3=v41" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a9720dc7a7e7&v3=v41" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a9720dc7a7e7&v3=v41" target="_blank">专家下沉一线 技术赋能找矿——四川省地质学会产业科技专家服务团在行动</a></div><div class="news-meta"><span class="src">中国地质学会</span> · 09-02</div><div class="news-summary">组织专家深入勘查一线开展技术指导，把成矿理论与勘查方法直接应用到找矿生产实践。</div><a class="btn-read" href="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a9720dc7a7e7&v3=v41" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61850.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61850.html" target="_blank">中国恩菲设计的太平矿业金矿石建设项目TBM始发</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 08-28</div><div class="news-summary">8月22日，中国恩菲设计的内蒙古太平矿业浩尧尔忽洞金矿年开采825万吨金矿石建设项目（二标段）TBM始发，标志着项目建设进入关键攻坚阶段。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61850.html" target="_blank">查看原文 →</a></div>
+<div class="sub-cat">🌐 国际矿业动态<span class="sub-count">8条</span></div>
+<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm" target="_blank">西澳穆尔金山钨矿成为世界级矿床</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-02</div><div class="news-summary">西澳穆尔金山钨矿资源量更新后跻身世界级矿床行列，全球钨资源供应格局或将生变。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260901_10303965.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260901_10303965.htm" target="_blank">德国有意开发巴西关键矿产</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-01</div><div class="news-summary">德国寻求与巴西在关键矿产领域开展合作开发，以分散供应链集中度、保障工业原料安全。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260901_10303965.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm" target="_blank">印度同赞比亚恢复矿产投资谈判</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-02</div><div class="news-summary">印度与赞比亚重启矿产投资谈判，聚焦铜及关键矿产的联合勘查开发与供应链合作。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260828_10301647.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260828_10301647.htm" target="_blank">巴西罗查稀土矿发现更多高品位矿段</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 08-28</div><div class="news-summary">巴西罗查稀土矿阿尔托山矿床在北、南、东侧证实高品位延伸带，共伴生铌钪钽铀品位高，计划钻探5000米进一步圈定矿床范围，新结果尚未纳入资源量估算。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260828_10301647.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202608/t20260828_10301649.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202608/t20260828_10301649.htm" target="_blank">周四国际矿产品价格多数上涨</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 08-28</div><div class="news-summary">周四国际矿产品价格多数上涨：纽约商品交易所黄金收于4600.5美元/盎司（+0.15%），白银69.26美元/盎司（+1.71%），铂、钯亦有上涨。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202608/t20260828_10301649.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260828_10301646.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260828_10301646.htm" target="_blank">美能源部资助关键矿产研发项目</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 08-28</div><div class="news-summary">美国能源部宣布资助7个关键矿产研发项目，涉及重稀土、镓、铜等关键材料，依托CMIH专业技术力量攻关重大技术难题，强化关键矿产产业链。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260828_10301646.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kygs/kygsbg/202608/t20260828_10301648.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kygs/kygsbg/202608/t20260828_10301648.htm" target="_blank">博利登并购尼克萨资源公司股份</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 08-28</div><div class="news-summary">博利登（Boliden）并购尼克萨资源公司股份，交易完成后将发起自愿现金要约收购剩余全部股份，国际矿业并购重组提速。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kygs/kygsbg/202608/t20260828_10301648.htm" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202608/t20260828_10301645.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202608/t20260828_10301645.htm" target="_blank">第二季度澳大利亚勘查投资创新高</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 08-28</div><div class="news-summary">澳大利亚第二季度矿产勘查投资创近年新高，关键矿产（金、铜、镍、锂、稀土）项目增速明显，全球勘查市场延续回暖。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202608/t20260828_10301645.htm" target="_blank">查看原文 →</a></div>
+<div class="sub-cat">🎓 培训与学术<span class="sub-count">1条</span></div>
+<div class="news-item" data-url="https://www.mnr.gov.cn/dt/ywbb/202608/t20260828_2937200.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.mnr.gov.cn/dt/ywbb/202608/t20260828_2937200.html" target="_blank">自然资源部举办矿产资源法实施条例贯彻实施培训班</a></div><div class="news-meta"><span class="src">自然资源部</span> · 08-28</div><div class="news-summary">8月25日至26日，自然资源部在武汉举办矿产资源法实施条例贯彻实施培训班，部相关司局围绕地质勘查、矿业权管理、矿产资源勘查开采、矿区生态修复等作系统讲解，160人参加培训。</div><a class="btn-read" href="https://www.mnr.gov.cn/dt/ywbb/202608/t20260828_2937200.html" target="_blank">查看原文 →</a></div>
+<div class="section" id="installGuideSection">
+<div class="section-title guide"><span class="icon">📲</span> 安装到桌面 · 详细说明 <span class="news-count" style="background:#cffafe;color:#0e7490">建议收藏本页</span></div>
+<div class="guide-intro">本页面是网页，<b>不需要"装软件"</b>。推荐做法：把链接<br><b>① 收藏到浏览器书签</b>（任意浏览器都行——每天打开一次即可）<br>② 或通过浏览器菜单"<b>添加到主屏幕 / 添加到桌面</b>"，桌面会出现一个图标、点图标直达、像App一样。本页面在介绍两种方式的详细操作、适用浏览器和常见坑。</div>
+
+<div class="guide-cols">
+<!-- ============== 手机端 ============== -->
+<div class="guide-col mobile">
+<div class="guide-col-head">📱 手机端 · 把日报添加到桌面</div>
+<div class="guide-col-body">
+<div class="guide-step gs-mobile"><strong>① 安卓 Chrome（最常见）</strong>右上角「⋮」（三点）→「<b>添加到主屏幕</b>」→ 可改名称（默认"矿业新闻日报"）→「<b>添加</b>」。桌面出图标，点图标直达、全屏显示。</div>
+<div class="guide-step gs-mobile"><strong>①' 安卓 Edge / QQ 浏览器 / 360 极速</strong>这几种支持 <b>PWA</b>：菜单选「<b>安装应用 / 添加到主屏幕</b>」→「<b>添加</b>」。比普通"添加到主屏幕"更强——可全屏、有启动动画、离线也能开。</div>
+<div class="guide-step gs-mobile"><strong>①'' 安卓三星 / 华为 / 小米 自带浏览器</strong>右上角菜单 → 找「<b>添加到主屏幕</b>」「添加书签到桌面」之类选项，名称略有差异。</div>
+<div class="guide-step gs-mobile"><strong>② iPhone Safari / iPad</strong>底部工具栏「<b>分享 □↑</b>」图标 → 滚到下方找「<b>添加到主屏幕</b>」→「<b>添加</b>」。iPhone 没有 PWA 全屏，但桌面图标直达已经很方便。</div>
+<div class="guide-step gs-warn"><strong>⚠️ 微信里看不到这些按钮！</strong>必须先点微信右上角「<b>···</b>」 →「<b>在浏览器中打开</b>」（若没这个选项，选「<b>复制链接</b>」→ 打开手机自带的浏览器 → 把链接粘贴进去）。</div>
+<div class="guide-step"><small>💡 "添加到桌面"的桌面图标其实是<b>网页书签</b>，不是真正安装App。优点是几乎所有浏览器都支持、不占内存、即加即用；缺点是不像 PWA 那样能离线运行。</small></div>
+</div>
+</div>
+
+<!-- ============== 电脑端 ============== -->
+<div class="guide-col pc">
+<div class="guide-col-head">💻 电脑端 · 装成独立窗口软件</div>
+<div class="guide-col-body">
+<div class="guide-step gs-pc"><strong>方式一：地址栏「安装」图标（推荐，最像 App）</strong>用 <b>Microsoft Edge</b> 或 <b>Google Chrome</b> 打开日报链接 → 看地址栏最右侧有没有一个<b>小方块+下载箭头</b>图标（有的浏览器显示 ⊞ 或 ⬇）→ 鼠标悬停显示「<b>安装 矿业新闻日报</b>」→ 点一下 → 弹窗确认「<b>安装</b>」。会自动：① 桌面生成图标 ②「开始菜单」里出现「矿业新闻日报」 ③ 以后双击图标就打开日报，<b>无地址栏、无标签页、全屏独立窗口</b>。</div>
+<div class="guide-step gs-pc"><strong>方式二：菜单「安装」</strong>如果地址栏右侧没图标，可点浏览器右上角「···」菜单 → 找「<b>安装 矿业新闻日报</b>」或「<b>将此网站作为应用安装</b>」选项。</div>
+<div class="guide-step gs-pc"><strong>方式三：Ctrl+D 收藏（兜底，所有浏览器都行）</strong>任意浏览器按 <b>Ctrl+D</b>（Mac 是 ⌘+D）→ 可改名称 → 选保存到「<b>书签栏</b>」（或收藏夹）→「完成」。每天打开浏览器点书签直达，无需安装。</div>
+<div class="guide-step gs-pc"><small>✅ 支持安装 PWA 的浏览器：<b>Microsoft Edge</b>（Windows 自带，强烈推荐）、<b>Google Chrome</b>、<b>QQ 浏览器（极速模式）</b>、<b>360 极速浏览器</b>、<b>Brave</b>。<br>❌ 不支持 PWA 安装、只能用 Ctrl+D 收藏：Firefox（火狐）、Safari（Mac）、IE、360 安全浏览器。<br>💡 推荐用电脑自带的 <b>Microsoft Edge</b> 即可，零下载，Win10/11 系统自带。</small></div>
+</div>
+</div>
+</div>
+
+<!-- 安装 PWA 的链接 -->
+<a class="guide-link" href="https://04bad6570ebc40da9fa12c25c30b6ad3.app.workbuddy.link" target="_blank">📋 复制链接到浏览器：https://04bad6570ebc40da9fa12c25c30b6ad3.app.workbuddy.link</a>
+
+<div class="guide-tip">💡 <b>安装后怎么卸载？</b>手机：长按桌面图标选「删除」；电脑：Edge / Chrome「设置」→「应用」→「已安装的应用」→ 找"矿业新闻日报"→「卸载」。链接收藏在书签：书签栏 → 浏览器「收藏夹管理器」删。本页面随时能在浏览器输入链接打开，不会因为卸载而丢失。</div>
+</div>
+<!-- ==================== 已归档收藏 ==================== -->
+<div class="section" id="archivedFavSection" style="display:none">
+<div class="section-title">🗂️ 已归档收藏（原新闻已滚出页面，收藏记录永久保留）<span class="news-count" id="archFavCount">0条</span></div>
+<div id="archFavList"></div>
+</div>
+<div class="footer">
+<p>数据来源：自然资源部 · 中国地质调查局 · 矿业权市场 · 中国有色网 · 北京国际矿业权交易所 · 上海联合矿权交易所 · 全球矿产资源信息系统 · 中国地质学会 · 中国黄金协会 · 中国稀土行业协会 · 中国有色金属工业协会</p>
+<p>聚焦有色金属：铜镍铅锌铝金银稀土钨钼锡锑锂钴 | 排除：煤炭、石油、天然气、钢铁、铁矿</p>
+<p>更新时间：2026-09-04 15:27 | 每日9:00起自动更新（约9:30前完成） | 11个信息源 | 本页新增：已读状态存储于访问者本机浏览器</p>
+<p>📱 手机：在浏览器菜单选「<b>添加到主屏幕</b>」｜ 💻 电脑：用 Edge 或 Chrome 点击地址栏右侧「安装」图标 → 独立窗口运行 ｜ <a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#1a3a5c;text-decoration:underline">详细说明 ↓</a></p>
+<div style="border-top:1px solid #d5dde5;margin:14px 0 10px;padding-top:12px;text-align:left">
+<p style="font-size:12px;color:#5b6b7a;line-height:1.8"><b style="color:#3a4a5a">版权与免责声明</b><br>
+本页面信息均来源于互联网公开渠道，包括但不限于中国政府机构、行业协会、权威媒体的官方网站及公开新闻报道。所有著作权及其他权利归原机构 / 原媒体所有。<br>
+本站仅作<b>信息聚合展示</b>，不存储完整原文，不作任何商业用途；通过「查看原文」链接引导读者返回原网站阅读，以尊重原网站访问流量与运营收益。<br>
+如原权利人认为本站所展示的内容存在侵权，请通过邮箱 <a href="mailto:1642988981@qq.com" style="color:#1a3a5c;text-decoration:underline">1642988981@qq.com</a> 联系我们，并提供：① 权利人身份证明；② 涉嫌侵权内容的页面链接；③ 要求删除的具体说明。我们将在收到通知后 <b>3 个工作日内</b>核实并处理。<br>
+本站不对所聚合信息的及时性、准确性、完整性作担保；如因信息源变更导致链接失效，概与本站无关。</p>
+</div>
+</div>
+</div>
+<!-- 全库新闻数据（供问答检索条使用；文件缺失时自动降级为页面内检索，不影响日报本身） -->
+<!-- ==================== 价格走势图弹层（9-04 新增）==================== -->
+<div class="pchart-mask" id="pchartMask" style="display:none" onclick="if(event.target===this)pcChartClose()">
+  <div class="pchart-modal">
+    <div class="pchart-head">
+      <div><span class="pchart-name" id="pchartName">—</span><span class="pchart-sub" id="pchartSub"></span></div>
+      <button class="pchart-close" onclick="pcChartClose()">✕</button>
+    </div>
+    <div class="pchart-body">
+      <div class="pchart-legend" id="pchartLegend"></div>
+      <div id="pchartSvg"></div>
+      <table class="pchart-table" id="pchartTable"></table>
+    </div>
+  </div>
+</div>
+<!-- ==================== 左下角问答悬浮球 + 面板（9-04 新增）==================== -->
+<button class="qa-fab" id="qaFab" title="新闻问答（检索全库新闻，服务在线时可 AI 作答）" onclick="qaFloatToggle()">💬</button>
+<div class="qa-float" id="qaFloat">
+  <div class="qa-float-head">
+    <span class="qa-float-title">💬 新闻问答</span>
+    <button class="pchart-close" onclick="qaFloatToggle()">✕</button>
+  </div>
+  <div class="qa-float-body" id="qaFloatBody"></div>
+  <div class="qa-float-foot">
+    <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="问点什么：稀土政策 / 锂价走势…" autocomplete="off">
+    <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词">检索</button>
+    <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答（需后端服务）">AI</button>
+  </div>
+</div>
+<script src="news-data.js"></script>
+<script src="lme-data.js"></script>
+<script src="price-history.js"></script>
+<script>
+
+
+
+// ===== 已读/未读 + 收藏 + 浏览记录（localStorage，按访问者本机存储）=====
+const STORE_KEY='mining_daily_read_urls';
+const FAV_KEY='mining_daily_favorites';
+const HISTORY_KEY='mining_daily_history';
+
+function getReadSet(){try{return new Set(JSON.parse(localStorage.getItem(STORE_KEY)||'[]'))}catch(e){return new Set()}}
+function saveReadSet(s){localStorage.setItem(STORE_KEY,JSON.stringify([...s]))}
+// 收藏存储：新格式为对象数组 {url,title,date,src}；旧格式（纯URL字符串数组）自动迁移
+function getFavs(){
+  let arr;try{arr=JSON.parse(localStorage.getItem(FAV_KEY)||'[]')}catch(e){arr=[]}
+  if(!Array.isArray(arr))return[];
+  return arr.map(v=>typeof v==='string'?{url:v}:v).filter(v=>v&&v.url)
+}
+function saveFavs(arr){localStorage.setItem(FAV_KEY,JSON.stringify(arr.slice(0,300)))}
+function getFavUrls(){return new Set(getFavs().map(f=>f.url))}
+function getHistory(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]')}catch(e){return[]}}
+function saveHistory(arr){localStorage.setItem(HISTORY_KEY,JSON.stringify(arr.slice(0,100)))}
+
+// 标记已读 + 记录浏览历史
+function markRead(url){
+  const s=getReadSet();
+  if(!s.has(url)){s.add(url);saveReadSet(s);refresh()}
+  recordHistory(url);
+}
+function recordHistory(url){
+  const item=document.querySelector('.news-item[data-url="'+url+'" data-embed="ok"]');
+  if(!item)return;
+  const title=item.querySelector('.news-title')?.textContent||'';
+  const src=item.querySelector('.src')?.textContent||'';
+  let arr=getHistory();
+  arr=arr.filter(h=>h.url!==url);
+  arr.unshift({url,title,src,time:new Date().toISOString()});
+  saveHistory(arr);
+  updateHistoryCount();
+}
+function markAllRead(){
+  const s=getReadSet();
+  document.querySelectorAll('.news-item').forEach(el=>s.add(el.dataset.url));
+  saveReadSet(s);refresh()
+}
+function clearAllRead(){
+  if(!confirm('确定要清除所有已读记录吗？\n\n所有新闻将恢复为「未读」状态。'))return;
+  localStorage.removeItem(STORE_KEY);
+  refresh();
+}
+// 单条标记为未读（针对某一条）
+function markUnread(url){
+  const s=getReadSet();
+  if(s.has(url)){
+    s.delete(url);
+    saveReadSet(s);
+    refresh();
+    // 短暂提示
+    const item=document.querySelector('.news-item[data-url="'+url+'" data-embed="ok"]');
+    if(item){
+      const old=item.style.boxShadow;
+      item.style.boxShadow='0 0 0 2px #16a085';
+      setTimeout(()=>{item.style.boxShadow=old},600);
+    }
+  }
+}
+
+// ===== 收藏功能（对象存储：收藏永久保留，即使新闻滚出页面）=====
+function toggleFav(url){
+  const favs=getFavs();
+  const i=favs.findIndex(f=>f.url===url);
+  if(i>=0){favs.splice(i,1)}
+  else{
+    let el=null;
+    document.querySelectorAll('.news-item:not(.arch-fav)').forEach(n=>{if(n.dataset.url===url)el=n});
+    const info={url};
+    if(el){
+      const t=el.querySelector('.news-title');if(t)info.title=t.textContent.trim();
+      const m=el.querySelector('.news-meta');if(m)info.date=m.textContent.split('·').pop().trim();
+      const sc=el.querySelector('.src');if(sc)info.src=sc.textContent.trim();
+    }
+    favs.unshift(info);
+  }
+  saveFavs(favs);
+  applyFavStates();
+  updateFavCount();
+  renderArchivedFavs();
+  if(filterMode==='fav')applyFilter();
+}
+function applyFavStates(){
+  const favUrls=getFavUrls();
+  document.querySelectorAll('.news-item:not(.arch-fav)').forEach(el=>{
+    const isFav=favUrls.has(el.dataset.url);
+    el.classList.toggle('favorited',isFav);
+    const star=el.querySelector('.btn-star');
+    if(star)star.innerHTML=isFav?'★':'☆';
+  });
+}
+function updateFavCount(){
+  const n=getFavs().length;
+  document.getElementById('favCount').textContent=n;
+  const t=document.getElementById('tocFavCount');if(t)t.textContent=n;
+}
+// ===== 已归档收藏渲染：收藏但新闻已不在当前页面的条目 =====
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderArchivedFavs(){
+  const list=document.getElementById('archFavList');
+  const sec=document.getElementById('archivedFavSection');
+  if(!list||!sec)return;
+  list.innerHTML='';
+  const pageUrls=new Set();
+  document.querySelectorAll('.news-item').forEach(el=>pageUrls.add(el.dataset.url));
+  const archived=getFavs().filter(f=>f.url&&!pageUrls.has(f.url));
+  document.getElementById('archFavCount').textContent=archived.length+'条';
+  list.innerHTML=archived.map(f=>{
+    const url=String(f.url).replace(/"/g,'&quot;');
+    const title=f.title||f.url;
+    const meta=[f.src,f.date].filter(Boolean).join(' · ');
+    return '<div class="news-item arch-fav read" data-url="'+url+'" data-embed="ok">'+
+    '<div class="news-head"><span class="dot"></span><a class="news-title" href="'+url+'" target="_blank">'+escapeHtml(title)+'</a></div>'+
+    (meta?'<div class="news-meta"><span class="src">已归档</span> · '+escapeHtml(meta)+'</div>':'')+
+    '<a class="btn-read" href="'+url+'" target="_blank">查看原文 →</a>'+
+    '<button class="btn-star" style="color:#f39c12" title="取消收藏">★</button></div>';
+  }).join('');
+}
+function updateHistoryCount(){
+  const n=getHistory().length;
+  document.getElementById('historyCount').textContent=n;
+  const t=document.getElementById('tocHistoryCount');if(t)t.textContent=n;
+}
+
+// ===== 新一轮找矿突破战略行动专项：按关键词自动识别并归类 =====
+// 命中关键词的新闻从"今日新增/往期内容"移动到专项区对应子类（不重复展示）
+const SPECIAL_KEYWORDS=['新一轮找矿','找矿突破','找矿攻坚','找矿行动','战略性矿产','紧缺矿产','大宗矿产','增储上产','增储','新发现矿产地','找矿空间','找矿大局','找矿方向','找矿布局','深地探测','深地工程','深部找矿','深部探测','绿色勘查','攻深找盲','资源安全保障','成矿区带','重点成矿','AI找矿','关键矿产'];
+function isSpecialNews(el){
+  const title=((el.querySelector('.news-title')||{}).textContent||'');
+  const t=title+((el.querySelector('.news-summary')||{}).textContent||'');
+  // 矿权出让/转让/挂牌/拍卖类公告不进专项（属常规矿权交易分类，即使摘要提到"战略性矿产/增储"等词）
+  if(/(出让|转让|挂牌|拍卖|成交公示|招拍挂)/.test(title))return false;
+  return SPECIAL_KEYWORDS.some(k=>t.includes(k));
+}
+// 专项子类归类：政策/成果/技术/资源安全（未命中前者的默认归技术）
+function specialCategoryOf(el){
+  const t=((el.querySelector('.news-title')||{}).textContent||'')+((el.querySelector('.news-summary')||{}).textContent||'');
+  if(/(通知|意见|规划|方案|部署|政策|条例|办法|战略行动)/.test(t))return 'policy';
+  if(/(新发现|矿产地|找矿空间|找矿成果|勘查成果|资源量|重大进展|找矿突破)/.test(t))return 'result';
+  if(/(关键矿产|供应链|地缘|资源安全|储备)/.test(t))return 'security';
+  return 'tech';
+}
+function initSpecial(){
+  const spSec=document.getElementById('specialSection');
+  if(!spSec)return;
+  // 工具：从节点提取日期（取 .news-meta 里的 "MM-DD"）
+  function _mmdd(el){
+    const m=((el.querySelector('.news-meta')||{}).textContent||'').match(/(\d{1,2})-(\d{1,2})/);
+    if(!m)return 9999; // 找不到日期排到最后
+    const now=new Date();const y=now.getFullYear();
+    let d=new Date(y, parseInt(m[1])-1, parseInt(m[2]));
+    if(d>now)d=new Date(y-1, parseInt(m[1])-1, parseInt(m[2])); // 跨年
+    return Math.floor((now-d)/86400000);
+  }
+  // 1) 今日新增里命中的战略新闻 → 搬进专项区（动态更新，第二天被替换/过期）
+  document.querySelectorAll('#todaySection .news-item').forEach(el=>{
+    if(el.classList.contains('arch-fav'))return;
+    if(el.classList.contains('is-special'))return; // 已在专项区（自动化生成时预分好类）
+    if(!isSpecialNews(el))return;
+    el.classList.add('is-special');
+    const cat=specialCategoryOf(el);
+    const list=document.getElementById('spList-'+cat);
+    if(list)list.appendChild(el); // 移动DOM（已读/收藏/浏览记录随节点走，不重复）
+  });
+  // 1.5) 往期里命中的战略新闻（最近14天内）：也搬进专项区，让用户看到真正"找矿"的内容
+  //      超过 14 天的只打标记不移动（避免专项区无限堆）
+  const ARCHIVE_SP_DAYS=14;
+  document.querySelectorAll('#archiveSection .news-item').forEach(el=>{
+    if(el.classList.contains('arch-fav'))return;
+    if(el.classList.contains('is-special'))return;
+    if(!isSpecialNews(el))return;
+    const days=_mmdd(el);
+    if(days<=ARCHIVE_SP_DAYS){
+      // 近14天：搬进专项区（但保留原位置：复制一份去专项区，原位置保留以保留上下文）
+      el.classList.add('is-special');
+      const cat=specialCategoryOf(el);
+      const list=document.getElementById('spList-'+cat);
+      if(list){
+        // 用 cloneNode(true) 避免破坏往期区的原有结构和徽章
+        const clone=el.cloneNode(true);
+        clone.dataset.clonedFrom=el.dataset.url||'';
+        clone.classList.add('sp-from-archive');
+        list.appendChild(clone);
+      }
+    }else{
+      el.classList.add('is-special'); // 远期：只打标记，不移动 DOM
+    }
+  });
+  // 2) 给所有专项新闻补"战略"徽章（含自动化生成时预放入的）
+  document.querySelectorAll('.news-item.is-special').forEach(el=>{
+    const head=el.querySelector('.news-head');
+    if(!head||head.querySelector('.badge-strategy'))return;
+    const badge=document.createElement('span');
+    badge.className='badge-strategy';
+    badge.textContent='战略';
+    badge.title='新一轮找矿突破战略行动相关';
+    head.insertBefore(badge,head.querySelector('.news-title'));
+  });
+  // 3) 重算今日新增各子类计数（部分新闻移走后数字不再准确）
+  document.querySelectorAll('#todaySection .sub-cat').forEach(cat=>{
+    let n=0,sib=cat.nextElementSibling;
+    while(sib&&!sib.classList.contains('sub-cat')){
+      if(sib.classList&&sib.classList.contains('news-item'))n++;
+      sib=sib.nextElementSibling;
+    }
+    const cnt=cat.querySelector('.sub-count');
+    if(cnt)cnt.textContent=n+'条新增';
+  });
+  // 4) 专项区整区为空则隐藏（只数专项区内的，不含往期里打标的）
+  const total=spSec.querySelectorAll('.sp-list .news-item.is-special').length;
+  if(!total)spSec.style.display='none';
+  updateSpecialCounts();
+}
+
+// 修复专项区与今日区同 URL 重复：initSpecial 搬入专项区后，今日区残留下同 URL 条目
+// 2026-09-01 出现过的"金川镍钴承压奋进攀高逐新"和"智阿秘玻四国成立关键矿产联盟"两条
+// 根因：AI 生成时把今日战略新闻同时塞进专项区 spList 与今日区。initSpecial 只搬不移源。
+// 这里在 initSpecial 之后，把所有 .is-special 的 URL 在今日区剩余的副本隐藏。
+function dedupSpecialInToday(){
+  const moved=new Set();
+  document.querySelectorAll('.sp-list .news-item.is-special').forEach(el=>{
+    if(el.dataset.url)moved.add(el.dataset.url);
+  });
+  if(!moved.size)return;
+  document.querySelectorAll('#todaySection .news-item').forEach(el=>{
+    if(el.classList.contains('arch-fav'))return;
+    if(el.classList.contains('is-special'))return;
+    if(el.dataset.url && moved.has(el.dataset.url))el.style.display='none';
+  });
+}
+
+function updateSpecialCounts(){
+  const counts={policy:0,result:0,tech:0,security:0};
+  document.querySelectorAll('.news-item.is-special').forEach(el=>{
+    const c=el.closest('.sp-list');
+    if(!c)return;
+    const key=Object.keys(counts).find(k=>c.id==='spList-'+k);
+    if(key)counts[key]++;
+  });
+  for(const k of Object.keys(counts)){
+    const el=document.getElementById('spCount-'+k);
+    if(el)el.textContent=counts[k]+'条';
+    const cat=document.querySelector('.sp-cat .sub-count#spCount-'+k);
+    if(cat)cat.parentElement.style.display=counts[k]?'':'none';
+  }
+}
+
+// ===== 筛选模式：none | new | fav | history | tag | special =====
+let filterMode='none';
+let tagFilter=null;
+let oldExpanded=false; // 往期内容中"超过7天旧闻"是否展开
+function setFilter(mode){
+  filterMode=mode;
+  if(mode!=='tag'){tagFilter=null;setChipActive(null)}
+  document.getElementById('filterBtn').classList.toggle('active',mode==='new');
+  document.getElementById('filterBtn').textContent=mode==='new'?'显示全部':'只看新增';
+  const spBtn=document.getElementById('specialBtn');
+  if(spBtn)spBtn.classList.toggle('active',mode==='special');
+  const unBtn=document.getElementById('unreadBtn');
+  if(unBtn)unBtn.classList.toggle('active',mode==='unread');
+  document.getElementById('favBtn').classList.toggle('active',mode==='fav');
+  document.getElementById('historyBtn').classList.toggle('active',mode==='history');
+  applyFilter();
+}
+function toggleUnreadFilter(){setFilter(filterMode==='unread'?'none':'unread')}
+function applyFilter(){
+  const favUrls=getFavUrls();
+  const historyUrls=new Set(getHistory().map(h=>h.url));
+  const readUrls=getReadSet();
+  const mode=filterMode;
+  document.querySelectorAll('.news-item').forEach(el=>{
+    let show=true;
+    if(mode==='new')show=el.classList.contains('is-new');
+    else if(mode==='special')show=el.classList.contains('is-special');
+    else if(mode==='unread')show=!readUrls.has(el.dataset.url);
+    else if(mode==='fav')show=favUrls.has(el.dataset.url);
+    else if(mode==='history')show=historyUrls.has(el.dataset.url);
+    else if(mode==='tag')show=!!tagFilter&&!!el.dataset.tags&&el.dataset.tags.split('|').includes(tagFilter);
+    // 已归档收藏仅在"收藏/历史"筛选中可见
+    if(el.classList.contains('arch-fav')&&mode!=='fav'&&mode!=='history')show=false;
+    // 无筛选模式下，超过7天的旧闻默认折叠
+    if(show&&mode==='none'&&el.classList.contains('old-folded')&&!oldExpanded)show=false;
+    el.classList.toggle('hidden',!show);
+  });
+  // 隐藏空子分类
+  document.querySelectorAll('.sub-cat').forEach(cat=>{
+    let hasVis=false,sib=cat.nextElementSibling;
+    while(sib&&!sib.classList.contains('sub-cat')){
+      if(sib.classList.contains('news-item')&&!sib.classList.contains('hidden')){hasVis=true;break}
+      sib=sib.nextElementSibling;
+    }
+    cat.style.display=hasVis?'':'none';
+  });
+  // 专项区子类（sp-cat 的新闻在 sp-list 容器内，单独判断）
+  document.querySelectorAll('.sp-cat').forEach(cat=>{
+    const cnt=cat.querySelector('.sub-count');
+    const key=cnt?cnt.id.replace('spCount-',''):'';
+    const list=document.getElementById('spList-'+key);
+    const vis=list?list.querySelectorAll('.news-item:not(.hidden)').length:0;
+    cat.style.display=vis?'':'none';
+  });
+  // 隐藏空区块（installGuideSection 是静态说明区，跳过新闻数判断常显）
+  document.querySelectorAll('.section').forEach(sec=>{
+    if(sec.id==='installGuideSection'||sec.id==='archivedFavSection')return;
+    const vis=sec.querySelectorAll('.news-item:not(.hidden)').length;
+    sec.style.display=vis?'':'none';
+  });
+}
+function toggleFilter(){setFilter(filterMode==='new'?'none':'new')}
+function toggleSpecialFilter(){
+  setFilter(filterMode==='special'?'none':'special');
+  if(filterMode==='special'){
+    const sp=document.getElementById('specialSection');
+    if(sp)window.scrollTo({top:sp.getBoundingClientRect().top+window.pageYOffset-80,behavior:'smooth'});
+    document.querySelectorAll('.toc-main-item').forEach(i=>i.classList.remove('active'));
+  }
+}
+function toggleFavFilter(){setFilter(filterMode==='fav'?'none':'fav')}
+function toggleHistoryFilter(){setFilter(filterMode==='history'?'none':'history')}
+function showAll(){
+  setFilter('none');
+  document.querySelectorAll('.toc-main-item').forEach(i=>i.classList.remove('active'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ===== 往期内容自动折叠：发布超过7天的旧闻默认隐藏（兜底，防止页面无限膨胀）=====
+function foldOldArchive(){
+  const arch=document.getElementById('archiveSection');
+  const btn=document.getElementById('foldToggle');
+  if(!arch)return;
+  const now=new Date();
+  const cutoff=new Date(now.getTime()-7*86400000);
+  let n=0;
+  arch.querySelectorAll('.news-item').forEach(el=>{
+    if(el.classList.contains('old-folded')){n++;return}
+    const meta=el.querySelector('.news-meta');
+    const m=meta?meta.textContent.match(/(\d{1,2})-(\d{1,2})/):null;
+    if(!m)return;
+    const d=new Date(now.getFullYear(),+m[1]-1,+m[2]);
+    if(d<cutoff&&!el.classList.contains('is-new')){el.classList.add('old-folded');n++}
+  });
+  if(btn){
+    btn.style.display=n?'':'none';
+    if(!oldExpanded)btn.textContent='▸ 展开更早内容（'+n+'条，发布超过7天）';
+  }
+}
+function toggleOldFold(){
+  oldExpanded=!oldExpanded;
+  const btn=document.getElementById('foldToggle');
+  const n=document.querySelectorAll('.old-folded').length;
+  if(btn)btn.textContent=oldExpanded?'▾ 收起更早内容':'▸ 展开更早内容（'+n+'条，发布超过7天）';
+  applyFilter();
+}
+
+// 刷新显示状态
+function refresh(){
+  const s=getReadSet();
+  let unread=0,newUnread=0;
+  document.querySelectorAll('.news-item:not(.arch-fav)').forEach(el=>{
+    const isRead=s.has(el.dataset.url);
+    el.classList.toggle('read',isRead);
+    if(!isRead){unread++;if(el.classList.contains('is-new'))newUnread++}
+  });
+  const newTotal=document.querySelectorAll('.news-item.is-new').length;
+  const allTotal=document.querySelectorAll('.news-item:not(.arch-fav)').length;
+  document.getElementById('newCount').textContent=newTotal;
+  document.getElementById('unreadCount').textContent=unread;
+  document.getElementById('unreadBtnCount').textContent=unread;
+  document.getElementById('todayCount').textContent='共'+newTotal+'条';
+  // spAll = 全部战略新闻（去重：原 archive 条目 + 今日命中，排除 .sp-from-archive 克隆体）
+  // spInSection = 仅专项区内的（含克隆体）→ 给专项区标题旁的"共 N 条"
+  const spAll=document.querySelectorAll('.news-item.is-special:not(.arch-fav):not(.sp-from-archive)').length;
+  const spInSection=document.querySelectorAll('#specialSection .sp-list .news-item.is-special').length;
+  const spFromArch=document.querySelectorAll('#specialSection .sp-list .news-item.sp-from-archive').length;
+  const spCnt=document.getElementById('specialCount');
+  if(spCnt)spCnt.textContent=spFromArch>0?('共'+spInSection+'条（含'+spFromArch+'条往期）'):('共'+spInSection+'条');
+  const spNum=document.getElementById('specialCountNum');
+  if(spNum)spNum.textContent=spAll;
+  const tocSp=document.getElementById('tocSpecialCount');
+  if(tocSp)tocSp.textContent=spAll;
+  const tocCnt=document.getElementById('tocTodayCount');
+  if(tocCnt)tocCnt.textContent=newTotal;
+  const allCnt=document.getElementById('tocAllCount');
+  if(allCnt)allCnt.textContent=allTotal;
+  // 往期内容计数：#archiveSection 下所有 .news-item 的数量
+  const archTotal=document.querySelectorAll('#archiveSection .news-item').length;
+  const archCnt=document.getElementById('tocArchiveCount');
+  if(archCnt)archCnt.textContent=archTotal;
+  const archTitleCnt=document.getElementById('archiveCount');
+  if(archTitleCnt)archTitleCnt.textContent=archTotal+'条';
+  applyFavStates();
+  updateFavCount();
+  updateHistoryCount();
+}
+
+// 移动端检测：安卓/iPhone/鸿蒙等手机浏览器
+const IS_MOBILE=/Android|iPhone|iPad|iPod|Mobile|HarmonyOS/i.test(navigator.userAgent);
+// PWA 独立窗口检测：电脑/手机装了 PWA 后在 standalone 模式运行时
+// （display-mode: standalone 是标准 API；window.navigator.standalone 是 iOS Safari 旧版兼容）
+const IS_PWA=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+
+// 点击事件：关键词标签筛选 / 标记已读+记录历史 / 收藏星标 / 单条恢复未读
+document.addEventListener('click',e=>{
+  // 关键词标签：点击筛选同类新闻，再点一次取消
+  const chip=e.target.closest('.tag-chip');
+  if(chip){
+    e.preventDefault();e.stopPropagation();
+    const tag=chip.dataset.tag;
+    if(filterMode==='tag'&&tagFilter===tag)setFilter('none');
+    else{tagFilter=tag;setFilter('tag')}
+    return;
+  }
+  const star=e.target.closest('.btn-star');
+  if(star){
+    e.preventDefault();e.stopPropagation();
+    const item=star.closest('.news-item');
+    if(item&&item.dataset.url)toggleFav(item.dataset.url);
+    return;
+  }
+  // 单条恢复未读按钮（preventDefault 防止冒泡触发其他逻辑）
+  const undoBtn=e.target.closest('.btn-unread');
+  if(undoBtn){
+    e.preventDefault();e.stopPropagation();
+    const item=undoBtn.closest('.news-item');
+    if(item&&item.dataset.url)markUnread(item.dataset.url);
+    return;
+  }
+  const a=e.target.closest('a[href]');
+  if(a){
+    // 「今日要闻」摘要条链接：直接跳转原网页（新标签页），不走站内 iframe 浮窗
+    // ——政府类网站多带 X-Frame-Options 防嵌入，浮窗内常打不开（2026-09-04 用户反馈）
+    if(a.classList.contains('digest-link'))return;
+    const item=a.closest('.news-item');
+    if(item&&item.dataset.url)markRead(item.dataset.url);
+    // 外链处理策略（2026-08-29 统一版 — 手机/电脑都按服务端预检标记分流）：
+    //   每条新闻的 news-item 上有 标记（由 batch_check_embed.py
+    //   在生成侧读真实响应头 X-Frame-Options / CSP frame-ancestors 写入，100% 可靠）。
+    //   ①（或无标记）→ 当前界面 iframe 浮窗打开（手机、电脑都一样，
+    //      "允许嵌入"是服务器响应头判断的，手机浏览器同样遵守，可安全嵌套）。
+    //   ②（网站禁止嵌入）→ toast 提醒"该网站禁止嵌入显示"
+    //      + 跳浏览器打开（手机走 <a target=_blank> 默认行为最稳；电脑用 window.open）。
+    const href=a.getAttribute('href')||'';
+    if(href.startsWith('javascript:')||href.startsWith('#'))return;
+    const embedFlag=item?(item.dataset.embed||'ok'):'ok';
+    if(embedFlag==='block'){
+      // 已知禁止嵌入的网站：提醒用户不是软件坏了，然后跳浏览器打开
+      showToast('🔗 该网站禁止嵌入显示，已在浏览器打开');
+      if(IS_MOBILE){
+        // 手机 PWA 的 window.open 常被吞，不 preventDefault，
+        // 让 <a target="_blank"> 默认行为跳系统浏览器（已验证可行）
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      window.open(a.href,'_blank','noopener,noreferrer');
+    }else{
+      e.preventDefault();
+      e.stopPropagation();
+      openInOverlay(a.href);
+    }
+  }
+});
+
+// ============ 轻量 toast 提示（外链分流等场景用）============
+function showToast(msg,duration){
+  const old=document.getElementById('wbdToast');
+  if(old)old.remove();
+  const t=document.createElement('div');
+  t.id='wbdToast';
+  t.style.cssText='position:fixed;left:50%;bottom:72px;transform:translateX(-50%);background:rgba(26,58,92,0.94);color:#fff;font-size:13px;padding:10px 18px;border-radius:8px;z-index:100000;box-shadow:0 4px 16px rgba(0,0,0,0.18);max-width:88vw;text-align:center;line-height:1.5;';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove();},duration||2600);
+}
+
+// ============ 外链 iframe 浮窗（仅电脑端用，手机端直接走 target=_blank）============
+function openInOverlay(url){
+  const old=document.getElementById('extOverlay');
+  if(old)old.remove();
+  const overlay=document.createElement('div');
+  overlay.id='extOverlay';
+  overlay.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:#fff;display:flex;flex-direction:column;';
+  const bar=document.createElement('div');
+  bar.style.cssText='display:flex;align-items:center;gap:10px;padding:8px 12px;background:#1a3a5c;color:#fff;font-size:14px;flex-shrink:0;';
+  const backBtn=document.createElement('button');
+  backBtn.innerHTML='← 返回日报';
+  backBtn.style.cssText='background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:14px;padding:6px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;';
+  backBtn.onclick=function(){overlay.remove();};
+  const urlLabel=document.createElement('span');
+  urlLabel.style.cssText='font-size:11px;opacity:0.75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;';
+  urlLabel.textContent=url;
+  bar.appendChild(backBtn);
+  bar.appendChild(urlLabel);
+  // 手动降级按钮：用户主动跳外站（X-Frame-Options 拦截时备用）
+  const extBtn=document.createElement('button');
+  extBtn.innerHTML='↗ 外站';
+  extBtn.title='在系统浏览器中打开';
+  extBtn.style.cssText='background:rgba(255,255,255,0.25);border:none;color:#fff;font-size:12px;padding:6px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;font-weight:500;';
+  extBtn.onclick=function(){window.open(url,'_blank','noopener,noreferrer');};
+  bar.appendChild(extBtn);
+  const frame=document.createElement('iframe');
+  frame.style.cssText='flex:1;border:none;width:100%;';
+  frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-forms allow-popups');
+  frame.src=url;
+  // 跨域加载状态监测：
+  //   onload：渲染完成（包括错误页），跨域可触发
+  //   onerror：X-Frame-Options / 网络错误等情况——但 iframe.onerror 对 X-Frame-Options 拒绝不可靠，
+  //            Chrome 通常只触发 onload 渲染内置错误页（"拒绝了我们的连接请求"）
+  frame._loaded=false;
+  frame._errored=false;
+  frame.onload=function(){frame._loaded=true;};
+  frame.onerror=function(){frame._errored=true;};
+  overlay.appendChild(bar);
+  overlay.appendChild(frame);
+  document.body.appendChild(overlay);
+  // 跨域 iframe 嵌入状态的可靠检测在浏览器侧无法实现（onload 不区分成功/失败，
+  // onerror 对 X-Frame-Options 不可靠，scrollHeight 因同源策略跨域读不到）。
+  // 因此不再做任何自动判断/降级：浮窗始终保留，让用户自行判断是否需要跳外站。
+  // 如需跳出，点击顶栏右侧 [↗ 外站] 按钮即可。
+  // 兜底：8 秒后若 iframe 仍完全空白（两个事件都没触发 = 网络极慢或彻底失败），
+  // 浮窗中央淡入一个轻量提示卡，引导用户操作——但已成功加载的网站不打扰。
+  setTimeout(function(){
+    if(!frame._loaded && !frame._errored){
+      showEmbedFallbackHint(overlay);
+    }
+  },8000);
+}
+// 中央显示"嵌入失败/打不开？"提示卡片，引导用户点 ↗ 外站按钮
+function showEmbedFallbackHint(overlay){
+  if(overlay.querySelector('.ext-hint'))return;
+  const hint=document.createElement('div');
+  hint.className='ext-hint';
+  hint.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,255,255,0.96);border:1px solid #e5e7eb;border-radius:12px;padding:18px 24px;box-shadow:0 4px 20px rgba(0,0,0,0.08);text-align:center;max-width:340px;z-index:10;animation:fadeIn 0.3s ease;';
+  hint.innerHTML=`
+    <div style="font-size:30px;line-height:1;margin-bottom:8px;">🔒</div>
+    <div style="font-size:14px;color:#1a3a5c;font-weight:600;margin-bottom:6px;">打不开此页面？</div>
+    <div style="font-size:12px;color:#6b7280;line-height:1.6;margin-bottom:14px;">部分政府/事业单位网站禁止被嵌入显示<br>请点击右上角 <b style="color:#1a3a5c;">[↗ 外站]</b> 在浏览器打开</div>
+    <button class="btn-jump-out" style="background:#1a3a5c;color:#fff;border:none;padding:9px 22px;border-radius:8px;font-size:13px;cursor:pointer;font-weight:500;">立即在外站打开 →</button>
+  `;
+  overlay.appendChild(hint);
+  hint.querySelector('.btn-jump-out').onclick=function(){
+    const urlLabel=overlay.querySelector('span');
+    const url=urlLabel?urlLabel.textContent:'';
+    overlay.remove();
+    window.open(url,'_blank','noopener,noreferrer');
+  };
+}
+
+// 为每条新闻注入 ☆ 星标 + ↶ 标为未读 按钮
+function injectStars(){
+  document.querySelectorAll('.news-item').forEach(el=>{
+    if(el.querySelector('.btn-star'))return;
+    // 星标按钮（已在原代码中处理）
+    const star=document.createElement('button');
+    star.className='btn-star';
+    star.innerHTML='☆';
+    star.title='收藏/取消收藏';
+    el.appendChild(star);
+  });
+  document.querySelectorAll('.news-item').forEach(el=>{
+    if(el.querySelector('.btn-unread'))return;
+    // 单条恢复未读按钮：插入到查看原文按钮后面（点击区域大）
+    const undo=document.createElement('button');
+    undo.type='button';
+    undo.className='btn-unread';
+    undo.innerHTML='↶ 标为未读';
+    undo.title='只将本条恢复为未读（不影响其他新闻）';
+    const btnRead=el.querySelector('.btn-read');
+    if(btnRead)btnRead.insertAdjacentElement('afterend',undo);
+    else el.appendChild(undo);
+  });
+}
+
+// ===== 自动关键词标签（重点提示词，按词典从标题+摘要提取）=====
+const TAG_DICT=[
+// 战略专项（新一轮找矿突破战略行动）——金色，词典置顶优先命中
+{t:'找矿突破',c:'strategy'},{t:'新一轮找矿',c:'strategy'},{t:'战略性矿产',c:'strategy'},
+{t:'关键矿产',c:'strategy'},{t:'增储上产',c:'strategy'},{t:'绿色勘查',c:'strategy'},
+{t:'深地',c:'strategy'},{t:'深部找矿',c:'strategy'},{t:'AI找矿',c:'strategy'},
+// 矿种
+{t:'稀土',c:'metal'},{t:'黄金',c:'metal'},{t:'金矿',c:'metal'},{t:'白银',c:'metal'},
+{t:'铜',c:'metal'},{t:'镍',c:'metal'},{t:'铅锌',c:'metal'},{t:'铝土矿',c:'metal'},
+{t:'铅',c:'metal'},{t:'锌',c:'metal'},{t:'铝',c:'metal'},{t:'钨',c:'metal'},
+{t:'钼',c:'metal'},{t:'锡',c:'metal'},{t:'锑',c:'metal'},{t:'锂',c:'metal'},
+{t:'钴',c:'metal'},{t:'铀',c:'metal'},{t:'萤石',c:'metal'},{t:'锰',c:'metal'},
+{t:'钛',c:'metal'},{t:'铌',c:'metal'},{t:'有色',c:'metal'},
+// 矿权
+{t:'探矿权',c:'rights'},{t:'采矿权',c:'rights'},{t:'矿业权',c:'rights'},
+{t:'探转采',c:'rights'},{t:'协议出让',c:'rights'},{t:'招拍挂',c:'rights'},
+{t:'挂牌',c:'rights'},{t:'拍卖',c:'rights'},{t:'转让',c:'rights'},{t:'出让',c:'rights'},
+{t:'成交公示',c:'rights'},{t:'储量评审',c:'rights'},
+// 勘查找矿
+{t:'找矿',c:'explore'},{t:'新发现',c:'explore'},{t:'增储',c:'explore'},
+{t:'资源量',c:'explore'},{t:'储量',c:'explore'},{t:'勘查',c:'explore'},{t:'勘探',c:'explore'},
+{t:'矿床',c:'explore'},{t:'深部',c:'explore'},{t:'物探',c:'explore'},{t:'化探',c:'explore'},
+{t:'钻探',c:'explore'},{t:'成矿',c:'explore'},
+// 资本
+{t:'并购',c:'capital'},{t:'收购',c:'capital'},{t:'重组',c:'capital'},{t:'股权',c:'capital'},
+{t:'融资',c:'capital'},{t:'分红',c:'capital'},{t:'承购',c:'capital'},{t:'战略合作',c:'capital'},
+{t:'招标',c:'capital'},
+// 政策
+{t:'征求意见',c:'policy'},{t:'管理办法',c:'policy'},{t:'出口管制',c:'policy'},
+{t:'总量调控',c:'policy'},{t:'绿色矿山',c:'policy'},{t:'绿色低碳',c:'policy'},
+{t:'规划',c:'policy'},{t:'政策',c:'policy'},{t:'法规',c:'policy'},{t:'通知',c:'policy'},
+// 市场
+{t:'景气指数',c:'market'},{t:'价格',c:'market'},{t:'产量',c:'market'},{t:'利润',c:'market'},
+{t:'供应链',c:'market'},{t:'交易所',c:'market'},{t:'市场',c:'market'},{t:'贸易',c:'market'},
+{t:'出口',c:'market'},{t:'进口',c:'market'},{t:'上涨',c:'market'},{t:'下跌',c:'market'},{t:'新高',c:'market'},
+// 培训学术
+{t:'培训',c:'edu'},{t:'研修',c:'edu'},{t:'研讨会',c:'edu'},{t:'大会',c:'edu'},{t:'会议',c:'edu'},
+{t:'暑期学校',c:'edu'},{t:'学术',c:'edu'},{t:'标准',c:'edu'},
+// 国际
+{t:'国际',c:'global'},{t:'全球',c:'global'},{t:'海外',c:'global'},{t:'境外',c:'global'},
+// 科技
+{t:'人工智能',c:'tech'},{t:'智能制造',c:'tech'},{t:'数字化',c:'tech'},{t:'智能',c:'tech'},
+{t:'创新',c:'tech'},{t:'科技',c:'tech'},{t:'技术',c:'tech'}
+];
+const TAG_STYLE={
+strategy:{color:'#b45309',bg:'#fef3c7',label:'战略'},
+metal:{color:'#d35400',bg:'#fdf2e9',label:'矿种'},
+rights:{color:'#2980b9',bg:'#ebf5fb',label:'矿权'},
+explore:{color:'#16a085',bg:'#e8f8f5',label:'勘查'},
+capital:{color:'#c0392b',bg:'#fdedec',label:'资本'},
+policy:{color:'#8e44ad',bg:'#f4ecf7',label:'政策'},
+market:{color:'#0e7490',bg:'#e0f2fe',label:'市场'},
+edu:{color:'#6d4c41',bg:'#efebe9',label:'培训'},
+global:{color:'#475569',bg:'#f1f5f9',label:'国际'},
+tech:{color:'#0f766e',bg:'#ccfbf1',label:'科技'}
+};
+// 提取规则：矿种类最多2个、其他类各1个、每条最多4个；已命中标签不再收其子串/父串（防"铅锌"又出"铅"）
+function extractTagsFor(item){
+  const title=item.querySelector('.news-title');
+  const sum=item.querySelector('.news-summary');
+  const text=((title?title.textContent:'')+' '+(sum?sum.textContent:''));
+  const found=[],cnt={};
+  for(const d of TAG_DICT){
+    if(found.length>=4)break;
+    const cap=d.c==='metal'?2:1;
+    if((cnt[d.c]||0)>=cap)continue;
+    if(!text.includes(d.t))continue;
+    if(found.some(f=>f.t.includes(d.t)||d.t.includes(f.t)))continue;
+    found.push(d);cnt[d.c]=(cnt[d.c]||0)+1;
+  }
+  return found;
+}
+// ===== 今日新增区：非今日发布日期的新闻加"原文发布"提示 =====
+function injectOrigDateBadges(){
+  const today=new Date();
+  const mm=String(today.getMonth()+1).padStart(2,'0');
+  const dd=String(today.getDate()).padStart(2,'0');
+  const todayStr=mm+'-'+dd;
+  const todayFull=today.getFullYear()+'-'+todayStr;
+  document.querySelectorAll('.news-item.is-new').forEach(el=>{
+    if(el.querySelector('.badge-orig-date'))return;
+    const meta=el.querySelector('.news-meta');
+    if(!meta)return;
+    const txt=meta.textContent||'';
+    const m=txt.match(/(\d{2})-(\d{2})/);
+    if(!m)return;
+    const itemDate=m[1]+'-'+m[2];
+    if(itemDate===todayStr)return;
+    const head=el.querySelector('.news-head');
+    if(!head)return;
+    const badge=document.createElement('span');
+    badge.className='badge-orig-date';
+    badge.textContent='📅 原文'+itemDate;
+    head.appendChild(badge);
+  });
+}
+// 给已知禁止嵌入的条目加 ↗ 角标（提示这条会跳外站打开）
+function injectEmbedBadges(){
+  document.querySelectorAll('.news-item').forEach(el=>{
+    if(el.querySelector('.badge-ext'))return;
+    const head=el.querySelector('.news-head');
+    if(!head)return;
+    const b=document.createElement('span');
+    b.className='badge-ext';
+    b.title='该网站禁止嵌入，点击将在新标签页打开';
+    b.textContent='↗ 外站';
+    head.appendChild(b);
+  });
+}
+function injectTags(){
+  document.querySelectorAll('.news-item').forEach(el=>{
+    if(el.querySelector('.news-tags'))return;
+    const tags=extractTagsFor(el);
+    el.dataset.tags=tags.map(t=>t.t).join('|');
+    if(!tags.length)return;
+    const wrap=document.createElement('div');
+    wrap.className='news-tags';
+    tags.forEach(tg=>{
+      const st=TAG_STYLE[tg.c]||{color:'#7f8c8d',bg:'#f4f6f7',label:'关键词'};
+      const chip=document.createElement('span');
+      chip.className='tag-chip';
+      chip.textContent='#'+tg.t;
+      chip.dataset.tag=tg.t;
+      chip.title=st.label+'：'+tg.t+'（点击筛选同类新闻）';
+      chip.style.color=st.color;
+      chip.style.background=st.bg;
+      wrap.appendChild(chip);
+    });
+    const head=el.querySelector('.news-head');
+    if(head)head.insertAdjacentElement('afterend',wrap);
+    else el.prepend(wrap);
+  });
+}
+function setChipActive(tag){
+  document.querySelectorAll('.tag-chip').forEach(c=>c.classList.toggle('chip-active',!!tag&&c.dataset.tag===tag));
+}
+
+// ===== 目录点击跳转 =====
+function scrollToSection(id,el){
+  // 跳转到section时，若处于筛选模式则自动恢复全部内容
+  if(filterMode!=='none'){
+    setFilter('none');
+    document.querySelectorAll('.toc-main-item').forEach(i=>i.classList.remove('active'));
+  }
+  const target=document.getElementById(id);
+  if(target){
+    const offset=80;
+    const top=target.getBoundingClientRect().top+window.pageYOffset-offset;
+    window.scrollTo({top,behavior:'smooth'});
+  }
+  document.querySelectorAll('.toc-main-item').forEach(i=>{
+    if(i!==el||i.dataset.target!==id)i.classList.remove('active');
+  });
+  if(el)el.classList.add('active');
+}
+
+// ===== 滚动监听：当前区块高亮 =====
+let lastActiveId=null;
+function updateActiveSection(){
+  const sections=['hotListSection','aiSection','specialSection','todaySection','archiveSection','installGuideSection'];
+  const offset=120;
+  let current=sections[0];
+  for(const id of sections){
+    const el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top<=offset)current=id;
+  }
+  if(current!==lastActiveId){
+    lastActiveId=current;
+    document.querySelectorAll('.toc-main-item').forEach(i=>{
+      i.classList.toggle('active',i.dataset.target===current);
+    });
+  }
+}
+window.addEventListener('scroll',updateActiveSection,{passive:true});
+// ===== 矿业热榜（9-03 新增，类似今日头条热榜） =====
+function renderHotNews(d){
+  var body=document.getElementById('hotListBody');
+  var cnt=document.getElementById('hotListCount');
+  if(!body)return;
+  var arr=(d&&Array.isArray(d.hot))?d.hot:[];
+  if(!arr.length){
+    body.innerHTML='<li class="hotlist-empty">今日热榜暂无数据（新闻源未更新）</li>';
+    if(cnt)cnt.textContent='0条';
+    return;
+  }
+  body.innerHTML=arr.map(function(n){
+    var t=String(n.t||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+    var s=n.s?String(n.s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}):'';
+    var u=String(n.u||'#').replace(/"/g,'&quot;');
+    var dStr=n.d?' · '+String(n.d).slice(5):'';
+    var fire=n.hot?'<span class="hot-fire">🔥 热</span>':'';
+    var rankCls=n.rank<=3?'top'+n.rank:'';
+    return '<li class="hot-item '+rankCls+'">'
+      +'<span class="hot-rank">'+(n.rank<10?'0':'')+n.rank+'</span>'
+      +'<div class="hot-body">'
+      +fire
+      +'<a class="hot-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'
+      +'<div class="hot-meta"><span>'+s+'</span><span>'+dStr+'</span></div>'
+      +'</div></li>';
+  }).join('');
+  if(cnt)cnt.textContent=arr.length+'条';
+}
+// ===== 热榜本地兜底（2026-09-04 新增）=====
+// 背景：站点有两种运行形态——带后端 server.py 的部署，以及 GitHub Pages 这类纯静态托管。
+// 纯静态下 /api/hot-news 不存在，不做兜底热榜就会显示"加载失败"。
+// 这里把 server.py 的 _compute_hot_news 算法（来源权重×10 + 时效分 + 热词加成）原样移植到前端，
+// 用全库 QA_ROWS 本地计算，保证两种部署形态下热榜口径一致。权重常量与 server.py 同步。
+var HOT_SRC_W={'自然资源部':12,'中国地质调查局':10,'中国地质学会':8,'中国有色金属工业协会':8,'中国黄金协会':8,'中国稀土行业协会':7,'中国有色网':7,'矿业权市场':6,'全球矿产资源':5,'上海联合矿权交易所':5,'上海期货交易所':6,'中国矿业报':7,'中国矿业网':6,'中国黄金集团':6,'紫金矿业':5,'中国黄金网':6,'矿冶集团':6,'中国稀土集团':7,'中国煤炭工业协会':6,'中国石油和化学工业联合会':6,'中国冶金矿山企业协会':7,'中国地质大学':5};
+var HOT_KW=['突破','重大','战略','世界第一','首次','关键矿产','新一轮','标志性','历史最好','历史新高','刷新','龙头','全球第一','亚洲第一','国内首台','首套','首发','首发阵容'];
+var NORMAL_KW=['找矿','勘查','探矿','重要','规划','增量','分红','成果','进展','签约','投产','扩建','增资','中标','出让','成交','创','新高','领先'];
+function computeHotNewsLocal(n){
+  n=n||10;
+  var anchor=qaReportDate()||'';
+  var today=anchor;
+  if(!today){
+    var now=new Date();
+    today=now.getFullYear()+'-'+String(now.getMonth()+1).replace(/^(\d)$/,'0$1')+'-'+String(now.getDate()).replace(/^(\d)$/,'0$1');
+  }
+  var td=new Date(today+'T00:00:00');
+  if(isNaN(td.getTime()))td=new Date();
+  var scored=[];
+  for(var i=0;i<QA_ROWS.length;i++){
+    var r=QA_ROWS[i];
+    var t=String(r.t||'').trim(),s=String(r.s||'').trim(),u=String(r.u||'').trim(),d=String(r.d||'').trim();
+    if(!t||!u||!d)continue;
+    if(d.length===5&&d.charAt(2)==='-')d=today.slice(0,4)+'-'+d;
+    var diff=0;
+    try{var dd=new Date(d+'T00:00:00');if(!isNaN(dd.getTime()))diff=Math.round((td-dd)/86400000);}catch(e){diff=0;}
+    if(diff<0)diff=0;
+    var rec=Math.max(0,30-diff*4);
+    var srcW=HOT_SRC_W[s]||3;
+    var hot=false,hotB=0,k;
+    for(k=0;k<HOT_KW.length;k++){if(t.indexOf(HOT_KW[k])>=0){hot=true;hotB=20;break;}}
+    var normB=0;
+    if(!hot){for(k=0;k<NORMAL_KW.length;k++){if(t.indexOf(NORMAL_KW[k])>=0){normB=5;break;}}}
+    scored.push({d:d,t:t,s:s,u:u,score:srcW*10+rec+hotB+normB,hot:hot});
+  }
+  scored.sort(function(a,b){if(b.score!==a.score)return b.score-a.score;return b.d<a.d?-1:(b.d>a.d?1:0);});
+  var seen={},out=[];
+  for(var j=0;j<scored.length;j++){
+    if(seen[scored[j].u])continue;
+    seen[scored[j].u]=1;out.push(scored[j]);
+    if(out.length>=n)break;
+  }
+  for(var m=0;m<out.length;m++)out[m].rank=m+1;
+  return out;
+}
+function fetchHotNews(){
+  fetch('api/hot-news?v='+Date.now(),{cache:'no-store'})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(d){
+      if(d&&Array.isArray(d.hot)&&d.hot.length){renderHotNews(d);return;}
+      renderHotNews({hot:computeHotNewsLocal(10),local:true});
+    })
+    .catch(function(){
+      // 纯静态部署（GitHub Pages）没有后端接口 → 退回全库本地计算，热榜功能不缺失
+      try{
+        var arr=computeHotNewsLocal(10);
+        if(arr.length){renderHotNews({hot:arr,local:true});return;}
+      }catch(e){console.warn('computeHotNewsLocal:',e);}
+      var body=document.getElementById('hotListBody');
+      if(body)body.innerHTML='<li class="hotlist-empty">热榜加载失败，请稍后刷新</li>';
+    });
+}
+// ===== 今日要闻摘要条（9-04 新增，纯前端：从全库挑当日关键信息，按来源权威×关键信息词打分）=====
+var DIGEST_SRC=[[ '自然资源部',30],['新华社',26],['新华网',26],['人民日报',26],['工信部',24],['发展改革委',24],['中国地质调查局',24],['商务部',20],['财政部',20],['中国黄金协会',18],['中国矿业报',18],['中国有色金属工业协会',16],['SMM',14],['矿业界',12]];
+var DIGEST_KW=[['找矿突破',30],['新发现',26],['储量',24],['投产',20],['政策',20],['印发',18],['突破',16],['开工',16],['并购',14],['万吨',12],['稀土',10],['锗',10],['镓',10],['钨',8],['锂',8],['铜',6],['金',6],['银',5]];
+function digestScore(r){
+  var s=0;
+  DIGEST_SRC.forEach(function(p){if((r.s||'').indexOf(p[0])>=0)s=Math.max(s,p[1]);});
+  var hay=(r.t||'')+' '+(r.m||'');
+  DIGEST_KW.forEach(function(p){if(hay.indexOf(p[0])>=0)s+=p[1];});
+  (r.g||[]).forEach(function(t){if(t==='政策'||t==='找矿')s+=10;});
+  return s;
+}
+function digestEsc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function renderDigest(){
+  var list=document.getElementById('digestList'),dateEl=document.getElementById('digestDate');
+  if(!list)return;
+  var anchor=qaReportDate(),week=['日','一','二','三','四','五','六'];
+  if(dateEl){
+    var dt=anchor?new Date(anchor+'T00:00:00'):new Date();
+    dateEl.textContent=(anchor?anchor.replace(/-/g,'.'):(dt.getFullYear()+'.'+(dt.getMonth()+1)+'.'+dt.getDate()))+' 星期'+week[dt.getDay()];
+  }
+  // 优先取"今日收录"的条目（n=first_seen，新闻可能发布于前一日），
+  // 无收录标记时退回发布日期==今日，再退回全库最新一天
+  var today=QA_ROWS.filter(function(r){return r.n===anchor;});
+  if(!today.length)today=QA_ROWS.filter(function(r){return r.d===anchor;});
+  if(!today.length){                       // 当日无数据时退回全库最新一天
+    var max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>max)max=r.d;});
+    today=QA_ROWS.filter(function(r){return r.d===max;});
+  }
+  if(!today.length){
+    list.innerHTML='<li class="digest-empty">暂无可提取的要闻（全库为空）</li>';
+    return;
+  }
+  var picks=today.map(function(r){return {r:r,sc:digestScore(r)};})
+    .sort(function(a,b){return b.sc-a.sc||(b.r.d||'').localeCompare(a.r.d||'');})
+    .slice(0,4);
+  list.innerHTML=picks.map(function(p){
+    var r=p.r;
+    return '<li><a class="digest-link" href="'+digestEsc(r.u)+'" target="_blank" rel="noopener" title="'+digestEsc(r.t)+'">'+digestEsc(r.t)+'</a></li>';
+  }).join('');
+}
+
+// ===== AI 深度解析（9-04 新增，依赖 deepseek API key）=====
+function aiEsc(s){
+  return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+}
+function renderAiAnalyze(d){
+  var body=document.getElementById('aiBody');
+  var cnt=document.getElementById('aiCount');
+  if(!body)return;
+  if(!d){body.innerHTML='<div class="ai-empty">AI 解析加载失败，请稍后刷新</div>';if(cnt)cnt.textContent='加载失败';return;}
+  if(d.enabled===false){
+    // 未配置 key
+    body.innerHTML='<div class="ai-disabled">🤖 AI 解析未配置<br>需在服务端设置环境变量 <code>DEEPSEEK_API_KEY</code> 后重启生效。<br>设置后今日 7 条新闻的「要点 / 启示 / 风险」将自动生成并缓存。</div>';
+    if(cnt)cnt.textContent='未配置';
+    return;
+  }
+  var items=Array.isArray(d.items)?d.items:[];
+  if(!items.length){
+    body.innerHTML='<div class="ai-empty">今日暂无 AI 解析（可能是新闻源未更新或配额已用完）</div>';
+    if(cnt)cnt.textContent='0条';
+    return;
+  }
+  body.innerHTML=items.map(function(n){
+    var title=aiEsc(n.title);
+    var src=aiEsc(n.src||'');
+    var url=aiEsc(n.url||'#');
+    var sum=aiEsc(n.summary||'—');
+    var ins=aiEsc(n.insight||'—');
+    var risk=aiEsc(n.risk||'无');
+    var riskClass=risk==='无'?'':'risk';
+    return '<div class="ai-item">'
+      +'<div class="ai-item-head">'
+      +(src?'<span class="ai-item-src">'+src+'</span>':'')
+      +'<a class="ai-item-title" href="'+url+'" target="_blank" rel="noopener">'+title+'</a>'
+      +'</div>'
+      +'<div class="ai-item-rows">'
+      +'<div class="ai-row"><span class="ai-label">要点</span><span class="ai-text">'+sum+'</span></div>'
+      +'<div class="ai-row"><span class="ai-label">启示</span><span class="ai-text">'+ins+'</span></div>'
+      +'<div class="ai-row '+riskClass+'"><span class="ai-label">风险</span><span class="ai-text">'+risk+'</span></div>'
+      +'</div></div>';
+  }).join('');
+  if(cnt)cnt.textContent=items.length+'条'+(d.cached?'（缓存）':'');
+  if(d.quota_left!=null&&d.quota_limit){
+    var q=document.createElement('div');
+    q.className='ai-quota';
+    q.textContent='今日 AI 配额：剩余 '+d.quota_left+' / '+d.quota_limit+' 次';
+    body.appendChild(q);
+  }
+}
+function fetchAiAnalyze(){
+  fetch('api/ai-analyze?v='+Date.now(),{cache:'no-store'})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(d){renderAiAnalyze(d);})
+    .catch(function(){
+      // 纯静态部署（GitHub Pages）没有后端、也没有 DEEPSEEK_API_KEY →
+      // 说明这是运行环境限制而非"网页坏了"，避免用户反复刷新。
+      var body=document.getElementById('aiBody');
+      if(body)body.innerHTML='<div class="ai-empty">AI 深度解析需要服务端支持（当前为纯静态托管，未接入 AI 服务）。<br>新闻、行情、热榜与问答检索均为本地计算，不受影响。</div>';
+    });
+}
+
+initSpecial();   // 找矿突破专项：先归类移动，再注入标签/星标（避免折叠逻辑处理前移走）
+fetchHotNews();   // 9-03 矿业热榜 Top 10
+fetchAiAnalyze(); // 9-04 AI 深度解析
+dedupSpecialInToday();   // 修复专项区与今日区同URL重复：已搬入专项区的今日条目从今日区隐藏
+injectTags();
+injectStars();
+renderArchivedFavs();
+foldOldArchive();
+injectOrigDateBadges();
+injectEmbedBadges();
+applyFilter();
+refresh();
+// ===== "安装成App"引导条（静态双端文案常显；✕仅本次会话隐藏，刷新重现）=====
+function dismissInstallTip(){
+  const tip=document.getElementById('installTip');
+  if(tip)tip.classList.remove('show');
+}
+// ===== PWA：注册 Service Worker（可安装成App + 离线可看）=====
+// 2026-09-02：新版 SW 激活后自动 reload，保证所有人打开就是最新版，无需手动清缓存
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('./sw.js').catch(function(){});
+    // 收到"新版已就绪"通知 → 自动刷新（只刷一次，防死循环）
+    navigator.serviceWorker.addEventListener('message',function(ev){
+      if(ev.data&&ev.data.type==='SW_UPDATED'&&!window.__swReloaded){
+        window.__swReloaded=true;
+        try{location.reload();}catch(e){}
+      }
+    });
+    // 发现 sw.js 有更新 → 通知它立刻接管（无需等用户关掉所有标签页）
+    navigator.serviceWorker.getRegistration().then(function(reg){
+      if(reg)reg.update().catch(function(){});
+    }).catch(function(){});
+  });
+}
+// ===== 新闻问答检索条（2026-09-01 新增，纯前端，零依赖）=====
+// 数据源双通道：① window.NEWS_DATA（news-data.js 全库）② 从页面 DOM 提取（兜底，100% 可用）
+var QA_MINERALS='铜 镍 铅 锌 铝 金 银 稀土 钨 钼 锡 锑 锂 钴 钛 铀 锰 钒 铬 镁 铌 钽 镓 锗 铟 铼 镉 铋 硒 碲 铂 钯 铁'.split(' ');
+var QA_TOPICS='政策 找矿 矿权 市场 技术 安全 国际'.split(' ');
+var QA_ROWS=[],QA_SRC='',QA_UPDATED='',QA_TREND=false;
+
+function qaReportDate(){
+  var t=document.querySelector('#todaySection .section-title');
+  if(t){var m=t.textContent.match(/(\d{4}-\d{2}-\d{2})/);if(m)return m[1];}
+  var h=(document.title||'').match(/(\d{4}-\d{2}-\d{2})/);
+  if(h)return h[1];
+  var d=new Date(),p=function(n){return n<10?'0'+n:''+n;};
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+}
+// MM-DD 补年份：以日报日期为锚，补全后若晚于锚点则年份减一（跨年回卷）
+function qaFullDate(mmdd,anchor){
+  if(!mmdd||!anchor)return '';
+  var y=anchor.slice(0,4),full=y+'-'+mmdd;
+  if(full>anchor)full=(parseInt(y,10)-1)+'-'+mmdd;
+  return full;
+}
+function qaFromDom(){
+  var anchor=qaReportDate(),out=[],seen={};
+  document.querySelectorAll('.news-item').forEach(function(el){
+    var a=el.querySelector('a.news-title');
+    if(!a)return;
+    var u=el.dataset.url||a.getAttribute('href')||'';
+    if(!u||seen[u])return;               // 专项区/今日区可能重复，按 URL 去重
+    seen[u]=1;
+    var meta=el.querySelector('.news-meta'),sum=el.querySelector('.news-summary');
+    var srcEl=meta?meta.querySelector('.src'):null,raw=meta?meta.textContent:'';
+    var d='',dm=raw.match(/(\d{4}-\d{2}-\d{2})/);
+    if(dm)d=dm[1];
+    else{var m2=raw.match(/(\d{2})-(\d{2})/);if(m2)d=qaFullDate(m2[1]+'-'+m2[2],anchor);}
+    out.push({d:d,t:(a.textContent||'').trim(),s:srcEl?(srcEl.textContent||'').trim():'',u:u,
+              g:(el.dataset.tags||'').split('|').filter(Boolean),c:'',m:sum?(sum.textContent||'').trim():''});
+  });
+  return out;
+}
+function qaInitData(){
+  if(window.NEWS_DATA&&window.NEWS_DATA.news&&window.NEWS_DATA.news.length){
+    QA_ROWS=window.NEWS_DATA.news;QA_SRC='full';QA_UPDATED=window.NEWS_DATA.updated||'';
+  }else{QA_ROWS=qaFromDom();QA_SRC='dom';QA_UPDATED='';}
+  var cnt={};
+  QA_ROWS.forEach(function(r){(r.g||[]).forEach(function(t){cnt[t]=(cnt[t]||0)+1;});});
+  var ms=document.getElementById('qaMineral'),ts=document.getElementById('qaTopic');
+  QA_MINERALS.forEach(function(m){if(cnt[m]){var o=document.createElement('option');o.value=m;o.textContent=m+' ('+cnt[m]+')';if(ms)ms.appendChild(o);}});
+  QA_TOPICS.forEach(function(t){if(cnt[t]){var o=document.createElement('option');o.value=t;o.textContent=t+' ('+cnt[t]+')';if(ts)ts.appendChild(o);}});
+  var meta=document.getElementById('qaMeta');
+  if(meta)meta.textContent=(QA_SRC==='full')
+    ?('全库 '+QA_ROWS.length+' 条'+(QA_UPDATED?' · 更新于 '+QA_UPDATED:''))
+    :('页面内 '+QA_ROWS.length+' 条');
+}
+function qaHay(r){return [r.t||'',r.m||'',r.s||'',r.c||'',(r.g||[]).join(' ')].join(' ');}
+function qaFilter(rows,words,mineral,topic,from,mode){
+  return rows.filter(function(r){
+    if(mineral&&(r.g||[]).indexOf(mineral)<0)return false;
+    if(topic&&(r.g||[]).indexOf(topic)<0)return false;
+    if(from&&(!r.d||r.d<from))return false;
+    if(words.length){
+      var hay=qaHay(r);
+      var ok=(mode==='or')?words.some(function(w){return hay.indexOf(w)>=0;})
+                          :words.every(function(w){return hay.indexOf(w)>=0;});
+      if(!ok)return false;
+    }
+    return true;
+  }).sort(function(a,b){return (b.d||'').localeCompare(a.d||'');});
+}
+function qaTrendText(rows){
+  var cnt={},order=[];
+  rows.forEach(function(r){var k=r.d||'未知日期';if(!(k in cnt)){cnt[k]=0;order.push(k);}cnt[k]++;});
+  order.sort();
+  var max=0;order.forEach(function(k){if(cnt[k]>max)max=cnt[k];});
+  return order.map(function(k){
+    var n=Math.max(1,Math.round(cnt[k]/max*30));
+    return k+'  '+new Array(n+1).join('#')+'  '+cnt[k];
+  }).join('\n');
+}
+function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function qaRender(){
+  var box=document.getElementById('qaResult');
+  if(!box)return;
+  var inp=document.getElementById('qaInput');
+  var kw=inp?(inp.value||'').trim():'';
+  var mineral=(document.getElementById('qaMineral')||{}).value||'';
+  var topic=(document.getElementById('qaTopic')||{}).value||'';
+  var range=parseInt((document.getElementById('qaRange')||{}).value,10)||0;
+  if(!kw&&!mineral&&!topic&&!range){box.style.display='none';box.innerHTML='';return;}
+  box.style.display='';
+  var words=kw?kw.split(/\s+/).filter(Boolean):[],from='';
+  if(range>0){
+    var max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>max)max=r.d;});
+    if(max){var dt=new Date(max+'T00:00:00');dt.setDate(dt.getDate()-range+1);from=dt.toISOString().slice(0,10);}
+  }
+  var hits=qaFilter(QA_ROWS,words,mineral,topic,from,'and'),relaxed=false;
+  if(!hits.length&&words.length>1){        // 精确无果自动放宽，避免空手而归
+    hits=qaFilter(QA_ROWS,words,mineral,topic,from,'or');
+    if(hits.length)relaxed=true;
+  }
+  var html='';
+  if(QA_SRC==='dom')html+='<div class="qa-warn">当前为<b>页面内检索</b>（全库数据文件未随页面加载，仅覆盖本页可见新闻）。关键词搜索不受影响，矿种/主题筛选可能不完整。</div>';
+  if(!hits.length){
+    html+='<div class="qa-empty">库中未检索到匹配内容。<br><b>这不等于「没有发生」</b>——本库由日报每日追加，存在抓取缺口。<br>建议：减少关键词，或换更通用的说法（如「价格」→「报价/指数」）。</div>';
+  }else{
+    var cond=[];
+    if(words.length)cond.push('关键词「'+qaEsc(kw)+'」'+(relaxed?'（已放宽为任一词）':'（同时含）'));
+    if(mineral)cond.push('矿种='+qaEsc(mineral));
+    if(topic)cond.push('主题='+qaEsc(topic));
+    if(from)cond.push(from+' 起');
+    html+='<div class="qa-sum">命中 <b>'+hits.length+'</b> 条'+(cond.length?'　'+cond.join('　'):'')+'</div>';
+    if(QA_TREND)html+='<div class="qa-trend">'+qaEsc(qaTrendText(hits))+'</div>';
+    var lim=Math.min(hits.length,60);
+    for(var i=0;i<lim;i++){
+      var r=hits[i];
+      html+='<div class="qa-item"><div class="qa-line">'
+        +'<span class="qa-d">'+qaEsc(r.d||'????-??-??')+'</span>'
+        +'<a class="qa-t" href="'+qaEsc(r.u)+'" target="_blank" rel="noopener">'+qaEsc(r.t)+'</a>'
+        +'<span class="qa-s">'+qaEsc(r.s)+'</span></div>'
+        +(r.m?'<div class="qa-m">'+qaEsc(r.m)+'</div>':'')+'</div>';
+    }
+    if(hits.length>lim)html+='<div class="qa-sum">仅显示最新 '+lim+' 条，共 '+hits.length+' 条；缩小范围可查看全部。</div>';
+  }
+  box.innerHTML=html;
+}
+function qaReset(){
+  var i=document.getElementById('qaInput');if(i)i.value='';
+  ['qaMineral','qaTopic'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  var rg=document.getElementById('qaRange');if(rg)rg.value='0';
+  QA_TREND=false;
+  var tb=document.getElementById('qaTrendBtn');if(tb)tb.classList.remove('on');
+  qaRender();
+}
+(function(){
+  qaInitData();
+  renderDigest();
+  var inp=document.getElementById('qaInput'),timer=null;
+  if(inp){
+    inp.addEventListener('input',function(){clearTimeout(timer);timer=setTimeout(qaRender,220);});
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();clearTimeout(timer);qaAskAI();return;}
+      if(e.key==='Enter'){clearTimeout(timer);qaRender();}
+      if(e.key==='Escape'){inp.value='';qaRender();inp.blur();}
+    });
+  }
+  var btn=document.getElementById('qaBtn');if(btn)btn.addEventListener('click',qaRender);
+  ['qaMineral','qaTopic','qaRange'].forEach(function(id){var e=document.getElementById(id);if(e)e.addEventListener('change',qaRender);});
+  var tb=document.getElementById('qaTrendBtn');
+  if(tb)tb.addEventListener('click',function(){QA_TREND=!QA_TREND;tb.classList.toggle('on',QA_TREND);qaRender();});
+  var rs=document.getElementById('qaReset');if(rs)rs.addEventListener('click',qaReset);
+  var ab=document.getElementById('qaAiBtn');if(ab)ab.addEventListener('click',qaAskAI);
+  qaAiProbe();
+  renderLmePrices();
+})();
+// ===== LME 6 大基本金属价格（2026-09-02 新增，数据源 lme-data.js，由 fetch_lme.py 每日更新）=====
+// 设计：lme-data.js 加载失败或数据缺失时显示"暂不可用"，不影响 SHFE 主行
+function renderLmePrices(){
+  try{
+    var box=document.getElementById('priceCardsLme');
+    if(!box)return;
+    var D=(typeof LME_DATA!=='undefined')?LME_DATA:null;
+    if(!D||!D.metals||!D.metals.length){
+      box.querySelectorAll('.pc-value').forEach(function(){/* 保留 -- */});
+      box.querySelectorAll('.pc-chg').forEach(function(el){el.textContent='暂无数据';});
+      return;
+    }
+    var map={};
+    D.metals.forEach(function(m){map[m.slug]=m;});
+    // 顺序：铜 铝 锌 铅 镍 锡
+    var order=['lcpt','lalt','lznt','lldt','lnkt','ltnt'];
+    var titles={lcpt:'LME 铜',lalt:'LME 铝',lznt:'LME 锌',lldt:'LME 铅',lnkt:'LME 镍',ltnt:'LME 锡'};
+    var cards=box.querySelectorAll('.price-card');
+    cards.forEach(function(card,idx){
+      var key=order[idx];var m=map[key];
+      var v=card.querySelector('.pc-value'),c=card.querySelector('.pc-chg');
+      if(!v||!c)return;
+      if(!m||m.price==null){v.textContent='--';c.textContent=m&&m.err?m.err:'暂无数据';return;}
+      v.textContent=Number(m.price).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+      var chg=Number(m.chg||0),pct=Number(m.chg_pct||0);
+      var arrow=chg>=0?'▲':'▼';
+      var sign=chg>=0?'+':'';
+      c.textContent=arrow+' '+sign+chg.toFixed(2)+' ('+sign+pct.toFixed(2)+'%)';
+      card.className='price-card '+(chg>=0?'up':'down');
+    });
+    // 更新顶部 note
+    var note=document.getElementById('priceStripNote');
+    if(note&&D.updated){
+      var dt=D.updated.substring(0,10);
+      note.textContent=dt+' 晨间更新 · 沪期主力/SMM·上金所 · LME(USD/吨) · 涨红跌绿 · 点击卡片看近8个交易日走势';
+    }
+  }catch(e){console.warn('renderLmePrices:',e);}
+}
+// ===== AI 智能问答（2026-09-02 新增，需后端 server.py 提供 /api/qa）=====
+// 设计：能力探测失败（纯静态部署）时 AI 按钮保持隐藏，原有检索功能完全不受影响
+var QA_AI_ON=false,QA_AI_BUSY=false,QA_LEFT=0;
+function qaAiProbe(){
+  // 用时间戳防 SW/中间层缓存命中导致拿到旧响应
+  fetch('api/health?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
+    .then(function(d){
+      if(!d||!d.ok)return;
+      var b=document.getElementById('qaAiBtn');
+      if(b){
+        if(!d.has_key){
+          b.disabled=true;b.textContent='✨ AI 待配置';
+          b.title='服务端尚未配置 API key，AI 问答暂不可用';
+        }else{
+          b.disabled=false;b.textContent='✨ AI 回答';
+          b.title='让 AI 读完相关新闻后组织语言作答（Ctrl+Enter）';
+        }
+      }
+      if(d.has_key){QA_AI_ON=true;QA_LEFT=d.limit||0;qaAiQuota();}
+    })
+    .catch(function(){
+      // 探测失败（纯静态部署或网络异常）→ 按钮变"不可用"，让用户清楚知道不是网页坏了
+      var b=document.getElementById('qaAiBtn');
+      if(b){b.disabled=true;b.textContent='✨ AI 不可用';
+        b.title='未检测到 AI 服务（可能当前是纯静态部署）';}
+    });
+}
+function qaAiQuota(){
+  fetch('api/quota',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
+    .then(function(d){if(d&&typeof d.left!=='undefined')QA_LEFT=d.left;}).catch(function(){});
+}
+function qaAskAI(){
+  if(QA_AI_BUSY)return;
+  var inp=document.getElementById('qaInput'),q=inp?(inp.value||'').trim():'';
+  var box=document.getElementById('qaAiBox'),body=document.getElementById('qaAiBody'),
+      refs=document.getElementById('qaAiRefs'),meta=document.getElementById('qaAiMeta');
+  if(!box||!body)return;
+  if(!q){
+    box.style.display='';body.className='qa-aibody';
+    body.innerHTML='<div class="qa-aierr">请先输入问题（例如「最近有哪些稀土政策」「锂价走势如何」），再点「✨ AI 回答」。</div>';
+    if(refs)refs.innerHTML='';if(meta)meta.textContent='';
+    return;
+  }
+  QA_AI_BUSY=true;
+  var btn=document.getElementById('qaAiBtn');
+  if(btn){btn.disabled=true;btn.textContent='思考中…';}
+  box.style.display='';body.className='qa-aibody loading';
+  body.textContent='正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…';
+  if(refs)refs.innerHTML='';if(meta)meta.textContent='';
+  fetch('api/qa',{method:'POST',headers:{'Content-Type':'application/json'},
+                  body:JSON.stringify({question:q})})
+    .then(function(r){
+      return r.json().then(function(d){return {ok:r.ok,code:r.status,d:d||{}};},
+                           function(){return {ok:false,code:r.status,d:{}};});
+    })
+    .then(function(res){
+      var d=res.d;
+      if(!res.ok||d.error){
+        body.className='qa-aibody';
+        body.innerHTML='<div class="qa-aierr">'+qaEsc(d.error||('请求失败（HTTP '+res.code+'）'))+'</div>';
+        if(typeof d.left!=='undefined')QA_LEFT=d.left;
+        return;
+      }
+      body.className='qa-aibody';
+      body.textContent=d.answer||'（模型未返回内容）';
+      var m=[];
+      if(d.matched)m.push('相关 '+d.matched+' 条');
+      if(d.cited)m.push('已读 '+d.cited+' 条');
+      if(d.secs)m.push(d.secs+' 秒');
+      if(typeof d.left!=='undefined'){m.push('剩余 '+d.left+' 次');QA_LEFT=d.left;}
+      if(meta)meta.textContent=m.join(' · ');
+      var h='';
+      (d.refs||[]).forEach(function(r){
+        if(r&&r.u)h+='<div>· '+qaEsc(r.d)+'　<a href="'+qaEsc(r.u)+'" target="_blank" rel="noopener">'+qaEsc(r.t)+'</a></div>';
+      });
+      if(h&&refs)refs.innerHTML='<div style="color:#5b7a94;margin-bottom:3px">参考条目：</div>'+h;
+    })
+    .catch(function(e){
+      body.className='qa-aibody';
+      body.innerHTML='<div class="qa-aierr">无法连接问答服务（'+
+        qaEsc((e&&e.message)||e||'网络错误')+'）。<br>请确认本页是通过 Python 服务打开的——'+
+        '纯静态部署没有 AI 能力，普通检索不受影响。</div>';
+    })
+    .then(function(){
+      QA_AI_BUSY=false;
+      var b=document.getElementById('qaAiBtn');
+      if(b&&QA_AI_ON){b.disabled=false;b.textContent='✨ AI 回答';}
+    });
+}
+// ===== 价格卡走势图（9-04 新增，数据源 price-history.js，由 fetch_price_history.py 每日更新）=====
+// 设计：缺数据时优雅降级提示，不影响行情卡本身；涨红跌绿配色
+function pcSeries(slug){
+  try{var H=window.PRICE_HISTORY;if(!H||!H.series)return null;return H.series[slug]||null;}catch(e){return null;}
+}
+function pcFmt(v){return Number(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function pcChartOpen(slug){
+  var mask=document.getElementById('pchartMask');if(!mask)return;
+  // 弹层无障碍（2026-09-05 补）：声明对话框语义 + 锁定背景滚动 + 记录来源焦点以便关闭后归还
+  mask.setAttribute('role','dialog');
+  mask.setAttribute('aria-modal','true');
+  if(mask.style.display!=='flex'){
+    window.PC_CHART_LAST_FOCUS=document.activeElement;
+    document.body.style.overflow='hidden';
+  }
+  var nameEl=document.getElementById('pchartName'),subEl=document.getElementById('pchartSub'),
+      svgEl=document.getElementById('pchartSvg'),tb=document.getElementById('pchartTable'),
+      lg=document.getElementById('pchartLegend');
+  var s=pcSeries(slug);
+  if(!s||!s.points||s.points.length<2){
+    nameEl.textContent='走势暂缺';
+    subEl.textContent='';
+    lg.innerHTML='<span>该品种暂无连续日K数据（电解钴为 SMM 现货报价无连续盘；其余品种由每日抓取累积，个别时段可能缺失）。</span>';
+    svgEl.innerHTML='';tb.innerHTML='';
+    mask.style.display='flex';return;
+  }
+  window.PC_CHART_SLUG=slug;      // 记录当前品种，供主题切换时重绘
+  var H=window.PRICE_HISTORY,pts=s.points.slice(-8),n=pts.length;
+  var closes=pts.map(function(p){return p[1];});
+  var first=closes[0],last=closes[n-1];
+  var up=last>=first,color=up?'#e74c3c':'#27ae60';
+  var pct=first?((last-first)/first*100):0;
+  var hi=Math.max.apply(null,closes),lo=Math.min.apply(null,closes);
+  nameEl.textContent=s.name;
+  subEl.textContent=s.unit+' · 近'+n+'个交易日 · 东方财富日K · 更新于 '+(H.updated||'');
+  lg.innerHTML='<span>最新 <b style="color:'+color+'">'+pcFmt(last)+'</b></span>'
+    +'<span>区间涨跌 <b style="color:'+color+'">'+(up?'+':'')+pct.toFixed(2)+'%</b></span>'
+    +'<span>区间最高 <b>'+pcFmt(hi)+'</b></span>'
+    +'<span>区间最低 <b>'+pcFmt(lo)+'</b></span>';
+  // ---- SVG 折线 ----
+  // 2026-09-05 修复：
+  //   ① 原固定 viewBox 宽 580，在 360px 手机上整体缩放约 0.5 倍，
+  //      日期/坐标文字实际只有约 5px 根本看不清 —— 改为按容器实际宽度 1:1 绘制；
+  //   ② 网格线、坐标轴文字、数据点为硬编码浅色，暗色模式下刺眼或看不见 —— 改为随主题取色
+  mask.style.display='flex';                       // 先显示，才能测到真实容器宽度
+  var DARK=document.body.classList.contains('dark');
+  var C_GRID=DARK?'#2c3845':'#eef2f5',
+      C_AXIS=DARK?'#8296a8':'#95a5a6',
+      C_DOT =DARK?'#1e2733':'#ffffff',
+      C_DATE=DARK?'#94a3b8':'#7f8c8d';
+  var hostW=svgEl.clientWidth||(window.innerWidth-72)||360;
+  var W=Math.max(300,Math.min(580,Math.round(hostW)));
+  var narrow=W<430;                                // 窄屏：压缩高度、加大字号、只留首尾日期
+  var Hh=narrow?200:235,L=narrow?52:58,R=14,T=18,B=30,FS=narrow?12:11;
+  var span=(hi-lo)||1;lo-=span*0.08;hi+=span*0.08;span=hi-lo;
+  function X(i){return L+i*(W-L-R)/(n-1);}
+  function Y(v){return T+(1-(v-lo)/span)*(Hh-T-B);}
+  var poly='',dots='',grid='',xlab='';
+  [hi,lo].forEach(function(v,i2){
+    grid+='<line x1="'+L+'" y1="'+Y(v)+'" x2="'+(W-R)+'" y2="'+Y(v)+'" stroke="'+C_GRID+'" stroke-width="1"/>'
+        +'<text x="'+(L-6)+'" y="'+(Y(v)+3.5)+'" text-anchor="end" font-size="'+FS+'" fill="'+C_AXIS+'">'+pcFmt(v)+'</text>';
+  });
+  closes.forEach(function(v,i2){
+    poly+=(i2?' ':'')+X(i2).toFixed(1)+','+Y(v).toFixed(1);
+    dots+='<circle cx="'+X(i2).toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="'+(narrow?3.6:3.2)+'" fill="'+C_DOT+'" stroke="'+color+'" stroke-width="2"><title>'+pts[i2][0]+'  收 '+pcFmt(v)+'</title></circle>';
+  });
+  pts.forEach(function(p,i2){
+    // 窄屏点位密集，只标首尾两个日期，避免文字互相重叠
+    var show = narrow ? (i2===0||i2===n-1) : (i2===0||i2===n-1||i2===Math.floor((n-1)/2));
+    if(show)
+      xlab+='<text x="'+X(i2).toFixed(1)+'" y="'+(Hh-8)+'" text-anchor="middle" font-size="'+FS+'" fill="'+C_DATE+'">'+p[0].slice(5)+'</text>';
+  });
+  var area='M'+X(0).toFixed(1)+','+Y(closes[0]).toFixed(1)+' '+closes.map(function(v,i2){return 'L'+X(i2).toFixed(1)+','+Y(v).toFixed(1);}).join(' ')
+          +' L'+X(n-1).toFixed(1)+','+(Hh-B)+' L'+X(0).toFixed(1)+','+(Hh-B)+' Z';
+  svgEl.innerHTML='<svg viewBox="0 0 '+W+' '+Hh+'" width="100%" style="display:block" role="img" aria-label="'+s.name+'近'+n+'日收盘价走势">'
+    +'<defs><linearGradient id="pcGrad" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0" stop-color="'+color+'" stop-opacity="0.18"/><stop offset="1" stop-color="'+color+'" stop-opacity="0.02"/></linearGradient></defs>'
+    +grid+'<path d="'+area+'" fill="url(#pcGrad)"/>'
+    +'<polyline points="'+poly+'" fill="none" stroke="'+color+'" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>'
+    +dots+xlab+'</svg>';
+  // ---- 明细表（最新在上）----
+  var h='<tr><th>日期</th><th>收盘</th><th>日涨跌</th></tr>';
+  for(var i=n-1;i>=0;i--){
+    var chg=i>0?((closes[i]-closes[i-1])/closes[i-1]*100):null;
+    h+='<tr><td>'+pts[i][0]+'</td><td>'+pcFmt(closes[i])+'</td><td>'
+      +(chg==null?'<span style="color:'+C_AXIS+'">—</span>'
+                 :'<span class="'+(chg>=0?'pchart-up':'pchart-down')+'">'+(chg>=0?'+':'')+chg.toFixed(2)+'%</span>')
+      +'</td></tr>';
+  }
+  tb.innerHTML=h;
+  mask.style.display='flex';
+  // 打开后把焦点移进弹层，键盘用户可直接用 ESC / 回车关闭
+  var cbtn=mask.querySelector('.pchart-close');
+  if(cbtn)setTimeout(function(){try{cbtn.focus();}catch(e){}},50);
+}
+function pcChartClose(){
+  var m=document.getElementById('pchartMask');
+  if(!m||m.style.display==='none')return;
+  m.style.display='none';
+  document.body.style.overflow='';      // 恢复背景滚动
+  window.PC_CHART_SLUG=null;
+  // 焦点归还给打开它的价格卡，键盘用户不会丢失位置
+  try{
+    var f=window.PC_CHART_LAST_FOCUS;
+    if(f&&f.focus)f.focus();
+  }catch(e){}
+}
+(function(){
+  document.querySelectorAll('.price-cards').forEach(function(box){
+    box.addEventListener('click',function(e){
+      var card=e.target?e.target.closest('.price-card'):null;if(!card)return;
+      var slug=card.getAttribute('data-slug');if(slug)pcChartOpen(slug);
+    });
+    // 键盘可达（2026-09-05 补）：此前价格卡是裸 div，Tab 不到、回车也打不开
+    box.addEventListener('keydown',function(e){
+      if(e.key!=='Enter'&&e.key!==' ')return;
+      var card=e.target?e.target.closest('.price-card'):null;if(!card)return;
+      e.preventDefault();
+      var slug=card.getAttribute('data-slug');if(slug)pcChartOpen(slug);
+    });
+  });
+  document.querySelectorAll('.price-card').forEach(function(card){
+    if(!card.getAttribute('data-slug'))return;      // 电解钴无日 K，不可点
+    card.setAttribute('tabindex','0');
+    card.setAttribute('role','button');
+    var nm=(card.querySelector('.pc-name')||{}).textContent||'';
+    card.setAttribute('aria-label','查看 '+nm.replace(/\s+/g,' ').trim()+' 近8个交易日价格走势');
+  });
+})();
+// ===== 左下角问答悬浮球（9-04 新增，复用全库 QA_ROWS 与 /api/qa 能力）=====
+var QA_FLOAT_BUSY=false;
+function qaFloatToggle(){
+  var p=document.getElementById('qaFloat'),b=document.getElementById('qaFab');
+  if(!p)return;
+  var open=p.classList.toggle('open');
+  if(b)b.classList.toggle('on',open);
+  if(open){var i=document.getElementById('qaFloatInput');if(i)setTimeout(function(){i.focus();},80);}
+}
+function qaFloatClose(){
+  var p=document.getElementById('qaFloat');if(p)p.classList.remove('open');
+  var b=document.getElementById('qaFab');if(b)b.classList.remove('on');
+}
+function qaFloatScroll(){
+  var b=document.getElementById('qaFloatBody');if(b)b.scrollTop=b.scrollHeight;
+}
+function qaFloatAdd(role,html,meta){
+  var body=document.getElementById('qaFloatBody');if(!body)return null;
+  var d=document.createElement('div');d.className='qa-msg '+role;
+  var m=meta?'<div class="qa-msg-meta">'+qaEsc(meta)+'</div>':'';
+  d.innerHTML='<div class="qa-msg-bubble">'+html+'</div>'+m;
+  body.appendChild(d);qaFloatScroll();return d;
+}
+function qaFloatSearch(){
+  var inp=document.getElementById('qaFloatInput');if(!inp)return;
+  var q=(inp.value||'').trim();if(!q)return;
+  qaFloatAdd('user',qaEsc(q),'');
+  inp.value='';
+  var words=q.split(/\s+/).filter(Boolean);
+  var hits=qaFilter(QA_ROWS,words,'','','','and'),relaxed=false;
+  if(!hits.length&&words.length>1){hits=qaFilter(QA_ROWS,words,'','','','or');relaxed=true;}
+  var html='';
+  if(!hits.length){
+    html='<div>全库未检索到匹配内容。<b>这不等于「没有发生」</b>——本库由日报每日追加，存在抓取缺口。建议减少关键词或换更通用的说法。</div>';
+  }else{
+    html='<div style="margin-bottom:4px">命中 <b>'+hits.length+'</b> 条'+(relaxed?'（已放宽为任一词命中）':'（同时含）')+'，最新 8 条：</div>';
+    var lim=Math.min(hits.length,8);
+    for(var i=0;i<lim;i++){
+      var r=hits[i];
+      html+='<a class="qa-msg-item" href="'+qaEsc(r.u)+'" target="_blank" rel="noopener"><span class="qd">'+qaEsc(r.d||'????-??-??')+'</span>'+qaEsc(r.t)+'<span class="qs">'+qaEsc(r.s||'')+'</span></a>';
+    }
+    if(hits.length>lim)html+='<div style="margin-top:4px;color:#6b7a89">共 '+hits.length+' 条，可到页顶「新闻问答」条查看全部并按矿种/主题/时间筛选。</div>';
+  }
+  qaFloatAdd('ai',html,'全库 '+QA_ROWS.length+' 条 · 检索于本地，不经任何服务');
+}
+function qaFloatAsk(){
+  if(QA_FLOAT_BUSY)return;
+  var inp=document.getElementById('qaFloatInput'),btn=document.getElementById('qaFloatAi');
+  var q=inp?(inp.value||'').trim():'';
+  if(!q){qaFloatAdd('ai','请先输入问题，例如「最近有哪些稀土政策」「锂价为什么大跌」。','');return;}
+  if(!QA_AI_ON){
+    qaFloatAdd('ai','AI 服务当前不可用（可能为纯静态部署，或服务端未配置 <code>DEEPSEEK_API_KEY</code>）。<br>关键词检索不受影响——直接点「检索」即可。','');
+    return;
+  }
+  QA_FLOAT_BUSY=true;
+  if(btn){btn.disabled=true;btn.textContent='思考中…';}
+  qaFloatAdd('user',qaEsc(q),'');
+  if(inp)inp.value='';
+  var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…','');
+  fetch('api/qa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})})
+    .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d||{}};},function(){return {ok:false,d:{}};});})
+    .then(function(res){
+      var d=res.d,bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
+      var text='';
+      if(!res.ok||d.error)text='<div style="color:#e74c3c">'+qaEsc(d.error||'请求失败，请稍后重试。')+'</div>';
+      else{
+        text=qaEsc(d.answer||'（模型未返回内容）');
+        var m=[];
+        if(d.matched)m.push('相关 '+d.matched+' 条');
+        if(d.cited)m.push('已读 '+d.cited+' 条');
+        if(d.secs)m.push(d.secs+' 秒');
+        if(typeof d.left!=='undefined')m.push('剩余 '+d.left+' 次');
+        if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=m.join(' · ');}
+        var h='';(d.refs||[]).forEach(function(r2){if(r2&&r2.u)h+='<a class="qa-msg-item" href="'+qaEsc(r2.u)+'" target="_blank" rel="noopener"><span class="qd">'+qaEsc(r2.d)+'</span>'+qaEsc(r2.t)+'</a>';});
+        if(h)text+='<div style="margin-top:6px;color:#5b7a94;font-size:11px">参考条目：</div>'+h;
+      }
+      if(bubble)bubble.innerHTML=text;
+      qaFloatScroll();
+    })
+    .catch(function(e){
+      var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
+      if(bubble)bubble.innerHTML='<div style="color:#e74c3c">无法连接问答服务（'+qaEsc((e&&e.message)||e||'网络错误')+'）。纯静态部署没有 AI 能力，关键词「检索」不受影响。</div>';
+      qaFloatScroll();
+    })
+    .then(function(){
+      QA_FLOAT_BUSY=false;
+      if(btn){btn.disabled=false;btn.textContent='AI';}
+    });
+}
+(function(){
+  var inp=document.getElementById('qaFloatInput');
+  if(inp){
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){e.preventDefault();qaFloatSearch();}
+      if(e.key==='Escape')qaFloatClose();
+    });
+  }
+  var sb=document.getElementById('qaFloatSearch');if(sb)sb.addEventListener('click',qaFloatSearch);
+  var ab=document.getElementById('qaFloatAi');if(ab)ab.addEventListener('click',qaFloatAsk);
+  document.addEventListener('keydown',function(e){
+    // 2026-09-05 修复：原写法在问答面板未打开时直接 return，
+    // 导致"只开价格走势弹层"时按 ESC 完全没反应（只能点遮罩或 ✕）
+    if(e.key!=='Escape')return;
+    pcChartClose();
+    qaFloatClose();
+  });
+})();
+
+/* ===== 主题切换（2026-09-05 新增）=====
+   手动切换后写入 localStorage，之后不再跟随系统；
+   系统主题变化时，仅对"从未手动选择过"的用户自动跟随。 */
+function applyTheme(mode){
+  var dark = mode === 'dark';
+  document.body.classList.toggle('dark', dark);
+  var btn = document.getElementById('themeToggle');
+  if(btn){
+    btn.textContent = dark ? '☀️' : '🌙';
+    btn.setAttribute('title', dark ? '切换到浅色模式' : '切换到深色模式');
+    btn.setAttribute('aria-label', btn.getAttribute('title'));
+  }
+  // 走势图若正开着，用新主题配色重绘一次
+  try{ if(window.PC_CHART_SLUG) pcChartOpen(window.PC_CHART_SLUG); }catch(e){}
+}
+function toggleTheme(){
+  var dark = !document.body.classList.contains('dark');
+  applyTheme(dark ? 'dark' : 'light');
+  try{ localStorage.setItem('md_theme', dark ? 'dark' : 'light'); }catch(e){}
+}
+(function(){
+  // 同步图标状态（class 已由 body 开头的初始化脚本设好）
+  applyTheme(document.body.classList.contains('dark') ? 'dark' : 'light');
+  // 未手动选择过时，跟随系统主题变化
+  try{
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var onChange = function(e){
+      var saved = null;
+      try{ saved = localStorage.getItem('md_theme'); }catch(err){}
+      if(!saved) applyTheme(e.matches ? 'dark' : 'light');
+    };
+    if(mq.addEventListener) mq.addEventListener('change', onChange);
+    else if(mq.addListener) mq.addListener(onChange);
+  }catch(e){}
+})();
+
+</script>
+</body>
+</html>

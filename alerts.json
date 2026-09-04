@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-04",
+  "has_history": true,
+  "history_days": 2,
+  "alerts": [
+    {
+      "commodity": "碳酸锂",
+      "market": "GFEX 主连",
+      "move": "-7.41%",
+      "severity": "high",
+      "detail": "碳酸锂主力合约单日大跌 7.41% 至 141,940 元/吨，为近期最大单日跌幅，关注锂价下行对上游矿企利润的压制。",
+      "type": "price"
+    }
+  ],
+  "summary": "LME 六基本金属无异常异动；今日异动集中在碳酸锂：GFEX 主力单日 -7.41%。",
+  "max_severity": "high"
+}
