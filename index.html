@@ -2100,13 +2100,20 @@ function renderLmePrices(){
 var QA_API_BASE='https://mining-daily-qa.pliucugb-mining-daily.workers.dev';
 var QA_AI_ON=false,QA_AI_BUSY=false,QA_LEFT=0;
 function qaAiProbe(){
+  // eslint-disable-next-line no-console
+  console.log('[qaAiProbe] QA_API_BASE=',QA_API_BASE);
   if(!QA_API_BASE||QA_API_BASE.indexOf('YOUR-CF-SUBDOMAIN')>=0){
     // 未配置后端地址，跳过探测（保持 AI 按钮为"不可用"）
+    // eslint-disable-next-line no-console
+    console.warn('[qaAiProbe] backend not configured, skip probe');
     var b0=document.getElementById('qaFloatAi');
-    if(b0){b0.disabled=true;b0.textContent='✨ AI 待配置';b0.title='请在 index.html 的 QA_API_BASE 填入 worker URL';}
+    if(b0){b0.disabled=true;b0.textContent='✨ AI 待配置';b0.title='请在 index.html 的 QA_API_BASE 填入 worker URL';
+    }
     return;
   }
   // 用时间戳防 SW/中间层缓存命中导致拿到旧响应
+  // eslint-disable-next-line no-console
+  console.log('[qaAiProbe] probing',QA_API_BASE+'/api/health');
   fetch(QA_API_BASE+'/api/health?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
     .then(function(d){
       if(!d||!d.ok)return;
@@ -2122,7 +2129,9 @@ function qaAiProbe(){
       }
       if(d.has_key){QA_AI_ON=true;qaAiQuota();}
     })
-    .catch(function(){
+    .catch(function(err){
+      // eslint-disable-next-line no-console
+      console.error('[qaAiProbe] probe failed:',err);
       // 探测失败（后端未部署或网络异常）→ 按钮变"不可用"，让用户清楚知道不是网页坏了
       var b=document.getElementById('qaFloatAi');
       if(b){b.disabled=true;b.textContent='✨ AI 不可用';
