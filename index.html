@@ -1369,14 +1369,18 @@ function renderHotNews(d){
   }).join('');
   if(cnt)cnt.textContent=arr.length+'条';
 }
+// 通用 JSON 拉取（容错：404/网络错误统一返回 null）
+function fetchJSON(url){
+  return fetch(url,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
+}
 function fetchHotNews(){
-  fetch('api/hot-news?v='+Date.now(),{cache:'no-store'})
-    .then(function(r){return r.ok?r.json():null;})
-    .then(function(d){renderHotNews(d||{});})
-    .catch(function(){
-      var body=document.getElementById('hotListBody');
-      if(body)body.innerHTML='<li class="hotlist-empty">热榜加载失败，请稍后刷新</li>';
+  // 优先后端 API（WorkBuddy 部署）；失败回退到预生成的静态文件（GitHub Pages 等纯静态场景）
+  fetchJSON('api/hot-news?v='+Date.now()).then(function(d){
+    if(d&&Array.isArray(d.hot)&&d.hot.length){renderHotNews(d);return;}
+    fetchJSON('./data/hot_news.json?v='+Date.now()).then(function(sd){
+      renderHotNews(sd||{});
     });
+  });
 }
 
 // ===== AI 深度解析（9-04 新增，依赖 deepseek API key）=====
@@ -1427,14 +1431,30 @@ function renderAiAnalyze(d){
     body.appendChild(q);
   }
 }
+function renderAiStaticEmpty(){
+  // 纯静态托管（GitHub Pages）且尚未生成当日 AI 快照时的提示
+  var body=document.getElementById('aiBody');
+  var cnt=document.getElementById('aiCount');
+  if(!body)return;
+  body.innerHTML='<div class="ai-empty">本站为静态托管（GitHub Pages），AI 深度解析以「每日快照」形式随仓库发布。<br>'
+    +'维护者配置 <code>DEEPSEEK_API_KEY</code> 后运行 <code>python build_static.py</code> 即可生成当日解析并随代码推送到本页。</div>';
+  if(cnt)cnt.textContent='快照未生成';
+}
 function fetchAiAnalyze(){
-  fetch('api/ai-analyze?v='+Date.now(),{cache:'no-store'})
-    .then(function(r){return r.ok?r.json():null;})
-    .then(function(d){renderAiAnalyze(d);})
-    .catch(function(){
-      var body=document.getElementById('aiBody');
-      if(body)body.innerHTML='<div class="ai-empty">AI 解析加载失败，请稍后刷新</div>';
+  // 优先后端 API；失败回退到预生成的静态快照文件
+  fetchJSON('api/ai-analyze?v='+Date.now()).then(function(d){
+    if(d&&d.enabled!==false&&Array.isArray(d.items)&&d.items.length){renderAiAnalyze(d);return;}
+    var today=new Date().toISOString().slice(0,10);
+    fetchJSON('./data/ai_analysis_'+today+'.json?v='+Date.now()).then(function(sd){
+      if(sd&&Array.isArray(sd.items)&&sd.items.length){
+        renderAiAnalyze({enabled:true,items:sd.items,cached:true});
+      }else if(sd&&Array.isArray(sd)&&sd.length){
+        renderAiAnalyze({enabled:true,items:sd,cached:true});
+      }else{
+        renderAiStaticEmpty();
+      }
     });
+  });
 }
 
 initSpecial();   // 找矿突破专项：先归类移动，再注入标签/星标（避免折叠逻辑处理前移走）
@@ -1456,7 +1476,7 @@ function dismissInstallTip(){
 }
 // ===== PWA：注册 Service Worker（可安装成App + 离线可看）=====
 // 2026-09-02：新版 SW 激活后自动 reload，保证所有人打开就是最新版，无需手动清缓存
-if('serviceWorker' in navigator){
+if('serviceWorker' in navigator && location.hostname.indexOf('github.io')<0){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js').catch(function(){});
     // 收到"新版已就绪"通知 → 自动刷新（只刷一次，防死循环）

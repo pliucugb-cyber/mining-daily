@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>矿业新闻日报 · 链接已更新</title>
+<style>
+  :root{ --gold:#b8860b; --gold2:#d4a017; --ink:#2b2b2b; --muted:#6b6b6b; --bg:#fbf7ee; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:linear-gradient(160deg,#fffdf7 0%,#fbf1dc 100%);
+    color:var(--ink); min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:24px;
+  }
+  .card{
+    background:#fff; max-width:520px; width:100%; border-radius:18px; padding:30px 26px;
+    box-shadow:0 12px 40px rgba(184,134,11,.16); border:1px solid #f0e4c8;
+  }
+  .badge{
+    display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--gold);
+    background:#fff7e6; border:1px solid #f3e2b8; padding:5px 12px; border-radius:999px; margin-bottom:16px;
+  }
+  h1{font-size:22px; line-height:1.4; margin-bottom:10px}
+  h1 .em{color:var(--gold)}
+  p{font-size:15px; color:var(--muted); line-height:1.75; margin:10px 0}
+  .reason{
+    background:#fbf7ee; border-left:4px solid var(--gold2); border-radius:8px;
+    padding:12px 14px; font-size:14px; color:#5a4a2a; margin:16px 0;
+  }
+  .reason b{color:var(--ink)}
+  .newlink{
+    display:block; text-decoration:none; margin:18px 0 6px;
+    background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 100%);
+    color:#fff; text-align:center; font-size:17px; font-weight:600;
+    padding:15px 18px; border-radius:12px; box-shadow:0 6px 18px rgba(184,134,11,.32);
+    transition:transform .12s ease;
+  }
+  .newlink:active{transform:translateY(1px)}
+  .url{
+    display:block; text-align:center; font-size:13px; color:var(--muted);
+    word-break:break-all; margin-top:6px; text-decoration:underline; cursor:pointer;
+  }
+  .count{text-align:center; font-size:13px; color:var(--muted); margin-top:16px}
+  .count b{color:var(--gold); font-size:16px}
+  .foot{text-align:center; font-size:12px; color:#aaa; margin-top:18px}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">📣 链接已迁移</div>
+    <h1>矿业新闻日报已迁至<span class="em">永久新链接</span></h1>
+    <p>原来的链接已停用。请收藏下方新地址——它绑定账号、<b>换电脑也不会变</b>。</p>
+
+    <div class="reason">
+      <b>为什么要换？</b><br>
+      旧链接绑定在具体部署环境上，换设备或重装后地址会变化，同事收藏的入口会失效；
+      新链接基于 GitHub Pages，绑定你的账号，<b>一次收藏、长期有效</b>。
+    </div>
+
+    <a class="newlink" id="goBtn" href="https://pliucugb-cyber.github.io/mining-daily/">立即前往新链接 →</a>
+    <span class="url" onclick="copyUrl()" id="urlText">https://pliucugb-cyber.github.io/mining-daily/</span>
+
+    <div class="count">页面将在 <b id="sec">6</b> 秒后自动跳转…&nbsp;&nbsp;<a href="javascript:stopAuto()">取消</a></div>
+    <div class="foot">矿业新闻日报 · 空-天-地-井勘查技术体系资讯</div>
+  </div>
+
+<script>
+  var NEW_URL = "https://pliucugb-cyber.github.io/mining-daily/";
+  var sec = 6, timer = null, locked = false;
+  function tick(){
+    sec--;
+    var el = document.getElementById('sec');
+    if(el) el.textContent = sec;
+    if(sec <= 0) doRedirect();
+  }
+  function doRedirect(){
+    if(locked) return; locked = true;
+    if(timer) clearInterval(timer);
+    window.location.replace(NEW_URL);
+  }
+  function stopAuto(){ if(timer){clearInterval(timer); timer=null;} var c=document.querySelector('.count'); if(c) c.innerHTML='已取消自动跳转，请点击上方按钮前往。'; }
+  function copyUrl(){
+    var t = document.getElementById('urlText').textContent.trim();
+    if(navigator.clipboard){ navigator.clipboard.writeText(t).then(function(){ alert('已复制新链接：\n'+t); }); }
+    else { alert('新链接：\n'+t); }
+  }
+  timer = setInterval(tick, 1000);
+  // 兜底：若 8 秒后仍未跳转（被拦截），确保按钮可用
+  setTimeout(function(){ if(!locked && sec>0){ /* 等待自动跳转 */ } }, 8000);
+</script>
+</body>
+</html>
