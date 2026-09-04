@@ -241,9 +241,10 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-fab .qa-fab-ico{font-size:18px;line-height:1;display:inline-block}
 .qa-fab .qa-fab-txt{display:inline-block}
 .qa-fab.on{background:linear-gradient(135deg,#334155,#475569)}
-.qa-float{position:fixed;left:16px;bottom:78px;z-index:999;width:min(380px,calc(100vw - 32px));max-height:min(600px,calc(100vh - 110px));background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:none;flex-direction:column;overflow:hidden}
+.qa-float{position:fixed;left:16px;bottom:78px;z-index:999;width:min(440px,calc(100vw - 32px));height:min(560px,calc(100vh - 110px));min-width:300px;min-height:260px;resize:both;background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:none;flex-direction:column;overflow:hidden}
 .qa-float.open{display:flex}
-.qa-float-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff}
+.qa-float-head{position:relative;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;cursor:grab;user-select:none}
+.qa-float-head .pchart-close{cursor:pointer}
 .qa-float-title{font-size:14px;font-weight:800}
 .qa-float-head .pchart-close{background:rgba(255,255,255,.2);color:#fff}
 .qa-float-body{flex:1;overflow-y:auto;padding:12px;background:#f7f9fb}
@@ -2022,6 +2023,14 @@ function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){retu
       }
     }
   }catch(e){}
+  // 恢复用户上次拖拽位置与尺寸，并给头部挂上拖拽监听
+  try{qaFloatRestoreSize();qaFloatRestorePos();}catch(e){}
+  var _head=document.querySelector('.qa-float-head');
+  if(_head){
+    _head.addEventListener('mousedown',qaFloatStartDrag);
+    _head.addEventListener('touchstart',qaFloatStartDrag,{passive:false});
+  }
+  qaFloatObserveSize();
 })();
 // ===== LME 6 大基本金属价格（2026-09-02 新增，数据源 lme-data.js，由 fetch_lme.py 每日更新）=====
 // 设计：lme-data.js 加载失败或数据缺失时显示"暂不可用"，不影响 SHFE 主行
@@ -2254,6 +2263,70 @@ function qaFloatClose(){
 function qaStopBreathe(){
   try{var b=document.getElementById('qaFab');if(b)b.classList.remove('breathe');}catch(e){}
   try{if(window.localStorage)localStorage.setItem('qaFabSeen','1');}catch(e){}
+}
+// ===== 悬浮球拖拽 + 尺寸记忆 =====
+var QA_DRAGGING=null;
+function qaFloatStartDrag(ev){
+  var p=document.getElementById('qaFloat'); if(!p||!p.classList.contains('open'))return;
+  if(ev.target.closest('.pchart-close'))return;
+  if(ev.type==='touchstart'&&ev.touches.length!==1)return;
+  var point=ev.touches?ev.touches[0]:ev;
+  var rect=p.getBoundingClientRect();
+  QA_DRAGGING={el:p,startX:point.clientX,startY:point.clientY,origLeft:rect.left,origTop:rect.top};
+  p.style.position='fixed'; p.style.bottom='auto';
+  document.addEventListener('mousemove',qaFloatDrag); document.addEventListener('mouseup',qaFloatStopDrag);
+  document.addEventListener('touchmove',qaFloatDrag,{passive:false}); document.addEventListener('touchend',qaFloatStopDrag);
+  ev.preventDefault();
+}
+function qaFloatDrag(ev){
+  if(!QA_DRAGGING)return;
+  if(ev.cancelable)ev.preventDefault();
+  var point=ev.touches?ev.touches[0]:ev;
+  var dx=point.clientX-QA_DRAGGING.startX, dy=point.clientY-QA_DRAGGING.startY;
+  var el=QA_DRAGGING.el, w=el.offsetWidth||440, h=el.offsetHeight||560;
+  var vw=window.innerWidth, vh=window.innerHeight;
+  var left=Math.min(Math.max(QA_DRAGGING.origLeft+dx,0),Math.max(vw-w,0));
+  var top=Math.min(Math.max(QA_DRAGGING.origTop+dy,0),Math.max(vh-h,0));
+  el.style.left=left+'px'; el.style.top=top+'px';
+}
+function qaFloatStopDrag(ev){
+  if(!QA_DRAGGING)return;
+  document.removeEventListener('mousemove',qaFloatDrag); document.removeEventListener('mouseup',qaFloatStopDrag);
+  document.removeEventListener('touchmove',qaFloatDrag,{passive:false}); document.removeEventListener('touchend',qaFloatStopDrag);
+  qaFloatSavePos(); QA_DRAGGING=null;
+}
+function qaFloatSavePos(){
+  try{
+    var p=document.getElementById('qaFloat'); if(!p)return;
+    var rect=p.getBoundingClientRect();
+    localStorage.setItem('qaFloatPos',JSON.stringify({left:rect.left,top:rect.top}));
+  }catch(e){}
+}
+function qaFloatRestorePos(){
+  try{
+    var raw=localStorage.getItem('qaFloatPos'); if(!raw)return;
+    var pos=JSON.parse(raw), p=document.getElementById('qaFloat'); if(!p)return;
+    var vw=window.innerWidth, vh=window.innerHeight, w=p.offsetWidth||440, h=p.offsetHeight||560;
+    var left=Math.min(Math.max(pos.left,0),Math.max(vw-w,0));
+    var top=Math.min(Math.max(pos.top,0),Math.max(vh-h,0));
+    p.style.position='fixed'; p.style.left=left+'px'; p.style.top=top+'px'; p.style.bottom='auto';
+  }catch(e){}
+}
+function qaFloatObserveSize(){
+  try{
+    var p=document.getElementById('qaFloat'); if(!p||!window.ResizeObserver)return;
+    var ro=new ResizeObserver(function(){
+      try{localStorage.setItem('qaFloatSize',JSON.stringify({width:p.offsetWidth,height:p.offsetHeight}));}catch(e){}
+    });
+    ro.observe(p);
+  }catch(e){}
+}
+function qaFloatRestoreSize(){
+  try{
+    var raw=localStorage.getItem('qaFloatSize'); if(!raw)return;
+    var sz=JSON.parse(raw), p=document.getElementById('qaFloat'); if(!p||!sz.width||!sz.height)return;
+    p.style.width=sz.width+'px'; p.style.height=sz.height+'px';
+  }catch(e){}
 }
 function qaFloatScroll(){
   var b=document.getElementById('qaFloatBody');if(b)b.scrollTop=b.scrollHeight;
