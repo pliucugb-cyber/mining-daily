@@ -1663,11 +1663,64 @@ function renderHotNews(d){
   }).join('');
   if(cnt)cnt.textContent=arr.length+'条';
 }
+// ===== 热榜本地兜底（2026-09-04 新增）=====
+// 背景：站点有两种运行形态——带后端 server.py 的部署，以及 GitHub Pages 这类纯静态托管。
+// 纯静态下 /api/hot-news 不存在，不做兜底热榜就会显示"加载失败"。
+// 这里把 server.py 的 _compute_hot_news 算法（来源权重×10 + 时效分 + 热词加成）原样移植到前端，
+// 用全库 QA_ROWS 本地计算，保证两种部署形态下热榜口径一致。权重常量与 server.py 同步。
+var HOT_SRC_W={'自然资源部':12,'中国地质调查局':10,'中国地质学会':8,'中国有色金属工业协会':8,'中国黄金协会':8,'中国稀土行业协会':7,'中国有色网':7,'矿业权市场':6,'全球矿产资源':5,'上海联合矿权交易所':5,'上海期货交易所':6,'中国矿业报':7,'中国矿业网':6,'中国黄金集团':6,'紫金矿业':5,'中国黄金网':6,'矿冶集团':6,'中国稀土集团':7,'中国煤炭工业协会':6,'中国石油和化学工业联合会':6,'中国冶金矿山企业协会':7,'中国地质大学':5};
+var HOT_KW=['突破','重大','战略','世界第一','首次','关键矿产','新一轮','标志性','历史最好','历史新高','刷新','龙头','全球第一','亚洲第一','国内首台','首套','首发','首发阵容'];
+var NORMAL_KW=['找矿','勘查','探矿','重要','规划','增量','分红','成果','进展','签约','投产','扩建','增资','中标','出让','成交','创','新高','领先'];
+function computeHotNewsLocal(n){
+  n=n||10;
+  var anchor=qaReportDate()||'';
+  var today=anchor;
+  if(!today){
+    var now=new Date();
+    today=now.getFullYear()+'-'+String(now.getMonth()+1).replace(/^(\d)$/,'0$1')+'-'+String(now.getDate()).replace(/^(\d)$/,'0$1');
+  }
+  var td=new Date(today+'T00:00:00');
+  if(isNaN(td.getTime()))td=new Date();
+  var scored=[];
+  for(var i=0;i<QA_ROWS.length;i++){
+    var r=QA_ROWS[i];
+    var t=String(r.t||'').trim(),s=String(r.s||'').trim(),u=String(r.u||'').trim(),d=String(r.d||'').trim();
+    if(!t||!u||!d)continue;
+    if(d.length===5&&d.charAt(2)==='-')d=today.slice(0,4)+'-'+d;
+    var diff=0;
+    try{var dd=new Date(d+'T00:00:00');if(!isNaN(dd.getTime()))diff=Math.round((td-dd)/86400000);}catch(e){diff=0;}
+    if(diff<0)diff=0;
+    var rec=Math.max(0,30-diff*4);
+    var srcW=HOT_SRC_W[s]||3;
+    var hot=false,hotB=0,k;
+    for(k=0;k<HOT_KW.length;k++){if(t.indexOf(HOT_KW[k])>=0){hot=true;hotB=20;break;}}
+    var normB=0;
+    if(!hot){for(k=0;k<NORMAL_KW.length;k++){if(t.indexOf(NORMAL_KW[k])>=0){normB=5;break;}}}
+    scored.push({d:d,t:t,s:s,u:u,score:srcW*10+rec+hotB+normB,hot:hot});
+  }
+  scored.sort(function(a,b){if(b.score!==a.score)return b.score-a.score;return b.d<a.d?-1:(b.d>a.d?1:0);});
+  var seen={},out=[];
+  for(var j=0;j<scored.length;j++){
+    if(seen[scored[j].u])continue;
+    seen[scored[j].u]=1;out.push(scored[j]);
+    if(out.length>=n)break;
+  }
+  for(var m=0;m<out.length;m++)out[m].rank=m+1;
+  return out;
+}
 function fetchHotNews(){
   fetch('api/hot-news?v='+Date.now(),{cache:'no-store'})
     .then(function(r){return r.ok?r.json():null;})
-    .then(function(d){renderHotNews(d||{});})
+    .then(function(d){
+      if(d&&Array.isArray(d.hot)&&d.hot.length){renderHotNews(d);return;}
+      renderHotNews({hot:computeHotNewsLocal(10),local:true});
+    })
     .catch(function(){
+      // 纯静态部署（GitHub Pages）没有后端接口 → 退回全库本地计算，热榜功能不缺失
+      try{
+        var arr=computeHotNewsLocal(10);
+        if(arr.length){renderHotNews({hot:arr,local:true});return;}
+      }catch(e){console.warn('computeHotNewsLocal:',e);}
       var body=document.getElementById('hotListBody');
       if(body)body.innerHTML='<li class="hotlist-empty">热榜加载失败，请稍后刷新</li>';
     });
@@ -1766,8 +1819,10 @@ function fetchAiAnalyze(){
     .then(function(r){return r.ok?r.json():null;})
     .then(function(d){renderAiAnalyze(d);})
     .catch(function(){
+      // 纯静态部署（GitHub Pages）没有后端、也没有 DEEPSEEK_API_KEY →
+      // 说明这是运行环境限制而非"网页坏了"，避免用户反复刷新。
       var body=document.getElementById('aiBody');
-      if(body)body.innerHTML='<div class="ai-empty">AI 解析加载失败，请稍后刷新</div>';
+      if(body)body.innerHTML='<div class="ai-empty">AI 深度解析需要服务端支持（当前为纯静态托管，未接入 AI 服务）。<br>新闻、行情、热榜与问答检索均为本地计算，不受影响。</div>';
     });
 }
 
