@@ -287,9 +287,10 @@ def write_news_data_js(data_dir, out_path):
         'g': r.get('tags', []),
         'c': r.get('category', ''),
         'm': (r.get('summary', '') or '')[:120],
+        'n': r.get('first_seen', ''),   # 收录日期（今日要闻条用 n==report_date 识别当日新增）
     } for r in rows]
     payload = {'updated': datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),
-               'schema': '1.1-slim', 'total': len(slim), 'news': slim}
+               'schema': '1.2-slim', 'total': len(slim), 'news': slim}
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write('window.NEWS_DATA='
                 + json.dumps(payload, ensure_ascii=False, separators=(',', ':'))

@@ -174,6 +174,30 @@ body.dark .hotlist-list li.hot-item:hover{background:#243140}
 body.dark .hot-rank{background:#2c3845;color:#c9d6e2}
 body.dark .hot-title{color:#8fb5dc}
 body.dark .hot-title:hover{color:#ff7a7a}
+/* ==================== 今日要闻摘要条（9-04 新增，仿早报要闻样式）==================== */
+.digest-strip{background:#fff;border:1px solid #eef2f7;border-radius:12px;padding:12px 16px 10px;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.digest-head{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}
+.digest-badge{background:#e74c3c;color:#fff;font-size:13px;font-weight:800;padding:2px 9px;border-radius:5px;letter-spacing:1px;flex-shrink:0}
+.digest-title{font-size:19px;font-weight:800;color:#1a3a5c;letter-spacing:1px}
+.digest-date{font-size:12.5px;color:#95a5a6;font-weight:400;margin-left:auto}
+.digest-list{list-style:none;margin:0;padding:0}
+.digest-list li{position:relative;padding:5px 0 5px 16px;font-size:14px;line-height:1.55;border-bottom:1px dashed #f0f3f6}
+.digest-list li:last-child{border-bottom:none}
+.digest-list li::before{content:'';position:absolute;left:3px;top:14px;width:5px;height:5px;border-radius:50%;background:#c0392b}
+.digest-list a{color:#1a3a5c;text-decoration:none;transition:color .15s}
+.digest-list a:hover{color:#e74c3c}
+.digest-link{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.digest-empty{padding:6px 0 2px;color:#9aa7b3;font-size:13px}
+body.dark .digest-strip{background:#1e2733;border-color:#2c3845}
+body.dark .digest-title{color:#e8eef3}
+body.dark .digest-list li{border-bottom-color:#2c3845}
+body.dark .digest-list a{color:#8fb5dc}
+body.dark .digest-list a:hover{color:#ff7a7a}
+@media(max-width:600px){
+  .digest-strip{padding:10px 12px 8px}
+  .digest-title{font-size:17px}
+  .digest-list li{font-size:13.5px}
+}
 /* ==================== 价格卡点击 + 走势图弹层（9-04 新增）==================== */
 .price-card[data-slug]{cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
 .price-card[data-slug]:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(26,58,92,.14);border-color:#1a3a5c}
@@ -432,6 +456,17 @@ body{padding-left:0;padding-top:56px}
 <h1>⛏️ 矿业新闻日报 <span class="date-badge">2026年09月04日 星期五</span></h1>
 <div class="sub">每日 9:00 起自动更新（约 9:30 前出今日版本） · 11个信息源 · 聚焦有色金属 · 部门内部参考 · 点击标题查看原文</div>
 <div class="install-tip show" id="installTip"><span id="installTipText">📲 手机：浏览器菜单选「<b>添加到桌面 / 添加书签</b>」（微信内先点右上角「···」→ 浏览器中打开）<br>💻 电脑：点 Edge/Chrome 地址栏右侧「<b>安装</b>」图标 → 变成独立窗口软件 ｜ <a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#7dd3fc;text-decoration:underline">查看详细说明 ↓</a></span><button class="tip-close" onclick="dismissInstallTip()" title="我知道了">✕</button></div>
+</div>
+<!-- ==================== 今日要闻（9-04 新增，每日自动提取 3~5 条关键信息）==================== -->
+<div class="digest-strip" id="digestStrip">
+  <div class="digest-head">
+    <span class="digest-badge">今日</span>
+    <span class="digest-title">要闻</span>
+    <span class="digest-date" id="digestDate"></span>
+  </div>
+  <ul class="digest-list" id="digestList">
+    <li class="digest-empty">要闻提取中…</li>
+  </ul>
 </div>
 <div class="price-strip" id="priceStrip">
 <div class="price-strip-head">
@@ -1442,6 +1477,46 @@ function fetchHotNews(){
       if(body)body.innerHTML='<li class="hotlist-empty">热榜加载失败，请稍后刷新</li>';
     });
 }
+// ===== 今日要闻摘要条（9-04 新增，纯前端：从全库挑当日关键信息，按来源权威×关键信息词打分）=====
+var DIGEST_SRC=[[ '自然资源部',30],['新华社',26],['新华网',26],['人民日报',26],['工信部',24],['发展改革委',24],['中国地质调查局',24],['商务部',20],['财政部',20],['中国黄金协会',18],['中国矿业报',18],['中国有色金属工业协会',16],['SMM',14],['矿业界',12]];
+var DIGEST_KW=[['找矿突破',30],['新发现',26],['储量',24],['投产',20],['政策',20],['印发',18],['突破',16],['开工',16],['并购',14],['万吨',12],['稀土',10],['锗',10],['镓',10],['钨',8],['锂',8],['铜',6],['金',6],['银',5]];
+function digestScore(r){
+  var s=0;
+  DIGEST_SRC.forEach(function(p){if((r.s||'').indexOf(p[0])>=0)s=Math.max(s,p[1]);});
+  var hay=(r.t||'')+' '+(r.m||'');
+  DIGEST_KW.forEach(function(p){if(hay.indexOf(p[0])>=0)s+=p[1];});
+  (r.g||[]).forEach(function(t){if(t==='政策'||t==='找矿')s+=10;});
+  return s;
+}
+function digestEsc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function renderDigest(){
+  var list=document.getElementById('digestList'),dateEl=document.getElementById('digestDate');
+  if(!list)return;
+  var anchor=qaReportDate(),week=['日','一','二','三','四','五','六'];
+  if(dateEl){
+    var dt=anchor?new Date(anchor+'T00:00:00'):new Date();
+    dateEl.textContent=(anchor?anchor.replace(/-/g,'.'):(dt.getFullYear()+'.'+(dt.getMonth()+1)+'.'+dt.getDate()))+' 星期'+week[dt.getDay()];
+  }
+  // 优先取"今日收录"的条目（n=first_seen，新闻可能发布于前一日），
+  // 无收录标记时退回发布日期==今日，再退回全库最新一天
+  var today=QA_ROWS.filter(function(r){return r.n===anchor;});
+  if(!today.length)today=QA_ROWS.filter(function(r){return r.d===anchor;});
+  if(!today.length){                       // 当日无数据时退回全库最新一天
+    var max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>max)max=r.d;});
+    today=QA_ROWS.filter(function(r){return r.d===max;});
+  }
+  if(!today.length){
+    list.innerHTML='<li class="digest-empty">暂无可提取的要闻（全库为空）</li>';
+    return;
+  }
+  var picks=today.map(function(r){return {r:r,sc:digestScore(r)};})
+    .sort(function(a,b){return b.sc-a.sc||(b.r.d||'').localeCompare(a.r.d||'');})
+    .slice(0,4);
+  list.innerHTML=picks.map(function(p){
+    var r=p.r;
+    return '<li><a class="digest-link" href="'+digestEsc(r.u)+'" target="_blank" rel="noopener" title="'+digestEsc(r.t)+'">'+digestEsc(r.t)+'</a></li>';
+  }).join('');
+}
 
 // ===== AI 深度解析（9-04 新增，依赖 deepseek API key）=====
 function aiEsc(s){
@@ -1670,6 +1745,7 @@ function qaReset(){
 }
 (function(){
   qaInitData();
+  renderDigest();
   var inp=document.getElementById('qaInput'),timer=null;
   if(inp){
     inp.addEventListener('input',function(){clearTimeout(timer);timer=setTimeout(qaRender,220);});
