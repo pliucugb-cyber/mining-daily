@@ -7,7 +7,9 @@ __pycache__/
 qa_config.json
 
 # ===== 部署/运行时产生的缓存（按日期、机器相关，非源码）=====
-data/ai_analysis_*.json
+# 注：data/ai_analysis_*.json 与 data/hot_news.json 是「静态站点预生成数据」，
+#     需随仓库发布给 GitHub Pages 使用，因此【不再忽略】，正常提交。
+
 
 # ===== 本地临时/诊断目录（约 4.6M 杂项，冒烟测试在下面例外保留）=====
 tmp/*
