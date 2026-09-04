@@ -2025,10 +2025,11 @@ function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){retu
   }catch(e){}
   // 恢复用户上次拖拽位置与尺寸，并给头部挂上拖拽监听
   try{qaFloatRestoreSize();qaFloatRestorePos();}catch(e){}
-  var _head=document.querySelector('.qa-float-head');
-  if(_head){
-    _head.addEventListener('mousedown',qaFloatStartDrag);
-    _head.addEventListener('touchstart',qaFloatStartDrag,{passive:false});
+  var _panel=document.getElementById('qaFloat');
+  if(_panel){
+    // 拖拽把手扩展到整个面板（除交互元素/缩放柄），详见 qaFloatStartDrag
+    _panel.addEventListener('mousedown',qaFloatStartDrag);
+    _panel.addEventListener('touchstart',qaFloatStartDrag,{passive:false});
   }
   qaFloatObserveSize();
 })();
@@ -2265,15 +2266,21 @@ function qaStopBreathe(){
   try{if(window.localStorage)localStorage.setItem('qaFabSeen','1');}catch(e){}
 }
 // ===== 悬浮球拖拽 + 尺寸记忆 =====
+// 拖拽把手=整个面板任意非交互位置（头部/边框/结果空白区均可拖）；
+// 输入框/筛选/按钮/链接/关闭键/趋势图/右下角原生缩放柄 不触发拖拽。
 var QA_DRAGGING=null;
+var QA_DRAG_EXCLUDE='input,select,button,a,textarea,[contenteditable],.qa-fsel,.qa-fchip,.pchart-close,.qa-trend,.qa-src';
 function qaFloatStartDrag(ev){
   var p=document.getElementById('qaFloat'); if(!p||!p.classList.contains('open'))return;
-  if(ev.target.closest('.pchart-close'))return;
+  // 交互元素不触发拖拽，保证内部可选择/点击/输入
+  if(ev.target.closest && ev.target.closest(QA_DRAG_EXCLUDE))return;
+  // 预留右下角 18px 给原生 resize 缩放柄
+  var r=p.getBoundingClientRect(), ex=ev.clientX-r.left, ey=ev.clientY-r.top;
+  if(ex>=r.width-18 && ey>=r.height-18)return;
   if(ev.type==='touchstart'&&ev.touches.length!==1)return;
   var point=ev.touches?ev.touches[0]:ev;
-  var rect=p.getBoundingClientRect();
-  QA_DRAGGING={el:p,startX:point.clientX,startY:point.clientY,origLeft:rect.left,origTop:rect.top};
-  p.style.position='fixed'; p.style.bottom='auto';
+  QA_DRAGGING={el:p,startX:point.clientX,startY:point.clientY,origLeft:r.left,origTop:r.top};
+  p.style.position='fixed'; p.style.bottom='auto'; p.style.cursor='grabbing';
   document.addEventListener('mousemove',qaFloatDrag); document.addEventListener('mouseup',qaFloatStopDrag);
   document.addEventListener('touchmove',qaFloatDrag,{passive:false}); document.addEventListener('touchend',qaFloatStopDrag);
   ev.preventDefault();
@@ -2293,6 +2300,7 @@ function qaFloatStopDrag(ev){
   if(!QA_DRAGGING)return;
   document.removeEventListener('mousemove',qaFloatDrag); document.removeEventListener('mouseup',qaFloatStopDrag);
   document.removeEventListener('touchmove',qaFloatDrag,{passive:false}); document.removeEventListener('touchend',qaFloatStopDrag);
+  var p=QA_DRAGGING.el; if(p)p.style.cursor='';
   qaFloatSavePos(); QA_DRAGGING=null;
 }
 function qaFloatSavePos(){
