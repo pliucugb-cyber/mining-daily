@@ -2543,7 +2543,13 @@ function qaFloatAsk(){
     })
     .catch(function(e){
       var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
-      if(bubble)bubble.innerHTML='<div style="color:#e74c3c">无法连接问答服务（'+qaEsc((e&&e.message)||e||'网络错误')+'）。纯静态部署没有 AI 能力，关键词「检索」不受影响。</div>';
+      var hint='无法连接 AI 问答服务（'+qaEsc((e&&e.message)||e||'网络错误')+'）。';
+      if(String(e&&e.message||e).indexOf('fetch')>=0||String(e&&e.message||e).indexOf('Failed')>=0){
+        hint+='常见原因：本地代理（Clash/V2Ray 等）或公司网络拦截了 <code>workers.dev</code>。可尝试关闭代理、换手机流量，或改用国内云函数后端。';
+      }else{
+        hint+='纯静态部署没有 AI 能力，关键词「检索」不受影响。';
+      }
+      if(bubble)bubble.innerHTML='<div style="color:#e74c3c">'+hint+'</div>';
       qaFloatScroll();
     })
     .then(function(){
