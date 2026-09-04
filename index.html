@@ -2094,12 +2094,20 @@ function renderLmePrices(){
     }
   }catch(e){console.warn('renderLmePrices:',e);}
 }
-// ===== AI 智能问答（2026-09-02 新增，需后端 server.py 提供 /api/qa）=====
-// 设计：能力探测失败（纯静态部署）时 AI 按钮保持隐藏，原有检索功能完全不受影响
+// ===== AI 智能问答（2026-09-04 改接 Cloudflare Workers 轻后端）=====
+// 后端仅服务 /api/qa + /api/health（worker/worker.js），DEEPSEEK_API_KEY 存为平台 secret。
+// QA_API_BASE 部署后填真实 worker URL；若未部署/为空，AI 按钮自动显示"不可用"，检索不受影响。
+var QA_API_BASE='https://mining-daily-qa.YOUR-CF-SUBDOMAIN.workers.dev';
 var QA_AI_ON=false,QA_AI_BUSY=false,QA_LEFT=0;
 function qaAiProbe(){
+  if(!QA_API_BASE||QA_API_BASE.indexOf('YOUR-CF-SUBDOMAIN')>=0){
+    // 未配置后端地址，跳过探测（保持 AI 按钮为"不可用"）
+    var b0=document.getElementById('qaFloatAi');
+    if(b0){b0.disabled=true;b0.textContent='✨ AI 待配置';b0.title='请在 index.html 的 QA_API_BASE 填入 worker URL';}
+    return;
+  }
   // 用时间戳防 SW/中间层缓存命中导致拿到旧响应
-  fetch('api/health?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
+  fetch(QA_API_BASE+'/api/health?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
     .then(function(d){
       if(!d||!d.ok)return;
       var b=document.getElementById('qaFloatAi');
@@ -2112,18 +2120,32 @@ function qaAiProbe(){
           b.title='让 AI 读完相关新闻后组织语言作答（Ctrl+Enter）';
         }
       }
-      if(d.has_key){QA_AI_ON=true;QA_LEFT=d.limit||0;qaAiQuota();}
+      if(d.has_key){QA_AI_ON=true;qaAiQuota();}
     })
     .catch(function(){
-      // 探测失败（纯静态部署或网络异常）→ 按钮变"不可用"，让用户清楚知道不是网页坏了
+      // 探测失败（后端未部署或网络异常）→ 按钮变"不可用"，让用户清楚知道不是网页坏了
       var b=document.getElementById('qaFloatAi');
       if(b){b.disabled=true;b.textContent='✨ AI 不可用';
-        b.title='未检测到 AI 服务（可能当前是纯静态部署）';}
+        b.title='未检测到 AI 服务（请检查 QA_API_BASE 或 worker 部署）';}
     });
 }
 function qaAiQuota(){
-  fetch('api/quota',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
-    .then(function(d){if(d&&typeof d.left!=='undefined')QA_LEFT=d.left;}).catch(function(){});
+  // 轻后端为无状态，不追踪配额；此处仅占位，保持旧调用点可用
+  QA_LEFT=0;
+}
+// 从自由文本问题中提取已知的矿种/主题词（取自检索下拉词表），用于 RAG 上下文检索。
+// 中文无空格，整句做关键词几乎命中为空；提取词表词后语义更准。
+function qaExtractTerms(q){
+  var out=[],seen={};
+  ['qaFloatMineral','qaFloatTopic'].forEach(function(id){
+    var sel=document.getElementById(id);
+    if(!sel||!sel.options)return;
+    for(var i=0;i<sel.options.length;i++){
+      var v=sel.options[i].value;
+      if(v&&q.indexOf(v)>=0&&!seen[v]){seen[v]=1;out.push(v);}
+    }
+  });
+  return out;
 }
 // qaAskAI 已删除：主内容区 AI box 随「新闻问答」检索条一并移除；悬浮球的 AI 回答由 qaFloatAsk 接管
 
@@ -2464,8 +2486,28 @@ function qaFloatAsk(){
   if(btn){btn.disabled=true;btn.textContent='思考中…';}
   qaFloatAdd('user',qaEsc(q),'');
   if(inp)inp.value='';
+  // 本地先检索与问题相关的全库新闻，作为 RAG 上下文一并交给后端 DeepSeek
+  var _min=(document.getElementById('qaFloatMineral')||{}).value||'';
+  var _top=(document.getElementById('qaFloatTopic')||{}).value||'';
+  var _rg=parseInt((document.getElementById('qaFloatRange')||{}).value,10)||0;
+  // 从问题中提取矿种/主题词，经 qaMineralHit 消歧后作为 RAG 上下文的精确筛选条件，
+  // 与「检索」面板同一套口径——避免把整句/同义词扩展当关键词，误把无关新闻带进上下文稀释 AI 答案。
+  var _ext=qaExtractTerms(q);
+  var _minSel=_ext.filter(function(t){return QA_MINERALS.indexOf(t)>=0;})[0]||'';
+  var _topSel=_ext.filter(function(t){return QA_TOPICS.indexOf(t)>=0;})[0]||'';
+  var _from='';
+  if(_rg>0){var _max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>_max)_max=r.d;});if(_max){var _dt=new Date(_max+'T00:00:00');_dt.setDate(_dt.getDate()-_rg+1);_from=_dt.toISOString().slice(0,10);}}
+  // 优先用问题中提取的矿种/主题；问题没提则用用户当前下拉选择；都没有则退化为全库最新 12 条
+  var _ctx=qaFilter(QA_ROWS,[],_minSel||_min,_topSel||_top,_from,'and').slice(0,12);
+  // 二次精筛：标题须真的出现该矿种词，避免「标签/来源含铝字」之类把无关新闻带进上下文
+  if(_minSel){_ctx=_ctx.filter(function(r){return (r.t||'').indexOf(_minSel)>=0;});}
   var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…','');
-  fetch('api/qa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})})
+  if(!QA_API_BASE||QA_API_BASE.indexOf('YOUR-CF-SUBDOMAIN')>=0){
+    if(msg){var _b=msg.querySelector('.qa-msg-bubble');if(_b)_b.innerHTML='<div style="color:#e74c3c">AI 后端地址尚未配置：请在 index.html 顶部把 QA_API_BASE 改成 worker 的真实 URL。</div>';}
+    QA_FLOAT_BUSY=false;if(btn){btn.disabled=false;btn.textContent='AI';}
+    return;
+  }
+  fetch(QA_API_BASE+'/api/qa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:_ctx})})
     .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d||{}};},function(){return {ok:false,d:{}};});})
     .then(function(res){
       var d=res.d,bubble=msg?msg.querySelector('.qa-msg-bubble'):null;

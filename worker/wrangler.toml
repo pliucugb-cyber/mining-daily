@@ -1,0 +1,21 @@
+# wrangler.toml —— 矿业新闻日报轻后端（Cloudflare Workers）
+# 仅服务 /api/qa + /api/health。DEEPSEEK_API_KEY 用 secret 注入，不写在此文件。
+#
+# 部署（换电脑只需重做这些步骤，代码与配置都在 git 里）：
+#   cd worker
+#   npm i -g wrangler
+#   wrangler login            # 浏览器登录你的 Cloudflare 账号
+#   wrangler secret put DEEPSEEK_API_KEY   # 粘贴 key
+#   wrangler deploy           # 输出 worker URL → 填回 index.html 的 QA_API_BASE
+#
+# 注意：name 决定 URL（https://<name>.<subdomain>.workers.dev）。
+# 改 name 即可换 URL；不改则每次 deploy 覆盖同一地址。
+
+name = "mining-daily-qa"
+main = "worker.js"
+compatibility_date = "2024-09-23"
+
+# 如需自定义域名（可选，非必须）：
+# routes = [
+#   { pattern = "qa.your-domain.com", custom_domain = true }
+# ]
