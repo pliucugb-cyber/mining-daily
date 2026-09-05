@@ -273,6 +273,17 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-msg.ai .qa-msg-bubble{background:#fff;border:1px solid #e8eef3;color:#1a3a5c;border-top-left-radius:3px}
 .qa-msg.user .qa-msg-bubble{background:#4f46e5;color:#fff;border-top-right-radius:3px}
 .qa-msg-meta{font-size:10.5px;color:#6b7a89;margin-top:3px}
+.qa-msg-time{font-size:9.5px;color:#aab4bf;margin-top:2px;text-align:right}
+.qa-thinking{display:flex;align-items:center;gap:6px;color:#6b7a89;font-size:12px}
+.qa-dot{width:7px;height:7px;border-radius:50%;background:#4f46e5;animation:qaBlink 1s infinite ease-in-out}
+@keyframes qaBlink{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+.qa-msg-sources{margin-top:8px;padding:8px 10px;background:#f6f8fb;border:1px dashed #d7deea;border-radius:8px;border-top-left-radius:3px}
+.qa-sources-title{font-size:11px;font-weight:700;color:#4f46e5;margin-bottom:4px}
+.qa-msg-sources ul{margin:0;padding-left:16px}
+.qa-msg-sources li{font-size:11.5px;line-height:1.5;margin:2px 0;color:#1a3a5c;user-select:text}
+.qa-msg-sources a{color:#4f46e5;text-decoration:none;border-bottom:1px dashed #a5b4fc}
+.qa-msg-sources a:hover{text-decoration:underline}
+.qa-src-date{color:#94a3b8;font-size:10.5px;margin-left:4px}
 .qa-msg-actions{display:flex;gap:6px;margin-top:4px;padding-left:1px}
 .qa-msg-action{background:none;border:none;color:#6b7a89;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:4px}
 .qa-msg-action:hover{background:#eef2f5;color:#4f46e5}
@@ -297,6 +308,12 @@ body.dark .qa-msg-bubble code{background:#2c3845;color:#c9d6e2}
 body.dark .qa-msg-bubble pre{background:#161d26}
 body.dark .qa-msg-bubble blockquote{border-color:#4b5563;color:#94a3b8;background:#1e2733}
 body.dark .qa-msg-bubble a{color:#818cf8;border-color:#4f46e5}
+body.dark .qa-msg-sources{background:#1a232f;border-color:#2c3845}
+body.dark .qa-sources-title{color:#818cf8}
+body.dark .qa-msg-sources li{color:#c9d6e2}
+body.dark .qa-msg-sources a{color:#818cf8;border-color:#4f46e5}
+body.dark .qa-src-date{color:#64748b}
+body.dark .qa-msg-time{color:#5b6b7c}
 body.dark .qa-msg-action{color:#94a3b8}
 body.dark .qa-msg-action:hover{background:#2c3845;color:#818cf8}
 body.dark .qa-float-foot{background:#1e2733;border-top-color:#2c3845}
@@ -837,6 +854,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
   <div class="qa-float-head">
     <span class="qa-float-title">💬 新闻问答</span>
     <div class="qa-head-actions">
+      <button class="qa-head-action" type="button" onclick="qaExportHistory(this)" title="复制全部对话">📤 导出</button>
       <button class="qa-head-action" type="button" onclick="qaClearHistory()" title="清空本次会话历史">🗑 清空</button>
       <button class="pchart-close" onclick="qaFloatToggle()">✕</button>
     </div>
@@ -2466,8 +2484,8 @@ function qaMdRender(md){
   text=text.replace(/^## (.*$)/gim,'<h2>$1</h2>');
   text=text.replace(/^# (.*$)/gim,'<h1>$1</h1>');
   text=text.replace(/^&gt; (.*$)/gim,'<blockquote>$1</blockquote>');
-  text=text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1" style="max-width:100%">');
-  text=text.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  text=text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,function(m,a,u){var s=qaSafeUrl(u);return s?'<img src="'+s+'" alt="'+a+'" style="max-width:100%">':'';});
+  text=text.replace(/\[([^\]]+)\]\(([^)]+)\)/g,function(m,t,u){var s=qaSafeUrl(u);return s?'<a href="'+s+'" target="_blank" rel="noopener">'+t+'</a>':t;});
   text=text.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
   text=text.replace(/__([^_]+)__/g,'<strong>$1</strong>');
   text=text.replace(/\*([^*]+)\*/g,'<em>$1</em>');
@@ -2501,6 +2519,10 @@ function qaMdRender(md){
     return '<p>'+b.replace(/\n/g,'<br>')+'</p>';
   }).join('\n');
 }
+function qaFmtTime(ts){
+  try{var d=new Date(Number(ts));var p=function(n){return (n<10?'0':'')+n;};
+    return p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());}catch(e){return '';}
+}
 function qaFloatAdd(role,html,meta,opts){
   opts=opts||{};
   var body=document.getElementById('qaFloatBody');if(!body)return null;
@@ -2514,12 +2536,32 @@ function qaFloatAdd(role,html,meta,opts){
       '</div>';
   }
   var m=meta?'<div class="qa-msg-meta">'+qaEsc(meta)+'</div>':'';
-  d.innerHTML=bubbleHtml+m+actions;
+  var t=opts.ts?'<div class="qa-msg-time">'+qaFmtTime(opts.ts)+'</div>':'';
+  d.innerHTML=bubbleHtml+m+t+actions;
   d.dataset.raw=html||'';
   d.dataset.md=opts.md?'1':'';
   if(opts.q)d.dataset.q=opts.q;
   if(opts.ctx)d.dataset.ctx=JSON.stringify(opts.ctx||[]);
+  if(opts.ts)d.dataset.ts=String(opts.ts);
   body.appendChild(d);qaFloatScroll();return d;
+}
+function qaExportHistory(btn){
+  try{
+    var body=document.getElementById('qaFloatBody');if(!body)return;
+    var msgs=body.querySelectorAll('.qa-msg');
+    var lines=['=== 矿业新闻日报 · 问答导出 ===','时间：'+new Date().toLocaleString('zh-CN'),''];
+    msgs.forEach(function(el){
+      var role=el.classList.contains('user')?'【问】':'【答】';
+      var raw=el.dataset.raw||'';
+      if(raw)lines.push(role+' '+raw.replace(/\n+/g,'\n'));
+    });
+    var txt=lines.join('\n');
+    navigator.clipboard.writeText(txt).then(function(){
+      if(btn){btn.textContent='已复制';setTimeout(function(){btn.textContent='📤 导出';},1500);}
+    },function(){
+      if(btn){btn.textContent='复制失败';setTimeout(function(){btn.textContent='📤 导出';},1500);}
+    });
+  }catch(e){}
 }
 function qaFloatSearch(){
   var inp=document.getElementById('qaFloatInput');if(!inp)return;
@@ -2609,7 +2651,7 @@ function qaFloatAsk(retryMode,ctxOverride){
   if(!q){qaFloatAdd('ai','请先输入问题，例如「最近有哪些稀土政策」「锂价为什么大跌」。','',{md:false});return;}
   QA_FLOAT_BUSY=true;
   if(btn){btn.disabled=true;btn.textContent='思考中…';}
-  if(!retryMode){qaFloatAdd('user',q,'',{md:false});qaSaveHistory();}
+  if(!retryMode){qaFloatAdd('user',q,'',{md:false,ts:Date.now()});qaSaveHistory();}
   if(inp)inp.value='';
   var _ctx=ctxOverride;
   if(!_ctx){
@@ -2625,48 +2667,77 @@ function qaFloatAsk(retryMode,ctxOverride){
     if(_minSel){_ctx=_ctx.filter(function(r){return (r.t||'').indexOf(_minSel)>=0;});}
   }
   var meta='正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候…';
-  var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false});
+  var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now()});
   qaDeepseekCall(q,_ctx,msg,btn);
   return;
+}
+// 安全清洗外链：只允许 http/https，拦截 javascript:/data:/vbscript: 等危险协议，并转义引号
+function qaSafeUrl(u){
+  if(!u)return '';
+  u=String(u).trim();
+  if(/^\s*(javascript|data|vbscript):/i.test(u))return '';
+  if(/^https?:\/\//i.test(u))return u.replace(/"/g,'%22');
+  return '';
+}
+// AI 回答下方自动附「参考来源」可点击列表（数据本身带 url，之前调用未使用）
+function qaDsSourcesHtml(ctx){
+  if(!ctx||!ctx.length)return '';
+  var items=ctx.slice(0,8).map(function(c){
+    var u=c.u||c.url||'',t=c.t||'新闻';
+    if(!u)return '';
+    var safe=qaSafeUrl(u);if(!safe)return '';
+    return '<li><a href="'+safe+'" target="_blank" rel="noopener">'+qaEsc(t)+'</a>'+(c.d?' <span class="qa-src-date">'+qaEsc(c.d)+'</span>':'');
+  }).filter(Boolean);
+  if(!items.length)return '';
+  return '<div class="qa-msg-sources"><div class="qa-sources-title">📚 参考来源（点击查看原文）</div><ul>'+items.join('')+'</ul></div>';
 }
 function qaDeepseekCall(q,ctx,msg,btn){
   var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
   var system=('你是资深矿业行业分析师，服务于「矿业新闻日报」产品。'
-    +'回答要简洁专业、不啰嗦、用中文。'
-    +'如果提供了相关新闻条目，请自然引用并注明来源与日期；'
+    +'回答用中文、简洁专业、结构化呈现（优先用要点列表或小标题，避免一大段文字）。'
+    +'若提供了相关新闻条目，请基于这些条目作答；引用具体新闻时用 Markdown 链接标注来源，例如 [标题](链接)，方便读者点击查看原文。'
     +'若没有相关新闻，请明确说明这是基于通用知识的回答，并建议用户查证官方信息。'
-    +'不要编造数据、价格或政策细节。');
+    +'不要编造数据、价格或政策细节；不要复制"以上信息来自公开公告"之类的注水结语。');
   var user='用户问题：'+q+'\n\n';
   if(ctx&&ctx.length){
-    user+='以下为本地检索到的相关新闻条目（仅供参考，请以公开权威信息为准）：\n';
+    user+='以下为本地检索到的相关新闻条目（含原文链接，优先参考这些，并以公开权威信息为准）：\n';
     ctx.forEach(function(c,i){
-      var d=c.d||'',t=c.t||'',s=c.s||'';
-      user+=(i+1)+'. ['+d+'] '+t+(s?('（'+s+'）'):'')+'\n';
+      var d=c.d||'',t=c.t||'',s=c.s||'',u=c.u||c.url||'';
+      user+=(i+1)+'. ['+d+'] '+t+(s?('（'+s+'）'):'')+(u?(' 链接：'+u):'')+'\n';
     });
     user+='\n';
   }else{
     user+='（未提供相关新闻，请基于通用知识回答。）\n\n';
   }
   user+='请直接给出回答，无需寒暄。';
-  if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">正在调用 DeepSeek 生成答案（约 10~30 秒）…</div>';
+  if(bubble)bubble.innerHTML='<div class="qa-thinking"><span class="qa-dot"></span>DeepSeek 正在组织答案（约 10~30 秒，可先浏览上方参考来源）…</div>';
   fetch('https://api.deepseek.com/chat/completions',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()},
-    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:system},{role:'user',content:user}],max_tokens:800,temperature:0.3,stream:false})
+    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:system},{role:'user',content:user}],max_tokens:1000,temperature:0.3,stream:false})
   })
-    .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d||{}};},function(){return {ok:false,d:{}};});})
+    .then(function(r){return r.json().then(function(d){return {ok:r.ok,status:r.status,d:d||{}};},function(){return {ok:false,status:0,d:{}};});})
     .then(function(res){
       var d=res.d,text='',meta='';
       if(!res.ok){
         var em=(d&&d.error&&d.error.message)||'请求失败，请稍后重试。';
-        text='DeepSeek 调用失败：'+em;
-        meta='DeepSeek 错误';
+        if(res.status===401||/authentication|invalid.*key|api key/i.test(em)){
+          text='⚠️ **API Key 已失效或被吊销**，AI 暂时无法回答。\n\n请联系网页维护者更新 DeepSeek API Key 后重试；你也可以切换到「检索」面板直接查看本地新闻。';
+          meta='需要更新 Key';
+        }else{
+          text='DeepSeek 调用失败：'+em+'\n\n可点「🔄 重新生成」重试，或切换到「检索」面板查看本地新闻。';
+          meta='DeepSeek 错误';
+        }
       }else{
         var content=((((d.choices||[])[0]||{}).message||{}).content||'').trim();
         if(!content){text='模型未返回内容';meta='DeepSeek 错误';}
         else{text=content;meta='DeepSeek 真 AI · 已读 '+(ctx?ctx.length:0)+' 条本地新闻';}
       }
-      if(bubble)bubble.innerHTML=qaMdRender(text);
+      if(bubble){
+        bubble.innerHTML=qaMdRender(text);
+        var src=qaDsSourcesHtml(ctx);
+        if(src)bubble.insertAdjacentHTML('afterend',src);
+      }
       if(msg){
         var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=meta;
         msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);
@@ -2688,7 +2759,11 @@ function qaDeepseekCall(q,ctx,msg,btn){
       var localAns=qaAiLocalAnswer(q,ctx);
       var hint='\n\n[DeepSeek 直连失败（'+((e&&e.message)||e||'网络错误')+'），已切换为本地知识库回答]';
       var text=localAns+hint;
-      if(bubble)bubble.innerHTML=qaMdRender(text);
+      if(bubble){
+        bubble.innerHTML=qaMdRender(text);
+        var src=qaDsSourcesHtml(ctx);
+        if(src)bubble.insertAdjacentHTML('afterend',src);
+      }
       if(msg){
         var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 全库 '+QA_ROWS.length+' 条';
         msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);
@@ -2706,7 +2781,7 @@ function qaDeepseekCall(q,ctx,msg,btn){
     })
     .then(function(){
       QA_FLOAT_BUSY=false;
-      if(btn){btn.disabled=false;btn.textContent='AI';}
+      if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
     });
 }
 // ===== 问答历史记忆（本地 localStorage）=====
@@ -2721,9 +2796,9 @@ function qaLoadHistory(){
     var body=document.getElementById('qaFloatBody');if(!body)return;
     body.innerHTML='';
     list.forEach(function(it){
-      if(it.role==='user')qaFloatAdd('user',it.html,'',{md:false});
-      else if(it.role==='ai')qaFloatAdd('ai',it.html,it.meta||'',{md:true,canRetry:it.canRetry!==false,actions:it.canRetry!==false,q:it.q||'',ctx:it.ctx||[]});
-      else if(it.role==='search')qaFloatAdd('ai',it.html,it.meta||'',{md:false});
+      if(it.role==='user')qaFloatAdd('user',it.html,'',{md:false,ts:it.ts});
+      else if(it.role==='ai')qaFloatAdd('ai',it.html,it.meta||'',{md:true,canRetry:it.canRetry!==false,actions:it.canRetry!==false,q:it.q||'',ctx:it.ctx||[],ts:it.ts});
+      else if(it.role==='search')qaFloatAdd('ai',it.html,it.meta||'',{md:false,ts:it.ts});
     });
   }catch(e){}
 }
@@ -2738,10 +2813,11 @@ function qaSaveHistory(){
       var metaEl=el.querySelector('.qa-msg-meta');
       var meta=metaEl?metaEl.textContent:'';
       var raw=el.dataset.raw||'';
+      var ts=el.dataset.ts?Number(el.dataset.ts):0;
       if(role==='ai'){
-        out.push({role:'ai',html:raw,meta:meta,q:el.dataset.q||'',ctx:el.dataset.ctx||'',canRetry:!!el.querySelector('.qa-msg-actions')});
+        out.push({role:'ai',html:raw,meta:meta,ts:ts,q:el.dataset.q||'',ctx:el.dataset.ctx||'',canRetry:!!el.querySelector('.qa-msg-actions')});
       }else{
-        out.push({role:'user',html:raw,meta:meta});
+        out.push({role:'user',html:raw,meta:meta,ts:ts});
       }
     });
     if(out.length>QA_HISTORY_MAX)out=out.slice(out.length-QA_HISTORY_MAX);
