@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260906-0105">
+<meta name="build-version" content="20260906-0112">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -1408,10 +1408,22 @@ document.addEventListener('click',e=>{
     //      "允许嵌入"是服务器响应头判断的，手机浏览器同样遵守，可安全嵌套）。
     //   ②（网站禁止嵌入）→ toast 提醒"该网站禁止嵌入显示"
     //      + 跳浏览器打开（手机走 <a target=_blank> 默认行为最稳；电脑用 window.open）。
+    // 2026-09-06：问答浮窗内的引用链接纳入同一套分流 ——
+    //   命中"禁止内嵌"名单时不再强制 iframe（否则整页白屏"拒绝连接"），
+    //   改为弹出提示卡，引导用户主动跳转原网站查看完整内容。
     const href=a.getAttribute('href')||'';
     if(href.startsWith('javascript:')||href.startsWith('#'))return;
-    const embedFlag=item?(item.dataset.embed||'ok'):'ok';
+    const inQa=!!a.closest('#qaFloat');
+    let embedFlag=item?(item.dataset.embed||'ok'):'ok';
+    if(!item&&inQa&&linkBlockedFromEmbed(a.href))embedFlag='block';
     if(embedFlag==='block'){
+      if(inQa){
+        // 问答引用：弹提示卡引导（不自动跳转，尊重用户选择）
+        e.preventDefault();
+        e.stopPropagation();
+        showEmbedJumpTip(a.href);
+        return;
+      }
       // 已知禁止嵌入的网站：提醒用户不是软件坏了，然后跳浏览器打开
       showToast('🔗 该网站禁止嵌入显示，已在浏览器打开');
       if(IS_MOBILE){
@@ -1442,6 +1454,70 @@ function showToast(msg,duration){
   setTimeout(function(){t.remove();},duration||2600);
 }
 
+// ============ 问答引用链接的「禁止内嵌」识别与引导（2026-09-06 新增）============
+// 背景：问答浮窗里的引用链接此前被强制走 iframe 阅读器，遇到 X-Frame-Options 站点
+//（如 chinania.org.cn）会整页白屏"拒绝连接"。浏览器无法预读跨域响应头，
+// 因此用两层名单判断：①生成侧 batch_check_embed.py 逐 URL 实测写入的 data-embed 标记（权威）；
+// ②静态域名兜底（本次 curl 实测 + 页面内 block 标记归纳），覆盖不在当前 7 天窗口内的历史链接。
+var NEWS_EMBED_MAP=null;
+function newsEmbedMap(){
+  if(NEWS_EMBED_MAP)return NEWS_EMBED_MAP;
+  var m={};
+  try{
+    document.querySelectorAll('.news-item[data-url]').forEach(function(el){
+      m[el.dataset.url]=el.dataset.embed||'ok';
+    });
+  }catch(e){}
+  NEWS_EMBED_MAP=m;return m;
+}
+var QA_EMBED_BLOCK_HOSTS=null;
+function qaEmbedBlockHosts(){
+  if(QA_EMBED_BLOCK_HOSTS)return QA_EMBED_BLOCK_HOSTS;
+  // 静态兜底：2026-09-06 用 curl 实测各源响应头得出
+  var set=new Set(['www.mnr.gov.cn','www.cgs.gov.cn','www.chinania.org.cn','www.cngold.org.cn']);
+  try{
+    document.querySelectorAll('.news-item[data-embed="block"][data-url]').forEach(function(el){
+      try{set.add(new URL(el.dataset.url).hostname);}catch(e){}
+    });
+  }catch(e){}
+  QA_EMBED_BLOCK_HOSTS=set;return set;
+}
+function linkBlockedFromEmbed(url){
+  // URL 级实测标记优先（同一域名下也可能有页面允许嵌入），域名级名单兜底
+  var map=newsEmbedMap();
+  if(Object.prototype.hasOwnProperty.call(map,url))return map[url]==='block';
+  try{return qaEmbedBlockHosts().has(new URL(url,location.href).hostname);}catch(e){return false;}
+}
+// 中央提示卡：引导用户跳转原网站查看完整内容
+function showEmbedJumpTip(url){
+  const old=document.getElementById('qaEmbedTipMask');
+  if(old)old.remove();
+  let host='';
+  try{host=new URL(url,location.href).hostname;}catch(e){}
+  const mask=document.createElement('div');
+  mask.id='qaEmbedTipMask';
+  mask.style.cssText='position:fixed;inset:0;background:rgba(12,22,36,.55);z-index:100002;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(2px);';
+  const card=document.createElement('div');
+  card.style.cssText='background:#fff;border-radius:14px;max-width:360px;width:100%;padding:22px 20px;box-shadow:0 12px 40px rgba(0,0,0,.28);text-align:center;';
+  card.innerHTML=
+    '<div style="font-size:34px;line-height:1;margin-bottom:10px;">🔗</div>'+
+    '<div style="font-size:15px;font-weight:800;color:#1a3a5c;margin-bottom:8px;">该网站禁止内嵌预览</div>'+
+    '<div style="font-size:12.5px;color:#5b6b7b;line-height:1.7;margin-bottom:16px;">'+(qaEsc(host)||'该网站')+' 不允许在日报页面内直接显示，<br>请前往原网站查看完整内容。</div>'+
+    '<div style="display:flex;gap:10px;justify-content:center;">'+
+    '<button class="qa-embed-go" style="flex:1;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;padding:10px 0;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;">前往原网站查看 →</button>'+
+    '<button class="qa-embed-cancel" style="background:#eef2f5;color:#1a3a5c;border:none;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;">取消</button>'+
+    '</div>';
+  mask.appendChild(card);
+  document.body.appendChild(mask);
+  const close=function(){mask.remove();};
+  mask.addEventListener('click',function(e){if(e.target===mask)close();});
+  card.querySelector('.qa-embed-cancel').onclick=close;
+  card.querySelector('.qa-embed-go').onclick=function(){
+    close();
+    window.open(url,'_blank','noopener,noreferrer');
+  };
+}
+
 // ============ 外链 iframe 浮窗（仅电脑端用，手机端直接走 target=_blank）============
 function openInOverlay(url){
   const old=document.getElementById('extOverlay');
@@ -1467,6 +1543,11 @@ function openInOverlay(url){
   extBtn.style.cssText='background:rgba(255,255,255,0.25);border:none;color:#fff;font-size:12px;padding:6px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;font-weight:500;';
   extBtn.onclick=function(){window.open(url,'_blank','noopener,noreferrer');};
   bar.appendChild(extBtn);
+  // 温和引导条：浏览器无法预读对方响应头，未知站点是否禁止内嵌只有加载后才知道；
+  // 对未预判到的站点给出 4 秒提示后自动淡出，避免用户对着白屏不知所措（2026-09-06）
+  const tipLine=document.createElement('div');
+  tipLine.style.cssText='background:#fff7ed;color:#9a3412;font-size:12px;line-height:1.5;padding:6px 12px;border-bottom:1px solid #fed7aa;text-align:center;transition:opacity .5s;';
+  tipLine.textContent='若页面无法显示（部分网站禁止内嵌），请点右上角「↗ 外站」在新标签页查看原文';
   const frame=document.createElement('iframe');
   frame.style.cssText='flex:1;border:none;width:100%;';
   frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-forms allow-popups');
@@ -1480,6 +1561,12 @@ function openInOverlay(url){
   frame.onload=function(){frame._loaded=true;};
   frame.onerror=function(){frame._errored=true;};
   overlay.appendChild(bar);
+  overlay.appendChild(tipLine);
+  // 4 秒后淡出，不打扰正常阅读
+  setTimeout(function(){
+    tipLine.style.opacity='0';
+    setTimeout(function(){if(tipLine.parentNode)tipLine.remove();},600);
+  },4000);
   overlay.appendChild(frame);
   document.body.appendChild(overlay);
   // 跨域 iframe 嵌入状态的可靠检测在浏览器侧无法实现（onload 不区分成功/失败，
@@ -3003,7 +3090,9 @@ function qaDsSourcesHtml(ctx){
     var u=c.u||c.url||'',t=c.t||'新闻';
     if(!u)return '';
     var safe=qaSafeUrl(u);if(!safe)return '';
-    return '<li><a href="'+safe+'" target="_blank" rel="noopener" onclick="window.open(this.href,\'_blank\',\'noopener,noreferrer\');return false;">'+qaEsc(t)+'</a>'+(c.d?' <span class="qa-src-date">'+qaEsc(c.d)+'</span>':'');
+    // 2026-09-06：去掉原内联 onclick 直接 window.open 的写法，统一走全局点击委托分流
+    //（允许嵌入的站内浮窗打开；禁止嵌入的弹提示引导跳原站）
+    return '<li><a href="'+safe+'" target="_blank" rel="noopener">'+qaEsc(t)+'</a>'+(c.d?' <span class="qa-src-date">'+qaEsc(c.d)+'</span>':'');
   }).filter(Boolean);
   if(!items.length)return '';
   return '<div class="qa-msg-sources"><div class="qa-sources-title">📚 参考来源（点击查看原文）</div><ul>'+items.join('')+'</ul></div>';
