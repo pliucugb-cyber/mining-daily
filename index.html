@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260905-2329">
+<meta name="build-version" content="20260906-0040">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -235,7 +235,7 @@ body.dark .pchart-head{border-bottom-color:#2c3845}
 body.dark .pchart-table th,body.dark .pchart-table td{border-bottom-color:#2c3845}
 body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 /* ==================== 左下角问答悬浮球 + 面板（9-04 新增）==================== */
-.qa-fab{position:fixed;left:16px;bottom:16px;z-index:100000;height:50px;max-width:calc(100vw - 32px);padding:0 18px;border:none;border-radius:999px;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:15px;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 20px rgba(79,70,229,.42);display:flex;align-items:center;gap:8px;white-space:nowrap;transition:transform .15s,box-shadow .15s,padding .15s;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.qa-fab{position:fixed;left:16px;bottom:16px;z-index:100000;height:50px;max-width:calc(100vw - 32px);padding:0 18px;border:none;border-radius:999px;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:15px;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 20px rgba(79,70,229,.42);display:flex;align-items:center;gap:8px;white-space:nowrap;transition:transform .15s,box-shadow .15s,padding .15s;backface-visibility:hidden;-webkit-backface-visibility:hidden;touch-action:none;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 /* 悬停：轻微上浮+加宽，呈现“可搜索”的引导感 */
 .qa-fab:hover{transform:translateY(-3px) scale(1.03);padding:0 22px;box-shadow:0 12px 30px rgba(79,70,229,.55)}
 /* 首次进入呼吸提示：柔和脉冲吸引注意，首次打开面板后停止（见 qaFloatToggle / 初始化） */
@@ -250,7 +250,7 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-fab .qa-fab-ico{font-size:18px;line-height:1;display:inline-block}
 .qa-fab .qa-fab-txt{display:inline-block}
 .qa-fab.on{background:linear-gradient(135deg,#334155,#475569)}
-.qa-float{position:fixed;left:16px;bottom:78px;z-index:100001;width:min(440px,calc(100vw - 32px));height:min(560px,calc(100vh - 110px));min-width:300px;min-height:260px;background:#fff;border:1px solid #d7deea;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;visibility:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;contain:layout paint}
+.qa-float{position:fixed;left:16px;bottom:78px;z-index:100001;width:min(440px,calc(100vw - 32px));height:min(560px,calc(100vh - 110px));min-width:300px;min-height:260px;background:#fff;border:1px solid #d7deea;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;visibility:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;contain:layout paint;touch-action:none}
 .qa-float.open{opacity:1;pointer-events:auto;visibility:visible}
 .qa-resize-handle{position:absolute;z-index:1;background:transparent;transition:background .15s}
 .qa-resize-handle:hover{background:rgba(79,70,229,.22)}
@@ -270,7 +270,7 @@ body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 .qa-float-head .qa-head-actions{display:flex;align-items:center;gap:6px}
 .qa-float-head .qa-head-action{background:rgba(255,255,255,.15);border:none;border-radius:6px;color:#fff;font-size:11px;padding:4px 8px;cursor:pointer}
 .qa-float-head .qa-head-action:hover{background:rgba(255,255,255,.3)}
-.qa-float-body{flex:1;overflow-y:auto;padding:12px;background:#f7f9fb}
+.qa-float-body{flex:1;overflow-y:auto;padding:12px;background:#f7f9fb;touch-action:pan-y;-webkit-overflow-scrolling:touch}
 .qa-msg{margin-bottom:12px;max-width:100%}
 .qa-msg.user{margin-left:auto;max-width:85%}
 .qa-msg-bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.75;word-break:break-word;user-select:text;-webkit-user-select:text;-moz-user-select:text}
@@ -566,6 +566,13 @@ body.dark .qa-airefs a{color:#6ab4e0}
   .theme-toggle{height:38px;border-radius:19px;padding:3px;font-size:15px}
   .theme-option{width:32px;height:32px}
   .pwa-header-btn{height:38px;padding:0 16px;font-size:14px;border-radius:19px}
+  /* 缩放柄在手机上只有 6px，手指抓不住：上/左/右边与顶角的加宽，底边两个仍保持原样
+     （底部被 .qa-float-foot 覆盖，柄 z-index 低于按钮，放大也不会误伤底部按钮点击） */
+  .qa-resize-n{height:12px}
+  .qa-resize-e,.qa-resize-w{width:12px}
+  .qa-resize-ne,.qa-resize-nw{width:18px;height:18px}
+  /* 悬浮球最小触摸目标 44px */
+  .qa-fab{min-height:44px}
 }
 /* 桌面端关闭按钮也稍作放大，兼顾触控笔记本 */
 @media (min-width:601px){
@@ -2458,28 +2465,42 @@ function qaFloatClose(){
 // 点击/拖动区分：短距离移动视为点击，否则视为拖动并阻止打开面板
 var QA_FAB_MOVED=false;
 var QA_FAB_DRAG=null;
+var QA_FAB_TOUCH_DONE=false;   // 触摸链路已自行处理点击，避免浏览器补发的 click 重复触发
+// 2026-09-06 移动端修复要点：
+//   触摸时绝不能在 touchstart 调 preventDefault()，否则浏览器不再合成 click，
+//   内联 onclick 永远不执行 —— 表现为"手机上悬浮球点不动，电脑上正常"。
+//   正确做法：touchstart 只记录起点；touchmove 判定真的移动了才 preventDefault 阻止页面滚动；
+//   touchend 若未发生移动则直接手动触发开合，不依赖浏览器补发 click。
 function qaFabClick(ev){
+  if(QA_FAB_TOUCH_DONE){QA_FAB_TOUCH_DONE=false;if(ev&&ev.preventDefault)ev.preventDefault();return false;}
   if(QA_FAB_MOVED){if(ev&&ev.preventDefault)ev.preventDefault();if(ev&&ev.stopPropagation)ev.stopPropagation();return false;}
   qaFloatToggle();
 }
+function qaFabIsTouch(ev){return !!ev&&typeof ev.type==='string'&&ev.type.indexOf('touch')===0;}
 function qaFabStartDrag(ev){
   var b=document.getElementById('qaFab');if(!b)return;
-  if(ev.type==='touchstart'&&ev.touches.length!==1)return;
-  var point=ev.touches?ev.touches[0]:ev;
+  var isTouch=qaFabIsTouch(ev);
+  if(isTouch&&ev.touches.length!==1)return;
+  var point=isTouch?ev.touches[0]:ev;
   var r=b.getBoundingClientRect();
   QA_FAB_DRAG={el:b,startX:point.clientX,startY:point.clientY,origLeft:r.left,origBottom:window.innerHeight-r.bottom};
   QA_FAB_MOVED=false;
   b.classList.add('dragging');
-  document.addEventListener('mousemove',qaFabDrag);document.addEventListener('mouseup',qaFabStopDrag);
-  document.addEventListener('touchmove',qaFabDrag,{passive:false});document.addEventListener('touchend',qaFabStopDrag);
-  ev.preventDefault();
+  if(isTouch){
+    document.addEventListener('touchmove',qaFabDrag,{passive:false});
+    document.addEventListener('touchend',qaFabStopDrag,{passive:false});
+    document.addEventListener('touchcancel',qaFabStopDrag,{passive:false});
+  }else{
+    document.addEventListener('mousemove',qaFabDrag);document.addEventListener('mouseup',qaFabStopDrag);
+    ev.preventDefault();   // 仅桌面：阻止拖拽时选中文本
+  }
 }
 function qaFabDrag(ev){
   if(!QA_FAB_DRAG)return;
-  if(ev.cancelable)ev.preventDefault();
   var point=ev.touches?ev.touches[0]:ev;
   var dx=point.clientX-QA_FAB_DRAG.startX, dy=point.clientY-QA_FAB_DRAG.startY;
-  if(Math.abs(dx)<4&&Math.abs(dy)<4)return;
+  if(Math.abs(dx)<4&&Math.abs(dy)<4)return;   // 手指轻微抖动不算拖动
+  if(ev.cancelable)ev.preventDefault();       // 确认是拖动后才阻止页面滚动
   QA_FAB_MOVED=true;
   var b=QA_FAB_DRAG.el, vw=window.innerWidth, vh=window.innerHeight, bw=b.offsetWidth||160, bh=b.offsetHeight||50;
   var left=Math.min(Math.max(QA_FAB_DRAG.origLeft+dx,0),Math.max(vw-bw,0));
@@ -2489,11 +2510,22 @@ function qaFabDrag(ev){
 function qaFabStopDrag(ev){
   if(!QA_FAB_DRAG)return;
   var b=QA_FAB_DRAG.el;
+  var wasTouch=qaFabIsTouch(ev);
   document.removeEventListener('mousemove',qaFabDrag);document.removeEventListener('mouseup',qaFabStopDrag);
-  document.removeEventListener('touchmove',qaFabDrag,{passive:false});document.removeEventListener('touchend',qaFabStopDrag);
+  document.removeEventListener('touchmove',qaFabDrag,{passive:false});
+  document.removeEventListener('touchend',qaFabStopDrag,{passive:false});
+  document.removeEventListener('touchcancel',qaFabStopDrag,{passive:false});
   if(b)b.classList.remove('dragging');
   qaFabSavePos();
   QA_FAB_DRAG=null;
+  if(wasTouch&&!QA_FAB_MOVED){
+    // 移动端：直接开合，不再等浏览器补发 click（补发了也会被标记拦掉）
+    QA_FAB_TOUCH_DONE=true;
+    setTimeout(function(){QA_FAB_TOUCH_DONE=false;},600);
+    if(ev&&ev.cancelable)ev.preventDefault();
+    qaFloatToggle();
+    return;
+  }
   // 300ms 后复位移动标记，避免后续 click 被误拦截
   setTimeout(function(){QA_FAB_MOVED=false;},300);
 }
@@ -2530,19 +2562,26 @@ function qaFloatStartDrag(ev){
   // 预留右下角 18px 给原生 resize 缩放柄
   var r=p.getBoundingClientRect(), ex=ev.clientX-r.left, ey=ev.clientY-r.top;
   if(ex>=r.width-18 && ey>=r.height-18)return;
-  if(ev.type==='touchstart'&&ev.touches.length!==1)return;
-  var point=ev.touches?ev.touches[0]:ev;
+  var isTouch=!!ev.type&&ev.type.indexOf('touch')===0;
+  if(isTouch&&ev.touches.length!==1)return;
+  var point=isTouch?ev.touches[0]:ev;
   QA_DRAGGING={el:p,startX:point.clientX,startY:point.clientY,origLeft:r.left,origTop:r.top};
   p.style.position='fixed'; p.style.bottom='auto'; p.style.cursor='grabbing';
-  document.addEventListener('mousemove',qaFloatDrag); document.addEventListener('mouseup',qaFloatStopDrag);
-  document.addEventListener('touchmove',qaFloatDrag,{passive:false}); document.addEventListener('touchend',qaFloatStopDrag);
-  ev.preventDefault();
+  if(isTouch){
+    document.addEventListener('touchmove',qaFloatDrag,{passive:false});
+    document.addEventListener('touchend',qaFloatStopDrag,{passive:false});
+    document.addEventListener('touchcancel',qaFloatStopDrag,{passive:false});
+  }else{
+    document.addEventListener('mousemove',qaFloatDrag); document.addEventListener('mouseup',qaFloatStopDrag);
+    ev.preventDefault();   // 仅桌面：阻止拖拽时选中文本
+  }
 }
 function qaFloatDrag(ev){
   if(!QA_DRAGGING)return;
-  if(ev.cancelable)ev.preventDefault();
   var point=ev.touches?ev.touches[0]:ev;
   var dx=point.clientX-QA_DRAGGING.startX, dy=point.clientY-QA_DRAGGING.startY;
+  if(Math.abs(dx)<4&&Math.abs(dy)<4)return;
+  if(ev.cancelable)ev.preventDefault();
   var el=QA_DRAGGING.el, w=el.offsetWidth||440, h=el.offsetHeight||560;
   var vw=window.innerWidth, vh=window.innerHeight;
   var left=Math.min(Math.max(QA_DRAGGING.origLeft+dx,0),Math.max(vw-w,0));
@@ -2552,7 +2591,9 @@ function qaFloatDrag(ev){
 function qaFloatStopDrag(ev){
   if(!QA_DRAGGING)return;
   document.removeEventListener('mousemove',qaFloatDrag); document.removeEventListener('mouseup',qaFloatStopDrag);
-  document.removeEventListener('touchmove',qaFloatDrag,{passive:false}); document.removeEventListener('touchend',qaFloatStopDrag);
+  document.removeEventListener('touchmove',qaFloatDrag,{passive:false});
+  document.removeEventListener('touchend',qaFloatStopDrag,{passive:false});
+  document.removeEventListener('touchcancel',qaFloatStopDrag,{passive:false});
   var p=QA_DRAGGING.el; if(p)p.style.cursor='';
   qaFloatSavePos(); QA_DRAGGING=null;
 }
@@ -2571,6 +2612,14 @@ function qaFloatRestorePos(){
     var left=Math.min(Math.max(pos.left,0),Math.max(vw-w,0));
     var top=Math.min(Math.max(pos.top,0),Math.max(vh-h,0));
     p.style.position='fixed'; p.style.left=left+'px'; p.style.top=top+'px'; p.style.bottom='auto';
+  }catch(e){}
+}
+// 2026-09-06 补：qaFloatStopResize() 一直在调用此函数，但此前从未定义，
+// 每次缩放结束都会抛 ReferenceError（缩放本身靠 ResizeObserver 兜底才没丢尺寸）
+function qaFloatSaveSize(){
+  try{
+    var p=document.getElementById('qaFloat'); if(!p)return;
+    if(window.localStorage)localStorage.setItem('qaFloatSize',JSON.stringify({width:p.offsetWidth,height:p.offsetHeight}));
   }catch(e){}
 }
 function qaFloatObserveSize(){
@@ -2602,15 +2651,26 @@ function qaFloatStartResize(ev){
   if(ev.target.closest && ev.target.closest('input,select,button,a,textarea,[contenteditable]'))return;
   var h=ev.target.closest && ev.target.closest('.qa-resize-handle'); if(!h)return;
   var p=document.getElementById('qaFloat'); if(!p)return;
+  var isTouch=!!ev.type&&ev.type.indexOf('touch')===0;
+  if(isTouch&&ev.touches.length!==1)return;
+  var pt=isTouch?ev.touches[0]:ev;
   var dir=h.dataset.dir||'se';
   var r=p.getBoundingClientRect();
-  QA_RESIZING={el:p,dir:dir,startX:ev.clientX,startY:ev.clientY,startW:r.width,startH:r.height,startL:r.left,startT:r.top,minW:300,minH:260};
-  document.addEventListener('mousemove',qaFloatResize); document.addEventListener('mouseup',qaFloatStopResize);
-  ev.preventDefault(); ev.stopPropagation();
+  QA_RESIZING={el:p,dir:dir,startX:pt.clientX,startY:pt.clientY,startW:r.width,startH:r.height,startL:r.left,startT:r.top,minW:300,minH:260};
+  if(isTouch){
+    document.addEventListener('touchmove',qaFloatResize,{passive:false});
+    document.addEventListener('touchend',qaFloatStopResize,{passive:false});
+    document.addEventListener('touchcancel',qaFloatStopResize,{passive:false});
+  }else{
+    document.addEventListener('mousemove',qaFloatResize); document.addEventListener('mouseup',qaFloatStopResize);
+  }
+  if(ev.cancelable)ev.preventDefault();
+  ev.stopPropagation();   // 缩放优先，别让面板拖拽抢走
 }
 function qaFloatResize(ev){
   if(!QA_RESIZING)return;
-  var o=QA_RESIZING, p=o.el, dx=ev.clientX-o.startX, dy=ev.clientY-o.startY;
+  var pt=ev.touches?ev.touches[0]:ev;
+  var o=QA_RESIZING, p=o.el, dx=pt.clientX-o.startX, dy=pt.clientY-o.startY;
   var vw=window.innerWidth, vh=window.innerHeight;
   var w=o.startW, h=o.startH, l=o.startL, t=o.startT;
   if(o.dir.indexOf('e')>=0){w=Math.min(Math.max(o.startW+dx,o.minW),vw-l-8);}
@@ -2618,11 +2678,14 @@ function qaFloatResize(ev){
   if(o.dir.indexOf('w')>=0){var newW=Math.min(Math.max(o.startW-dx,o.minW),vw-16); l=Math.min(Math.max(o.startL+o.startW-newW,0),o.startL+o.startW-o.minW); w=newW;}
   if(o.dir.indexOf('n')>=0){var newH=Math.min(Math.max(o.startH-dy,o.minH),vh-16); t=Math.min(Math.max(o.startT+o.startH-newH,0),o.startT+o.startH-o.minH); h=newH;}
   p.style.width=w+'px'; p.style.height=h+'px'; p.style.left=l+'px'; p.style.top=t+'px'; p.style.bottom='auto';
-  ev.preventDefault();
+  if(ev.cancelable)ev.preventDefault();
 }
 function qaFloatStopResize(ev){
   if(!QA_RESIZING)return;
   document.removeEventListener('mousemove',qaFloatResize); document.removeEventListener('mouseup',qaFloatStopResize);
+  document.removeEventListener('touchmove',qaFloatResize,{passive:false});
+  document.removeEventListener('touchend',qaFloatStopResize,{passive:false});
+  document.removeEventListener('touchcancel',qaFloatStopResize,{passive:false});
   QA_RESIZING=null; qaFloatSavePos(); qaFloatSaveSize();
 }
 function qaFloatScroll(){
@@ -3147,6 +3210,8 @@ function toggleTheme(){
     // 缩放把手优先；拖拽把手=整个面板除交互元素/缩放柄
     _panel.addEventListener('mousedown',qaFloatStartResize);
     _panel.addEventListener('mousedown',qaFloatStartDrag);
+    // 移动端：缩放柄也要能拖（此前只绑了 mousedown，手机上完全无法改变面板大小）
+    _panel.addEventListener('touchstart',qaFloatStartResize,{passive:false});
     _panel.addEventListener('touchstart',qaFloatStartDrag,{passive:false});
   }
   qaFloatObserveSize();
