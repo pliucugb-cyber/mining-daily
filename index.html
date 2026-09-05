@@ -2223,46 +2223,8 @@ function getDsKey(){
   qaInitData();
   renderDigest();
   setupCardOpen();   // 整张卡片点击打开原文（标题/按钮仍各自处理）
-  // 悬浮球筛选：矿种 / 主题 / 时间变化即触发检索（实时）
-  ['qaFloatMineral','qaFloatTopic'].forEach(function(id){
-    var e=document.getElementById(id);if(e)e.addEventListener('change',qaFloatSearch);
-  });
-  var rg=document.getElementById('qaFloatRange');if(rg)rg.addEventListener('change',qaFloatSearch);
-  var tb=document.getElementById('qaFloatTrend');
-  if(tb)tb.addEventListener('click',function(){QA_TREND=!QA_TREND;tb.classList.toggle('on',QA_TREND);tb.setAttribute('aria-pressed',QA_TREND?'true':'false');qaFloatSearch();});
-  var rs=document.getElementById('qaFloatReset');if(rs)rs.addEventListener('click',qaFloatReset);
   qaAiProbe();
   renderLmePrices();
-  // 首次进入：未打开过悬浮球且未启用“减少动态效果”时，播放呼吸提示吸引注意
-  try{
-    var _reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var _seen=window.localStorage&&localStorage.getItem('qaFabSeen');
-    if(!_seen&&!_reduce){
-      var _fb=document.getElementById('qaFab');
-      if(_fb){
-        _fb.classList.add('breathe');
-        setTimeout(function(){if(_fb.classList.contains('breathe'))qaStopBreathe();},9000);
-      }
-    }
-  }catch(e){}
-  // 恢复用户上次拖拽位置与尺寸，并给头部挂上拖拽监听
-  try{qaFloatRestoreSize();qaFloatRestorePos();}catch(e){}
-  // 恢复悬浮球按钮位置并挂载拖动
-  try{qaFabRestorePos();}catch(e){}
-  var _fab=document.getElementById('qaFab');
-  if(_fab){
-    _fab.addEventListener('mousedown',qaFabStartDrag);
-    _fab.addEventListener('touchstart',qaFabStartDrag,{passive:false});
-  }
-  var _panel=document.getElementById('qaFloat');
-  if(_panel){
-    qaFloatAddResizeHandles();
-    // 缩放把手优先；拖拽把手=整个面板除交互元素/缩放柄
-    _panel.addEventListener('mousedown',qaFloatStartResize);
-    _panel.addEventListener('mousedown',qaFloatStartDrag);
-    _panel.addEventListener('touchstart',qaFloatStartDrag,{passive:false});
-  }
-  qaFloatObserveSize();
 })();
 // ===== LME 6 大基本金属价格（2026-09-02 新增，数据源 lme-data.js，由 fetch_lme.py 每日更新）=====
 // 设计：lme-data.js 加载失败或数据缺失时显示"暂不可用"，不影响 SHFE 主行
@@ -3058,32 +3020,6 @@ function qaFloatReset(){
   QA_TREND=false;
   var tb=document.getElementById('qaFloatTrend');if(tb){tb.classList.remove('on');tb.setAttribute('aria-pressed','false');}
 }
-(function(){
-  var fb=document.getElementById('qaFloatBody');
-  if(fb){
-    if(fb.children.length)fb.innerHTML='';
-    qaLoadHistory();
-    if(!fb.children.length){
-      qaFloatAdd('ai','全库 '+QA_ROWS.length+' 条新闻可检索。输入关键词，或先选矿种 / 主题 / 时间再点「检索」。','本地检索 · 零依赖',{md:false});
-    }
-  }
-  var inp=document.getElementById('qaFloatInput');
-  if(inp){
-    inp.addEventListener('keydown',function(e){
-      if(e.key==='Enter'){e.preventDefault();qaFloatSearch();}
-      if(e.key==='Escape')qaFloatClose();
-    });
-  }
-  var sb=document.getElementById('qaFloatSearch');if(sb)sb.addEventListener('click',qaFloatSearch);
-  var ab=document.getElementById('qaFloatAi');if(ab)ab.addEventListener('click',qaFloatAsk);
-  document.addEventListener('keydown',function(e){
-    // 2026-09-05 修复：原写法在问答面板未打开时直接 return，
-    // 导致"只开价格走势弹层"时按 ESC 完全没反应（只能点遮罩或 ✕）
-    if(e.key!=='Escape')return;
-    pcChartClose();
-    qaFloatClose();
-  });
-})();
 
 /* ===== 主题切换（2026-09-05 新增）=====
    手动切换后写入 localStorage，之后不再跟随系统；
@@ -3172,5 +3108,75 @@ function toggleTheme(){
   </div>
   <div class="qa-float-tip">💡 问答历史仅存在本机浏览器，换设备 / 清缓存会丢失；长期留存请点「📤 导出」</div>
 </div>
+<script>
+// 问答浮窗 DOM 就绪后统一初始化（必须放在 #qaFab/#qaFloat HTML 之后）
+(function(){
+  // 筛选器：矿种 / 主题 / 时间变化即触发检索
+  ['qaFloatMineral','qaFloatTopic'].forEach(function(id){
+    var e=document.getElementById(id);if(e)e.addEventListener('change',qaFloatSearch);
+  });
+  var rg=document.getElementById('qaFloatRange');if(rg)rg.addEventListener('change',qaFloatSearch);
+  var tb=document.getElementById('qaFloatTrend');
+  if(tb)tb.addEventListener('click',function(){QA_TREND=!QA_TREND;tb.classList.toggle('on',QA_TREND);tb.setAttribute('aria-pressed',QA_TREND?'true':'false');qaFloatSearch();});
+  var rs=document.getElementById('qaFloatReset');if(rs)rs.addEventListener('click',qaFloatReset);
+
+  // 首次进入呼吸提示
+  try{
+    var _reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var _seen=window.localStorage&&localStorage.getItem('qaFabSeen');
+    if(!_seen&&!_reduce){
+      var _fb=document.getElementById('qaFab');
+      if(_fb){
+        _fb.classList.add('breathe');
+        setTimeout(function(){if(_fb.classList.contains('breathe'))qaStopBreathe();},9000);
+      }
+    }
+  }catch(e){}
+
+  // 恢复上次位置与尺寸，并挂载拖拽
+  try{qaFloatRestoreSize();qaFloatRestorePos();}catch(e){}
+  try{qaFabRestorePos();}catch(e){}
+  var _fab=document.getElementById('qaFab');
+  if(_fab){
+    _fab.addEventListener('mousedown',qaFabStartDrag);
+    _fab.addEventListener('touchstart',qaFabStartDrag,{passive:false});
+  }
+  var _panel=document.getElementById('qaFloat');
+  if(_panel){
+    qaFloatAddResizeHandles();
+    // 缩放把手优先；拖拽把手=整个面板除交互元素/缩放柄
+    _panel.addEventListener('mousedown',qaFloatStartResize);
+    _panel.addEventListener('mousedown',qaFloatStartDrag);
+    _panel.addEventListener('touchstart',qaFloatStartDrag,{passive:false});
+  }
+  qaFloatObserveSize();
+
+  // 初始化会话：加载历史或显示引导
+  var fb=document.getElementById('qaFloatBody');
+  if(fb){
+    if(fb.children.length)fb.innerHTML='';
+    qaLoadHistory();
+    if(!fb.children.length){
+      qaFloatAdd('ai','全库 '+QA_ROWS.length+' 条新闻可检索。输入关键词，或先选矿种 / 主题 / 时间再点「检索」。','本地检索 · 零依赖',{md:false});
+    }
+  }
+
+  // 输入框快捷键与按钮事件
+  var inp=document.getElementById('qaFloatInput');
+  if(inp){
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){e.preventDefault();qaFloatSearch();}
+      if(e.key==='Escape')qaFloatClose();
+    });
+  }
+  var sb=document.getElementById('qaFloatSearch');if(sb)sb.addEventListener('click',qaFloatSearch);
+  var ab=document.getElementById('qaFloatAi');if(ab)ab.addEventListener('click',qaFloatAsk);
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Escape')return;
+    pcChartClose();
+    qaFloatClose();
+  });
+})();
+</script>
 </body>
 </html>
