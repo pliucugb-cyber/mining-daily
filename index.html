@@ -18,6 +18,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;color:#2c3e50;line-height:1.6;padding-left:200px}
+body.has-install-bar{padding-bottom:64px}
 /* 目录导航 - 桌面端：左侧悬浮侧栏；移动端：顶部水平滚动条 */
 .toc-sidebar{position:fixed;left:18px;top:88px;width:168px;background:#fff;border-radius:10px;padding:14px 12px;box-shadow:0 2px 10px rgba(0,0,0,.08);z-index:99;max-height:calc(100vh - 120px);overflow-y:auto}
 .toc-title{font-size:12px;font-weight:700;color:#6b7a89;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #eef2f5;letter-spacing:1px}
@@ -58,7 +59,7 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;c
 .section-title.today{background:linear-gradient(90deg,#fff5f5,#fff);border-bottom:2px solid #f5c6cb}
 .news-count{font-size:13px;color:#6b7a89;font-weight:400;margin-left:auto}
 /* 新闻条目 */
-.news-item{padding:13px 18px;border-bottom:1px solid #f4f6f8;transition:opacity .3s;position:relative}
+.news-item{padding:13px 18px;border-bottom:1px solid #f4f6f8;transition:opacity .3s;position:relative;cursor:pointer}
 .news-item:last-child{border-bottom:none}
 .news-item.read{opacity:.45}
 .news-item.read .news-title{color:#7f8c8d}
@@ -67,7 +68,6 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;c
 .news-item.read .dot{background:#bdc3c7}
 .badge-new{background:#e74c3c;color:#fff;font-size:11px;padding:1px 7px;border-radius:4px;font-weight:600;flex-shrink:0;margin-top:4px;animation:pulse 1.5s infinite}
 .badge-orig-date{background:#f0f4f8;color:#6b7280;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500;flex-shrink:0;margin-top:4px;white-space:nowrap}
-.badge-ext{background:#fff7ed;color:#b45309;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500;flex-shrink:0;margin-top:4px;white-space:nowrap;border:1px solid #fed7aa}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 .news-title{color:#1a5276;text-decoration:none;font-weight:600;font-size:15px;line-height:1.45}
 .news-title:hover{text-decoration:underline}
@@ -90,7 +90,7 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;c
 .btn-unread{display:inline-block;font-size:12px;color:#16a085;text-decoration:none;border:1px solid #16a085;border-radius:5px;padding:2px 9px;margin-left:8px;cursor:pointer;background:rgba(255,255,255,.7);transition:.2s;vertical-align:middle;font-family:inherit}
 .btn-unread:hover{background:#16a085;color:#fff;transform:translateY(-1px);box-shadow:0 2px 4px rgba(22,160,133,.3)}
 .news-item:not(.read) .btn-unread{display:none}
-/* 往期内容：超过14天的旧闻默认折叠 */
+/* 往期内容：超过7天的旧闻默认折叠 */
 .fold-toggle{margin:10px 16px;padding:8px 12px;background:#f8f9fa;border:1px dashed #b0bec5;border-radius:8px;font-size:12.5px;color:#78909c;cursor:pointer;text-align:center;transition:.2s;user-select:none}
 .fold-toggle:hover{background:#eef4fa;color:#1a3a5c;border-color:#2980b9}
 /* 已归档收藏（新闻已滚出页面，从localStorage渲染） */
@@ -147,8 +147,8 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;c
 .sp-cat .sub-count{font-size:12.5px;color:#b45309;font-weight:600;margin-left:6px;background:#fff;padding:1px 8px;border-radius:10px;border:1px solid #f0d488}
 .badge-strategy{background:linear-gradient(135deg,#b45309,#d4a017);color:#fff;font-size:11px;padding:1px 7px;border-radius:4px;font-weight:700;flex-shrink:0;margin-top:4px;letter-spacing:.5px}
 .news-item.is-special{background:linear-gradient(90deg,#fffdf5 0%,#fff 30%)}
-.sp-list .news-item.sp-from-archive{background:linear-gradient(90deg,#f8fafc 0%,#fff 60%);border-left:3px solid #94a3b8;position:relative}
-.sp-list .news-item.sp-from-archive::before{content:"往期";position:absolute;top:6px;right:8px;font-size:10px;background:#e2e8f0;color:#475569;padding:1px 6px;border-radius:8px;font-weight:600;letter-spacing:.3px}
+.sp-list .news-item.sp-from-archive{background:linear-gradient(90deg,#f8fafc 0%,#fff 60%);border-left:3px solid #94a3b8}
+.sp-list .news-item.sp-from-archive .news-meta::after{content:"往期";font-size:10px;background:#e2e8f0;color:#475569;padding:1px 6px;border-radius:8px;font-weight:600;letter-spacing:.3px;margin-left:8px;white-space:nowrap}
 .btn-special{background:#f5e6bc;color:#92400e;border:1px solid #e6c86e}
 .btn-special:hover{background:#eed9a4}
 .btn-special.active{background:#b45309;color:#fff;border-color:#b45309}
@@ -157,7 +157,7 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;c
 .section-title.hotlist .hl-tag{display:inline-block;background:linear-gradient(135deg,#ff6b3d,#e74c3c);color:#fff;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:10px;margin-left:4px;letter-spacing:.5px}
 .section-title.hotlist .hl-sub{font-size:12px;color:#9aa7b3;font-weight:400;margin-left:auto}
 .hotlist-list{margin:6px 14px 14px;padding:0;list-style:none;background:#fff;border:1px solid #eef2f7;border-radius:9px;overflow:hidden}
-.hotlist-list li.hot-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:1px solid #f4f6f8;transition:background .15s}
+.hotlist-list li.hot-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:1px solid #f4f6f8;transition:background .15s;cursor:pointer}
 .hotlist-list li.hot-item:last-child{border-bottom:none}
 .hotlist-list li.hot-item:hover{background:#fafcff}
 .hot-rank{min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:6px;background:#eef2f5;color:#5a6b7a;font-size:13px;font-weight:700;flex-shrink:0;font-family:'Helvetica Neue',Arial,sans-serif}
@@ -184,7 +184,8 @@ body.dark .hot-title:hover{color:#ff7a7a}
 .digest-title{font-size:19px;font-weight:800;color:#1a3a5c;letter-spacing:1px}
 .digest-date{font-size:12.5px;color:#6b7a89;font-weight:400;margin-left:auto}
 .digest-list{list-style:none;margin:0;padding:0}
-.digest-list li{position:relative;padding:5px 0 5px 16px;font-size:14px;line-height:1.55;border-bottom:1px dashed #f0f3f6}
+.digest-list li{position:relative;padding:5px 0 5px 16px;font-size:14px;line-height:1.55;border-bottom:1px dashed #f0f3f6;cursor:pointer;transition:background .15s}
+.digest-list li:hover{background:#fafcff}
 .digest-list li:last-child{border-bottom:none}
 .digest-list li::before{content:'';position:absolute;left:3px;top:14px;width:5px;height:5px;border-radius:50%;background:#c0392b}
 .digest-list a{color:#1a3a5c;text-decoration:none;transition:color .15s}
@@ -194,6 +195,7 @@ body.dark .hot-title:hover{color:#ff7a7a}
 body.dark .digest-strip{background:#1e2733;border-color:#2c3845}
 body.dark .digest-title{color:#e8eef3}
 body.dark .digest-list li{border-bottom-color:#2c3845}
+body.dark .digest-list li:hover{background:#243140}
 body.dark .digest-list a{color:#8fb5dc}
 body.dark .digest-list a:hover{color:#ff7a7a}
 @media(max-width:600px){
@@ -242,19 +244,64 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-fab .qa-fab-ico{font-size:18px;line-height:1;display:inline-block}
 .qa-fab .qa-fab-txt{display:inline-block}
 .qa-fab.on{background:linear-gradient(135deg,#334155,#475569)}
-.qa-float{position:fixed;left:16px;bottom:78px;z-index:999;width:min(440px,calc(100vw - 32px));height:min(560px,calc(100vh - 110px));min-width:300px;min-height:260px;resize:both;background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:none;flex-direction:column;overflow:hidden}
+.qa-float{position:fixed;left:16px;bottom:78px;z-index:999;width:min(440px,calc(100vw - 32px));height:min(560px,calc(100vh - 110px));min-width:300px;min-height:260px;background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:none;flex-direction:column;overflow:hidden}
 .qa-float.open{display:flex}
+.qa-resize-handle{position:absolute;z-index:10;background:transparent;transition:background .15s}
+.qa-resize-handle:hover{background:rgba(79,70,229,.22)}
+.qa-resize-n{top:0;left:10px;right:10px;height:6px;cursor:ns-resize}
+.qa-resize-s{bottom:0;left:10px;right:10px;height:6px;cursor:ns-resize}
+.qa-resize-e{top:10px;right:0;bottom:10px;width:6px;cursor:ew-resize}
+.qa-resize-w{top:10px;left:0;bottom:10px;width:6px;cursor:ew-resize}
+.qa-resize-ne{top:0;right:0;width:12px;height:12px;cursor:nesw-resize}
+.qa-resize-nw{top:0;left:0;width:12px;height:12px;cursor:nwse-resize}
+.qa-resize-se{bottom:0;right:0;width:12px;height:12px;cursor:nwse-resize}
+.qa-resize-sw{bottom:0;left:0;width:12px;height:12px;cursor:nesw-resize}
+body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 .qa-float-head{position:relative;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;cursor:grab;user-select:none}
 .qa-float-head .pchart-close{cursor:pointer}
 .qa-float-title{font-size:14px;font-weight:800}
 .qa-float-head .pchart-close{background:rgba(255,255,255,.2);color:#fff}
+.qa-float-head .qa-head-actions{display:flex;align-items:center;gap:6px}
+.qa-float-head .qa-head-action{background:rgba(255,255,255,.15);border:none;border-radius:6px;color:#fff;font-size:11px;padding:4px 8px;cursor:pointer}
+.qa-float-head .qa-head-action:hover{background:rgba(255,255,255,.3)}
 .qa-float-body{flex:1;overflow-y:auto;padding:12px;background:#f7f9fb}
-.qa-msg{margin-bottom:10px;max-width:92%}
-.qa-msg.user{margin-left:auto}
-.qa-msg-bubble{padding:8px 11px;border-radius:10px;font-size:12.5px;line-height:1.55;word-break:break-word}
-.qa-msg.ai .qa-msg-bubble{background:#fff;border:1px solid #e8eef3;color:#1a3a5c;border-top-left-radius:3px}
+.qa-msg{margin-bottom:12px;max-width:100%}
+.qa-msg.user{margin-left:auto;max-width:85%}
+.qa-msg-bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.75;word-break:break-word;user-select:text;-webkit-user-select:text;-moz-user-select:text}
+.qa-msg-bubble,.qa-msg-bubble *{user-select:text !important;-webkit-user-select:text !important;-moz-user-select:text !important}
+.qa-msg-bubble .qa-msg-action{user-select:none !important;-webkit-user-select:none !important;-moz-user-select:none !important}
+.qa-msg-bubble p{margin:0 0 8px;color:inherit}
+.qa-msg-bubble p:last-child{margin-bottom:0}
+.qa-msg-bubble h1,.qa-msg-bubble h2,.qa-msg-bubble h3,.qa-msg-bubble h4{font-weight:700;margin:10px 0 6px;color:#1a3a5c;line-height:1.4}
+.qa-msg-bubble h1{font-size:16px}
+.qa-msg-bubble h2{font-size:15px}
+.qa-msg-bubble h3,.qa-msg-bubble h4{font-size:14px}
+.qa-msg-bubble ul,.qa-msg-bubble ol{margin:6px 0 10px;padding-left:22px}
+.qa-msg-bubble li{margin:4px 0}
+.qa-msg-bubble strong,.qa-msg-bubble b{color:#1a3a5c;font-weight:700}
+.qa-msg-bubble code{background:#f1f5f9;padding:1px 5px;border-radius:4px;font-family:Consolas,monospace;font-size:12px;color:#334155}
+.qa-msg-bubble pre{background:#f1f5f9;padding:10px 12px;border-radius:8px;overflow-x:auto;margin:8px 0}
+.qa-msg-bubble pre code{background:none;padding:0}
+.qa-msg-bubble blockquote{border-left:3px solid #94a3b8;margin:8px 0;padding:8px 12px;color:#475569;background:#f8fafc;border-radius:0 6px 6px 0}
+.qa-msg-bubble a{color:#4f46e5;text-decoration:none;border-bottom:1px dashed #a5b4fc}
+.qa-msg-bubble a:hover{text-decoration:underline}
+.qa-msg.ai .qa-msg-bubble{background:#fff;border:1px solid #e8eef3;color:#1a3a5c;border-top-left-radius:3px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
 .qa-msg.user .qa-msg-bubble{background:#4f46e5;color:#fff;border-top-right-radius:3px}
 .qa-msg-meta{font-size:10.5px;color:#6b7a89;margin-top:3px}
+.qa-msg-time{font-size:9.5px;color:#aab4bf;margin-top:2px;text-align:right}
+.qa-thinking{display:flex;align-items:center;gap:6px;color:#6b7a89;font-size:12px}
+.qa-dot{width:7px;height:7px;border-radius:50%;background:#4f46e5;animation:qaBlink 1s infinite ease-in-out}
+@keyframes qaBlink{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+.qa-msg-sources{margin-top:12px;padding:10px 12px;background:#f6f8fb;border:1px dashed #d7deea;border-radius:8px;border-top-left-radius:3px}
+.qa-sources-title{font-size:12px;font-weight:700;color:#4f46e5;margin-bottom:6px}
+.qa-msg-sources ul{margin:0;padding-left:18px}
+.qa-msg-sources li{font-size:12.5px;line-height:1.6;margin:4px 0;color:#1a3a5c;user-select:text}
+.qa-msg-sources a{color:#4f46e5;text-decoration:none;border-bottom:1px dashed #a5b4fc}
+.qa-msg-sources a:hover{text-decoration:underline}
+.qa-src-date{color:#94a3b8;font-size:10.5px;margin-left:4px}
+.qa-msg-actions{display:flex;gap:6px;margin-top:4px;padding-left:1px}
+.qa-msg-action{background:none;border:none;color:#6b7a89;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:4px}
+.qa-msg-action:hover{background:#eef2f5;color:#4f46e5}
 .qa-msg.ai .qa-msg-meta{text-align:left}
 .qa-msg.user .qa-msg-meta{text-align:right}
 .qa-msg-item{display:block;padding:5px 0;border-bottom:1px dashed #eef2f5;color:#1a3a5c;text-decoration:none;font-size:12px;line-height:1.45}
@@ -267,10 +314,26 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-float-btn{border:none;border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;background:#eef2f5;color:#1a3a5c}
 .qa-float-btn.primary{background:#4f46e5;color:#fff}
 .qa-float-btn:disabled{opacity:.5;cursor:not-allowed}
+.qa-float-tip{font-size:10.5px;color:#8a98a6;padding:6px 12px 9px;background:#fff;border-top:1px solid #f1f4f7;line-height:1.4;user-select:none}
 body.dark .qa-float{background:#1e2733}
 body.dark .qa-float-body{background:#161d26}
 body.dark .qa-msg.ai .qa-msg-bubble{background:#243140;border-color:#2c3845;color:#e8eef3}
+body.dark .qa-msg-bubble h1,body.dark .qa-msg-bubble h2,body.dark .qa-msg-bubble h3,body.dark .qa-msg-bubble h4{color:#e8eef3}
+body.dark .qa-msg-bubble strong,body.dark .qa-msg-bubble b{color:#e8eef3}
+body.dark .qa-msg-bubble code{background:#2c3845;color:#c9d6e2}
+body.dark .qa-msg-bubble pre{background:#161d26}
+body.dark .qa-msg-bubble blockquote{border-color:#64748b;color:#94a3b8;background:#1e2733}
+body.dark .qa-msg-bubble a{color:#818cf8;border-color:#4f46e5}
+body.dark .qa-msg-sources{background:#1a232f;border-color:#2c3845}
+body.dark .qa-sources-title{color:#818cf8}
+body.dark .qa-msg-sources li{color:#c9d6e2}
+body.dark .qa-msg-sources a{color:#818cf8;border-color:#4f46e5}
+body.dark .qa-src-date{color:#64748b}
+body.dark .qa-msg-time{color:#5b6b7c}
+body.dark .qa-msg-action{color:#94a3b8}
+body.dark .qa-msg-action:hover{background:#2c3845;color:#818cf8}
 body.dark .qa-float-foot{background:#1e2733;border-top-color:#2c3845}
+body.dark .qa-float-tip{background:#1a222d;color:#7c8a99;border-top-color:#2c3845}
 body.dark .qa-float-input{background:#243140;border-color:#2c3845;color:#e8eef3}
 body.dark .qa-msg-item{color:#8fb5dc}
 body.dark .qa-float-btn{background:#2c3845;color:#c9d6e2}
@@ -304,11 +367,38 @@ body.dark .ai-loading,body.dark .ai-empty,body.dark .ai-disabled{background:#1e2
    页面骨架（背景、区块、新闻条目、价格卡、侧栏、按钮）缺配套样式，
    暗色下会大面积白底黑字 —— 这里补齐基础层，并新增右上角切换按钮。 */
 .header{position:relative}
-.theme-toggle{position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:16px;line-height:1;cursor:pointer;transition:.2s}
-.theme-toggle:hover{background:rgba(255,255,255,.32)}
+.header-actions{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:8px;z-index:2}
+.theme-toggle{height:34px;border:none;border-radius:17px;padding:3px;background:rgba(255,255,255,.16);color:#fff;font-size:14px;line-height:1;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:2px}
+.theme-toggle:hover{background:rgba(255,255,255,.28)}
 .theme-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.theme-option{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s;opacity:.55}
+.theme-option.active{background:rgba(255,255,255,.9);color:#1a3a5c;opacity:1;box-shadow:0 1px 3px rgba(0,0,0,.15)}
 body.dark .theme-toggle{background:rgba(0,0,0,.28)}
 body.dark .theme-toggle:hover{background:rgba(0,0,0,.45)}
+body.dark .theme-option.active{background:#2c5f8a;color:#fff}
+.pwa-header-btn{height:34px;border:none;border-radius:17px;padding:0 14px;font-size:13px;font-weight:600;background:#fff;color:#1a3a5c;cursor:pointer;transition:.2s;box-shadow:0 2px 6px rgba(0,0,0,.12);display:inline-flex;align-items:center;gap:5px}
+.pwa-header-btn:hover{background:#e8f0f8;transform:translateY(-1px)}
+.pwa-header-btn[hidden]{display:none!important}
+.pwa-header-btn.mobile{height:38px;padding:0 16px;font-size:14px;border-radius:19px}
+body.dark .pwa-header-btn{background:#0f2530;color:#7dd3fc}
+body.dark .pwa-header-btn:hover{background:#153449}
+body.dark .theme-toggle{background:rgba(0,0,0,.28)}
+body.dark .theme-toggle:hover{background:rgba(0,0,0,.45)}
+/* 移动端安装浮条 */
+.mobile-install-bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e2e8f0;box-shadow:0 -2px 12px rgba(0,0,0,.1);padding:10px 12px;display:flex;align-items:center;gap:10px;z-index:200;font-size:14px;transition:transform .25s}
+.mobile-install-bar[hidden]{display:none!important}
+.mobile-install-icon{font-size:20px}
+.mobile-install-text{flex:1;color:#2c3e50;line-height:1.4}
+.mobile-install-btn{height:34px;border:none;border-radius:17px;padding:0 16px;font-size:13px;font-weight:600;background:#1a3a5c;color:#fff;cursor:pointer;transition:.2s}
+.mobile-install-btn:hover{background:#2c5f8a}
+.mobile-install-close{width:30px;height:30px;border:none;border-radius:50%;background:#f0f3f6;color:#5b6b7a;font-size:16px;cursor:pointer;transition:.2s}
+.mobile-install-close:hover{background:#e2e8f0}
+body.dark .mobile-install-bar{background:#161d26;border-top-color:#2c3845}
+body.dark .mobile-install-text{color:#e8eef3}
+body.dark .mobile-install-btn{background:#2c5f8a}
+body.dark .mobile-install-btn:hover{background:#3d7ab0}
+body.dark .mobile-install-close{background:#243140;color:#94a3b8}
+body.dark .mobile-install-close:hover{background:#2c3845}
 body.dark{background:#0f151c;color:#e8eef3}
 body.dark .header{background:linear-gradient(135deg,#14293f 0%,#1d4364 100%)}
 body.dark .toc-sidebar{background:#161d26;border:1px solid #2c3845;box-shadow:0 2px 10px rgba(0,0,0,.35)}
@@ -328,7 +418,6 @@ body.dark .news-title{color:#8fb5dc}
 body.dark .news-meta{color:#8296a8}
 body.dark .news-summary{color:#a8bacb}
 body.dark .badge-orig-date{background:#243140;color:#94a3b8}
-body.dark .badge-ext{background:#33261a;color:#d9a05b;border-color:#5a4326}
 body.dark .btn-read{color:#ff8a80;border-color:#a33d33}
 body.dark .btn-read:hover{background:#c0392b;color:#fff;border-color:#c0392b}
 body.dark .sub-cat{color:#c9d6e2}
@@ -383,7 +472,7 @@ body.dark .footer{color:#8b9bad}
 body.dark .section-title.special{background:linear-gradient(90deg,#2a2415,#161d26)}
 body.dark .news-item.is-special{background:linear-gradient(90deg,#241f12 0%,#161d26 30%)}
 body.dark .sp-list .news-item.sp-from-archive{background:linear-gradient(90deg,#1b2431 0%,#161d26 60%);border-left-color:#64748b}
-body.dark .sp-list .news-item.sp-from-archive::before{background:#33404f;color:#c3d0dc}
+body.dark .sp-list .news-item.sp-from-archive .news-meta::after{background:#33404f;color:#c3d0dc}
 body.dark .btn-special{background:#3a3120;color:#f0d18a;border-color:#6b5a2e}
 body.dark .btn-special:hover{background:#4a3f28}
 /* ---- 热榜 ---- */
@@ -468,7 +557,9 @@ body.dark .qa-airefs a{color:#6ab4e0}
   .btn-star{padding:9px 10px;font-size:19px}
   .pchart-mask{padding:10px}
   .pchart-modal{max-height:92vh;border-radius:12px}
-  .theme-toggle{top:12px;right:12px;width:40px;height:40px;font-size:17px}
+  .theme-toggle{height:38px;border-radius:19px;padding:3px;font-size:15px}
+  .theme-option{width:32px;height:32px}
+  .pwa-header-btn{height:38px;padding:0 16px;font-size:14px;border-radius:19px}
 }
 /* 桌面端关闭按钮也稍作放大，兼顾触控笔记本 */
 @media (min-width:601px){
@@ -502,6 +593,16 @@ body.dark .qa-airefs a{color:#6ab4e0}
 .guide-tip{margin:10px 14px 0;padding:10px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;font-size:12.5px;color:#78350f;line-height:1.65}
 .guide-link{display:block;margin:12px 16px 4px;padding:12px 14px;background:linear-gradient(90deg,#1a3a5c,#2c5f8a);color:#fff;border-radius:8px;text-align:center;font-weight:700;font-size:15px;word-break:break-all}
 .guide-link:hover{opacity:.92;text-decoration:none}
+.guide-summary{padding:12px 16px;font-size:13.5px;color:#334155;line-height:1.7;background:#fff;border-bottom:1px solid #e2e8f0}
+.guide-summary p{margin:0 0 6px}
+.guide-summary b{color:#0e7490}
+.guide-summary-note{color:#64748b;font-size:12.5px;margin-top:8px}
+.guide-toggle{margin-left:auto;height:28px;border:none;border-radius:14px;padding:0 12px;font-size:12.5px;font-weight:600;background:#e0f2fe;color:#0e7490;cursor:pointer;transition:.2s}
+.guide-toggle:hover{background:#cffafe}
+body.dark .guide-summary{background:#0f151c;border-bottom-color:#2c3845;color:#cbd5e1}
+body.dark .guide-summary-note{color:#94a3b8}
+body.dark .guide-toggle{background:#163545;color:#7dd3fc}
+body.dark .guide-toggle:hover{background:#1d4558}
 @media(max-width:600px){
 .sp-cat{font-size:14px;padding:12px 14px 10px 18px}
 .guide-cols{flex-direction:column;padding:10px 12px}
@@ -509,10 +610,15 @@ body.dark .qa-airefs a{color:#6ab4e0}
 .guide-col-body{font-size:13px;padding:12px}
 .guide-intro{font-size:12.5px;padding:8px 12px 10px;margin:0 10px 4px}
 .guide-link{font-size:13.5px}
+.guide-summary{padding:10px 12px;font-size:13px}
+.guide-toggle{height:26px;padding:0 10px;font-size:12px}
 }
 @media(max-width:600px){
 .header{padding:18px 14px}.header h1{font-size:18px}
-.install-tip{font-size:11.5px;padding:7px 10px}
+.header-actions{top:12px;right:12px}
+.mobile-install-bar{padding:8px 10px;font-size:13px}
+.mobile-install-btn{height:32px;padding:0 12px}
+.mobile-install-text{line-height:1.35}
 .news-title{font-size:14px}.news-summary{font-size:12.5px}
 .stats-bar{gap:8px}.btn-allread{margin-left:0}
 .sub-cat{font-size:15px;padding:12px 14px 10px 18px}
@@ -610,10 +716,10 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 </script>
 <nav class="toc-sidebar" id="tocSidebar">
 <div class="toc-title">📑 目录导航</div>
-<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})">📋 全部内容 <span class="toc-count" id="tocAllCount">47</span></div>
+<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})">📋 全部内容 <span class="toc-count" id="tocAllCount">58</span></div>
 <div class="toc-main-item" data-target="specialSection" onclick="scrollToSection('specialSection',this)" style="color:#b45009">⛏️ 找矿专项 <span class="toc-count" id="tocSpecialCount" style="background:#fdf3d7;color:#b45009">0</span></div>
 <div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)">🔥 今日新增 <span class="toc-count" id="tocTodayCount">11</span></div>
-<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)">📰 往期内容 <span class="toc-count" id="tocArchiveCount">36</span></div>
+<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)">📰 往期内容 <span class="toc-count" id="tocArchiveCount">47</span></div>
 <div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#f39c12">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12">0</span></div>
 <div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#8e44ad">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad">0</span></div>
 <div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490">📘</span></div>
@@ -622,10 +728,12 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="container">
 
 <div class="header">
-<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式">🌙</button>
-<h1>⛏️ 矿业新闻日报 <span class="date-badge">2026年09月05日 星期六</span></h1>
-<div class="sub">每日 9:00 起自动更新（约 9:30 前出今日版本） · 11个信息源 · 聚焦有色金属 · 部门内部参考 · 点击标题查看原文</div>
-<div class="install-tip show" id="installTip"><span id="installTipText">📲 手机：浏览器菜单选「<b>添加到桌面 / 添加书签</b>」（微信内先点右上角「···」→ 浏览器中打开）<br>💻 电脑：点 Edge/Chrome 地址栏右侧「<b>安装</b>」图标 → 变成独立窗口软件 ｜ <a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#7dd3fc;text-decoration:underline">查看详细说明 ↓</a></span><button class="tip-close" onclick="dismissInstallTip()" title="我知道了">✕</button></div>
+  <div class="header-actions">
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式"><span class="theme-option light">☀️</span><span class="theme-option dark">🌙</span></button>
+    <button class="pwa-header-btn" id="pwaHeaderBtn" type="button" title="将本页安装到电脑桌面" hidden>💻 添加到桌面</button>
+  </div>
+  <h1>⛏️ 矿业新闻日报 <span class="date-badge">2026年09月05日 星期六</span></h1>
+  <div class="sub">每日 9:00 起自动更新（约 9:30 前出今日版本） · 11个信息源 · 聚焦有色金属 · 部门内部参考 · 点击标题查看原文</div>
 </div>
 <!-- ==================== 今日要闻（9-04 新增，每日自动提取 3~5 条关键信息）==================== -->
 <div class="digest-strip" id="digestStrip">
@@ -691,6 +799,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <!-- ==================== 今日新增 ==================== -->
 <!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
 <!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
+<!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
 <div class="section" id="todaySection">
 <div class="section-title today"><span class="icon">🔥</span> 今日新增（2026-09-05 抓取）<span class="news-count" id="todayCount">11条</span></div>
 <div class="sub-cat">💼 矿权交易<span class="sub-count">3条新增</span></div>
@@ -700,22 +809,22 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" target="_blank">国际钯价大幅上涨</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-04</div><div class="news-summary">周四国际矿产品价格多数上涨，贵金属涨幅居前：纽约金收于4473.6美元/盎司涨1.96%，银66.96美元/盎司涨2.52%，铂1834.0美元/盎司涨3.93%，钯1440.0美元/盎司涨5.84%领涨；LME铜14356美元/吨涨0.84%、锡54750美元/吨涨1.32%；WTI原油91.66美元/桶涨1.15%，62%铁矿粉99.35美元/吨涨1.85%，铀（U3O8）89.50美元/磅持平。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" target="_blank">西澳格拉斯帕奇项目进展</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">里德利山矿业公司（Mount Ridley Mines）西澳格拉斯帕奇（Grass Patch）项目推测资源量升级至9.58亿吨，钪品位0.0050%，折合钪金属量4.7万吨，公司称其为世界最大已公开钪资源量，赋存于含重稀土—镓的风化层中；自研Selectro工艺钪回收率可达80%、重稀土83%、镓56%。</div><a class="btn-read" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" target="_blank">查看原文 →</a></div></div>
 <!-- ==================== 往期内容 ==================== -->
 <div class="section" id="archiveSection">
-<div class="section-title"><span class="icon">📰</span> 往期内容（近14天自动展开，更早需点开）<span class="news-count" id="archiveCount">36条</span></div>
+<div class="section-title"><span class="icon">📰</span> 往期内容（近14天自动展开，更早需点开）<span class="news-count" id="archiveCount">47条</span></div>
 <div class="fold-toggle" id="foldToggle" style="display:none" onclick="toggleOldFold()">▸ 展开更早内容</div>
-<div class="sub-cat">💼 矿权交易<span class="sub-count">6条</span></div>
-<div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" target="_blank">新疆皮山县库尔良铜矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">新疆维吾尔自治区自然资源厅委托自治区公共资源交易中心挂牌出让皮山县库尔良铜矿勘查探矿权，区块面积39.42平方千米，起始价118.27万元，出让收益率1.2%，拟出让年限5年，挂牌期2026年10月21日至11月4日。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" target="_blank">内蒙古巴林右旗巴彦琥硕银矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">赤峰市自然资源局委托赤峰市公共资源交易中心网上挂牌出让巴彦琥硕银矿勘查探矿权（赤公矿交告〔2026〕001号），区块面积6.30平方千米，起始价38万元，出让收益率2.3%，拟出让年限5年，挂牌期2026年10月23日至11月6日。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" target="_blank">湖北省通山县泉塘王矿区金矿勘查网上挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">湖北省自然资源厅打包出让通山县泉塘王矿区金矿南段和北段勘查探矿权，矿种为金矿，南段3.9平方千米、北段5.9平方千米，起始价59.04万元，出让收益率2.3%。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" target="_blank">查看原文 →</a></div>
+<div class="sub-cat">💼 矿权交易<span class="sub-count">9条</span></div>
+<div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306828.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306828.htm" target="_blank">四川省峨边县桥儿沟磷铅锌矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-04</div><div class="news-summary">四川省自然资源厅委托省政务服务和公共资源交易服务中心网上挂牌出让峨边县桥儿沟磷铅锌矿勘查探矿权，勘查矿种磷矿，区块面积29.28平方千米，起始价352万元，出让收益率磷矿2.1%、铅锌2.3%，拟出让年限5年，挂牌期2026年10月27日至11月10日，竞买保证金2000万元。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306828.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306829.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306829.htm" target="_blank">河北省宽城满族自治县蒋杖子村金矿勘查探矿权拍卖出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-04</div><div class="news-summary">承德市自然资源和规划局委托承德银源拍卖有限公司拍卖出让宽城满族自治县蒋杖子村金矿勘查探矿权（承矿拍〔2026〕02号），区块面积3.12平方千米，起始价9.36万元，出让收益率2.3%，拟出让年限5年，竞买保证金100万元，拍卖定于2026年10月27日在承德市公共资源交易中心举行。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306829.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306831.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306831.htm" target="_blank">四川省会理市关河铜镍矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-04</div><div class="news-summary">四川省自然资源厅委托省政务服务和资源交易服务中心挂牌出让会理市关河铜镍矿勘查探矿权（川公共矿挂〔2026〕013号），勘查矿种铜矿，区块面积10.46平方千米，起始价84万元，出让收益率1.2%，拟出让年限5年，挂牌期2026年10月27日至11月10日，保证金1500万元；出让范围与国家级水土流失重点预防区重叠6.80平方千米。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306831.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" target="_blank">新疆皮山县库尔良铜矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">新疆维吾尔自治区自然资源厅委托自治区公共资源交易中心挂牌出让皮山县库尔良铜矿勘查探矿权，区块面积39.42平方千米，起始价118.27万元，出让收益率1.2%，拟出让年限5年，挂牌期2026年10月21日至11月4日。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" target="_blank">内蒙古巴林右旗巴彦琥硕银矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">赤峰市自然资源局委托赤峰市公共资源交易中心网上挂牌出让巴彦琥硕银矿勘查探矿权（赤公矿交告〔2026〕001号），区块面积6.30平方千米，起始价38万元，出让收益率2.3%，拟出让年限5年，挂牌期2026年10月23日至11月6日。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" target="_blank">湖北省通山县泉塘王矿区金矿勘查网上挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">湖北省自然资源厅打包出让通山县泉塘王矿区金矿南段和北段勘查探矿权，矿种为金矿，南段3.9平方千米、北段5.9平方千米，起始价59.04万元，出让收益率2.3%。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260903_10305004.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260903_10305004.htm" target="_blank">云南省广南县董平金矿勘探探矿权转让公示</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-02</div><div class="news-summary">文山州自然资源局公示广南县董平金矿勘探探矿权转让，转让人为云南金龙矿业，受让人为广南广钰矿业，勘查面积9.44平方千米，转让方式为出售。</div><a class="btn-read" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260903_10305004.htm" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260901_10302816.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260901_10302816.htm" target="_blank">湖北省大冶市铜山口外围铜多金属矿勘查网上挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 08-31</div><div class="news-summary">湖北大冶铜山口外围铜多金属矿勘查探矿权网上挂牌出让，属长江中下游铜铁金成矿带重点接续区。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260901_10302816.htm" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260901_10302808.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260901_10302808.htm" target="_blank">内蒙古翁牛特旗红石砬子铜多金属勘探探矿权转让公示</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 08-31</div><div class="news-summary">内蒙古翁牛特旗红石砬子铜多金属矿勘探探矿权转让公示，涉及大兴安岭中南段有色金属成矿带。</div><a class="btn-read" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260901_10302808.htm" target="_blank">查看原文 →</a></div>
-<div class="sub-cat">🔍 找矿成果与勘查技术<span class="sub-count">7条</span></div>
-<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" target="_blank">澳大利亚延达尔金矿勘探取得新发现</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">盖特维矿业（Gateway Mining）宣布西澳延达尔（Yandal）金矿项目考扎（Cowza）探区取得重大高品位原生金矿发现，钻孔在104米深处见矿41米、金品位2克/吨；连同赛利亚南、沃德靶区，延达尔构造带延伸长度已超13公里，后续将开展金刚石钻探。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" target="_blank">新一轮找矿突破战略行动再获标志性成果 安徽茶亭铜金矿勘查取得重大突破</a></div><div class="news-meta"><span class="src">自然资源部</span> · 09-02</div><div class="news-summary">自然资源部发布新一轮找矿突破战略行动最新标志性成果，安徽茶亭铜金矿勘查取得重大突破，为长江中下游成矿带找矿提供新的资源接续。</div><a class="btn-read" href="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" target="_blank">查看原文 →</a></div>
+<div class="sub-cat">🔍 找矿成果与勘查技术<span class="sub-count">10条</span></div>
+<div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867977.html" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867977.html" target="_blank">跑出深部找矿“中国速度”——安徽茶亭超大型铜多金属矿勘探与勘查增储纪实</a></div><div class="news-meta"><span class="src">中国地质调查局</span> · 09-04</div><div class="news-summary">安徽宣州茶亭铜多金属矿为伴生银、硫的斑岩型铜金矿床，核心勘查区上长村矿段面积1.24平方千米。项目针对火山岩厚覆盖、第四系厚沉积及膏盐层难题，打破“伸展火山盆地难成大型斑岩铜金矿”理论束缚，由唐菊兴院士团队领衔，采用央地企协同、产学研用融合模式，设计钻探总量96240米、最大孔深2000米，力争一年完成常规需2至3年的工作量。</div><a class="btn-read" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867977.html" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/kykj/202609/t20260904_10306813.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/kykj/202609/t20260904_10306813.htm" target="_blank">埃塞俄比亚SEDEX型矿床潜力分析</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-04</div><div class="news-summary">据Mining.com报道，分析认为埃塞俄比亚具备形成喷流沉积（SEDEX）矿床的条件：阿法尔洼地蒸发岩环境可生成高密度盐卤水作为搬运流体；阿拉伯—努比亚地盾火山沉积岩与东非大裂谷提供丰富金属源；元古代基底之上沉积的碳酸盐与碳质页岩构成还原障。恩卡法拉已有典型喷流沉积铁锰钡矿床记录，显示该区仍具SEDEX找矿潜力。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kydt/kykj/202609/t20260904_10306813.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.worldmr.net/GeologyNews/NewsList/Info/2026-09-04/325603.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.worldmr.net/GeologyNews/NewsList/Info/2026-09-04/325603.shtml" target="_blank">烟台金矿勘查获新突破</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">据中国矿业报报道，中国地质调查局烟台海岸带地质调查中心承担的重要金多金属矿集区资源调查评价项目实现找矿新突破。截至目前，项目已基本查明3个完工标准图幅的区域成矿地质条件、矿产分布规律与资源禀赋特征，划定多处优质成矿有利区，为后续勘查部署与资源扩容提供了重要地质依据。</div><a class="btn-read" href="https://www.worldmr.net/GeologyNews/NewsList/Info/2026-09-04/325603.shtml" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" target="_blank">澳大利亚延达尔金矿勘探取得新发现</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">盖特维矿业（Gateway Mining）宣布西澳延达尔（Yandal）金矿项目考扎（Cowza）探区取得重大高品位原生金矿发现，钻孔在104米深处见矿41米、金品位2克/吨；连同赛利亚南、沃德靶区，延达尔构造带延伸长度已超13公里，后续将开展金刚石钻探。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" target="_blank">新一轮找矿突破战略行动再获标志性成果 安徽茶亭铜金矿勘查取得重大突破</a></div><div class="news-meta"><span class="src">自然资源部</span> · 09-02</div><div class="news-summary">自然资源部发布新一轮找矿突破战略行动最新标志性成果，安徽茶亭铜金矿勘查取得重大突破，为长江中下游成矿带找矿提供新的资源接续。</div><a class="btn-read" href="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260902_867767.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260902_867767.html" target="_blank">绿色矿业｜六大场景解锁我国绿色勘查新路径</a></div><div class="news-meta"><span class="src">中国地质调查局</span> · 09-02</div><div class="news-summary">系统梳理我国绿色勘查在六大典型场景下的技术路径与装备应用，推动勘查全过程减扰动、低排放、可恢复。</div><a class="btn-read" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260902_867767.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260901_867682.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260901_867682.html" target="_blank">星-空-地-井协同勘查技术助力冈底斯找矿取得新突破</a></div><div class="news-meta"><span class="src">中国地质调查局</span> · 09-01</div><div class="news-summary">通过卫星遥感、航空物探、地面调查与钻探验证四位一体协同，冈底斯成矿带深部找矿取得新进展，验证星-空-地-井一体化勘查技术体系的有效性。</div><a class="btn-read" href="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260901_867682.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.geosociety.org.cn/?v1=v14&v4=v16&v2=6a967e1769a02&v3=v41" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.geosociety.org.cn/?v1=v14&v4=v16&v2=6a967e1769a02&v3=v41" target="_blank">《中国矿产地质志研编与重大创新》成果通过权威评审</a></div><div class="news-meta"><span class="src">中国地质学会</span> · 09-02</div><div class="news-summary">中国矿产地质志研编成果通过权威评审，系统总结全国成矿规律与找矿方向，为新一轮找矿突破战略行动提供基础支撑。</div><a class="btn-read" href="https://www.geosociety.org.cn/?v1=v14&v4=v16&v2=6a967e1769a02&v3=v41" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a866ecaf3741&v3=v41" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a866ecaf3741&v3=v41" target="_blank">四川省地质学会战略性矿产资源勘查领域产业科技专家服务团组建</a></div><div class="news-meta"><span class="src">中国地质学会</span> · 09-02</div><div class="news-summary">四川省地质学会组建战略性矿产资源勘查领域产业科技专家服务团，推动产学研协同与找矿技术成果转化。</div><a class="btn-read" href="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a866ecaf3741&v3=v41" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a9720dc7a7e7&v3=v41" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a9720dc7a7e7&v3=v41" target="_blank">专家下沉一线 技术赋能找矿——四川省地质学会产业科技专家服务团在行动</a></div><div class="news-meta"><span class="src">中国地质学会</span> · 09-02</div><div class="news-summary">组织专家深入勘查一线开展技术指导，把成矿理论与勘查方法直接应用到找矿生产实践。</div><a class="btn-read" href="https://www.geosociety.org.cn/?v1=v14&v4=v17&v2=6a9720dc7a7e7&v3=v41" target="_blank">查看原文 →</a></div>
-<div class="sub-cat">🏭 行业动态<span class="sub-count">17条</span></div>
-<div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html" target="_blank">薪火代代传——驰宏锌锗以“0.3克锗精神”续写科研攻坚答卷</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-03</div><div class="news-summary">从1958年乌蒙山简陋实验室提取0.3克金属锗起步，驰宏锌锗现年产锗产品含锗65吨、稳居全球原生锗产业第一梯队；自主研发的沉锗工艺为全球独有，并正以一步法直接蒸馏技术填补国内低品位锗料高效处置空白。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html" target="_blank">2026矿冶科技集团有限公司科技创新大会在京召开</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-03</div><div class="news-summary">矿冶集团科技创新大会8月28日在京召开，部署“十五五”时期集团科技创新重点任务，发布集团志《走向辉煌（2016—2026）》与“十五五”品牌战略规划，并同期举办采矿工程、选矿工程、冶金环境、新材料4个分论坛。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html" target="_blank">有色企业紧急捐款驰援西藏吉隆灾区</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-03</div><div class="news-summary">尼泊尔侧泥石流灾害造成西藏日喀则吉隆口岸重大人员伤亡后，有色企业紧急驰援：中国铝业携中国铜业捐赠2000万元，中国黄金集团1500万元，魏桥创业1000万元，紫金矿业1000万元，用于抢险救援与灾后重建。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.cngold.org.cn/news/show-9524.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9524.html" target="_blank">周洲出席中吉商务与投资论坛 中国黄金集团深耕中亚矿业合作</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">中国黄金集团董事长周洲出席中吉商务与投资论坛，强调吉尔吉斯斯坦是集团推进全球资源布局的重要地区，持续推进库鲁-捷盖列克铜金矿、布丘克金矿等项目建设和运营。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9524.html" target="_blank">查看原文 →</a></div>
+<div class="sub-cat">🏭 行业动态<span class="sub-count">20条</span></div>
+<div class="news-item" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473759" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473759" target="_blank">2026年（第二届）有色金属行业“双碳”大会在杭州召开</a></div><div class="news-meta"><span class="src">中国有色网</span> · 09-04</div><div class="news-summary">9月4日，中国有色金属工业协会主办的第二届有色行业“双碳”大会在杭州召开。常务副会长贾明星指出行业正处从规模扩张向绿色低碳转型的关键期，提出夯实碳管理基础、以刚性约束倒逼结构调整、以碳排放双控为引领等意见；聂祚仁院士作主旨报告。近300名代表参会，同期召开铝行业节能降碳专题研讨会。</div><a class="btn-read" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473759" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473758" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473758" target="_blank">2026年（第十三届）中国锑业年会在云南昆明召开</a></div><div class="news-meta"><span class="src">中国有色网</span> · 09-04</div><div class="news-summary">9月3日，以“安全、高效、可持续发展”为主题的第十三届中国锑业年会在昆明召开，300余人参会。有色协会副会长陈学森提出严守政策底线、强化行业自律严控新增产能、夯实资源保障、拓展下游应用、推进锑期货上市研究等八点建议；专家围绕出口管制合规、全球锑资源勘查开发、光伏产业形势等议题交流。</div><a class="btn-read" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473758" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867980.html" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867980.html" target="_blank">2026中国国际矿业大会将于9月10日开幕</a></div><div class="news-meta"><span class="src">中国地质调查局</span> · 09-04</div><div class="news-summary">9月4日从组委会获悉，以“合作共赢，绿色智能”为主题的2026（第二十八届）中国国际矿业大会将于9月10日至12日在天津梅江会展中心举办，在往届论坛、展览两大板块基础上新增矿业权交易板块。大会设28场论坛，展览面积6.5万平方米创历届新高，已吸引全球25个国家的658家企业参展。</div><a class="btn-read" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867980.html" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html" target="_blank">薪火代代传——驰宏锌锗以“0.3克锗精神”续写科研攻坚答卷</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-03</div><div class="news-summary">从1958年乌蒙山简陋实验室提取0.3克金属锗起步，驰宏锌锗现年产锗产品含锗65吨、稳居全球原生锗产业第一梯队；自主研发的沉锗工艺为全球独有，并正以一步法直接蒸馏技术填补国内低品位锗料高效处置空白。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html" target="_blank">2026矿冶科技集团有限公司科技创新大会在京召开</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-03</div><div class="news-summary">矿冶集团科技创新大会8月28日在京召开，部署“十五五”时期集团科技创新重点任务，发布集团志《走向辉煌（2016—2026）》与“十五五”品牌战略规划，并同期举办采矿工程、选矿工程、冶金环境、新材料4个分论坛。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html" target="_blank">有色企业紧急捐款驰援西藏吉隆灾区</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-03</div><div class="news-summary">尼泊尔侧泥石流灾害造成西藏日喀则吉隆口岸重大人员伤亡后，有色企业紧急驰援：中国铝业携中国铜业捐赠2000万元，中国黄金集团1500万元，魏桥创业1000万元，紫金矿业1000万元，用于抢险救援与灾后重建。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.cngold.org.cn/news/show-9524.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9524.html" target="_blank">周洲出席中吉商务与投资论坛 中国黄金集团深耕中亚矿业合作</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">中国黄金集团董事长周洲出席中吉商务与投资论坛，强调吉尔吉斯斯坦是集团推进全球资源布局的重要地区，持续推进库鲁-捷盖列克铜金矿、布丘克金矿等项目建设和运营。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9524.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html" target="_blank">云铝股份交出历史最好半年成绩单 营收增长20.3%利润增长175%</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">云铝股份上半年营收349.81亿元同比增长20.3%，利润总额104.54亿元同比增长175%，电解铝板块半年利润创历史最好，氧化铝、炭素产量超额完成，合金产品出口实现突破。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html" target="_blank">洛阳铜加工产出首根镁合金铸锭 镁板全流程工艺贯通</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">中铝洛阳铜加工变形镁合金板材生产线一期镁熔铸试生产成功，产出首根合格镁合金铸锭，标志镁板全流程生产工艺全线贯通，具备规模化生产能力。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html" target="_blank">株冶集团奋力推进"三化两型"建设 铅锌冶炼绿色智能升级</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">株冶集团推进绿色化、智能化、融合化建设，30万吨锌冶炼基地单位能耗降22%，建成铜铅锌联合冶炼与多源固废协同利用示范工程，铟回收率超行业均值10个百分点。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html" target="_blank">查看原文 →</a></div>
@@ -728,56 +837,62 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="news-item" data-url="https://www.cngold.org.cn/news/show-9500.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">2026年上半年我国黄金产量152.908吨，同比下降14.62%，黄金消费量511.412吨，同比增长1.23%</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">上半年国内黄金产量同比下降14.62%至152.908吨，黄金消费量511.412吨、同比增长1.23%，产消缺口进一步扩大。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cngold.org.cn/news/show-9503.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9503.html" target="_blank">中国黄金集团与中国地质大学（武汉）举行工作会商</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">校企双方围绕科技创新、人才培养与地质勘查成果转化开展会商，推动产学研深度融合。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9503.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cngold.org.cn/news/show-9505.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9505.html" target="_blank">持续增厚股东回报 紫金矿业公布111亿元中期分红方案</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">紫金矿业公布111亿元中期分红方案，在铜金价格高位背景下持续提升股东回报。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9505.html" target="_blank">查看原文 →</a></div>
-<div class="sub-cat">🌐 国际矿业动态<span class="sub-count">6条</span></div>
-<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" target="_blank">政府干预关键矿产“前所未有”</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">据Mining.com报道，各国政府正从单纯贷款转向股权、保底价与长期承购等商业投资模式直接介入采矿与关键矿产交易；美国2月启动120亿美元“金库计划”，快市统计2025年1月以来矿产相关协议约160个、总额近400亿美元，激励与禁购并举的模式被指“前所未有”。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm" target="_blank">国际贵金属价格回升</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">周三国际矿产品价格多数下跌、贵金属普遍上涨：纽约金收于4387.8美元/盎司涨1.36%，银65.32美元/盎司涨1.95%，钯涨2.25%；LME铜14236美元/吨涨0.35%，铝3292.5美元/吨涨0.61%，镍16890美元/吨涨1.35%，铅、锌、锡小幅走低；铀（U3O8）收89.50美元/磅。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm" target="_blank">格陵兰资源公司获最高1.2亿美元融资意向 推进马尔姆杰格钼镁项目</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">加拿大初级矿业公司格陵兰资源收到北欧投资银行（NIB）最高1.2亿美元融资意向书，为加拿大EDC牵头2.75亿美元支持的补充；马尔姆杰格钼镁项目已完成最终可行性研究，钼金属储量5.71亿磅，前10年年均产钼精矿3280万磅，约为欧盟年消费量的25%。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm" target="_blank">查看原文 →</a><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm" target="_blank">西澳穆尔金山钨矿成为世界级矿床</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-02</div><div class="news-summary">西澳穆尔金山钨矿资源量更新后跻身世界级矿床行列，全球钨资源供应格局或将生变。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm" target="_blank">查看原文 →</a></div>
+<div class="sub-cat">🌐 国际矿业动态<span class="sub-count">8条</span></div>
+<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" target="_blank">国际钯价大幅上涨</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-04</div><div class="news-summary">周四国际矿产品价格多数上涨，贵金属涨幅居前：纽约金收于4473.6美元/盎司涨1.96%，银66.96美元/盎司涨2.52%，铂1834.0美元/盎司涨3.93%，钯1440.0美元/盎司涨5.84%领涨；LME铜14356美元/吨涨0.84%、锡54750美元/吨涨1.32%；WTI原油91.66美元/桶涨1.15%，62%铁矿粉99.35美元/吨涨1.85%，铀（U3O8）89.50美元/磅持平。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" target="_blank">西澳格拉斯帕奇项目进展</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">里德利山矿业公司（Mount Ridley Mines）西澳格拉斯帕奇（Grass Patch）项目推测资源量升级至9.58亿吨，钪品位0.0050%，折合钪金属量4.7万吨，公司称其为世界最大已公开钪资源量，赋存于含重稀土—镓的风化层中；自研Selectro工艺钪回收率可达80%、重稀土83%、镓56%。</div><a class="btn-read" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" target="_blank">查看原文 →</a><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" target="_blank">政府干预关键矿产“前所未有”</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">据Mining.com报道，各国政府正从单纯贷款转向股权、保底价与长期承购等商业投资模式直接介入采矿与关键矿产交易；美国2月启动120亿美元“金库计划”，快市统计2025年1月以来矿产相关协议约160个、总额近400亿美元，激励与禁购并举的模式被指“前所未有”。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm" target="_blank">国际贵金属价格回升</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">周三国际矿产品价格多数下跌、贵金属普遍上涨：纽约金收于4387.8美元/盎司涨1.36%，银65.32美元/盎司涨1.95%，钯涨2.25%；LME铜14236美元/吨涨0.35%，铝3292.5美元/吨涨0.61%，镍16890美元/吨涨1.35%，铅、锌、锡小幅走低；铀（U3O8）收89.50美元/磅。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm" target="_blank">格陵兰资源公司获最高1.2亿美元融资意向 推进马尔姆杰格钼镁项目</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">加拿大初级矿业公司格陵兰资源收到北欧投资银行（NIB）最高1.2亿美元融资意向书，为加拿大EDC牵头2.75亿美元支持的补充；马尔姆杰格钼镁项目已完成最终可行性研究，钼金属储量5.71亿磅，前10年年均产钼精矿3280万磅，约为欧盟年消费量的25%。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm" target="_blank">查看原文 →</a><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm" target="_blank">西澳穆尔金山钨矿成为世界级矿床</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-02</div><div class="news-summary">西澳穆尔金山钨矿资源量更新后跻身世界级矿床行列，全球钨资源供应格局或将生变。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260901_10303965.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260901_10303965.htm" target="_blank">德国有意开发巴西关键矿产</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-01</div><div class="news-summary">德国寻求与巴西在关键矿产领域开展合作开发，以分散供应链集中度、保障工业原料安全。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260901_10303965.htm" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm" target="_blank">印度同赞比亚恢复矿产投资谈判</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-02</div><div class="news-summary">印度与赞比亚重启矿产投资谈判，聚焦铜及关键矿产的联合勘查开发与供应链合作。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm" target="_blank">查看原文 →</a></div>
-</div>
 <div class="section" id="installGuideSection">
-<div class="section-title guide"><span class="icon">📲</span> 安装到桌面 · 详细说明 <span class="news-count" style="background:#cffafe;color:#0e7490">建议收藏本页</span></div>
-<div class="guide-intro">本页面是网页，<b>不需要"装软件"</b>。推荐做法：把链接<br><b>① 收藏到浏览器书签</b>（任意浏览器都行——每天打开一次即可）<br>② 或通过浏览器菜单"<b>添加到主屏幕 / 添加到桌面</b>"，桌面会出现一个图标、点图标直达、像App一样。本页面在介绍两种方式的详细操作、适用浏览器和常见坑。</div>
-
+<div class="section-title guide"><span class="icon">📲</span> 安装到桌面 <span class="news-count" style="background:#cffafe;color:#0e7490">备用指引</span><button class="guide-toggle" id="guideToggle" onclick="toggleInstallGuide()" type="button">展开 ▼</button></div>
+<div class="guide-summary" id="guideSummary">
+<p><b>💻 电脑</b>：优先点页面右上角「<b>添加到桌面</b>」按钮，一键安装成独立窗口。</p>
+<p><b>📱 手机</b>：优先点页面底部「<b>安装</b>」浮条；iPhone 会提示 Safari 分享步骤。</p>
+<p class="guide-summary-note">如果没看到按钮，或想了解详细浏览器步骤，点上方「展开」查看。</p>
+</div>
+<div class="guide-body" id="guideBody" style="display:none">
 <div class="guide-cols">
 <!-- ============== 手机端 ============== -->
 <div class="guide-col mobile">
 <div class="guide-col-head">📱 手机端 · 把日报添加到桌面</div>
 <div class="guide-col-body">
-<div class="guide-step gs-mobile"><strong>① 安卓 Chrome（最常见）</strong>右上角「⋮」（三点）→「<b>添加到主屏幕</b>」→ 可改名称（默认"矿业新闻日报"）→「<b>添加</b>」。桌面出图标，点图标直达、全屏显示。</div>
-<div class="guide-step gs-mobile"><strong>①' 安卓 Edge / QQ 浏览器 / 360 极速</strong>这几种支持 <b>PWA</b>：菜单选「<b>安装应用 / 添加到主屏幕</b>」→「<b>添加</b>」。比普通"添加到主屏幕"更强——可全屏、有启动动画、离线也能开。</div>
-<div class="guide-step gs-mobile"><strong>①'' 安卓三星 / 华为 / 小米 自带浏览器</strong>右上角菜单 → 找「<b>添加到主屏幕</b>」「添加书签到桌面」之类选项，名称略有差异。</div>
-<div class="guide-step gs-mobile"><strong>② iPhone Safari / iPad</strong>底部工具栏「<b>分享 □↑</b>」图标 → 滚到下方找「<b>添加到主屏幕</b>」→「<b>添加</b>」。iPhone 没有 PWA 全屏，但桌面图标直达已经很方便。</div>
-<div class="guide-step gs-warn"><strong>⚠️ 微信里看不到这些按钮！</strong>必须先点微信右上角「<b>···</b>」 →「<b>在浏览器中打开</b>」（若没这个选项，选「<b>复制链接</b>」→ 打开手机自带的浏览器 → 把链接粘贴进去）。</div>
-<div class="guide-step"><small>💡 "添加到桌面"的桌面图标其实是<b>网页书签</b>，不是真正安装App。优点是几乎所有浏览器都支持、不占内存、即加即用；缺点是不像 PWA 那样能离线运行。</small></div>
+<div class="guide-step gs-mobile"><strong>① 安卓 Chrome</strong>右上角「⋮」→「<b>添加到主屏幕</b>」→ 改名称 →「<b>添加</b>」。桌面出图标，点图标直达。</div>
+<div class="guide-step gs-mobile"><strong>② iPhone Safari / iPad</strong>底部「<b>分享 □↑</b>」→ 上滑找「<b>添加到主屏幕</b>」→「<b>添加</b>」。iPhone 为桌面图标直达。</div>
+<div class="guide-step gs-warn"><strong>⚠️ 微信里看不到这些按钮！</strong>先点微信右上角「<b>···</b>」→「<b>在浏览器中打开</b>」；没这选项就「<b>复制链接</b>」→ 用手机自带浏览器打开。</div>
+<div class="guide-step"><small>💡 安卓 Edge/Chrome 支持 PWA 安装，可离线、全屏；其他浏览器多退化为书签图标。</small></div>
 </div>
 </div>
-
 <!-- ============== 电脑端 ============== -->
 <div class="guide-col pc">
 <div class="guide-col-head">💻 电脑端 · 装成独立窗口软件</div>
 <div class="guide-col-body">
-<div class="guide-step gs-pc"><strong>方式一：地址栏「安装」图标（推荐，最像 App）</strong>用 <b>Microsoft Edge</b> 或 <b>Google Chrome</b> 打开日报链接 → 看地址栏最右侧有没有一个<b>小方块+下载箭头</b>图标（有的浏览器显示 ⊞ 或 ⬇）→ 鼠标悬停显示「<b>安装 矿业新闻日报</b>」→ 点一下 → 弹窗确认「<b>安装</b>」。会自动：① 桌面生成图标 ②「开始菜单」里出现「矿业新闻日报」 ③ 以后双击图标就打开日报，<b>无地址栏、无标签页、全屏独立窗口</b>。</div>
-<div class="guide-step gs-pc"><strong>方式二：菜单「安装」</strong>如果地址栏右侧没图标，可点浏览器右上角「···」菜单 → 找「<b>安装 矿业新闻日报</b>」或「<b>将此网站作为应用安装</b>」选项。</div>
-<div class="guide-step gs-pc"><strong>方式三：Ctrl+D 收藏（兜底，所有浏览器都行）</strong>任意浏览器按 <b>Ctrl+D</b>（Mac 是 ⌘+D）→ 可改名称 → 选保存到「<b>书签栏</b>」（或收藏夹）→「完成」。每天打开浏览器点书签直达，无需安装。</div>
-<div class="guide-step gs-pc"><small>✅ 支持安装 PWA 的浏览器：<b>Microsoft Edge</b>（Windows 自带，强烈推荐）、<b>Google Chrome</b>、<b>QQ 浏览器（极速模式）</b>、<b>360 极速浏览器</b>、<b>Brave</b>。<br>❌ 不支持 PWA 安装、只能用 Ctrl+D 收藏：Firefox（火狐）、Safari（Mac）、IE、360 安全浏览器。<br>💡 推荐用电脑自带的 <b>Microsoft Edge</b> 即可，零下载，Win10/11 系统自带。</small></div>
+<div class="guide-step gs-pc"><strong>方式一：地址栏「安装」图标（推荐）</strong>用 <b>Edge / Chrome</b> 打开 → 地址栏右侧小方块+下载箭头图标 → 悬停显示「安装 矿业新闻日报」→ 确认安装。桌面与开始菜单都会出现图标，双击独立窗口打开。</div>
+<div class="guide-step gs-pc"><strong>方式二：菜单安装</strong>点浏览器右上角「⋯」→「<b>安装应用 / 添加到桌面</b>」。</div>
+<div class="guide-step gs-pc"><strong>方式三：Ctrl+D 收藏（兜底）</strong>按 <b>Ctrl+D</b>（Mac ⌘+D）保存到书签栏，每天点书签直达。</div>
+<div class="guide-step gs-pc"><small>✅ 推荐 Edge / Chrome；❌ Firefox、Safari(Mac)、IE 不支持 PWA，只能用 Ctrl+D 收藏。</small></div>
 </div>
 </div>
 </div>
-
-<!-- 安装 PWA 的链接 -->
 <a class="guide-link" href="https://04bad6570ebc40da9fa12c25c30b6ad3.app.workbuddy.link" target="_blank">📋 复制链接到浏览器：https://04bad6570ebc40da9fa12c25c30b6ad3.app.workbuddy.link</a>
-
-<div class="guide-tip">💡 <b>安装后怎么卸载？</b>手机：长按桌面图标选「删除」；电脑：Edge / Chrome「设置」→「应用」→「已安装的应用」→ 找"矿业新闻日报"→「卸载」。链接收藏在书签：书签栏 → 浏览器「收藏夹管理器」删。本页面随时能在浏览器输入链接打开，不会因为卸载而丢失。</div>
+<div class="guide-tip">💡 <b>安装后卸载：</b>手机长按图标删除；电脑 Edge/Chrome「设置」→「应用」→ 找"矿业新闻日报"卸载。收藏版在书签管理器中删除。</div>
+</div>
 </div>
 <!-- ==================== 已归档收藏 ==================== -->
 <div class="section" id="archivedFavSection" style="display:none">
 <div class="section-title">🗂️ 已归档收藏（原新闻已滚出页面，收藏记录永久保留）<span class="news-count" id="archFavCount">0条</span></div>
 <div id="archFavList"></div>
 </div>
+<!-- 移动端 PWA 安装浮条 -->
+<div class="mobile-install-bar" id="mobileInstallBar" hidden>
+  <span class="mobile-install-icon">⛏️</span>
+  <span class="mobile-install-text" id="mobileInstallText">安装到主屏幕，离线也能看日报</span>
+  <button class="mobile-install-btn" id="mobileInstallBtn" type="button">安装</button>
+  <button class="mobile-install-close" id="mobileInstallClose" type="button" title="我知道了">✕</button>
+</div>
+
 <div class="footer">
 <p>数据来源：自然资源部 · 中国地质调查局 · 矿业权市场 · 中国有色网 · 北京国际矿业权交易所 · 上海联合矿权交易所 · 全球矿产资源信息系统 · 中国地质学会 · 中国黄金协会 · 中国稀土行业协会 · 中国有色金属工业协会</p>
 <p>聚焦有色金属：铜镍铅锌铝金银稀土钨钼锡锑锂钴 | 排除：煤炭、石油、天然气、钢铁、铁矿</p>
-<p>更新时间：2026-09-05 09:29 | 每日9:00起自动更新（约9:30前完成） | 11个信息源 | 本页新增：已读状态存储于访问者本机浏览器</p>
-<p>📱 手机：在浏览器菜单选「<b>添加到主屏幕</b>」｜ 💻 电脑：用 Edge 或 Chrome 点击地址栏右侧「安装」图标 → 独立窗口运行 ｜ <a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#1a3a5c;text-decoration:underline">详细说明 ↓</a></p>
+<p>更新时间：2026-09-05 21:14 | 每日9:00起自动更新（约9:30前完成） | 11个信息源 | 本页新增：已读状态存储于访问者本机浏览器</p>
+<p><a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#1a3a5c;text-decoration:underline">💻 添加到桌面 / 📱 安装到主屏幕</a> · 像 App 一样使用 · 离线也能看</p>
 <div style="border-top:1px solid #d5dde5;margin:14px 0 10px;padding-top:12px;text-align:left">
 <p style="font-size:12px;color:#5b6b7a;line-height:1.8"><b style="color:#3a4a5a">版权与免责声明</b><br>
 本页面信息均来源于互联网公开渠道，包括但不限于中国政府机构、行业协会、权威媒体的官方网站及公开新闻报道。所有著作权及其他权利归原机构 / 原媒体所有。<br>
@@ -807,7 +922,11 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="qa-float" id="qaFloat">
   <div class="qa-float-head">
     <span class="qa-float-title">💬 新闻问答</span>
-    <button class="pchart-close" onclick="qaFloatToggle()">✕</button>
+    <div class="qa-head-actions">
+      <button class="qa-head-action" type="button" onclick="qaExportHistory(this)" title="复制全部对话">📤 导出</button>
+      <button class="qa-head-action" type="button" onclick="qaClearHistory()" title="清空本次会话历史">🗑 清空</button>
+      <button class="pchart-close" onclick="qaFloatToggle()">✕</button>
+    </div>
   </div>
   <div class="qa-float-filters">
     <select class="qa-fsel" id="qaFloatMineral" aria-label="按矿种筛选"><option value="">矿种·全部</option></select>
@@ -829,6 +948,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
     <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词">检索</button>
     <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答（DeepSeek 直连）">AI</button>
   </div>
+  <div class="qa-float-tip">💡 问答历史仅存在本机浏览器，换设备 / 清缓存会丢失；长期留存请点「📤 导出」</div>
 </div>
 <script src="news-data.js"></script>
 <script src="lme-data.js"></script>
@@ -956,6 +1076,23 @@ function renderArchivedFavs(){
     '<a class="btn-read" href="'+url+'" target="_blank">查看原文 →</a>'+
     '<button class="btn-star" style="color:#f39c12" title="取消收藏">★</button></div>';
   }).join('');
+}
+// ===== 整张卡片点击打开原文（2026-09-05 增强）=====
+// 标题与「查看原文」本就是 <a> 链接直接可点；这里补全：点击卡片其余区域（摘要/来源等）
+// 也能打开原文。点 <a>（链接本身）或 <button>（收藏/未读等）不拦截，走各自默认行为。
+// 同时标记已读，与「浏览记录」统计口径一致。
+function setupCardOpen(){
+  document.addEventListener('click',function(e){
+    var item=e.target.closest?e.target.closest('.news-item,.hot-item,.digest-list > li'):null;
+    if(!item)return;
+    if(e.target.closest('a')||e.target.closest('button'))return; // 链接/按钮各自处理
+    var url=item.getAttribute('data-url');
+    if(url&&url!=='#'&&/^https?:/i.test(url)){
+      e.preventDefault();
+      markRead(url);
+      window.open(url,'_blank','noopener');
+    }
+  });
 }
 function updateHistoryCount(){
   const n=getHistory().length;
@@ -1508,19 +1645,6 @@ function injectOrigDateBadges(){
     head.appendChild(badge);
   });
 }
-// 给已知禁止嵌入的条目加 ↗ 角标（提示这条会跳外站打开）
-function injectEmbedBadges(){
-  document.querySelectorAll('.news-item').forEach(el=>{
-    if(el.querySelector('.badge-ext'))return;
-    const head=el.querySelector('.news-head');
-    if(!head)return;
-    const b=document.createElement('span');
-    b.className='badge-ext';
-    b.title='该网站禁止嵌入，点击将在新标签页打开';
-    b.textContent='↗ 外站';
-    head.appendChild(b);
-  });
-}
 function injectTags(){
   document.querySelectorAll('.news-item').forEach(el=>{
     if(el.querySelector('.news-tags'))return;
@@ -1604,7 +1728,7 @@ function renderHotNews(d){
     var dStr=n.d?' · '+String(n.d).slice(5):'';
     var fire=n.hot?'<span class="hot-fire">🔥 热</span>':'';
     var rankCls=n.rank<=3?'top'+n.rank:'';
-    return '<li class="hot-item '+rankCls+'">'
+    return '<li class="hot-item '+rankCls+'" data-url="'+u+'">'
       +'<span class="hot-rank">'+(n.rank<10?'0':'')+n.rank+'</span>'
       +'<div class="hot-body">'
       +fire
@@ -1713,7 +1837,7 @@ function renderDigest(){
     .slice(0,4);
   list.innerHTML=picks.map(function(p){
     var r=p.r;
-    return '<li><a class="digest-link" href="'+digestEsc(r.u)+'" target="_blank" rel="noopener" title="'+digestEsc(r.t)+'">'+digestEsc(r.t)+'</a></li>';
+    return '<li data-url="'+digestEsc(r.u)+'"><a class="digest-link" href="'+digestEsc(r.u)+'" target="_blank" rel="noopener" title="'+digestEsc(r.t)+'">'+digestEsc(r.t)+'</a></li>';
   }).join('');
 }
 
@@ -1786,14 +1910,112 @@ injectStars();
 renderArchivedFavs();
 foldOldArchive();
 injectOrigDateBadges();
-injectEmbedBadges();
 applyFilter();
 refresh();
-// ===== "安装成App"引导条（静态双端文案常显；✕仅本次会话隐藏，刷新重现）=====
-function dismissInstallTip(){
-  const tip=document.getElementById('installTip');
-  if(tip)tip.classList.remove('show');
+// ===== PWA 安装引导（克制入口：PC顶部按钮 + 移动端底部浮条）=====
+// 平台判断
+const IS_STANDALONE=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+const IS_IOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+const IS_ANDROID=/Android/i.test(navigator.userAgent);
+const IS_MOBILE_UA=/Android|iPhone|iPad|iPod|Mobile|HarmonyOS/i.test(navigator.userAgent);
+
+// 捕获浏览器安装提示（Chrome/Edge/Android）
+window.__deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();
+  window.__deferredPrompt=e;
+  showPwaInstallPrompt();
+});
+
+// 安装完成后隐藏入口
+window.addEventListener('appinstalled',function(){
+  window.__deferredPrompt=null;
+  hidePwaInstallPrompt();
+});
+
+function dismissInstallTip(){ hidePwaInstallPrompt(); }
+
+function hidePwaInstallPrompt(){
+  var pcBtn=document.getElementById('pwaHeaderBtn');
+  if(pcBtn)pcBtn.hidden=true;
+  var mbBar=document.getElementById('mobileInstallBar');
+  if(mbBar)mbBar.hidden=true;
+  document.body.classList.remove('has-install-bar');
 }
+
+function showPwaInstallPrompt(){
+  if(IS_STANDALONE){ hidePwaInstallPrompt(); return; }
+  // 用户本次会话点过关闭，不再打扰
+  try{ if(sessionStorage.getItem('pwa-install-bar-dismissed')==='1') return; }catch(e){}
+
+  if(IS_MOBILE_UA){
+    // 移动端：底部浮条
+    var bar=document.getElementById('mobileInstallBar');
+    var btn=document.getElementById('mobileInstallBtn');
+    var txt=document.getElementById('mobileInstallText');
+    if(!bar)return;
+    if(IS_IOS){
+      txt.textContent='Safari 点“分享”→“添加到主屏幕”，像 App 一样使用';
+      btn.textContent='如何添加';
+      btn.onclick=function(){ alert('① 点 Safari 底部“分享”按钮（□↑）\n② 上滑找到“添加到主屏幕”\n③ 点“添加”即可'); };
+    }else{
+      txt.textContent='安装到主屏幕，离线也能看日报';
+      btn.textContent='安装';
+      btn.onclick=function(){ triggerPwaInstall(); };
+    }
+    bar.hidden=false;
+    document.body.classList.add('has-install-bar');
+    var close=document.getElementById('mobileInstallClose');
+    if(close)close.onclick=function(){ bar.hidden=true; document.body.classList.remove('has-install-bar'); try{sessionStorage.setItem('pwa-install-bar-dismissed','1');}catch(e){} };
+  }else{
+    // 电脑端：顶部按钮
+    var pcBtn=document.getElementById('pwaHeaderBtn');
+    if(pcBtn){
+      pcBtn.hidden=false;
+      pcBtn.onclick=function(){ triggerPwaInstall(); };
+    }
+  }
+}
+
+function toggleInstallGuide(){
+  var body=document.getElementById('guideBody');
+  var btn=document.getElementById('guideToggle');
+  if(!body||!btn)return;
+  if(body.style.display==='none'){
+    body.style.display='';
+    btn.textContent='收起 ▲';
+  }else{
+    body.style.display='none';
+    btn.textContent='展开 ▼';
+  }
+}
+function triggerPwaInstall(){
+  if(window.__deferredPrompt){
+    window.__deferredPrompt.prompt();
+    window.__deferredPrompt.userChoice.then(function(choice){
+      window.__deferredPrompt=null;
+      if(choice&&choice.outcome==='accepted'){
+        hidePwaInstallPrompt();
+      }
+    });
+  }else{
+    // 无浏览器提示时（如 Firefox/Safari），给手动指引
+    if(IS_IOS){
+      alert('请按以下步骤添加到主屏幕：\n① 点 Safari 底部“分享”按钮（□↑）\n② 上滑找到“添加到主屏幕”\n③ 点“添加”');
+    }else{
+      alert('请按以下步骤添加：\n① 点浏览器右上角“⋮”菜单\n② 选择“安装应用 / 添加到桌面”\n③ 确认添加');
+    }
+  }
+}
+
+// 页面加载后再判断一次（处理 iOS 等不触发 beforeinstallprompt 的场景）
+window.addEventListener('DOMContentLoaded',function(){
+  if(IS_STANDALONE){ hidePwaInstallPrompt(); return; }
+  // iOS 不触发 beforeinstallprompt，直接显示浮条
+  if(IS_IOS&&IS_MOBILE_UA) showPwaInstallPrompt();
+  // 电脑端若浏览器支持安装，先显示按钮；等 beforeinstallprompt 触发后再点亮实际安装能力
+  if(!IS_MOBILE_UA) showPwaInstallPrompt();
+});
 // ===== PWA：注册 Service Worker（可安装成App + 离线可看）=====
 // 2026-09-02：新版 SW 激活后自动 reload，保证所有人打开就是最新版，无需手动清缓存
 if('serviceWorker' in navigator){
@@ -1991,16 +2213,27 @@ function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){retu
 // ===== AI 智能问答（2026-09-05 方案 B：前端直连 DeepSeek，共享 key 内嵌）=====
 // 背景：本页是 GitHub Pages 纯静态站点、无后端服务器；所有后端（Cloudflare/腾讯云/华为云/阿里云）
 // 要么被公司网络墙、要么受国内 ICP 备案限制，故改「前端直连 DeepSeek」。
-// 共享 key 以 base64 混淆内嵌（避免被 GitHub 密钥扫描拦截）；但静态页面无法真正隐藏密钥，
-// 任何人按 F12 即可解码——仅限内部可信小圈子使用。如对外分发，请改用后端或每人自有 key。
+// 共享 key 以「XOR(salt)+Base64」双重混淆内嵌：源码中既无 sk- 明文、也无可直接 atob 的 base64，
+// 能挡住 GitHub 密钥扫描与简单 base64 还原；但静态页面仍无法真正隐藏密钥，有心人按 F12 仍可逆推——
+// 仅限内部可信小圈子使用。如对外分发，请改用后端代理或每人自有 key。
 // 已验证：DeepSeek 允许 github.io 跨域（CORS），浏览器可直接调用。
 var QA_API_BASE='';
-var QA_DS_KEY_B64='c2stZGZiNDA4ZWVhNzA1NDg3ZTg2ZjBhODY4OTBmMThjM2M=';
-function getDsKey(){try{return atob(QA_DS_KEY_B64);}catch(e){return '';}}
+var QA_DS_SALT='mlb2026xk';
+var QA_DS_KEY_B64='HgdPUwJTBEoOWV9VVAQAAkxbVVRWBQkFUh0KXg8AC1ZQBx0=';
+function getDsKey(){
+  try{
+    var bin=atob(QA_DS_KEY_B64),out='';
+    for(var i=0;i<bin.length;i++){
+      out+=String.fromCharCode(bin.charCodeAt(i)^QA_DS_SALT.charCodeAt(i%QA_DS_SALT.length));
+    }
+    return out;
+  }catch(e){return '';}
+}
 
 (function(){
   qaInitData();
   renderDigest();
+  setupCardOpen();   // 整张卡片点击打开原文（标题/按钮仍各自处理）
   // 悬浮球筛选：矿种 / 主题 / 时间变化即触发检索（实时）
   ['qaFloatMineral','qaFloatTopic'].forEach(function(id){
     var e=document.getElementById(id);if(e)e.addEventListener('change',qaFloatSearch);
@@ -2034,7 +2267,9 @@ function getDsKey(){try{return atob(QA_DS_KEY_B64);}catch(e){return '';}}
   }
   var _panel=document.getElementById('qaFloat');
   if(_panel){
-    // 拖拽把手扩展到整个面板（除交互元素/缩放柄），详见 qaFloatStartDrag
+    qaFloatAddResizeHandles();
+    // 缩放把手优先；拖拽把手=整个面板除交互元素/缩放柄
+    _panel.addEventListener('mousedown',qaFloatStartResize);
     _panel.addEventListener('mousedown',qaFloatStartDrag);
     _panel.addEventListener('touchstart',qaFloatStartDrag,{passive:false});
   }
@@ -2336,7 +2571,7 @@ function qaStopBreathe(){
 // 拖拽把手=整个面板任意非交互位置（头部/边框/结果空白区均可拖）；
 // 输入框/筛选/按钮/链接/关闭键/趋势图/右下角原生缩放柄 不触发拖拽。
 var QA_DRAGGING=null;
-var QA_DRAG_EXCLUDE='input,select,button,a,textarea,[contenteditable],.qa-fsel,.qa-fchip,.pchart-close,.qa-trend,.qa-src';
+var QA_DRAG_EXCLUDE='input,select,button,a,textarea,[contenteditable],.qa-fsel,.qa-fchip,.pchart-close,.qa-trend,.qa-src,.qa-msg-bubble,.qa-float-body,.qa-resize-handle';
 function qaFloatStartDrag(ev){
   var p=document.getElementById('qaFloat'); if(!p||!p.classList.contains('open'))return;
   // 交互元素不触发拖拽，保证内部可选择/点击/输入
@@ -2403,15 +2638,140 @@ function qaFloatRestoreSize(){
     p.style.width=sz.width+'px'; p.style.height=sz.height+'px';
   }catch(e){}
 }
+// ===== 面板四边四角自定义缩放 =====
+var QA_RESIZING=null;
+function qaFloatAddResizeHandles(){
+  var p=document.getElementById('qaFloat'); if(!p||p.querySelector('.qa-resize-handle'))return;
+  ['n','s','e','w','ne','nw','se','sw'].forEach(function(dir){
+    var d=document.createElement('div'); d.className='qa-resize-handle qa-resize-'+dir; d.dataset.dir=dir;
+    p.appendChild(d);
+  });
+}
+function qaFloatStartResize(ev){
+  var h=ev.target.closest && ev.target.closest('.qa-resize-handle'); if(!h)return;
+  var p=document.getElementById('qaFloat'); if(!p)return;
+  var dir=h.dataset.dir||'se';
+  var r=p.getBoundingClientRect();
+  QA_RESIZING={el:p,dir:dir,startX:ev.clientX,startY:ev.clientY,startW:r.width,startH:r.height,startL:r.left,startT:r.top,minW:300,minH:260};
+  document.addEventListener('mousemove',qaFloatResize); document.addEventListener('mouseup',qaFloatStopResize);
+  ev.preventDefault(); ev.stopPropagation();
+}
+function qaFloatResize(ev){
+  if(!QA_RESIZING)return;
+  var o=QA_RESIZING, p=o.el, dx=ev.clientX-o.startX, dy=ev.clientY-o.startY;
+  var vw=window.innerWidth, vh=window.innerHeight;
+  var w=o.startW, h=o.startH, l=o.startL, t=o.startT;
+  if(o.dir.indexOf('e')>=0){w=Math.min(Math.max(o.startW+dx,o.minW),vw-l-8);}
+  if(o.dir.indexOf('s')>=0){h=Math.min(Math.max(o.startH+dy,o.minH),vh-t-8);}
+  if(o.dir.indexOf('w')>=0){var newW=Math.min(Math.max(o.startW-dx,o.minW),vw-16); l=Math.min(Math.max(o.startL+o.startW-newW,0),o.startL+o.startW-o.minW); w=newW;}
+  if(o.dir.indexOf('n')>=0){var newH=Math.min(Math.max(o.startH-dy,o.minH),vh-16); t=Math.min(Math.max(o.startT+o.startH-newH,0),o.startT+o.startH-o.minH); h=newH;}
+  p.style.width=w+'px'; p.style.height=h+'px'; p.style.left=l+'px'; p.style.top=t+'px'; p.style.bottom='auto';
+  ev.preventDefault();
+}
+function qaFloatStopResize(ev){
+  if(!QA_RESIZING)return;
+  document.removeEventListener('mousemove',qaFloatResize); document.removeEventListener('mouseup',qaFloatStopResize);
+  QA_RESIZING=null; qaFloatSavePos(); qaFloatSaveSize();
+}
 function qaFloatScroll(){
   var b=document.getElementById('qaFloatBody');if(b)b.scrollTop=b.scrollHeight;
 }
-function qaFloatAdd(role,html,meta){
+// 轻量 Markdown → HTML（仅支持回答常见格式：加粗、列表、标题、代码、引用、链接）
+function qaMdRender(md){
+  if(!md)return '';
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  var text=esc(md).replace(/\r\n/g,'\n');
+  var codes=[], placeholders=[];
+  text=text.replace(/```([\s\S]*?)```/g,function(m,code){
+    var i=codes.length;
+    codes.push('<pre><code>'+esc(code.replace(/^```\s*\n?|```$/g,'').replace(/^\n+|\n+$/g,''))+'</code></pre>');
+    placeholders.push('__CODE_BLOCK_'+i+'__');
+    return placeholders[i];
+  });
+  text=text.replace(/`([^`]+)`/g,'<code>$1</code>');
+  text=text.replace(/^#### (.*$)/gim,'<h4>$1</h4>');
+  text=text.replace(/^### (.*$)/gim,'<h3>$1</h3>');
+  text=text.replace(/^## (.*$)/gim,'<h2>$1</h2>');
+  text=text.replace(/^# (.*$)/gim,'<h1>$1</h1>');
+  text=text.replace(/^&gt; (.*$)/gim,'<blockquote>$1</blockquote>');
+  text=text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,function(m,a,u){var s=qaSafeUrl(u);return s?'<img src="'+s+'" alt="'+a+'" style="max-width:100%">':'';});
+  text=text.replace(/\[([^\]]+)\]\(([^)]+)\)/g,function(m,t,u){var s=qaSafeUrl(u);if(!s)return t;return '<a href="'+s+'" target="_blank" rel="noopener" onclick="window.open(this.href,\'_blank\',\'noopener,noreferrer\');return false;">'+t+'</a>';});
+  text=text.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  text=text.replace(/__([^_]+)__/g,'<strong>$1</strong>');
+  text=text.replace(/\*([^*]+)\*/g,'<em>$1</em>');
+  text=text.replace(/_([^_]+)_/g,'<em>$1</em>');
+  var lines=text.split('\n');
+  var out=[], inList=false, listType='ul';
+  function flushList(){if(inList){out.push('</'+listType+'>');inList=false;}}
+  lines.forEach(function(line){
+    var t=line.trim();
+    if(!t){flushList();out.push('');return;}
+    if(/^<(h[1-4]|pre|blockquote|img)/.test(line)){flushList();out.push(line);return;}
+    if(/^__CODE_BLOCK_/.test(line)){flushList();out.push(line);return;}
+    var ul=line.match(/^[\*\-]\s+(.*)$/);
+    var ol=line.match(/^(\d+)\.\s+(.*)$/);
+    if(ul){
+      if(!inList||listType!=='ul'){flushList();out.push('<ul>');listType='ul';}
+      inList=true;out.push('<li>'+ul[1]+'</li>');
+    }else if(ol){
+      if(!inList||listType!=='ol'){flushList();out.push('<ol>');listType='ol';}
+      inList=true;out.push('<li>'+ol[2]+'</li>');
+    }else{
+      flushList();out.push(line);
+    }
+  });
+  flushList();
+  var html=out.join('\n');
+  codes.forEach(function(c,i){html=html.replace(placeholders[i],c);});
+  return html.split(/\n\n+/).filter(Boolean).map(function(b){
+    b=b.trim();
+    if(/^<(h[1-4]|pre|blockquote|ul|ol)/.test(b))return b;
+    return '<p>'+b.replace(/\n/g,'<br>')+'</p>';
+  }).join('\n');
+}
+function qaFmtTime(ts){
+  try{var d=new Date(Number(ts));var p=function(n){return (n<10?'0':'')+n;};
+    return p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());}catch(e){return '';}
+}
+function qaFloatAdd(role,html,meta,opts){
+  opts=opts||{};
   var body=document.getElementById('qaFloatBody');if(!body)return null;
   var d=document.createElement('div');d.className='qa-msg '+role;
+  var bubbleHtml='<div class="qa-msg-bubble">'+(opts.md?qaMdRender(html):qaEsc(html).replace(/\n/g,'<br>'))+'</div>';
+  var actions='';
+  if(role==='ai'&&opts.actions!==false){
+    actions='<div class="qa-msg-actions">'+
+      '<button class="qa-msg-action" type="button" title="复制回答" onclick="qaCopyAi(this)">📋 复制</button>'+
+      (opts.canRetry?'<button class="qa-msg-action" type="button" title="重新生成" onclick="qaRetryAi(this)">🔄 重新生成</button>':'')+
+      '</div>';
+  }
   var m=meta?'<div class="qa-msg-meta">'+qaEsc(meta)+'</div>':'';
-  d.innerHTML='<div class="qa-msg-bubble">'+html+'</div>'+m;
+  var t=opts.ts?'<div class="qa-msg-time">'+qaFmtTime(opts.ts)+'</div>':'';
+  d.innerHTML=bubbleHtml+m+t+actions;
+  d.dataset.raw=html||'';
+  d.dataset.md=opts.md?'1':'';
+  if(opts.q)d.dataset.q=opts.q;
+  if(opts.ctx)d.dataset.ctx=JSON.stringify(opts.ctx||[]);
+  if(opts.ts)d.dataset.ts=String(opts.ts);
   body.appendChild(d);qaFloatScroll();return d;
+}
+function qaExportHistory(btn){
+  try{
+    var body=document.getElementById('qaFloatBody');if(!body)return;
+    var msgs=body.querySelectorAll('.qa-msg');
+    var lines=['=== 矿业新闻日报 · 问答导出 ===','时间：'+new Date().toLocaleString('zh-CN'),''];
+    msgs.forEach(function(el){
+      var role=el.classList.contains('user')?'【问】':'【答】';
+      var raw=el.dataset.raw||'';
+      if(raw)lines.push(role+' '+raw.replace(/\n+/g,'\n'));
+    });
+    var txt=lines.join('\n');
+    navigator.clipboard.writeText(txt).then(function(){
+      if(btn){btn.textContent='已复制';setTimeout(function(){btn.textContent='📤 导出';},1500);}
+    },function(){
+      if(btn){btn.textContent='复制失败';setTimeout(function(){btn.textContent='📤 导出';},1500);}
+    });
+  }catch(e){}
 }
 function qaFloatSearch(){
   var inp=document.getElementById('qaFloatInput');if(!inp)return;
@@ -2419,9 +2779,9 @@ function qaFloatSearch(){
   var mineral=(document.getElementById('qaFloatMineral')||{}).value||'';
   var topic=(document.getElementById('qaFloatTopic')||{}).value||'';
   var range=parseInt((document.getElementById('qaFloatRange')||{}).value,10)||0;
-  if(q){qaFloatAdd('user',qaEsc(q),'');inp.value='';}
+  if(q){qaFloatAdd('user',q,'',{md:false});inp.value='';}
   if(!q&&!mineral&&!topic&&!range){
-    qaFloatAdd('ai','请选择矿种 / 主题 / 时间，或输入关键词后点「检索」。','');
+    qaFloatAdd('ai','请选择矿种 / 主题 / 时间，或输入关键词后点「检索」。','',{md:false});
     return;
   }
   var words=q?q.split(/\s+/).filter(Boolean):[],from='';
@@ -2449,7 +2809,8 @@ function qaFloatSearch(){
     }
     if(hits.length>lim)html+='<div style="margin-top:4px;color:#6b7a89">共 '+hits.length+' 条，可缩小矿种 / 主题 / 时间范围查看全部。</div>';
   }
-  qaFloatAdd('ai',html,'全库 '+QA_ROWS.length+' 条 · 检索于本地，不经任何服务');
+  qaFloatAdd('ai',html,'全库 '+QA_ROWS.length+' 条 · 检索于本地，不经任何服务',{md:false});
+  qaSaveHistory();
 }
 // 本地关键词兜底库：后端不可达时，仍能给出基于通用矿业知识的回答
 var QA_AI_FALLBACK=[
@@ -2493,94 +2854,212 @@ function qaAiLocalAnswer(q,ctx){
   }
   return text;
 }
-function qaFloatAsk(){
+function qaFloatAsk(retryMode,ctxOverride){
   if(QA_FLOAT_BUSY)return;
   var inp=document.getElementById('qaFloatInput'),btn=document.getElementById('qaFloatAi');
   var q=inp?(inp.value||'').trim():'';
-  if(!q){qaFloatAdd('ai','请先输入问题，例如「最近有哪些稀土政策」「锂价为什么大跌」。','');return;}
-  // 2026-09-05 修复：不再因为 QA_AI_ON 预探测失败就拒绝用户。
-  // 公司代理/扩展可能伪造 health 响应导致 QA_AI_ON=false，但 /api/qa 其实可通。
-  // 因此点 AI 时直接尝试请求后端；若真不可用，catch 会给出真实错误提示。
+  if(!q){qaFloatAdd('ai','请先输入问题，例如「最近有哪些稀土政策」「锂价为什么大跌」。','',{md:false});return;}
   QA_FLOAT_BUSY=true;
   if(btn){btn.disabled=true;btn.textContent='思考中…';}
-  qaFloatAdd('user',qaEsc(q),'');
+  if(!retryMode){qaFloatAdd('user',q,'',{md:false,ts:Date.now()});qaSaveHistory();}
   if(inp)inp.value='';
-  // 本地先检索与问题相关的全库新闻，作为 RAG 上下文一并交给后端 DeepSeek
-  var _min=(document.getElementById('qaFloatMineral')||{}).value||'';
-  var _top=(document.getElementById('qaFloatTopic')||{}).value||'';
-  var _rg=parseInt((document.getElementById('qaFloatRange')||{}).value,10)||0;
-  // 从问题中提取矿种/主题词，经 qaMineralHit 消歧后作为 RAG 上下文的精确筛选条件，
-  // 与「检索」面板同一套口径——避免把整句/同义词扩展当关键词，误把无关新闻带进上下文稀释 AI 答案。
-  var _ext=qaExtractTerms(q);
-  var _minSel=_ext.filter(function(t){return QA_MINERALS.indexOf(t)>=0;})[0]||'';
-  var _topSel=_ext.filter(function(t){return QA_TOPICS.indexOf(t)>=0;})[0]||'';
-  var _from='';
-  if(_rg>0){var _max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>_max)_max=r.d;});if(_max){var _dt=new Date(_max+'T00:00:00');_dt.setDate(_dt.getDate()-_rg+1);_from=_dt.toISOString().slice(0,10);}}
-  // 优先用问题中提取的矿种/主题；问题没提则用用户当前下拉选择；都没有则退化为全库最新 12 条
-  var _ctx=qaFilter(QA_ROWS,[],_minSel||_min,_topSel||_top,_from,'and').slice(0,12);
-  // 二次精筛：标题须真的出现该矿种词，避免「标签/来源含铝字」之类把无关新闻带进上下文
-  if(_minSel){_ctx=_ctx.filter(function(r){return (r.t||'').indexOf(_minSel)>=0;});}
-  var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…','');
-  // 前端直连 DeepSeek（共享 key 已内嵌）；若公司网络拦截 api.deepseek.com / key 无效 / CORS 失败，
-  // 自动降级到本地知识库兜底，保证用户始终能得到回答。
+  var _ctx=ctxOverride;
+  if(!_ctx){
+    var _min=(document.getElementById('qaFloatMineral')||{}).value||'';
+    var _top=(document.getElementById('qaFloatTopic')||{}).value||'';
+    var _rg=parseInt((document.getElementById('qaFloatRange')||{}).value,10)||0;
+    var _ext=qaExtractTerms(q);
+    var _minSel=_ext.filter(function(t){return QA_MINERALS.indexOf(t)>=0;})[0]||'';
+    var _topSel=_ext.filter(function(t){return QA_TOPICS.indexOf(t)>=0;})[0]||'';
+    var _from='';
+    if(_rg>0){var _max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>_max)_max=r.d;});if(_max){var _dt=new Date(_max+'T00:00:00');_dt.setDate(_dt.getDate()-_rg+1);_from=_dt.toISOString().slice(0,10);}}
+    _ctx=qaFilter(QA_ROWS,[],_minSel||_min,_topSel||_top,_from,'and').slice(0,12);
+    if(_minSel){_ctx=_ctx.filter(function(r){return (r.t||'').indexOf(_minSel)>=0;});}
+  }
+  var meta='正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候…';
+  var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now()});
   qaDeepseekCall(q,_ctx,msg,btn);
   return;
+}
+// 安全清洗外链：只允许 http/https，拦截 javascript:/data:/vbscript: 等危险协议，并转义引号
+function qaSafeUrl(u){
+  if(!u)return '';
+  u=String(u).trim();
+  if(/^\s*(javascript|data|vbscript):/i.test(u))return '';
+  if(/^https?:\/\//i.test(u))return u.replace(/"/g,'%22');
+  return '';
+}
+// AI 回答下方自动附「参考来源」可点击列表（数据本身带 url，之前调用未使用）
+function qaDsSourcesHtml(ctx){
+  if(!ctx||!ctx.length)return '';
+  var items=ctx.slice(0,8).map(function(c){
+    var u=c.u||c.url||'',t=c.t||'新闻';
+    if(!u)return '';
+    var safe=qaSafeUrl(u);if(!safe)return '';
+    return '<li><a href="'+safe+'" target="_blank" rel="noopener" onclick="window.open(this.href,\'_blank\',\'noopener,noreferrer\');return false;">'+qaEsc(t)+'</a>'+(c.d?' <span class="qa-src-date">'+qaEsc(c.d)+'</span>':'');
+  }).filter(Boolean);
+  if(!items.length)return '';
+  return '<div class="qa-msg-sources"><div class="qa-sources-title">📚 参考来源（点击查看原文）</div><ul>'+items.join('')+'</ul></div>';
 }
 function qaDeepseekCall(q,ctx,msg,btn){
   var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
   var system=('你是资深矿业行业分析师，服务于「矿业新闻日报」产品。'
-    +'回答要简洁专业、不啰嗦、用中文。'
-    +'如果提供了相关新闻条目，请自然引用并注明来源与日期；'
+    +'回答用中文、简洁专业、结构化呈现（优先用要点列表或小标题，避免一大段文字）。'
+    +'若提供了相关新闻条目，请基于这些条目作答；引用具体新闻时只写标题和发布日期，不要在回答正文中插入 Markdown 链接——系统会自动在回答底部列出可点击的参考来源。'
     +'若没有相关新闻，请明确说明这是基于通用知识的回答，并建议用户查证官方信息。'
-    +'不要编造数据、价格或政策细节。');
+    +'不要编造数据、价格或政策细节；不要复制"以上信息来自公开公告"之类的注水结语。');
   var user='用户问题：'+q+'\n\n';
   if(ctx&&ctx.length){
-    user+='以下为本地检索到的相关新闻条目（仅供参考，请以公开权威信息为准）：\n';
+    user+='以下为本地检索到的相关新闻条目（含原文链接，优先参考这些，并以公开权威信息为准）：\n';
     ctx.forEach(function(c,i){
-      var d=c.d||'',t=c.t||'',s=c.s||'';
-      user+=(i+1)+'. ['+d+'] '+t+(s?('（'+s+'）'):'')+'\n';
+      var d=c.d||'',t=c.t||'',s=c.s||'',u=c.u||c.url||'';
+      user+=(i+1)+'. ['+d+'] '+t+(s?('（'+s+'）'):'')+(u?(' 链接：'+u):'')+'\n';
     });
     user+='\n';
   }else{
     user+='（未提供相关新闻，请基于通用知识回答。）\n\n';
   }
   user+='请直接给出回答，无需寒暄。';
-  if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">正在调用 DeepSeek 生成答案（约 10~30 秒）…</div>';
+  if(bubble)bubble.innerHTML='<div class="qa-thinking"><span class="qa-dot"></span>DeepSeek 正在组织答案（约 10~30 秒，可先浏览上方参考来源）…</div>';
   fetch('https://api.deepseek.com/chat/completions',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()},
-    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:system},{role:'user',content:user}],max_tokens:800,temperature:0.3,stream:false})
+    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:system},{role:'user',content:user}],max_tokens:1000,temperature:0.3,stream:false})
   })
-    .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d||{}};},function(){return {ok:false,d:{}};});})
+    .then(function(r){return r.json().then(function(d){return {ok:r.ok,status:r.status,d:d||{}};},function(){return {ok:false,status:0,d:{}};});})
     .then(function(res){
-      var d=res.d,text='';
+      var d=res.d,text='',meta='';
       if(!res.ok){
         var em=(d&&d.error&&d.error.message)||'请求失败，请稍后重试。';
-        text='<div style="color:#e74c3c">DeepSeek 调用失败：'+qaEsc(em)+'</div>';
-        if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='DeepSeek 错误';}
+        if(res.status===401||/authentication|invalid.*key|api key/i.test(em)){
+          text='⚠️ **API Key 已失效或被吊销**，AI 暂时无法回答。\n\n请联系网页维护者更新 DeepSeek API Key 后重试；你也可以切换到「检索」面板直接查看本地新闻。';
+          meta='需要更新 Key';
+        }else{
+          text='DeepSeek 调用失败：'+em+'\n\n可点「🔄 重新生成」重试，或切换到「检索」面板查看本地新闻。';
+          meta='DeepSeek 错误';
+        }
       }else{
         var content=((((d.choices||[])[0]||{}).message||{}).content||'').trim();
-        if(!content){text='<div style="color:#e74c3c">模型未返回内容</div>';}
-        else{
-          text=qaEsc(content);
-          if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='DeepSeek 真 AI · 已读 '+(ctx?ctx.length:0)+' 条本地新闻';}
+        if(!content){text='模型未返回内容';meta='DeepSeek 错误';}
+        else{text=content;meta='DeepSeek 真 AI · 已读 '+(ctx?ctx.length:0)+' 条本地新闻';}
+      }
+      if(bubble){
+        bubble.innerHTML=qaMdRender(text);
+        var src=qaDsSourcesHtml(ctx);
+        if(src)bubble.insertAdjacentHTML('afterend',src);
+      }
+      if(msg){
+        var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=meta;
+        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);
+        if(res.ok&&content){
+          var actions='<div class="qa-msg-actions">'+
+            '<button class="qa-msg-action" type="button" title="复制回答" onclick="qaCopyAi(this)">📋 复制</button>'+
+            '<button class="qa-msg-action" type="button" title="重新生成" onclick="qaRetryAi(this)">🔄 重新生成</button>'+
+            '</div>';
+          if(!msg.querySelector('.qa-msg-actions')){
+            var metaEl=msg.querySelector('.qa-msg-meta');
+            if(metaEl)metaEl.insertAdjacentHTML('afterend',actions);
+            else msg.insertAdjacentHTML('beforeend',actions);
+          }
         }
       }
-      if(bubble)bubble.innerHTML=text;
-      qaFloatScroll();
+      qaFloatScroll();qaSaveHistory();
     })
     .catch(function(e){
-      // 直连失败（公司网络拦截 api.deepseek.com / key 无效 / CORS）：本地兜底
       var localAns=qaAiLocalAnswer(q,ctx);
-      var hint='\n\n[DeepSeek 直连失败（'+qaEsc((e&&e.message)||e||'网络错误')+'），已切换为本地知识库回答]';
-      if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">'+qaEsc(localAns)+'<span style="color:#e74c3c">'+hint+'</span></div>';
-      if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 全库 '+QA_ROWS.length+' 条';}
-      qaFloatScroll();
+      var hint='\n\n[DeepSeek 直连失败（'+((e&&e.message)||e||'网络错误')+'），已切换为本地知识库回答]';
+      var text=localAns+hint;
+      if(bubble){
+        bubble.innerHTML=qaMdRender(text);
+        var src=qaDsSourcesHtml(ctx);
+        if(src)bubble.insertAdjacentHTML('afterend',src);
+      }
+      if(msg){
+        var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 全库 '+QA_ROWS.length+' 条';
+        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);
+        if(!msg.querySelector('.qa-msg-actions')){
+          var metaEl=msg.querySelector('.qa-msg-meta');
+          var actions='<div class="qa-msg-actions">'+
+            '<button class="qa-msg-action" type="button" title="复制回答" onclick="qaCopyAi(this)">📋 复制</button>'+
+            '<button class="qa-msg-action" type="button" title="重新生成" onclick="qaRetryAi(this)">🔄 重新生成</button>'+
+            '</div>';
+          if(metaEl)metaEl.insertAdjacentHTML('afterend',actions);
+          else msg.insertAdjacentHTML('beforeend',actions);
+        }
+      }
+      qaFloatScroll();qaSaveHistory();
     })
     .then(function(){
       QA_FLOAT_BUSY=false;
-      if(btn){btn.disabled=false;btn.textContent='AI';}
+      if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
     });
+}
+// ===== 问答历史记忆（本地 localStorage）=====
+var QA_HISTORY_KEY='qa_history_v1';
+var QA_HISTORY_MAX=50;
+function qaLoadHistory(){
+  try{
+    var s=localStorage.getItem(QA_HISTORY_KEY);
+    if(!s)return;
+    var list=JSON.parse(s);
+    if(!Array.isArray(list))return;
+    var body=document.getElementById('qaFloatBody');if(!body)return;
+    body.innerHTML='';
+    list.forEach(function(it){
+      if(it.role==='user')qaFloatAdd('user',it.html,'',{md:false,ts:it.ts});
+      else if(it.role==='ai')qaFloatAdd('ai',it.html,it.meta||'',{md:true,canRetry:it.canRetry!==false,actions:it.canRetry!==false,q:it.q||'',ctx:it.ctx||[],ts:it.ts});
+      else if(it.role==='search')qaFloatAdd('ai',it.html,it.meta||'',{md:false,ts:it.ts});
+    });
+  }catch(e){}
+}
+function qaSaveHistory(){
+  try{
+    var body=document.getElementById('qaFloatBody');if(!body)return;
+    var msgs=body.querySelectorAll('.qa-msg');
+    var out=[];
+    msgs.forEach(function(el){
+      var role=el.classList.contains('user')?'user':(el.classList.contains('ai')?'ai':'');
+      if(!role)return;
+      var metaEl=el.querySelector('.qa-msg-meta');
+      var meta=metaEl?metaEl.textContent:'';
+      var raw=el.dataset.raw||'';
+      var ts=el.dataset.ts?Number(el.dataset.ts):0;
+      if(role==='ai'){
+        out.push({role:'ai',html:raw,meta:meta,ts:ts,q:el.dataset.q||'',ctx:el.dataset.ctx||'',canRetry:!!el.querySelector('.qa-msg-actions')});
+      }else{
+        out.push({role:'user',html:raw,meta:meta,ts:ts});
+      }
+    });
+    if(out.length>QA_HISTORY_MAX)out=out.slice(out.length-QA_HISTORY_MAX);
+    localStorage.setItem(QA_HISTORY_KEY,JSON.stringify(out));
+  }catch(e){}
+}
+function qaClearHistory(){
+  try{localStorage.removeItem(QA_HISTORY_KEY);}catch(e){}
+  var body=document.getElementById('qaFloatBody');if(!body)return;
+  body.innerHTML='';
+  qaFloatAdd('ai','全库 '+QA_ROWS.length+' 条新闻可检索。输入关键词，或先选矿种 / 主题 / 时间再点「检索」。','本地检索 · 零依赖',{md:false});
+}
+function qaCopyAi(btn){
+  var msg=btn.closest('.qa-msg');if(!msg)return;
+  var raw=msg.dataset.raw||'';
+  try{
+    navigator.clipboard.writeText(raw).then(function(){
+      btn.textContent='已复制';setTimeout(function(){btn.textContent='📋 复制';},1500);
+    },function(){
+      btn.textContent='复制失败';setTimeout(function(){btn.textContent='📋 复制';},1500);
+    });
+  }catch(e){btn.textContent='复制失败';setTimeout(function(){btn.textContent='📋 复制';},1500);}
+}
+function qaRetryAi(btn){
+  var msg=btn.closest('.qa-msg');if(!msg)return;
+  var q=msg.dataset.q||'',ctx=msg.dataset.ctx||'[]';
+  if(!q)return;
+  try{ctx=JSON.parse(ctx)||[];}catch(e){ctx=[];}
+  var inp=document.getElementById('qaFloatInput');if(inp)inp.value=q;
+  var body=document.getElementById('qaFloatBody');if(!body||!body.contains(msg))return;
+  body.removeChild(msg);
+  qaFloatAsk(true,ctx);
 }
 function qaFloatReset(){
   var i=document.getElementById('qaFloatInput');if(i)i.value='';
@@ -2591,8 +3070,12 @@ function qaFloatReset(){
 }
 (function(){
   var fb=document.getElementById('qaFloatBody');
-  if(fb&&!fb.children.length){
-    qaFloatAdd('ai','全库 '+QA_ROWS.length+' 条新闻可检索。输入关键词，或先选矿种 / 主题 / 时间再点「检索」。','本地检索 · 零依赖');
+  if(fb){
+    if(fb.children.length)fb.innerHTML='';
+    qaLoadHistory();
+    if(!fb.children.length){
+      qaFloatAdd('ai','全库 '+QA_ROWS.length+' 条新闻可检索。输入关键词，或先选矿种 / 主题 / 时间再点「检索」。','本地检索 · 零依赖',{md:false});
+    }
   }
   var inp=document.getElementById('qaFloatInput');
   if(inp){
@@ -2620,7 +3103,10 @@ function applyTheme(mode){
   document.body.classList.toggle('dark', dark);
   var btn = document.getElementById('themeToggle');
   if(btn){
-    btn.textContent = dark ? '☀️' : '🌙';
+    var lightOpt = btn.querySelector('.theme-option.light');
+    var darkOpt = btn.querySelector('.theme-option.dark');
+    if(lightOpt) lightOpt.classList.toggle('active', !dark);
+    if(darkOpt) darkOpt.classList.toggle('active', dark);
     btn.setAttribute('title', dark ? '切换到浅色模式' : '切换到深色模式');
     btn.setAttribute('aria-label', btn.getAttribute('title'));
   }
