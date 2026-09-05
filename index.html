@@ -580,6 +580,16 @@ body.dark .qa-airefs a{color:#6ab4e0}
 .guide-tip{margin:10px 14px 0;padding:10px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;font-size:12.5px;color:#78350f;line-height:1.65}
 .guide-link{display:block;margin:12px 16px 4px;padding:12px 14px;background:linear-gradient(90deg,#1a3a5c,#2c5f8a);color:#fff;border-radius:8px;text-align:center;font-weight:700;font-size:15px;word-break:break-all}
 .guide-link:hover{opacity:.92;text-decoration:none}
+.guide-summary{padding:12px 16px;font-size:13.5px;color:#334155;line-height:1.7;background:#fff;border-bottom:1px solid #e2e8f0}
+.guide-summary p{margin:0 0 6px}
+.guide-summary b{color:#0e7490}
+.guide-summary-note{color:#64748b;font-size:12.5px;margin-top:8px}
+.guide-toggle{margin-left:auto;height:28px;border:none;border-radius:14px;padding:0 12px;font-size:12.5px;font-weight:600;background:#e0f2fe;color:#0e7490;cursor:pointer;transition:.2s}
+.guide-toggle:hover{background:#cffafe}
+body.dark .guide-summary{background:#0f151c;border-bottom-color:#2c3845;color:#cbd5e1}
+body.dark .guide-summary-note{color:#94a3b8}
+body.dark .guide-toggle{background:#163545;color:#7dd3fc}
+body.dark .guide-toggle:hover{background:#1d4558}
 @media(max-width:600px){
 .sp-cat{font-size:14px;padding:12px 14px 10px 18px}
 .guide-cols{flex-direction:column;padding:10px 12px}
@@ -587,6 +597,8 @@ body.dark .qa-airefs a{color:#6ab4e0}
 .guide-col-body{font-size:13px;padding:12px}
 .guide-intro{font-size:12.5px;padding:8px 12px 10px;margin:0 10px 4px}
 .guide-link{font-size:13.5px}
+.guide-summary{padding:10px 12px;font-size:13px}
+.guide-toggle{height:26px;padding:0 10px;font-size:12px}
 }
 @media(max-width:600px){
 .header{padding:18px 14px}.header h1{font-size:18px}
@@ -817,39 +829,38 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm" target="_blank">印度同赞比亚恢复矿产投资谈判</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-02</div><div class="news-summary">印度与赞比亚重启矿产投资谈判，聚焦铜及关键矿产的联合勘查开发与供应链合作。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm" target="_blank">查看原文 →</a></div>
 </div>
 <div class="section" id="installGuideSection">
-<div class="section-title guide"><span class="icon">📲</span> 安装到桌面 · 详细说明 <span class="news-count" style="background:#cffafe;color:#0e7490">建议收藏本页</span></div>
-<div class="guide-intro">本页面是网页，<b>不需要"装软件"</b>。推荐做法：把链接<br><b>① 收藏到浏览器书签</b>（任意浏览器都行——每天打开一次即可）<br>② 或通过浏览器菜单"<b>添加到主屏幕 / 添加到桌面</b>"，桌面会出现一个图标、点图标直达、像App一样。本页面在介绍两种方式的详细操作、适用浏览器和常见坑。</div>
-
+<div class="section-title guide"><span class="icon">📲</span> 安装到桌面 <span class="news-count" style="background:#cffafe;color:#0e7490">备用指引</span><button class="guide-toggle" id="guideToggle" onclick="toggleInstallGuide()" type="button">展开 ▼</button></div>
+<div class="guide-summary" id="guideSummary">
+<p><b>💻 电脑</b>：优先点页面右上角「<b>添加到桌面</b>」按钮，一键安装成独立窗口。</p>
+<p><b>📱 手机</b>：优先点页面底部「<b>安装</b>」浮条；iPhone 会提示 Safari 分享步骤。</p>
+<p class="guide-summary-note">如果没看到按钮，或想了解详细浏览器步骤，点上方「展开」查看。</p>
+</div>
+<div class="guide-body" id="guideBody" style="display:none">
 <div class="guide-cols">
 <!-- ============== 手机端 ============== -->
 <div class="guide-col mobile">
 <div class="guide-col-head">📱 手机端 · 把日报添加到桌面</div>
 <div class="guide-col-body">
-<div class="guide-step gs-mobile"><strong>① 安卓 Chrome（最常见）</strong>右上角「⋮」（三点）→「<b>添加到主屏幕</b>」→ 可改名称（默认"矿业新闻日报"）→「<b>添加</b>」。桌面出图标，点图标直达、全屏显示。</div>
-<div class="guide-step gs-mobile"><strong>①' 安卓 Edge / QQ 浏览器 / 360 极速</strong>这几种支持 <b>PWA</b>：菜单选「<b>安装应用 / 添加到主屏幕</b>」→「<b>添加</b>」。比普通"添加到主屏幕"更强——可全屏、有启动动画、离线也能开。</div>
-<div class="guide-step gs-mobile"><strong>①'' 安卓三星 / 华为 / 小米 自带浏览器</strong>右上角菜单 → 找「<b>添加到主屏幕</b>」「添加书签到桌面」之类选项，名称略有差异。</div>
-<div class="guide-step gs-mobile"><strong>② iPhone Safari / iPad</strong>底部工具栏「<b>分享 □↑</b>」图标 → 滚到下方找「<b>添加到主屏幕</b>」→「<b>添加</b>」。iPhone 没有 PWA 全屏，但桌面图标直达已经很方便。</div>
-<div class="guide-step gs-warn"><strong>⚠️ 微信里看不到这些按钮！</strong>必须先点微信右上角「<b>···</b>」 →「<b>在浏览器中打开</b>」（若没这个选项，选「<b>复制链接</b>」→ 打开手机自带的浏览器 → 把链接粘贴进去）。</div>
-<div class="guide-step"><small>💡 "添加到桌面"的桌面图标其实是<b>网页书签</b>，不是真正安装App。优点是几乎所有浏览器都支持、不占内存、即加即用；缺点是不像 PWA 那样能离线运行。</small></div>
+<div class="guide-step gs-mobile"><strong>① 安卓 Chrome</strong>右上角「⋮」→「<b>添加到主屏幕</b>」→ 改名称 →「<b>添加</b>」。桌面出图标，点图标直达。</div>
+<div class="guide-step gs-mobile"><strong>② iPhone Safari / iPad</strong>底部「<b>分享 □↑</b>」→ 上滑找「<b>添加到主屏幕</b>」→「<b>添加</b>」。iPhone 为桌面图标直达。</div>
+<div class="guide-step gs-warn"><strong>⚠️ 微信里看不到这些按钮！</strong>先点微信右上角「<b>···</b>」→「<b>在浏览器中打开</b>」；没这选项就「<b>复制链接</b>」→ 用手机自带浏览器打开。</div>
+<div class="guide-step"><small>💡 安卓 Edge/Chrome 支持 PWA 安装，可离线、全屏；其他浏览器多退化为书签图标。</small></div>
 </div>
 </div>
-
 <!-- ============== 电脑端 ============== -->
 <div class="guide-col pc">
 <div class="guide-col-head">💻 电脑端 · 装成独立窗口软件</div>
 <div class="guide-col-body">
-<div class="guide-step gs-pc"><strong>方式一：地址栏「安装」图标（推荐，最像 App）</strong>用 <b>Microsoft Edge</b> 或 <b>Google Chrome</b> 打开日报链接 → 看地址栏最右侧有没有一个<b>小方块+下载箭头</b>图标（有的浏览器显示 ⊞ 或 ⬇）→ 鼠标悬停显示「<b>安装 矿业新闻日报</b>」→ 点一下 → 弹窗确认「<b>安装</b>」。会自动：① 桌面生成图标 ②「开始菜单」里出现「矿业新闻日报」 ③ 以后双击图标就打开日报，<b>无地址栏、无标签页、全屏独立窗口</b>。</div>
-<div class="guide-step gs-pc"><strong>方式二：菜单「安装」</strong>如果地址栏右侧没图标，可点浏览器右上角「···」菜单 → 找「<b>安装 矿业新闻日报</b>」或「<b>将此网站作为应用安装</b>」选项。</div>
-<div class="guide-step gs-pc"><strong>方式三：Ctrl+D 收藏（兜底，所有浏览器都行）</strong>任意浏览器按 <b>Ctrl+D</b>（Mac 是 ⌘+D）→ 可改名称 → 选保存到「<b>书签栏</b>」（或收藏夹）→「完成」。每天打开浏览器点书签直达，无需安装。</div>
-<div class="guide-step gs-pc"><small>✅ 支持安装 PWA 的浏览器：<b>Microsoft Edge</b>（Windows 自带，强烈推荐）、<b>Google Chrome</b>、<b>QQ 浏览器（极速模式）</b>、<b>360 极速浏览器</b>、<b>Brave</b>。<br>❌ 不支持 PWA 安装、只能用 Ctrl+D 收藏：Firefox（火狐）、Safari（Mac）、IE、360 安全浏览器。<br>💡 推荐用电脑自带的 <b>Microsoft Edge</b> 即可，零下载，Win10/11 系统自带。</small></div>
+<div class="guide-step gs-pc"><strong>方式一：地址栏「安装」图标（推荐）</strong>用 <b>Edge / Chrome</b> 打开 → 地址栏右侧小方块+下载箭头图标 → 悬停显示「安装 矿业新闻日报」→ 确认安装。桌面与开始菜单都会出现图标，双击独立窗口打开。</div>
+<div class="guide-step gs-pc"><strong>方式二：菜单安装</strong>点浏览器右上角「⋯」→「<b>安装应用 / 添加到桌面</b>」。</div>
+<div class="guide-step gs-pc"><strong>方式三：Ctrl+D 收藏（兜底）</strong>按 <b>Ctrl+D</b>（Mac ⌘+D）保存到书签栏，每天点书签直达。</div>
+<div class="guide-step gs-pc"><small>✅ 推荐 Edge / Chrome；❌ Firefox、Safari(Mac)、IE 不支持 PWA，只能用 Ctrl+D 收藏。</small></div>
 </div>
 </div>
 </div>
-
-<!-- 安装 PWA 的链接 -->
 <a class="guide-link" href="https://04bad6570ebc40da9fa12c25c30b6ad3.app.workbuddy.link" target="_blank">📋 复制链接到浏览器：https://04bad6570ebc40da9fa12c25c30b6ad3.app.workbuddy.link</a>
-
-<div class="guide-tip">💡 <b>安装后怎么卸载？</b>手机：长按桌面图标选「删除」；电脑：Edge / Chrome「设置」→「应用」→「已安装的应用」→ 找"矿业新闻日报"→「卸载」。链接收藏在书签：书签栏 → 浏览器「收藏夹管理器」删。本页面随时能在浏览器输入链接打开，不会因为卸载而丢失。</div>
+<div class="guide-tip">💡 <b>安装后卸载：</b>手机长按图标删除；电脑 Edge/Chrome「设置」→「应用」→ 找"矿业新闻日报"卸载。收藏版在书签管理器中删除。</div>
+</div>
 </div>
 <!-- ==================== 已归档收藏 ==================== -->
 <div class="section" id="archivedFavSection" style="display:none">
@@ -1953,6 +1964,18 @@ function showPwaInstallPrompt(){
   }
 }
 
+function toggleInstallGuide(){
+  var body=document.getElementById('guideBody');
+  var btn=document.getElementById('guideToggle');
+  if(!body||!btn)return;
+  if(body.style.display==='none'){
+    body.style.display='';
+    btn.textContent='收起 ▲';
+  }else{
+    body.style.display='none';
+    btn.textContent='展开 ▼';
+  }
+}
 function triggerPwaInstall(){
   if(window.__deferredPrompt){
     window.__deferredPrompt.prompt();
