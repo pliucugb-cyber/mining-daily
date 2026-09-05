@@ -14,8 +14,9 @@ with open(SRC, encoding='utf-8') as f:
 
 REPORT = '2026-09-04'
 GRAB = '2026-09-04'
-ARCHIVE_DAYS = 14          # 往期展示窗口（天）。WIN_FROM 由 REPORT 自动推算，勿手写日期
-WIN_FROM = (datetime.date.fromisoformat(REPORT) - datetime.timedelta(days=ARCHIVE_DAYS - 1)).strftime('%m-%d')
+ARCHIVE_DAYS = 14          # 往期展示窗口（天）。窗口由 REPORT 自动推算，勿手写日期
+REPORT_DT = datetime.date.fromisoformat(REPORT)
+CUTOFF_DT = REPORT_DT - datetime.timedelta(days=ARCHIVE_DAYS - 1)   # 往期最早日期（含）；按 (年,月,日) 元组比较，正确跨年
 
 # ============ 1. 标题 / 日期 / 更新时间 ============
 html = html.replace('<title>矿业新闻日报 2026-09-03</title>', '<title>矿业新闻日报 2026-09-04</title>')
@@ -79,9 +80,15 @@ def split_items(block):
 today_items = split_items(today_raw)
 arch_items  = split_items(arch_raw)
 
-def item_date(it):
-    m = re.search(r'</span>\s*·\s*([0-9]{2}-[0-9]{2})', it)
-    return m.group(1) if m else '99-99'
+def item_after_cutoff(it):
+    """条目是否在往期窗口内（含 CUTOFF_DT）。无日期的条目保留。按 (年,月,日) 元组比较，跨年不误删。"""
+    m = re.search(r'</span>\s*·\s*([0-9]{2})-([0-9]{2})', it)
+    if not m:
+        return True
+    im, id_ = int(m.group(1)), int(m.group(2))
+    # 跨年处理：条目月份大于报告月份 → 视为上一年（仅对 <1 年窗口有效，14 天窗口足够）
+    iy = REPORT_DT.year if im <= REPORT_DT.month else REPORT_DT.year - 1
+    return (iy, im, id_) >= (CUTOFF_DT.year, CUTOFF_DT.month, CUTOFF_DT.day)
 
 def strip_new(it):
     it = it.replace(' is-new', '')
@@ -91,8 +98,8 @@ def strip_new(it):
 
 # 今日区内容（上一期 7 条）转往期
 prev_today = [(cat, strip_new(it)) for cat, it in today_items if '<div class="news-item' in it]
-# 往期窗口滚动：剔除 08-27 及更早（跨月时同月比较；因窗口都在 2026-08/09 内，直接比 MM-DD）
-arch_keep = [x for x in arch_items if '<div class="news-item' in x[1] and item_date(x[1]) >= WIN_FROM]
+# 往期窗口滚动：剔除早于 CUTOFF_DT 的条目（按 年-月-日 比较，跨年正确）
+arch_keep = [x for x in arch_items if '<div class="news-item' in x[1] and item_after_cutoff(x[1])]
 
 # ============ 4. 今日新增条目（09-04 抓取） ============
 def ni(url, src, date, title, summary, embed='ok'):
