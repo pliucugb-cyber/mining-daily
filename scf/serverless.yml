@@ -1,0 +1,31 @@
+# 腾讯云 SCF + API 网关 一键部署配置（Serverless Framework）
+# 用法见 scf/README.md「方式二」。本文件可进 git，换电脑 `sls deploy` 即可。
+service: mining-daily-qa
+
+provider:
+  name: tencent
+  runtime: Python3.10
+
+plugins:
+  - serverless-tencent-scf
+
+functions:
+  qa:
+    handler: index.main_handler
+    runtime: Python3.10
+    timeout: 30
+    memorySize: 128
+    environment:
+      DEEPSEEK_API_KEY: ${env:DEEPSEEK_API_KEY}
+    events:
+      - apigw:
+          name: miningDailyQaApigw
+          parameters:
+            protocols:
+              - https
+            serviceName: mining-daily-qa
+            description: 矿业新闻日报 AI 后端
+            environment: release
+            endpoints:
+              - path: /api/{path+}
+                method: ANY
