@@ -14,6 +14,7 @@ P0.5 数据底座：从 index.html 解析导出结构化 JSON
 
 设计要点：index.html 的"往期"区内容是漂浮的（每天 AI 重新抓取，不是滚动窗口），
 因此只有追加式累积库才能保证历史可回溯。页面保留几天与问答能力无关，两者已解耦。
+news-data.js（前端问答检索库）仅导出最近 RETAIN_DAYS=30 天，避免随历史无限膨胀。
 
 用法：python export_news_json.py [index.html路径] [输出json路径]
 """
@@ -279,6 +280,19 @@ def write_news_data_js(data_dir, out_path):
             print('[warn] 读取失败 %s: %s' % (fn, e), file=sys.stderr)
             continue
     rows.sort(key=lambda r: (r.get('orig_date_full', ''), r.get('id', '')), reverse=True)
+    # 搜索库保留窗口：news-data.js 仅导出最近 RETAIN_DAYS 天，避免随历史无限膨胀
+    RETAIN_DAYS = 30
+    _cut = datetime.date.today() - datetime.timedelta(days=RETAIN_DAYS)
+    def _odt(s):
+        try:
+            return datetime.date.fromisoformat(s)
+        except Exception:
+            return None
+    _before = len(rows)
+    rows = [r for r in rows if (_odt(r.get('orig_date_full', '')) or _cut) >= _cut]
+    if _before != len(rows):
+        print('[news-data] 保留 %d 天内 %d/%d 条（剔除 %d 条更早）'
+              % (RETAIN_DAYS, len(rows), _before, _before - len(rows)))
     slim = [{
         'd': r.get('orig_date_full', ''),
         't': r.get('title', ''),

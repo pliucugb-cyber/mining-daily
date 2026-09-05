@@ -2,7 +2,7 @@
 """
 生成 2026-09-05 矿业新闻日报 index.html（原地更新）
 - 09-04 的"今日新增"条目滚入"往期内容"（去 NEW 标记、按同类目合并）
-- 按 7 天窗口剔除往期条目（保留 >= 08-30，即 今日-6 天），月度全量在 data/news_*.json
+- 按 14 天窗口剔除往期条目（保留 >= 08-23，即 今日-13 天），月度全量在 data/news_*.json
 - 换入 09-05 抓取的最新条目（is-new + NEW），更新各计数与 AI 区条数
 - 更新国内期货/上金所价格卡（周六休市，沿用 09-04 收盘）；LME 行由 lme-data.js 前端动态渲染
 - 保留：data-slug / digestStrip / qaFab / pchartMask / themeToggle / 正文热榜与 AI 解析区块
@@ -15,7 +15,7 @@ with open(SRC, encoding='utf-8') as f:
 
 REPORT = '2026-09-05'
 GRAB = '2026-09-05'
-WIN_FROM = '08-30'          # 7 天滚动窗口：保留 >= 08-30（今日 09-05 - 6 天）
+WIN_FROM = '08-23'          # 14 天展示窗口：保留 >= 08-23（今日 09-05 - 13 天）
 DATA_ASOF = '09-04'         # 周六休市，国内外均无当日收盘，沿用上一交易日
 
 # ============ 1. 标题 / 日期 / 更新时间 ============
@@ -183,7 +183,7 @@ new_today_block = ('<!-- ==================== 今日新增（%s 抓取） ======
 
 new_arch_block = ('<!-- ==================== 往期内容 ==================== -->\n'
     '<div class="section" id="archiveSection">\n'
-    '<div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近7天）'
+    '<div class="section-title"><span class="icon">📰</span> 往期内容（近14天自动展开，更早需点开）'
     '<span class="news-count" id="archiveCount">%d条</span></div>\n'
     '<div class="fold-toggle" id="foldToggle" style="display:none" onclick="toggleOldFold()">▸ 展开更早内容</div>\n'
     % arch_n + ''.join(arch_groups) + '</div>\n')
