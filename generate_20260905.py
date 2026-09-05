@@ -97,6 +97,10 @@ def item_after_cutoff(it):
     iy = REPORT_DT.year if im <= REPORT_DT.month else REPORT_DT.year - 1
     return (iy, im, id_) >= (CUTOFF_DT.year, CUTOFF_DT.month, CUTOFF_DT.day)
 
+def item_url(it):
+    m = re.search(r'data-url="([^"]+)"', it)
+    return m.group(1) if m else it
+
 def strip_new(it):
     it = it.replace(' is-new', '')
     it = it.replace('<span class="badge-new">NEW</span>', '')
@@ -104,6 +108,16 @@ def strip_new(it):
 
 prev_today = [(cat, strip_new(it)) for cat, it in today_items if '<div class="news-item' in it]
 arch_keep = [x for x in arch_items if '<div class="news-item' in x[1] and item_after_cutoff(x[1])]
+
+# 往期合并：按 URL 去重（同一篇文章昨天新增滚入往期后，不应再和更早的往期重复）
+merge_seq = []
+seen_url = set()
+for cat, it in prev_today + arch_keep:
+    url = item_url(it)
+    if url in seen_url:
+        continue
+    seen_url.add(url)
+    merge_seq.append((cat, it))
 
 # ============ 4. 今日新增条目（09-05 抓取，源文 09-03~09-04 发布，均逐页核实） ============
 def ni(url, src, date, title, summary, embed='ok'):
@@ -172,15 +186,21 @@ def render_cat_groups(seq, mark_new=False):
         out.extend(items)
     return out
 
-merge_seq = []
-seen = set()
-for cat, it in prev_today + arch_keep:
-    if it in seen:
+# 今日新增去重（同一天脚本可能重复运行，new_items 自身也可能重复）
+unique_new = []
+new_seen_url = set()
+for cat, it in new_items:
+    url = item_url(it)
+    if url in new_seen_url:
         continue
-    seen.add(it)
-    merge_seq.append((cat, it))
-arch_groups = render_cat_groups(merge_seq, mark_new=False)
+    new_seen_url.add(url)
+    unique_new.append((cat, it))
+new_items = unique_new
 
+# 往期剔除已被今日新增覆盖的 URL：今天抓到的新闻优先放在今日区，不应同时出现在往期
+merge_seq = [x for x in merge_seq if item_url(x[1]) not in new_seen_url]
+
+arch_groups = render_cat_groups(merge_seq, mark_new=False)
 today_groups = render_cat_groups(new_items, mark_new=True)
 
 # ============ 5. 拼装新区 ============
