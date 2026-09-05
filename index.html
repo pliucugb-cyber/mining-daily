@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260906-0112">
+<meta name="build-version" content="20260906-0122">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -72,7 +72,7 @@ body.has-install-bar{padding-bottom:64px}
 .dot{width:9px;height:9px;border-radius:50%;background:#2980b9;flex-shrink:0;margin-top:7px}
 .news-item.read .dot{background:#bdc3c7}
 .badge-new{background:#e74c3c;color:#fff;font-size:11px;padding:1px 7px;border-radius:4px;font-weight:600;flex-shrink:0;margin-top:4px;animation:pulse 1.5s infinite}
-.badge-orig-date{background:#f0f4f8;color:#6b7280;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500;flex-shrink:0;margin-top:4px;white-space:nowrap}
+.badge-orig-date{display:inline-block;background:#f0f4f8;color:#6b7280;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500;margin-left:8px;vertical-align:1px;white-space:nowrap}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 .news-title{color:#1a5276;text-decoration:none;font-weight:600;font-size:15px;line-height:1.45}
 .news-title:hover{text-decoration:underline}
@@ -649,6 +649,11 @@ body.dark .guide-toggle:hover{background:#1d4558}
 .mobile-install-btn{height:32px;padding:0 12px}
 .mobile-install-text{line-height:1.35}
 .news-title{font-size:14px}.news-summary{font-size:12.5px}
+/* 长标题排版修复（2026-09-06）：手机上 .news-head 一行塞不下
+   圆点+NEW+战略+标题+原文日期（徽章全是 flex-shrink:0），长标题会被挤成每行几个字的窄条。
+   改为：标题 flex:1 1 100% 独占一整行，圆点/NEW/战略退为上方眉标行 */
+.news-head{flex-wrap:wrap;row-gap:6px}
+.news-title{flex:1 1 100%;line-height:1.5;word-break:break-word}
 .stats-bar{gap:8px}.btn-allread{margin-left:0}
 .sub-cat{font-size:15px;padding:12px 14px 10px 18px}
 .section-title{font-size:16px;padding:12px 14px}
@@ -1700,6 +1705,8 @@ function extractTagsFor(item){
   return found;
 }
 // ===== 今日新增区：非今日发布日期的新闻加"原文发布"提示 =====
+// 2026-09-06：徽章从 .news-head 移到 .news-meta 行 —— 头部一行塞不下时会把长标题
+// 挤成窄条（手机端尤其明显）；日期本质是元信息，放 meta 行更合理
 function injectOrigDateBadges(){
   const today=new Date();
   const mm=String(today.getMonth()+1).padStart(2,'0');
@@ -1715,12 +1722,11 @@ function injectOrigDateBadges(){
     if(!m)return;
     const itemDate=m[1]+'-'+m[2];
     if(itemDate===todayStr)return;
-    const head=el.querySelector('.news-head');
-    if(!head)return;
     const badge=document.createElement('span');
     badge.className='badge-orig-date';
-    badge.textContent='📅 原文'+itemDate;
-    head.appendChild(badge);
+    badge.textContent='原文发布 '+itemDate;
+    badge.title='原文发布于 '+todayFull+'，非今日抓取';
+    meta.appendChild(badge);
   });
 }
 function injectTags(){
