@@ -254,7 +254,9 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-float-body{flex:1;overflow-y:auto;padding:12px;background:#f7f9fb}
 .qa-msg{margin-bottom:10px;max-width:92%}
 .qa-msg.user{margin-left:auto}
-.qa-msg-bubble{padding:8px 11px;border-radius:10px;font-size:12.5px;line-height:1.55;word-break:break-word;user-select:text;-webkit-user-select:text}
+.qa-msg-bubble{padding:8px 11px;border-radius:10px;font-size:12.5px;line-height:1.55;word-break:break-word;user-select:text;-webkit-user-select:text;-moz-user-select:text}
+.qa-msg-bubble,.qa-msg-bubble *{user-select:text !important;-webkit-user-select:text !important;-moz-user-select:text !important}
+.qa-msg-bubble .qa-msg-action{user-select:none !important;-webkit-user-select:none !important;-moz-user-select:none !important}
 .qa-msg-bubble p{margin:0 0 6px;color:inherit}
 .qa-msg-bubble p:last-child{margin-bottom:0}
 .qa-msg-bubble h1,.qa-msg-bubble h2,.qa-msg-bubble h3,.qa-msg-bubble h4{font-size:13px;font-weight:700;margin:8px 0 4px;color:#1a3a5c}
