@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260906-0058">
+<meta name="build-version" content="20260906-0105">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -250,6 +250,19 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-fab .qa-fab-ico{font-size:18px;line-height:1;display:inline-block}
 .qa-fab .qa-fab-txt{display:inline-block}
 .qa-fab.on{background:linear-gradient(135deg,#334155,#475569)}
+/* ===== 悬浮球吸边 / 半隐藏（2026-09-06 新增）=====
+   拖出屏幕左/右边缘松手 → 球体滑出视口，只留 26px 把手；点击把手唤出，桌面鼠标悬停也会滑出。
+   用 transform 位移实现，left/bottom 定位逻辑（拖拽、位置记忆）完全不受影响。 */
+.qa-fab.tucked{transition:transform .3s cubic-bezier(.22,.61,.36,1),box-shadow .15s}
+.qa-fab.tucked.tuck-left{transform:translateX(calc(-100% + 26px))}
+.qa-fab.tucked.tuck-right{transform:translateX(calc(100% - 26px))}
+/* 桌面：鼠标移到露出的把手上即整体滑出（此时点击直接开面板，不再多一次「唤出」） */
+.qa-fab.tucked:hover{transform:none}
+/* 把手上的白色小竖条，提示"这里可以点" */
+.qa-fab::before{content:'';position:absolute;top:50%;margin-top:-9px;width:3px;height:18px;border-radius:2px;background:rgba(255,255,255,.6);opacity:0;transition:opacity .2s;pointer-events:none}
+.qa-fab.tucked::before{opacity:1}
+.qa-fab.tuck-left::before{right:9px}
+.qa-fab.tuck-right::before{left:9px}
 .qa-float{position:fixed;left:16px;bottom:78px;z-index:100001;width:min(440px,calc(100vw - 32px));height:min(560px,calc(100vh - 110px));min-width:300px;min-height:260px;background:#fff;border:1px solid #d7deea;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;visibility:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;contain:layout paint;touch-action:none}
 .qa-float.open{opacity:1;pointer-events:auto;visibility:visible}
 .qa-resize-handle{position:absolute;z-index:1;background:transparent;transition:background .15s}
@@ -2471,19 +2484,50 @@ var QA_FAB_TOUCH_DONE=false;   // 触摸链路已自行处理点击，避免浏�
 //   内联 onclick 永远不执行 —— 表现为"手机上悬浮球点不动，电脑上正常"。
 //   正确做法：touchstart 只记录起点；touchmove 判定真的移动了才 preventDefault 阻止页面滚动；
 //   touchend 若未发生移动则直接手动触发开合，不依赖浏览器补发 click。
+// 按下瞬间是否处于半隐藏状态：点击判定必须以"按下时"为准，
+// 否则（触摸设备上）按下即归位、抬手时就变成展开态，会跳过"唤出"直接弹面板。
+var QA_FAB_PRESS_TUCKED=null;
 function qaFabClick(ev){
+  var press=(typeof QA_FAB_PRESS_TUCKED==='boolean')?QA_FAB_PRESS_TUCKED:QA_FAB_TUCKED;
+  QA_FAB_PRESS_TUCKED=null;
   if(QA_FAB_TOUCH_DONE){QA_FAB_TOUCH_DONE=false;if(ev&&ev.preventDefault)ev.preventDefault();return false;}
   if(QA_FAB_MOVED){if(ev&&ev.preventDefault)ev.preventDefault();if(ev&&ev.stopPropagation)ev.stopPropagation();return false;}
+  qaFabActivate(press);
+}
+// 悬浮球点击的统一入口：半隐藏状态下先唤出，展开状态下才开合面板
+function qaFabActivate(wasTucked){
+  var tucked=(typeof wasTucked==='boolean')?wasTucked:QA_FAB_TUCKED;
+  if(tucked){
+    // 桌面（真·指针设备）鼠标悬停时球已由 CSS 滑出，点击意为开面板，不必先唤出。
+    // 触摸设备 tap 后 :hover 会短暂匹配，故用 (hover:hover) 排除，避免手机上跳过唤出。
+    var canHover=false;
+    try{canHover=!!(window.matchMedia&&window.matchMedia('(hover: hover) and (pointer: fine)').matches);}catch(e){}
+    var hovering=false;
+    if(canHover){try{var b0=document.getElementById('qaFab');hovering=!!(b0&&b0.matches&&b0.matches(':hover'));}catch(e){}}
+    if(!hovering){qaFabUntuck();return;}
+  }
   qaFloatToggle();
 }
 function qaFabIsTouch(ev){return !!ev&&typeof ev.type==='string'&&ev.type.indexOf('touch')===0;}
+// 布局位置（不含 transform）：半隐藏时 getBoundingClientRect 会被 translateX 带偏，不能直接用
+function qaFabLayoutLeft(b){
+  var v=parseFloat(b.style.left);
+  if(!isNaN(v))return v;
+  return b.offsetLeft||0;
+}
+function qaFabLayoutBottom(b){
+  var v=parseFloat(b.style.bottom);
+  if(!isNaN(v))return v;
+  var bh=b.offsetHeight||50;
+  return Math.max(window.innerHeight-(b.offsetTop||0)-bh,0);
+}
 function qaFabStartDrag(ev){
   var b=document.getElementById('qaFab');if(!b)return;
   var isTouch=qaFabIsTouch(ev);
   if(isTouch&&ev.touches.length!==1)return;
   var point=isTouch?ev.touches[0]:ev;
-  var r=b.getBoundingClientRect();
-  QA_FAB_DRAG={el:b,startX:point.clientX,startY:point.clientY,origLeft:r.left,origBottom:window.innerHeight-r.bottom};
+  QA_FAB_PRESS_TUCKED=QA_FAB_TUCKED;
+  QA_FAB_DRAG={el:b,startX:point.clientX,startY:point.clientY,origLeft:qaFabLayoutLeft(b),origBottom:qaFabLayoutBottom(b)};
   QA_FAB_MOVED=false;
   b.classList.add('dragging');
   if(isTouch){
@@ -2501,9 +2545,13 @@ function qaFabDrag(ev){
   var dx=point.clientX-QA_FAB_DRAG.startX, dy=point.clientY-QA_FAB_DRAG.startY;
   if(Math.abs(dx)<4&&Math.abs(dy)<4)return;   // 手指轻微抖动不算拖动
   if(ev.cancelable)ev.preventDefault();       // 确认是拖动后才阻止页面滚动
+  // 从半隐藏状态起拖：真正移动了才归位，点击（未移动）时保持收起以便"唤出"
+  if(!QA_FAB_MOVED&&QA_FAB_PRESS_TUCKED&&QA_FAB_TUCKED)qaFabUntuck();
   QA_FAB_MOVED=true;
   var b=QA_FAB_DRAG.el, vw=window.innerWidth, vh=window.innerHeight, bw=b.offsetWidth||160, bh=b.offsetHeight||50;
-  var left=Math.min(Math.max(QA_FAB_DRAG.origLeft+dx,0),Math.max(vw-bw,0));
+  // 允许向左右各拖出球体 55%：拖出屏幕边缘松手即进入半隐藏；没拖出去就留在原位
+  var minLeft=-Math.round(bw*0.55), maxLeft=Math.max(vw-bw*0.45,0);
+  var left=Math.min(Math.max(QA_FAB_DRAG.origLeft+dx,minLeft),maxLeft);
   var bottom=Math.min(Math.max(QA_FAB_DRAG.origBottom-dy,0),Math.max(vh-bh,0));
   b.style.left=left+'px'; b.style.bottom=bottom+'px'; b.style.top='auto';
 }
@@ -2516,24 +2564,66 @@ function qaFabStopDrag(ev){
   document.removeEventListener('touchend',qaFabStopDrag,{passive:false});
   document.removeEventListener('touchcancel',qaFabStopDrag,{passive:false});
   if(b)b.classList.remove('dragging');
-  qaFabSavePos();
   QA_FAB_DRAG=null;
+  if(QA_FAB_MOVED&&b){
+    // 拖出屏幕边缘 → 半隐藏；否则只记录位置
+    var bw=b.offsetWidth||160, vw=window.innerWidth;
+    var l=qaFabLayoutLeft(b);
+    if(l<=0)qaFabTuck('left');
+    else if(l+bw>=vw-1)qaFabTuck('right');
+    else{qaFabUntuckState();qaFabSavePos();}
+  }
   if(wasTouch&&!QA_FAB_MOVED){
     // 移动端：直接开合，不再等浏览器补发 click（补发了也会被标记拦掉）
     QA_FAB_TOUCH_DONE=true;
     setTimeout(function(){QA_FAB_TOUCH_DONE=false;},600);
     if(ev&&ev.cancelable)ev.preventDefault();
-    qaFloatToggle();
+    var press=QA_FAB_PRESS_TUCKED;QA_FAB_PRESS_TUCKED=null;
+    qaFabActivate(press);
     return;
   }
+  QA_FAB_PRESS_TUCKED=null;
   // 300ms 后复位移动标记，避免后续 click 被误拦截
   setTimeout(function(){QA_FAB_MOVED=false;},300);
 }
+// ===== 悬浮球半隐藏：吸边收起 / 点击唤出（2026-09-06 新增）=====
+// 拖出屏幕左右边缘松手 → 球体只剩 26px 把手贴边；点击把手唤出；桌面鼠标悬停也会滑出。
+// 状态用 transform 表达，left/bottom 始终是"展开时"的贴边位置，位置记忆不受影响。
+var QA_FAB_TUCKED=false;
+var QA_FAB_SIDE='left';
+function qaFabApplyTuck(){
+  var b=document.getElementById('qaFab');if(!b)return;
+  b.classList.toggle('tucked',QA_FAB_TUCKED);
+  b.classList.toggle('tuck-left',QA_FAB_SIDE==='left');
+  b.classList.toggle('tuck-right',QA_FAB_SIDE==='right');
+  b.title=QA_FAB_TUCKED?'已收起 · 点击唤出悬浮球（拖到屏幕边缘可再次收起）':'新闻检索 / AI 问答（可拖动；拖出屏幕边缘即收起）';
+}
+function qaFabSaveTuck(){
+  try{if(window.localStorage)localStorage.setItem('qaFabTuck',JSON.stringify({t:QA_FAB_TUCKED,s:QA_FAB_SIDE}));}catch(e){}
+}
+function qaFabRestoreTuck(){
+  try{
+    var raw=window.localStorage&&localStorage.getItem('qaFabTuck');if(!raw)return;
+    var o=JSON.parse(raw);QA_FAB_TUCKED=!!o.t;QA_FAB_SIDE=(o.s==='right'?'right':'left');
+  }catch(e){}
+}
+// 仅收回状态、不写存储（拖回可视区时用）
+function qaFabUntuckState(){QA_FAB_TUCKED=false;qaFabApplyTuck();}
+function qaFabTuck(side){
+  var b=document.getElementById('qaFab');if(!b)return;
+  var bw=b.offsetWidth||160, vw=window.innerWidth;
+  QA_FAB_SIDE=(side==='right'?'right':'left');
+  b.style.left=(QA_FAB_SIDE==='left'?0:Math.max(vw-bw,0))+'px';
+  b.style.top='auto';
+  QA_FAB_TUCKED=true;
+  qaFabApplyTuck();qaFabSavePos();qaFabSaveTuck();
+}
+function qaFabUntuck(){qaFabUntuckState();qaFabSavePos();qaFabSaveTuck();}
 function qaFabSavePos(){
   try{
     var b=document.getElementById('qaFab');if(!b)return;
-    var r=b.getBoundingClientRect();
-    localStorage.setItem('qaFabPos',JSON.stringify({left:r.left,bottom:window.innerHeight-r.bottom}));
+    // 用布局位置（不含 transform），否则半隐藏时存进去的 left 是负数，刷新后球会在屏幕外
+    localStorage.setItem('qaFabPos',JSON.stringify({left:qaFabLayoutLeft(b),bottom:qaFabLayoutBottom(b)}));
   }catch(e){}
 }
 function qaFabRestorePos(){
@@ -3206,12 +3296,23 @@ function toggleTheme(){
 
   // 恢复上次位置与尺寸，并挂载拖拽
   try{qaFloatRestoreSize();qaFloatRestorePos();}catch(e){}
-  try{qaFabRestorePos();}catch(e){}
+  try{qaFabRestorePos();qaFabRestoreTuck();qaFabApplyTuck();}catch(e){}
   var _fab=document.getElementById('qaFab');
   if(_fab){
     _fab.addEventListener('mousedown',qaFabStartDrag);
     _fab.addEventListener('touchstart',qaFabStartDrag,{passive:false});
   }
+  // 窗口缩放 / 手机旋转：把悬浮球重新夹回可视区（半隐藏时保持所在边）
+  window.addEventListener('resize',function(){
+    try{
+      var _b=document.getElementById('qaFab');if(!_b)return;
+      var _vw=window.innerWidth,_vh=window.innerHeight,_bw=_b.offsetWidth||160,_bh=_b.offsetHeight||50;
+      var _l=Math.min(Math.max(qaFabLayoutLeft(_b),0),Math.max(_vw-_bw,0));
+      var _bm=Math.min(Math.max(qaFabLayoutBottom(_b),0),Math.max(_vh-_bh,0));
+      _b.style.left=_l+'px';_b.style.bottom=_bm+'px';_b.style.top='auto';
+      if(QA_FAB_TUCKED)qaFabTuck(QA_FAB_SIDE);
+    }catch(e){}
+  });
   var _panel=document.getElementById('qaFloat');
   if(_panel){
     qaFloatAddResizeHandles();
