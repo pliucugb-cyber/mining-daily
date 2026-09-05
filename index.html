@@ -58,7 +58,7 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;c
 .section-title.today{background:linear-gradient(90deg,#fff5f5,#fff);border-bottom:2px solid #f5c6cb}
 .news-count{font-size:13px;color:#6b7a89;font-weight:400;margin-left:auto}
 /* 新闻条目 */
-.news-item{padding:13px 18px;border-bottom:1px solid #f4f6f8;transition:opacity .3s;position:relative}
+.news-item{padding:13px 18px;border-bottom:1px solid #f4f6f8;transition:opacity .3s;position:relative;cursor:pointer}
 .news-item:last-child{border-bottom:none}
 .news-item.read{opacity:.45}
 .news-item.read .news-title{color:#7f8c8d}
@@ -299,6 +299,7 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-float-btn{border:none;border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;background:#eef2f5;color:#1a3a5c}
 .qa-float-btn.primary{background:#4f46e5;color:#fff}
 .qa-float-btn:disabled{opacity:.5;cursor:not-allowed}
+.qa-float-tip{font-size:10.5px;color:#8a98a6;padding:6px 12px 9px;background:#fff;border-top:1px solid #f1f4f7;line-height:1.4;user-select:none}
 body.dark .qa-float{background:#1e2733}
 body.dark .qa-float-body{background:#161d26}
 body.dark .qa-msg.ai .qa-msg-bubble{background:#243140;border-color:#2c3845;color:#e8eef3}
@@ -317,6 +318,7 @@ body.dark .qa-msg-time{color:#5b6b7c}
 body.dark .qa-msg-action{color:#94a3b8}
 body.dark .qa-msg-action:hover{background:#2c3845;color:#818cf8}
 body.dark .qa-float-foot{background:#1e2733;border-top-color:#2c3845}
+body.dark .qa-float-tip{background:#1a222d;color:#7c8a99;border-top-color:#2c3845}
 body.dark .qa-float-input{background:#243140;border-color:#2c3845;color:#e8eef3}
 body.dark .qa-msg-item{color:#8fb5dc}
 body.dark .qa-float-btn{background:#2c3845;color:#c9d6e2}
@@ -879,6 +881,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
     <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词">检索</button>
     <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答（DeepSeek 直连）">AI</button>
   </div>
+  <div class="qa-float-tip">💡 问答历史仅存在本机浏览器，换设备 / 清缓存会丢失；长期留存请点「📤 导出」</div>
 </div>
 <script src="news-data.js"></script>
 <script src="lme-data.js"></script>
@@ -1006,6 +1009,23 @@ function renderArchivedFavs(){
     '<a class="btn-read" href="'+url+'" target="_blank">查看原文 →</a>'+
     '<button class="btn-star" style="color:#f39c12" title="取消收藏">★</button></div>';
   }).join('');
+}
+// ===== 整张卡片点击打开原文（2026-09-05 增强）=====
+// 标题与「查看原文」本就是 <a> 链接直接可点；这里补全：点击卡片其余区域（摘要/来源等）
+// 也能打开原文。点 <a>（链接本身）或 <button>（收藏/未读等）不拦截，走各自默认行为。
+// 同时标记已读，与「浏览记录」统计口径一致。
+function setupCardOpen(){
+  document.addEventListener('click',function(e){
+    var item=e.target.closest?e.target.closest('.news-item'):null;
+    if(!item)return;
+    if(e.target.closest('a')||e.target.closest('button'))return; // 链接/按钮各自处理
+    var url=item.getAttribute('data-url');
+    if(url&&url!=='#'&&/^https?:/i.test(url)){
+      e.preventDefault();
+      markRead(url);
+      window.open(url,'_blank','noopener');
+    }
+  });
 }
 function updateHistoryCount(){
   const n=getHistory().length;
@@ -2061,6 +2081,7 @@ function getDsKey(){
 (function(){
   qaInitData();
   renderDigest();
+  setupCardOpen();   // 整张卡片点击打开原文（标题/按钮仍各自处理）
   // 悬浮球筛选：矿种 / 主题 / 时间变化即触发检索（实时）
   ['qaFloatMineral','qaFloatTopic'].forEach(function(id){
     var e=document.getElementById(id);if(e)e.addEventListener('change',qaFloatSearch);
