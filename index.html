@@ -2088,17 +2088,18 @@ function renderLmePrices(){
     }
   }catch(e){console.warn('renderLmePrices:',e);}
 }
-var QA_AI_ON=false,QA_AI_BUSY=false,QA_LEFT=0;
+var QA_AI_ON=false,QA_AI_BUSY=false,QA_LEFT=0,QA_AI_PROBE_OK=false;
 function qaAiProbe(){
   // eslint-disable-next-line no-console
   console.log('[qaAiProbe] QA_API_BASE=',QA_API_BASE);
+  var b0=document.getElementById('qaFloatAi');
   if(!QA_API_BASE||QA_API_BASE.indexOf('REPLACE-ME')>=0){
-    // 未配置后端地址，跳过探测（保持 AI 按钮为"不可用"）
+    // 未配置后端地址：仍允许点击，使用本地知识库兜底回答
+    QA_AI_PROBE_OK=false;QA_AI_ON=false;
     // eslint-disable-next-line no-console
-    console.warn('[qaAiProbe] backend not configured, skip probe');
-    var b0=document.getElementById('qaFloatAi');
-    if(b0){b0.disabled=true;b0.textContent='✨ AI 待配置';b0.title='请在 index.html 的 QA_API_BASE 填入 SCF 函数 URL';
-    }
+    console.warn('[qaAiProbe] backend not configured, use local fallback');
+    if(b0){b0.disabled=false;b0.textContent='✨ AI 本地';
+      b0.title='未配置 AI 后端，点击将使用本地知识库兜底回答';}
     return;
   }
   // 用时间戳防 SW/中间层缓存命中导致拿到旧响应
@@ -2110,13 +2111,17 @@ function qaAiProbe(){
       if(!d||typeof d!=='object'||d.ok!==true||typeof d.has_key!=='boolean'||d.model!=='deepseek-chat'){
         // eslint-disable-next-line no-console
         console.warn('[qaAiProbe] unexpected health response:',d);
+        QA_AI_PROBE_OK=false;
+        if(b0){b0.disabled=false;b0.textContent='✨ AI 本地';
+          b0.title='AI 后端暂不可达，点击将使用本地知识库兜底回答';}
         return;
       }
+      QA_AI_PROBE_OK=true;
       var b=document.getElementById('qaFloatAi');
       if(b){
         if(!d.has_key){
-          b.disabled=true;b.textContent='✨ AI 待配置';
-          b.title='服务端尚未配置 API key，AI 问答暂不可用';
+          b.disabled=false;b.textContent='✨ AI 本地';
+          b.title='服务端尚未配置 API key，将使用本地/关键词兜底回答';
         }else{
           b.disabled=false;b.textContent='✨ AI 回答';
           b.title='让 AI 读完相关新闻后组织语言作答（Ctrl+Enter）';
@@ -2127,10 +2132,11 @@ function qaAiProbe(){
     .catch(function(err){
       // eslint-disable-next-line no-console
       console.error('[qaAiProbe] probe failed:',err);
-      // 探测失败（后端未部署或网络异常）→ 按钮变"不可用"，让用户清楚知道不是网页坏了
+      // 探测失败（后端未部署或网络异常）→ 仍允许点击，qaFloatAsk 会直接用本地知识库兜底
+      QA_AI_PROBE_OK=false;
       var b=document.getElementById('qaFloatAi');
-      if(b){b.disabled=true;b.textContent='✨ AI 不可用';
-        b.title='未检测到 AI 服务（请检查 QA_API_BASE 或 SCF 部署）';}
+      if(b){b.disabled=false;b.textContent='✨ AI 本地';
+        b.title='AI 后端暂不可达，点击将使用本地知识库兜底回答';}
     });
 }
 function qaAiQuota(){
@@ -2547,8 +2553,8 @@ function qaFloatAsk(){
   // 二次精筛：标题须真的出现该矿种词，避免「标签/来源含铝字」之类把无关新闻带进上下文
   if(_minSel){_ctx=_ctx.filter(function(r){return (r.t||'').indexOf(_minSel)>=0;});}
   var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…','');
-  if(!QA_API_BASE||QA_API_BASE.indexOf('REPLACE-ME')>=0){
-    // 未配置后端：直接走本地兜底，不让用户看到错误
+  if(!QA_API_BASE||QA_API_BASE.indexOf('REPLACE-ME')>=0||!QA_AI_PROBE_OK){
+    // 未配置后端或后端不可达：直接走本地兜底，不让用户等 fetch 超时
     var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
     if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">'+qaEsc(qaAiLocalAnswer(q,_ctx))+'</div>';
     if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 未配置 AI 后端';}
