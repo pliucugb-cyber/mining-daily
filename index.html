@@ -827,7 +827,8 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
   <div class="qa-float-foot">
     <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="问点什么：稀土政策 / 锂价走势…" autocomplete="off">
     <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词">检索</button>
-    <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答（需后端服务）">AI</button>
+    <button class="qa-float-btn" id="qaFloatKey" title="设置 / 查看 DeepSeek API Key（仅存本机浏览器，不会上传）">🔑</button>
+    <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答（需先点 🔑 设置 Key）">AI</button>
   </div>
 </div>
 <script src="news-data.js"></script>
@@ -1989,9 +1990,11 @@ function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){retu
 // qaReset 已迁移至悬浮球（qaFloatReset)
 
 // ===== AI 智能问答（2026-09-05 改接腾讯云 SCF 轻后端）=====
-// 后端仅服务 /api/qa + /api/health（scf/index.py，腾讯云云函数 + 函数 URL），DEEPSEEK_API_KEY 存为函数环境变量。
-// QA_API_BASE 部署后填真实函数 URL；若仍为占位符/为空，AI 走本地知识库兜底，检索不受影响。
-var QA_API_BASE='https://l4f9289f14-k19u1z12hd-ap-guangzhou.tencentscf.com';
+// 2026-09-05 方案：腾讯云 SCF 函数 URL 域名解析失败（手机/电脑均 NXDOMAIN），
+// 改为前端直连 DeepSeek。但 key 不写进代码/公开仓库（会被 GitHub 拦截且泄露），
+// 改为运行时从本机浏览器 localStorage 读取（用户自己粘贴，仅本人浏览器可用，源码里看不到）。
+var QA_API_BASE='';
+function getDsKey(){try{return (localStorage.getItem('qaDsKey')||'').trim();}catch(e){return '';}}
 
 (function(){
   qaInitData();
@@ -2090,54 +2093,17 @@ function renderLmePrices(){
 }
 var QA_AI_ON=false,QA_AI_BUSY=false,QA_LEFT=0,QA_AI_PROBE_OK=false;
 function qaAiProbe(){
-  // eslint-disable-next-line no-console
-  console.log('[qaAiProbe] QA_API_BASE=',QA_API_BASE);
-  var b0=document.getElementById('qaFloatAi');
-  if(!QA_API_BASE||QA_API_BASE.indexOf('REPLACE-ME')>=0){
-    // 未配置后端地址：仍允许点击，使用本地知识库兜底回答
-    QA_AI_PROBE_OK=false;QA_AI_ON=false;
-    // eslint-disable-next-line no-console
-    console.warn('[qaAiProbe] backend not configured, use local fallback');
-    if(b0){b0.disabled=false;b0.textContent='✨ AI 本地';
-      b0.title='未配置 AI 后端，点击将使用本地知识库兜底回答';}
-    return;
+  // 前端直连方案：不再探测后端。只要配置了 DEEPSEEK_API_KEY 即点亮 AI 按钮。
+  var b=document.getElementById('qaFloatAi');
+  if(getDsKey()){
+    QA_AI_ON=true;QA_AI_PROBE_OK=true;
+    if(b){b.disabled=false;b.textContent='✨ AI 回答';
+      b.title='让 AI 读完相关新闻后组织语言作答（Ctrl+Enter）';}
+  }else{
+    QA_AI_ON=false;QA_AI_PROBE_OK=false;
+    if(b){b.disabled=false;b.textContent='✨ AI 本地';
+      b.title='未配置 API key，点击将使用本地知识库兜底回答';}
   }
-  // 用时间戳防 SW/中间层缓存命中导致拿到旧响应
-  // eslint-disable-next-line no-console
-  console.log('[qaAiProbe] probing',QA_API_BASE+'/api/health');
-  fetch(QA_API_BASE+'/api/health?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;})
-    .then(function(d){
-      // 严格校验：防止公司代理/浏览器扩展返回伪造 200 响应（如 Server:GitHub.com, CORS:*）
-      if(!d||typeof d!=='object'||d.ok!==true||typeof d.has_key!=='boolean'||d.model!=='deepseek-chat'){
-        // eslint-disable-next-line no-console
-        console.warn('[qaAiProbe] unexpected health response:',d);
-        QA_AI_PROBE_OK=false;
-        if(b0){b0.disabled=false;b0.textContent='✨ AI 本地';
-          b0.title='AI 后端暂不可达，点击将使用本地知识库兜底回答';}
-        return;
-      }
-      QA_AI_PROBE_OK=true;
-      var b=document.getElementById('qaFloatAi');
-      if(b){
-        if(!d.has_key){
-          b.disabled=false;b.textContent='✨ AI 本地';
-          b.title='服务端尚未配置 API key，将使用本地/关键词兜底回答';
-        }else{
-          b.disabled=false;b.textContent='✨ AI 回答';
-          b.title='让 AI 读完相关新闻后组织语言作答（Ctrl+Enter）';
-        }
-      }
-      if(d.has_key){QA_AI_ON=true;qaAiQuota();}
-    })
-    .catch(function(err){
-      // eslint-disable-next-line no-console
-      console.error('[qaAiProbe] probe failed:',err);
-      // 探测失败（后端未部署或网络异常）→ 仍允许点击，qaFloatAsk 会直接用本地知识库兜底
-      QA_AI_PROBE_OK=false;
-      var b=document.getElementById('qaFloatAi');
-      if(b){b.disabled=false;b.textContent='✨ AI 本地';
-        b.title='AI 后端暂不可达，点击将使用本地知识库兜底回答';}
-    });
 }
 function qaAiQuota(){
   // 轻后端为无状态，不追踪配额；此处仅占位，保持旧调用点可用
@@ -2553,40 +2519,66 @@ function qaFloatAsk(){
   // 二次精筛：标题须真的出现该矿种词，避免「标签/来源含铝字」之类把无关新闻带进上下文
   if(_minSel){_ctx=_ctx.filter(function(r){return (r.t||'').indexOf(_minSel)>=0;});}
   var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…','');
-  if(!QA_API_BASE||QA_API_BASE.indexOf('REPLACE-ME')>=0||!QA_AI_PROBE_OK){
-    // 未配置后端或后端不可达：直接走本地兜底，不让用户等 fetch 超时
-    var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
-    if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">'+qaEsc(qaAiLocalAnswer(q,_ctx))+'</div>';
-    if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 未配置 AI 后端';}
-    QA_FLOAT_BUSY=false;if(btn){btn.disabled=false;btn.textContent='AI';}
-    qaFloatScroll();
+  if(getDsKey()){
+    // 前端直连 DeepSeek（无后端）
+    qaDeepseekCall(q,_ctx,msg,btn);
     return;
   }
-  fetch(QA_API_BASE+'/api/qa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:_ctx})})
+  // 无 key：本地兜底
+  var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
+  if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">'+qaEsc(qaAiLocalAnswer(q,_ctx))+'</div>';
+  if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 未配置 API key';}
+  QA_FLOAT_BUSY=false;if(btn){btn.disabled=false;btn.textContent='AI';}
+  qaFloatScroll();
+  return;
+}
+function qaDeepseekCall(q,ctx,msg,btn){
+  var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
+  var system=('你是资深矿业行业分析师，服务于「矿业新闻日报」产品。'
+    +'回答要简洁专业、不啰嗦、用中文。'
+    +'如果提供了相关新闻条目，请自然引用并注明来源与日期；'
+    +'若没有相关新闻，请明确说明这是基于通用知识的回答，并建议用户查证官方信息。'
+    +'不要编造数据、价格或政策细节。');
+  var user='用户问题：'+q+'\n\n';
+  if(ctx&&ctx.length){
+    user+='以下为本地检索到的相关新闻条目（仅供参考，请以公开权威信息为准）：\n';
+    ctx.forEach(function(c,i){
+      var d=c.d||'',t=c.t||'',s=c.s||'';
+      user+=(i+1)+'. ['+d+'] '+t+(s?('（'+s+'）'):'')+'\n';
+    });
+    user+='\n';
+  }else{
+    user+='（未提供相关新闻，请基于通用知识回答。）\n\n';
+  }
+  user+='请直接给出回答，无需寒暄。';
+  if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">正在调用 DeepSeek 生成答案（约 10~30 秒）…</div>';
+  fetch('https://api.deepseek.com/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()},
+    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:system},{role:'user',content:user}],max_tokens:800,temperature:0.3,stream:false})
+  })
     .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d||{}};},function(){return {ok:false,d:{}};});})
     .then(function(res){
-      var d=res.d,bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
-      var text='';
-      if(!res.ok||d.error)text='<div style="color:#e74c3c">'+qaEsc(d.error||'请求失败，请稍后重试。')+'</div>';
-      else{
-        text=qaEsc(d.answer||'（模型未返回内容）');
-        var m=[];
-        if(d.matched)m.push('相关 '+d.matched+' 条');
-        if(d.cited)m.push('已读 '+d.cited+' 条');
-        if(d.secs)m.push(d.secs+' 秒');
-        if(typeof d.left!=='undefined')m.push('剩余 '+d.left+' 次');
-        if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=m.join(' · ');}
-        var h='';(d.refs||[]).forEach(function(r2){if(r2&&r2.u)h+='<a class="qa-msg-item" href="'+qaEsc(r2.u)+'" target="_blank" rel="noopener"><span class="qd">'+qaEsc(r2.d)+'</span>'+qaEsc(r2.t)+'</a>';});
-        if(h)text+='<div style="margin-top:6px;color:#5b7a94;font-size:11px">参考条目：</div>'+h;
+      var d=res.d,text='';
+      if(!res.ok){
+        var em=(d&&d.error&&d.error.message)||'请求失败，请稍后重试。';
+        text='<div style="color:#e74c3c">DeepSeek 调用失败：'+qaEsc(em)+'</div>';
+        if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='DeepSeek 错误';}
+      }else{
+        var content=((((d.choices||[])[0]||{}).message||{}).content||'').trim();
+        if(!content){text='<div style="color:#e74c3c">模型未返回内容</div>';}
+        else{
+          text=qaEsc(content);
+          if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='DeepSeek 真 AI · 已读 '+(ctx?ctx.length:0)+' 条本地新闻';}
+        }
       }
       if(bubble)bubble.innerHTML=text;
       qaFloatScroll();
     })
     .catch(function(e){
-      // 后端连不上：用本地检索结果 + 关键词库兜底，保证用户仍能得到回答
-      var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
-      var localAns=qaAiLocalAnswer(q,_ctx);
-      var hint='\n\n[AI 后端当前无法连接（'+qaEsc((e&&e.message)||e||'网络错误')+'），已切换为本地知识库回答]';
+      // 直连失败（CORS / 网络 / key 无效）：本地兜底
+      var localAns=qaAiLocalAnswer(q,ctx);
+      var hint='\n\n[DeepSeek 直连失败（'+qaEsc((e&&e.message)||e||'网络错误')+'），已切换为本地知识库回答]';
       if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">'+qaEsc(localAns)+'<span style="color:#e74c3c">'+hint+'</span></div>';
       if(msg){var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 全库 '+QA_ROWS.length+' 条';}
       qaFloatScroll();
@@ -2595,6 +2587,15 @@ function qaFloatAsk(){
       QA_FLOAT_BUSY=false;
       if(btn){btn.disabled=false;btn.textContent='AI';}
     });
+}
+function qaSetKey(){
+  var cur=getDsKey()||'';
+  var v=prompt('设置 DeepSeek API Key（仅保存在你本机浏览器，不会上传到任何服务器）：\n留空并确认可清除，AI 将走本地知识库兜底。',cur);
+  if(v===null)return;
+  v=v.trim();
+  if(v){localStorage.setItem('qaDsKey',v);alert('Key 已保存，AI 已启用。');}
+  else{localStorage.removeItem('qaDsKey');alert('Key 已清除，AI 走本地知识库兜底。');}
+  qaAiProbe();
 }
 function qaFloatReset(){
   var i=document.getElementById('qaFloatInput');if(i)i.value='';
@@ -2617,6 +2618,7 @@ function qaFloatReset(){
   }
   var sb=document.getElementById('qaFloatSearch');if(sb)sb.addEventListener('click',qaFloatSearch);
   var ab=document.getElementById('qaFloatAi');if(ab)ab.addEventListener('click',qaFloatAsk);
+  var kb=document.getElementById('qaFloatKey');if(kb)kb.addEventListener('click',qaSetKey);
   document.addEventListener('keydown',function(e){
     // 2026-09-05 修复：原写法在问答面板未打开时直接 return，
     // 导致"只开价格走势弹层"时按 ESC 完全没反应（只能点遮罩或 ✕）
