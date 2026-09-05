@@ -1989,9 +1989,9 @@ function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){retu
 // qaReset 已迁移至悬浮球（qaFloatReset)
 
 // ===== AI 智能问答（2026-09-05 改接腾讯云 SCF 轻后端）=====
-// 后端仅服务 /api/qa + /api/health（scf/index.py，腾讯云云函数 + API 网关），DEEPSEEK_API_KEY 存为函数环境变量。
-// QA_API_BASE 部署后填真实 API 网关 URL；若仍为占位符/为空，AI 走本地知识库兜底，检索不受影响。
-var QA_API_BASE='https://REPLACE-ME.apigw.tencentcs.com/release';
+// 后端仅服务 /api/qa + /api/health（scf/index.py，腾讯云云函数 + 函数 URL），DEEPSEEK_API_KEY 存为函数环境变量。
+// QA_API_BASE 部署后填真实函数 URL；若仍为占位符/为空，AI 走本地知识库兜底，检索不受影响。
+var QA_API_BASE='https://l4f9289f14-k19u1z12hd-ap-guangzhou.tencentscf.com';
 
 (function(){
   qaInitData();
@@ -2097,7 +2097,7 @@ function qaAiProbe(){
     // eslint-disable-next-line no-console
     console.warn('[qaAiProbe] backend not configured, skip probe');
     var b0=document.getElementById('qaFloatAi');
-    if(b0){b0.disabled=true;b0.textContent='✨ AI 待配置';b0.title='请在 index.html 的 QA_API_BASE 填入 SCF API 网关 URL';
+    if(b0){b0.disabled=true;b0.textContent='✨ AI 待配置';b0.title='请在 index.html 的 QA_API_BASE 填入 SCF 函数 URL';
     }
     return;
   }
