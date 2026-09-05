@@ -18,6 +18,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;color:#2c3e50;line-height:1.6;padding-left:200px}
+body.has-install-bar{padding-bottom:64px}
 /* 目录导航 - 桌面端：左侧悬浮侧栏；移动端：顶部水平滚动条 */
 .toc-sidebar{position:fixed;left:18px;top:88px;width:168px;background:#fff;border-radius:10px;padding:14px 12px;box-shadow:0 2px 10px rgba(0,0,0,.08);z-index:99;max-height:calc(100vh - 120px);overflow-y:auto}
 .toc-title{font-size:12px;font-weight:700;color:#6b7a89;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #eef2f5;letter-spacing:1px}
@@ -353,11 +354,33 @@ body.dark .ai-loading,body.dark .ai-empty,body.dark .ai-disabled{background:#1e2
    页面骨架（背景、区块、新闻条目、价格卡、侧栏、按钮）缺配套样式，
    暗色下会大面积白底黑字 —— 这里补齐基础层，并新增右上角切换按钮。 */
 .header{position:relative}
-.theme-toggle{position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:16px;line-height:1;cursor:pointer;transition:.2s}
+.header-actions{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:8px;z-index:2}
+.theme-toggle{width:34px;height:34px;border:none;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:16px;line-height:1;cursor:pointer;transition:.2s}
 .theme-toggle:hover{background:rgba(255,255,255,.32)}
 .theme-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.pwa-header-btn{height:34px;border:none;border-radius:17px;padding:0 14px;font-size:13px;font-weight:600;background:#fff;color:#1a3a5c;cursor:pointer;transition:.2s;box-shadow:0 2px 6px rgba(0,0,0,.12);display:inline-flex;align-items:center;gap:5px}
+.pwa-header-btn:hover{background:#e8f0f8;transform:translateY(-1px)}
+.pwa-header-btn[hidden]{display:none!important}
+.pwa-header-btn.mobile{height:38px;padding:0 16px;font-size:14px;border-radius:19px}
+body.dark .pwa-header-btn{background:#0f2530;color:#7dd3fc}
+body.dark .pwa-header-btn:hover{background:#153449}
 body.dark .theme-toggle{background:rgba(0,0,0,.28)}
 body.dark .theme-toggle:hover{background:rgba(0,0,0,.45)}
+/* 移动端安装浮条 */
+.mobile-install-bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e2e8f0;box-shadow:0 -2px 12px rgba(0,0,0,.1);padding:10px 12px;display:flex;align-items:center;gap:10px;z-index:200;font-size:14px;transition:transform .25s}
+.mobile-install-bar[hidden]{display:none!important}
+.mobile-install-icon{font-size:20px}
+.mobile-install-text{flex:1;color:#2c3e50;line-height:1.4}
+.mobile-install-btn{height:34px;border:none;border-radius:17px;padding:0 16px;font-size:13px;font-weight:600;background:#1a3a5c;color:#fff;cursor:pointer;transition:.2s}
+.mobile-install-btn:hover{background:#2c5f8a}
+.mobile-install-close{width:30px;height:30px;border:none;border-radius:50%;background:#f0f3f6;color:#5b6b7a;font-size:16px;cursor:pointer;transition:.2s}
+.mobile-install-close:hover{background:#e2e8f0}
+body.dark .mobile-install-bar{background:#161d26;border-top-color:#2c3845}
+body.dark .mobile-install-text{color:#e8eef3}
+body.dark .mobile-install-btn{background:#2c5f8a}
+body.dark .mobile-install-btn:hover{background:#3d7ab0}
+body.dark .mobile-install-close{background:#243140;color:#94a3b8}
+body.dark .mobile-install-close:hover{background:#2c3845}
 body.dark{background:#0f151c;color:#e8eef3}
 body.dark .header{background:linear-gradient(135deg,#14293f 0%,#1d4364 100%)}
 body.dark .toc-sidebar{background:#161d26;border:1px solid #2c3845;box-shadow:0 2px 10px rgba(0,0,0,.35)}
@@ -516,7 +539,8 @@ body.dark .qa-airefs a{color:#6ab4e0}
   .btn-star{padding:9px 10px;font-size:19px}
   .pchart-mask{padding:10px}
   .pchart-modal{max-height:92vh;border-radius:12px}
-  .theme-toggle{top:12px;right:12px;width:40px;height:40px;font-size:17px}
+  .theme-toggle{width:40px;height:40px;font-size:17px}
+  .pwa-header-btn{height:38px;padding:0 16px;font-size:14px;border-radius:19px}
 }
 /* 桌面端关闭按钮也稍作放大，兼顾触控笔记本 */
 @media (min-width:601px){
@@ -560,7 +584,10 @@ body.dark .qa-airefs a{color:#6ab4e0}
 }
 @media(max-width:600px){
 .header{padding:18px 14px}.header h1{font-size:18px}
-.install-tip{font-size:11.5px;padding:7px 10px}
+.header-actions{top:12px;right:12px}
+.mobile-install-bar{padding:8px 10px;font-size:13px}
+.mobile-install-btn{height:32px;padding:0 12px}
+.mobile-install-text{line-height:1.35}
 .news-title{font-size:14px}.news-summary{font-size:12.5px}
 .stats-bar{gap:8px}.btn-allread{margin-left:0}
 .sub-cat{font-size:15px;padding:12px 14px 10px 18px}
@@ -670,10 +697,12 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="container">
 
 <div class="header">
-<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式">🌙</button>
-<h1>⛏️ 矿业新闻日报 <span class="date-badge">2026年09月05日 星期六</span></h1>
-<div class="sub">每日 9:00 起自动更新（约 9:30 前出今日版本） · 11个信息源 · 聚焦有色金属 · 部门内部参考 · 点击标题查看原文</div>
-<div class="install-tip show" id="installTip"><span id="installTipText">📲 手机：浏览器菜单选「<b>添加到桌面 / 添加书签</b>」（微信内先点右上角「···」→ 浏览器中打开）<br>💻 电脑：点 Edge/Chrome 地址栏右侧「<b>安装</b>」图标 → 变成独立窗口软件 ｜ <a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#7dd3fc;text-decoration:underline">查看详细说明 ↓</a></span><button class="tip-close" onclick="dismissInstallTip()" title="我知道了">✕</button></div>
+  <div class="header-actions">
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式">🌙</button>
+    <button class="pwa-header-btn" id="pwaHeaderBtn" type="button" title="将本页安装到电脑桌面" hidden>💻 添加到桌面</button>
+  </div>
+  <h1>⛏️ 矿业新闻日报 <span class="date-badge">2026年09月05日 星期六</span></h1>
+  <div class="sub">每日 9:00 起自动更新（约 9:30 前出今日版本） · 11个信息源 · 聚焦有色金属 · 部门内部参考 · 点击标题查看原文</div>
 </div>
 <!-- ==================== 今日要闻（9-04 新增，每日自动提取 3~5 条关键信息）==================== -->
 <div class="digest-strip" id="digestStrip">
@@ -821,11 +850,19 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="section-title">🗂️ 已归档收藏（原新闻已滚出页面，收藏记录永久保留）<span class="news-count" id="archFavCount">0条</span></div>
 <div id="archFavList"></div>
 </div>
+<!-- 移动端 PWA 安装浮条 -->
+<div class="mobile-install-bar" id="mobileInstallBar" hidden>
+  <span class="mobile-install-icon">⛏️</span>
+  <span class="mobile-install-text" id="mobileInstallText">安装到主屏幕，离线也能看日报</span>
+  <button class="mobile-install-btn" id="mobileInstallBtn" type="button">安装</button>
+  <button class="mobile-install-close" id="mobileInstallClose" type="button" title="我知道了">✕</button>
+</div>
+
 <div class="footer">
 <p>数据来源：自然资源部 · 中国地质调查局 · 矿业权市场 · 中国有色网 · 北京国际矿业权交易所 · 上海联合矿权交易所 · 全球矿产资源信息系统 · 中国地质学会 · 中国黄金协会 · 中国稀土行业协会 · 中国有色金属工业协会</p>
 <p>聚焦有色金属：铜镍铅锌铝金银稀土钨钼锡锑锂钴 | 排除：煤炭、石油、天然气、钢铁、铁矿</p>
 <p>更新时间：2026-09-05 09:29 | 每日9:00起自动更新（约9:30前完成） | 11个信息源 | 本页新增：已读状态存储于访问者本机浏览器</p>
-<p>📱 手机：在浏览器菜单选「<b>添加到主屏幕</b>」｜ 💻 电脑：用 Edge 或 Chrome 点击地址栏右侧「安装」图标 → 独立窗口运行 ｜ <a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#1a3a5c;text-decoration:underline">详细说明 ↓</a></p>
+<p><a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#1a3a5c;text-decoration:underline">💻 添加到桌面 / 📱 安装到主屏幕</a> · 像 App 一样使用 · 离线也能看</p>
 <div style="border-top:1px solid #d5dde5;margin:14px 0 10px;padding-top:12px;text-align:left">
 <p style="font-size:12px;color:#5b6b7a;line-height:1.8"><b style="color:#3a4a5a">版权与免责声明</b><br>
 本页面信息均来源于互联网公开渠道，包括但不限于中国政府机构、行业协会、权威媒体的官方网站及公开新闻报道。所有著作权及其他权利归原机构 / 原媒体所有。<br>
@@ -1845,11 +1882,98 @@ foldOldArchive();
 injectOrigDateBadges();
 applyFilter();
 refresh();
-// ===== "安装成App"引导条（静态双端文案常显；✕仅本次会话隐藏，刷新重现）=====
-function dismissInstallTip(){
-  const tip=document.getElementById('installTip');
-  if(tip)tip.classList.remove('show');
+// ===== PWA 安装引导（克制入口：PC顶部按钮 + 移动端底部浮条）=====
+// 平台判断
+const IS_STANDALONE=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+const IS_IOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+const IS_ANDROID=/Android/i.test(navigator.userAgent);
+const IS_MOBILE_UA=/Android|iPhone|iPad|iPod|Mobile|HarmonyOS/i.test(navigator.userAgent);
+
+// 捕获浏览器安装提示（Chrome/Edge/Android）
+window.__deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();
+  window.__deferredPrompt=e;
+  showPwaInstallPrompt();
+});
+
+// 安装完成后隐藏入口
+window.addEventListener('appinstalled',function(){
+  window.__deferredPrompt=null;
+  hidePwaInstallPrompt();
+});
+
+function dismissInstallTip(){ hidePwaInstallPrompt(); }
+
+function hidePwaInstallPrompt(){
+  var pcBtn=document.getElementById('pwaHeaderBtn');
+  if(pcBtn)pcBtn.hidden=true;
+  var mbBar=document.getElementById('mobileInstallBar');
+  if(mbBar)mbBar.hidden=true;
+  document.body.classList.remove('has-install-bar');
 }
+
+function showPwaInstallPrompt(){
+  if(IS_STANDALONE){ hidePwaInstallPrompt(); return; }
+  // 用户本次会话点过关闭，不再打扰
+  try{ if(sessionStorage.getItem('pwa-install-bar-dismissed')==='1') return; }catch(e){}
+
+  if(IS_MOBILE_UA){
+    // 移动端：底部浮条
+    var bar=document.getElementById('mobileInstallBar');
+    var btn=document.getElementById('mobileInstallBtn');
+    var txt=document.getElementById('mobileInstallText');
+    if(!bar)return;
+    if(IS_IOS){
+      txt.textContent='Safari 点“分享”→“添加到主屏幕”，像 App 一样使用';
+      btn.textContent='如何添加';
+      btn.onclick=function(){ alert('① 点 Safari 底部“分享”按钮（□↑）\n② 上滑找到“添加到主屏幕”\n③ 点“添加”即可'); };
+    }else{
+      txt.textContent='安装到主屏幕，离线也能看日报';
+      btn.textContent='安装';
+      btn.onclick=function(){ triggerPwaInstall(); };
+    }
+    bar.hidden=false;
+    document.body.classList.add('has-install-bar');
+    var close=document.getElementById('mobileInstallClose');
+    if(close)close.onclick=function(){ bar.hidden=true; document.body.classList.remove('has-install-bar'); try{sessionStorage.setItem('pwa-install-bar-dismissed','1');}catch(e){} };
+  }else{
+    // 电脑端：顶部按钮
+    var pcBtn=document.getElementById('pwaHeaderBtn');
+    if(pcBtn){
+      pcBtn.hidden=false;
+      pcBtn.onclick=function(){ triggerPwaInstall(); };
+    }
+  }
+}
+
+function triggerPwaInstall(){
+  if(window.__deferredPrompt){
+    window.__deferredPrompt.prompt();
+    window.__deferredPrompt.userChoice.then(function(choice){
+      window.__deferredPrompt=null;
+      if(choice&&choice.outcome==='accepted'){
+        hidePwaInstallPrompt();
+      }
+    });
+  }else{
+    // 无浏览器提示时（如 Firefox/Safari），给手动指引
+    if(IS_IOS){
+      alert('请按以下步骤添加到主屏幕：\n① 点 Safari 底部“分享”按钮（□↑）\n② 上滑找到“添加到主屏幕”\n③ 点“添加”');
+    }else{
+      alert('请按以下步骤添加：\n① 点浏览器右上角“⋮”菜单\n② 选择“安装应用 / 添加到桌面”\n③ 确认添加');
+    }
+  }
+}
+
+// 页面加载后再判断一次（处理 iOS 等不触发 beforeinstallprompt 的场景）
+window.addEventListener('DOMContentLoaded',function(){
+  if(IS_STANDALONE){ hidePwaInstallPrompt(); return; }
+  // iOS 不触发 beforeinstallprompt，直接显示浮条
+  if(IS_IOS&&IS_MOBILE_UA) showPwaInstallPrompt();
+  // 电脑端若浏览器支持安装，先显示按钮；等 beforeinstallprompt 触发后再点亮实际安装能力
+  if(!IS_MOBILE_UA) showPwaInstallPrompt();
+});
 // ===== PWA：注册 Service Worker（可安装成App + 离线可看）=====
 // 2026-09-02：新版 SW 激活后自动 reload，保证所有人打开就是最新版，无需手动清缓存
 if('serviceWorker' in navigator){

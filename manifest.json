@@ -1,13 +1,16 @@
 {
-  "name": "矿业新闻日报·AI问答",
+  "name": "矿业新闻日报",
   "short_name": "矿业日报",
+  "description": "有色金属矿业新闻日报与 AI 问答",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f5f7fa",
-  "theme_color": "#1a237e",
+  "theme_color": "#1a3a5c",
   "icons": [
     {"src": "./icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "./icon-512.png", "sizes": "512x512", "type": "image/png"}
+    {"src": "./icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "./icon-192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+    {"src": "./icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
   ]
 }
