@@ -67,7 +67,6 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;c
 .news-item.read .dot{background:#bdc3c7}
 .badge-new{background:#e74c3c;color:#fff;font-size:11px;padding:1px 7px;border-radius:4px;font-weight:600;flex-shrink:0;margin-top:4px;animation:pulse 1.5s infinite}
 .badge-orig-date{background:#f0f4f8;color:#6b7280;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500;flex-shrink:0;margin-top:4px;white-space:nowrap}
-.badge-ext{background:#fff7ed;color:#b45309;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500;flex-shrink:0;margin-top:4px;white-space:nowrap;border:1px solid #fed7aa}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 .news-title{color:#1a5276;text-decoration:none;font-weight:600;font-size:15px;line-height:1.45}
 .news-title:hover{text-decoration:underline}
@@ -147,8 +146,8 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;c
 .sp-cat .sub-count{font-size:12.5px;color:#b45309;font-weight:600;margin-left:6px;background:#fff;padding:1px 8px;border-radius:10px;border:1px solid #f0d488}
 .badge-strategy{background:linear-gradient(135deg,#b45309,#d4a017);color:#fff;font-size:11px;padding:1px 7px;border-radius:4px;font-weight:700;flex-shrink:0;margin-top:4px;letter-spacing:.5px}
 .news-item.is-special{background:linear-gradient(90deg,#fffdf5 0%,#fff 30%)}
-.sp-list .news-item.sp-from-archive{background:linear-gradient(90deg,#f8fafc 0%,#fff 60%);border-left:3px solid #94a3b8;position:relative}
-.sp-list .news-item.sp-from-archive::before{content:"往期";position:absolute;top:6px;right:8px;font-size:10px;background:#e2e8f0;color:#475569;padding:1px 6px;border-radius:8px;font-weight:600;letter-spacing:.3px}
+.sp-list .news-item.sp-from-archive{background:linear-gradient(90deg,#f8fafc 0%,#fff 60%);border-left:3px solid #94a3b8}
+.sp-list .news-item.sp-from-archive .news-meta::after{content:"往期";font-size:10px;background:#e2e8f0;color:#475569;padding:1px 6px;border-radius:8px;font-weight:600;letter-spacing:.3px;margin-left:8px;white-space:nowrap}
 .btn-special{background:#f5e6bc;color:#92400e;border:1px solid #e6c86e}
 .btn-special:hover{background:#eed9a4}
 .btn-special.active{background:#b45309;color:#fff;border-color:#b45309}
@@ -378,7 +377,6 @@ body.dark .news-title{color:#8fb5dc}
 body.dark .news-meta{color:#8296a8}
 body.dark .news-summary{color:#a8bacb}
 body.dark .badge-orig-date{background:#243140;color:#94a3b8}
-body.dark .badge-ext{background:#33261a;color:#d9a05b;border-color:#5a4326}
 body.dark .btn-read{color:#ff8a80;border-color:#a33d33}
 body.dark .btn-read:hover{background:#c0392b;color:#fff;border-color:#c0392b}
 body.dark .sub-cat{color:#c9d6e2}
@@ -433,7 +431,7 @@ body.dark .footer{color:#8b9bad}
 body.dark .section-title.special{background:linear-gradient(90deg,#2a2415,#161d26)}
 body.dark .news-item.is-special{background:linear-gradient(90deg,#241f12 0%,#161d26 30%)}
 body.dark .sp-list .news-item.sp-from-archive{background:linear-gradient(90deg,#1b2431 0%,#161d26 60%);border-left-color:#64748b}
-body.dark .sp-list .news-item.sp-from-archive::before{background:#33404f;color:#c3d0dc}
+body.dark .sp-list .news-item.sp-from-archive .news-meta::after{background:#33404f;color:#c3d0dc}
 body.dark .btn-special{background:#3a3120;color:#f0d18a;border-color:#6b5a2e}
 body.dark .btn-special:hover{background:#4a3f28}
 /* ---- 热榜 ---- */
@@ -1580,19 +1578,6 @@ function injectOrigDateBadges(){
     head.appendChild(badge);
   });
 }
-// 给已知禁止嵌入的条目加 ↗ 角标（提示这条会跳外站打开）
-function injectEmbedBadges(){
-  document.querySelectorAll('.news-item').forEach(el=>{
-    if(el.querySelector('.badge-ext'))return;
-    const head=el.querySelector('.news-head');
-    if(!head)return;
-    const b=document.createElement('span');
-    b.className='badge-ext';
-    b.title='该网站禁止嵌入，点击将在新标签页打开';
-    b.textContent='↗ 外站';
-    head.appendChild(b);
-  });
-}
 function injectTags(){
   document.querySelectorAll('.news-item').forEach(el=>{
     if(el.querySelector('.news-tags'))return;
@@ -1858,7 +1843,6 @@ injectStars();
 renderArchivedFavs();
 foldOldArchive();
 injectOrigDateBadges();
-injectEmbedBadges();
 applyFilter();
 refresh();
 // ===== "安装成App"引导条（静态双端文案常显；✕仅本次会话隐藏，刷新重现）=====
