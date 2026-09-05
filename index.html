@@ -355,9 +355,14 @@ body.dark .ai-loading,body.dark .ai-empty,body.dark .ai-disabled{background:#1e2
    暗色下会大面积白底黑字 —— 这里补齐基础层，并新增右上角切换按钮。 */
 .header{position:relative}
 .header-actions{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:8px;z-index:2}
-.theme-toggle{width:34px;height:34px;border:none;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:16px;line-height:1;cursor:pointer;transition:.2s}
-.theme-toggle:hover{background:rgba(255,255,255,.32)}
+.theme-toggle{height:34px;border:none;border-radius:17px;padding:3px;background:rgba(255,255,255,.16);color:#fff;font-size:14px;line-height:1;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:2px}
+.theme-toggle:hover{background:rgba(255,255,255,.28)}
 .theme-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.theme-option{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s;opacity:.55}
+.theme-option.active{background:rgba(255,255,255,.9);color:#1a3a5c;opacity:1;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+body.dark .theme-toggle{background:rgba(0,0,0,.28)}
+body.dark .theme-toggle:hover{background:rgba(0,0,0,.45)}
+body.dark .theme-option.active{background:#2c5f8a;color:#fff}
 .pwa-header-btn{height:34px;border:none;border-radius:17px;padding:0 14px;font-size:13px;font-weight:600;background:#fff;color:#1a3a5c;cursor:pointer;transition:.2s;box-shadow:0 2px 6px rgba(0,0,0,.12);display:inline-flex;align-items:center;gap:5px}
 .pwa-header-btn:hover{background:#e8f0f8;transform:translateY(-1px)}
 .pwa-header-btn[hidden]{display:none!important}
@@ -539,7 +544,8 @@ body.dark .qa-airefs a{color:#6ab4e0}
   .btn-star{padding:9px 10px;font-size:19px}
   .pchart-mask{padding:10px}
   .pchart-modal{max-height:92vh;border-radius:12px}
-  .theme-toggle{width:40px;height:40px;font-size:17px}
+  .theme-toggle{height:38px;border-radius:19px;padding:3px;font-size:15px}
+  .theme-option{width:32px;height:32px}
   .pwa-header-btn{height:38px;padding:0 16px;font-size:14px;border-radius:19px}
 }
 /* 桌面端关闭按钮也稍作放大，兼顾触控笔记本 */
@@ -698,7 +704,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 
 <div class="header">
   <div class="header-actions">
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式">🌙</button>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式"><span class="theme-option light">☀️</span><span class="theme-option dark">🌙</span></button>
     <button class="pwa-header-btn" id="pwaHeaderBtn" type="button" title="将本页安装到电脑桌面" hidden>💻 添加到桌面</button>
   </div>
   <h1>⛏️ 矿业新闻日报 <span class="date-badge">2026年09月05日 星期六</span></h1>
@@ -3024,7 +3030,10 @@ function applyTheme(mode){
   document.body.classList.toggle('dark', dark);
   var btn = document.getElementById('themeToggle');
   if(btn){
-    btn.textContent = dark ? '☀️' : '🌙';
+    var lightOpt = btn.querySelector('.theme-option.light');
+    var darkOpt = btn.querySelector('.theme-option.dark');
+    if(lightOpt) lightOpt.classList.toggle('active', !dark);
+    if(darkOpt) darkOpt.classList.toggle('active', dark);
     btn.setAttribute('title', dark ? '切换到浅色模式' : '切换到深色模式');
     btn.setAttribute('aria-label', btn.getAttribute('title'));
   }
