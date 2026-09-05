@@ -1988,10 +1988,10 @@ function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){retu
 
 // qaReset 已迁移至悬浮球（qaFloatReset)
 
-// ===== AI 智能问答（2026-09-04 改接 Cloudflare Workers 轻后端）=====
-// 后端仅服务 /api/qa + /api/health（worker/worker.js），DEEPSEEK_API_KEY 存为平台 secret。
-// QA_API_BASE 部署后填真实 worker URL；若未部署/为空，AI 按钮自动显示"不可用"，检索不受影响。
-var QA_API_BASE='https://mining-daily-qa.pliucugb-mining-daily.workers.dev';
+// ===== AI 智能问答（2026-09-05 改接腾讯云 SCF 轻后端）=====
+// 后端仅服务 /api/qa + /api/health（scf/index.py，腾讯云云函数 + API 网关），DEEPSEEK_API_KEY 存为函数环境变量。
+// QA_API_BASE 部署后填真实 API 网关 URL；若仍为占位符/为空，AI 走本地知识库兜底，检索不受影响。
+var QA_API_BASE='https://REPLACE-ME.apigw.tencentcs.com/release';
 
 (function(){
   qaInitData();
@@ -2092,12 +2092,12 @@ var QA_AI_ON=false,QA_AI_BUSY=false,QA_LEFT=0;
 function qaAiProbe(){
   // eslint-disable-next-line no-console
   console.log('[qaAiProbe] QA_API_BASE=',QA_API_BASE);
-  if(!QA_API_BASE||QA_API_BASE.indexOf('YOUR-CF-SUBDOMAIN')>=0){
+  if(!QA_API_BASE||QA_API_BASE.indexOf('REPLACE-ME')>=0){
     // 未配置后端地址，跳过探测（保持 AI 按钮为"不可用"）
     // eslint-disable-next-line no-console
     console.warn('[qaAiProbe] backend not configured, skip probe');
     var b0=document.getElementById('qaFloatAi');
-    if(b0){b0.disabled=true;b0.textContent='✨ AI 待配置';b0.title='请在 index.html 的 QA_API_BASE 填入 worker URL';
+    if(b0){b0.disabled=true;b0.textContent='✨ AI 待配置';b0.title='请在 index.html 的 QA_API_BASE 填入 SCF API 网关 URL';
     }
     return;
   }
@@ -2130,7 +2130,7 @@ function qaAiProbe(){
       // 探测失败（后端未部署或网络异常）→ 按钮变"不可用"，让用户清楚知道不是网页坏了
       var b=document.getElementById('qaFloatAi');
       if(b){b.disabled=true;b.textContent='✨ AI 不可用';
-        b.title='未检测到 AI 服务（请检查 QA_API_BASE 或 worker 部署）';}
+        b.title='未检测到 AI 服务（请检查 QA_API_BASE 或 SCF 部署）';}
     });
 }
 function qaAiQuota(){
@@ -2547,7 +2547,7 @@ function qaFloatAsk(){
   // 二次精筛：标题须真的出现该矿种词，避免「标签/来源含铝字」之类把无关新闻带进上下文
   if(_minSel){_ctx=_ctx.filter(function(r){return (r.t||'').indexOf(_minSel)>=0;});}
   var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…','');
-  if(!QA_API_BASE||QA_API_BASE.indexOf('YOUR-CF-SUBDOMAIN')>=0){
+  if(!QA_API_BASE||QA_API_BASE.indexOf('REPLACE-ME')>=0){
     // 未配置后端：直接走本地兜底，不让用户看到错误
     var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
     if(bubble)bubble.innerHTML='<div style="white-space:pre-wrap">'+qaEsc(qaAiLocalAnswer(q,_ctx))+'</div>';
