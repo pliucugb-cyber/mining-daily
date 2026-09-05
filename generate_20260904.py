@@ -14,7 +14,8 @@ with open(SRC, encoding='utf-8') as f:
 
 REPORT = '2026-09-04'
 GRAB = '2026-09-04'
-WIN_FROM = '08-28'          # 7 天滚动窗口：保留 >= 08-28（月份同为 2026-09/08 当期）
+ARCHIVE_DAYS = 14          # 往期展示窗口（天）。WIN_FROM 由 REPORT 自动推算，勿手写日期
+WIN_FROM = (datetime.date.fromisoformat(REPORT) - datetime.timedelta(days=ARCHIVE_DAYS - 1)).strftime('%m-%d')
 
 # ============ 1. 标题 / 日期 / 更新时间 ============
 html = html.replace('<title>矿业新闻日报 2026-09-03</title>', '<title>矿业新闻日报 2026-09-04</title>')

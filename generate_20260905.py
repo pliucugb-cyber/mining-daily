@@ -15,7 +15,8 @@ with open(SRC, encoding='utf-8') as f:
 
 REPORT = '2026-09-05'
 GRAB = '2026-09-05'
-WIN_FROM = '08-23'          # 14 天展示窗口：保留 >= 08-23（今日 09-05 - 13 天）
+ARCHIVE_DAYS = 14          # 往期展示窗口（天）。复制本脚本出新版时只改 REPORT/GRAB/新条目，WIN_FROM 自动按 REPORT 往前推 (ARCHIVE_DAYS-1) 天，勿再手写日期
+WIN_FROM = (datetime.date.fromisoformat(REPORT) - datetime.timedelta(days=ARCHIVE_DAYS - 1)).strftime('%m-%d')
 DATA_ASOF = '09-04'         # 周六休市，国内外均无当日收盘，沿用上一交易日
 
 # ============ 1. 标题 / 日期 / 更新时间 ============

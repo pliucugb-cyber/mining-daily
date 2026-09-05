@@ -581,7 +581,7 @@ body_start = '''</head>
 <div class="section-title today"><span class="icon">🔥</span> 今日新增（2026-08-27 抓取）<span class="news-count" id="todayCount"></span></div>
 '''
 
-body_today_end = '</div>\n\n<!-- ==================== 往期内容 ==================== -->\n<div class="section" id="archiveSection">\n<div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近7天）<span class="news-count">' + str(archive_count) + '条</span></div>\n<div class="fold-toggle" id="foldToggle" style="display:none" onclick="toggleOldFold()">▸ 展开更早内容</div>\n\n'
+body_today_end = '</div>\n\n<!-- ==================== 往期内容 ==================== -->\n<div class="section" id="archiveSection">\n<div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近14天）<span class="news-count">' + str(archive_count) + '条</span></div>\n<div class="fold-toggle" id="foldToggle" style="display:none" onclick="toggleOldFold()">▸ 展开更早内容</div>\n\n'
 
 body_archive_end = '</div>\n\n<!-- ==================== 详细安装指引（双端展开,默认浏览器加入到桌面或书签） ==================== -->\n<div class="section" id="installGuideSection">\n'
 
