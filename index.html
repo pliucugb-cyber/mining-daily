@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260905-2250">
+<meta name="build-version" content="20260905-2313">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -252,7 +252,7 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-fab.on{background:linear-gradient(135deg,#334155,#475569)}
 .qa-float{position:fixed;left:16px;bottom:78px;z-index:100001;width:min(440px,calc(100vw - 32px));height:min(560px,calc(100vh - 110px));min-width:300px;min-height:260px;background:#fff;border:1px solid #d7deea;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;visibility:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;contain:layout paint}
 .qa-float.open{opacity:1;pointer-events:auto;visibility:visible}
-.qa-resize-handle{position:absolute;z-index:10;background:transparent;transition:background .15s}
+.qa-resize-handle{position:absolute;z-index:1;background:transparent;transition:background .15s}
 .qa-resize-handle:hover{background:rgba(79,70,229,.22)}
 .qa-resize-n{top:0;left:10px;right:10px;height:6px;cursor:ns-resize}
 .qa-resize-s{bottom:0;left:10px;right:10px;height:6px;cursor:ns-resize}
@@ -314,10 +314,10 @@ body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 .qa-msg-item:hover{color:#4f46e5}
 .qa-msg-item .qd{color:#6b7a89;font-size:11px;margin-right:5px}
 .qa-msg-item .qs{color:#6b7a89;font-size:11px;margin-left:5px}
-.qa-float-foot{display:flex;gap:6px;padding:10px;border-top:1px solid #eef2f5;background:#fff}
-.qa-float-input{flex:1;border:1px solid #dbe2ea;border-radius:8px;padding:8px 10px;font-size:13px;outline:none}
+.qa-float-foot{position:relative;z-index:3;display:flex;gap:6px;padding:10px;border-top:1px solid #eef2f5;background:#fff}
+.qa-float-input{position:relative;z-index:4;flex:1;border:1px solid #dbe2ea;border-radius:8px;padding:8px 10px;font-size:13px;outline:none}
 .qa-float-input:focus{border-color:#4f46e5}
-.qa-float-btn{border:none;border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;background:#eef2f5;color:#1a3a5c}
+.qa-float-btn{position:relative;z-index:4;border:none;border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;background:#eef2f5;color:#1a3a5c}
 .qa-float-btn.primary{background:#4f46e5;color:#fff}
 .qa-float-btn:disabled{opacity:.5;cursor:not-allowed}
 .qa-float-tip{font-size:10.5px;color:#8a98a6;padding:6px 12px 9px;background:#fff;border-top:1px solid #f1f4f7;line-height:1.4;user-select:none}
@@ -819,6 +819,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
 <!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
 <!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
+<!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
 <div class="section" id="todaySection">
 <div class="section-title today"><span class="icon">🔥</span> 今日新增（2026-09-05 抓取）<span class="news-count" id="todayCount">11条</span></div>
 <div class="sub-cat">💼 矿权交易<span class="sub-count">3条新增</span></div>
@@ -856,7 +857,6 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="news-item" data-url="https://www.cngold.org.cn/news/show-9500.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">2026年上半年我国黄金产量152.908吨，同比下降14.62%，黄金消费量511.412吨，同比增长1.23%</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">上半年国内黄金产量同比下降14.62%至152.908吨，黄金消费量511.412吨、同比增长1.23%，产消缺口进一步扩大。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cngold.org.cn/news/show-9503.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9503.html" target="_blank">中国黄金集团与中国地质大学（武汉）举行工作会商</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">校企双方围绕科技创新、人才培养与地质勘查成果转化开展会商，推动产学研深度融合。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9503.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cngold.org.cn/news/show-9505.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9505.html" target="_blank">持续增厚股东回报 紫金矿业公布111亿元中期分红方案</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">紫金矿业公布111亿元中期分红方案，在铜金价格高位背景下持续提升股东回报。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9505.html" target="_blank">查看原文 →</a></div>
-</div>
 <div class="section" id="installGuideSection">
 <div class="section-title guide"><span class="icon">📲</span> 安装到桌面 <span class="news-count" style="background:#cffafe;color:#0e7490">备用指引</span><button class="guide-toggle" id="guideToggle" onclick="toggleInstallGuide()" type="button">展开 ▼</button></div>
 <div class="guide-summary" id="guideSummary">
@@ -907,7 +907,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="footer">
 <p>数据来源：自然资源部 · 中国地质调查局 · 矿业权市场 · 中国有色网 · 北京国际矿业权交易所 · 上海联合矿权交易所 · 全球矿产资源信息系统 · 中国地质学会 · 中国黄金协会 · 中国稀土行业协会 · 中国有色金属工业协会</p>
 <p>聚焦有色金属：铜镍铅锌铝金银稀土钨钼锡锑锂钴 | 排除：煤炭、石油、天然气、钢铁、铁矿</p>
-<p>更新时间：2026-09-05 22:50 | 每日9:00起自动更新（约9:30前完成） | 11个信息源 | 本页新增：已读状态存储于访问者本机浏览器</p>
+<p>更新时间：2026-09-05 23:13 | 每日9:00起自动更新（约9:30前完成） | 11个信息源 | 本页新增：已读状态存储于访问者本机浏览器</p>
 <p><a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#1a3a5c;text-decoration:underline">💻 添加到桌面 / 📱 安装到主屏幕</a> · 像 App 一样使用 · 离线也能看</p>
 <div style="border-top:1px solid #d5dde5;margin:14px 0 10px;padding-top:12px;text-align:left">
 <p style="font-size:12px;color:#5b6b7a;line-height:1.8"><b style="color:#3a4a5a">版权与免责声明</b><br>
@@ -2635,6 +2635,7 @@ function qaFloatAddResizeHandles(){
   });
 }
 function qaFloatStartResize(ev){
+  if(ev.target.closest && ev.target.closest('input,select,button,a,textarea,[contenteditable]'))return;
   var h=ev.target.closest && ev.target.closest('.qa-resize-handle'); if(!h)return;
   var p=document.getElementById('qaFloat'); if(!p)return;
   var dir=h.dataset.dir||'se';
