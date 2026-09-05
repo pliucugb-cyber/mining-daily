@@ -2378,7 +2378,7 @@ function qaStopBreathe(){
 // 拖拽把手=整个面板任意非交互位置（头部/边框/结果空白区均可拖）；
 // 输入框/筛选/按钮/链接/关闭键/趋势图/右下角原生缩放柄 不触发拖拽。
 var QA_DRAGGING=null;
-var QA_DRAG_EXCLUDE='input,select,button,a,textarea,[contenteditable],.qa-fsel,.qa-fchip,.pchart-close,.qa-trend,.qa-src';
+var QA_DRAG_EXCLUDE='input,select,button,a,textarea,[contenteditable],.qa-fsel,.qa-fchip,.pchart-close,.qa-trend,.qa-src,.qa-msg-bubble,.qa-float-body';
 function qaFloatStartDrag(ev){
   var p=document.getElementById('qaFloat'); if(!p||!p.classList.contains('open'))return;
   // 交互元素不触发拖拽，保证内部可选择/点击/输入
