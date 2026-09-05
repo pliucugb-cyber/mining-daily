@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260905-2245">
+<meta name="build-version" content="20260905-2250">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -620,8 +620,11 @@ body.dark .guide-toggle:hover{background:#1d4558}
 .guide-toggle{height:26px;padding:0 10px;font-size:12px}
 }
 @media(max-width:600px){
-.header{padding:18px 14px}.header h1{font-size:18px}
-.header-actions{top:12px;right:12px}
+.header{padding:16px 14px;display:flex;flex-direction:column}
+.header h1{font-size:18px;order:1}
+.header .sub{order:2;margin-top:8px}
+/* 手机端：夜间模式/桌面按钮改回正常流，排到标题下方并右对齐，避免盖住标题与副标题 */
+.header-actions{position:static;top:auto;right:auto;order:3;justify-content:flex-end;margin-top:12px}
 .mobile-install-bar{padding:8px 10px;font-size:13px}
 .mobile-install-btn{height:32px;padding:0 12px}
 .mobile-install-text{line-height:1.35}
@@ -722,10 +725,10 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 </script>
 <nav class="toc-sidebar" id="tocSidebar">
 <div class="toc-title">📑 目录导航</div>
-<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})">📋 全部内容 <span class="toc-count" id="tocAllCount">42</span></div>
+<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})">📋 全部内容 <span class="toc-count" id="tocAllCount">41</span></div>
 <div class="toc-main-item" data-target="specialSection" onclick="scrollToSection('specialSection',this)" style="color:#b45009">⛏️ 找矿专项 <span class="toc-count" id="tocSpecialCount" style="background:#fdf3d7;color:#b45009">0</span></div>
 <div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)">🔥 今日新增 <span class="toc-count" id="tocTodayCount">11</span></div>
-<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)">📰 往期内容 <span class="toc-count" id="tocArchiveCount">31</span></div>
+<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)">📰 往期内容 <span class="toc-count" id="tocArchiveCount">30</span></div>
 <div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#f39c12">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12">0</span></div>
 <div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#8e44ad">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad">0</span></div>
 <div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490">📘</span></div>
@@ -815,6 +818,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
 <!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
 <!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
+<!-- ==================== 今日新增（2026-09-05 抓取） ==================== -->
 <div class="section" id="todaySection">
 <div class="section-title today"><span class="icon">🔥</span> 今日新增（2026-09-05 抓取）<span class="news-count" id="todayCount">11条</span></div>
 <div class="sub-cat">💼 矿权交易<span class="sub-count">3条新增</span></div>
@@ -824,7 +828,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" target="_blank">国际钯价大幅上涨</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-04</div><div class="news-summary">周四国际矿产品价格多数上涨，贵金属涨幅居前：纽约金收于4473.6美元/盎司涨1.96%，银66.96美元/盎司涨2.52%，铂1834.0美元/盎司涨3.93%，钯1440.0美元/盎司涨5.84%领涨；LME铜14356美元/吨涨0.84%、锡54750美元/吨涨1.32%；WTI原油91.66美元/桶涨1.15%，62%铁矿粉99.35美元/吨涨1.85%，铀（U3O8）89.50美元/磅持平。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" target="_blank">西澳格拉斯帕奇项目进展</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">里德利山矿业公司（Mount Ridley Mines）西澳格拉斯帕奇（Grass Patch）项目推测资源量升级至9.58亿吨，钪品位0.0050%，折合钪金属量4.7万吨，公司称其为世界最大已公开钪资源量，赋存于含重稀土—镓的风化层中；自研Selectro工艺钪回收率可达80%、重稀土83%、镓56%。</div><a class="btn-read" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" target="_blank">查看原文 →</a></div></div>
 <!-- ==================== 往期内容 ==================== -->
 <div class="section" id="archiveSection">
-<div class="section-title"><span class="icon">📰</span> 往期内容（近14天自动展开，更早需点开）<span class="news-count" id="archiveCount">31条</span></div>
+<div class="section-title"><span class="icon">📰</span> 往期内容（近14天自动展开，更早需点开）<span class="news-count" id="archiveCount">30条</span></div>
 <div class="fold-toggle" id="foldToggle" style="display:none" onclick="toggleOldFold()">▸ 展开更早内容</div>
 <div class="sub-cat">💼 矿权交易<span class="sub-count">6条</span></div>
 <div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" target="_blank">新疆皮山县库尔良铜矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">新疆维吾尔自治区自然资源厅委托自治区公共资源交易中心挂牌出让皮山县库尔良铜矿勘查探矿权，区块面积39.42平方千米，起始价118.27万元，出让收益率1.2%，拟出让年限5年，挂牌期2026年10月21日至11月4日。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" target="_blank">内蒙古巴林右旗巴彦琥硕银矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">赤峰市自然资源局委托赤峰市公共资源交易中心网上挂牌出让巴彦琥硕银矿勘查探矿权（赤公矿交告〔2026〕001号），区块面积6.30平方千米，起始价38万元，出让收益率2.3%，拟出让年限5年，挂牌期2026年10月23日至11月6日。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" target="_blank">湖北省通山县泉塘王矿区金矿勘查网上挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">湖北省自然资源厅打包出让通山县泉塘王矿区金矿南段和北段勘查探矿权，矿种为金矿，南段3.9平方千米、北段5.9平方千米，起始价59.04万元，出让收益率2.3%。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" target="_blank">查看原文 →</a></div>
@@ -852,8 +856,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="news-item" data-url="https://www.cngold.org.cn/news/show-9500.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">2026年上半年我国黄金产量152.908吨，同比下降14.62%，黄金消费量511.412吨，同比增长1.23%</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">上半年国内黄金产量同比下降14.62%至152.908吨，黄金消费量511.412吨、同比增长1.23%，产消缺口进一步扩大。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cngold.org.cn/news/show-9503.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9503.html" target="_blank">中国黄金集团与中国地质大学（武汉）举行工作会商</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">校企双方围绕科技创新、人才培养与地质勘查成果转化开展会商，推动产学研深度融合。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9503.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cngold.org.cn/news/show-9505.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9505.html" target="_blank">持续增厚股东回报 紫金矿业公布111亿元中期分红方案</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">紫金矿业公布111亿元中期分红方案，在铜金价格高位背景下持续提升股东回报。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9505.html" target="_blank">查看原文 →</a></div>
-<div class="sub-cat">🌐 国际矿业动态<span class="sub-count">1条</span></div>
-<div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" target="_blank">政府干预关键矿产“前所未有”</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-03</div><div class="news-summary">据Mining.com报道，各国政府正从单纯贷款转向股权、保底价与长期承购等商业投资模式直接介入采矿与关键矿产交易；美国2月启动120亿美元“金库计划”，快市统计2025年1月以来矿产相关协议约160个、总额近400亿美元，激励与禁购并举的模式被指“前所未有”。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm" target="_blank">查看原文 →</a></div>
+</div>
 <div class="section" id="installGuideSection">
 <div class="section-title guide"><span class="icon">📲</span> 安装到桌面 <span class="news-count" style="background:#cffafe;color:#0e7490">备用指引</span><button class="guide-toggle" id="guideToggle" onclick="toggleInstallGuide()" type="button">展开 ▼</button></div>
 <div class="guide-summary" id="guideSummary">
@@ -904,7 +907,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="footer">
 <p>数据来源：自然资源部 · 中国地质调查局 · 矿业权市场 · 中国有色网 · 北京国际矿业权交易所 · 上海联合矿权交易所 · 全球矿产资源信息系统 · 中国地质学会 · 中国黄金协会 · 中国稀土行业协会 · 中国有色金属工业协会</p>
 <p>聚焦有色金属：铜镍铅锌铝金银稀土钨钼锡锑锂钴 | 排除：煤炭、石油、天然气、钢铁、铁矿</p>
-<p>更新时间：2026-09-05 22:45 | 每日9:00起自动更新（约9:30前完成） | 11个信息源 | 本页新增：已读状态存储于访问者本机浏览器</p>
+<p>更新时间：2026-09-05 22:50 | 每日9:00起自动更新（约9:30前完成） | 11个信息源 | 本页新增：已读状态存储于访问者本机浏览器</p>
 <p><a href="javascript:void(0)" onclick="scrollToSection('installGuideSection',null)" style="color:#1a3a5c;text-decoration:underline">💻 添加到桌面 / 📱 安装到主屏幕</a> · 像 App 一样使用 · 离线也能看</p>
 <div style="border-top:1px solid #d5dde5;margin:14px 0 10px;padding-top:12px;text-align:left">
 <p style="font-size:12px;color:#5b6b7a;line-height:1.8"><b style="color:#3a4a5a">版权与免责声明</b><br>
