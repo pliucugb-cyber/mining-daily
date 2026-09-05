@@ -27,6 +27,10 @@ now = datetime.datetime.now().strftime('%H:%M')
 html = re.sub(r'更新时间：2026-09-\d{2} \d{2}:\d{2}', '更新时间：%s %s' % (REPORT, now), html)
 html = re.sub(r'今日新增（2026-09-\d{2} 抓取）', '今日新增（%s 抓取）' % GRAB, html)
 html = re.sub(r'id="priceStripNote">2026-09-\d{2} 更新', 'id="priceStripNote">%s 更新' % REPORT, html)
+# 2026-09-05 新增：每次生成自动 bump build-version 戳，配合页面内版本自愈 JS（见 index.html"版本戳自愈"块），
+# 确保用户一旦拿到新页面即自动硬刷新，不会被旧版 SW/浏览器缓存长期困在旧版 CSS。
+html = re.sub(r'name="build-version" content="\d{8}-\d{4}"',
+              'name="build-version" content="%s-%s"' % (REPORT.replace('-', ''), now.replace(':', '')), html)
 
 # ============ 2. 国内价格卡（09-04 收盘，周六休市） ============
 def card(slug, css, name, tag, value, unit, chg):
