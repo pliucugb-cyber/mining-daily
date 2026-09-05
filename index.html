@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260906-0040">
+<meta name="build-version" content="20260906-0058">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -2765,6 +2765,8 @@ function qaFloatAdd(role,html,meta,opts){
   d.innerHTML=bubbleHtml+m+t+actions;
   d.dataset.raw=html||'';
   d.dataset.md=opts.md?'1':'';
+  // 2026-09-06 记录渲染格式，历史恢复时按原样渲染（否则检索结果 HTML 会被 md 渲染器转义成裸文本）
+  d.dataset.fmt=opts.html?'html':(opts.md?'md':'text');
   if(opts.q)d.dataset.q=opts.q;
   if(opts.ctx)d.dataset.ctx=JSON.stringify(opts.ctx||[]);
   if(opts.ts)d.dataset.ts=String(opts.ts);
@@ -2965,7 +2967,7 @@ function qaDeepseekCall(q,ctx,msg,btn){
       }
       if(msg){
         var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=meta;
-        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);
+        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);
         if(res.ok&&content){
           var actions='<div class="qa-msg-actions">'+
             '<button class="qa-msg-action" type="button" title="复制回答" onclick="qaCopyAi(this)">📋 复制</button>'+
@@ -2991,7 +2993,7 @@ function qaDeepseekCall(q,ctx,msg,btn){
       }
       if(msg){
         var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 全库 '+QA_ROWS.length+' 条';
-        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);
+        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);
         if(!msg.querySelector('.qa-msg-actions')){
           var metaEl=msg.querySelector('.qa-msg-meta');
           var actions='<div class="qa-msg-actions">'+
@@ -3021,9 +3023,15 @@ function qaLoadHistory(){
     var body=document.getElementById('qaFloatBody');if(!body)return;
     body.innerHTML='';
     list.forEach(function(it){
+      // 2026-09-06 修复：按保存时的渲染格式恢复。此前 ai 类消息一律 {md:true}，
+      // qaMdRender 第一步会把检索结果的 <a> 卡片整体转义 → 刷新后"回答变裸 HTML"。
+      // 旧记录无 fmt 字段时保持 md 兼容（真正的 AI 回答不受影响）。
+      // 旧记录无 fmt 字段：内容以 "<" 开头的按 HTML 渲染（修复存量坏数据），否则按 md
+      var f=it.fmt||(it.role==='search'?'html':(/^\s*</.test(it.html||'')?'html':'md'));
+      var ropts=f==='html'?{html:true,ts:it.ts}:(f==='text'?{md:false,ts:it.ts}:{md:true,ts:it.ts});
       if(it.role==='user')qaFloatAdd('user',it.html,'',{md:false,ts:it.ts});
-      else if(it.role==='ai')qaFloatAdd('ai',it.html,it.meta||'',{md:true,canRetry:it.canRetry!==false,actions:it.canRetry!==false,q:it.q||'',ctx:it.ctx||[],ts:it.ts});
-      else if(it.role==='search')qaFloatAdd('ai',it.html,it.meta||'',{md:false,ts:it.ts});
+      else if(it.role==='ai')qaFloatAdd('ai',it.html,it.meta||'',Object.assign({canRetry:it.canRetry!==false,actions:it.canRetry!==false,q:it.q||'',ctx:it.ctx||[]},ropts));
+      else if(it.role==='search')qaFloatAdd('ai',it.html,it.meta||'',{html:true,ts:it.ts});
     });
   }catch(e){}
 }
@@ -3040,7 +3048,7 @@ function qaSaveHistory(){
       var raw=el.dataset.raw||'';
       var ts=el.dataset.ts?Number(el.dataset.ts):0;
       if(role==='ai'){
-        out.push({role:'ai',html:raw,meta:meta,ts:ts,q:el.dataset.q||'',ctx:el.dataset.ctx||'',canRetry:!!el.querySelector('.qa-msg-actions')});
+        out.push({role:'ai',html:raw,meta:meta,ts:ts,fmt:el.dataset.fmt||'',q:el.dataset.q||'',ctx:el.dataset.ctx||'',canRetry:!!el.querySelector('.qa-msg-actions')});
       }else{
         out.push({role:'user',html:raw,meta:meta,ts:ts});
       }
