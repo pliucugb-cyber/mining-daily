@@ -207,8 +207,9 @@ body.dark .digest-list a:hover{color:#ff7a7a}
 .price-card[data-slug]{cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
 .price-card[data-slug]:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(26,58,92,.14);border-color:#1a3a5c}
 .price-card[data-slug]:hover::after{content:'📈 走势';position:absolute;right:4px;top:3px;font-size:9px;color:#7f8c8d}
-.pchart-mask{position:fixed;inset:0;background:rgba(15,30,48,.55);z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px}
-.pchart-modal{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 12px 48px rgba(0,0,0,.3)}
+.pchart-mask{position:fixed;inset:0;background:rgba(12,22,36,.72);z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility .2s ease;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.pchart-mask.open{opacity:1;visibility:visible;pointer-events:auto}
+.pchart-modal{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 12px 48px rgba(0,0,0,.3);backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .pchart-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;border-bottom:1px solid #eef2f5}
 .pchart-name{font-size:16px;font-weight:800;color:#1a3a5c}
 .pchart-sub{font-size:11.5px;color:#7f8c8d;margin-left:8px;font-weight:400}
@@ -229,7 +230,7 @@ body.dark .pchart-head{border-bottom-color:#2c3845}
 body.dark .pchart-table th,body.dark .pchart-table td{border-bottom-color:#2c3845}
 body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 /* ==================== 左下角问答悬浮球 + 面板（9-04 新增）==================== */
-.qa-fab{position:fixed;left:16px;bottom:16px;z-index:100000;height:50px;max-width:calc(100vw - 32px);padding:0 18px;border:none;border-radius:999px;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:15px;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 20px rgba(79,70,229,.42);display:flex;align-items:center;gap:8px;white-space:nowrap;transition:transform .15s,box-shadow .15s,padding .15s}
+.qa-fab{position:fixed;left:16px;bottom:16px;z-index:100000;height:50px;max-width:calc(100vw - 32px);padding:0 18px;border:none;border-radius:999px;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:15px;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 20px rgba(79,70,229,.42);display:flex;align-items:center;gap:8px;white-space:nowrap;transition:transform .15s,box-shadow .15s,padding .15s;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 /* 悬停：轻微上浮+加宽，呈现“可搜索”的引导感 */
 .qa-fab:hover{transform:translateY(-3px) scale(1.03);padding:0 22px;box-shadow:0 12px 30px rgba(79,70,229,.55)}
 /* 首次进入呼吸提示：柔和脉冲吸引注意，首次打开面板后停止（见 qaFloatToggle / 初始化） */
@@ -244,7 +245,7 @@ body.dark .pchart-close{background:#2c3845;color:#c9d6e2}
 .qa-fab .qa-fab-ico{font-size:18px;line-height:1;display:inline-block}
 .qa-fab .qa-fab-txt{display:inline-block}
 .qa-fab.on{background:linear-gradient(135deg,#334155,#475569)}
-.qa-float{position:fixed;left:16px;bottom:78px;z-index:100001;width:min(440px,calc(100vw - 32px));height:min(560px,calc(100vh - 110px));min-width:300px;min-height:260px;background:#fff;border:1px solid #d7deea;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;visibility:hidden;transition:opacity .18s ease,visibility .18s ease}
+.qa-float{position:fixed;left:16px;bottom:78px;z-index:100001;width:min(440px,calc(100vw - 32px));height:min(560px,calc(100vh - 110px));min-width:300px;min-height:260px;background:#fff;border:1px solid #d7deea;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;visibility:hidden;transition:opacity .18s ease,visibility .18s ease;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .qa-float.open{opacity:1;pointer-events:auto;visibility:visible}
 .qa-resize-handle{position:absolute;z-index:10;background:transparent;transition:background .15s}
 .qa-resize-handle:hover{background:rgba(79,70,229,.22)}
@@ -2328,7 +2329,7 @@ function pcChartOpen(slug){
   // 弹层无障碍（2026-09-05 补）：声明对话框语义 + 锁定背景滚动 + 记录来源焦点以便关闭后归还
   mask.setAttribute('role','dialog');
   mask.setAttribute('aria-modal','true');
-  if(mask.style.display!=='flex'){
+  if(!mask.classList.contains('open')){
     window.PC_CHART_LAST_FOCUS=document.activeElement;
     document.body.style.overflow='hidden';
   }
@@ -2341,7 +2342,7 @@ function pcChartOpen(slug){
     subEl.textContent='';
     lg.innerHTML='<span>该品种暂无连续日K数据（电解钴为 SMM 现货报价无连续盘；其余品种由每日抓取累积，个别时段可能缺失）。</span>';
     svgEl.innerHTML='';tb.innerHTML='';
-    mask.style.display='flex';return;
+    mask.classList.add('open');return;
   }
   window.PC_CHART_SLUG=slug;      // 记录当前品种，供主题切换时重绘
   var H=window.PRICE_HISTORY,pts=s.points.slice(-8),n=pts.length;
@@ -2361,7 +2362,7 @@ function pcChartOpen(slug){
   //   ① 原固定 viewBox 宽 580，在 360px 手机上整体缩放约 0.5 倍，
   //      日期/坐标文字实际只有约 5px 根本看不清 —— 改为按容器实际宽度 1:1 绘制；
   //   ② 网格线、坐标轴文字、数据点为硬编码浅色，暗色模式下刺眼或看不见 —— 改为随主题取色
-  mask.style.display='flex';                       // 先显示，才能测到真实容器宽度
+  mask.classList.add('open');                       // 先显示，才能测到真实容器宽度
   var DARK=document.body.classList.contains('dark');
   var C_GRID=DARK?'#2c3845':'#eef2f5',
       C_AXIS=DARK?'#8296a8':'#95a5a6',
@@ -2407,15 +2408,15 @@ function pcChartOpen(slug){
       +'</td></tr>';
   }
   tb.innerHTML=h;
-  mask.style.display='flex';
+  mask.classList.add('open');
   // 打开后把焦点移进弹层，键盘用户可直接用 ESC / 回车关闭
   var cbtn=mask.querySelector('.pchart-close');
   if(cbtn)setTimeout(function(){try{cbtn.focus();}catch(e){}},50);
 }
 function pcChartClose(){
   var m=document.getElementById('pchartMask');
-  if(!m||m.style.display==='none')return;
-  m.style.display='none';
+  if(!m||!m.classList.contains('open'))return;
+  m.classList.remove('open');
   document.body.style.overflow='';      // 恢复背景滚动
   window.PC_CHART_SLUG=null;
   // 焦点归还给打开它的价格卡，键盘用户不会丢失位置
@@ -3091,7 +3092,7 @@ function toggleTheme(){
 
 </script>
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
-<div class="pchart-mask" id="pchartMask" style="display:none" onclick="if(event.target===this)pcChartClose()">
+<div class="pchart-mask" id="pchartMask" onclick="if(event.target===this)pcChartClose()">
   <div class="pchart-modal">
     <div class="pchart-head">
       <div><span class="pchart-name" id="pchartName">—</span><span class="pchart-sub" id="pchartSub"></span></div>
