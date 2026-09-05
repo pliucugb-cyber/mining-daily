@@ -78,6 +78,24 @@ check('非白名单 origin → Access-Control-Allow-Origin=null', r['headers'].g
 r = m.main_handler({'path': '/x', 'httpMethod': 'GET', 'headers': {}}, None)
 check('未知路径 → 404', r['statusCode'] == 404)
 
+# 8b) Web 函数 / 函数 URL 事件格式兼容（requestContext.http.path/method）
+r = m.main_handler({
+    'version': '2.0',
+    'requestContext': {'http': {'path': '/api/health', 'method': 'GET'}},
+    'headers': {'origin': GH}
+}, None)
+d = json.loads(r['body'])
+check('Web 函数格式 health → ok', d['ok'] is True)
+
+r = m.main_handler({
+    'version': '2.0',
+    'requestContext': {'http': {'path': '/api/qa', 'method': 'POST'}},
+    'headers': {'origin': GH},
+    'body': json.dumps({'question': '铝土矿', 'context': []})
+}, None)
+d = json.loads(r['body'])
+check('Web 函数格式 qa → 命中铝兜底', '铝' in d['answer'])
+
 # 9) 空问题
 r = m.main_handler({'path': '/api/qa', 'httpMethod': 'POST', 'headers': {'origin': GH},
                     'body': json.dumps({'question': '   '})}, None)

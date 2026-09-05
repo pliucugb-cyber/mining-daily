@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 """
 scf/index.py —— 矿业新闻日报 · 轻后端（仅 /api/qa + /api/health）
-部署目标：腾讯云云函数 SCF + API 网关（Python 3.10）
+部署目标：腾讯云云函数 SCF（Web 函数 + 函数 URL，Python 3.10）
 
 设计目标（与用户约定）：
   - 无状态：不读任何数据文件，前端把「问题 + 本地已检索到的相关新闻」一起 POST 过来，
     本函数只负责调 DeepSeek 生成答案（key 存为函数环境变量，不落代码）。
   - 国内访问最稳：腾讯云 SCF 国内节点，同事访问基本不会被墙（相比 Cloudflare Workers 的 workers.dev）。
-  - 换电脑可恢复：本文件进 git；key 是云函数环境变量（控制台或 Serverless Framework 配置）；
-    换机只需 `git clone` + `sls deploy`（或控制台重新部署）即可。
+  - 换电脑可恢复：本文件进 git；key 是云函数环境变量（控制台配置）；
+    换机只需 `git clone` + 控制台重新粘贴代码、设环境变量、开函数 URL 即可。
 
-入口：腾讯云 SCF API 网关触发时调用 main_handler(event, context)
-event 关键字段（API 网关集成响应）：
+入口：腾讯云 SCF Web 函数调用 main_handler(event, context)
+event 关键字段（Web 函数 / 函数 URL / API 网关 v2 兼容）：
   - event["path"]           请求路径，如 "/api/health"
   - event["httpMethod"]     请求方法，如 "GET"/"POST"
   - event["headers"]        请求头 dict（key 大小写不固定，取 origin 时忽略大小写）
   - event["body"]           请求体字符串（isBase64Encoded 为 true 时是 base64）
   - event["isBase64Encoded"] 请求体是否 base64 编码
-返回：API 网关集成响应格式
+返回：API 网关 / Web 函数集成响应格式
   {
     "isBase64Encoded": False,
     "statusCode": 200,
@@ -153,7 +153,7 @@ def ask_deepseek(api_key, question, context):
     return content
 
 
-# ── 工具：统一构造 API 网关集成响应 ──
+# ── 工具：统一构造 API 网关 / Web 函数集成响应 ──
 def respond(status, payload, cors):
     body_str = payload if isinstance(payload, str) else json.dumps(payload, ensure_ascii=False)
     headers = dict(cors)
@@ -192,13 +192,31 @@ def get_origin(event):
     return None
 
 
+# ── 工具：兼容取 path 和 method ──
+# Web 函数 / 函数 URL：event["path"] / event["httpMethod"]
+# API 网关 v2：event["requestContext"]["http"]["path"] / ["method"]
+# API 网关 v1：event["requestContext"]["httpMethod"]
+def get_path(event):
+    if event.get('path'):
+        return event['path']
+    rc = event.get('requestContext') or {}
+    http = rc.get('http') or {}
+    return http.get('path') or ''
+
+
+def get_method(event):
+    if event.get('httpMethod'):
+        return event['httpMethod']
+    rc = event.get('requestContext') or {}
+    http = rc.get('http') or {}
+    return http.get('method') or rc.get('httpMethod') or 'GET'
+
+
 # ── 路由处理 ──
 def main_handler(event, context):
     event = event or {}
-    path = event.get('path', '')
-    method = (event.get('httpMethod')
-              or ((event.get('requestContext') or {}).get('httpMethod'))
-              or 'GET')
+    path = get_path(event)
+    method = get_method(event)
     origin = get_origin(event)
     cors = cors_headers(origin)
 

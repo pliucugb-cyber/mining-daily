@@ -1,5 +1,7 @@
-# 腾讯云 SCF + API 网关 一键部署配置（Serverless Framework）
-# 用法见 scf/README.md「方式二」。本文件可进 git，换电脑 `sls deploy` 即可。
+# 腾讯云 SCF 一键部署配置（Serverless Framework）
+# 用法：在 scf/ 目录下执行 sls deploy
+# 注意：腾讯云旧 API 网关已停止新建，本配置改用函数 URL（scfUrl）。
+#      如果 sls deploy 报错，请改用控制台手动创建（见 README.md）。
 service: mining-daily-qa
 
 provider:
@@ -18,14 +20,10 @@ functions:
     environment:
       DEEPSEEK_API_KEY: ${env:DEEPSEEK_API_KEY}
     events:
-      - apigw:
-          name: miningDailyQaApigw
-          parameters:
-            protocols:
-              - https
-            serviceName: mining-daily-qa
-            description: 矿业新闻日报 AI 后端
-            environment: release
-            endpoints:
-              - path: /api/{path+}
-                method: ANY
+      - scfUrl:
+          enable: true
+          authType: NONE
+          cors:
+            accessControlAllowOrigin: '*'
+            accessControlAllowMethods: GET,POST,OPTIONS
+            accessControlAllowHeaders: Content-Type

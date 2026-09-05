@@ -3,25 +3,27 @@
 > 为什么从 Cloudflare Workers 迁过来：Workers 的 `*.workers.dev` 在部分公司网络/地区被拦截，
 > 浏览器发 POST 直接超时。腾讯云 SCF 是国内节点，同事访问基本不会被墙，DeepSeek 真 AI 可用。
 >
-> 代码已进 git（`scf/index.py`），key 是云函数环境变量。换电脑不丢：只需 `git clone` + 重新部署。
+> 腾讯云旧「API 网关触发器」已停止新建，本方案改用 **Web 函数 + 函数 URL**，更简单、更稳。
+>
+> 代码已进 git（`scf/index.py`），key 是云函数环境变量。换电脑不丢：只需 `git clone` + 控制台重新粘贴代码、设环境变量、开函数 URL。
 
 ---
 
 ## 前置准备
 
-1. 注册腾讯云账号：https://cloud.tencent.com （需要实名认证，否则无法创建云函数/API 网关）。
+1. 注册腾讯云账号：https://cloud.tencent.com （需要实名认证，否则无法创建云函数）。
 2. 准备 DeepSeek API Key：https://platform.deepseek.com （充值一点余额即可，按调用量计费）。
 
 ---
 
-## 方式一：控制台手动创建（最直观，推荐首次用）
+## 控制台手动创建（最直观，推荐首次用）
 
 ### 1) 创建云函数
 
 1. 进入 **云函数 SCF** 控制台：https://console.cloud.tencent.com/scf
 2. 左上角选地域（建议 **广州 / 上海 / 北京**，离同事近即可）。
-3. 点 **新建** → 选择 **「函数」**：
-   - 创建方式：**自定义创建**
+3. 点 **新建** → 选择 **「从头开始」**：
+   - **函数类型：Web 函数**（必须选这个，不要选事件函数）
    - 函数名称：`mining-daily-qa`
    - 运行环境：**Python 3.10**
    - 函数时长：默认 3s，建议改 **30s**（DeepSeek 有时要 10~25s）
@@ -30,124 +32,75 @@
    - 执行方法：`index.main_handler`（函数名默认就是 main_handler，确认入口是 `index.main_handler`）
 4. 点 **完成**。
 
-### 2) 配置环境变量（key 不落代码）
+### 2) 粘贴函数代码
 
-1. 在刚创建的函数里，左侧切到 **函数配置** → **环境变量**。
+1. 在函数代码编辑区，删掉默认代码。
+2. 把你电脑上 `scf/index.py` 的内容全文复制粘贴进去：
+   - 路径：`C:\Users\中铝矿业投并部\mining-daily\scf\index.py`
+3. 点 **保存** 或 **部署**。
+
+### 3) 配置环境变量（key 不落代码）
+
+1. 在函数详情页，左侧切到 **函数配置** → **环境变量**。
 2. 新增：
    - Key：`DEEPSEEK_API_KEY`
    - Value：你的 DeepSeek key（如 `sk-xxxx`）
 3. 保存。
 
-### 3) 创建 API 网关触发（对外暴露 HTTP）
+> key 不要写在代码里，也不要发给别人，只填在腾讯云控制台的环境变量里。
 
-1. 函数左侧 **触发管理** → **创建触发器**：
-   - 触发类型：**API 网关触发**
-   - 勾选 **「新建 API 服务」**（或复用已有）
-   - 请求方法：**ANY**（一次覆盖 GET/POST/OPTIONS，函数内自己路由）
-   - 发布环境：**release**
-   - 鉴权方式：**免鉴权**
-   - 路径：`/`（或 `/api`，函数在内部按 `/api/health`、`/api/qa` 路由）
-2. 创建后，触发器会显示一个 **访问路径**，形如：
+### 4) 开启函数 URL（对外暴露 HTTP）
+
+1. 函数详情页左侧，找到 **函数管理** → **函数 URL**（或「触发管理」→「函数 URL」）。
+2. 点 **创建** 或 **开启**。
+3. 配置建议：
+   - 鉴权方式：**None（公网可访问）**
+   - 跨域（CORS）：**由函数代码处理**（因为代码里已经按 `*.github.io` 做了白名单）
+4. 保存后，腾讯云会生成一个固定网址，形如：
    ```
-   https://service-xxxxx-1234567890.apigw.tencentcs.com/release/
+   https://mining-daily-qa-xxxxxxxx.gz.apigw.tencentcs.com
    ```
-   复制这个 URL（**不带末尾文件名，保留 `/release` 路径**）。
-
-### 4) 发布 API
-
-1. 进入 **API 网关** 控制台：https://console.cloud.tencent.com/apigw
-2. 找到刚建的服务 → **服务** → **API 管理**，确认 API 已存在。
-3. 点 **发布**，环境选 `release`，备注随便写。
-4. 最终可访问地址：
-   - 健康检查：`https://<上面那个域名>/release/api/health`
-   - 问答：`https://<上面那个域名>/release/api/qa`
-
-> 注意路径：前端 `QA_API_BASE` 填的是 **`https://<域名>/release`**（不带具体 api 路径），
-> 函数内部会拼 `/api/health`、`/api/qa`。所以网关里 API 路径必须包含 `/api/...`，
-> 即在网关创建 API 时路径填 `/api/{path+}`（或分别建 `/api/health`、`/api/qa` 两个，都指向本函数）。
+   复制这个 URL。
 
 ### 5) 填回前端并发布
 
-1. 打开 `index.html`，把顶部：
+1. 打开项目里的 `index.html`，找到：
    ```js
    var QA_API_BASE='https://REPLACE-ME.apigw.tencentcs.com/release';
    ```
-   改成你拿到的真实地址，例如：
+2. 把单引号里的内容换成你复制的函数 URL，例如：
    ```js
-   var QA_API_BASE='https://service-xxxxx-1234567890.apigw.tencentcs.com/release';
+   var QA_API_BASE='https://mining-daily-qa-xxxxxxxx.gz.apigw.tencentcs.com';
    ```
-2. 提交并发布 GitHub Pages：
+3. 保存 `index.html`。
+4. 打开 Git Bash，进入项目目录并发布：
    ```bash
-   git add index.html
-   git commit -m "chore: set QA_API_BASE to Tencent SCF API gateway URL"
-   git push origin main
+   cd "C:\Users\中铝矿业投并部\mining-daily"
    python deploy_pages.py
    ```
 
----
-
-## 方式二：Serverless Framework 一键部署（可进 git，换电脑最省心）
-
-> 适合以后要反复部署/换电脑的场景。代码和配置都在仓库里，换机 `sls deploy` 即可。
-
-1. 安装 Serverless Framework（用 WorkBuddy 自带 Node）：
-   ```bash
-   export PATH="$PATH:/c/Users/中铝矿业投并部/.workbuddy/binaries/node/versions/22.22.2-2"
-   npm i -g serverless
-   ```
-2. 在 `scf/` 下创建 `serverless.yml`（已提供模板 `scf/serverless.yml`）：
-   ```yaml
-   service: mining-daily-qa
-   provider:
-     name: tencent
-     runtime: Python3.10
-   plugins:
-     - serverless-tencent-scf
-   functions:
-     qa:
-       handler: index.main_handler
-       runtime: Python3.10
-       timeout: 30
-       environment:
-         DEEPSEEK_API_KEY: ${env:DEEPSEEK_API_KEY}
-       events:
-         - apigw:
-             name: miningDailyQaApigw
-             parameters:
-               protocols:
-                 - https
-               serviceName: mining-daily-qa
-               description: 矿业新闻日报 AI 后端
-               environment: release
-               endpoints:
-                 - path: /api/{path+}
-                   method: ANY
-   ```
-3. 登录腾讯云并部署：
-   ```bash
-   export PATH="$PATH:/c/Users/中铝矿业投并部/.workbuddy/binaries/node/versions/22.22.2-2"
-   export DEEPSEEK_API_KEY='sk-你的key'
-   serverless deploy   # 或 sls deploy
-   ```
-   部署成功会输出 API 网关 URL，填回 `index.html` 的 `QA_API_BASE` 即可。
+发布后等 1~2 分钟，打开网页点右下角「问 AI」，能正常回复就说明通了。
 
 ---
 
 ## 换电脑恢复步骤
 
-代码、配置全在 git，key 在云函数环境变量（控制台或 serverless.yml 用 `${env:DEEPSEEK_API_KEY}` 注入）：
+代码在 git 里，key 在腾讯云环境变量里：
 
 ```bash
 git clone <你的仓库>
 cd mining-daily
-# 方式二：装好 serverless 后
-export DEEPSEEK_API_KEY='sk-你的key'
-export PATH="$PATH:/c/Users/中铝矿业投并部/.workbuddy/binaries/node/versions/22.22.2-2"
-serverless deploy
-# 方式一：登录腾讯云控制台，按上面步骤重新粘贴 index.py + 设环境变量 + 发布 API
 ```
 
-无需迁移任何本地文件、无需重设 key（key 已绑定在腾讯云账号下）。
+然后登录腾讯云控制台：
+1. 新建 Web 函数 `mining-daily-qa`
+2. 粘贴 `scf/index.py`
+3. 设环境变量 `DEEPSEEK_API_KEY`
+4. 开函数 URL
+5. 把 URL 填回 `index.html` 的 `QA_API_BASE`
+6. `python deploy_pages.py`
+
+无需迁移任何本地文件。
 
 ---
 
@@ -157,7 +110,7 @@ serverless deploy
 python scf/verify_scf.py
 ```
 
-会 mock DeepSeek 调用，验证 OPTIONS 预检、/api/health、/api/qa、CORS 白名单、base64 body 解析共 16 项。
+会 mock DeepSeek 调用，验证 OPTIONS 预检、/api/health、/api/qa、CORS 白名单、base64 body 解析等。
 全部 PASS 说明函数逻辑正确，部署后浏览器就能真正调通 DeepSeek。
 
 ---
@@ -166,9 +119,9 @@ python scf/verify_scf.py
 
 | 现象 | 原因/处理 |
 |---|---|
-| 页面 AI 按钮显示「待配置」 | `QA_API_BASE` 还是 `REPLACE-ME` 占位符，或探测被代理拦截。按 F12 Console 看 `[qaAiProbe]` 日志。 |
-| 点 AI 报 Failed to fetch | 浏览器到 API 网关网络不通；确认 URL 路径含 `/release`，且网关已发布。 |
+| 页面 AI 按钮显示「待配置」 | `QA_API_BASE` 还是 `REPLACE-ME` 占位符。按 F12 Console 看 `[qaAiProbe]` 日志。 |
+| 点 AI 报 Failed to fetch | 浏览器到函数 URL 网络不通；确认 URL 复制完整，且函数 URL 已开启。 |
 | /api/health 返回 `has_key:false` | 环境变量 `DEEPSEEK_API_KEY` 没配或配错，去函数配置补上并保存。 |
 | 回答是关键词模板而非真 AI | 同上是无 key 兜底模式；配好 key 即变真 AI。 |
-| 网关 404 | API 路径没映射到 `/api/...`，在网关里确认 `/api/{path+}` 或分别建 `/api/health`、`/api/qa`。 |
+| 函数 URL 404 | 检查 `index.py` 是否已保存/部署；路径必须是 `/api/health` 或 `/api/qa`。 |
 | CORS 报错 | 来源不是 `*.github.io` 或 localhost；检查前端部署域名，或临时把 `is_allowed_origin` 放宽。 |
