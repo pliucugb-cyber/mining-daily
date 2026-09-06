@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260906-1031">
+<meta name="build-version" content="20260906-1111">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -215,7 +215,6 @@ body.dark .digest-list a:hover{color:#ff7a7a}
 .brief-title{font-size:17px;font-weight:800;color:#1a3a5c;letter-spacing:1px}
 .brief-sub{font-size:12px;color:#8899a8}
 .brief-date{font-size:12px;color:#6b7a89;margin-left:auto;white-space:nowrap}
-.brief-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:12px}
 .brief-card{background:#f8fafc;border:1px solid #eef2f7;border-radius:10px;padding:11px 13px;min-width:0}
 .brief-card-h{font-size:12.5px;font-weight:700;color:#1a3a5c;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .brief-card-h .bc-n{background:#1a3a5c;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:600;flex-shrink:0}
@@ -247,6 +246,24 @@ body.dark .digest-list a:hover{color:#ff7a7a}
 .sent-bar{flex:1;height:5px;background:#e8edf2;border-radius:3px;overflow:hidden;max-width:120px}
 .sent-bar i{display:block;height:100%;background:#1a3a5c;border-radius:3px}
 .brief-empty{font-size:12.5px;color:#9aa7b3;padding:4px 0}
+/* 市场脉搏：情绪 + 趋势信号 + 价格异动，与金属价格板块合并展示（9-06） */
+.market-pulse{margin-bottom:11px;padding:8px 11px 9px;background:#f8fafc;border:1px solid #eef2f7;border-radius:9px;display:flex;flex-direction:column;gap:6px}
+.mp-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11.5px;line-height:1.5}
+.mp-label{flex-shrink:0;font-size:11.5px;font-weight:700;color:#6b7a89;background:#eef2f7;border-radius:4px;padding:1px 6px}
+.mp-sent{font-weight:700;color:#33475c}
+.mp-idx{font-weight:700;color:#33475c}
+.mp-total{color:#8899a8}
+.mp-sev{font-size:10px;font-weight:800;color:#c0392b;margin-right:1px}
+.mp-alert{display:inline-flex;align-items:baseline;gap:5px;background:#fff;border:1px solid #e6ecf3;border-radius:6px;padding:2px 8px;font-size:11.5px;cursor:help}
+.mp-alert .mp-a-name{font-weight:700;color:#33475c}
+.mp-alert .mp-a-move{font-weight:800;font-size:12px}
+.mp-alert .mp-a-mkt{font-size:10.5px;color:#8899a8}
+.mp-none{font-size:11.5px;color:#9aa7b3}
+body.dark .market-pulse{background:#161d26;border-color:#2c3845}
+body.dark .mp-label{background:#243140;color:#94a3b8}
+body.dark .mp-sent,body.dark .mp-idx,body.dark .mp-alert .mp-a-name{color:#c3d0dc}
+body.dark .mp-total,body.dark .mp-alert .mp-a-mkt{color:#7d8ea0}
+body.dark .mp-alert{background:#1b2431;border-color:#33404f}
 body.dark .brief-strip{background:#1e2733;border-color:#2c3845}
 body.dark .brief-badge,body.dark .brief-card-h .bc-n{background:#2c5f8d}
 body.dark .brief-title,body.dark .brief-card-h{color:#e8eef3}
@@ -264,14 +281,14 @@ body.dark .bs-down{background:#16301f;border-color:#26543a;color:#7fd6a2}
 body.dark .bs-flat{background:#243140;border-color:#33404f;color:#94a3b8}
 body.dark .sent-bar{background:#2c3845}
 body.dark .sent-bar i{background:#5b9bd5}
-@media(max-width:900px){
-  .brief-grid{grid-template-columns:1fr}
-}
 @media(max-width:600px){
   .brief-strip{padding:11px 12px 10px}
   .brief-title{font-size:16px}
   .brief-date{margin-left:0;width:100%}
   .brief-card{padding:10px 11px}
+  .market-pulse{padding:7px 9px 8px;gap:5px}
+  .mp-row{gap:6px}
+  .sent-bar{max-width:80px}
 }
 /* ==================== 徽章：重要性分级 + 信源权威（9-06 新增）==================== */
 .badge-level,.badge-authority{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600;margin-left:8px;vertical-align:1px;white-space:nowrap;line-height:1.6}
@@ -881,17 +898,9 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
     <span class="brief-sub" id="briefSub"></span>
     <span class="brief-date" id="briefDate"></span>
   </div>
-  <div class="brief-grid">
-    <div class="brief-card">
-      <div class="brief-card-h"><span class="bc-n">判</span> 今日判断</div>
-      <div class="brief-md" id="briefMain"><div class="brief-empty">简报加载中…</div></div>
-    </div>
-    <div class="brief-card">
-      <div class="brief-card-h"><span class="bc-n">动</span> 异动与信号</div>
-      <div id="briefAlerts"><div class="brief-empty">简报加载中…</div></div>
-      <div class="brief-signals" id="briefSignals"></div>
-      <div class="brief-sent" id="briefSent" hidden></div>
-    </div>
+  <div class="brief-card">
+    <div class="brief-card-h"><span class="bc-n">判</span> 今日判断</div>
+    <div class="brief-md" id="briefMain"><div class="brief-empty">简报加载中…</div></div>
   </div>
 </div>
 <div class="reading-exit">阅读模式：只显示今日判断、金属价格与今日新闻。再次点击右上角「阅读」按钮或按 Esc 退出。</div>
@@ -911,6 +920,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <span class="price-strip-title">📊 金属价格</span>
 <span class="price-strip-note" id="priceStripNote">2026-09-06 更新 · 第一行 沪期主力/SMM·上金所（人民币） · 第二行 LME 美元/吨 · 涨红跌绿 · 点击卡片看近8个交易日走势</span>
 </div>
+<div class="market-pulse" id="marketPulse" hidden></div>
 <div class="price-cards" id="priceCardsShfe"><div data-slug="cum" class="price-card up"><div class="pc-name">沪铜 <span class="pc-tag">SHFE</span></div><div class="pc-value">108,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +370 (+0.34%)</div></div><div data-slug="alm" class="price-card down"><div class="pc-name">沪铝 <span class="pc-tag">SHFE</span></div><div class="pc-value">24,290</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -80 (-0.33%)</div></div><div data-slug="pbm" class="price-card up"><div class="pc-name">沪铅 <span class="pc-tag">SHFE</span></div><div class="pc-value">16,130</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +10 (+0.06%)</div></div><div data-slug="znm" class="price-card up"><div class="pc-name">沪锌 <span class="pc-tag">SHFE</span></div><div class="pc-value">26,745</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +135 (+0.51%)</div></div><div data-slug="snm" class="price-card up"><div class="pc-name">沪锡 <span class="pc-tag">SHFE</span></div><div class="pc-value">416,460</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +370 (+0.09%)</div></div><div data-slug="nim" class="price-card down"><div class="pc-name">沪镍 <span class="pc-tag">SHFE</span></div><div class="pc-value">127,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -1,110 (-0.86%)</div></div><div data-slug="au9999" class="price-card up"><div class="pc-name">上海金 <span class="pc-tag">Au99.99</span></div><div class="pc-value">965.96</div><div class="pc-unit">元/克</div><div class="pc-chg">&#9650; +0.79%</div></div><div data-slug="agtd" class="price-card up"><div class="pc-name">白银 <span class="pc-tag">Ag(T+D)</span></div><div class="pc-value">16,250</div><div class="pc-unit">元/千克</div><div class="pc-chg">&#9650; +1.28%</div></div><div data-slug="lcm" class="price-card down"><div class="pc-name">碳酸锂 <span class="pc-tag">主力连续</span></div><div class="pc-value">141,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -7,940 (-5.30%)</div></div><div class="price-card "><div class="pc-name">电解钴 <span class="pc-tag">SMM 09-04</span></div><div class="pc-value">304,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">上日 304,940（SMM 未更新）</div></div></div>
 <div class="price-cards" id="priceCardsLme" style="margin-top:6px;border-top:1px dashed #dbe2ea;padding-top:6px"><div data-slug="lcpt" class="price-card "><div class="pc-name">LME 铜 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lalt" class="price-card "><div class="pc-name">LME 铝 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lznt" class="price-card "><div class="pc-name">LME 锌 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lldt" class="price-card "><div class="pc-name">LME 铅 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lnkt" class="price-card "><div class="pc-name">LME 镍 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="ltnt" class="price-card "><div class="pc-name">LME 锡 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">USD/吨</div><div class="pc-chg">检测中…</div></div></div>
 </div>
@@ -956,6 +966,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="sp-list" id="spList-security">
 
 </div>
+</div>
 <!-- ==================== 今日新增 ==================== -->
 <!-- ==================== 今日新增（2026-09-06 抓取） ==================== -->
 <!-- ==================== 今日新增（2026-09-06 抓取） ==================== -->
@@ -980,7 +991,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="sub-cat">💼 矿权交易<span class="sub-count">5条新增</span></div>
 <div class="news-item is-new" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306830.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306830.htm" target="_blank">四川省丹巴县天宝洞金矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-04</div><div class="news-summary">受四川省自然资源厅委托，四川省政府政务服务和公共资源交易服务中心网上挂牌出让丹巴县天宝洞金矿勘查探矿权（川公共矿挂〔2026〕011号），区块面积15.93平方千米，起始价128万元，起始出让收益率2.3%，拟出让年限5年，竞买保证金1500万元。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306830.htm" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306827.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306827.htm" target="_blank">四川省乐山市金口河区鲤鱼堡铅锌矿勘查探矿权挂牌出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-04</div><div class="news-summary">四川省政府政务服务和公共资源交易服务中心挂牌出让乐山市金口河区鲤鱼堡铅锌矿勘查探矿权（川公共矿挂〔2026〕010号），区块面积10.80平方千米，起始价87万元，出让收益率2.3%，拟出让年限5年，竞买保证金1500万元；公告明确本区块不接受外商和外资参与竞买。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306827.htm" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306826.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306826.htm" target="_blank">河北省滦平县安纯沟门乡大西沟金矿勘查探矿权拍卖出让公告</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-04</div><div class="news-summary">承德市公共资源交易中心委托承德银源拍卖有限公司拍卖出让滦平县安纯沟门乡大西沟金矿勘查探矿权（承矿拍〔2026〕03号），区块面积4.37平方千米，起始价26.22万元，出让收益率2.3%，拟出让年限5年，竞买保证金100万元，保证金缴纳截止2026年10月26日16时。</div><a class="btn-read" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306826.htm" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260905_10306820.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260905_10306820.htm" target="_blank">内蒙古自治区扎赉特旗黑大山金铜多金属矿勘查探矿权转让公示</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-04</div><div class="news-summary">兴安盟自然资源局公示扎赉特旗黑大山金铜多金属矿勘查探矿权转让（内自然资探转示〔2026〕026号），转让人为喀喇沁旗天成美石有限责任公司，受让人为嘉石矿业（兴安盟扎赉特旗）有限公司，勘查面积34.417平方千米，发证机关为内蒙古自治区自然资源厅，探矿权有效期自2026年7月30日起。</div><a class="btn-read" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260905_10306820.htm" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260904_10305942.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260904_10305942.htm" target="_blank">吉林省临江市小栗子银多金属矿详查探矿权转让公示</a></div><div class="news-meta"><span class="src">矿业权市场</span> · 09-03</div><div class="news-summary">白山市自然资源局公示临江市小栗子银多金属矿详查探矿权转让（白山自然资探转〔2026〕1号），转让人为吉林星泰集团有限公司，勘查面积1.237平方千米，探矿权有效期自2026年7月9日起，依据《矿产资源法实施条例》《矿业权出让交易规则》办理。</div><a class="btn-read" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260904_10305942.htm" target="_blank">查看原文 →</a></div><div class="sub-cat">🔍 找矿成果与勘查技术<span class="sub-count">2条新增</span></div>
 <div class="news-item is-new" data-url="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325571.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325571.shtml" target="_blank">低品位难选铁矿有望成“富矿”</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">据中国矿业报，全球规模最大的难选铁矿流态化磁化焙烧工程在辽宁鞍山通过竣工验收，年处理556万吨并连续稳定运行、全面达产。中科院过程工程研究所朱庆山团队攻关20余年，从含铁仅11%的铁尾矿中稳定产出品位65%的铁精矿，铁矿物相转化率达98%，综合能耗较同类技术低35%；项目入选国家发改委首批绿色低碳先进技术示范清单，有望带动国内近300亿吨难选铁矿和近100亿吨含铁尾矿开发，并已与老挝签订褐铁矿焙烧提质项目。</div><a class="btn-read" href="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325571.shtml" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867978.html" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867978.html" target="_blank">中国地质调查局实施吉隆泥石流次生地质灾害监测</a></div><div class="news-meta"><span class="src">中国地质调查局</span> · 09-04</div><div class="news-summary">受西藏吉隆口岸“8·26”冰岩崩—泥石流灾害链持续影响，源区残留不稳定冰川与岩体，存在冰岩崩、泥石流、滑坡—堰塞湖等次生风险。由中国工程院院士殷跃平牵头、中国地质调查局18名技术专家组成团队，在错坚河口至拉比村核心风险带布设边坡雷达、雷视一体监测仪、微震监测仪，并在色琼村同步部署监测河道水位与断面变化，实现24小时全自动观测与智能预警。</div><a class="btn-read" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867978.html" target="_blank">查看原文 →</a></div><div class="sub-cat">🏭 行业动态<span class="sub-count">3条新增</span></div>
-<div class="news-item is-new" data-url="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325572.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325572.shtml" target="_blank">从粗放开采到绿色高效</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">我国矿山生产加速由经验驱动转向数据驱动：浙江交投矿业搭建“一个中心、一套模型、四大平台、N个子系统”智能架构，依托三维实景模型模拟推演开采方案，调度效率提升10%；湖州新开元碎石构建矿山三维动态地质孪生模型，创新“四量四率”量化管理，生产管控效率提升四成；嵩县山金运用Vulcan三维软件建资源数据库并实现关键固定设备无人值守，西部矿业锡铁山铅锌矿建成智慧矿山管控平台。</div><a class="btn-read" href="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325572.shtml" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325598.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325598.shtml" target="_blank">贵州推动非常规天然气增储上产</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">贵州省人民政府办公厅印发《贵州省非常规天然气增储上产三年攻坚行动方案（2026—2028年）》，聚焦页岩气、煤层气（煤矿瓦斯）系统推进勘探、开发、储运、利用全链条建设，部署六大方面15条举措：统筹资源储备扩容与产能释放、优化矿产资源管理整治矿业权低效利用、深化地质勘探夯实深部油气开发基础、推进煤气共采由井下被动抽采转向地面主动预抽、推进全省天然气管道“一张网”、强化科技攻关与成果转化。</div><a class="btn-read" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325598.shtml" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325589.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325589.shtml" target="_blank">紫金矿业：高位进阶后的“韧性突围”</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">紫金矿业2025年年度股东会披露新一届管理层“三年规划和十年远景目标”：到2028年铜、金矿产品产量进入全球前3位，到2035年全面建成“绿色高技术超一流国际矿业集团”。董事长邹来昌表示增长策略新增“上产”维度，把握金属价格高企机遇加快释放产能、以规模效应摊薄固定成本；一季度主营金属产量高位抬升，利润突破200亿元创历史新高、同比近乎翻番。</div><a class="btn-read" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325589.shtml" target="_blank">查看原文 →</a><div class="sub-cat">🌐 国际矿业动态<span class="sub-count">2条新增</span></div>
+<div class="news-item is-new" data-url="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325572.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325572.shtml" target="_blank">从粗放开采到绿色高效</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">我国矿山生产加速由经验驱动转向数据驱动：浙江交投矿业搭建“一个中心、一套模型、四大平台、N个子系统”智能架构，依托三维实景模型模拟推演开采方案，调度效率提升10%；湖州新开元碎石构建矿山三维动态地质孪生模型，创新“四量四率”量化管理，生产管控效率提升四成；嵩县山金运用Vulcan三维软件建资源数据库并实现关键固定设备无人值守，西部矿业锡铁山铅锌矿建成智慧矿山管控平台。</div><a class="btn-read" href="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325572.shtml" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325598.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325598.shtml" target="_blank">贵州推动非常规天然气增储上产</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">贵州省人民政府办公厅印发《贵州省非常规天然气增储上产三年攻坚行动方案（2026—2028年）》，聚焦页岩气、煤层气（煤矿瓦斯）系统推进勘探、开发、储运、利用全链条建设，部署六大方面15条举措：统筹资源储备扩容与产能释放、优化矿产资源管理整治矿业权低效利用、深化地质勘探夯实深部油气开发基础、推进煤气共采由井下被动抽采转向地面主动预抽、推进全省天然气管道“一张网”、强化科技攻关与成果转化。</div><a class="btn-read" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325598.shtml" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325589.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325589.shtml" target="_blank">紫金矿业：高位进阶后的“韧性突围”</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">紫金矿业2025年年度股东会披露新一届管理层“三年规划和十年远景目标”：到2028年铜、金矿产品产量进入全球前3位，到2035年全面建成“绿色高技术超一流国际矿业集团”。董事长邹来昌表示增长策略新增“上产”维度，把握金属价格高企机遇加快释放产能、以规模效应摊薄固定成本；一季度主营金属产量高位抬升，利润突破200亿元创历史新高、同比近乎翻番。</div><a class="btn-read" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325589.shtml" target="_blank">查看原文 →</a></div><div class="sub-cat">🌐 国际矿业动态<span class="sub-count">2条新增</span></div>
 <div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260901_10303964.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260901_10303964.htm" target="_blank">BMI：未来5年铁矿石产量增速加快</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-01</div><div class="news-summary">据矿业周刊（Miningweekly）报道，惠誉方案（Fitch Solutions）旗下基准矿物情报公司（BMI）在最新铁矿石采矿业展望报告中预计，2026—2030年全球铁矿石生产增速将加快，平均增速2.2%，高于前5年的1.2%，到2030年产量有望达30.4亿吨。西芒杜铁矿达产后，几内亚将成为全球铁矿石产量增长的主要推动力；BMI同时预计政治和社会不稳以及资源民族主义将导致部分项目开发推迟。中期看，价格下跌将使铁矿石生产停滞，2032—2034年转为下降。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260901_10303964.htm" target="_blank">查看原文 →</a></div><div class="news-item is-new" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-02/325521.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-02/325521.shtml" target="_blank">艾佩里昂公司获美军钛供应研发合同</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-02</div><div class="news-summary">据Mining.com报道，艾佩里昂公司（IperionX）宣布美军已向其授予一份小企业创新研究（SBIR）合同，用于探索国防用低成本钛的国内供应。钛因独特的强度重量比和耐腐蚀性被美国、欧盟和加拿大列为关键矿产。这是该公司第二份SBIR合同，使美国政府机构可下达总额不超过9900万美元的特定项目订单，任务订单1和2总额约1980万美元。</div><a class="btn-read" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-02/325521.shtml" target="_blank">查看原文 →</a></div></div>
 <div class="section" id="archiveSection">
 <div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近7天）<span class="news-count" id="archiveCount">39条</span></div>
@@ -1002,14 +1013,15 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html" target="_blank">云铝股份交出历史最好半年成绩单 营收增长20.3%利润增长175%</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">云铝股份上半年营收349.81亿元同比增长20.3%，利润总额104.54亿元同比增长175%，电解铝板块半年利润创历史最好，氧化铝、炭素产量超额完成，合金产品出口实现突破。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html" target="_blank">洛阳铜加工产出首根镁合金铸锭 镁板全流程工艺贯通</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">中铝洛阳铜加工变形镁合金板材生产线一期镁熔铸试生产成功，产出首根合格镁合金铸锭，标志镁板全流程生产工艺全线贯通，具备规模化生产能力。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html" target="_blank">株冶集团奋力推进"三化两型"建设 铅锌冶炼绿色智能升级</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">株冶集团推进绿色化、智能化、融合化建设，30万吨锌冶炼基地单位能耗降22%，建成铜铅锌联合冶炼与多源固废协同利用示范工程，铟回收率超行业均值10个百分点。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html" target="_blank">查看原文 →</a></div>
-<div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html" target="_blank">西安矿产中心科技成果获陕西省科学技术进步奖三等奖</a></div><div class="news-meta"><span class="src">中国地质调查局</span> · 09-02</div><div class="news-summary">中国地质调查局西安矿产资源调查中心成果获陕西省科技进步奖三等奖，聚焦秦岭矿集区矿渣型泥石流灾害防治与生态修复，成果在汉中、安康等矿集区落地应用。</div><a class="btn-read" href="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html" target="_blank">查看原文 →</a><div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html" target="_blank">中国恩菲实施的非洲首例井下无人驾驶电机车项目通过验收并进入常态化运行</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">非洲首例井下无人驾驶电机车项目通过验收，标志我国智能矿山装备与技术在海外矿山实现常态化应用。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html" target="_blank">查看原文 →</a></div>
+<div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html" target="_blank">西安矿产中心科技成果获陕西省科学技术进步奖三等奖</a></div><div class="news-meta"><span class="src">中国地质调查局</span> · 09-02</div><div class="news-summary">中国地质调查局西安矿产资源调查中心成果获陕西省科技进步奖三等奖，聚焦秦岭矿集区矿渣型泥石流灾害防治与生态修复，成果在汉中、安康等矿集区落地应用。</div><a class="btn-read" href="https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html" target="_blank">中国恩菲实施的非洲首例井下无人驾驶电机车项目通过验收并进入常态化运行</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">非洲首例井下无人驾驶电机车项目通过验收，标志我国智能矿山装备与技术在海外矿山实现常态化应用。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61881.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61881.html" target="_blank">上半年铜陵有色净利润同比翻倍</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">铜陵有色上半年经营业绩大幅增长，净利润同比翻倍，反映铜冶炼与加工环节盈利显著修复。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61881.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61891.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61891.html" target="_blank">陕西黄金集团西安秦金项目获陕西省科技厅立项</a></div><div class="news-meta"><span class="src">中国有色金属工业协会</span> · 09-01</div><div class="news-summary">陕西黄金集团西安秦金项目获省级科技立项，聚焦黄金资源综合利用与绿色冶炼技术攻关。</div><a class="btn-read" href="https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61891.html" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473665" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473665" target="_blank">一座钼矿何以在林海深处绘就“共生图景”</a></div><div class="news-meta"><span class="src">中国有色网</span> · 09-02</div><div class="news-summary">报道一座位于林区的钼矿如何在开发过程中统筹生态保护与资源利用，探索绿色矿山与生态修复协同路径。</div><a class="btn-read" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473665" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473653" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473653" target="_blank">英国加码投资关键矿产本土供应链建设</a></div><div class="news-meta"><span class="src">中国有色网</span> · 09-02</div><div class="news-summary">英国加大对关键矿产本土供应链的投资力度，旨在降低对外依赖、提升战略性矿产保障能力。</div><a class="btn-read" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473653" target="_blank">查看原文 →</a></div>
 <div class="news-item" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473599" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473599" target="_blank">7月份锂行业运行情况</a></div><div class="news-meta"><span class="src">中国有色网</span> · 09-02</div><div class="news-summary">发布7月份锂行业运行数据，涉及碳酸锂产量、库存与消费情况，反映锂产业链供需边际变化。</div><a class="btn-read" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473599" target="_blank">查看原文 →</a></div>
-<div class="news-item" data-url="https://www.cngold.org.cn/news/show-9500.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">2026年上半年我国黄金产量152.908吨，同比下降14.62%，黄金消费量511.412吨，同比增长1.23%</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">上半年国内黄金产量同比下降14.62%至152.908吨，黄金消费量511.412吨、同比增长1.23%，产消缺口进一步扩大。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">查看原文 →</a><div class="sub-cat">🌐 国际矿业动态<span class="sub-count">2条</span></div>
+<div class="news-item" data-url="https://www.cngold.org.cn/news/show-9500.html" data-embed="block"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">2026年上半年我国黄金产量152.908吨，同比下降14.62%，黄金消费量511.412吨，同比增长1.23%</a></div><div class="news-meta"><span class="src">中国黄金协会</span> · 09-02</div><div class="news-summary">上半年国内黄金产量同比下降14.62%至152.908吨，黄金消费量511.412吨、同比增长1.23%，产消缺口进一步扩大。</div><a class="btn-read" href="https://www.cngold.org.cn/news/show-9500.html" target="_blank">查看原文 →</a></div><div class="sub-cat">🌐 国际矿业动态<span class="sub-count">2条</span></div>
 <div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" target="_blank">国际钯价大幅上涨</a></div><div class="news-meta"><span class="src">全球矿产资源</span> · 09-04</div><div class="news-summary">周四国际矿产品价格多数上涨，贵金属涨幅居前：纽约金收于4473.6美元/盎司涨1.96%，银66.96美元/盎司涨2.52%，铂1834.0美元/盎司涨3.93%，钯1440.0美元/盎司涨5.84%领涨；LME铜14356美元/吨涨0.84%、锡54750美元/吨涨1.32%；WTI原油91.66美元/桶涨1.15%，62%铁矿粉99.35美元/吨涨1.85%，铀（U3O8）89.50美元/磅持平。</div><a class="btn-read" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm" target="_blank">查看原文 →</a></div><div class="news-item" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" data-embed="ok"><div class="news-head"><span class="dot"></span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" target="_blank">西澳格拉斯帕奇项目进展</a></div><div class="news-meta"><span class="src">全球矿产资源网</span> · 09-04</div><div class="news-summary">里德利山矿业公司（Mount Ridley Mines）西澳格拉斯帕奇（Grass Patch）项目推测资源量升级至9.58亿吨，钪品位0.0050%，折合钪金属量4.7万吨，公司称其为世界最大已公开钪资源量，赋存于含重稀土—镓的风化层中；自研Selectro工艺钪回收率可达80%、重稀土83%、镓56%。</div><a class="btn-read" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325588.shtml" target="_blank">查看原文 →</a></div>
+</div>
 <div class="section" id="installGuideSection">
 <div class="section-title guide"><span class="icon">📲</span> 安装到桌面 <span class="news-count" style="background:#cffafe;color:#0e7490">备用指引</span><button class="guide-toggle" id="guideToggle" onclick="toggleInstallGuide()" type="button">展开 ▼</button></div>
 <div class="guide-summary" id="guideSummary">
@@ -1103,8 +1115,16 @@ function markRead(url){
   if(!s.has(url)){s.add(url);saveReadSet(s);refresh()}
   recordHistory(url);
 }
+// 按 URL 定位新闻节点。
+// 注意：不能写成 '.news-item[data-url="x" data-embed="ok"]' —— 单个方括号内只允许一个属性条件，
+// 这种写法整个选择器非法、querySelector 直接抛错，曾导致浏览历史一条都记不下来。
+function newsItemByUrl(url){
+  var list=document.querySelectorAll('.news-item');
+  for(var i=0;i<list.length;i++){ if(list[i].getAttribute('data-url')===url)return list[i]; }
+  return null;
+}
 function recordHistory(url){
-  const item=document.querySelector('.news-item[data-url="'+url+'" data-embed="ok"]');
+  const item=newsItemByUrl(url);
   if(!item)return;
   const title=item.querySelector('.news-title')?.textContent||'';
   const src=item.querySelector('.src')?.textContent||'';
@@ -1132,7 +1152,7 @@ function markUnread(url){
     saveReadSet(s);
     refresh();
     // 短暂提示
-    const item=document.querySelector('.news-item[data-url="'+url+'" data-embed="ok"]');
+    const item=newsItemByUrl(url);
     if(item){
       const old=item.style.boxShadow;
       item.style.boxShadow='0 0 0 2px #16a085';
@@ -2002,36 +2022,46 @@ function renderBrief(d){
     main.innerHTML=h||'<div class="brief-empty">今日判断暂未生成</div>';
   }
   // 「今日5件事」卡已移除（与下方「今日要闻」重复）；top_news 仍参与简报区显隐判断
-  var al=document.getElementById('briefAlerts');
-  if(al){
-    if(!alerts.length){al.innerHTML='<div class="brief-empty">今日无价格异动</div>';}
-    else{
-      var ah=[];
-      for(var j=0;j<alerts.length;j++){
-        var a=alerts[j]||{};
-        ah.push('<div class="brief-alert"><div class="ba-line"><span class="ba-name">'+briefEsc(a.commodity||'')+'</span><span class="ba-move '+briefMoveClass(a.move)+'">'+briefEsc(a.move||'')+'</span><span class="ba-mkt">'+briefEsc(a.market||'')+'</span></div><div class="ba-detail">'+briefEsc(a.detail||'')+'</div></div>');
-      }
-      al.innerHTML=ah.join('');
-    }
+  // 价格相关（情绪 / 趋势信号 / 异动）改挂到下方「金属价格」板块内的市场脉搏条，与行情同屏对照
+  renderMarketPulse(alerts,metals,sent);
+  strip.hidden=false;
+}
+function marketPulseRow(label,inner){
+  return '<div class="mp-row"><span class="mp-label">'+briefEsc(label)+'</span>'+inner+'</div>';
+}
+function renderMarketPulse(alerts,metals,sent){
+  var mp=document.getElementById('marketPulse');
+  if(!mp)return;
+  var rows=[];
+  if(sent&&typeof sent.market_index==='number'){
+    var idx=Math.max(0,Math.min(100,sent.market_index));
+    rows.push(marketPulseRow('市场情绪',
+      '<span class="mp-sent">'+briefEsc(sent.market_label||'')+'</span>'+
+      '<span class="sent-bar"><i style="width:'+idx+'%"></i></span>'+
+      '<span class="mp-idx">'+idx+'</span>'+
+      (sent.total?'<span class="mp-total">· '+briefEsc(sent.total)+' 条新闻</span>':'')));
   }
-  var sg=document.getElementById('briefSignals');
-  if(sg){
+  if(metals&&metals.length){
     var sh=[];
     for(var k=0;k<metals.length;k++){
       var m=metals[k]||{};
       sh.push('<span class="bs-chip '+briefSignalClass(m.signal)+'" title="'+briefEsc(m.note||m.position||'')+'">'+briefEsc(m.name||'')+' <b>'+briefEsc(m.signal||'')+'</b></span>');
     }
-    sg.innerHTML=sh.join('');
+    rows.push(marketPulseRow('趋势信号',sh.join('')));
   }
-  var se=document.getElementById('briefSent');
-  if(se){
-    if(sent&&typeof sent.market_index==='number'){
-      var idx=Math.max(0,Math.min(100,sent.market_index));
-      se.innerHTML='<span>市场情绪 '+briefEsc(sent.market_label||'')+'</span><span class="sent-bar"><i style="width:'+idx+'%"></i></span><span>'+idx+'</span>'+(sent.total?'<span>· '+briefEsc(sent.total)+' 条</span>':'');
-      se.hidden=false;
-    }else{se.hidden=true;se.innerHTML='';}
+  var ah=[];
+  for(var j=0;j<(alerts||[]).length;j++){
+    var a=alerts[j]||{};
+    var sev=(a.severity==='high')?'<span class="mp-sev" title="高等级异动">!</span>':'';
+    ah.push('<span class="mp-alert" title="'+briefEsc(a.detail||a.summary||'')+'">'+sev+
+      '<span class="mp-a-name">'+briefEsc(a.commodity||'')+'</span>'+
+      '<span class="mp-a-move '+briefMoveClass(a.move)+'">'+briefEsc(a.move||'')+'</span>'+
+      '<span class="mp-a-mkt">'+briefEsc(a.market||'')+'</span></span>');
   }
-  strip.hidden=false;
+  rows.push(marketPulseRow('价格异动',ah.length?ah.join(''):'<span class="mp-none">今日无价格异动</span>'));
+  if(!rows.length){mp.hidden=true;mp.innerHTML='';return;}
+  mp.innerHTML=rows.join('');
+  mp.hidden=false;
 }
 function loadBrief(){
   fetch('morning_report.json?v='+Date.now(),{cache:'no-store'})
