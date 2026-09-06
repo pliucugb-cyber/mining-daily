@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-0011" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-0012" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -257,8 +257,8 @@ body.dark .digest-list a:hover{color:#ff7a7a}
 .sent-bar i{display:block;height:100%;background:#1a3a5c;border-radius:3px}
 .brief-empty{font-size:12.5px;color:#9aa7b3;padding:4px 0}
 /* 市场脉搏：情绪 + 趋势信号 + 价格异动，与金属价格板块合并展示（9-06） */
-.market-pulse{margin-bottom:11px;padding:8px 11px 9px;background:#f8fafc;border:1px solid #eef2f7;border-radius:9px;display:flex;flex-direction:column;gap:6px}
-.mp-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11.5px;line-height:1.5}
+.market-pulse{margin-bottom:11px;padding:8px 11px 9px;background:#f8fafc;border:1px solid #eef2f7;border-radius:9px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;align-items:start}
+.mp-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11.5px;line-height:1.5;min-width:0}
 .mp-label{flex-shrink:0;font-size:11.5px;font-weight:700;color:#6b7a89;background:#eef2f7;border-radius:4px;padding:1px 6px}
 .mp-sent{font-weight:700;color:#33475c}
 .mp-idx{font-weight:700;color:#33475c}
@@ -301,7 +301,7 @@ body.dark .sent-bar i{background:#5b9bd5}
   .brief-date{margin-left:0;width:100%}
   .brief-card{padding:12px 13px}
   .brief-md{font-size:13.5px;line-height:1.72}
-  .market-pulse{padding:7px 9px 8px;gap:5px}
+  .market-pulse{padding:7px 9px 8px;gap:6px;grid-template-columns:1fr}
   .mp-row{gap:6px}
   .sent-bar{max-width:80px}
 }
