@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260906-1650" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260906-2245" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -3918,6 +3918,8 @@ function qaFloatAsk(retryMode,ctxOverride){
     var _filtered=qaFilter(QA_ROWS,[],_minSel||_min,_topSel||_top,_from,'and');
     _ctx=qaRankByRelevance(q,_filtered).slice(0,20);
   }
+  // 2026-09-06：传给 AI 前先按相关性阈值过滤，避免 AI 正文混入无关条目
+  _ctx=qaFilterRelevant(_ctx,q);
   var meta='正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候…';
   var msg=qaFloatAdd('ai','正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now()});
   qaDeepseekCall(q,_ctx,msg,btn);
@@ -3931,10 +3933,9 @@ function qaSafeUrl(u){
   if(/^https?:\/\//i.test(u))return u.replace(/"/g,'%22');
   return '';
 }
-// AI 回答下方自动附「参考来源」可点击列表，按相关性梯度过滤，避免混入低相关条目
-function qaDsSourcesHtml(ctx,q){
-  if(!ctx||!ctx.length)return '';
-  // 按最高相关分的比例定阈值：只显示 score >= 最高分*0.6 的条目，确保参考来源与问题强相关
+// 按相关性阈值过滤条目，用于传给 AI 的上下文和底部参考来源（避免混入低相关条目）
+function qaFilterRelevant(ctx,q){
+  if(!ctx||!ctx.length)return [];
   var scores=ctx.map(function(c){return c._score||0;});
   var maxScore=Math.max.apply(null,scores);
   var threshold=Math.max(6, maxScore*0.6);
@@ -3947,7 +3948,12 @@ function qaDsSourcesHtml(ctx,q){
   if(relevant.length<3){
     relevant=ctx.filter(function(c){return (c._score||0)>0;}).slice(0,10);
   }
-  var items=relevant.slice(0,10).map(function(c){
+  return relevant.slice(0,10);
+}
+// AI 回答下方自动附「参考来源」可点击列表，按相关性梯度过滤，避免混入低相关条目
+function qaDsSourcesHtml(ctx,q){
+  var relevant=qaFilterRelevant(ctx,q);
+  var items=relevant.map(function(c){
     var u=c.u||c.url||'',t=c.t||'新闻';
     if(!u)return '';
     var safe=qaSafeUrl(u);if(!safe)return '';
@@ -3959,25 +3965,28 @@ function qaDsSourcesHtml(ctx,q){
   var countHtml='<span class="qa-sources-count">已为您从全库中筛选出 <b>'+Math.min(relevant.length,10)+'</b> 条相关条目</span>';
   return '<div class="qa-msg-sources"><div class="qa-sources-title">📚 参考来源（点击查看原文）</div>'+countHtml+'<ul>'+items.join('')+'</ul></div>';
 }
-function qaDeepseekCall(q,ctx,msg,btn){
+function qaDeepseekCall(q,ctxRaw,msg,btn){
+  // 2026-09-06：AI 上下文再次按相关性阈值过滤，确保正文和参考来源只出现强相关内容
+  var ctx=qaFilterRelevant(ctxRaw||[],q);
   var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
   var system=('你是资深矿业行业分析师，服务于「矿业新闻日报」产品。'
     +'回答用中文、简洁专业、结构化呈现（优先用要点列表或小标题，避免一大段文字）。'
-    +'若提供了相关新闻条目，请基于这些条目作答；引用具体新闻时只写标题和发布日期，不要在回答正文中插入 Markdown 链接——系统会自动在回答底部列出可点击的参考来源。'
-    +'若没有相关新闻，请明确说明这是基于通用知识的回答，并建议用户查证官方信息。'
+    +'若提供了相关新闻条目，请严格只基于这些条目作答；不要引用、不要列出任何与问题无直接关联的条目；若条目与问题关联度不足，直接忽略即可，不要在回答正文中以"补充说明""其余条目""其他新闻"等形式解释为何无关。'
+    +'引用具体新闻时只写标题和发布日期，不要在回答正文中插入 Markdown 链接——系统会自动在回答底部列出可点击的参考来源。'
+    +'若提供的条目均与问题无关或没有提供相关新闻，请明确说明"本地新闻库暂未找到直接相关的报道"，并建议用户换关键词或查证官方信息；不要基于通用知识编造具体数据、价格或政策细节。'
     +'不要编造数据、价格或政策细节；不要复制"以上信息来自公开公告"之类的注水结语。');
   var user='用户问题：'+q+'\n\n';
   if(ctx&&ctx.length){
-    user+='以下为本地检索到的相关新闻条目（含原文链接，优先参考这些，并以公开权威信息为准）：\n';
+    user+='以下为本地检索到的相关新闻条目（已按问题相关性筛选，仅包含与问题直接相关的条目）：\n';
     ctx.forEach(function(c,i){
       var d=c.d||'',t=c.t||'',s=c.s||'',u=c.u||c.url||'';
       user+=(i+1)+'. ['+d+'] '+t+(s?('（'+s+'）'):'')+(u?(' 链接：'+u):'')+'\n';
     });
     user+='\n';
   }else{
-    user+='（未提供相关新闻，请基于通用知识回答。）\n\n';
+    user+='（本地新闻库暂未找到直接相关的报道，请基于通用知识简要回答，并建议用户换关键词或查证官方信息。）\n\n';
   }
-  user+='请直接给出回答，无需寒暄。';
+  user+='请直接给出回答，无需寒暄。'
   if(bubble)bubble.innerHTML='<div class="qa-thinking"><span class="qa-dot"></span>DeepSeek 正在组织答案（约 10~30 秒，可先浏览上方参考来源）…</div>';
   fetch('https://api.deepseek.com/chat/completions',{
     method:'POST',
@@ -3999,7 +4008,7 @@ function qaDeepseekCall(q,ctx,msg,btn){
       }else{
         var content=((((d.choices||[])[0]||{}).message||{}).content||'').trim();
         if(!content){text='模型未返回内容';meta='DeepSeek 错误';}
-        else{text=content;meta='DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条本地新闻';}
+        else{text=content;meta='DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条相关本地新闻';}
       }
       if(bubble){
         bubble.innerHTML=qaMdRender(text);
