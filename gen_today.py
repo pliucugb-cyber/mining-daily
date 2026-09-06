@@ -32,76 +32,46 @@ html = html.replace(
 html = html.replace('2026-09-02 更新', '2026-09-03 更新')
 
 # ========== STEP 5: Update price cards ==========
-# 2026-09-06 改版：价格区为「同列同品种」矩阵（price-matrix）——
-#   前 6 列每列两张卡（上=国内 沪期主力，下=LME），slug 一一对应：
-#   cum/lcpt(铜) alm/lalt(铝) pbm/lldt(铅) znm/lznt(锌) nim/lnkt(镍) snm/ltnt(锡)；
-#   后 4 列为国内独有品种通栏单卡（pm-solo）：上海金 au9999、白银 agtd、碳酸锂 lcm、电解钴(无slug)。
-#   LME 卡单位是「美元/吨」，数值由前端 renderLmePrices() 按 data-slug 填充，静态值写 -- 和「检测中…」。
-#   注意：只有一个容器 <div class="price-cards price-matrix" id="priceCardsShfe">，
-#   旧的 priceCardsLme 独立行已废弃，勿再生成。
-# 整个容器在 index.html 里是单行，块尾为 pm-col 收闭 + 容器收闭（…</div></div>）后接换行；
-# 非贪婪匹配到第一个「行尾的 </div></div>\n」即整块结束，不会越过 priceStrip 边界
-old_price_pattern = r'<div class="price-cards price-matrix" id="priceCardsShfe">.*?</div></div>\n'
+# 2026-09-06 晚定版：价格区为上下两行（国内外分开，用户确认勿改回矩阵/单容器混排）——
+#   首行 <div class="price-cards" id="priceCardsShfe">：国内 10 卡，顺序 铜铝铅锌镍锡 + 上海金/白银/碳酸锂/电解钴；
+#   次行 <div class="price-cards price-cards-lme" id="priceCardsLme">：LME 6 卡，顺序与首行一致 铜铝铅锌镍锡。
+#   slug：国内 cum/alm/pbm/znm/nim/snm + au9999/agtd/lcm（电解钴无slug）；LME lcpt/lalt/lldt/lznt/lnkt/ltnt。
+#   LME 卡单位「美元/吨」，数值由前端 renderLmePrices() 按 data-slug 填充，静态值写 -- 和「检测中…」。
+#   注意：严禁把 LME 卡混回首行（同列同品种矩阵已废弃），也不要恢复 pm-col/pm-solo 结构。
+# 每行容器在 index.html 里各占一行（以行尾 </div>\n 结束），非贪婪匹配不会越过 priceStrip 边界
+old_price_pattern = (r'<div class="price-cards[^"]*" id="priceCardsShfe">.*?</div>\n'
+                     r'<div class="price-cards[^"]*" id="priceCardsLme">.*?</div>\n')
+def _card(slug,cls,name,tag,val,unit,chg):
+    d=f' data-slug="{slug}"' if slug else ''
+    return (f'<div{d} class="price-card {cls}"><div class="pc-name">{name} <span class="pc-tag">{tag}</span></div>'
+            f'<div class="pc-value">{val}</div><div class="pc-unit">{unit}</div><div class="pc-chg">{chg}</div></div>')
+def _lme(slug,name):
+    return _card(slug,' ',f'LME {name}','LME','--','美元/吨','检测中…')
 new_price_html = (
-    '<div class="price-cards price-matrix" id="priceCardsShfe">'
-    # —— 6 个国内外配对品种：上=沪期主力，下=LME ——
-    '<div class="pm-col">'
-    '<div class="price-card up" data-slug="cum"><div class="pc-name">沪铜 <span class="pc-tag">SHFE</span></div>'
-    '<div class="pc-value">108,570</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +460 (+0.43%)</div></div>'
-    '<div class="price-card " data-slug="lcpt"><div class="pc-name">LME 铜 <span class="pc-tag">LME</span></div>'
-    '<div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div>'
-    '</div>'
-    '<div class="pm-col">'
-    '<div class="price-card up" data-slug="alm"><div class="pc-name">沪铝 <span class="pc-tag">SHFE</span></div>'
-    '<div class="pc-value">24,350</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +290 (+1.21%)</div></div>'
-    '<div class="price-card " data-slug="lalt"><div class="pc-name">LME 铝 <span class="pc-tag">LME</span></div>'
-    '<div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div>'
-    '</div>'
-    '<div class="pm-col">'
-    '<div class="price-card down" data-slug="pbm"><div class="pc-name">沪铅 <span class="pc-tag">SHFE</span></div>'
-    '<div class="pc-value">16,105</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -65 (-0.40%)</div></div>'
-    '<div class="price-card " data-slug="lldt"><div class="pc-name">LME 铅 <span class="pc-tag">LME</span></div>'
-    '<div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div>'
-    '</div>'
-    '<div class="pm-col">'
-    '<div class="price-card up" data-slug="znm"><div class="pc-name">沪锌 <span class="pc-tag">SHFE</span></div>'
-    '<div class="pc-value">26,665</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +20 (+0.08%)</div></div>'
-    '<div class="price-card " data-slug="lznt"><div class="pc-name">LME 锌 <span class="pc-tag">LME</span></div>'
-    '<div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div>'
-    '</div>'
-    '<div class="pm-col">'
-    '<div class="price-card up" data-slug="nim"><div class="pc-name">沪镍 <span class="pc-tag">SHFE</span></div>'
-    '<div class="pc-value">128,890</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +2,280 (+1.80%)</div></div>'
-    '<div class="price-card " data-slug="lnkt"><div class="pc-name">LME 镍 <span class="pc-tag">LME</span></div>'
-    '<div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div>'
-    '</div>'
-    '<div class="pm-col">'
-    '<div class="price-card down" data-slug="snm"><div class="pc-name">沪锡 <span class="pc-tag">SHFE</span></div>'
-    '<div class="pc-value">414,770</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -1,050 (-0.25%)</div></div>'
-    '<div class="price-card " data-slug="ltnt"><div class="pc-name">LME 锡 <span class="pc-tag">LME</span></div>'
-    '<div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div>'
-    '</div>'
-    # —— 4 个国内独有品种：通栏单卡（pm-solo，内容垂直居中） ——
-    '<div class="pm-col">'
-    '<div class="price-card up pm-solo" data-slug="au9999"><div class="pc-name">上海金 <span class="pc-tag">早盘价</span></div>'
-    '<div class="pc-value">931.36</div><div class="pc-unit">元/克</div><div class="pc-chg">今开 939.99</div>'
-    '</div>'
-    '<div class="pm-col">'
-    '<div class="price-card  pm-solo" data-slug="agtd"><div class="pc-name">白银 <span class="pc-tag">Ag(T+D)</span></div>'
-    '<div class="pc-value">15,659</div><div class="pc-unit">元/千克</div><div class="pc-chg">今开 15,659</div>'
-    '</div>'
-    '<div class="pm-col">'
-    '<div class="price-card down pm-solo" data-slug="lcm"><div class="pc-name">碳酸锂 <span class="pc-tag">主力连续</span></div>'
-    '<div class="pc-value">156,450</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -523 (-0.33%)</div>'
-    '</div>'
-    '<div class="pm-col">'
-    '<div class="price-card down pm-solo"><div class="pc-name">电解钴 <span class="pc-tag">SMM</span></div>'
-    '<div class="pc-value">304,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -45 (-0.02%)</div>'
-    '</div>'
-    '</div>\n'
+    '<div class="price-cards" id="priceCardsShfe">'
+    +_card('cum','up','沪铜','SHFE','108,570','元/吨','&#9650; +460 (+0.43%)')
+    +_card('alm','up','沪铝','SHFE','24,350','元/吨','&#9650; +290 (+1.21%)')
+    +_card('pbm','up','沪铅','SHFE','16,105','元/吨','&#9650; +10 (+0.06%)')
+    +_card('znm','up','沪锌','SHFE','26,665','元/吨','&#9650; +20 (+0.08%)')
+    +_card('nim','up','沪镍','SHFE','128,890','元/吨','&#9650; +2,280 (+1.80%)')
+    +_card('snm','down','沪锡','SHFE','414,770','元/吨','&#9660; -1,050 (-0.25%)')
+    +_card('au9999','up','上海金','早盘价','931.36','元/克','今开 939.99')
+    +_card('agtd','up','白银','Ag(T+D)','15,659','元/千克','今开 15,659')
+    +_card('lcm','down','碳酸锂','主力连续','156,450','元/吨','&#9660; -523 (-0.33%)')
+    +_card(None,'down','电解钴','SMM','304,940','元/吨','&#9660; -45 (-0.02%)')
+    +'</div>\n'
+    '<div class="price-cards price-cards-lme" id="priceCardsLme">'
+    +_lme('lcpt','铜')+_lme('lalt','铝')+_lme('lldt','铅')+_lme('lznt','锌')+_lme('lnkt','镍')+_lme('ltnt','锡')
+    +'</div>\n'
 )
 html = re.sub(old_price_pattern, lambda m: new_price_html, html, flags=re.DOTALL)
-print("Step 5: Price cards updated")
+# 替换后校验：两容器各一个、LME 6 slug、div 收支为 0
+assert html.count('id="priceCardsShfe"')==1 and html.count('id="priceCardsLme"')==1
+assert html.count("price-cards-lme")==1
+for _sl in ['lcpt','lalt','lldt','lznt','lnkt','ltnt']:
+    assert f'data-slug="{_sl}"' in html, _sl
+assert len(re.findall(r'<div\b',html))==html.count('</div>'), 'div balance broken'
+print("Step 5: Price cards updated (two-row layout)")
 
 # ========== STEP 6: Extract old today & archive, then replace ==========
 # Find markers - these are UNIQUE in the file
