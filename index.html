@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260906-0122">
+<meta name="build-version" content="20260906-0205">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -207,6 +207,119 @@ body.dark .digest-list a:hover{color:#ff7a7a}
   .digest-strip{padding:10px 12px 8px}
   .digest-title{font-size:17px}
   .digest-list li{font-size:13.5px}
+}
+/* ==================== 今日情报简报（9-06 新增：每日判断 / 今日5件事 / 异动 / 金属信号）==================== */
+.brief-strip{background:#fff;border:1px solid #eef2f7;border-radius:12px;padding:13px 16px 12px;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.brief-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.brief-badge{background:#1a3a5c;color:#fff;font-size:12px;font-weight:800;padding:2px 9px;border-radius:5px;letter-spacing:1px;flex-shrink:0}
+.brief-title{font-size:17px;font-weight:800;color:#1a3a5c;letter-spacing:1px}
+.brief-sub{font-size:12px;color:#8899a8}
+.brief-date{font-size:12px;color:#6b7a89;margin-left:auto;white-space:nowrap}
+.brief-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:12px}
+.brief-card{background:#f8fafc;border:1px solid #eef2f7;border-radius:10px;padding:11px 13px;min-width:0}
+.brief-card-h{font-size:12.5px;font-weight:700;color:#1a3a5c;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.brief-card-h .bc-n{background:#1a3a5c;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:600;flex-shrink:0}
+.brief-md{font-size:13px;line-height:1.68;color:#33475c}
+.brief-md p{margin:0 0 6px}
+.brief-md p:last-child{margin-bottom:0}
+.brief-md strong{color:#1a3a5c;font-weight:700}
+.brief-md ul{margin:4px 0 6px;padding-left:17px}
+.brief-md li{margin-bottom:3px}
+.brief-risk{margin-top:8px;padding-top:7px;border-top:1px dashed #dfe6ee;font-size:12.5px;color:#8a4b12;line-height:1.62}
+.brief-risk b{color:#a04000}
+.brief-top5{list-style:none;margin:0;padding:0;counter-reset:bn}
+.brief-top5 li{position:relative;padding:5px 0 5px 23px;font-size:13px;line-height:1.5;border-bottom:1px dashed #eef2f7}
+.brief-top5 li:last-child{border-bottom:none}
+.brief-top5 li::before{counter-increment:bn;content:counter(bn);position:absolute;left:0;top:7px;width:15px;height:15px;line-height:15px;text-align:center;background:#1a3a5c;color:#fff;border-radius:3px;font-size:10px;font-weight:700}
+.brief-top5 a{color:#1a3a5c;text-decoration:none;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brief-top5 a:hover{color:#e74c3c}
+.brief-top5 .bc-src{font-size:10.5px;color:#8899a8;margin-left:6px;white-space:nowrap}
+.brief-alert{padding:6px 0;border-bottom:1px dashed #eef2f7;font-size:12.5px;line-height:1.5}
+.brief-alert:last-child{border-bottom:none}
+.ba-line{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.ba-name{font-weight:700;color:#33475c;flex-shrink:0}
+.ba-move{font-weight:800;font-size:13px;flex-shrink:0}
+.ba-up{color:#c0392b}
+.ba-down{color:#1e8449}
+.ba-flat{color:#6b7a89}
+.ba-mkt{font-size:11px;color:#8899a8}
+.ba-detail{font-size:11.5px;color:#6b7a89;line-height:1.55;margin-top:2px}
+.brief-signals{display:flex;flex-wrap:wrap;gap:5px}
+.bs-chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;padding:2px 8px;border-radius:20px;background:#fff;border:1px solid #e2e8f0;color:#475569;white-space:nowrap}
+.bs-chip b{font-weight:700}
+.bs-up{background:#fdecea;border-color:#f5c6c2;color:#c0392b}
+.bs-down{background:#e8f6ee;border-color:#bfe3cd;color:#1e8449}
+.bs-flat{background:#f1f3f5;border-color:#e2e8f0;color:#5f6b7a}
+.brief-sent{margin-top:9px;font-size:12px;color:#6b7a89;display:flex;align-items:center;gap:7px}
+.sent-bar{flex:1;height:5px;background:#e8edf2;border-radius:3px;overflow:hidden;max-width:120px}
+.sent-bar i{display:block;height:100%;background:#1a3a5c;border-radius:3px}
+.brief-empty{font-size:12.5px;color:#9aa7b3;padding:4px 0}
+body.dark .brief-strip{background:#1e2733;border-color:#2c3845}
+body.dark .brief-badge,body.dark .brief-card-h .bc-n{background:#2c5f8d}
+body.dark .brief-title,body.dark .brief-card-h{color:#e8eef3}
+body.dark .brief-card{background:#161d26;border-color:#2c3845}
+body.dark .brief-md{color:#c3d0dc}
+body.dark .brief-md strong{color:#e8eef3}
+body.dark .brief-risk{color:#f0b47a;border-top-color:#2c3845}
+body.dark .brief-risk b{color:#ffc78a}
+body.dark .brief-top5 li{border-bottom-color:#2c3845}
+body.dark .brief-top5 a{color:#8fb5dc}
+body.dark .brief-top5 a:hover{color:#ff7a7a}
+body.dark .brief-alert{border-bottom-color:#2c3845}
+body.dark .ba-name{color:#c3d0dc}
+body.dark .ba-detail{color:#94a3b8}
+body.dark .bs-chip{background:#1b2431;border-color:#33404f;color:#c3d0dc}
+body.dark .bs-up{background:#3a1f1c;border-color:#5c2f2a;color:#ff8f8f}
+body.dark .bs-down{background:#16301f;border-color:#26543a;color:#7fd6a2}
+body.dark .bs-flat{background:#243140;border-color:#33404f;color:#94a3b8}
+body.dark .sent-bar{background:#2c3845}
+body.dark .sent-bar i{background:#5b9bd5}
+@media(max-width:900px){
+  .brief-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .brief-strip{padding:11px 12px 10px}
+  .brief-title{font-size:16px}
+  .brief-date{margin-left:0;width:100%}
+  .brief-card{padding:10px 11px}
+}
+/* ==================== 徽章：重要性分级 + 信源权威（9-06 新增）==================== */
+.badge-level,.badge-authority{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600;margin-left:8px;vertical-align:1px;white-space:nowrap;line-height:1.6}
+.lv-major{background:#fdecea;color:#c0392b}
+.lv-important{background:#fef3e2;color:#b9770e}
+.lv-notable{background:#e8f1fb;color:#1f618d}
+.au-official{background:#e8f1fb;color:#1f618d}
+.au-assoc{background:#f3e8fb;color:#7d3c98}
+.au-media{background:#f0f4f8;color:#6b7280}
+body.dark .lv-major{background:#3a1f1c;color:#ff8f8f}
+body.dark .lv-important{background:#3a2c14;color:#f0b47a}
+body.dark .lv-notable{background:#1b3145;color:#8fb5dc}
+body.dark .au-official{background:#1b3145;color:#8fb5dc}
+body.dark .au-assoc{background:#2e1f3d;color:#c9a3e0}
+body.dark .au-media{background:#243140;color:#94a3b8}
+/* ==================== 阅读模式（9-06 新增：只留判断/要闻/价格/今日新闻）==================== */
+.reading-toggle{background:#f1f5f9;border:1px solid #dde5ee;color:#475569;font-size:12px;padding:4px 10px;border-radius:6px;cursor:pointer;font-weight:600;transition:all .15s;white-space:nowrap}
+.reading-toggle:hover{background:#e2eaf3;color:#1a3a5c}
+.reading-toggle.active{background:#1a3a5c;border-color:#1a3a5c;color:#fff}
+body.dark .reading-toggle{background:#1b2431;border-color:#33404f;color:#c3d0dc}
+body.dark .reading-toggle:hover{background:#243140;color:#e8eef3}
+body.dark .reading-toggle.active{background:#2c5f8d;border-color:#2c5f8d;color:#fff}
+body.reading-mode .toc-sidebar,
+body.reading-mode #digestStrip,
+body.reading-mode #specialSection,
+body.reading-mode #archiveSection,
+body.reading-mode #archivedFavSection,
+body.reading-mode #hotListSection,
+body.reading-mode #installGuideSection,
+body.reading-mode #mobileInstallBar,
+body.reading-mode .stats-bar,
+body.reading-mode #qaFab{display:none !important}
+body.reading-mode .container{max-width:820px}
+.reading-exit{position:relative;display:none;margin-bottom:10px;font-size:12px;color:#6b7a89;background:#f8fafc;border:1px dashed #dde5ee;border-radius:8px;padding:7px 11px}
+body.reading-mode .reading-exit{display:block}
+body.dark .reading-exit{background:#161d26;border-color:#2c3845;color:#94a3b8}
+@media(max-width:600px){
+  .reading-exit{margin-bottom:8px;font-size:11.5px}
 }
 /* ==================== 价格卡点击 + 走势图弹层（9-04 新增）==================== */
 .price-card[data-slug]{cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
@@ -765,10 +878,37 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
   <div class="header-actions">
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式"><span class="theme-option light">☀️</span><span class="theme-option dark">🌙</span></button>
     <button class="pwa-header-btn" id="pwaHeaderBtn" type="button" title="将本页安装到电脑桌面" hidden>💻 添加到桌面</button>
+    <button class="reading-toggle" id="readingToggle" type="button" onclick="toggleReadingMode()" title="只显示今日判断、5件事、金属价格与今日新闻">阅读</button>
   </div>
   <h1>⛏️ 矿业新闻日报 <span class="date-badge">2026年09月05日 星期六</span></h1>
   <div class="sub">每日 9:00 起自动更新（约 9:30 前出今日版本） · 11个信息源 · 聚焦有色金属 · 部门内部参考 · 点击标题查看原文</div>
 </div>
+<!-- ==================== 今日情报简报（9-06 新增：数据取自 morning_report.json，随每日日报一同生成）==================== -->
+<div class="brief-strip" id="briefStrip" hidden>
+  <div class="brief-head">
+    <span class="brief-badge">情报</span>
+    <span class="brief-title">今日简报</span>
+    <span class="brief-sub" id="briefSub"></span>
+    <span class="brief-date" id="briefDate"></span>
+  </div>
+  <div class="brief-grid">
+    <div class="brief-card">
+      <div class="brief-card-h"><span class="bc-n">判</span> 今日判断</div>
+      <div class="brief-md" id="briefMain"><div class="brief-empty">简报加载中…</div></div>
+    </div>
+    <div class="brief-card">
+      <div class="brief-card-h"><span class="bc-n">5</span> 今日 5 件事</div>
+      <ul class="brief-top5" id="briefTop5"><li class="brief-empty">简报加载中…</li></ul>
+    </div>
+    <div class="brief-card">
+      <div class="brief-card-h"><span class="bc-n">动</span> 异动与信号</div>
+      <div id="briefAlerts"><div class="brief-empty">简报加载中…</div></div>
+      <div class="brief-signals" id="briefSignals"></div>
+      <div class="brief-sent" id="briefSent" hidden></div>
+    </div>
+  </div>
+</div>
+<div class="reading-exit">阅读模式：只显示今日判断、5 件事、金属价格与今日新闻。再次点击右上角「阅读」按钮或按 Esc 退出。</div>
 <!-- ==================== 今日要闻（9-04 新增，每日自动提取 3~5 条关键信息）==================== -->
 <div class="digest-strip" id="digestStrip">
   <div class="digest-head">
@@ -1729,6 +1869,221 @@ function injectOrigDateBadges(){
     meta.appendChild(badge);
   });
 }
+// ==================== 新闻徽章：重要性分级 + 信源权威（9-06 新增）====================
+// 分级复用热榜打分（来源权威 × 时效 × 关键词），不引入任何虚构指标
+var LV_TABLE=[[125,'lv-major','重大'],[105,'lv-important','重要'],[85,'lv-notable','关注']];
+var AU_MAP={'自然资源部':'au-official','矿业权市场':'au-official','中国地质调查局':'au-official','全球矿产资源':'au-official','上海联合矿权交易所':'au-official','上海期货交易所':'au-official','中国有色金属工业协会':'au-assoc','中国黄金协会':'au-assoc','中国稀土行业协会':'au-assoc','中国地质学会':'au-assoc','中国煤炭工业协会':'au-assoc','中国冶金矿山企业协会':'au-assoc','中国石油和化学工业联合会':'au-assoc','中国矿业报':'au-assoc','中国有色网':'au-media','中国黄金网':'au-media','中国矿业网':'au-media','全球矿产资源网':'au-media','矿冶集团':'au-assoc','中国稀土集团':'au-official','中国黄金集团':'au-official','紫金矿业':'au-official'};
+var AU_LABEL={'au-official':'官方','au-assoc':'协会','au-media':'媒体'};
+function newsLevelOf(score){
+  for(var i=0;i<LV_TABLE.length;i++){if(score>=LV_TABLE[i][0])return {cls:LV_TABLE[i][1],label:LV_TABLE[i][2]};}
+  return null;   // 低于「关注」线不显示徽章，避免满屏噪音
+}
+function authorClassOf(srcName,url){
+  if(AU_MAP[srcName])return AU_MAP[srcName];
+  if(!url)return '';
+  try{
+    var host=(new URL(url,location.href)).hostname.toLowerCase();
+    if(host.indexOf('.gov.cn')>=0)return 'au-official';
+    if(host.indexOf('chinania.org.cn')>=0||host.indexOf('cnmn.com.cn')>=0)return 'au-assoc';
+    return 'au-media';
+  }catch(e){return '';}
+}
+// 打分表：优先复用热榜算法（口径与热榜一致）；QA_ROWS 尚未就绪时退回 news-data.js 原始行自算同一公式
+function newsScoreMap(){
+  var map={};
+  try{
+    var arr=computeHotNewsLocal(9999);
+    for(var i=0;i<arr.length;i++){if(arr[i].u)map[arr[i].u]=arr[i].score;}
+  }catch(e){}
+  if(Object.keys(map).length)return map;
+  var rows=(window.NEWS_DATA&&window.NEWS_DATA.news)||[];
+  var anchor='';
+  try{anchor=qaReportDate()||'';}catch(e){}
+  if(!anchor){
+    var n=new Date();
+    anchor=n.getFullYear()+'-'+String(n.getMonth()+1).replace(/^(\d)$/,'0$1')+'-'+String(n.getDate()).replace(/^(\d)$/,'0$1');
+  }
+  var td=new Date(anchor+'T00:00:00');
+  if(isNaN(td.getTime()))td=new Date();
+  for(var j=0;j<rows.length;j++){
+    var r=rows[j];
+    if(!r||!r.u)continue;
+    var d=String(r.d||'');
+    if(d.length===5&&d.charAt(2)==='-')d=anchor.slice(0,4)+'-'+d;
+    var diff=0;
+    try{var dd=new Date(d+'T00:00:00');if(!isNaN(dd.getTime()))diff=Math.round((td-dd)/86400000);}catch(e){}
+    if(diff<0)diff=0;
+    var rec=Math.max(0,30-diff*4);
+    var srcW=HOT_SRC_W[r.s]||3;
+    var t=String(r.t||''),hot=false,nb=0,k;
+    for(k=0;k<HOT_KW.length;k++){if(t.indexOf(HOT_KW[k])>=0){hot=true;break;}}
+    if(!hot){for(k=0;k<NORMAL_KW.length;k++){if(t.indexOf(NORMAL_KW[k])>=0){nb=5;break;}}}
+    map[r.u]=srcW*10+rec+(hot?20:0)+nb;
+  }
+  return map;
+}
+function injectNewsBadges(){
+  var scoreMap={};
+  try{scoreMap=newsScoreMap();}catch(e){console.warn('[badge] 打分失败：',(e&&e.message)||e);}
+  document.querySelectorAll('.news-item').forEach(function(el){
+    if(el.querySelector('.badge-level')||el.querySelector('.badge-authority'))return;
+    var meta=el.querySelector('.news-meta');
+    if(!meta)return;
+    var srcEl=meta.querySelector('.src');
+    var srcName=srcEl?String(srcEl.textContent||'').trim():'';
+    var url=el.dataset.url||'';
+    var sc=scoreMap[url];
+    if(typeof sc==='number'){
+      var lv=newsLevelOf(sc);
+      if(lv){
+        var b=document.createElement('span');
+        b.className='badge-level '+lv.cls;
+        b.textContent=lv.label;
+        b.title='情报价值 '+sc+' 分（来源权威 × 时效 × 关键词）→ '+lv.label;
+        meta.appendChild(b);
+      }
+    }
+    var auCls=authorClassOf(srcName,url);
+    if(auCls){
+      var ab=document.createElement('span');
+      ab.className='badge-authority '+auCls;
+      ab.textContent=AU_LABEL[auCls]||'';
+      ab.title='信源等级：'+(AU_LABEL[auCls]||'')+(srcName?(' · '+srcName):'');
+      meta.appendChild(ab);
+    }
+  });
+}
+// ==================== 今日情报简报（9-06 新增）====================
+// 数据来自 morning_report.json（每日随日报生成，sections 内已含 signals / anomalies / sentiment）。
+// 铁律：取不到就整块不显示，绝不编造任何判断或数字。
+function briefEsc(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+// 极简 Markdown：先整段转义，再还原加粗/列表/段落，杜绝 HTML 注入
+function briefMd(md){
+  var lines=String(md||'').split(/\r?\n/);
+  var out=[],buf=[],ul=false;
+  function flushP(){if(buf.length){out.push('<p>'+buf.join('<br>')+'</p>');buf=[];}}
+  function closeUl(){if(ul){out.push('</ul>');ul=false;}}
+  for(var i=0;i<lines.length;i++){
+    var t=lines[i].trim();
+    if(!t){flushP();closeUl();continue;}
+    t=briefEsc(t).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+    if(/^[-*]\s+/.test(t)){
+      flushP();
+      if(!ul){out.push('<ul>');ul=true;}
+      out.push('<li>'+t.replace(/^[-*]\s+/,'')+'</li>');
+    }else{closeUl();buf.push(t);}
+  }
+  flushP();closeUl();
+  return out.join('');
+}
+function briefMoveClass(mv){
+  var s=String(mv||'');
+  if(s.indexOf('-')>=0)return 'ba-down';
+  if(s.indexOf('+')>=0)return 'ba-up';
+  return 'ba-flat';
+}
+function briefSignalClass(sig){
+  if(sig==='偏强')return 'bs-up';
+  if(sig==='偏弱')return 'bs-down';
+  return 'bs-flat';
+}
+function renderBrief(d){
+  var strip=document.getElementById('briefStrip');
+  if(!strip||!d||typeof d!=='object')return;
+  var sec=d.sections||{};
+  var news=d.top_news||sec.headlines||[];
+  var alerts=(sec.anomalies&&sec.anomalies.alerts)||[];
+  var metals=(sec.signals&&sec.signals.metals)||[];
+  var sent=sec.sentiment||null;
+  var rep=String(d.report||'');
+  if(!rep.trim()&&!news.length&&!alerts.length&&!metals.length)return;
+  var dEl=document.getElementById('briefDate');
+  if(dEl)dEl.textContent=d.date?('数据日期 '+d.date):'';
+  var sEl=document.getElementById('briefSub');
+  if(sEl)sEl.textContent='每日 9:30 随日报生成';
+  var main=document.getElementById('briefMain');
+  if(main){
+    var body=rep,risk='';
+    var ri=rep.indexOf('**风险提示：**');
+    if(ri>=0){risk=rep.slice(ri).replace(/^\*\*风险提示：\*\*\s*/,'');body=rep.slice(0,ri);}
+    var hi=body.indexOf('**今日头条：**');
+    if(hi>=0)body=body.slice(0,hi);
+    body=body.replace(/^\*\*总览：\*\*\s*/,'').trim();
+    var h=briefMd(body);
+    if(String(risk).trim())h+='<div class="brief-risk"><b>⚠ 风险提示：</b>'+briefMd(risk)+'</div>';
+    main.innerHTML=h||'<div class="brief-empty">今日判断暂未生成</div>';
+  }
+  var t5=document.getElementById('briefTop5');
+  if(t5){
+    if(!news.length){t5.innerHTML='<li class="brief-empty">今日要闻暂未生成</li>';}
+    else{
+      var li=[];
+      for(var i=0;i<Math.min(news.length,5);i++){
+        var n=news[i]||{};
+        var t=briefEsc(n.t||''),u=briefEsc(n.u||'');
+        li.push('<li>'+(u?'<a href="'+u+'" target="_blank" rel="noopener" title="'+t+'">'+t+'</a>':'<span>'+t+'</span>')+(n.s?'<span class="bc-src">'+briefEsc(n.s)+'</span>':'')+'</li>');
+      }
+      t5.innerHTML=li.join('');
+    }
+  }
+  var al=document.getElementById('briefAlerts');
+  if(al){
+    if(!alerts.length){al.innerHTML='<div class="brief-empty">今日无价格异动</div>';}
+    else{
+      var ah=[];
+      for(var j=0;j<alerts.length;j++){
+        var a=alerts[j]||{};
+        ah.push('<div class="brief-alert"><div class="ba-line"><span class="ba-name">'+briefEsc(a.commodity||'')+'</span><span class="ba-move '+briefMoveClass(a.move)+'">'+briefEsc(a.move||'')+'</span><span class="ba-mkt">'+briefEsc(a.market||'')+'</span></div><div class="ba-detail">'+briefEsc(a.detail||'')+'</div></div>');
+      }
+      al.innerHTML=ah.join('');
+    }
+  }
+  var sg=document.getElementById('briefSignals');
+  if(sg){
+    var sh=[];
+    for(var k=0;k<metals.length;k++){
+      var m=metals[k]||{};
+      sh.push('<span class="bs-chip '+briefSignalClass(m.signal)+'" title="'+briefEsc(m.note||m.position||'')+'">'+briefEsc(m.name||'')+' <b>'+briefEsc(m.signal||'')+'</b></span>');
+    }
+    sg.innerHTML=sh.join('');
+  }
+  var se=document.getElementById('briefSent');
+  if(se){
+    if(sent&&typeof sent.market_index==='number'){
+      var idx=Math.max(0,Math.min(100,sent.market_index));
+      se.innerHTML='<span>市场情绪 '+briefEsc(sent.market_label||'')+'</span><span class="sent-bar"><i style="width:'+idx+'%"></i></span><span>'+idx+'</span>'+(sent.total?'<span>· '+briefEsc(sent.total)+' 条</span>':'');
+      se.hidden=false;
+    }else{se.hidden=true;se.innerHTML='';}
+  }
+  strip.hidden=false;
+}
+function loadBrief(){
+  fetch('morning_report.json?v='+Date.now(),{cache:'no-store'})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(d){if(d)renderBrief(d);})
+    .catch(function(){console.warn('[brief] morning_report.json 不可用，简报区保持隐藏');});
+}
+// ==================== 阅读模式（9-06 新增：只留判断 / 5件事 / 价格 / 今日新闻）====================
+function toggleReadingMode(){
+  var on=document.body.classList.toggle('reading-mode');
+  var btn=document.getElementById('readingToggle');
+  if(btn){btn.classList.toggle('active',on);btn.textContent=on?'退出':'阅读';}
+  try{localStorage.setItem('readingMode',on?'1':'0');}catch(e){}
+  if(on){try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}}
+}
+function restoreReadingMode(){
+  var v=null;
+  try{v=localStorage.getItem('readingMode');}catch(e){}
+  if(v!=='1')return;
+  document.body.classList.add('reading-mode');
+  var btn=document.getElementById('readingToggle');
+  if(btn){btn.classList.add('active');btn.textContent='退出';}
+}
+document.addEventListener('keydown',function(e){
+  if((e.key==='Escape'||e.key==='Esc')&&document.body.classList.contains('reading-mode'))toggleReadingMode();
+});
 function injectTags(){
   document.querySelectorAll('.news-item').forEach(el=>{
     if(el.querySelector('.news-tags'))return;
@@ -1994,6 +2349,8 @@ injectStars();
 renderArchivedFavs();
 foldOldArchive();
 injectOrigDateBadges();
+loadBrief();
+restoreReadingMode();
 applyFilter();
 refresh();
 // ===== PWA 安装引导（克制入口：PC顶部按钮 + 移动端底部浮条）=====
@@ -2334,6 +2691,7 @@ function getDsKey(){
 
 (function(){
   qaInitData();
+  injectNewsBadges();   // 依赖 QA_ROWS（由 qaInitData 赋值），必须在其之后调用
   renderDigest();
   setupCardOpen();   // 整张卡片点击打开原文（标题/按钮仍各自处理）
   qaAiProbe();
