@@ -170,10 +170,45 @@ def check_one(item, last_domain_ts):
     return ok, findings
 
 
+def check_dom_structure(html):
+    """结构自检：新闻块缺 </div> 会让后续条目（甚至问答悬浮面板）被嵌套进 .news-item，
+    导致筛选时整块被隐藏、问答引用链接被误判为「禁止内嵌」。
+    返回问题列表；空列表表示结构正常。"""
+    import re as _re
+    problems = []
+    stack = []          # 栈里存该层 div 是否是 news-item
+    for m in _re.finditer(r'<div\b[^>]*>|</div>', html):
+        tag = m.group(0)
+        if tag == '</div>':
+            if stack:
+                stack.pop()
+            continue
+        cls = _re.search(r'class="([^"]*)"', tag)
+        cls = cls.group(1) if cls else ''
+        is_item = 'news-item' in cls.split()
+        if is_item and any(stack):
+            line = html.count('\n', 0, m.start()) + 1
+            problems.append(f'第 {line} 行：news-item 被另一个 news-item 嵌套（缺少 </div>）')
+        stack.append(is_item)
+    if stack:
+        problems.append(f'全文有 {len(stack)} 个 <div> 未闭合')
+    return problems
+
+
 def main():
     if not OUTPUT_HTML.exists():
         print(f'❌ 找不到 {OUTPUT_HTML}')
         sys.exit(1)
+
+    # 结构自检（2026-09-06 新增）：先查 DOM 骨架，再逐条校验 URL
+    dom_problems = check_dom_structure(OUTPUT_HTML.read_text(encoding='utf-8'))
+    if dom_problems:
+        print('❌ HTML 结构异常（需先修复再校验 URL）：')
+        for p in dom_problems[:20]:
+            print('   - ' + p)
+        print('   参考修复：在缺失闭合处补 </div>，规范结构为 `...查看原文 →</a></div><div class="sub-cat">`\n')
+    else:
+        print('✅ HTML 结构自检通过（无 news-item 嵌套 / 无未闭合 div）\n')
 
     items = extract_news_items()
     print(f'从 {OUTPUT_HTML} 扫到 {len(items)} 条新闻 URL 待校验\n')
