@@ -5,7 +5,7 @@
 // 2026-09-04 二次修复：支持子路径部署（GitHub Pages 站点位于 /mining-daily/）。
 //   原先写死 '/index.html' 这类绝对路径，在子路径下会指向站点根而 404。
 //   改为以 SW 自身所在目录为基准推导 BASE，根路径部署（本地/沙箱）与子路径部署（Pages）均可。
-const CACHE_NAME = 'mining-daily-v6';
+const CACHE_NAME = 'mining-daily-v9';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -68,9 +68,11 @@ self.addEventListener('fetch', event => {
 
   // HTML 与每日数据文件：network-first —— 永远优先拿线上最新版，失败才用缓存（离线兜底）
   // 注意：index.html 成功时也不写入缓存，防止 Service Worker 把旧版 HTML 长期发给用户。
+  // 2026-09-05 加固：fetch 带 cache:'reload'，绕过浏览器 HTTP 缓存，每次刷新都向 CDN 要最新 HTML，
+  // 避免用户端长期停留旧版 CSS（此前出现"浮窗半透明"实为旧版缓存所致）。
   if (isHtml || DATA_FILES.indexOf(url.pathname) >= 0) {
     event.respondWith(
-      fetch(req).then(res => {
+      fetch(req, { cache: 'reload' }).then(res => {
         if (isHtml) return res; // HTML 只走网络，避免旧版缓存
         if (res && res.ok && res.type === 'basic') {
           const copy = res.clone();
