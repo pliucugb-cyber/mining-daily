@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260906-1630" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260906-1640" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -448,6 +448,8 @@ body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 @keyframes qaBlink{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
 .qa-msg-sources{margin-top:12px;padding:10px 12px;background:#f6f8fb;border:1px dashed #d7deea;border-radius:8px;border-top-left-radius:3px}
 .qa-sources-title{font-size:12px;font-weight:700;color:#4f46e5;margin-bottom:6px}
+.qa-sources-count{display:block;font-size:11px;color:#6b7a89;margin-bottom:7px}
+.qa-sources-count b{color:#1a3a5c;font-weight:700}
 .qa-msg-sources ul{margin:0;padding-left:18px}
 .qa-msg-sources li{font-size:12.5px;line-height:1.6;margin:4px 0;color:#1a3a5c;user-select:text}
 .qa-msg-sources a{color:#4f46e5;text-decoration:none;border-bottom:1px dashed #a5b4fc}
@@ -480,6 +482,8 @@ body.dark .qa-msg-bubble blockquote{border-color:#64748b;color:#94a3b8;backgroun
 body.dark .qa-msg-bubble a{color:#818cf8;border-color:#4f46e5}
 body.dark .qa-msg-sources{background:#1a232f;border-color:#2c3845}
 body.dark .qa-sources-title{color:#818cf8}
+body.dark .qa-sources-count{color:#8b9bad}
+body.dark .qa-sources-count b{color:#e8eef3}
 body.dark .qa-msg-sources li{color:#c9d6e2}
 body.dark .qa-msg-sources a{color:#818cf8;border-color:#4f46e5}
 body.dark .qa-src-date{color:#64748b}
@@ -3204,12 +3208,16 @@ function qaRankByRelevance(q,rows){
   var now=new Date();
   return rows.map(function(r){
     var title=String(r.t||''),body=qaHay(r),tags=(r.g||[]).join(' ');
-    var score=0,hitParts=[];
+    var score=0,hitParts=[],titleHits=0,tagsHits=0;
     tokens.forEach(function(t){
-      if(title.indexOf(t)>=0){score+=10;if(hitParts.indexOf('title')<0)hitParts.push('title');}
-      else if(tags.indexOf(t)>=0){score+=6;if(hitParts.indexOf('tags')<0)hitParts.push('tags');}
+      if(title.indexOf(t)>=0){score+=10;titleHits++;if(hitParts.indexOf('title')<0)hitParts.push('title');}
+      else if(tags.indexOf(t)>=0){score+=6;tagsHits++;if(hitParts.indexOf('tags')<0)hitParts.push('tags');}
       else if(body.indexOf(t)>=0){score+=3;if(hitParts.indexOf('body')<0)hitParts.push('body');}
     });
+    // 连续完整词额外奖励：如「紫金矿业」整体出现，比拆成「紫金」+「矿业」更相关
+    if(q.indexOf(title)>=0){score+=15;}
+    // 多 token 同时命中 title/tags 再奖励
+    if((titleHits+tagsHits)>=2){score+=8;}
     // 时效性：越新略加分，但相关性权重占主导
     var d=String(r.d||'');
     if(d){
@@ -3221,6 +3229,7 @@ function qaRankByRelevance(q,rows){
         }
       }catch(e){}
     }
+    r._score=score;r._hitParts=hitParts;
     return {r:r,score:score,hit:hitParts.length>0};
   }).sort(function(a,b){
     // 优先按相关性倒序；同分按日期倒序
@@ -3893,10 +3902,16 @@ function qaSafeUrl(u){
   if(/^https?:\/\//i.test(u))return u.replace(/"/g,'%22');
   return '';
 }
-// AI 回答下方自动附「参考来源」可点击列表（数据本身带 url，之前调用未使用）
+// AI 回答下方自动附「参考来源」可点击列表，按相关性过滤，只显示真正命中的条目
 function qaDsSourcesHtml(ctx){
   if(!ctx||!ctx.length)return '';
-  var items=ctx.slice(0,10).map(function(c){
+  // 只取有实际相关命中的条目：score>=6（title 或 tags 命中至少一个 token），或整体标题包含在问题中
+  var relevant=ctx.filter(function(c){return (c._score||0)>=6 || (c._hitParts||[]).indexOf('title')>=0;});
+  // 兜底：如果高相关不足 3 条，则按 score 排序取前 10（至少 score>0）
+  if(relevant.length<3){
+    relevant=ctx.filter(function(c){return (c._score||0)>0;}).slice(0,10);
+  }
+  var items=relevant.slice(0,10).map(function(c){
     var u=c.u||c.url||'',t=c.t||'新闻';
     if(!u)return '';
     var safe=qaSafeUrl(u);if(!safe)return '';
@@ -3905,7 +3920,8 @@ function qaDsSourcesHtml(ctx){
     return '<li><a href="'+safe+'" target="_blank" rel="noopener">'+qaEsc(t)+'</a>'+(c.d?' <span class="qa-src-date">'+qaEsc(c.d)+'</span>':'');
   }).filter(Boolean);
   if(!items.length)return '';
-  return '<div class="qa-msg-sources"><div class="qa-sources-title">📚 参考来源（点击查看原文）</div><ul>'+items.join('')+'</ul></div>';
+  var countHtml=relevant.length>0?'<span class="qa-sources-count">已为您从全库中筛选出 <b>'+Math.min(relevant.length,10)+'</b> 条相关条目</span>':'';
+  return '<div class="qa-msg-sources"><div class="qa-sources-title">📚 参考来源（点击查看原文）</div>'+countHtml+'<ul>'+items.join('')+'</ul></div>';
 }
 function qaDeepseekCall(q,ctx,msg,btn){
   var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
@@ -3947,7 +3963,7 @@ function qaDeepseekCall(q,ctx,msg,btn){
       }else{
         var content=((((d.choices||[])[0]||{}).message||{}).content||'').trim();
         if(!content){text='模型未返回内容';meta='DeepSeek 错误';}
-        else{text=content;meta='DeepSeek 真 AI · 已读 '+(ctx?ctx.length:0)+' 条本地新闻';}
+        else{text=content;meta='DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条本地新闻';}
       }
       if(bubble){
         bubble.innerHTML=qaMdRender(text);
