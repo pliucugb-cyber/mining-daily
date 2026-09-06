@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260906-1600" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260906-1610" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -871,73 +871,84 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 }
 /* ===== 矿权交易独立专区（9-06 新增）===== */
 .section-title.rights{background:linear-gradient(135deg,#0e7490,#0891b2);color:#fff}
-.rights-note{font-size:12.5px;color:#5b6b7a;line-height:1.6;padding:2px 2px 10px}
-.rights-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
-.rights-filters{display:flex;flex-wrap:wrap;gap:10px}
-.rights-filters label{font-size:12px;color:#5b6b7a;display:flex;align-items:center;gap:5px;font-weight:600}
-.rights-filters select{padding:5px 8px;border:1px solid #d5deea;border-radius:7px;font-size:12.5px;background:#fff;color:#33414f;cursor:pointer;outline:none}
+#rightsSection{padding:10px 18px 26px}
+.rights-note{font-size:12.5px;color:#5b6b7a;line-height:1.65;padding:2px 4px 14px}
+.rights-toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px;padding:12px 14px;background:#f8fafc;border:1px solid #e6edf3;border-radius:12px}
+.rights-filters{display:flex;flex-wrap:wrap;gap:12px}
+.rights-filters label{font-size:12px;color:#4a5568;display:flex;align-items:center;gap:6px;font-weight:600}
+.rights-filters select{padding:6px 10px;border:1px solid #d5deea;border-radius:8px;font-size:12.5px;background:#fff;color:#33414f;cursor:pointer;outline:none}
 .rights-filters select:focus{border-color:#0e7490}
-.rights-views{display:flex;gap:6px}
-.rights-view-btn{padding:5px 12px;border:1px solid #cfe3ea;background:#fff;border-radius:7px;font-size:12.5px;color:#0e7490;cursor:pointer;font-weight:600}
+.rights-views{display:flex;gap:8px}
+.rights-view-btn{padding:6px 14px;border:1px solid #cfe3ea;background:#fff;border-radius:8px;font-size:12.5px;color:#0e7490;cursor:pointer;font-weight:600}
 .rights-view-btn:hover{background:#e0f2fe}
 .rights-view-btn.active{background:#0e7490;color:#fff;border-color:#0e7490}
-.rights-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.rights-card{background:#fff;border:1px solid #e6edf3;border-radius:11px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;transition:box-shadow .15s,transform .15s}
-.rights-card:hover{box-shadow:0 4px 16px rgba(14,116,144,.12);transform:translateY(-1px)}
-.rc-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.rc-method{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;background:#e0f2fe;color:#0e7490}
-.rc-method.rc-m-拍卖{background:#fdecea;color:#c0392b}
-.rc-method.rc-m-协议{background:#e8f1fb;color:#1f618d}
-.rc-method.rc-m-转让{background:#f3e8fb;color:#7d3c98}
-.rc-mineral{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;background:#f1f5f9;color:#475569}
-.rc-deadline{margin-left:auto;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px}
-.rc-deadline.rc-urgent{background:#fee2e2;color:#b91c1c}
-.rc-deadline.rc-soon{background:#fff7ed;color:#c2410c}
-.rc-deadline.rc-normal{background:#f1f5f9;color:#64748b}
-.rc-deadline.rc-expired{background:#f1f5f9;color:#94a3b8;text-decoration:line-through}
-.rc-title{font-size:14px;font-weight:700;line-height:1.45;color:#1a3a5c}
+.rights-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.rights-card{background:#fff;border:1px solid #dfe6ee;border-radius:14px;padding:17px 18px;display:flex;flex-direction:column;gap:11px;transition:box-shadow .18s,transform .18s,border-color .18s;box-shadow:0 2px 8px rgba(13,60,78,.06)}
+.rights-card:hover{box-shadow:0 8px 26px rgba(14,116,144,.15);transform:translateY(-2px);border-color:#c5d3e0}
+.rc-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rc-method{font-size:11.5px;font-weight:800;padding:3px 10px;border-radius:20px;background:#e0f2fe;color:#0e7490;border:1px solid rgba(14,116,144,.12)}
+.rc-method.rc-m-挂牌{background:#e0f2fe;color:#0e7490}
+.rc-method.rc-m-拍卖{background:#fdecea;color:#c0392b;border-color:rgba(192,57,43,.14)}
+.rc-method.rc-m-协议{background:#e8f1fb;color:#1f618d;border-color:rgba(31,97,141,.14)}
+.rc-method.rc-m-转让{background:#f3e8fb;color:#7d3c98;border-color:rgba(125,60,152,.14)}
+.rc-mineral{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:20px;background:#f1f5f9;color:#475569;border:1px solid rgba(71,85,105,.08)}
+.rc-deadline{margin-left:auto;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.rc-deadline.rc-urgent{background:#fee2e2;color:#b91c1c;border:1px solid rgba(185,28,28,.12)}
+.rc-deadline.rc-soon{background:#fff7ed;color:#c2410c;border:1px solid rgba(194,65,12,.12)}
+.rc-deadline.rc-normal{background:#f1f5f9;color:#64748b;border:1px solid rgba(100,116,139,.08)}
+.rc-deadline.rc-expired{background:#f1f5f9;color:#94a3b8;text-decoration:line-through;border:1px solid rgba(148,163,184,.08)}
+.rc-title{font-size:14.5px;font-weight:800;line-height:1.55;color:#1a3a5c}
 .rc-title a{color:inherit;text-decoration:none}
-.rc-title a:hover{text-decoration:underline}
-.rc-region{font-size:12px;color:#5b6b7a;display:flex;align-items:center;gap:4px}
-.rc-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;margin-top:2px}
-.rc-grid>div{display:flex;flex-direction:column;gap:1px}
-.rc-grid span{font-size:10.5px;color:#94a3b8}
-.rc-grid b{font-size:13px;color:#33475c;font-weight:700}
-.rc-src{font-size:11px;color:#9aa7b3;border-top:1px dashed #eef2f7;padding-top:7px;margin-top:1px}
-.rights-table-wrap{overflow-x:auto;border:1px solid #e6edf3;border-radius:11px}
+.rc-title a:hover{text-decoration:underline;color:#0e7490}
+.rc-region{font-size:12.5px;color:#5b6b7a;display:flex;align-items:center;gap:5px}
+.rc-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px 16px;margin-top:3px}
+.rc-grid>div{display:flex;flex-direction:column;gap:3px}
+.rc-grid span{font-size:11px;color:#8b9aad;font-weight:500}
+.rc-grid b{font-size:13.5px;color:#33475c;font-weight:800}
+.rc-grid b.na{color:#cbd5e1;font-weight:500}
+.rc-src{font-size:11px;color:#9aa7b3;border-top:1px dashed #e2e8f0;padding-top:9px;margin-top:2px}
+.rights-table-wrap{overflow-x:auto;border:1px solid #dfe6ee;border-radius:12px;box-shadow:0 2px 8px rgba(13,60,78,.06)}
 .rights-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:660px}
-.rights-table th,.rights-table td{padding:8px 10px;text-align:left;border-bottom:1px solid #eef2f7;white-space:nowrap}
+.rights-table th,.rights-table td{padding:10px 12px;text-align:left;border-bottom:1px solid #eef2f7;white-space:nowrap}
 .rights-table th{background:#f1f5f9;color:#475569;font-weight:700;position:sticky;top:0;cursor:pointer;user-select:none}
 .rights-table th[data-sort]:hover{color:#0e7490}
 .rights-table tbody tr:hover{background:#f8fafc}
 .rights-table td.rp-mineral,.rights-table td.rp-method{font-weight:600}
 .rights-table a{color:#0e7490;text-decoration:none}
 .rights-table a:hover{text-decoration:underline}
-.rights-empty{padding:22px;text-align:center;color:#9aa7b3;font-size:13px}
+.rights-empty{padding:28px;text-align:center;color:#9aa7b3;font-size:13px}
 body.dark .section-title.rights{background:linear-gradient(135deg,#0e7490,#0891b2)}
+body.dark #rightsSection{background:#0f141c}
 body.dark .rights-note{color:#8b9bad}
+body.dark .rights-toolbar{background:#131a23;border-color:#2c3845}
 body.dark .rights-filters label{color:#94a3b8}
 body.dark .rights-filters select{background:#243140;border-color:#2c3845;color:#c9d6e2}
 body.dark .rights-view-btn{background:#1b2431;border-color:#2c3845;color:#67e8f9}
 body.dark .rights-view-btn:hover{background:#243140}
 body.dark .rights-view-btn.active{background:#0e7490;color:#fff;border-color:#0e7490}
-body.dark .rights-card{background:#161d26;border-color:#2c3845}
-body.dark .rights-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.4)}
+body.dark .rights-card{background:#161d26;border-color:#2c3845;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+body.dark .rights-card:hover{box-shadow:0 8px 26px rgba(0,0,0,.45);border-color:#3a4a5a}
 body.dark .rc-mineral{background:#243140;color:#c9d6e2}
 body.dark .rc-title{color:#e8eef3}
+body.dark .rc-title a:hover{color:#67e8f9}
 body.dark .rc-grid b{color:#c9d6e2}
+body.dark .rc-grid b.na{color:#5a6a7a}
 body.dark .rc-grid span{color:#7d8ea0}
 body.dark .rc-src{color:#7d8ea0;border-top-color:#2c3845}
-body.dark .rights-table-wrap{border-color:#2c3845}
+body.dark .rights-table-wrap{border-color:#2c3845;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 body.dark .rights-table th{background:#1b2431;color:#94a3b8}
 body.dark .rights-table td{border-bottom-color:#2c3845}
 body.dark .rights-table tbody tr:hover{background:#1b2431}
 body.dark .rights-table a{color:#67e8f9}
 body.dark .rights-empty{color:#7d8ea0}
 @media(max-width:600px){
-  .rights-toolbar{flex-direction:column;align-items:stretch}
+  #rightsSection{padding:8px 12px 20px}
+  .rights-toolbar{flex-direction:column;align-items:stretch;gap:10px;padding:10px 12px}
+  .rights-filters{justify-content:space-between}
   .rights-views{justify-content:flex-end}
-  .rights-cards{grid-template-columns:1fr}
+  .rights-cards{grid-template-columns:1fr;gap:14px}
+  .rights-card{padding:15px 16px}
+  .rc-title{font-size:14px;line-height:1.5}
 }
 </style>
 <!-- GoatCounter 访问统计 -->
@@ -1373,10 +1384,10 @@ window.gcTotal=function(data){
         +'<div class="rc-title"><a href="'+r.it.u+'" target="_blank" rel="noopener">'+esc(r.it.t)+'</a></div>'
         +(r.region?'<div class="rc-region">📍 '+esc(r.region)+'</div>':'')
         +'<div class="rc-grid">'
-        +'<div><span>起始价</span><b>'+fmtMoney(r.price)+'</b></div>'
-        +'<div><span>保证金</span><b>'+fmtMoney(r.deposit)+'</b></div>'
-        +'<div><span>面积</span><b>'+fmtArea(r.area)+'</b></div>'
-        +'<div><span>截标日</span><b>'+fmtDeadline(r.deadline)+'</b></div>'
+        +'<div><span>起始价</span><b class="'+(r.price==null?'na':'')+'">'+fmtMoney(r.price)+'</b></div>'
+        +'<div><span>保证金</span><b class="'+(r.deposit==null?'na':'')+'">'+fmtMoney(r.deposit)+'</b></div>'
+        +'<div><span>面积</span><b class="'+(r.area==null?'na':'')+'">'+fmtArea(r.area)+'</b></div>'
+        +'<div><span>截标日</span><b class="'+(r.deadline?'':'na')+'">'+fmtDeadline(r.deadline)+'</b></div>'
         +'</div>'
         +'<div class="rc-src">'+esc(r.it.s)+' · '+r.it.d.slice(5)+'</div>'
         +'</div>';
