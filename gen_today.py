@@ -67,8 +67,8 @@ with open('index.html', 'r', encoding='utf-8') as f:
 
 # ========== STEP 1: Update title date ==========
 html = html.replace(
-    '<title>矿业新闻日报 2026-09-03</title>',
-    '<title>矿业新闻日报 2026-09-04</title>'
+    '<title>2026-09-03</title>',
+    '<title>2026-09-04</title>'
 )
 
 # ========== STEP 2: Update header date badge ==========
