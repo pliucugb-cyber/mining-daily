@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260906-2310" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260906-2320" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1454,18 +1454,20 @@ const STORE_KEY='mining_daily_read_urls';
 const FAV_KEY='mining_daily_favorites';
 const HISTORY_KEY='mining_daily_history';
 
+// 2026-09-06 晚：统一 localStorage 写入封装（隐私模式/配额满时静默失败，不中断交互）
+function lsSet(k,v){try{window.lsSet(k,v);}catch(e){}}
 function getReadSet(){try{return new Set(JSON.parse(localStorage.getItem(STORE_KEY)||'[]'))}catch(e){return new Set()}}
-function saveReadSet(s){localStorage.setItem(STORE_KEY,JSON.stringify([...s]))}
+function saveReadSet(s){lsSet(STORE_KEY,JSON.stringify([...s]))}
 // 收藏存储：新格式为对象数组 {url,title,date,src}；旧格式（纯URL字符串数组）自动迁移
 function getFavs(){
   let arr;try{arr=JSON.parse(localStorage.getItem(FAV_KEY)||'[]')}catch(e){arr=[]}
   if(!Array.isArray(arr))return[];
   return arr.map(v=>typeof v==='string'?{url:v}:v).filter(v=>v&&v.url)
 }
-function saveFavs(arr){localStorage.setItem(FAV_KEY,JSON.stringify(arr.slice(0,300)))}
+function saveFavs(arr){lsSet(FAV_KEY,JSON.stringify(arr.slice(0,300)))}
 function getFavUrls(){return new Set(getFavs().map(f=>f.url))}
 function getHistory(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]')}catch(e){return[]}}
-function saveHistory(arr){localStorage.setItem(HISTORY_KEY,JSON.stringify(arr.slice(0,100)))}
+function saveHistory(arr){lsSet(HISTORY_KEY,JSON.stringify(arr.slice(0,100)))}
 
 // 标记已读 + 记录浏览历史
 function markRead(url){
@@ -2483,7 +2485,7 @@ function toggleReadingMode(){
   var on=document.body.classList.toggle('reading-mode');
   var btn=document.getElementById('readingToggle');
   if(btn){btn.classList.toggle('active',on);btn.textContent=on?'退出':'阅读';}
-  try{localStorage.setItem('readingMode',on?'1':'0');}catch(e){}
+  try{lsSet('readingMode',on?'1':'0');}catch(e){}
   if(on){try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}}
 }
 function restoreReadingMode(){
@@ -2882,22 +2884,24 @@ window.addEventListener('DOMContentLoaded',function(){
     var k='md_build_ver';
     var old=localStorage.getItem(k);
     if(old&&old!==v){            // 版本变了 → 说明这是新发布，硬刷新确保用最新 CSS/JS
-      try{localStorage.setItem(k,v);}catch(e){}
+      try{lsSet(k,v);}catch(e){}
       try{location.reload(true);}catch(e){location.href=location.href;}
       return;
     }
-    try{localStorage.setItem(k,v);}catch(e){}
+    try{lsSet(k,v);}catch(e){}
   }catch(e){}
 })();
 // ===== PWA：注册 Service Worker（可安装成App + 离线可看）=====
 // 2026-09-02：新版 SW 激活后自动 reload，保证所有人打开就是最新版，无需手动清缓存
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('./sw.js?v=9').catch(function(){});
+    navigator.serviceWorker.register('./sw.js?v=11').catch(function(){});
     // 收到"新版已就绪"通知 → 自动刷新（只刷一次，防死循环）
     navigator.serviceWorker.addEventListener('message',function(ev){
       if(ev.data&&ev.data.type==='SW_UPDATED'&&!window.__swReloaded){
         window.__swReloaded=true;
+        // 先写当前 build-version，避免新页面加载后版本戳自愈再触发一次硬刷新（双刷新闪屏）
+        try{var _m=document.querySelector('meta[name="build-version"]');if(_m)lsSet('md_build_ver',_m.getAttribute('content'));}catch(e){}
         try{location.reload();}catch(e){}
       }
     });
@@ -3539,7 +3543,7 @@ function qaFabApplyTuck(){
   b.title=QA_FAB_TUCKED?'已收起 · 点击唤出悬浮球（拖到屏幕边缘可再次收起）':'新闻检索 / AI 问答（可拖动；拖出屏幕边缘即收起）';
 }
 function qaFabSaveTuck(){
-  try{if(window.localStorage)localStorage.setItem('qaFabTuck',JSON.stringify({t:QA_FAB_TUCKED,s:QA_FAB_SIDE}));}catch(e){}
+  try{if(window.localStorage)lsSet('qaFabTuck',JSON.stringify({t:QA_FAB_TUCKED,s:QA_FAB_SIDE}));}catch(e){}
 }
 function qaFabRestoreTuck(){
   try{
@@ -3563,7 +3567,7 @@ function qaFabSavePos(){
   try{
     var b=document.getElementById('qaFab');if(!b)return;
     // 用布局位置（不含 transform），否则半隐藏时存进去的 left 是负数，刷新后球会在屏幕外
-    localStorage.setItem('qaFabPos',JSON.stringify({left:qaFabLayoutLeft(b),bottom:qaFabLayoutBottom(b)}));
+    lsSet('qaFabPos',JSON.stringify({left:qaFabLayoutLeft(b),bottom:qaFabLayoutBottom(b)}));
   }catch(e){}
 }
 function qaFabRestorePos(){
@@ -3578,7 +3582,7 @@ function qaFabRestorePos(){
 }
 function qaStopBreathe(){
   try{var b=document.getElementById('qaFab');if(b)b.classList.remove('breathe');}catch(e){}
-  try{if(window.localStorage)localStorage.setItem('qaFabSeen','1');}catch(e){}
+  try{if(window.localStorage)lsSet('qaFabSeen','1');}catch(e){}
 }
 // ===== 悬浮球拖拽 + 尺寸记忆 =====
 // 拖拽把手=整个面板任意非交互位置（头部/边框/结果空白区均可拖）；
@@ -3631,7 +3635,7 @@ function qaFloatSavePos(){
   try{
     var p=document.getElementById('qaFloat'); if(!p)return;
     var rect=p.getBoundingClientRect();
-    localStorage.setItem('qaFloatPos',JSON.stringify({left:rect.left,top:rect.top}));
+    lsSet('qaFloatPos',JSON.stringify({left:rect.left,top:rect.top}));
   }catch(e){}
 }
 function qaFloatRestorePos(){
@@ -3649,14 +3653,14 @@ function qaFloatRestorePos(){
 function qaFloatSaveSize(){
   try{
     var p=document.getElementById('qaFloat'); if(!p)return;
-    if(window.localStorage)localStorage.setItem('qaFloatSize',JSON.stringify({width:p.offsetWidth,height:p.offsetHeight}));
+    if(window.localStorage)lsSet('qaFloatSize',JSON.stringify({width:p.offsetWidth,height:p.offsetHeight}));
   }catch(e){}
 }
 function qaFloatObserveSize(){
   try{
     var p=document.getElementById('qaFloat'); if(!p||!window.ResizeObserver)return;
     var ro=new ResizeObserver(function(){
-      try{localStorage.setItem('qaFloatSize',JSON.stringify({width:p.offsetWidth,height:p.offsetHeight}));}catch(e){}
+      try{lsSet('qaFloatSize',JSON.stringify({width:p.offsetWidth,height:p.offsetHeight}));}catch(e){}
     });
     ro.observe(p);
   }catch(e){}
@@ -3995,6 +3999,10 @@ function qaIsBroadQuery(q){
 // 2026-09-06 晚（D）：按板块（c.s）分组展示，扫读更快
 function qaDsSourcesHtml(ctx,q){
   var relevant=qaFilterRelevant(ctx,q);
+  // 2026-09-06 晚：按 URL 去重，避免同一链接跨板块重复出现
+  var _seen={},_rel2=[];
+  relevant.forEach(function(c){var u=c.u||c.url||'';if(u){if(_seen[u])return;_seen[u]=1;} _rel2.push(c);});
+  relevant=_rel2;
   var liOf=function(c){
     var u=c.u||c.url||'',t=c.t||'新闻';
     if(!u)return '';
@@ -4054,10 +4062,13 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad){
   }
   user+='请直接给出回答，无需寒暄。'
   if(bubble)bubble.innerHTML='<div class="qa-thinking"><span class="qa-dot"></span>DeepSeek 正在组织答案（约 10~30 秒，可先浏览上方参考来源）…</div>';
+  // 2026-09-06 晚：35s 超时兜底，避免 DeepSeek 卡住时面板长期转圈
+  var _ac=new AbortController();var _to=setTimeout(function(){_ac.abort();},35000);
   fetch('https://api.deepseek.com/chat/completions',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()},
-    body:JSON.stringify({model:'deepseek-chat',messages:dsMessages.concat([{role:'user',content:user}]),max_tokens:1000,temperature:0.3,stream:false})
+    body:JSON.stringify({model:'deepseek-chat',messages:dsMessages.concat([{role:'user',content:user}]),max_tokens:1000,temperature:0.3,stream:false}),
+    signal:_ac.signal
   })
     .then(function(r){return r.json().then(function(d){return {ok:r.ok,status:r.status,d:d||{}};},function(){return {ok:false,status:0,d:{}};});})
     .then(function(res){
@@ -4100,7 +4111,8 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad){
     })
     .catch(function(e){
       var localAns=qaAiLocalAnswer(q,ctx);
-      var hint='\n\n[DeepSeek 直连失败（'+((e&&e.message)||e||'网络错误')+'），已切换为本地知识库回答]';
+      var _why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||e||'网络错误');
+      var hint='\n\n[DeepSeek 直连失败（'+_why+'），已切换为本地知识库回答]';
       var text=localAns+hint;
       if(bubble){
         bubble.innerHTML=qaMdRender(text);
@@ -4123,6 +4135,7 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad){
       qaFloatScroll();qaSaveHistory();
     })
     .then(function(){
+      clearTimeout(_to);
       QA_FLOAT_BUSY=false;
       if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
     });
@@ -4170,7 +4183,7 @@ function qaSaveHistory(){
       }
     });
     if(out.length>QA_HISTORY_MAX)out=out.slice(out.length-QA_HISTORY_MAX);
-    localStorage.setItem(QA_HISTORY_KEY,JSON.stringify(out));
+    lsSet(QA_HISTORY_KEY,JSON.stringify(out));
   }catch(e){}
 }
 function qaClearHistory(){
@@ -4229,7 +4242,7 @@ function applyTheme(mode){
 function toggleTheme(){
   var dark = !document.body.classList.contains('dark');
   applyTheme(dark ? 'dark' : 'light');
-  try{ localStorage.setItem('md_theme', dark ? 'dark' : 'light'); }catch(e){}
+  try{ lsSet('md_theme', dark ? 'dark' : 'light'); }catch(e){}
 }
 (function(){
   // 同步图标状态（class 已由 body 开头的初始化脚本设好）

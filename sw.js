@@ -7,7 +7,7 @@
 // 2026-09-04 二次修复：支持子路径部署（GitHub Pages 站点位于 /mining-daily/）。
 //   原先写死 '/index.html' 这类绝对路径，在子路径下会指向站点根而 404。
 //   改为以 SW 自身所在目录为基准推导 BASE，根路径部署（本地/沙箱）与子路径部署（Pages）均可。
-const CACHE_NAME = 'mining-daily-v10';
+const CACHE_NAME = 'mining-daily-v11';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -91,13 +91,19 @@ self.addEventListener('fetch', event => {
     return;
   }
   if (DATA_FILES.indexOf(url.pathname) >= 0) {
+    // 2026-09-06 晚修复：去掉 cache:'reload' 后，GitHub Pages 对条件请求可能返回 304（空 body）。
+    // 若直接把 304 返回给页面，fetch('news-data.js').text() 得到空串 → window.NEWS_DATA 为空 → 新闻列表空白。
+    // 故：仅当 200 才写缓存并返回；304 / 5xx 一律改用在缓存里的上次 200 正文（内容未变，等价）。
     event.respondWith(
       fetch(req).then(res => {
-        if (res && res.ok && res.type === 'basic') {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
+        if (res && res.ok) {
+          if (res.type === 'basic') {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
+          }
+          return res;
         }
-        return res;
+        return caches.match(req).then(c => c || res);
       }).catch(() => caches.match(req).then(r => r || caches.match(BASE + 'index.html')))
     );
     return;
