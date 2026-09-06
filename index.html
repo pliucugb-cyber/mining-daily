@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260906-1111">
+<meta name="build-version" content="20260906-1133">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -224,6 +224,13 @@ body.dark .digest-list a:hover{color:#ff7a7a}
 .brief-md strong{color:#1a3a5c;font-weight:700}
 .brief-md ul{margin:4px 0 6px;padding-left:17px}
 .brief-md li{margin-bottom:3px}
+.brief-md.brief-clamp{max-height:336px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 76%,transparent 100%);mask-image:linear-gradient(180deg,#000 76%,transparent 100%)}
+.brief-more{margin-top:8px;background:#fff;border:1px solid #dde5ee;color:#1a3a5c;font-size:12px;font-weight:600;padding:4px 12px;border-radius:6px;cursor:pointer}
+.brief-more:hover{background:#f1f5f9}
+.brief-sec{margin:9px 0 3px;font-size:12.5px;font-weight:800;color:#1a3a5c;letter-spacing:.5px;display:flex;align-items:center;gap:7px}
+.brief-sec:first-child{margin-top:0}
+.brief-sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,#dfe6ee,transparent)}
+.brief-md ul:last-child{margin-bottom:0}
 .brief-risk{margin-top:8px;padding-top:7px;border-top:1px dashed #dfe6ee;font-size:12.5px;color:#8a4b12;line-height:1.62}
 .brief-risk b{color:#a04000}
 .brief-alert{padding:6px 0;border-bottom:1px dashed #eef2f7;font-size:12.5px;line-height:1.5}
@@ -270,6 +277,10 @@ body.dark .brief-title,body.dark .brief-card-h{color:#e8eef3}
 body.dark .brief-card{background:#161d26;border-color:#2c3845}
 body.dark .brief-md{color:#c3d0dc}
 body.dark .brief-md strong{color:#e8eef3}
+body.dark .brief-sec{color:#9fc4e8}
+body.dark .brief-more{background:#161d26;border-color:#2c3845;color:#9fc4e8}
+body.dark .brief-more:hover{background:#1e2733}
+body.dark .brief-sec::after{background:linear-gradient(90deg,#2c3845,transparent)}
 body.dark .brief-risk{color:#f0b47a;border-top-color:#2c3845}
 body.dark .brief-risk b{color:#ffc78a}
 body.dark .brief-alert{border-bottom-color:#2c3845}
@@ -901,6 +912,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
   <div class="brief-card">
     <div class="brief-card-h"><span class="bc-n">判</span> 今日判断</div>
     <div class="brief-md" id="briefMain"><div class="brief-empty">简报加载中…</div></div>
+    <button class="brief-more" id="briefMore" type="button" hidden>展开全部</button>
   </div>
 </div>
 <div class="reading-exit">阅读模式：只显示今日判断、金属价格与今日新闻。再次点击右上角「阅读」按钮或按 Esc 退出。</div>
@@ -1974,6 +1986,9 @@ function briefMd(md){
   for(var i=0;i<lines.length;i++){
     var t=lines[i].trim();
     if(!t){flushP();closeUl();continue;}
+    // 整行只有一个加粗段（如 **政策与产业：**）→ 渲染成分节小标题，便于扫读
+    var secM=t.match(/^\*\*([^*]{2,20})\*\*\s*$/);
+    if(secM){flushP();closeUl();out.push('<div class="brief-sec">'+briefEsc(secM[1])+'</div>');continue;}
     t=briefEsc(t).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
     if(/^[-*]\s+/.test(t)){
       flushP();
@@ -2008,23 +2023,56 @@ function renderBrief(d){
   var dEl=document.getElementById('briefDate');
   if(dEl)dEl.textContent=d.date?('数据日期 '+d.date):'';
   var sEl=document.getElementById('briefSub');
-  if(sEl)sEl.textContent='每日 9:30 随日报生成';
+  if(sEl){
+    // 有 stats 就报今日收录量，说明简报覆盖的是当日全部内容（不只是行情）
+    var st=d.stats||{};
+    var n=st.new_count;
+    sEl.textContent=(typeof n==='number'&&n>0)
+      ? ('今日收录 '+n+' 条 · 按行情/政策/勘查/矿权分类摘要')
+      : '每日 9:30 随日报生成';
+  }
   var main=document.getElementById('briefMain');
   if(main){
     var body=rep,risk='';
     var ri=rep.indexOf('**风险提示：**');
     if(ri>=0){risk=rep.slice(ri).replace(/^\*\*风险提示：\*\*\s*/,'');body=rep.slice(0,ri);}
-    var hi=body.indexOf('**今日头条：**');
-    if(hi>=0)body=body.slice(0,hi);
+    // 注意：不要再截断「今日头条」等分节——简报定位是当日全部内容的分类摘要，
+    // 之前因「今日5件事」卡而截断，去重删卡后只剩行情段，非价格内容全被吞掉（2026-09-06 事故）
     body=body.replace(/^\*\*总览：\*\*\s*/,'').trim();
     var h=briefMd(body);
     if(String(risk).trim())h+='<div class="brief-risk"><b>⚠ 风险提示：</b>'+briefMd(risk)+'</div>';
     main.innerHTML=h||'<div class="brief-empty">今日判断暂未生成</div>';
   }
+  setupBriefClamp();
   // 「今日5件事」卡已移除（与下方「今日要闻」重复）；top_news 仍参与简报区显隐判断
   // 价格相关（情绪 / 趋势信号 / 异动）改挂到下方「金属价格」板块内的市场脉搏条，与行情同屏对照
   renderMarketPulse(alerts,metals,sent);
   strip.hidden=false;
+}
+// 简报内容按需折叠：分类摘要可能很长（10+ 条），默认只露出头部，避免把价格板块和新闻推到屏幕外
+function setupBriefClamp(){
+  var main=document.getElementById('briefMain'),btn=document.getElementById('briefMore');
+  if(!main||!btn)return;
+  main.classList.remove('brief-clamp');
+  btn.hidden=true;
+  var LIMIT=420;
+  var apply=function(){
+    if(main.scrollHeight>LIMIT){
+      main.classList.add('brief-clamp');
+      btn.hidden=false;
+      var n=main.querySelectorAll('li').length;
+      btn.textContent='展开全部'+(n?('（'+n+' 条）'):'');
+      btn.dataset.open='0';
+    }else{btn.hidden=true;main.classList.remove('brief-clamp');}
+  };
+  apply();
+  // 字体/宽度变化后重新判定一次，避免小屏折叠阈值算错
+  setTimeout(apply,300);
+  btn.onclick=function(){
+    var open=btn.dataset.open==='1';
+    if(open){main.classList.add('brief-clamp');btn.dataset.open='0';btn.textContent='展开全部'+(main.querySelectorAll('li').length?('（'+main.querySelectorAll('li').length+' 条）'):'');}
+    else{main.classList.remove('brief-clamp');btn.dataset.open='1';btn.textContent='收起';}
+  };
 }
 function marketPulseRow(label,inner){
   return '<div class="mp-row"><span class="mp-label">'+briefEsc(label)+'</span>'+inner+'</div>';
