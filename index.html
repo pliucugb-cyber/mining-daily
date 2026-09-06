@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260906-1315" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260906-0140" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -866,6 +866,76 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
   .hot-title{font-size:14px;line-height:1.5}
   .hot-meta{font-size:11px}
 }
+/* ===== 矿权交易独立专区（9-06 新增）===== */
+.section-title.rights{background:linear-gradient(135deg,#0e7490,#0891b2);color:#fff}
+.rights-note{font-size:12.5px;color:#5b6b7a;line-height:1.6;padding:2px 2px 10px}
+.rights-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.rights-filters{display:flex;flex-wrap:wrap;gap:10px}
+.rights-filters label{font-size:12px;color:#5b6b7a;display:flex;align-items:center;gap:5px;font-weight:600}
+.rights-filters select{padding:5px 8px;border:1px solid #d5deea;border-radius:7px;font-size:12.5px;background:#fff;color:#33414f;cursor:pointer;outline:none}
+.rights-filters select:focus{border-color:#0e7490}
+.rights-views{display:flex;gap:6px}
+.rights-view-btn{padding:5px 12px;border:1px solid #cfe3ea;background:#fff;border-radius:7px;font-size:12.5px;color:#0e7490;cursor:pointer;font-weight:600}
+.rights-view-btn:hover{background:#e0f2fe}
+.rights-view-btn.active{background:#0e7490;color:#fff;border-color:#0e7490}
+.rights-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.rights-card{background:#fff;border:1px solid #e6edf3;border-radius:11px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;transition:box-shadow .15s,transform .15s}
+.rights-card:hover{box-shadow:0 4px 16px rgba(14,116,144,.12);transform:translateY(-1px)}
+.rc-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.rc-method{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;background:#e0f2fe;color:#0e7490}
+.rc-method.rc-m-拍卖{background:#fdecea;color:#c0392b}
+.rc-method.rc-m-协议{background:#e8f1fb;color:#1f618d}
+.rc-method.rc-m-转让{background:#f3e8fb;color:#7d3c98}
+.rc-mineral{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;background:#f1f5f9;color:#475569}
+.rc-deadline{margin-left:auto;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px}
+.rc-deadline.rc-urgent{background:#fee2e2;color:#b91c1c}
+.rc-deadline.rc-soon{background:#fff7ed;color:#c2410c}
+.rc-deadline.rc-normal{background:#f1f5f9;color:#64748b}
+.rc-deadline.rc-expired{background:#f1f5f9;color:#94a3b8;text-decoration:line-through}
+.rc-title{font-size:14px;font-weight:700;line-height:1.45;color:#1a3a5c}
+.rc-title a{color:inherit;text-decoration:none}
+.rc-title a:hover{text-decoration:underline}
+.rc-region{font-size:12px;color:#5b6b7a;display:flex;align-items:center;gap:4px}
+.rc-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;margin-top:2px}
+.rc-grid>div{display:flex;flex-direction:column;gap:1px}
+.rc-grid span{font-size:10.5px;color:#94a3b8}
+.rc-grid b{font-size:13px;color:#33475c;font-weight:700}
+.rc-src{font-size:11px;color:#9aa7b3;border-top:1px dashed #eef2f7;padding-top:7px;margin-top:1px}
+.rights-table-wrap{overflow-x:auto;border:1px solid #e6edf3;border-radius:11px}
+.rights-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:660px}
+.rights-table th,.rights-table td{padding:8px 10px;text-align:left;border-bottom:1px solid #eef2f7;white-space:nowrap}
+.rights-table th{background:#f1f5f9;color:#475569;font-weight:700;position:sticky;top:0;cursor:pointer;user-select:none}
+.rights-table th[data-sort]:hover{color:#0e7490}
+.rights-table tbody tr:hover{background:#f8fafc}
+.rights-table td.rp-mineral,.rights-table td.rp-method{font-weight:600}
+.rights-table a{color:#0e7490;text-decoration:none}
+.rights-table a:hover{text-decoration:underline}
+.rights-empty{padding:22px;text-align:center;color:#9aa7b3;font-size:13px}
+body.dark .section-title.rights{background:linear-gradient(135deg,#0e7490,#0891b2)}
+body.dark .rights-note{color:#8b9bad}
+body.dark .rights-filters label{color:#94a3b8}
+body.dark .rights-filters select{background:#243140;border-color:#2c3845;color:#c9d6e2}
+body.dark .rights-view-btn{background:#1b2431;border-color:#2c3845;color:#67e8f9}
+body.dark .rights-view-btn:hover{background:#243140}
+body.dark .rights-view-btn.active{background:#0e7490;color:#fff;border-color:#0e7490}
+body.dark .rights-card{background:#161d26;border-color:#2c3845}
+body.dark .rights-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.4)}
+body.dark .rc-mineral{background:#243140;color:#c9d6e2}
+body.dark .rc-title{color:#e8eef3}
+body.dark .rc-grid b{color:#c9d6e2}
+body.dark .rc-grid span{color:#7d8ea0}
+body.dark .rc-src{color:#7d8ea0;border-top-color:#2c3845}
+body.dark .rights-table-wrap{border-color:#2c3845}
+body.dark .rights-table th{background:#1b2431;color:#94a3b8}
+body.dark .rights-table td{border-bottom-color:#2c3845}
+body.dark .rights-table tbody tr:hover{background:#1b2431}
+body.dark .rights-table a{color:#67e8f9}
+body.dark .rights-empty{color:#7d8ea0}
+@media(max-width:600px){
+  .rights-toolbar{flex-direction:column;align-items:stretch}
+  .rights-views{justify-content:flex-end}
+  .rights-cards{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
@@ -884,10 +954,11 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 </script>
 <nav class="toc-sidebar" id="tocSidebar" data-page-node-id="h7lkEHpfaxuwNBZUMU0kSo">
 <div class="toc-title" data-page-node-id="8LRX6eNrJaUyp2fpou5rph">📑 目录导航</div>
-<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="mcjfrkVHVCvuozlWyll2ET">📋 全部内容 <span class="toc-count" id="tocAllCount" data-page-node-id="SdCwIBzFr1gjNNVQ4j6dXV">51</span></div>
+<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="mcjfrkVHVCvuozlWyll2ET">📋 全部内容 <span class="toc-count" id="tocAllCount" data-page-node-id="SdCwIBzFr1gjNNVQ4j6dXV">37</span></div>
 <div class="toc-main-item" data-target="specialSection" onclick="scrollToSection('specialSection',this)" style="color:#b45009" data-page-node-id="bVIAHgApeTJfE4aC3AKyn3">⛏️ 找矿专项 <span class="toc-count" id="tocSpecialCount" style="background:#fdf3d7;color:#b45009" data-page-node-id="f3N9WgzkKHYYiMEXqJgEbn">0</span></div>
-<div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)" data-page-node-id="EFrXr8SMUaesjIaDEYAhDR">🔥 今日新增 <span class="toc-count" id="tocTodayCount" data-page-node-id="kxUrDeEPE1TaVSom0stu9q">12</span></div>
-<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容 <span class="toc-count" id="tocArchiveCount" data-page-node-id="yWrBhpdNt0u9plVJHxIRn0">39</span></div>
+<div class="toc-main-item" data-target="rightsSection" onclick="scrollToSection('rightsSection',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易 <span class="toc-count" id="tocRightsCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="tRcC9kPvHKmCp8T4wQ3NxY">14</span></div>
+<div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)" data-page-node-id="EFrXr8SMUaesjIaDEYAhDR">🔥 今日新增 <span class="toc-count" id="tocTodayCount" data-page-node-id="kxUrDeEPE1TaVSom0stu9q">7</span></div>
+<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容 <span class="toc-count" id="tocArchiveCount" data-page-node-id="yWrBhpdNt0u9plVJHxIRn0">30</span></div>
 <div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#f39c12" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
 <div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#8e44ad" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
 <div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
@@ -1001,20 +1072,83 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <!-- ==================== 今日新增（2026-09-06 抓取） ==================== -->
 <!-- ==================== 今日新增（2026-09-06 抓取） ==================== -->
 <div class="section" id="todaySection" data-page-node-id="ShuOFAKDtbjCl99M6WI9HF">
-<div class="section-title today" data-page-node-id="KF4CefFpDWMRbV0LHUu0L8"><span class="icon" data-page-node-id="LqS1prUVmz6hbRWl66ixCd">🔥</span> 今日新增（2026-09-06 抓取）<span class="news-count" id="todayCount" data-page-node-id="F0uiZ1KIcrA0qFOacJVyEz">12条</span></div>
-<div class="sub-cat" data-page-node-id="L4BSpG2LJhEM5WzQ5akaQi">💼 矿权交易<span class="sub-count" data-page-node-id="sFEiziKY2KBn7eL81iq9pF">5条新增</span></div>
-<div class="news-item is-new" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306830.htm" data-embed="ok" data-page-node-id="BElimdy2rTwkELXpS3yV6a"><div class="news-head" data-page-node-id="8K93RcHfCssx9wk1EKCc1Z"><span class="dot" data-page-node-id="Udte1jM3JOUUjxdHK3m8fN"></span><span class="badge-new" data-page-node-id="F0C93sk2h01bqaLSjNdH6e">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306830.htm" target="_blank" data-page-node-id="YYZG1TDcEeAEf7LMnIHsQa">四川省丹巴县天宝洞金矿勘查探矿权挂牌出让公告</a></div><div class="news-meta" data-page-node-id="jAkEQ8Ku9zDHhIRoTOI9Va"><span class="src" data-page-node-id="hIVChbKELVCtdPCq6bUsk4">矿业权市场</span> · 09-04</div><div class="news-summary" data-page-node-id="FqGKc0I9T03mommBcqQLiE">受四川省自然资源厅委托，四川省政府政务服务和公共资源交易服务中心网上挂牌出让丹巴县天宝洞金矿勘查探矿权（川公共矿挂〔2026〕011号），区块面积15.93平方千米，起始价128万元，起始出让收益率2.3%，拟出让年限5年，竞买保证金1500万元。</div></div><div class="news-item is-new" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306827.htm" data-embed="ok" data-page-node-id="hX7OZOThL1LzTyAyWPVNPq"><div class="news-head" data-page-node-id="KWUbmHRrMtp3FWrG0CyhPe"><span class="dot" data-page-node-id="wsaCpe60scP1UiDBz9wvAt"></span><span class="badge-new" data-page-node-id="XulTIzwDFCgAPYGCp1nic4">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306827.htm" target="_blank" data-page-node-id="jWe1ek7SYNg619su8XRHin">四川省乐山市金口河区鲤鱼堡铅锌矿勘查探矿权挂牌出让公告</a></div><div class="news-meta" data-page-node-id="6GIsl5q2VUGDaGglEk93Dh"><span class="src" data-page-node-id="xPd3jdZ8Kzhbq6pKA92EVJ">矿业权市场</span> · 09-04</div><div class="news-summary" data-page-node-id="Q4No1FdO1lWJ7iwtTTJSna">四川省政府政务服务和公共资源交易服务中心挂牌出让乐山市金口河区鲤鱼堡铅锌矿勘查探矿权（川公共矿挂〔2026〕010号），区块面积10.80平方千米，起始价87万元，出让收益率2.3%，拟出让年限5年，竞买保证金1500万元；公告明确本区块不接受外商和外资参与竞买。</div></div><div class="news-item is-new" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306826.htm" data-embed="ok" data-page-node-id="DfIPWIFjthlHQ1l3rUnLy4"><div class="news-head" data-page-node-id="Qe7nP6xCXt2pMjCer44TME"><span class="dot" data-page-node-id="eqxPsoQg5IyKSDmJuDcPQ2"></span><span class="badge-new" data-page-node-id="iFoAin3NaLJoQVZbzn9CML">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306826.htm" target="_blank" data-page-node-id="f8sVO5Ij9LKJQJyKZQvonC">河北省滦平县安纯沟门乡大西沟金矿勘查探矿权拍卖出让公告</a></div><div class="news-meta" data-page-node-id="sd5WvzZ4FYN3mDTB2ehUZG"><span class="src" data-page-node-id="0Crv3y9zkH5ILkqWcDP8PX">矿业权市场</span> · 09-04</div><div class="news-summary" data-page-node-id="9HqdKHYIpyCeAhY22MOnCz">承德市公共资源交易中心委托承德银源拍卖有限公司拍卖出让滦平县安纯沟门乡大西沟金矿勘查探矿权（承矿拍〔2026〕03号），区块面积4.37平方千米，起始价26.22万元，出让收益率2.3%，拟出让年限5年，竞买保证金100万元，保证金缴纳截止2026年10月26日16时。</div></div><div class="news-item is-new" data-url="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260905_10306820.htm" data-embed="ok" data-page-node-id="pQ28s8BEU5fdl4VJNpC2u7"><div class="news-head" data-page-node-id="sA7imxLFecCAnk7ZpHYOLX"><span class="dot" data-page-node-id="XEYtdOXL9ELnrtxF8RpMGE"></span><span class="badge-new" data-page-node-id="ovl6bVHe0WrkgXzdz8kHFo">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260905_10306820.htm" target="_blank" data-page-node-id="hmCuO0uqtK0TtKitLM9HcF">内蒙古自治区扎赉特旗黑大山金铜多金属矿勘查探矿权转让公示</a></div><div class="news-meta" data-page-node-id="uGqfnChEHx88VfnZkqlJ6W"><span class="src" data-page-node-id="1J3FbLdh7dzj1uSzV0vRsU">矿业权市场</span> · 09-04</div><div class="news-summary" data-page-node-id="E3HFVlFf8UHtPkzECaB8mT">兴安盟自然资源局公示扎赉特旗黑大山金铜多金属矿勘查探矿权转让（内自然资探转示〔2026〕026号），转让人为喀喇沁旗天成美石有限责任公司，受让人为嘉石矿业（兴安盟扎赉特旗）有限公司，勘查面积34.417平方千米，发证机关为内蒙古自治区自然资源厅，探矿权有效期自2026年7月30日起。</div></div><div class="news-item is-new" data-url="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260904_10305942.htm" data-embed="ok" data-page-node-id="R6MPc1drF8W9fjSW8SgmHT"><div class="news-head" data-page-node-id="xebyDcpu4JyKhE4Vx9bm8t"><span class="dot" data-page-node-id="evaDvCklz7fMbY9wxAARBQ"></span><span class="badge-new" data-page-node-id="mVxAZ2ahs40QlcOa8xbklx">NEW</span><a class="news-title" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260904_10305942.htm" target="_blank" data-page-node-id="MT7v4e8ycLexZVTeE87o2e">吉林省临江市小栗子银多金属矿详查探矿权转让公示</a></div><div class="news-meta" data-page-node-id="lzrW8kl4neR1rVdSgUFzSr"><span class="src" data-page-node-id="C29A9d0Ji8ZP4DVxVvUbb0">矿业权市场</span> · 09-03</div><div class="news-summary" data-page-node-id="lBs7QFtqC8L4FAF1lhGsVd">白山市自然资源局公示临江市小栗子银多金属矿详查探矿权转让（白山自然资探转〔2026〕1号），转让人为吉林星泰集团有限公司，勘查面积1.237平方千米，探矿权有效期自2026年7月9日起，依据《矿产资源法实施条例》《矿业权出让交易规则》办理。</div></div><div class="sub-cat" data-page-node-id="X5U8Z8uE4J5hq7mmppZe2x">🔍 找矿成果与勘查技术<span class="sub-count" data-page-node-id="HGResEerpS8B08KMstasCD">2条新增</span></div>
+<div class="section-title today" data-page-node-id="KF4CefFpDWMRbV0LHUu0L8"><span class="icon" data-page-node-id="LqS1prUVmz6hbRWl66ixCd">🔥</span> 今日新增（2026-09-06 抓取）<span class="news-count" id="todayCount" data-page-node-id="F0uiZ1KIcrA0qFOacJVyEz">7条</span></div>
+<div class="sub-cat" data-page-node-id="X5U8Z8uE4J5hq7mmppZe2x">🔍 找矿成果与勘查技术<span class="sub-count" data-page-node-id="HGResEerpS8B08KMstasCD">2条新增</span></div>
 <div class="news-item is-new" data-url="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325571.shtml" data-embed="ok" data-page-node-id="eI7BFXn7sG4kW9TzZvGPi8"><div class="news-head" data-page-node-id="HViMVqcpNTjSYt3RdSuhtb"><span class="dot" data-page-node-id="ygvCHaM6F0SBa7Ex9MIpWN"></span><span class="badge-new" data-page-node-id="J6AeBn1etCgPB26XPs2NGp">NEW</span><a class="news-title" href="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325571.shtml" target="_blank" data-page-node-id="3uCbO2EdqDAW7mDM8TvRDB">低品位难选铁矿有望成“富矿”</a></div><div class="news-meta" data-page-node-id="HmHsBdsQnbEVZTqlEzBwlJ"><span class="src" data-page-node-id="jFIMrqDLAtPz7qrsbZK9Po">全球矿产资源网</span> · 09-04</div><div class="news-summary" data-page-node-id="GGlBCQW57HL7s0CDA5CR8t">据中国矿业报，全球规模最大的难选铁矿流态化磁化焙烧工程在辽宁鞍山通过竣工验收，年处理556万吨并连续稳定运行、全面达产。中科院过程工程研究所朱庆山团队攻关20余年，从含铁仅11%的铁尾矿中稳定产出品位65%的铁精矿，铁矿物相转化率达98%，综合能耗较同类技术低35%；项目入选国家发改委首批绿色低碳先进技术示范清单，有望带动国内近300亿吨难选铁矿和近100亿吨含铁尾矿开发，并已与老挝签订褐铁矿焙烧提质项目。</div></div><div class="news-item is-new" data-url="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867978.html" data-embed="ok" data-page-node-id="xBZwJDkT5cFMT7F2tNF9yH"><div class="news-head" data-page-node-id="9CFCxSwYOLDbqL9WRC0n2V"><span class="dot" data-page-node-id="BIwwOzbFnMBYQL2y3gSb0r"></span><span class="badge-new" data-page-node-id="HCAVtrLG3upLqzTJEB7Kb4">NEW</span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867978.html" target="_blank" data-page-node-id="hZJPeroRdtHDchIQWiLnKn">中国地质调查局实施吉隆泥石流次生地质灾害监测</a></div><div class="news-meta" data-page-node-id="sr3IaNVounLQCkFCp1eT4U"><span class="src" data-page-node-id="uWUsyETu6Wr5MkmNsGKs71">中国地质调查局</span> · 09-04</div><div class="news-summary" data-page-node-id="8RjYtGI1NyG5TLLfpCqrCd">受西藏吉隆口岸“8·26”冰岩崩—泥石流灾害链持续影响，源区残留不稳定冰川与岩体，存在冰岩崩、泥石流、滑坡—堰塞湖等次生风险。由中国工程院院士殷跃平牵头、中国地质调查局18名技术专家组成团队，在错坚河口至拉比村核心风险带布设边坡雷达、雷视一体监测仪、微震监测仪，并在色琼村同步部署监测河道水位与断面变化，实现24小时全自动观测与智能预警。</div></div><div class="sub-cat" data-page-node-id="DknI5XwBfOFZd7FZB8GQWO">🏭 行业动态<span class="sub-count" data-page-node-id="XUvEZBAArLoMHoyfkLDyu1">3条新增</span></div>
 <div class="news-item is-new" data-url="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325572.shtml" data-embed="ok" data-page-node-id="lK0r5Nvl1Qd88DNMTRfCTi"><div class="news-head" data-page-node-id="3DqUSN1HauO3LO2wWt60VK"><span class="dot" data-page-node-id="dxkjpDb9PlDgemy1zI30FB"></span><span class="badge-new" data-page-node-id="mHitwEJCGOXsUVGZKeyXw0">NEW</span><a class="news-title" href="https://www.worldmr.net/Industry/IndustryList/Info/2026-09-04/325572.shtml" target="_blank" data-page-node-id="GvwLOpyfg7zvyslkQB7GFc">从粗放开采到绿色高效</a></div><div class="news-meta" data-page-node-id="t6wb6SHm1B4Vl2ptYCQGsv"><span class="src" data-page-node-id="pgJeCCqXQigOLetjIlMnd2">全球矿产资源网</span> · 09-04</div><div class="news-summary" data-page-node-id="9YgvJWzMubmFQ3BVtxwYwx">我国矿山生产加速由经验驱动转向数据驱动：浙江交投矿业搭建“一个中心、一套模型、四大平台、N个子系统”智能架构，依托三维实景模型模拟推演开采方案，调度效率提升10%；湖州新开元碎石构建矿山三维动态地质孪生模型，创新“四量四率”量化管理，生产管控效率提升四成；嵩县山金运用Vulcan三维软件建资源数据库并实现关键固定设备无人值守，西部矿业锡铁山铅锌矿建成智慧矿山管控平台。</div></div><div class="news-item is-new" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325598.shtml" data-embed="ok" data-page-node-id="AnyUV7MTtVHQ9gU4TWivB9"><div class="news-head" data-page-node-id="32JGsnzi79qsS5J1cuEEyv"><span class="dot" data-page-node-id="WtGrpBddXrV1cBEjl0SHgq"></span><span class="badge-new" data-page-node-id="PJFraUEnXQDXN3vUvDydpu">NEW</span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325598.shtml" target="_blank" data-page-node-id="M95FD13ep5PdJgKlz4cLIE">贵州推动非常规天然气增储上产</a></div><div class="news-meta" data-page-node-id="FrnEN5YL6iuxEIan8DLJHh"><span class="src" data-page-node-id="a7WAuVtnVDkEx4VXkLkhQS">全球矿产资源网</span> · 09-04</div><div class="news-summary" data-page-node-id="b4TTGECVeGpV4eSYOx6RIO">贵州省人民政府办公厅印发《贵州省非常规天然气增储上产三年攻坚行动方案（2026—2028年）》，聚焦页岩气、煤层气（煤矿瓦斯）系统推进勘探、开发、储运、利用全链条建设，部署六大方面15条举措：统筹资源储备扩容与产能释放、优化矿产资源管理整治矿业权低效利用、深化地质勘探夯实深部油气开发基础、推进煤气共采由井下被动抽采转向地面主动预抽、推进全省天然气管道“一张网”、强化科技攻关与成果转化。</div></div><div class="news-item is-new" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325589.shtml" data-embed="ok" data-page-node-id="rEipdP9skL99RwmN1zUNzo"><div class="news-head" data-page-node-id="LyG05eWewciGwyadfK7Whp"><span class="dot" data-page-node-id="a7dYGEOo0ZGzMxt5vYId7d"></span><span class="badge-new" data-page-node-id="znOTHV2JjxQboL9haawu0y">NEW</span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-04/325589.shtml" target="_blank" data-page-node-id="5rW2rTiMbs2xfvUKNx0KAa">紫金矿业：高位进阶后的“韧性突围”</a></div><div class="news-meta" data-page-node-id="AqPT3AXJi3K3AuP9RiP1Q9"><span class="src" data-page-node-id="tc9jEhIJuXcH6qphcDCQlx">全球矿产资源网</span> · 09-04</div><div class="news-summary" data-page-node-id="CQSiSQLgsNyRpeuNnptVuQ">紫金矿业2025年年度股东会披露新一届管理层“三年规划和十年远景目标”：到2028年铜、金矿产品产量进入全球前3位，到2035年全面建成“绿色高技术超一流国际矿业集团”。董事长邹来昌表示增长策略新增“上产”维度，把握金属价格高企机遇加快释放产能、以规模效应摊薄固定成本；一季度主营金属产量高位抬升，利润突破200亿元创历史新高、同比近乎翻番。</div></div><div class="sub-cat" data-page-node-id="QSquQe1OJWt3VBySPMjp96">🌐 国际矿业动态<span class="sub-count" data-page-node-id="stcIbVFo4pP0OzMsWnyuxD">2条新增</span></div>
 <div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260901_10303964.htm" data-embed="ok" data-page-node-id="e4M5FEAuwlu5IIO1R9Gg7w"><div class="news-head" data-page-node-id="FfsX76yTKvRf3SWMJpgPxj"><span class="dot" data-page-node-id="9uc3zDagKIHm99hI21Nq4L"></span><span class="badge-new" data-page-node-id="U9JFvlfQzCajRdNBRgJwUj">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260901_10303964.htm" target="_blank" data-page-node-id="uDtzYCKD0NEmIYFqaExzlm">BMI：未来5年铁矿石产量增速加快</a></div><div class="news-meta" data-page-node-id="pJdny6gVnnbAVxs2tCaqzn"><span class="src" data-page-node-id="NugG60bXdnhsGqPtK64spN">全球矿产资源</span> · 09-01</div><div class="news-summary" data-page-node-id="Ogt3lnYWSPMnPn2MVT7d4m">据矿业周刊（Miningweekly）报道，惠誉方案（Fitch Solutions）旗下基准矿物情报公司（BMI）在最新铁矿石采矿业展望报告中预计，2026—2030年全球铁矿石生产增速将加快，平均增速2.2%，高于前5年的1.2%，到2030年产量有望达30.4亿吨。西芒杜铁矿达产后，几内亚将成为全球铁矿石产量增长的主要推动力；BMI同时预计政治和社会不稳以及资源民族主义将导致部分项目开发推迟。中期看，价格下跌将使铁矿石生产停滞，2032—2034年转为下降。</div></div><div class="news-item is-new" data-url="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-02/325521.shtml" data-embed="ok" data-page-node-id="tpICvIr0GHinQrgEcKkBEV"><div class="news-head" data-page-node-id="xn5gUf8pHnCgGxuYdNHVYZ"><span class="dot" data-page-node-id="6KiiOFyjLT6MPYr37peid2"></span><span class="badge-new" data-page-node-id="eXJdr6MaHwsrvtIfJICtWf">NEW</span><a class="news-title" href="https://www.worldmr.net/MRightTrade/MRightCorpList/Info/2026-09-02/325521.shtml" target="_blank" data-page-node-id="3wkvnfrq8wZCTPRFeeE7Xm">艾佩里昂公司获美军钛供应研发合同</a></div><div class="news-meta" data-page-node-id="IJ7j83QoXppa1dgDxRql2f"><span class="src" data-page-node-id="jIxMDYPrKNsFck5u7GeLtu">全球矿产资源网</span> · 09-02</div><div class="news-summary" data-page-node-id="sjT7PLj6Kym56yHUhobk77">据Mining.com报道，艾佩里昂公司（IperionX）宣布美军已向其授予一份小企业创新研究（SBIR）合同，用于探索国防用低成本钛的国内供应。钛因独特的强度重量比和耐腐蚀性被美国、欧盟和加拿大列为关键矿产。这是该公司第二份SBIR合同，使美国政府机构可下达总额不超过9900万美元的特定项目订单，任务订单1和2总额约1980万美元。</div></div></div>
+<div class="section" id="rightsSection" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">
+<div class="section-title rights" data-page-node-id="rGHZSHy4RJt4h8Y1cR2Y9D"><span class="icon" data-page-node-id="rGIZSHy4RJt4h8Y1cR2Y9E">💼</span> 矿权交易 · 结构化卡片<span class="news-count" id="rightsCount" data-page-node-id="rGJZSHy4RJt4h8Y1cR2Y9F">全部</span></div>
+<div class="rights-note" data-page-node-id="rGJZSHy4RJt4h8Y1cR2Y9G">矿业权市场结构化摘要（行政区 / 矿种 / 方式 / 起拍价 / 保证金 / 面积 / 截标日），按发布日期倒序；近 7 日内截标的卡片会置顶并显示倒计时。</div>
+<div class="rights-toolbar" data-page-node-id="rGKZSHy4RJt4h8Y1cR2Y9H">
+  <div class="rights-filters" data-page-node-id="rGLZSHy4RJt4h8Y1cR2Y9I">
+    <label data-page-node-id="rGMZSHy4RJt4h8Y1cR2Y9J">出让方式
+      <select id="rightsFilterMethod" data-page-node-id="rGNZSHy4RJt4h8Y1cR2Y9K">
+        <option value="" data-page-node-id="rGOZSHy4RJt4h8Y1cR2Y9L">全部</option>
+        <option value="挂牌" data-page-node-id="rGPZSHy4RJt4h8Y1cR2Y9M">挂牌出让</option>
+        <option value="拍卖" data-page-node-id="rGQZSHy4RJt4h8Y1cR2Y9N">拍卖出让</option>
+        <option value="协议" data-page-node-id="rGRZSHy4RJt4h8Y1cR2Y9O">协议出让</option>
+        <option value="转让" data-page-node-id="rGSZSHy4RJt4h8Y1cR2Y9P">转让公示</option>
+        <option value="其他" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9Q">其他</option>
+      </select>
+    </label>
+    <label data-page-node-id="rGUZSHy4RJt4h8Y1cR2Y9R">矿种
+      <select id="rightsFilterMineral" data-page-node-id="rGVZSHy4RJt4h8Y1cR2Y9S">
+        <option value="" data-page-node-id="rGWZSHy4RJt4h8Y1cR2Y9T">全部</option>
+        <option value="金" data-page-node-id="rGXZSHy4RJt4h8Y1cR2Y9U">金</option>
+        <option value="银" data-page-node-id="rGYZSHy4RJt4h8Y1cR2Y9V">银</option>
+        <option value="铜" data-page-node-id="rGZZSHy4RJt4h8Y1cR2Y9W">铜</option>
+        <option value="铅锌" data-page-node-id="rGA2SHy4RJt4h8Y1cR2Y9X">铅锌</option>
+        <option value="镍" data-page-node-id="rGB2SHy4RJt4h8Y1cR2Y9Y">镍</option>
+        <option value="锡" data-page-node-id="rGC2SHy4RJt4h8Y1cR2Y9Z">锡</option>
+        <option value="锂" data-page-node-id="rGD2SHy4RJt4h8Y1cR2Y9a">锂</option>
+        <option value="稀土" data-page-node-id="rGE2SHy4RJt4h8Y1cR2Y9b">稀土</option>
+        <option value="磷" data-page-node-id="rGF2SHy4RJt4h8Y1cR2Y9c">磷</option>
+        <option value="铁" data-page-node-id="rGG2SHy4RJt4h8Y1cR2Y9d">铁</option>
+        <option value="钨钼" data-page-node-id="rGH2SHy4RJt4h8Y1cR2Y9e">钨钼</option>
+        <option value="多金属" data-page-node-id="rGI2SHy4RJt4h8Y1cR2Y9f">多金属</option>
+      </select>
+    </label>
+    <label data-page-node-id="rGJ2SHy4RJt4h8Y1cR2Y9g">时间窗口
+      <select id="rightsFilterWindow" data-page-node-id="rGK2SHy4RJt4h8Y1cR2Y9h">
+        <option value="7" selected data-page-node-id="rGL2SHy4RJt4h8Y1cR2Y9i">近 7 日</option>
+        <option value="14" data-page-node-id="rGM2SHy4RJt4h8Y1cR2Y9j">近 14 日</option>
+        <option value="30" data-page-node-id="rGN2SHy4RJt4h8Y1cR2Y9k">近 30 日</option>
+        <option value="all" data-page-node-id="rGO2SHy4RJt4h8Y1cR2Y9l">全部</option>
+      </select>
+    </label>
+  </div>
+  <div class="rights-views" data-page-node-id="rGP2SHy4RJt4h8Y1cR2Y9m">
+    <button class="rights-view-btn active" data-view="cards" type="button" data-page-node-id="rGQ2SHy4RJt4h8Y1cR2Y9n">▦ 卡片</button>
+    <button class="rights-view-btn" data-view="table" type="button" data-page-node-id="rGR2SHy4RJt4h8Y1cR2Y9o">▤ 表格</button>
+  </div>
+</div>
+<div class="rights-cards" id="rightsCards" data-page-node-id="rGS2SHy4RJt4h8Y1cR2Y9p"></div>
+<div class="rights-table-wrap" id="rightsTableWrap" hidden data-page-node-id="rGT2SHy4RJt4h8Y1cR2Y9q">
+<table class="rights-table" id="rightsTable" data-page-node-id="rGU2SHy4RJt4h8Y1cR2Y9r">
+<thead data-page-node-id="rGV2SHy4RJt4h8Y1cR2Y9s"><tr data-page-node-id="rGW2SHy4RJt4h8Y1cR2Y9t">
+  <th data-sort="mineral" data-page-node-id="rGX2SHy4RJt4h8Y1cR2Y9u">矿种</th>
+  <th data-page-node-id="rGY2SHy4RJt4h8Y1cR2Y9v">项目 / 行政区</th>
+  <th data-page-node-id="rGZ2SHy4RJt4h8Y1cR2Y9w">方式</th>
+  <th data-sort="price" data-page-node-id="rH02SHy4RJt4h8Y1cR2Y9x">起拍价</th>
+  <th data-page-node-id="rH12SHy4RJt4h8Y1cR2Y9y">保证金</th>
+  <th data-page-node-id="rH22SHy4RJt4h8Y1cR2Y9z">面积 km²</th>
+  <th data-sort="deadline" data-page-node-id="rH32SHy4RJt4h8Y1cR2Y9A">截标日</th>
+  <th data-page-node-id="rH42SHy4RJt4h8Y1cR2Y9B">原文</th>
+</tr></thead>
+<tbody id="rightsTableBody" data-page-node-id="rH52SHy4RJt4h8Y1cR2Y9C"></tbody>
+</table>
+</div>
+<div class="rights-empty" id="rightsEmpty" hidden data-page-node-id="rH62SHy4RJt4h8Y1cR2Y9D">当前筛选条件下无矿权交易条目。</div>
+</div>
+<!-- ==================== 往期内容 ==================== -->
 <div class="section" id="archiveSection" data-page-node-id="EwlNFKlaj3C5ApPnTBjauT">
-<div class="section-title" data-page-node-id="iM2XDs3VxAjFf0n7dedEBt"><span class="icon" data-page-node-id="rqKrGiy6HEPniLPOJLMj6m">📰</span> 往期内容（滚动保留最近7天）<span class="news-count" id="archiveCount" data-page-node-id="N9vcYtc177LvBvCQpIMbIF">39条</span></div>
+<div class="section-title" data-page-node-id="iM2XDs3VxAjFf0n7dedEBt"><span class="icon" data-page-node-id="rqKrGiy6HEPniLPOJLMj6m">📰</span> 往期内容（滚动保留最近7天）<span class="news-count" id="archiveCount" data-page-node-id="N9vcYtc177LvBvCQpIMbIF">30条</span></div>
 <div class="fold-toggle" id="foldToggle" style="display:none" onclick="toggleOldFold()" data-page-node-id="u83gg8lxDn7szR0kmDG3lB">▸ 展开更早内容</div>
-<div class="sub-cat" data-page-node-id="gYR6CZZ0oDviI7Gadawf6y">💼 矿权交易<span class="sub-count" data-page-node-id="6EAa8qJccLeXLvhm7K5lDN">9条</span></div>
-<div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306828.htm" data-embed="ok" data-page-node-id="n5IToG3hPkt00MRH5XF5zC"><div class="news-head" data-page-node-id="DFw4PjoAmjztb0Zy4057EC"><span class="dot" data-page-node-id="xlUOBs8zkcMpCKSE7oslEE"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306828.htm" target="_blank" data-page-node-id="C9PExKSmhbwaw4kfhkni5Z">四川省峨边县桥儿沟磷铅锌矿勘查探矿权挂牌出让公告</a></div><div class="news-meta" data-page-node-id="bezxciFVt5A1R7JiYDLCG1"><span class="src" data-page-node-id="cypFuqBzBRiqx0I1EZXGom">矿业权市场</span> · 09-04</div><div class="news-summary" data-page-node-id="fmLkx8ZYBNG3XJyTquRjLT">四川省自然资源厅委托省政务服务和公共资源交易服务中心网上挂牌出让峨边县桥儿沟磷铅锌矿勘查探矿权，勘查矿种磷矿，区块面积29.28平方千米，起始价352万元，出让收益率磷矿2.1%、铅锌2.3%，拟出让年限5年，挂牌期2026年10月27日至11月10日，竞买保证金2000万元。</div></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306829.htm" data-embed="ok" data-page-node-id="1Fea5OeHRedkbgW6GDTvMC"><div class="news-head" data-page-node-id="dMbsIiSmiYrLldDtLD4rwP"><span class="dot" data-page-node-id="SLpgufCVFnQBtkVMXZICC7"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306829.htm" target="_blank" data-page-node-id="GBeej7szeQLLlGgU0O6FVg">河北省宽城满族自治县蒋杖子村金矿勘查探矿权拍卖出让公告</a></div><div class="news-meta" data-page-node-id="p5clDeCTHIO4qUcwb5fWFm"><span class="src" data-page-node-id="xgrXWnsvL9hLbiBzHtmw6Y">矿业权市场</span> · 09-04</div><div class="news-summary" data-page-node-id="SFHqbPsVqVuVDSirI3AaOA">承德市自然资源和规划局委托承德银源拍卖有限公司拍卖出让宽城满族自治县蒋杖子村金矿勘查探矿权（承矿拍〔2026〕02号），区块面积3.12平方千米，起始价9.36万元，出让收益率2.3%，拟出让年限5年，竞买保证金100万元，拍卖定于2026年10月27日在承德市公共资源交易中心举行。</div></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306831.htm" data-embed="ok" data-page-node-id="4bjSknecfjDBjO3EEoYORf"><div class="news-head" data-page-node-id="Pq4m8oOxSIGzapyGaX5VGf"><span class="dot" data-page-node-id="oTVhQFri0n23B8FxTcFpdC"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260905_10306831.htm" target="_blank" data-page-node-id="U7FZBF5ryk63fvbUtzGrAN">四川省会理市关河铜镍矿勘查探矿权挂牌出让公告</a></div><div class="news-meta" data-page-node-id="YQMjQGtHgLj14PHh216FvR"><span class="src" data-page-node-id="Ej3kUH2wNMXjeWINbdfjbz">矿业权市场</span> · 09-04</div><div class="news-summary" data-page-node-id="XTuvDvI0zZYao5SmOW7dGy">四川省自然资源厅委托省政务服务和资源交易服务中心挂牌出让会理市关河铜镍矿勘查探矿权（川公共矿挂〔2026〕013号），勘查矿种铜矿，区块面积10.46平方千米，起始价84万元，出让收益率1.2%，拟出让年限5年，挂牌期2026年10月27日至11月10日，保证金1500万元；出让范围与国家级水土流失重点预防区重叠6.80平方千米。</div></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" data-embed="ok" data-page-node-id="D6XIJJAhEBjEHwTSNNtR6T"><div class="news-head" data-page-node-id="jV2PZEJ1YNvpZW4z1SyALC"><span class="dot" data-page-node-id="EZJEWU1X1NOqgKhvJCGMV0"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305955.htm" target="_blank" data-page-node-id="CdDivk4xLudSYSxkmY89GN">新疆皮山县库尔良铜矿勘查探矿权挂牌出让公告</a></div><div class="news-meta" data-page-node-id="Zhd9b7kNSEyyFyxgxQVrjP"><span class="src" data-page-node-id="RjHpN84pxM1ARlovcHAuNy">矿业权市场</span> · 09-03</div><div class="news-summary" data-page-node-id="OoDH0uG9kJrzGc8NKsqm7d">新疆维吾尔自治区自然资源厅委托自治区公共资源交易中心挂牌出让皮山县库尔良铜矿勘查探矿权，区块面积39.42平方千米，起始价118.27万元，出让收益率1.2%，拟出让年限5年，挂牌期2026年10月21日至11月4日。</div></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" data-embed="ok" data-page-node-id="8mAoGXUzNFIbczT50WoKV4"><div class="news-head" data-page-node-id="bAuAluoFCuCbDHtGerEHCH"><span class="dot" data-page-node-id="czUkgGLElKgvYiX3rcGwm2"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260904_10305949.htm" target="_blank" data-page-node-id="y7FBtSZH6pbJAOFUkfRDH4">内蒙古巴林右旗巴彦琥硕银矿勘查探矿权挂牌出让公告</a></div><div class="news-meta" data-page-node-id="stDzyldYp51VNzZVwsw5Lx"><span class="src" data-page-node-id="WWN2wETdHdKOpoobJByH6s">矿业权市场</span> · 09-03</div><div class="news-summary" data-page-node-id="SEYgBDBOjWEtBsSqLXGKpF">赤峰市自然资源局委托赤峰市公共资源交易中心网上挂牌出让巴彦琥硕银矿勘查探矿权（赤公矿交告〔2026〕001号），区块面积6.30平方千米，起始价38万元，出让收益率2.3%，拟出让年限5年，挂牌期2026年10月23日至11月6日。</div></div><div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" data-embed="ok" data-page-node-id="9S3QQYf7gUj49EUHRB1NMG"><div class="news-head" data-page-node-id="Q5EEsBHLmskRSGxWtiNPWm"><span class="dot" data-page-node-id="ZPL2GuH15LZSS1Awg2ZIcg"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260903_10305021.htm" target="_blank" data-page-node-id="Rq6qMa0GNY8NSdWFD9sWrE">湖北省通山县泉塘王矿区金矿勘查网上挂牌出让公告</a></div><div class="news-meta" data-page-node-id="NJQFkxNYRuutCVAfqWFCa5"><span class="src" data-page-node-id="LYSOFNdYCg9XUt1hKph3e9">矿业权市场</span> · 09-03</div><div class="news-summary" data-page-node-id="dbTuwRVFfqQT3y22YkaQKV">湖北省自然资源厅打包出让通山县泉塘王矿区金矿南段和北段勘查探矿权，矿种为金矿，南段3.9平方千米、北段5.9平方千米，起始价59.04万元，出让收益率2.3%。</div></div>
-<div class="news-item" data-url="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260903_10305004.htm" data-embed="ok" data-page-node-id="V0YlQAPpqIw68fVco8YFEA"><div class="news-head" data-page-node-id="h3xJx6OGd8nYjICpzuAUBU"><span class="dot" data-page-node-id="q5qNKYeR2dvtsTqwLrHJVE"></span><a class="news-title" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260903_10305004.htm" target="_blank" data-page-node-id="DVa3YkCWPGPzMHWRTRc5ME">云南省广南县董平金矿勘探探矿权转让公示</a></div><div class="news-meta" data-page-node-id="3IpDeMBqP5aTUseDsCjERI"><span class="src" data-page-node-id="fsC2rex99WIy4oqStshtoL">矿业权市场</span> · 09-02</div><div class="news-summary" data-page-node-id="aXJNGkRCxLRBZuBha8QsAK">文山州自然资源局公示广南县董平金矿勘探探矿权转让，转让人为云南金龙矿业，受让人为广南广钰矿业，勘查面积9.44平方千米，转让方式为出售。</div></div>
-<div class="news-item" data-url="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260901_10302816.htm" data-embed="ok" data-page-node-id="Ds6lwr3aDdU5z3uGJkG3Ga"><div class="news-head" data-page-node-id="mLVWBQVfE4GObJtUmHbGF1"><span class="dot" data-page-node-id="HoUKnUOZr7hQJO64wIDe7d"></span><a class="news-title" href="https://ky.mnr.gov.cn/kyqcrgg/tkq/202609/t20260901_10302816.htm" target="_blank" data-page-node-id="ZXnEEvcNfcJETYENTa3YFi">湖北省大冶市铜山口外围铜多金属矿勘查网上挂牌出让公告</a></div><div class="news-meta" data-page-node-id="cHy8lOJCDhYDaExhPpmgae"><span class="src" data-page-node-id="gObmWXsMCawHVz7EP7halW">矿业权市场</span> · 08-31</div><div class="news-summary" data-page-node-id="teKAKCJ6GHCii4Y7eTTwsZ">湖北大冶铜山口外围铜多金属矿勘查探矿权网上挂牌出让，属长江中下游铜铁金成矿带重点接续区。</div></div>
-<div class="news-item" data-url="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260901_10302808.htm" data-embed="ok" data-page-node-id="7Wbm79qt6ZqAJdJrJ7a6Ak"><div class="news-head" data-page-node-id="ZpfXkN1DcZnxeebtqJ93jF"><span class="dot" data-page-node-id="mZylrl2m4wB2SCD601pgXa"></span><a class="news-title" href="https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260901_10302808.htm" target="_blank" data-page-node-id="rfFtdHI6ufD0214AgbK3m7">内蒙古翁牛特旗红石砬子铜多金属勘探探矿权转让公示</a></div><div class="news-meta" data-page-node-id="F6osDHZLO14xIOkQCzRSmt"><span class="src" data-page-node-id="b1qUmIg3tpdRftiuCODoGB">矿业权市场</span> · 08-31</div><div class="news-summary" data-page-node-id="bEBWCY0PJwJoBFdUhFjj4k">内蒙古翁牛特旗红石砬子铜多金属矿勘探探矿权转让公示，涉及大兴安岭中南段有色金属成矿带。</div></div>
+
+
+
+
 <div class="sub-cat" data-page-node-id="L3w09uX5EN0r95gXwCOFsc">🔍 找矿成果与勘查技术<span class="sub-count" data-page-node-id="DHXgKEMHYyN7ixGtw13o4q">10条</span></div>
 <div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867977.html" data-embed="ok" data-page-node-id="HbsZvRSfJ0KxY1UoUwGoY7"><div class="news-head" data-page-node-id="FybrfLVq7hlF0GvL2ivwM9"><span class="dot" data-page-node-id="fsjDVouK5S7zeVgCPTidof"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867977.html" target="_blank" data-page-node-id="fCpv4KwTrNFVX4UeYK7haf">跑出深部找矿“中国速度”——安徽茶亭超大型铜多金属矿勘探与勘查增储纪实</a></div><div class="news-meta" data-page-node-id="IMrqU1NnkQkuux4qwZyJl3"><span class="src" data-page-node-id="LYT7sDFOxpuDNTTT0wdIqk">中国地质调查局</span> · 09-04</div><div class="news-summary" data-page-node-id="0Fr0CotDSwWDni3QklzexF">安徽宣州茶亭铜多金属矿为伴生银、硫的斑岩型铜金矿床，核心勘查区上长村矿段面积1.24平方千米。项目针对火山岩厚覆盖、第四系厚沉积及膏盐层难题，打破“伸展火山盆地难成大型斑岩铜金矿”理论束缚，由唐菊兴院士团队领衔，采用央地企协同、产学研用融合模式，设计钻探总量96240米、最大孔深2000米，力争一年完成常规需2至3年的工作量。</div></div><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/kykj/202609/t20260904_10306813.htm" data-embed="ok" data-page-node-id="z6pZaZuO5zHbARbKlj6Ree"><div class="news-head" data-page-node-id="h0c1UcLTWTqcDufBDhepnx"><span class="dot" data-page-node-id="yiTqe4OSGqqrPAbL3uuKab"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/kykj/202609/t20260904_10306813.htm" target="_blank" data-page-node-id="Ro6FqVmuefSydk9LLCYmnw">埃塞俄比亚SEDEX型矿床潜力分析</a></div><div class="news-meta" data-page-node-id="V0rR4JciDSzla39OdZ8c29"><span class="src" data-page-node-id="s4D2zhlMDOFDdjvpvZm1oR">全球矿产资源</span> · 09-04</div><div class="news-summary" data-page-node-id="P2WWoN8nNkkEw4xWS7vJNw">据Mining.com报道，分析认为埃塞俄比亚具备形成喷流沉积（SEDEX）矿床的条件：阿法尔洼地蒸发岩环境可生成高密度盐卤水作为搬运流体；阿拉伯—努比亚地盾火山沉积岩与东非大裂谷提供丰富金属源；元古代基底之上沉积的碳酸盐与碳质页岩构成还原障。恩卡法拉已有典型喷流沉积铁锰钡矿床记录，显示该区仍具SEDEX找矿潜力。</div></div><div class="news-item" data-url="https://www.worldmr.net/GeologyNews/NewsList/Info/2026-09-04/325603.shtml" data-embed="ok" data-page-node-id="igVKHpifHmh3paMv91DQlB"><div class="news-head" data-page-node-id="ThSIVmWYOVM0sVnznM8G6B"><span class="dot" data-page-node-id="r0eQS6tczJFquJb0Qif6Kz"></span><a class="news-title" href="https://www.worldmr.net/GeologyNews/NewsList/Info/2026-09-04/325603.shtml" target="_blank" data-page-node-id="SMM7USYFqa3QXEeGGJdMwB">烟台金矿勘查获新突破</a></div><div class="news-meta" data-page-node-id="NRlXgKKpr6LLO2TbENPWGx"><span class="src" data-page-node-id="YZy02KQ4OBCnSArboKV5HE">全球矿产资源网</span> · 09-04</div><div class="news-summary" data-page-node-id="uDyahgrdFNKfbrTunghDBy">据中国矿业报报道，中国地质调查局烟台海岸带地质调查中心承担的重要金多金属矿集区资源调查评价项目实现找矿新突破。截至目前，项目已基本查明3个完工标准图幅的区域成矿地质条件、矿产分布规律与资源禀赋特征，划定多处优质成矿有利区，为后续勘查部署与资源扩容提供了重要地质依据。</div></div><div class="news-item" data-url="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" data-embed="ok" data-page-node-id="UlEuzn6r1hBvqSKlcxUshz"><div class="news-head" data-page-node-id="TFhOg6l9o9HaF0asv5j7E7"><span class="dot" data-page-node-id="saEN5CSCtgvRIEfJKjt94y"></span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm" target="_blank" data-page-node-id="CZRbTt9oY4Zcp4ktic0K9E">澳大利亚延达尔金矿勘探取得新发现</a></div><div class="news-meta" data-page-node-id="DpBuyOyuIWGU5BnjUapag5"><span class="src" data-page-node-id="dVMFcjLQZytdvGvW1bpUI4">全球矿产资源</span> · 09-03</div><div class="news-summary" data-page-node-id="YeuGXxhgAYl1bmIv0trldT">盖特维矿业（Gateway Mining）宣布西澳延达尔（Yandal）金矿项目考扎（Cowza）探区取得重大高品位原生金矿发现，钻孔在104米深处见矿41米、金品位2克/吨；连同赛利亚南、沃德靶区，延达尔构造带延伸长度已超13公里，后续将开展金刚石钻探。</div></div><div class="news-item" data-url="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" data-embed="block" data-page-node-id="6wHUC33RUwC5M4IBdwuqUX"><div class="news-head" data-page-node-id="BNtam46WTB0HtDrOO8o4IW"><span class="dot" data-page-node-id="snkQMug1tRrGRgaC9buCiR"></span><a class="news-title" href="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" target="_blank" data-page-node-id="E7xKqdpQWzatK0Kp78pfgX">新一轮找矿突破战略行动再获标志性成果 安徽茶亭铜金矿勘查取得重大突破</a></div><div class="news-meta" data-page-node-id="lcBmaL6Gnp7uloRJBJ6T64"><span class="src" data-page-node-id="vPwEp3EVDAy2yUbCJ3Zm3O">自然资源部</span> · 09-02</div><div class="news-summary" data-page-node-id="LDC7YnSItAllmYIxcqHu9Z">自然资源部发布新一轮找矿突破战略行动最新标志性成果，安徽茶亭铜金矿勘查取得重大突破，为长江中下游成矿带找矿提供新的资源接续。</div></div>
 <div class="news-item" data-url="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260902_867767.html" data-embed="block" data-page-node-id="RJ7Z7x6bCcrabdsnxZ3jks"><div class="news-head" data-page-node-id="DAsJiDbc1XCe29kHJcRhIY"><span class="dot" data-page-node-id="9wsNKIHD3kd0Foc9oDw2XN"></span><a class="news-title" href="https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260902_867767.html" target="_blank" data-page-node-id="erAt0BWfFyUb6oduGcgBpq">绿色矿业｜六大场景解锁我国绿色勘查新路径</a></div><div class="news-meta" data-page-node-id="QF2VI6Ld7HAdHW6ADurfx2"><span class="src" data-page-node-id="KSupmMO9F9malCJuDphCkF">中国地质调查局</span> · 09-02</div><div class="news-summary" data-page-node-id="ghZVnNK1GynMD1Pi91UAMA">系统梳理我国绿色勘查在六大典型场景下的技术路径与装备应用，推动勘查全过程减扰动、低排放、可恢复。</div></div>
@@ -1101,6 +1235,182 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 <script src="news-data.js"></script>
 <script src="lme-data.js"></script>
 <script src="price-history.js"></script>
+<script>
+/* ===================== 矿权交易独立专区渲染（9-06 新增）===================== */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function parseRights(it){
+    var m=it.m||"", t=it.t||"", g=it.g||[];
+    var full=t+" "+m;
+    var method="其他";
+    if(/挂牌/.test(full)) method="挂牌";
+    else if(/拍卖/.test(full)) method="拍卖";
+    else if(/协议/.test(full)) method="协议";
+    else if(/转让/.test(full)) method="转让";
+    var mineral="";
+    var mm=m.match(/勘查矿种([一-龥]{1,4})矿/);
+    if(mm) mineral=mm[1];
+    else {
+      var order=["金","银","铜","铅","锌","镍","锡","锂","稀土","磷","铁","钨","钼"];
+      mineral=g.filter(function(x){return order.indexOf(x)>=0;})[0]||"";
+      if(!mineral && /铅锌/.test(t)) mineral="铅锌";
+      if(!mineral && /钨钼/.test(t)) mineral="钨钼";
+      if(!mineral && /多金属/.test(t)) mineral="多金属";
+      if(!mineral && g.some(function(x){return /金属/.test(x);})) mineral="多金属";
+    }
+    var pm=m.match(/起始价([\d.]+)万元/); var price=pm?parseFloat(pm[1]):null;
+    var dm=m.match(/保证金([\d.]+)万元/); var deposit=dm?parseFloat(dm[1]):null;
+    var am=m.match(/面积([\d.]+)平方千米/); var area=am?parseFloat(am[1]):null;
+    var deadline=null;
+    var dl=m.match(/(?:挂牌期|竞价期|报价期)[^至]*至\s*(\d{4})年(\d{1,2})月(\d{1,2})日/);
+    if(dl) deadline=dl[1]+"-"+("0"+dl[2]).slice(-2)+"-"+("0"+dl[3]).slice(-2);
+    else { var dl2=m.match(/(?:截[止至标]|报名截止|交纳截止)[^0-9]*(\d{4})年(\d{1,2})月(\d{1,2})日/); if(dl2) deadline=dl2[1]+"-"+("0"+dl2[2]).slice(-2)+"-"+("0"+dl2[3]).slice(-2); }
+    var rg=t.match(/([一-龥]{2,}(?:省|市|县|区|旗|自治州|盟|新区))/);
+    var region=rg?rg[1]:"";
+    return {method:method,mineral:mineral,price:price,deposit:deposit,area:area,deadline:deadline,region:region,it:it};
+  }
+  function refDate(){
+    try{ if(window.NEWS_DATA&&window.NEWS_DATA.updated){ var d=new Date(window.NEWS_DATA.updated.replace(/-/g,"/")); if(!isNaN(d)) return d; } }catch(e){}
+    return new Date();
+  }
+  function daysBetween(a,b){ return Math.round((a-b)/86400000); }
+  function fmtMoney(v){ return v==null?"—":v.toLocaleString("zh-CN")+" 万元"; }
+  function fmtArea(v){ return v==null?"—":v+" km²"; }
+  function fmtDeadline(d){ return d?d.slice(5):"—"; }
+  var rightsSort={key:null,dir:"asc"};
+  function getRightsData(){
+    if(!window.NEWS_DATA||!window.NEWS_DATA.news) return [];
+    // 矿权交易结构化专区只展示「矿业权市场」官方出让/转让公告（ky.mnr.gov.cn），
+    // 避免把其它来源被归类为矿权交易的普通新闻混入卡片。
+    return window.NEWS_DATA.news.filter(function(it){
+      return it.s==="矿业权市场" || /ky\.mnr\.gov\.cn/.test(it.u||"");
+    }).map(parseRights);
+  }
+  function renderRightsSection(){
+    var data=getRightsData();
+    var cardsEl=document.getElementById("rightsCards");
+    var tableWrap=document.getElementById("rightsTableWrap");
+    var tableBody=document.getElementById("rightsTableBody");
+    var emptyEl=document.getElementById("rightsEmpty");
+    var countEl=document.getElementById("rightsCount");
+    var tocEl=document.getElementById("tocRightsCount");
+    if(!cardsEl) return;
+    if(!data.length){
+      cardsEl.innerHTML=""; if(tableBody) tableBody.innerHTML="";
+      if(emptyEl) emptyEl.hidden=false;
+      if(countEl) countEl.textContent="0 条";
+      if(tocEl) tocEl.textContent="0";
+      return;
+    }
+    var ref=refDate();
+    var fm=(document.getElementById("rightsFilterMethod")||{}).value||"";
+    var fmin=(document.getElementById("rightsFilterMineral")||{}).value||"";
+    var fwin=(document.getElementById("rightsFilterWindow")||{}).value||"all";
+    var list=data.filter(function(r){
+      if(fm && r.method!==fm) return false;
+      if(fmin){
+        if(fmin==="铅锌"){ if(r.it.g.indexOf("铅")<0 && r.it.g.indexOf("锌")<0) return false; }
+        else if(fmin==="钨钼"){ if(r.it.g.indexOf("钨")<0 && r.it.g.indexOf("钼")<0) return false; }
+        else if(fmin==="多金属"){ if(r.mineral!=="多金属") return false; }
+        else { if(r.mineral!==fmin && r.it.g.indexOf(fmin)<0) return false; }
+      }
+      if(fwin!=="all"){
+        var w=parseInt(fwin,10);
+        var dd=daysBetween(ref, new Date(r.it.d.replace(/-/g,"/")));
+        if(dd<0 || dd>w) return false;
+      }
+      return true;
+    });
+    function score(r){
+      if(r.deadline){
+        var d=daysBetween(new Date(r.deadline.replace(/-/g,"/")), ref);
+        if(d<0) return 3;
+        if(d<=7) return 0;
+        return 1;
+      }
+      return 2;
+    }
+    list.sort(function(a,b){
+      if(rightsSort.key){
+        var va,vb;
+        if(rightsSort.key==="mineral"){ va=a.mineral||""; vb=b.mineral||""; return rightsSort.dir==="asc"?va.localeCompare(vb,"zh"):vb.localeCompare(va,"zh"); }
+        if(rightsSort.key==="price"){ va=a.price==null?-1:a.price; vb=b.price==null?-1:b.price; }
+        else { va=a.deadline||"9999-12-31"; vb=b.deadline||"9999-12-31"; }
+        return rightsSort.dir==="asc"?(va<vb?-1:va>vb?1:0):(va>vb?-1:va<vb?1:0);
+      }
+      var sa=score(a), sb=score(b);
+      if(sa!==sb) return sa-sb;
+      if(a.deadline && b.deadline) return a.deadline<b.deadline?-1:1;
+      return a.it.d>b.it.d?-1:(a.it.d<b.it.d?1:0);
+    });
+    cardsEl.innerHTML=list.map(function(r){
+      var badge="";
+      if(r.deadline){
+        var d=daysBetween(new Date(r.deadline.replace(/-/g,"/")), ref);
+        var cls="rc-normal", txt="截标 "+fmtDeadline(r.deadline);
+        if(d<0){ cls="rc-expired"; txt="已截标 "+fmtDeadline(r.deadline); }
+        else if(d<=7){ cls="rc-urgent"; txt="截标 "+fmtDeadline(r.deadline)+" · 剩"+d+"天"; }
+        else if(d<=14){ cls="rc-soon"; txt="截标 "+fmtDeadline(r.deadline)+" · 剩"+d+"天"; }
+        badge='<span class="rc-deadline '+cls+'">'+txt+'</span>';
+      }
+      var mineralHtml=r.mineral?'<span class="rc-mineral">'+r.mineral+'</span>':'';
+      return '<div class="rights-card" data-method="'+r.method+'" data-mineral="'+r.mineral+'">'
+        +'<div class="rc-top"><span class="rc-method rc-m-'+r.method+'">'+r.method+'</span>'+mineralHtml+badge+'</div>'
+        +'<div class="rc-title"><a href="'+r.it.u+'" target="_blank" rel="noopener">'+esc(r.it.t)+'</a></div>'
+        +(r.region?'<div class="rc-region">📍 '+esc(r.region)+'</div>':'')
+        +'<div class="rc-grid">'
+        +'<div><span>起始价</span><b>'+fmtMoney(r.price)+'</b></div>'
+        +'<div><span>保证金</span><b>'+fmtMoney(r.deposit)+'</b></div>'
+        +'<div><span>面积</span><b>'+fmtArea(r.area)+'</b></div>'
+        +'<div><span>截标日</span><b>'+fmtDeadline(r.deadline)+'</b></div>'
+        +'</div>'
+        +'<div class="rc-src">'+esc(r.it.s)+' · '+r.it.d.slice(5)+'</div>'
+        +'</div>';
+    }).join("");
+    if(tableBody){
+      tableBody.innerHTML=list.map(function(r){
+        return '<tr>'
+          +'<td class="rp-mineral">'+(r.mineral||"—")+'</td>'
+          +'<td><a href="'+r.it.u+'" target="_blank" rel="noopener" title="'+esc(r.it.t)+'">'+esc(r.it.t)+(r.region?'<br><span style="color:#94a3b8;font-size:11px">'+esc(r.region)+'</span>':'')+'</a></td>'
+          +'<td class="rp-method">'+r.method+'</td>'
+          +'<td>'+(r.price==null?"—":r.price.toLocaleString("zh-CN"))+'</td>'
+          +'<td>'+(r.deposit==null?"—":r.deposit.toLocaleString("zh-CN"))+'</td>'
+          +'<td>'+(r.area==null?"—":r.area)+'</td>'
+          +'<td>'+fmtDeadline(r.deadline)+'</td>'
+          +'<td><a href="'+r.it.u+'" target="_blank" rel="noopener">原文 ↗</a></td>'
+          +'</tr>';
+      }).join("");
+    }
+    var tableView=document.querySelector('.rights-view-btn[data-view="table"]');
+    var isTable=tableView && tableView.classList.contains("active");
+    cardsEl.style.display=isTable?"none":"";
+    if(tableWrap) tableWrap.hidden=!isTable;
+    if(emptyEl) emptyEl.hidden=list.length>0;
+    if(countEl) countEl.textContent=data.length+" 条"+(list.length!==data.length?"（筛后 "+list.length+"）":"");
+    if(tocEl) tocEl.textContent=String(data.length);
+  }
+  function bindRights(){
+    ["rightsFilterMethod","rightsFilterMineral","rightsFilterWindow"].forEach(function(id){
+      var el=document.getElementById(id); if(el) el.addEventListener("change", renderRightsSection);
+    });
+    document.querySelectorAll(".rights-view-btn").forEach(function(b){
+      b.addEventListener("click", function(){
+        document.querySelectorAll(".rights-view-btn").forEach(function(x){ x.classList.remove("active"); });
+        b.classList.add("active"); renderRightsSection();
+      });
+    });
+    document.querySelectorAll("#rightsTable th[data-sort]").forEach(function(th){
+      th.addEventListener("click", function(){
+        var k=th.getAttribute("data-sort");
+        rightsSort.dir=(rightsSort.key===k && rightsSort.dir==="asc")?"desc":"asc";
+        rightsSort.key=k; renderRightsSection();
+      });
+    });
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", function(){ renderRightsSection(); bindRights(); });
+  else { renderRightsSection(); bindRights(); }
+})();
+</script>
 <script>
 
 
@@ -1443,7 +1753,7 @@ function applyFilter(){
   });
   // 隐藏空区块（installGuideSection 是静态说明区，跳过新闻数判断常显）
   document.querySelectorAll('.section').forEach(sec=>{
-    if(sec.id==='installGuideSection'||sec.id==='archivedFavSection')return;
+    if(sec.id==='installGuideSection'||sec.id==='archivedFavSection'||sec.id==='rightsSection')return;
     const vis=sec.querySelectorAll('.news-item:not(.hidden)').length;
     sec.style.display=vis?'':'none';
   });
@@ -2204,7 +2514,7 @@ function scrollToSection(id,el){
 // ===== 滚动监听：当前区块高亮 =====
 let lastActiveId=null;
 function updateActiveSection(){
-  const sections=['hotListSection','aiSection','specialSection','todaySection','archiveSection','installGuideSection'];
+  const sections=['hotListSection','aiSection','specialSection','todaySection','rightsSection','archiveSection','installGuideSection'];
   const offset=120;
   let current=sections[0];
   for(const id of sections){

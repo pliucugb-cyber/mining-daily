@@ -4,6 +4,41 @@ Works by in-place modification of the old HTML file.
 """
 import re
 
+
+def strip_rights_html(h):
+    """Remove 矿权交易 news-items (矿业权市场 / ky.mnr.gov.cn) from today/archive so they
+    only appear in the dedicated rightsSection (rendered from NEWS_DATA at the front-end)."""
+    open_re = re.compile(r'<div class="news-item[^"]*"[^>]*data-url="https://ky\.mnr\.gov\.cn[^"]*"[^>]*>')
+    while True:
+        m = open_re.search(h)
+        if not m:
+            break
+        depth = 1  # the matched news-item opening itself
+        j = m.end(); n = len(h); ok = False
+        while j < n:
+            if h.startswith('<div', j):
+                depth += 1
+                k = h.find('>', j)
+                if k == -1:
+                    break
+                j = k + 1
+            elif h.startswith('</div>', j):
+                depth -= 1
+                j += 6
+                if depth == 0:
+                    ok = True
+                    break
+            else:
+                j += 1
+        if ok:
+            h = h[:m.start()] + h[j:]
+        else:
+            break
+    # remove leftover 矿权交易 sub-category headers (now empty)
+    h = re.sub(r'<div class="sub-cat"[^>]*>💼\s*矿权交易[\s\S]*?</div>\s*', '', h)
+    return h
+
+
 with open('index.html', 'r', encoding='utf-8') as f:
     html = f.read()
 
@@ -227,6 +262,7 @@ else:
     print("Step 8: spList-security pattern not found (may already be empty)")
 
 # ========== Write output ==========
+html = strip_rights_html(html)
 with open('index.html', 'w', encoding='utf-8') as f:
     f.write(html)
 
