@@ -39,6 +39,29 @@ def strip_rights_html(h):
     return h
 
 
+def find_matching_close(h, start):
+    """Find the matching </div> for a <div> starting at `start`."""
+    gt = h.find('>', start)
+    if gt == -1:
+        return -1
+    depth = 1
+    j = gt + 1
+    n = len(h)
+    while j < n and depth > 0:
+        if h.startswith('<div', j):
+            depth += 1
+            k = h.find('>', j)
+            j = k + 1 if k != -1 else n
+        elif h.startswith('</div>', j):
+            depth -= 1
+            j += 6
+            if depth == 0:
+                return j
+        else:
+            j += 1
+    return -1
+
+
 with open('index.html', 'r', encoding='utf-8') as f:
     html = f.read()
 
@@ -124,9 +147,17 @@ if pos_today < 0 or pos_archive < 0 or pos_install < 0:
     print("ERROR: Could not find all markers!")
     exit(1)
 
+# Find the real end of archiveSection (rightsSection now lives between archive and install)
+archive_div_start = html.find('<div class="section" id="archiveSection"', pos_archive)
+archive_div_end = find_matching_close(html, archive_div_start)
+if archive_div_end < 0:
+    print("ERROR: Could not find closing tag for archiveSection!")
+    exit(1)
+
 # Extract old sections
 old_today_section = html[pos_today:pos_archive]  # from today marker to archive marker
-old_archive_section = html[pos_archive:pos_install]  # from archive marker to install marker
+old_archive_section = html[pos_archive:archive_div_end]  # archive comment through closing </div>
+rights_block = html[archive_div_end:pos_install]  # preserve rightsSection (and any spacer) as-is
 
 # --- Process old today items -> become archive items ---
 # Remove is-new class and NEW badges from old today items
@@ -241,8 +272,8 @@ new_archive = (
     '</div>\n'
 )
 
-# Replace old today+archive with new today+archive
-html = html[:pos_today] + new_today + '\n' + new_archive + html[pos_install:]
+# Replace old today+archive while preserving rightsSection (now after archiveSection)
+html = html[:pos_today] + new_today + '\n' + new_archive + rights_block + html[pos_install:]
 
 print(f"Step 6: Sections replaced. New size: {len(html)} chars")
 
