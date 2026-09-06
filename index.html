@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-0012" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-0013" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -256,24 +256,6 @@ body.dark .digest-list a:hover{color:#ff7a7a}
 .sent-bar{flex:1;height:5px;background:#e8edf2;border-radius:3px;overflow:hidden;max-width:120px}
 .sent-bar i{display:block;height:100%;background:#1a3a5c;border-radius:3px}
 .brief-empty{font-size:12.5px;color:#9aa7b3;padding:4px 0}
-/* 市场脉搏：情绪 + 趋势信号 + 价格异动，与金属价格板块合并展示（9-06） */
-.market-pulse{margin-bottom:11px;padding:8px 11px 9px;background:#f8fafc;border:1px solid #eef2f7;border-radius:9px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;align-items:start}
-.mp-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11.5px;line-height:1.5;min-width:0}
-.mp-label{flex-shrink:0;font-size:11.5px;font-weight:700;color:#6b7a89;background:#eef2f7;border-radius:4px;padding:1px 6px}
-.mp-sent{font-weight:700;color:#33475c}
-.mp-idx{font-weight:700;color:#33475c}
-.mp-total{color:#8899a8}
-.mp-sev{font-size:10px;font-weight:800;color:#c0392b;margin-right:1px}
-.mp-alert{display:inline-flex;align-items:baseline;gap:5px;background:#fff;border:1px solid #e6ecf3;border-radius:6px;padding:2px 8px;font-size:11.5px;cursor:help}
-.mp-alert .mp-a-name{font-weight:700;color:#33475c}
-.mp-alert .mp-a-move{font-weight:800;font-size:12px}
-.mp-alert .mp-a-mkt{font-size:10.5px;color:#8899a8}
-.mp-none{font-size:11.5px;color:#9aa7b3}
-body.dark .market-pulse{background:#161d26;border-color:#2c3845}
-body.dark .mp-label{background:#243140;color:#94a3b8}
-body.dark .mp-sent,body.dark .mp-idx,body.dark .mp-alert .mp-a-name{color:#c3d0dc}
-body.dark .mp-total,body.dark .mp-alert .mp-a-mkt{color:#7d8ea0}
-body.dark .mp-alert{background:#1b2431;border-color:#33404f}
 body.dark .brief-strip{background:#1e2733;border-color:#2c3845}
 body.dark .brief-badge,body.dark .brief-card-h .bc-n{background:#2c5f8d}
 body.dark .brief-title,body.dark .brief-card-h{color:#e8eef3}
@@ -301,8 +283,6 @@ body.dark .sent-bar i{background:#5b9bd5}
   .brief-date{margin-left:0;width:100%}
   .brief-card{padding:12px 13px}
   .brief-md{font-size:13.5px;line-height:1.72}
-  .market-pulse{padding:7px 9px 8px;gap:6px;grid-template-columns:1fr}
-  .mp-row{gap:6px}
   .sent-bar{max-width:80px}
 }
 /* ==================== 徽章：重要性分级 + 信源权威（9-06 新增）==================== */
@@ -1094,7 +1074,6 @@ window.gcTotal=function(data){
 <span class="price-strip-title" data-page-node-id="EziLhE8fq4fekt5gooiUD2">📊 金属价格</span>
 <span class="price-strip-note" id="priceStripNote" data-page-node-id="xooCpuWUUyU50ALBWhR3vd">2026-09-06 更新 · 首行国内（元/吨） 次行 LME（美元/吨） · 金属顺序一致 · 点击卡片看走势</span>
 </div>
-<div class="market-pulse" id="marketPulse" hidden data-page-node-id="S42onwU1iycksV2YkzlsEk"></div>
 <div class="price-cards" id="priceCardsShfe"><div data-slug="cum" class="price-card up"><div class="pc-name">沪铜 <span class="pc-tag">SHFE</span></div><div class="pc-value">108,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +370 (+0.34%)</div></div><div data-slug="alm" class="price-card down"><div class="pc-name">沪铝 <span class="pc-tag">SHFE</span></div><div class="pc-value">24,290</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -80 (-0.33%)</div></div><div data-slug="pbm" class="price-card up"><div class="pc-name">沪铅 <span class="pc-tag">SHFE</span></div><div class="pc-value">16,130</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +10 (+0.06%)</div></div><div data-slug="znm" class="price-card up"><div class="pc-name">沪锌 <span class="pc-tag">SHFE</span></div><div class="pc-value">26,745</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +135 (+0.51%)</div></div><div data-slug="nim" class="price-card down"><div class="pc-name">沪镍 <span class="pc-tag">SHFE</span></div><div class="pc-value">127,780</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -1,110 (-0.86%)</div></div><div data-slug="snm" class="price-card up"><div class="pc-name">沪锡 <span class="pc-tag">SHFE</span></div><div class="pc-value">416,460</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +370 (+0.09%)</div></div><div data-slug="au9999" class="price-card up"><div class="pc-name">上海金 <span class="pc-tag">Au99.99</span></div><div class="pc-value">965.96</div><div class="pc-unit">元/克</div><div class="pc-chg">&#9650; +0.79%</div></div><div data-slug="agtd" class="price-card up"><div class="pc-name">白银 <span class="pc-tag">Ag(T+D)</span></div><div class="pc-value">16,250</div><div class="pc-unit">元/千克</div><div class="pc-chg">&#9650; +1.28%</div></div><div data-slug="lcm" class="price-card down"><div class="pc-name">碳酸锂 <span class="pc-tag">主力连续</span></div><div class="pc-value">141,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9660; -7,940 (-5.30%)</div></div><div class="price-card "><div class="pc-name">电解钴 <span class="pc-tag">SMM 09-04</span></div><div class="pc-value">304,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">上日 304,940（SMM 未更新）</div></div></div>
 <div class="price-cards price-cards-lme" id="priceCardsLme"><div data-slug="lcpt" class="price-card "><div class="pc-name">LME 铜 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lalt" class="price-card "><div class="pc-name">LME 铝 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lldt" class="price-card "><div class="pc-name">LME 铅 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lznt" class="price-card "><div class="pc-name">LME 锌 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="lnkt" class="price-card "><div class="pc-name">LME 镍 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div><div data-slug="ltnt" class="price-card "><div class="pc-name">LME 锡 <span class="pc-tag">LME</span></div><div class="pc-value">--</div><div class="pc-unit">美元/吨</div><div class="pc-chg">检测中…</div></div></div>
 </div>
@@ -2472,8 +2451,6 @@ function renderBrief(d){
   }
   setupBriefClamp();
   // 「今日5件事」卡已移除（与下方「今日要闻」重复）；top_news 仍参与简报区显隐判断
-  // 价格相关（情绪 / 趋势信号 / 异动）改挂到下方「金属价格」板块内的市场脉搏条，与行情同屏对照
-  renderMarketPulse(alerts,metals,sent);
   strip.hidden=false;
 }
 // 简报内容按需折叠：分类摘要可能很长（10+ 条），默认只露出头部，避免把价格板块和新闻推到屏幕外
@@ -2500,43 +2477,6 @@ function setupBriefClamp(){
     if(open){main.classList.add('brief-clamp');btn.dataset.open='0';btn.textContent='展开全部'+(main.querySelectorAll('li').length?('（'+main.querySelectorAll('li').length+' 条）'):'');}
     else{main.classList.remove('brief-clamp');btn.dataset.open='1';btn.textContent='收起';}
   };
-}
-function marketPulseRow(label,inner){
-  return '<div class="mp-row"><span class="mp-label">'+briefEsc(label)+'</span>'+inner+'</div>';
-}
-function renderMarketPulse(alerts,metals,sent){
-  var mp=document.getElementById('marketPulse');
-  if(!mp)return;
-  var rows=[];
-  if(sent&&typeof sent.market_index==='number'){
-    var idx=Math.max(0,Math.min(100,sent.market_index));
-    rows.push(marketPulseRow('市场情绪',
-      '<span class="mp-sent">'+briefEsc(sent.market_label||'')+'</span>'+
-      '<span class="sent-bar"><i style="width:'+idx+'%"></i></span>'+
-      '<span class="mp-idx">'+idx+'</span>'+
-      (sent.total?'<span class="mp-total">· '+briefEsc(sent.total)+' 条新闻</span>':'')));
-  }
-  if(metals&&metals.length){
-    var sh=[];
-    for(var k=0;k<metals.length;k++){
-      var m=metals[k]||{};
-      sh.push('<span class="bs-chip '+briefSignalClass(m.signal)+'" title="'+briefEsc(m.note||m.position||'')+'">'+briefEsc(m.name||'')+' <b>'+briefEsc(m.signal||'')+'</b></span>');
-    }
-    rows.push(marketPulseRow('趋势信号',sh.join('')));
-  }
-  var ah=[];
-  for(var j=0;j<(alerts||[]).length;j++){
-    var a=alerts[j]||{};
-    var sev=(a.severity==='high')?'<span class="mp-sev" title="高等级异动">!</span>':'';
-    ah.push('<span class="mp-alert" title="'+briefEsc(a.detail||a.summary||'')+'">'+sev+
-      '<span class="mp-a-name">'+briefEsc(a.commodity||'')+'</span>'+
-      '<span class="mp-a-move '+briefMoveClass(a.move)+'">'+briefEsc(a.move||'')+'</span>'+
-      '<span class="mp-a-mkt">'+briefEsc(a.market||'')+'</span></span>');
-  }
-  rows.push(marketPulseRow('价格异动',ah.length?ah.join(''):'<span class="mp-none">今日无价格异动</span>'));
-  if(!rows.length){mp.hidden=true;mp.innerHTML='';return;}
-  mp.innerHTML=rows.join('');
-  mp.hidden=false;
 }
 function loadBrief(){
   fetch('morning_report.json?v='+Date.now(),{cache:'no-store'})
