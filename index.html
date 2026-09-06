@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260906-2330" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-0008" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -997,6 +997,23 @@ body.dark .qa-alert-item.down{background:#16301f;color:#86efac}
   .news-item{break-inside:avoid}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+/* 新闻列表搜索 + 快捷筛选条（2026-09-07，渲染层，不动生成脚本） */
+.news-filter-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 2px;padding:8px 10px;background:#f4f8fc;border:1px solid #e2eaf2;border-radius:10px}
+.nf-search{flex:1 1 220px;min-width:160px;padding:7px 10px;border:1px solid #cfdbe8;border-radius:8px;font-size:13px;outline:none;background:#fff;color:#1a3a5c}
+.nf-search:focus{border-color:#1a3a5c;box-shadow:0 0 0 2px rgba(26,58,92,.12)}
+.nf-chips{display:flex;flex-wrap:wrap;gap:6px}
+.nf-chip{font-size:12px;font-weight:600;padding:3px 10px;border-radius:12px;background:#e8eef5;color:#2c5a85;cursor:pointer;user-select:none;transition:.15s;border:1px solid transparent}
+.nf-chip:hover{background:#dde8f3}
+.nf-chip.active{background:#1a3a5c;color:#fff}
+.nf-count{font-size:12px;color:#5b7a99;margin-left:4px}
+.nf-export-btn{margin-left:8px;padding:4px 10px;font-size:12px;border:1px solid #cfdbe8;border-radius:8px;background:#fff;color:#1a3a5c;cursor:pointer;vertical-align:middle}
+.nf-export-btn:hover{background:#eef4fa}
+body.dark .news-filter-bar{background:#1b2733;border-color:#2a3a4a}
+body.dark .nf-search{background:#16202b;color:#cfe0ee;border-color:#2a3a4a}
+body.dark .nf-chip{background:#22303d;color:#9fc0db}
+body.dark .nf-chip.active{background:#3a6ea5;color:#fff}
+body.dark .nf-export-btn{background:#1b2733;color:#cfe0ee;border-color:#2a3a4a}
+@media print{.news-filter-bar{display:none!important}.nf-export-btn{display:none!important}}
 </style>
 <!-- GoatCounter 访问统计 -->
 <script data-goatcounter="https://mining-daily.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -1774,6 +1791,7 @@ function updateSpecialCounts(){
 // ===== 筛选模式：none | new | fav | history | tag | special =====
 let filterMode='none';
 let tagFilter=null;
+let newsSearchText='';
 let oldExpanded=false; // 往期内容中"超过14天旧闻"是否展开
 function setFilter(mode){
   filterMode=mode;
@@ -1804,8 +1822,13 @@ function applyFilter(){
     else if(mode==='tag')show=!!tagFilter&&!!el.dataset.tags&&el.dataset.tags.split('|').includes(tagFilter);
     // 已归档收藏仅在"收藏/历史"筛选中可见
     if(el.classList.contains('arch-fav')&&mode!=='fav'&&mode!=='history')show=false;
-    // 无筛选模式下，超过14天的旧闻默认折叠
-    if(show&&mode==='none'&&el.classList.contains('old-folded')&&!oldExpanded)show=false;
+    // 全局搜索：标题/摘要/来源全文匹配（AND 条件，与上方 mode 筛选叠加）
+    if(show&&newsSearchText){
+      const _t=(el.textContent||'').toLowerCase();
+      if(_t.indexOf(newsSearchText)<0)show=false;
+    }
+    // 无筛选模式下，超过14天的旧闻默认折叠（搜索激活时穿透折叠，露出往期匹配项）
+    if(show&&mode==='none'&&el.classList.contains('old-folded')&&!oldExpanded&&!newsSearchText)show=false;
     el.classList.toggle('hidden',!show);
   });
   // 隐藏空子分类
@@ -4345,6 +4368,122 @@ function qaTogglePanel(id){
     if(cfg.on)qaCheckAlerts();
   }catch(e){}
 })();
+
+// ===== 2026-09-07：新闻列表搜索 + 快捷矿种/类别筛选 + CSV 导出（渲染层，不动 gen_today.py）=====
+function setupNewsFilterBar(){
+  if(document.getElementById('newsFilterBar'))return;
+  var today=document.getElementById('todaySection'); if(!today)return;
+  var bar=document.createElement('div'); bar.id='newsFilterBar'; bar.className='news-filter-bar';
+  bar.innerHTML='<input class="nf-search" id="nfSearch" type="search" placeholder="搜索标题 / 摘要 / 来源…" aria-label="搜索新闻">'
+    +'<div class="nf-chips" id="nfChips">'
+    +'<span class="nf-chip active" data-kw="">全部</span>'
+    +'<span class="nf-chip" data-kw="金">金</span>'
+    +'<span class="nf-chip" data-kw="铜">铜</span>'
+    +'<span class="nf-chip" data-kw="铝">铝</span>'
+    +'<span class="nf-chip" data-kw="铅锌">铅锌</span>'
+    +'<span class="nf-chip" data-kw="镍">镍</span>'
+    +'<span class="nf-chip" data-kw="锡">锡</span>'
+    +'<span class="nf-chip" data-kw="锂">锂</span>'
+    +'<span class="nf-chip" data-kw="钴">钴</span>'
+    +'<span class="nf-chip" data-kw="矿权">矿权</span>'
+    +'<span class="nf-chip" data-kw="政策">政策</span>'
+    +'<span class="nf-chip" data-kw="勘查">勘查</span>'
+    +'<span class="nf-chip" data-kw="技术">技术</span>'
+    +'<span class="nf-chip" data-kw="风险">风险</span>'
+    +'</div><span class="nf-count" id="nfCount"></span>';
+  today.parentNode.insertBefore(bar, today);
+  var input=document.getElementById('nfSearch');
+  input.addEventListener('input',function(){
+    newsSearchText=(input.value||'').trim().toLowerCase();
+    document.querySelectorAll('.nf-chip').forEach(function(x){x.classList.toggle('active', x.getAttribute('data-kw')==='');});
+    applyFilter(); updateNfCount();
+  });
+  document.getElementById('nfChips').addEventListener('click',function(e){
+    var c=e.target.closest('.nf-chip'); if(!c)return;
+    var kw=c.getAttribute('data-kw')||'';
+    var cur=document.querySelector('.nf-chip.active');
+    var activeKw=cur?cur.getAttribute('data-kw'):'';
+    if(kw===''||kw===activeKw){ newsSearchText=''; input.value=''; }
+    else { newsSearchText=kw.toLowerCase(); input.value=''; }
+    document.querySelectorAll('.nf-chip').forEach(function(x){x.classList.toggle('active', x.getAttribute('data-kw')===newsSearchText);});
+    applyFilter(); updateNfCount();
+  });
+}
+function updateNfCount(){
+  var el=document.getElementById('nfCount'); if(!el)return;
+  el.textContent= newsSearchText? ('匹配 '+document.querySelectorAll('.news-item:not(.hidden)').length+' 条') : '';
+}
+// CSV 导出（价格 / 矿权），纯前端生成，不依赖后端
+function downloadCsv(filename, rows){
+  if(!rows||rows.length<2){ alert('暂无可导出的数据'); return; }
+  var csv='\uFEFF';
+  rows.forEach(function(r){
+    csv+=r.map(function(c){
+      var s=(c==null?'':String(c));
+      s=s.replace(/\r?\n/g,' ').replace(/"/g,'""');
+      if(/[",\n;]/.test(s)) s='"'+s+'"';
+      return s;
+    }).join(',')+'\r\n';
+  });
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url);},1000);
+}
+function csvDate(){ var d=new Date(); return d.getFullYear()+('-'+(d.getMonth()+1)).slice(-2)+('-'+d.getDate()).slice(-2); }
+function exportPriceCsv(){
+  var rows=[['市场','品种','代码','价格','单位','涨跌']];
+  ['priceCardsShfe','priceCardsLme'].forEach(function(id){
+    var wrap=document.getElementById(id); if(!wrap)return;
+    var market= id==='priceCardsLme'?'LME':'上期所';
+    wrap.querySelectorAll('.price-card').forEach(function(card){
+      var name=(card.querySelector('.pc-name')||{}).textContent||'';
+      var tag=(card.querySelector('.pc-tag')||{}).textContent||'';
+      var val=(card.querySelector('.pc-value')||{}).textContent||'';
+      var unit=(card.querySelector('.pc-unit')||{}).textContent||'';
+      var chg=(card.querySelector('.pc-chg')||{}).textContent||'';
+      var variety=name.split(tag).join('').trim();
+      rows.push([market, variety, tag, val, unit, chg]);
+    });
+  });
+  downloadCsv('矿业日报_金属价格_'+csvDate()+'.csv', rows);
+}
+function exportRightsCsv(){
+  var tb=document.getElementById('rightsTableBody'); if(!tb){alert('矿权数据未加载');return;}
+  var rows=[['矿种','标题','地区','出让方式','起始价','保证金','面积','截标日','链接']];
+  tb.querySelectorAll('tr').forEach(function(tr){
+    var td=tr.querySelectorAll('td'); if(td.length<8)return;
+    var link=td[1].querySelector('a');
+    var region=td[1].querySelector('span');
+    rows.push([
+      td[0].textContent.trim(),
+      (link?link.textContent:td[1].textContent).replace(/\s+/g,' ').trim(),
+      region?region.textContent.trim():'',
+      td[2].textContent.trim(),
+      td[3].textContent.trim(),
+      td[4].textContent.trim(),
+      td[5].textContent.trim(),
+      td[6].textContent.trim(),
+      link?link.href:''
+    ]);
+  });
+  downloadCsv('矿业日报_矿权出让_'+csvDate()+'.csv', rows);
+}
+function setupExportButtons(){
+  var head=document.querySelector('.price-strip-head');
+  if(head && !document.getElementById('priceCsvBtn')){
+    var b=document.createElement('button'); b.id='priceCsvBtn'; b.className='nf-export-btn';
+    b.type='button'; b.textContent='⬇ 价格CSV'; b.onclick=exportPriceCsv; head.appendChild(b);
+  }
+  var rtb=document.querySelector('.rights-toolbar');
+  if(rtb && !document.getElementById('rightsCsvBtn')){
+    var b2=document.createElement('button'); b2.id='rightsCsvBtn'; b2.className='nf-export-btn';
+    b2.type='button'; b2.textContent='⬇ 矿权CSV'; b2.onclick=exportRightsCsv; rtb.appendChild(b2);
+  }
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setupNewsFilterBar(); setupExportButtons(); });
+else { setupNewsFilterBar(); setupExportButtons(); }
 
 /* ===== 主题切换（2026-09-05 新增）=====
    手动切换后写入 localStorage，之后不再跟随系统；
