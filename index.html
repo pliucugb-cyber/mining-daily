@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260906-1224" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260906-1238" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -28,8 +28,8 @@ body.has-install-bar{padding-bottom:64px}
 .toc-title{font-size:12px;font-weight:700;color:#6b7a89;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #eef2f5;letter-spacing:1px}
 .toc-main-item{font-size:13.5px;font-weight:700;color:#1a3a5c;padding:9px 11px;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:.2s;margin-bottom:4px}
 .toc-main-item:hover{background:#f4f6f9}
-.toc-main-item.active{background:#1a3a5c;color:#fff;box-shadow:0 2px 6px rgba(26,58,92,.3)}
-.toc-main-item.active .toc-count{color:#1a3a5c;background:#fff}
+.toc-main-item.active{background:#e9f1f8;color:#1a3a5c;box-shadow:none}
+.toc-main-item.active .toc-count{color:#fff;background:#1a3a5c}
 .toc-count{font-size:11px;color:#7f8c8d;background:#eef2f5;padding:2px 7px;border-radius:10px;font-weight:600;min-width:22px;text-align:center}
 .toc-back-top{font-size:12px;color:#2980b9;padding:8px 11px;cursor:pointer;border-radius:6px;text-align:center;margin-top:6px;border-top:1px solid #f4f6f8;padding-top:10px}
 .toc-back-top:hover{background:#eef4fa}
@@ -902,10 +902,10 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
   <div class="header-actions" data-page-node-id="yJYZi46Jr7ZF8gVCztwhXK">
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式" data-page-node-id="2iDzxnPLAUp6us12HurPQU"><span class="theme-option light" data-page-node-id="Oaq0BbspbHbHEGiQqEAhXM">☀️</span><span class="theme-option dark" data-page-node-id="3WKWDNkc8RniCqHAgzYWdR">🌙</span></button>
     <button class="pwa-header-btn" id="pwaHeaderBtn" type="button" title="将本页安装到电脑桌面" hidden data-page-node-id="GNGgVLBi3LF8M1CcNASx0d">💻 添加到桌面</button>
-    <button class="reading-toggle" id="readingToggle" type="button" onclick="toggleReadingMode()" title="只显示今日判断、金属价格与今日新闻" data-page-node-id="PUjIdpQMuWEUqYq7W7gcgy">阅读</button>
+    <button class="reading-toggle" id="readingToggle" type="button" onclick="toggleReadingMode()" title="只显示今日简报、金属价格与今日新闻" data-page-node-id="PUjIdpQMuWEUqYq7W7gcgy">阅读</button>
   </div>
   <h1 data-page-node-id="S5DUV8BO8QSMOdwBtUTJ83">⛏️ 矿业新闻日报 <span class="date-badge" data-page-node-id="hCCkUOj51jKh8M4hgHwkAC">2026年09月06日 星期日</span></h1>
-  <div class="sub" data-page-node-id="KCd8v2OwWtULBvjvQtEumB">每日 9:00 起自动更新（约 9:30 前出今日版本） · 11个信息源 · 聚焦有色金属 · 部门内部参考 · 点击标题查看原文</div>
+  <div class="sub" data-page-node-id="KCd8v2OwWtULBvjvQtEumB">每日 9:00 起自动更新（约 9:30 前出今日版本） · 11个信息源 · 聚焦有色金属</div>
 </div>
 <!-- ==================== 今日情报简报（9-06 新增：数据取自 morning_report.json，随每日日报一同生成）==================== -->
 <div class="brief-strip" id="briefStrip" hidden data-page-node-id="uiXcXoG33rQd2Ofr4IRinO">
@@ -916,12 +916,11 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
     <span class="brief-date" id="briefDate" data-page-node-id="7Te0Yh0KB8bp3DsyQTk9T1"></span>
   </div>
   <div class="brief-card" data-page-node-id="DL9ezeqD58z9kGQxMZhKPR">
-    <div class="brief-card-h" data-page-node-id="5k4Mbk3PGySY5HJR3GOLFl"><span class="bc-n" data-page-node-id="EzuEgIunAJ4WVGsYUS1VVX">判</span> 今日判断</div>
     <div class="brief-md" id="briefMain" data-page-node-id="nCJ5rYv7iler54tWucV3L3"><div class="brief-empty" data-page-node-id="wFtAqhN3k1iuKN65phPOhP">简报加载中…</div></div>
     <button class="brief-more" id="briefMore" type="button" hidden data-page-node-id="0mU25b5YB8lNqFehLN2Wgk">展开全部</button>
   </div>
 </div>
-<div class="reading-exit" data-page-node-id="Zyus0JiMMHAPp1HSgx9GJf">阅读模式：只显示今日判断、金属价格与今日新闻。再次点击右上角「阅读」按钮或按 Esc 退出。</div>
+<div class="reading-exit" data-page-node-id="Zyus0JiMMHAPp1HSgx9GJf">阅读模式：只显示今日简报、金属价格与今日新闻。再次点击右上角「阅读」按钮或按 Esc 退出。</div>
 <!-- ==================== 今日要闻（9-04 新增，每日自动提取 3~5 条关键信息）==================== -->
 <div class="digest-strip" id="digestStrip" data-page-node-id="FJwnxoUlMQmkEFXOTb8Ajz">
   <div class="digest-head" data-page-node-id="SHylSejGak9rsOaXN7y5vI">
@@ -2046,7 +2045,7 @@ function renderBrief(d){
     body=body.replace(/^\*\*总览：\*\*\s*/,'').trim();
     var h=briefMd(body);
     if(String(risk).trim())h+='<div class="brief-risk"><b>⚠ 风险提示：</b>'+briefMd(risk)+'</div>';
-    main.innerHTML=h||'<div class="brief-empty">今日判断暂未生成</div>';
+    main.innerHTML=h||'<div class="brief-empty">今日简报暂未生成</div>';
   }
   setupBriefClamp();
   // 「今日5件事」卡已移除（与下方「今日要闻」重复）；top_news 仍参与简报区显隐判断
