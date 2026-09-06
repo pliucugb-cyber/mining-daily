@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-0009" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-0010" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -2945,14 +2945,31 @@ window.addEventListener('DOMContentLoaded',function(){
     var v=m.getAttribute('content');
     var k='md_build_ver';
     var old=localStorage.getItem(k);
+    // 防横跳：同一会话(reload)最多自动刷新2次，避免 CDN 收敛期在旧/新版本间反复硬刷新
+    var _rc=parseInt(sessionStorage.getItem('md_reload_cnt')||'0',10);
     if(old&&old!==v){            // 版本变了 → 说明这是新发布，硬刷新确保用最新 CSS/JS
       try{lsSet(k,v);}catch(e){}
+      if(_rc>=2){return;}         // 已达上限，停在当前版本，停止横跳
+      try{sessionStorage.setItem('md_reload_cnt',String(_rc+1));}catch(e){}
+      _clearHtmlCache();          // 清 SW HTML 缓存，确保下次从网络拿最新
       try{location.reload(true);}catch(e){location.href=location.href;}
       return;
     }
     try{lsSet(k,v);}catch(e){}
   }catch(e){}
 })();
+// 清掉 SW 缓存的站点数据，强制下次导航从网络拉最新（避免 stale-while-revalidate 反复返回旧 HTML 造成刷新横跳）
+function _clearHtmlCache(){
+  try{
+    if('caches' in window&&window.caches&&window.caches.keys){
+      window.caches.keys().then(function(ks){
+        ks.forEach(function(name){
+          if(/mining-daily/.test(name)){ window.caches.delete(name).catch(function(){}); }
+        });
+      }).catch(function(){});
+    }
+  }catch(e){}
+}
 // ===== PWA：注册 Service Worker（可安装成App + 离线可看）=====
 // 2026-09-02：新版 SW 激活后自动 reload，保证所有人打开就是最新版，无需手动清缓存
 if('serviceWorker' in navigator){
@@ -2961,9 +2978,13 @@ if('serviceWorker' in navigator){
     // 收到"新版已就绪"通知 → 自动刷新（只刷一次，防死循环）
     navigator.serviceWorker.addEventListener('message',function(ev){
       if(ev.data&&ev.data.type==='SW_UPDATED'&&!window.__swReloaded){
+        var _rc=parseInt(sessionStorage.getItem('md_reload_cnt')||'0',10);
+        if(_rc>=2)return;          // 防横跳：会话内已达刷新上限，不再硬刷
         window.__swReloaded=true;
         // 先写当前 build-version，避免新页面加载后版本戳自愈再触发一次硬刷新（双刷新闪屏）
         try{var _m=document.querySelector('meta[name="build-version"]');if(_m)lsSet('md_build_ver',_m.getAttribute('content'));}catch(e){}
+        try{sessionStorage.setItem('md_reload_cnt',String(_rc+1));}catch(e){}
+        _clearHtmlCache();
         try{location.reload();}catch(e){}
       }
     });
