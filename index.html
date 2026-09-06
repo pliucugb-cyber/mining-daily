@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260906-2305" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260906-2310" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -455,6 +455,10 @@ body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 .qa-msg-sources a{color:#4f46e5;text-decoration:none;border-bottom:1px dashed #a5b4fc}
 .qa-msg-sources a:hover{text-decoration:underline}
 .qa-src-date{color:#94a3b8;font-size:10.5px;margin-left:4px}
+.qa-src-group{margin-top:9px}
+.qa-src-group:first-of-type{margin-top:2px}
+.qa-src-group-title{font-size:11px;font-weight:700;color:#1a3a5c;background:#e9eef5;border-radius:5px;padding:2px 8px;display:inline-block;margin-bottom:4px}
+.qa-src-group ul{margin:0;padding-left:18px}
 .qa-msg-actions{display:flex;gap:6px;margin-top:4px;padding-left:1px}
 .qa-msg-action{background:none;border:none;color:#6b7a89;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:4px}
 .qa-msg-action:hover{background:#eef2f5;color:#4f46e5}
@@ -487,6 +491,7 @@ body.dark .qa-sources-count b{color:#e8eef3}
 body.dark .qa-msg-sources li{color:#c9d6e2}
 body.dark .qa-msg-sources a{color:#818cf8;border-color:#4f46e5}
 body.dark .qa-src-date{color:#64748b}
+body.dark .qa-src-group-title{color:#cdd9e5;background:#222e3c}
 body.dark .qa-msg-time{color:#5b6b7c}
 body.dark .qa-msg-action{color:#94a3b8}
 body.dark .qa-msg-action:hover{background:#2c3845;color:#818cf8}
@@ -3920,9 +3925,12 @@ function qaFloatAsk(retryMode,ctxOverride){
   }
   // 2026-09-06：传给 AI 前先按相关性阈值过滤，避免 AI 正文混入无关条目
   _ctx=qaFilterRelevant(_ctx,q);
+  // 2026-09-06 晚：多轮追问上下文 + 宽泛问题引导标记（B / C）
+  var _conv=qaBuildConv();
+  var _broad=qaIsBroadQuery(q);
   var meta='正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候…';
   var msg=qaFloatAdd('ai','正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now()});
-  qaDeepseekCall(q,_ctx,msg,btn);
+  qaDeepseekCall(q,_ctx,msg,btn,_conv,_broad);
   return;
 }
 // 安全清洗外链：只允许 http/https，拦截 javascript:/data:/vbscript: 等危险协议，并转义引号
@@ -3950,22 +3958,70 @@ function qaFilterRelevant(ctx,q){
   }
   return relevant.slice(0,10);
 }
+// 2026-09-06 晚（B）：从对话浮窗 DOM 还原最近的多轮上下文，供 AI 追问时连贯作答。
+// 规则：取最近若干条 user/assistant 消息；去掉末尾的 user 消息（即本次正在问的问题，
+// 稍后会作为带资料的最终 user 消息单独发送），只保留最近 4 条（2 轮）。
+function qaBuildConv(){
+  var body=document.getElementById('qaFloatBody');if(!body)return [];
+  var msgs=body.querySelectorAll('.qa-msg');
+  var turns=[];
+  msgs.forEach(function(el){
+    if(!el.classList.contains('user')&&!el.classList.contains('ai'))return;
+    var role=el.classList.contains('user')?'user':'assistant';
+    var raw=el.dataset.raw||'';
+    if(!raw)return;
+    // 跳过「正在检索…」这类临时占位（一般已替换，但保险起见）
+    if(/^正在从全库.*检索相关条目/.test(raw))return;
+    turns.push({role:role,content:raw});
+  });
+  // 去掉末尾的 user 消息（本次问题），保留历史轮次
+  while(turns.length && turns[turns.length-1].role==='user') turns.pop();
+  if(turns.length>4) turns=turns.slice(turns.length-4);
+  return turns;
+}
+// 2026-09-06 晚（C）：判断问题是否过于宽泛（如「最近有什么新闻」），需先引导筛选再给概览。
+function qaIsBroadQuery(q){
+  if(!q)return false;
+  var q2=q.replace(/\s/g,'');
+  var hasEntity=(qaExtractTerms(q).length>0)
+    || /紫金|中铝|洛钼|洛阳钼业|山东黄金|江西铜业|中国铝业|五矿|必和必拓|力拓|淡水河谷|嘉能可|西部矿业|铜陵有色|云南铜业|神火|天山铝业/.test(q);
+  if(q2.length<=5 && !hasEntity) return true;
+  // 形如「最近/近期/最新 +（有/啥/什么/哪些） + 新闻/动态/消息/资讯/报道/情况/进展/热点」
+  if(/^(最近|近期|最新|这两天|这几天|今天|本周|本月|今年以来|今年)?(有|有啥|有什么|有哪|啥|什么|哪些|哪些方面的|关于)?(新闻|消息|动态|资讯|报道|热点|情况|进展|更新|内容|信息)$/.test(q2)) return true;
+  if(/^(新闻|消息|动态|资讯|报道|热点|情况|进展|更新|内容|信息)$/.test(q2) && !hasEntity) return true;
+  return false;
+}
 // AI 回答下方自动附「参考来源」可点击列表，按相关性梯度过滤，避免混入低相关条目
+// 2026-09-06 晚（D）：按板块（c.s）分组展示，扫读更快
 function qaDsSourcesHtml(ctx,q){
   var relevant=qaFilterRelevant(ctx,q);
-  var items=relevant.map(function(c){
+  var liOf=function(c){
     var u=c.u||c.url||'',t=c.t||'新闻';
     if(!u)return '';
     var safe=qaSafeUrl(u);if(!safe)return '';
     // 2026-09-06：去掉原内联 onclick 直接 window.open 的写法，统一走全局点击委托分流
     //（允许嵌入的站内浮窗打开；禁止嵌入的弹提示引导跳原站）
     return '<li><a href="'+safe+'" target="_blank" rel="noopener">'+qaEsc(t)+'</a>'+(c.d?' <span class="qa-src-date">'+qaEsc(c.d)+'</span>':'');
-  }).filter(Boolean);
-  if(!items.length)return '';
+  };
+  if(!relevant.length)return '';
+  // 按板块分组（保持首次出现顺序 ≈ 相关性/时效序），组内按日期倒序
+  var groups={},order=[];
+  relevant.forEach(function(c){
+    var g=c.s||'其他';
+    if(!groups[g]){groups[g]=[];order.push(g);}
+    groups[g].push(c);
+  });
   var countHtml='<span class="qa-sources-count">已为您从全库中筛选出 <b>'+Math.min(relevant.length,10)+'</b> 条相关条目</span>';
-  return '<div class="qa-msg-sources"><div class="qa-sources-title">📚 参考来源（点击查看原文）</div>'+countHtml+'<ul>'+items.join('')+'</ul></div>';
+  var html='<div class="qa-msg-sources"><div class="qa-sources-title">📚 参考来源（点击查看原文）</div>'+countHtml;
+  order.forEach(function(g){
+    var items=groups[g].map(liOf).filter(Boolean);
+    if(!items.length)return;
+    html+='<div class="qa-src-group"><div class="qa-src-group-title">'+qaEsc(g)+'</div><ul>'+items.join('')+'</ul></div>';
+  });
+  html+='</div>';
+  return html;
 }
-function qaDeepseekCall(q,ctxRaw,msg,btn){
+function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad){
   // 2026-09-06：AI 上下文再次按相关性阈值过滤，确保正文和参考来源只出现强相关内容
   var ctx=qaFilterRelevant(ctxRaw||[],q);
   var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
@@ -3976,6 +4032,15 @@ function qaDeepseekCall(q,ctxRaw,msg,btn){
     +'引用具体新闻时，请在相关结论后用括号标注来源媒体与发布日期（如"（全球矿产资源网，2026-09-04）"），便于与底部参考来源对照；不要在回答正文中插入 Markdown 链接——系统会自动在回答底部列出可点击的参考来源。'
     +'若提供的条目均与问题无关或没有提供相关新闻，请明确说明"本地新闻库暂未找到直接相关的报道"，并建议用户换关键词或查证官方信息；不要基于通用知识编造具体数据、价格或政策细节。'
     +'不要编造数据、价格或政策细节；不要复制"以上信息来自公开公告"之类的注水结语。');
+  // 2026-09-06 晚（C）：宽泛问题先提示可按矿种/主题/时间筛选，再按板块给概览
+  if(broad){
+    system+='\n\n若用户问题较宽泛（例如"最近有什么新闻"），请先一句话提示"可按矿种 / 主题 / 时间筛选以获得更精准结果"，再按板块（行情 / 政策与产业 / 勘查与技术 / 矿权市场 / 风险提示）给出近期概览，用分组要点呈现，不要逐条罗列全部新闻。';
+  }
+  // 2026-09-06 晚（B）：多轮追问——把历史轮次作为前置对话，使追问能理解"它""这家"等指代
+  var dsMessages=[{role:'system',content:system}];
+  if(conv&&conv.length){
+    conv.forEach(function(t){ dsMessages.push({role:t.role,content:t.content}); });
+  }
   var user='用户问题：'+q+'\n\n';
   if(ctx&&ctx.length){
     user+='以下为本地检索到的相关新闻条目（已按问题相关性筛选，仅包含与问题直接相关的条目）。请先系统整理这些条目，再按主题/维度给出综合性回答，不要逐条复述：\n';
@@ -3992,7 +4057,7 @@ function qaDeepseekCall(q,ctxRaw,msg,btn){
   fetch('https://api.deepseek.com/chat/completions',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()},
-    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:system},{role:'user',content:user}],max_tokens:1000,temperature:0.3,stream:false})
+    body:JSON.stringify({model:'deepseek-chat',messages:dsMessages.concat([{role:'user',content:user}]),max_tokens:1000,temperature:0.3,stream:false})
   })
     .then(function(r){return r.json().then(function(d){return {ok:r.ok,status:r.status,d:d||{}};},function(){return {ok:false,status:0,d:{}};});})
     .then(function(res){
