@@ -67,7 +67,13 @@ OPTIONAL = [
 
 def run(cmd, cwd=None, check=True):
     """执行命令，返回 (returncode, stdout+stderr)"""
-    p = subprocess.run(cmd, cwd=cwd, shell=True,
+    # 定时任务里跑 git 时严禁任何交互式等待：否则一个 rebase/编辑器提示就能把整轮流程挂死
+    env = os.environ.copy()
+    env['GIT_TERMINAL_PROMPT'] = '0'
+    env['GIT_EDITOR'] = 'true'
+    env['GIT_SEQUENCE_EDITOR'] = 'true'
+    env['GIT_MERGE_AUTOEDIT'] = 'no'
+    p = subprocess.run(cmd, cwd=cwd, shell=True, env=env,
                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out = p.stdout.decode('utf-8', errors='replace')
     if check and p.returncode != 0:
@@ -155,9 +161,13 @@ def main():
     log('[deploy_pages] 推送到 %s 分支…' % BRANCH)
     code, out = run('git push -u origin %s' % BRANCH, cwd=WORK, check=False)
     if code != 0:
-        log('[deploy_pages] 第 1 次推送失败，3 秒后重试：\n%s' % out)
+        log('[deploy_pages] 第 1 次推送失败，3 秒后按「本地文件为准」合并远程再推：\n%s' % out)
         time.sleep(3)
-        code, out = run('git pull --rebase origin %s' % BRANCH, cwd=WORK, check=False)
+        # 关键：这里绝不能用 git pull --rebase。
+        # 非交互环境下 rebase 一旦需要人工介入就会停在中间态，之后每一轮定时任务都会失败。
+        # 本站内容是「从 main 复制过来」的全量快照，历史合并一律以本地文件为准（-X ours）。
+        run('git fetch origin %s' % BRANCH, cwd=WORK, check=False)
+        run('git merge -X ours --no-edit FETCH_HEAD', cwd=WORK, check=False)
         code, out = run('git push -u origin %s' % BRANCH, cwd=WORK, check=False)
         if code != 0:
             log('[deploy_pages] 推送仍失败：\n%s' % out)
