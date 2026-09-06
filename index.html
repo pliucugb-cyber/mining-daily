@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260906-1620" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260906-1630" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -3183,6 +3183,51 @@ function qaExtractTerms(q){
   });
   return out;
 }
+// 从问题中切分出可用于相关性打分的检索词（长度≥2 的词组 + 矿种/主题词表命中词）
+function qaTokenize(q){
+  var tokens=[],seen={};
+  // ① 矿种/主题词表命中
+  QA_MINERALS.concat(QA_TOPICS).forEach(function(w){
+    if(q.indexOf(w)>=0){seen[w]=1;tokens.push(w);}
+  });
+  // ② 长度≥2 的连续中英文/数字串（过滤单字噪音）
+  var clean=q.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g,' ');
+  clean.split(/\s+/).forEach(function(w){
+    if(w.length>=2&&!seen[w]){seen[w]=1;tokens.push(w);}
+  });
+  return tokens;
+}
+// 按问题与新闻条目的相关性打分排序（全库 RAG，不再无脑取最新 N 条）
+function qaRankByRelevance(q,rows){
+  var tokens=qaTokenize(q);
+  if(!tokens.length)return rows.slice();
+  var now=new Date();
+  return rows.map(function(r){
+    var title=String(r.t||''),body=qaHay(r),tags=(r.g||[]).join(' ');
+    var score=0,hitParts=[];
+    tokens.forEach(function(t){
+      if(title.indexOf(t)>=0){score+=10;if(hitParts.indexOf('title')<0)hitParts.push('title');}
+      else if(tags.indexOf(t)>=0){score+=6;if(hitParts.indexOf('tags')<0)hitParts.push('tags');}
+      else if(body.indexOf(t)>=0){score+=3;if(hitParts.indexOf('body')<0)hitParts.push('body');}
+    });
+    // 时效性：越新略加分，但相关性权重占主导
+    var d=String(r.d||'');
+    if(d){
+      try{
+        var dd=new Date(d+'T00:00:00');
+        if(!isNaN(dd.getTime())){
+          var days=Math.max(0,(now-dd)/86400000);
+          score+=Math.max(0,10-days)*0.3;
+        }
+      }catch(e){}
+    }
+    return {r:r,score:score,hit:hitParts.length>0};
+  }).sort(function(a,b){
+    // 优先按相关性倒序；同分按日期倒序
+    if(b.score!==a.score)return b.score-a.score;
+    return String(b.r.d||'').localeCompare(String(a.r.d||''));
+  }).map(function(x){return x.r;});
+}
 // qaAskAI 已删除：主内容区 AI box 随「新闻问答」检索条一并移除；悬浮球的 AI 回答由 qaFloatAsk 接管
 
 // ===== 价格卡走势图（9-04 新增，数据源 price-history.js，由 fetch_price_history.py 每日更新）=====
@@ -3832,11 +3877,11 @@ function qaFloatAsk(retryMode,ctxOverride){
     var _topSel=_ext.filter(function(t){return QA_TOPICS.indexOf(t)>=0;})[0]||'';
     var _from='';
     if(_rg>0){var _max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>_max)_max=r.d;});if(_max){var _dt=new Date(_max+'T00:00:00');_dt.setDate(_dt.getDate()-_rg+1);_from=_dt.toISOString().slice(0,10);}}
-    _ctx=qaFilter(QA_ROWS,[],_minSel||_min,_topSel||_top,_from,'and').slice(0,12);
-    if(_minSel){_ctx=_ctx.filter(function(r){return (r.t||'').indexOf(_minSel)>=0;});}
+    var _filtered=qaFilter(QA_ROWS,[],_minSel||_min,_topSel||_top,_from,'and');
+    _ctx=qaRankByRelevance(q,_filtered).slice(0,20);
   }
-  var meta='正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候…';
-  var msg=qaFloatAdd('ai','正在阅读全库 '+QA_ROWS.length+' 条新闻并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now()});
+  var meta='正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候…';
+  var msg=qaFloatAdd('ai','正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now()});
   qaDeepseekCall(q,_ctx,msg,btn);
   return;
 }
@@ -3851,7 +3896,7 @@ function qaSafeUrl(u){
 // AI 回答下方自动附「参考来源」可点击列表（数据本身带 url，之前调用未使用）
 function qaDsSourcesHtml(ctx){
   if(!ctx||!ctx.length)return '';
-  var items=ctx.slice(0,8).map(function(c){
+  var items=ctx.slice(0,10).map(function(c){
     var u=c.u||c.url||'',t=c.t||'新闻';
     if(!u)return '';
     var safe=qaSafeUrl(u);if(!safe)return '';
