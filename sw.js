@@ -2,10 +2,12 @@
 // 2026-09-04 修复：改为 network-first（HTML 永远优先拿线上最新版，离线才用缓存）
 // + 缓存版本号 bump + activate 时清掉所有旧缓存 + 新 SW 激活后通知页面自动刷新
 // 这样任何访客无需手动 Ctrl+F5 即可看到最新内容。
+// 2026-09-06 提速：HTML 改 stale-while-revalidate（本地缓存秒开 + build-version 自愈兜底），
+// 数据文件 network-first 但去掉 cache:'reload' 改用 HTTP 304 验证，避免每次刷新全量重拉拖慢体感。
 // 2026-09-04 二次修复：支持子路径部署（GitHub Pages 站点位于 /mining-daily/）。
 //   原先写死 '/index.html' 这类绝对路径，在子路径下会指向站点根而 404。
 //   改为以 SW 自身所在目录为基准推导 BASE，根路径部署（本地/沙箱）与子路径部署（Pages）均可。
-const CACHE_NAME = 'mining-daily-v9';
+const CACHE_NAME = 'mining-daily-v10';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -66,14 +68,31 @@ self.addEventListener('fetch', event => {
                  url.pathname === BASE ||
                  url.pathname.endsWith('.html');
 
-  // HTML 与每日数据文件：network-first —— 永远优先拿线上最新版，失败才用缓存（离线兜底）
-  // 注意：index.html 成功时也不写入缓存，防止 Service Worker 把旧版 HTML 长期发给用户。
-  // 2026-09-05 加固：fetch 带 cache:'reload'，绕过浏览器 HTTP 缓存，每次刷新都向 CDN 要最新 HTML，
-  // 避免用户端长期停留旧版 CSS（此前出现"浮窗半透明"实为旧版缓存所致）。
-  if (isHtml || DATA_FILES.indexOf(url.pathname) >= 0) {
+  // 2026-09-06 提速：此前 HTML 与数据文件均 network-first + cache:'reload'，
+  // 每次刷新强制绕过浏览器缓存向 CDN 全量重拉（index.html 310KB + news-data.js 56KB），
+  // 国内访问 GitHub Pages RTT 偏高时体感明显变慢。改为：
+  //   HTML         → stale-while-revalidate：先秒开本地缓存，后台静默拉新；
+  //                  旧版仅一瞬，index.html 内 build-version 自愈会立即 reload 拉最新，不会长期停留。
+  //   数据文件      → network-first（刷新即见最新）+ 写缓存（离线兜底），去掉 cache:'reload' 改用 HTTP 304 验证，
+  //                  未变更时 304 秒回、变更时才下载新内容。
+  if (isHtml) {
     event.respondWith(
-      fetch(req, { cache: 'reload' }).then(res => {
-        if (isHtml) return res; // HTML 只走网络，避免旧版缓存
+      caches.match(req).then(cached => {
+        const network = fetch(req).then(res => {
+          if (res && res.ok && res.type === 'basic') {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
+          }
+          return res;
+        }).catch(() => cached);
+        return cached || network;
+      })
+    );
+    return;
+  }
+  if (DATA_FILES.indexOf(url.pathname) >= 0) {
+    event.respondWith(
+      fetch(req).then(res => {
         if (res && res.ok && res.type === 'basic') {
           const copy = res.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
