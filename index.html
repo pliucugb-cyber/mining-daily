@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-0010" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-0011" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1998,6 +1998,8 @@ document.addEventListener('click',e=>{
     //   改为弹出提示卡，引导用户主动跳转原网站查看完整内容。
     const href=a.getAttribute('href')||'';
     if(href.startsWith('javascript:')||href.startsWith('#'))return;
+    // 2026-09-07 修复：CSV 下载链不进入 iframe 浮窗
+    if(a.hasAttribute('download')||href.startsWith('blob:'))return;
     const inQa=!!a.closest('#qaFloat');
     let embedFlag=item?(item.dataset.embed||'ok'):'ok';
     if(!item&&inQa&&linkBlockedFromEmbed(a.href))embedFlag='block';
@@ -4450,6 +4452,8 @@ function downloadCsv(filename, rows){
   var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a'); a.href=url; a.download=filename;
+  a.className='csv-download'; a.setAttribute('data-no-overlay','1');
+  a.addEventListener('click',function(e){ e.stopPropagation(); });
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(function(){URL.revokeObjectURL(url);},1000);
 }
@@ -4496,12 +4500,12 @@ function setupExportButtons(){
   var head=document.querySelector('.price-strip-head');
   if(head && !document.getElementById('priceCsvBtn')){
     var b=document.createElement('button'); b.id='priceCsvBtn'; b.className='nf-export-btn';
-    b.type='button'; b.textContent='⬇ 价格CSV'; b.onclick=exportPriceCsv; head.appendChild(b);
+    b.type='button'; b.textContent='⬇ 价格CSV'; b.onclick=function(e){ if(e){e.stopPropagation();} exportPriceCsv(); }; head.appendChild(b);
   }
   var rtb=document.querySelector('.rights-toolbar');
   if(rtb && !document.getElementById('rightsCsvBtn')){
     var b2=document.createElement('button'); b2.id='rightsCsvBtn'; b2.className='nf-export-btn';
-    b2.type='button'; b2.textContent='⬇ 矿权CSV'; b2.onclick=exportRightsCsv; rtb.appendChild(b2);
+    b2.type='button'; b2.textContent='⬇ 矿权CSV'; b2.onclick=function(e){ if(e){e.stopPropagation();} exportRightsCsv(); }; rtb.appendChild(b2);
   }
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setupNewsFilterBar(); setupExportButtons(); });
