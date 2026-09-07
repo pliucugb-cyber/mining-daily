@@ -2,7 +2,7 @@
 """
 矿业新闻日报信源白名单校验工具。
 
-约定信源（memory 2026-09-07 固化）：
+约定信源（memory 2026-09-07 固化，2026-09-07 晚扩展 2 个）：
 - ky.mnr.gov.cn          全国矿业权市场网（矿权出让/转让/结果）
 - mnr.gov.cn             自然资源部官网
 - cgs.gov.cn             中国地质调查局（含各中心子域，如 xgsnrc.cgs.gov.cn）
@@ -10,6 +10,8 @@
 - cnmn.com.cn            中国有色金属报/中国金属网
 - geoglobal.mnr.gov.cn   全球矿产资源信息系统
 - cngold.org.cn          中国黄金协会
+- chinamining.org.cn     中国矿业网 / 中国矿业联合会
+- zgkyb.com              中国矿业报
 
 使用方式：
     python source_whitelist.py --check-url <url>
@@ -29,6 +31,8 @@ ALLOWED_DOMAINS = [
     "cnmn.com.cn",
     "geoglobal.mnr.gov.cn",
     "cngold.org.cn",
+    "chinamining.org.cn",
+    "zgkyb.com",
 ]
 
 # 非新闻来源的功能/统计/API 链接，校验时跳过
