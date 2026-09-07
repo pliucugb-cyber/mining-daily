@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-1443" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-1453" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1535,12 +1535,13 @@ window.gcTotal=function(data){
       minerals.forEach(function(m){ if(t.indexOf(m)>=0 && foundMinerals.indexOf(m)<0) foundMinerals.push(m); });
     });
     var minStr=foundMinerals.slice(0,5).join('、')||'多矿种';
-    var label='今日矿权出让结果：共 '+results.length+' 宗，涉及'+minStr+'（详见矿权交易专区）';
-    var html='<div class="news-item is-new" data-url="#rightsSection" data-rights-summary="1" data-embed="ok">'
+    var firstUrl=results[0].u||results[0].url||'#rightsSection';
+    var label='今日矿权出让结果：共 '+results.length+' 宗，涉及'+minStr+'（查看公告）';
+    var html='<div class="news-item is-new" data-url="'+firstUrl+'" data-rights-summary="1" data-embed="ok">'
            + '<div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span>'
-           + '<a class="news-title" href="#rightsSection">'+label+'</a></div>'
+           + '<a class="news-title" href="'+firstUrl+'">'+label+'</a></div>'
            + '<div class="news-meta"><span class="src">矿业权市场</span> · '+today.slice(5)+'</div>'
-           + '<div class="news-summary">今日矿权交易专区更新 '+results.length+' 宗出让/转让结果，点击跳转查看详情。</div>'
+           + '<div class="news-summary">今日矿权交易专区更新 '+results.length+' 宗出让/转让结果，点击查看具体公告。</div>'
            + '</div>';
     var todaySection=document.getElementById('todaySection');
     if(!todaySection) return;
