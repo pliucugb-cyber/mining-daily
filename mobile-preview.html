@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>矿业新闻日报 · 手机视图模拟器</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:18px}
+  h1{font-size:18px;font-weight:700;margin-bottom:4px}
+  .tip{font-size:12.5px;color:#94a3b8;margin-bottom:14px;text-align:center;line-height:1.6;max-width:720px}
+  .tip b{color:#7dd3fc}
+  .warn{color:#fbbf24;background:#2a1b05;border:1px solid #92400e;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12.5px;line-height:1.6;max-width:720px;display:none}
+  .warn b{color:#f59e0b}
+  code{background:#1e293b;padding:2px 6px;border-radius:4px;font-family:Consolas,monospace}
+  .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;margin-bottom:18px;background:#1e293b;padding:12px 16px;border-radius:12px}
+  .bar label{font-size:13px;color:#cbd5e1}
+  select,input[type=text]{background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:7px 10px;font-size:13px;outline:none}
+  input[type=text]{width:340px}
+  button{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+  button:hover{background:#1d4ed8}
+  button.ghost{background:#334155}
+  button.ghost:hover{background:#475569}
+  .stage{flex:1;width:100%;display:flex;align-items:center;justify-content:center;overflow:auto;padding:10px}
+  .scaler{transform-origin:top center;transition:transform .15s}
+  .phone{background:#111;padding:10px;border-radius:38px;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 2px #444;position:relative}
+  .notch{position:absolute;top:18px;left:50%;transform:translateX(-50%);width:120px;height:24px;background:#000;border-radius:0 0 14px 14px;z-index:5}
+  .screen{background:#fff;border-radius:28px;overflow:hidden;position:relative}
+  iframe{width:100%;height:100%;border:none;display:block;background:#fff}
+  .home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:110px;height:5px;background:#333;border-radius:3px;z-index:5}
+  .info{font-size:11px;color:#64748b;margin-top:8px}
+</style>
+</head>
+<body>
+  <h1>📱 矿业新闻日报 · 手机视图模拟器</h1>
+  <div class="tip">
+    在电脑上预览日报的<b>手机端真实排版</b>。下拉选机型 / 点「旋转」切换横竖屏 / 自动缩放适配你的屏幕。<br>
+    最权威的验证仍推荐浏览器自带：<b>F12 → 点左上角「📱 设备工具栏」→ 选机型</b>。本工具适合快速来回对比。
+  </div>
+
+  <div class="warn" id="warn">
+    ⚠️ 你当前是 <b>file:// 协议打开</b>，浏览器安全策略通常会让 iframe 里的日报加载失败或样式异常。<br>
+    请在日报项目目录启动本地服务器：
+    <code>python -m http.server 8080</code>，
+    然后访问 <code>http://localhost:8080/mobile-preview.html</code>。
+  </div>
+
+  <div class="bar">
+    <label>机型</label>
+    <select id="device">
+      <option value="375x667">iPhone SE (375×667)</option>
+      <option value="390x844" selected>iPhone 12/13/14 (390×844)</option>
+      <option value="393x851">Pixel 5 (393×851)</option>
+      <option value="412x915">Galaxy S20 (412×915)</option>
+      <option value="430x932">iPhone 14 Pro Max (430×932)</option>
+      <option value="360x640">老安卓 (360×640)</option>
+    </select>
+    <button id="rotate" class="ghost">🔄 旋转</button>
+    <label>网址</label>
+    <input type="text" id="url" value="./index.html" title="默认加载同目录 index.html，避免跨域；可改回线上地址">
+    <button id="go">前往</button>
+    <button id="reload" class="ghost">↻ 刷新</button>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="scaler" id="scaler">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" id="screen">
+          <iframe id="frame" src="./index.html"></iframe>
+        </div>
+        <div class="home"></div>
+      </div>
+    </div>
+  </div>
+  <div class="info" id="info"></div>
+
+<script>
+  const screenEl = document.getElementById('screen');
+  const scaler = document.getElementById('scaler');
+  const stage = document.getElementById('stage');
+  const frame = document.getElementById('frame');
+  const info = document.getElementById('info');
+  const warn = document.getElementById('warn');
+  let landscape = false;
+
+  if(location.protocol === 'file:') warn.style.display = 'block';
+
+  function apply(){
+    let [w,h] = document.getElementById('device').value.split('x').map(Number);
+    if(landscape){ [w,h] = [h,w]; }
+    screenEl.style.width = w + 'px';
+    screenEl.style.height = h + 'px';
+    const availW = stage.clientWidth - 40;
+    const availH = stage.clientHeight - 40;
+    const scale = Math.min(availW / (w+20), availH / (h+20), 1);
+    scaler.style.transform = 'scale(' + scale + ')';
+    info.textContent = (landscape?'横屏 ':'竖屏 ') + w + ' × ' + h + ' ｜ 显示缩放 ' + (scale*100).toFixed(0) + '%';
+  }
+
+  document.getElementById('device').addEventListener('change', apply);
+  document.getElementById('rotate').addEventListener('click', ()=>{ landscape=!landscape; apply(); });
+  document.getElementById('go').addEventListener('click', ()=>{ frame.src = document.getElementById('url').value; });
+  document.getElementById('reload').addEventListener('click', ()=>{ frame.src = document.getElementById('url').value; });
+  window.addEventListener('resize', apply);
+  apply();
+</script>
+</body>
+</html>
