@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-1900" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-1936" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -31,6 +31,19 @@ body.has-install-bar{padding-bottom:64px}
 .toc-main-item.active{background:#e9f1f8;color:#1a3a5c;box-shadow:none}
 .toc-main-item.active .toc-count{color:#fff;background:#1a3a5c}
 .toc-count{font-size:11px;color:#7f8c8d;background:#eef2f5;padding:2px 7px;border-radius:10px;font-weight:600;min-width:22px;text-align:center}
+/* 「今日新增」的「新鲜度」数字：红色高亮 + 仅在有内容时轻微脉冲，吸引目光 */
+.toc-main-item .toc-count-fresh{color:#fff;background:#e74c3c;font-weight:700}
+.toc-main-item .toc-count-fresh.is-empty{color:#94a3b8;background:#eef2f5;font-weight:600}
+.toc-main-item .toc-count-fresh.has-fresh{animation:fresh-pulse 1.8s ease-out infinite}
+@keyframes fresh-pulse{
+  0%{box-shadow:0 0 0 0 rgba(231,76,60,.5)}
+  70%{box-shadow:0 0 0 6px rgba(231,76,60,0)}
+  100%{box-shadow:0 0 0 0 rgba(231,76,60,0)}
+}
+.toc-main-item.active .toc-count-fresh{color:#fff;background:#e74c3c}
+.toc-main-item.active .toc-count-fresh.is-empty{color:#1a3a5c;background:#fff}
+body.dark .toc-count-fresh{color:#fff;background:#e74c3c}
+body.dark .toc-count-fresh.is-empty{color:#94a3b8;background:#243140}
 .toc-back-top{font-size:12px;color:#2980b9;padding:8px 11px;cursor:pointer;border-radius:6px;text-align:center;margin-top:6px;border-top:1px solid #f4f6f8;padding-top:10px}
 .toc-back-top:hover{background:#eef4fa}
 .toc-all{color:#34495e!important}
@@ -1050,11 +1063,11 @@ window.gcTotal=function(data){
 </script>
 <nav class="toc-sidebar" id="tocSidebar" data-page-node-id="h7lkEHpfaxuwNBZUMU0kSo">
 <div class="toc-title" data-page-node-id="8LRX6eNrJaUyp2fpou5rph">📑 目录导航</div>
-<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="mcjfrkVHVCvuozlWyll2ET">📋 全部内容 <span class="toc-count" id="tocAllCount">79</span></div>
-<div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)" data-page-node-id="EFrXr8SMUaesjIaDEYAhDR">🔥 今日新增 <span class="toc-count" id="tocTodayCount">1</span></div>
-<div class="toc-main-item" data-target="specialSection" onclick="scrollToSection('specialSection',this)" style="color:#b45009" data-page-node-id="bVIAHgApeTJfE4aC3AKyn3">⛏️ 找矿专项 <span class="toc-count" id="tocSpecialCount" style="background:#fdf3d7;color:#b45009" data-page-node-id="f3N9WgzkKHYYiMEXqJgEbn">0</span></div>
-<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容 <span class="toc-count" id="tocArchiveCount">78</span></div>
-<div class="toc-main-item" data-target="rightsSection" onclick="scrollToSection('rightsSection',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易 <span class="toc-count" id="tocRightsCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="tRcC9kPvHKmCp8T4wQ3NxY">14</span></div>
+<div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="mcjfrkVHVCvuozlWyll2ET">📋 全部内容</div>
+<div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)" data-page-node-id="EFrXr8SMUaesjIaDEYAhDR">🔥 今日新增 <span class="toc-count toc-count-fresh" id="tocTodayCount">1</span></div>
+<div class="toc-main-item" data-target="specialSection" onclick="scrollToSection('specialSection',this)" style="color:#b45009" data-page-node-id="bVIAHgApeTJfE4aC3AKyn3">⛏️ 找矿专项</div>
+<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容</div>
+<div class="toc-main-item" data-target="rightsSection" onclick="scrollToSection('rightsSection',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易</div>
 <div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#f39c12" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
 <div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#8e44ad" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
 <div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
@@ -2221,20 +2234,17 @@ function refresh(){
   if(spCnt)spCnt.textContent=spFromArch>0?('共'+spInSection+'条（含'+spFromArch+'条往期）'):('共'+spInSection+'条');
   const spNum=document.getElementById('specialCountNum');
   if(spNum)spNum.textContent=spAll;
-  const tocSp=document.getElementById('tocSpecialCount');
-  if(tocSp){
-    tocSp.textContent=spAll;
-    // 2026-09-06 简化：专项区为 0 条时整条目录项隐藏（空入口=噪音，有内容时自动回来）
-    if(tocSp.parentElement)tocSp.parentElement.style.display=spAll?'':'none';
-  }
+  const tocSpRow=document.querySelector('.toc-main-item[data-target="specialSection"]');
+  if(tocSpRow)tocSpRow.style.display=spAll?'':'none';
   const tocCnt=document.getElementById('tocTodayCount');
-  if(tocCnt)tocCnt.textContent=newTotal;
-  const allCnt=document.getElementById('tocAllCount');
-  if(allCnt)allCnt.textContent=allTotal;
-  // 往期内容计数：#archiveSection 下所有 .news-item 的数量
+  if(tocCnt){
+    tocCnt.textContent=newTotal;
+    // 「新鲜度」高亮：有内容时加 .has-fresh 触发脉冲，无内容时退化为灰色 .is-empty
+    tocCnt.classList.toggle('has-fresh',newTotal>0);
+    tocCnt.classList.toggle('is-empty',newTotal===0);
+  }
+  // 往期区标题旁的「N条」属于区块头部，不是侧栏数字，保留（用户感知的总量）
   const archTotal=document.querySelectorAll('#archiveSection .news-item').length;
-  const archCnt=document.getElementById('tocArchiveCount');
-  if(archCnt)archCnt.textContent=archTotal;
   const archTitleCnt=document.getElementById('archiveCount');
   if(archTitleCnt)archTitleCnt.textContent=archTotal+'条';
   applyFavStates();
