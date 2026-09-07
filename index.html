@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-1623" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-1638" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1537,18 +1537,33 @@ window.gcTotal=function(data){
       var t=r.t||r.title||'';
       minerals.forEach(function(m){ if(t.indexOf(m)>=0 && foundMinerals.indexOf(m)<0) foundMinerals.push(m); });
     });
-    var first=results[0]||{};
-    var firstUrl=first.u||first.url||'#rightsSection';
-    var firstTitle=(first.t||first.title||'').trim();
-    // 用户反馈：摘要卡直接用原公告标题，不再合成「今日矿权出让结果：共 X 宗...」
-    var label=firstTitle || '今日矿权出让结果';
-    if(results.length>1) label += ' 等 '+results.length+' 宗';
-    var html='<div class="news-item is-new" data-url="'+firstUrl+'" data-rights-summary="1" data-embed="ok">'
-           + '<div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span>'
-           + '<a class="news-title" href="'+firstUrl+'">'+label+'</a></div>'
-           + '<div class="news-meta"><span class="src">矿业权市场</span> · '+today.slice(5)+'</div>'
-           + '<div class="news-summary">今日矿权交易专区更新 '+results.length+' 宗出让/转让结果，点击标题查看原公告。</div>'
-           + '</div>';
+    function escA(s){return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function escT(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+    var html;
+    if(results.length===1){
+      var fr=results[0];
+      var fUrl=escA(fr.u||fr.url||'#rightsSection');
+      var fTitle=escT((fr.t||fr.title||'').trim()) || '今日矿权出让结果';
+      html='<div class="news-item is-new" data-url="'+fUrl+'" data-rights-summary="1" data-embed="ok">'
+         + '<div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span>'
+         + '<a class="news-title" href="'+fUrl+'">'+fTitle+'</a></div>'
+         + '<div class="news-meta"><span class="src">矿业权市场</span> · '+today.slice(5)+'</div>'
+         + '<div class="news-summary">今日矿权交易专区更新 1 宗出让/转让结果，点击标题查看原公告。</div>'
+         + '</div>';
+    } else {
+      // 多宗：列出全部原公告标题（各带链接），而非只取首条 +「等 X 宗」
+      var links=results.map(function(r){
+        var u=escA(r.u||r.url||'#rightsSection');
+        var t=escT((r.t||r.title||'').trim());
+        return '<a class="rr-link" style="display:block;margin:3px 0;color:#1a73e8" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>';
+      }).join('');
+      html='<div class="news-item is-new" data-url="#rightsSection" data-rights-summary="1" data-embed="ok">'
+         + '<div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span>'
+         + '<span class="news-title">今日矿权出让/转让结果共 '+results.length+' 宗</span></div>'
+         + '<div class="news-meta"><span class="src">矿业权市场</span> · '+today.slice(5)+'</div>'
+         + '<div class="news-summary">今日矿权交易专区更新 '+results.length+' 宗出让/转让结果：'+links+'</div>'
+         + '</div>';
+    }
     var todaySection=document.getElementById('todaySection');
     if(!todaySection) return;
     var titleDiv=todaySection.querySelector('.section-title');
@@ -1742,13 +1757,16 @@ function updateHistoryCount(){
 
 // ===== 新一轮找矿突破战略行动专项：按关键词自动识别并归类 =====
 // 命中关键词的新闻从"今日新增/往期内容"移动到专项区对应子类（不重复展示）
-const SPECIAL_KEYWORDS=['新一轮找矿','找矿突破','找矿攻坚','找矿行动','战略性矿产','紧缺矿产','大宗矿产','增储上产','增储','新发现矿产地','找矿空间','找矿大局','找矿方向','找矿布局','深地探测','深地工程','深部找矿','深部探测','绿色勘查','攻深找盲','资源安全保障','成矿区带','重点成矿','AI找矿','关键矿产'];
+// 找矿专项归集：仅当标题/摘要明确含"找矿"或"新一轮找矿突破战略行动"才归专项。
+// 2026-09-07 收紧：原 SPECIAL_KEYWORDS 含"关键矿产/绿色勘查/增储/战略性矿产"等过宽词，
+// 会把"英国关键矿产供应链""绿色矿业六大场景科普"等国际动态/技术科普误拉进专项区（与往期区重复出现）。
 function isSpecialNews(el){
   const title=((el.querySelector('.news-title')||{}).textContent||'');
   const t=title+((el.querySelector('.news-summary')||{}).textContent||'');
   // 矿权出让/转让/挂牌/拍卖类公告不进专项（属常规矿权交易分类，即使摘要提到"战略性矿产/增储"等词）
   if(/(出让|转让|挂牌|拍卖|成交公示|招拍挂)/.test(title))return false;
-  return SPECIAL_KEYWORDS.some(k=>t.includes(k));
+  // 收窄：必须明确围绕"找矿突破战略行动"才归专项，避免过宽词误归类
+  return t.includes('找矿') || t.includes('新一轮找矿突破战略行动');
 }
 // 专项子类归类：政策/成果/技术/资源安全（未命中前者的默认归技术）
 function specialCategoryOf(el){
@@ -2654,15 +2672,57 @@ function renderAiAnalyze(d){
     body.appendChild(q);
   }
 }
+
+// 本地兜底：纯静态托管（GitHub Pages）无后端 / 无 DEEPSEEK_API_KEY 时，
+// 基于本地 news-data.js 生成「今日新闻按板块汇总」，替换"需服务端支持"空状态。
+function localAiSummary(){
+  var body=document.getElementById('aiBody');
+  var cnt=document.getElementById('aiCount');
+  if(!body)return;
+  var news=(window.NEWS_DATA&&window.NEWS_DATA.news)||[];
+  var today=qaReportDate();
+  var todays=news.filter(function(r){
+    var n=r.n||r.first_seen||'';
+    var d=r.d||r.orig_date_full||'';
+    return n===today || d===today;
+  });
+  if(!todays.length){
+    body.innerHTML='<div class="ai-empty">本地检索：今日暂无新增新闻（纯静态托管，未接入 AI 服务端）。行情、热榜与问答均为本地计算。</div>';
+    if(cnt)cnt.textContent='本地';
+    return;
+  }
+  var order=[], groups={};
+  todays.forEach(function(r){
+    var c=r.c||r.category||'其他';
+    if(!groups[c]){groups[c]=[];order.push(c);}
+    groups[c].push(r);
+  });
+  var html=order.map(function(c){
+    var items=groups[c].map(function(r){
+      var u=aiEsc(r.u||r.url||'#');
+      var t=aiEsc(r.t||r.title||'');
+      var s=aiEsc(r.s||r.source||'');
+      return '<div style="margin:2px 0"><a class="ai-item-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'+(s?' <span class="ai-item-src">'+s+'</span>':'')+'</div>';
+    }).join('');
+    return '<div class="ai-item">'
+      +'<div class="ai-item-head"><span class="ai-item-src">'+aiEsc(c)+'</span><span style="margin-left:auto;color:#888;font-size:12px">'+groups[c].length+'条</span></div>'
+      +'<div class="ai-item-rows"><div class="ai-row"><span class="ai-text">'+items+'</span></div></div>'
+      +'</div>';
+  }).join('');
+  body.innerHTML='<div style="padding:6px 10px;color:#b45309;background:#fffbeb;border-radius:6px;margin-bottom:8px;font-size:13px">以下为本地检索生成的今日新闻汇总（纯静态托管，AI 深度解读需服务端 DEEPSEEK_API_KEY）：</div>'+html;
+  if(cnt)cnt.textContent='本地 '+todays.length+'条';
+}
+
 function fetchAiAnalyze(){
   fetch('api/ai-analyze?v='+Date.now(),{cache:'no-store'})
     .then(function(r){return r.ok?r.json():null;})
-    .then(function(d){renderAiAnalyze(d);})
+    .then(function(d){
+      if(d && d.enabled!==false) renderAiAnalyze(d);
+      else localAiSummary(); // 服务端未配置 key 或纯静态托管 404 → 本地 news-data.js 兜底
+    })
     .catch(function(){
-      // 纯静态部署（GitHub Pages）没有后端、也没有 DEEPSEEK_API_KEY →
-      // 说明这是运行环境限制而非"网页坏了"，避免用户反复刷新。
-      var body=document.getElementById('aiBody');
-      if(body)body.innerHTML='<div class="ai-empty">AI 深度解析需要服务端支持（当前为纯静态托管，未接入 AI 服务）。<br>新闻、行情、热榜与问答检索均为本地计算，不受影响。</div>';
+      // 纯静态部署（GitHub Pages）无后端、也无 DEEPSEEK_API_KEY → 用本地检索兜底，不再显示"需服务端支持"
+      localAiSummary();
     });
 }
 
