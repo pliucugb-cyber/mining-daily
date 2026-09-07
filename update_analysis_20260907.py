@@ -212,8 +212,28 @@ policy_text = '\n'.join(fmt_bullet(n) for n in recent_items('行业动态')) or 
 tech_text = '\n'.join(fmt_bullet(n) for n in recent_items('找矿成果与勘查技术')) or '今日暂无新的勘查与技术动态。'
 ma_text = '\n'.join(fmt_bullet(n) for n in recent_items('并购与投资')) or '今日暂无新增并购/投资类公告。'
 
+# ---------- LME 行情文字：统一用 price_history_detail.json 的日K收盘价（与价格卡片口径一致）----------
+def _ph_q(key):
+    p = ph[key]['points']
+    last, prev = p[-1][1], p[-2][1]
+    pct = (last - prev) / prev * 100 if prev else 0.0
+    return last, pct
+
+def _fmt_pct(x):
+    return ('+%.2f%%' if x >= 0 else '%.2f%%') % x
+
+_lme = {name: _ph_q(k) for k, name in [('lcpt', '铜'), ('lalt', '铝'), ('lznt', '锌'),
+                                       ('lldt', '铅'), ('lnkt', '镍'), ('ltnt', '锡')]}
+_lme_up = ['%s %s（%s）' % (n, format(v[0], ',.1f'), _fmt_pct(v[1])) for n, v in _lme.items() if v[1] > 0.001]
+_lme_down = ['%s %s（%s）' % (n, format(v[0], ',.1f'), _fmt_pct(v[1])) for n, v in _lme.items() if v[1] < -0.001]
+_lme_flat = ['%s %s（%s）' % (n, format(v[0], ',.1f'), _fmt_pct(v[1])) for n, v in _lme.items() if -0.001 <= v[1] <= 0.001]
+lme_text = 'LME 09-07 收盘（美元/吨）——' + '、'.join(_lme_up) + '偏强，' + '、'.join(_lme_down) + '走弱'
+if _lme_flat:
+    lme_text += '，' + '、'.join(_lme_flat) + '持平'
+
+
 report = """**行情：**
-周一交易时段进行中，国内上期所最新官方收盘仍为 09-04（上周五）数据，价格卡沿用并显示；LME 09-07 电子盘窄幅波动——铜 14,400.5 美元/吨（+0.15%）、锌 3,969.5（+0.74%）、铅 1,913.5（+0.37%）偏强，铝 3,295.5（-0.02%）、镍 16,805.0（-0.18%）、锡 54,770.0（-0.15%）走弱。国内基本金属延续"金强锂弱"：上海金 965.96 元/克（+0.79%）、白银 16,250 元/千克（+1.28%）偏强；碳酸锂主力 09-04 收 141,940 元/吨（-5.30%）仍为最弱品种；沪锌 +0.51%、沪铜 +0.34% 偏强，沪镍 -0.86%、沪铝 -0.33% 走弱。详见下方金属价格板块。
+周一交易时段进行中，国内上期所最新官方收盘仍为 09-04（上周五）数据，价格卡沿用并显示；{lme_text}。国内基本金属延续"金强锂弱"：上海金 965.96 元/克（+0.79%）、白银 16,250 元/千克（+1.28%）偏强；碳酸锂主力 09-04 收 141,940 元/吨（-5.30%）仍为最弱品种；沪锌 +0.51%、沪铜 +0.34% 偏强，沪镍 -0.86%、沪铝 -0.33% 走弱。详见下方金属价格板块。
 
 **政策与产业：**
 {policy_text}
@@ -227,7 +247,7 @@ report = """**行情：**
 **矿权市场：**
 - 甘肃文县范坝交流一带金矿普查探矿权公开出让结果公示（09-07）：竞得人陇南市忠亿矿业开发有限公司，成交价 8365 万元，区块面积 1.4195 平方千米，勘查矿种金矿，拟出让年限 5.0 年，起始价 5.0 万元；公示期 09-07 至 09-18。
 
-**风险提示：** 碳酸锂主力 09-04 单日 -5.30%、两日累计跌逾 12%，短线情绪偏弱，关注锂价下行对上游矿企利润的压制；西藏吉隆"8·26"冰岩崩—泥石流灾害链次生风险仍处高位，源区残留不稳定冰川与岩体需持续监测；周一国内尚无新收盘，价格卡沿用 09-04 数据，盘中波动以 LME 09-07 电子盘为参考。""".strip().format(policy_text=policy_text, tech_text=tech_text, ma_text=ma_text)
+**风险提示：** 碳酸锂主力 09-04 单日 -5.30%、两日累计跌逾 12%，短线情绪偏弱，关注锂价下行对上游矿企利润的压制；西藏吉隆"8·26"冰岩崩—泥石流灾害链次生风险仍处高位，源区残留不稳定冰川与岩体需持续监测；周一国内尚无新收盘，价格卡沿用 09-04 数据，LME 以 09-07 日K收盘为参考。""".strip().format(policy_text=policy_text, tech_text=tech_text, ma_text=ma_text, lme_text=lme_text)
 
 import collections as _c
 _cat = _c.Counter(n.get('category', '') for n in new_items)
