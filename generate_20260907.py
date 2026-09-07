@@ -2,7 +2,7 @@
 """
 生成 2026-09-07 矿业新闻日报 index.html（原地更新）
 - 09-06 的"今日新增"条目滚入"往期内容"（去 NEW 标记、按同类目合并）
-- 按 7 天窗口剔除往期条目（保留 >= 09-01，即 今日-6 天），月度全量在 data/news_*.json
+- 按 30 天窗口（滚动保留最近30天）剔除往期条目（保留 >= 今日-29 天），月度全量在 data/news_*.json
 - 换入 09-07 抓取的最新条目（is-new + NEW），更新各计数与 AI 区条数
 - 周一交易时段进行中，国内上期所最新收盘仍为 09-04（上周五），价格卡沿用并标注；LME 09-07 电子盘由前端 JS 填充
 - 矿权条目按规范仅入 rightsSection 数据层（data/news_2026-09.json），不进主页列表
@@ -29,9 +29,9 @@ with open(SRC, encoding='utf-8') as f:
 
 REPORT = '2026-09-07'
 GRAB = '2026-09-07'
-ARCHIVE_DAYS = 14         # 往期展示窗口（天）
+ARCHIVE_DAYS = 30         # 往期展示窗口（天）
 REPORT_DT = datetime.date.fromisoformat(REPORT)
-CUTOFF_DT = REPORT_DT - datetime.timedelta(days=ARCHIVE_DAYS - 1)   # 往期最早日期（含）= 08-25
+CUTOFF_DT = REPORT_DT - datetime.timedelta(days=ARCHIVE_DAYS - 1)   # 往期最早日期（含）= 08-09
 DATA_ASOF = '09-04'       # 周一交易时段进行中，国内最新收盘仍为 09-04（上周五）
 
 # ============ 1. 标题 / 日期 / 更新时间 ============

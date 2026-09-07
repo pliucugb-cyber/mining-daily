@@ -1,6 +1,6 @@
 {
  "date": "2026-09-07",
- "total": 73,
+ "total": 79,
  "market_index": 52,
  "market_label": "中性",
  "by_commodity": {
@@ -26,17 +26,12 @@
   },
   "金": {
    "score": 53,
-   "count": 33,
+   "count": 36,
    "label": "中性"
   },
   "铅": {
    "score": 53,
    "count": 2,
-   "label": "中性"
-  },
-  "稀土": {
-   "score": 53,
-   "count": 7,
    "label": "中性"
   },
   "银": {
@@ -52,6 +47,11 @@
   "锌": {
    "score": 52,
    "count": 3,
+   "label": "中性"
+  },
+  "稀土": {
+   "score": 52,
+   "count": 9,
    "label": "中性"
   },
   "铀": {
@@ -103,22 +103,22 @@
  "themes": [
   {
    "theme": "国际",
-   "count": 24,
+   "count": 26,
    "score": 54
   },
   {
    "theme": "找矿",
-   "count": 18,
+   "count": 20,
    "score": 53
   },
   {
    "theme": "技术",
-   "count": 14,
+   "count": 15,
    "score": 53
   },
   {
    "theme": "政策",
-   "count": 9,
+   "count": 10,
    "score": 51
   },
   {
@@ -142,5 +142,5 @@
    ]
   }
  ],
- "source": "keyword-rule（基于 index.html 收录 73 条）"
+ "source": "keyword-rule（基于 index.html 收录 79 条）"
 }
