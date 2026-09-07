@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-1829" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-1849" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -603,6 +603,22 @@ body.dark .fold-toggle:hover{background:#22303f;color:#cfe0ee;border-color:#3d7a
 body.dark .notice{background:#2b2617;border-color:#5c5228;color:#e0cf90}
 body.dark .notice b{color:#e8cf7a}
 body.dark .sub-cat .icon{color:#6aa9e0}
+/* ---- 往期区子分类/日组 可折叠抽屉（2026-09-07） ---- */
+.sub-cat-collapsible{cursor:pointer;user-select:none;transition:background .12s}
+.sub-cat-collapsible:hover{background:linear-gradient(90deg,#e3eef8 0%,#f3f8fc 100%)}
+.sub-cat-collapsible .cat-arrow{display:inline-block;width:14px;height:16px;line-height:16px;text-align:center;margin-right:4px;color:#2980b9;font-weight:700;transition:transform .15s}
+.sub-cat-collapsible[data-collapsed="true"] .cat-arrow{transform:rotate(-90deg)}
+.sub-cat-collapsible:focus-visible{outline:2px solid #2980b9;outline-offset:-2px;border-radius:6px}
+.day-group{padding:8px 14px 7px 32px;margin:4px 14px 2px;font-size:13px;font-weight:600;color:#475569;background:#f5f7fa;border-left:3px solid #94a3b8;border-radius:0 4px 4px 0;cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;transition:background .12s}
+.day-group:hover{background:#eaf1f8}
+.day-group .day-arrow{display:inline-block;width:12px;height:14px;line-height:14px;text-align:center;color:#64748b;font-weight:700;transition:transform .15s}
+.day-group[data-collapsed="true"] .day-arrow{transform:rotate(-90deg)}
+.day-group .day-count{margin-left:auto;background:#e2e8f0;color:#475569;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600}
+.day-group:focus-visible{outline:2px solid #2980b9;outline-offset:-2px}
+body.dark .sub-cat-collapsible:hover{background:linear-gradient(90deg,#1d2a38 0%,#1c2632 100%)}
+body.dark .day-group{background:#1c2632;color:#cbd5e1;border-left-color:#475569}
+body.dark .day-group:hover{background:#243140}
+body.dark .day-group .day-count{background:#2c3845;color:#cbd5e1}
 /* ---- 金属价格条 ---- */
 body.dark .price-strip-title{color:#9ecbe8}
 body.dark .price-strip-note{color:#8b9bad}
@@ -1994,6 +2010,168 @@ function toggleOldFold(){
   applyFilter();
 }
 
+// ===== 往期区可折叠抽屉（2026-09-07）=====
+// 解决往期 78 条全平铺翻起来费劲：4 个子分类可折叠（行业动态、国际矿业动态默认折叠），
+// 行业动态内部按天再分组（每组可独立折叠）。状态用 localStorage 记忆用户主动切换。
+// 全部依赖现有 DOM 渲染（不动生成器），明天自动化生成新 HTML 仍生效。
+const _AF_LS_CAT='mining_daily.archive.cat';   // 分类折叠状态：{name: bool}
+const _AF_LS_DAY='mining_daily.archive.day';   // 日组折叠状态：{MM-DD: bool}
+const _AF_DEFAULT_COLLAPSED=['行业动态','国际矿业动态'];   // 默认折叠的子分类（按名称包含判定）
+function _afLoadMap(key){
+  try{return JSON.parse(localStorage.getItem(key)||'{}')||{}}catch(e){return {}}
+}
+function _afSaveMap(key,m){try{localStorage.setItem(key,JSON.stringify(m))}catch(e){}}
+function _afCatName(cat){
+  // 提取分类名（去掉 emoji 与空白）。例："🏭 行业动态 10条" → "行业动态"
+  const t=(cat.firstChild&&cat.firstChild.textContent)||cat.textContent||'';
+  // sub-count 里的数字不影响：取到第一个 "数字+"条" 之前
+  return t.replace(/[A-Za-z0-9\u4e00-\u9fa5]+(?:条新增|条)/,'').trim();
+}
+function _afToggleItems(collapsed, startNode, stopPredicate){
+  let sib=startNode;
+  while(sib && !stopPredicate(sib)){
+    if(sib.classList && (sib.classList.contains('news-item') || sib.classList.contains('day-group'))){
+      sib.style.display=collapsed?'none':'';
+    }
+    sib=sib.nextElementSibling;
+  }
+}
+function initArchiveFold(){
+  const arch=document.getElementById('archiveSection');
+  if(!arch)return;
+  const catMap=_afLoadMap(_AF_LS_CAT);
+  const dayMap=_afLoadMap(_AF_LS_DAY);
+
+  // 1) 改造每个 archive sub-cat 为可折叠
+  const subcats=Array.from(arch.querySelectorAll('.sub-cat'));
+  subcats.forEach(cat=>{
+    const name=_afCatName(cat);
+    cat._afName=name;   // 缓存：第二个 forEach（按日分组）需要复用；注 arrow 后 firstChild 不再是文本
+    const isDefaultCollapsed=_AF_DEFAULT_COLLAPSED.some(k=>name.indexOf(k)>=0);
+    if(!(name in catMap))catMap[name]=isDefaultCollapsed;   // 仅在用户未改过时跟随默认
+
+    // 视觉：加可点击样式、展开/折叠三角、ARIA
+    cat.classList.add('sub-cat-collapsible');
+    cat.setAttribute('role','button');
+    cat.setAttribute('tabindex','0');
+    cat.setAttribute('data-collapsed', String(!!catMap[name]));
+    cat.setAttribute('aria-expanded', String(!catMap[name]));
+
+    // 注入三角 span（仅首次）
+    let arrow=cat.querySelector('.cat-arrow');
+    if(!arrow){
+      arrow=document.createElement('span');
+      arrow.className='cat-arrow';
+      cat.insertBefore(arrow, cat.firstChild);
+    }
+
+    // 初始隐藏/显示其后的所有 news-item
+    _afToggleItems(!!catMap[name], cat.nextElementSibling, el=>el.classList&&el.classList.contains('sub-cat'));
+
+    const toggle=()=>{
+      const next=!catMap[name];
+      catMap[name]=next;
+      _afSaveMap(_AF_LS_CAT, catMap);
+      cat.setAttribute('data-collapsed', String(next));
+      cat.setAttribute('aria-expanded', String(!next));
+      _afToggleItems(next, cat.nextElementSibling, el=>el.classList&&el.classList.contains('sub-cat'));
+    };
+    cat.addEventListener('click', toggle);
+    cat.addEventListener('keydown', e=>{
+      if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){e.preventDefault();toggle()}
+    });
+  });
+
+  // 2) 行业动态：按日期分日组（DOM 改造；只在 items>=2 时分组）
+  subcats.forEach(cat=>{
+    const name=cat._afName||_afCatName(cat);   // 优先用缓存的 name（避免 _afCatName 受 DOM 变更影响）
+    if(name.indexOf('行业动态')<0)return;
+    if(cat.getAttribute('data-day-grouped')==='1')return;   // 防重入
+    cat.setAttribute('data-day-grouped','1');
+
+    // 创建日组时，父级分类若正处于折叠态，对 day-group 标题自身也要隐藏
+    // （_afToggleItems 之前已跑过，但那时 day-group 还没建）
+    const parentCollapsed=!!catMap[name];
+
+    // 收集本分类下所有 news-item（直至下一个 sub-cat）
+    const items=[];
+    let sib=cat.nextElementSibling;
+    while(sib && !(sib.classList&&sib.classList.contains('sub-cat'))){
+      if(sib.classList && sib.classList.contains('news-item'))items.push(sib);
+      sib=sib.nextElementSibling;
+    }
+    if(items.length<2)return;   // 1 条不分组
+
+    // 按日期分组（从 news-meta 文本提取 MM-DD）
+    const groups={};
+    items.forEach(el=>{
+      const meta=el.querySelector('.news-meta');
+      const m=meta?(meta.textContent.match(/(\d{1,2})-(\d{1,2})/)||[]):null;
+      const key=m?(m[1].length===1?'0'+m[1]:m[1])+'-'+(m[2].length===1?'0'+m[2]:m[2]):'未标注';
+      (groups[key]=groups[key]||[]).push(el);
+    });
+
+    // 按日期降序
+    const dayKeys=Object.keys(groups).sort((a,b)=>{
+      if(a==='未标注')return 1;if(b==='未标注')return -1;
+      return a<b?1:a>b?-1:0;
+    });
+
+    // 在 cat 之后依次插入"日组标题 + 该日 items"
+    let prevNode=cat;
+    dayKeys.forEach(key=>{
+      const itemsInDay=groups[key];
+      // 用户偏好优先，未设则默认展开
+      if(!(key in dayMap))dayMap[key]=false;
+
+      const dayHead=document.createElement('div');
+      dayHead.className='day-group';
+      if(parentCollapsed)dayHead.style.display='none';   // 父级折叠时，日组标题也收起
+      dayHead.setAttribute('role','button');
+      dayHead.setAttribute('tabindex','0');
+      dayHead.setAttribute('data-day', key);
+      dayHead.setAttribute('data-collapsed', String(!!dayMap[key]));
+      dayHead.setAttribute('aria-expanded', String(!dayMap[key]));
+      dayHead.innerHTML='<span class="day-arrow">▾</span><span class="day-text">'+key+'</span><span class="day-count">'+itemsInDay.length+'条</span>';
+
+      // 插入到 prevNode 之后
+      prevNode.parentNode.insertBefore(dayHead, prevNode.nextSibling);
+      prevNode=dayHead;
+
+      // 把该日 items 移到 dayHead 之后
+      itemsInDay.forEach(it=>{
+        if(dayMap[key])it.style.display='none';
+        prevNode.parentNode.insertBefore(it, prevNode.nextSibling);
+        prevNode=it;
+      });
+
+      const toggle=()=>{
+        const next=!dayMap[key];
+        dayMap[key]=next;
+        _afSaveMap(_AF_LS_DAY, dayMap);
+        dayHead.setAttribute('data-collapsed', String(next));
+        dayHead.setAttribute('aria-expanded', String(!next));
+        // 切换该日下 items
+        let n=dayHead.nextElementSibling;let cnt=0;
+        while(n && cnt<itemsInDay.length){
+          if(n.classList && n.classList.contains('news-item')){
+            n.style.display=next?'none':'';
+            cnt++;
+          }
+          n=n.nextElementSibling;
+        }
+      };
+      dayHead.addEventListener('click', toggle);
+      dayHead.addEventListener('keydown', e=>{
+        if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){e.preventDefault();toggle()}
+      });
+    });
+  });
+
+  _afSaveMap(_AF_LS_CAT, catMap);
+  _afSaveMap(_AF_LS_DAY, dayMap);
+}
+
 // 刷新显示状态
 function refresh(){
   const s=getReadSet();
@@ -2733,6 +2911,7 @@ injectTags();
 injectStars();
 renderArchivedFavs();
 foldOldArchive();
+initArchiveFold();   // 往期区 4 个子分类可折叠抽屉 + 行业动态按日折叠（2026-09-07）
 // injectOrigDateBadges();   // 2026-09-06 停用（与 meta 日期重复）
 loadBrief();
 restoreReadingMode();
