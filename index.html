@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-1252" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-1349" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1029,7 +1029,7 @@ window.gcTotal=function(data){
 <div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="mcjfrkVHVCvuozlWyll2ET">📋 全部内容 <span class="toc-count" id="tocAllCount">46</span></div>
 <div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)" data-page-node-id="EFrXr8SMUaesjIaDEYAhDR">🔥 今日新增 <span class="toc-count" id="tocTodayCount">9</span></div>
 <div class="toc-main-item" data-target="specialSection" onclick="scrollToSection('specialSection',this)" style="color:#b45009" data-page-node-id="bVIAHgApeTJfE4aC3AKyn3">⛏️ 找矿专项 <span class="toc-count" id="tocSpecialCount" style="background:#fdf3d7;color:#b45009" data-page-node-id="f3N9WgzkKHYYiMEXqJgEbn">0</span></div>
-<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容 <span class="toc-count" id="tocArchiveCount">37</span></div>
+<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容 <span class="toc-count" id="tocArchiveCount">27</span></div>
 <div class="toc-main-item" data-target="rightsSection" onclick="scrollToSection('rightsSection',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易 <span class="toc-count" id="tocRightsCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="tRcC9kPvHKmCp8T4wQ3NxY">14</span></div>
 <div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#f39c12" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
 <div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#8e44ad" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
@@ -1172,8 +1172,8 @@ window.gcTotal=function(data){
     </label>
     <label data-page-node-id="rGJ2SHy4RJt4h8Y1cR2Y9g">时间窗口
       <select id="rightsFilterWindow" data-page-node-id="rGK2SHy4RJt4h8Y1cR2Y9h">
-        <option value="7" selected data-page-node-id="rGL2SHy4RJt4h8Y1cR2Y9i">近 7 日</option>
-        <option value="14" data-page-node-id="rGM2SHy4RJt4h8Y1cR2Y9j">近 14 日</option>
+        <option value="7" data-page-node-id="rGL2SHy4RJt4h8Y1cR2Y9i">近 7 日</option>
+        <option value="14" selected data-page-node-id="rGM2SHy4RJt4h8Y1cR2Y9j">近 14 日</option>
         <option value="30" data-page-node-id="rGN2SHy4RJt4h8Y1cR2Y9k">近 30 日</option>
         <option value="all" data-page-node-id="rGO2SHy4RJt4h8Y1cR2Y9l">全部</option>
       </select>
@@ -1505,7 +1505,7 @@ window.gcTotal=function(data){
     if(tableWrap) tableWrap.hidden=!isTable;
     if(emptyEl) emptyEl.hidden=list.length>0;
     if(countEl) countEl.textContent=data.length+" 条"+(list.length!==data.length?"（筛后 "+list.length+"）":"");
-    if(tocEl) tocEl.textContent=String(data.length);
+    if(tocEl) tocEl.textContent=String(list.length);
   }
   function bindRights(){
     ["rightsFilterMethod","rightsFilterMineral","rightsFilterWindow"].forEach(function(id){
@@ -1936,7 +1936,7 @@ function refresh(){
     if(!isRead){unread++;if(el.classList.contains('is-new'))newUnread++}
   });
   const newTotal=document.querySelectorAll('.news-item.is-new').length;
-  const allTotal=document.querySelectorAll('.news-item:not(.arch-fav)').length;
+  const allTotal=document.querySelectorAll('.news-item:not(.arch-fav):not(.sp-from-archive)').length;
   document.getElementById('newCount').textContent=newTotal;
   document.getElementById('unreadCount').textContent=unread;
   document.getElementById('unreadBtnCount').textContent=unread;
