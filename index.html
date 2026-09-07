@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-1557" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-1623" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1780,7 +1780,7 @@ function initSpecial(){
     const list=document.getElementById('spList-'+cat);
     if(list)list.appendChild(el); // 移动DOM（已读/收藏/浏览记录随节点走，不重复）
   });
-  // 1.5) 往期里命中的战略新闻（最近14天内）：也搬进专项区，让用户看到真正"找矿"的内容
+  // 1.5) 往期里命中的战略新闻（最近14天内）：直接搬进专项区，原位置移除（与今日新增一致，专项/往期互斥）
   //      超过 14 天的只打标记不移动（避免专项区无限堆）
   const ARCHIVE_SP_DAYS=14;
   document.querySelectorAll('#archiveSection .news-item').forEach(el=>{
@@ -1789,17 +1789,11 @@ function initSpecial(){
     if(!isSpecialNews(el))return;
     const days=_mmdd(el);
     if(days<=ARCHIVE_SP_DAYS){
-      // 近14天：搬进专项区（但保留原位置：复制一份去专项区，原位置保留以保留上下文）
+      // 近14天：直接移动 DOM 到专项区，往期原位置不再保留（专项区与往期区互斥，不重复展示）
       el.classList.add('is-special');
       const cat=specialCategoryOf(el);
       const list=document.getElementById('spList-'+cat);
-      if(list){
-        // 用 cloneNode(true) 避免破坏往期区的原有结构和徽章
-        const clone=el.cloneNode(true);
-        clone.dataset.clonedFrom=el.dataset.url||'';
-        clone.classList.add('sp-from-archive');
-        list.appendChild(clone);
-      }
+      if(list)list.appendChild(el);
     }else{
       el.classList.add('is-special'); // 远期：只打标记，不移动 DOM
     }
@@ -1823,6 +1817,16 @@ function initSpecial(){
     }
     const cnt=cat.querySelector('.sub-count');
     if(cnt)cnt.textContent=n+'条新增';
+  });
+  // 3.5) 重算往期内容各子类计数（往期命中战略新闻被移走后，静态数字偏高，需同步）
+  document.querySelectorAll('#archiveSection .sub-cat').forEach(cat=>{
+    let n=0,sib=cat.nextElementSibling;
+    while(sib&&!sib.classList.contains('sub-cat')){
+      if(sib.classList&&sib.classList.contains('news-item'))n++;
+      sib=sib.nextElementSibling;
+    }
+    const cnt=cat.querySelector('.sub-count');
+    if(cnt)cnt.textContent=n+'条';
   });
   // 4) 专项区整区为空则隐藏（只数专项区内的，不含往期里打标的）
   const total=spSec.querySelectorAll('.sp-list .news-item.is-special').length;
