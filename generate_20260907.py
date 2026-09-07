@@ -29,9 +29,9 @@ with open(SRC, encoding='utf-8') as f:
 
 REPORT = '2026-09-07'
 GRAB = '2026-09-07'
-ARCHIVE_DAYS = 7          # 往期展示窗口（天）
+ARCHIVE_DAYS = 14         # 往期展示窗口（天）
 REPORT_DT = datetime.date.fromisoformat(REPORT)
-CUTOFF_DT = REPORT_DT - datetime.timedelta(days=ARCHIVE_DAYS - 1)   # 往期最早日期（含）= 09-01
+CUTOFF_DT = REPORT_DT - datetime.timedelta(days=ARCHIVE_DAYS - 1)   # 往期最早日期（含）= 08-25
 DATA_ASOF = '09-04'       # 周一交易时段进行中，国内最新收盘仍为 09-04（上周五）
 
 # ============ 1. 标题 / 日期 / 更新时间 ============
@@ -181,7 +181,7 @@ new_today_block = ('<!-- ==================== 今日新增（%s 抓取） ======
 
 new_arch_block = ('<!-- ==================== 往期内容 ==================== -->\n'
     '<div class="section" id="archiveSection">\n'
-    '<div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近7天）'
+    '<div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近14天）'
     '<span class="news-count" id="archiveCount">%d条</span></div>\n'
     '<div class="fold-toggle" id="foldToggle" style="display:none" onclick="toggleOldFold()">▸ 展开更早内容</div>\n'
     % arch_n + ''.join(arch_groups) + '</div>\n')

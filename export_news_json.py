@@ -280,8 +280,8 @@ def write_news_data_js(data_dir, out_path):
             print('[warn] 读取失败 %s: %s' % (fn, e), file=sys.stderr)
             continue
     rows.sort(key=lambda r: (r.get('orig_date_full', ''), r.get('id', '')), reverse=True)
-    # 搜索库保留窗口：news-data.js 仅导出最近 RETAIN_DAYS 天，避免随历史无限膨胀
-    RETAIN_DAYS = 30
+    # 搜索库保留窗口：news-data.js 导出最近 RETAIN_DAYS 天，避免随历史无限膨胀
+    RETAIN_DAYS = 365
     _cut = datetime.date.today() - datetime.timedelta(days=RETAIN_DAYS)
     def _odt(s):
         try:

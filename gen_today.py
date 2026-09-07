@@ -270,7 +270,7 @@ new_archive_count = total_archive
 new_archive = (
     '<!-- ==================== 往期内容 ==================== -->\n'
     '<div class="section" id="archiveSection">\n'
-    '<div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近7天）'
+    '<div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近14天）'
     f'<span class="news-count" id="archiveCount">{new_archive_count}条</span></div>\n'
     '<div class="fold-toggle" id="foldToggle" style="display:none" onclick="toggleOldFold()">▸ 展开更早内容</div>\n'
     + old_today_content + '\n'
