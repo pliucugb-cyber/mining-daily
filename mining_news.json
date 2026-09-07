@@ -1,13 +1,14 @@
 {
   "meta": {
     "report_date": "2026-09-07",
-    "generated_at": "2026-09-07T17:34:19+08:00",
-    "total": 73,
+    "generated_at": "2026-09-07T18:07:04+08:00",
+    "total": 79,
     "new_today": 1,
-    "archive": 72,
-    "page_total": 75,
+    "archive": 78,
+    "page_total": 81,
     "page_new_count": 3,
     "sources": [
+      "中国地质调查局",
       "中国地质调查局西宁中心",
       "中国有色网",
       "中国有色金属工业协会",
@@ -221,6 +222,23 @@
         "金",
         "找矿",
         "国际"
+      ]
+    },
+    {
+      "id": "18b610f34432",
+      "title": "探矿工程所\"一种超短半径水平井造斜段轨迹控制系统\"获国家发明专利授权",
+      "url": "https://www.cgs.gov.cn/ywdt/dwdt/202608/t20260821_867102.html",
+      "source": "中国地质调查局",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-07",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "中国地质调查局探矿工程所研发的超短半径水平井造斜段轨迹控制系统获国家发明专利授权，为深部找矿与关键矿产勘查提供装备支撑。",
+      "embed": "ok",
+      "tags": [
+        "找矿",
+        "技术"
       ]
     },
     {
@@ -918,6 +936,40 @@
       ]
     },
     {
+      "id": "d5a41ad01af1",
+      "title": "关于2026年度有色金属企业管理现代化创新成果审定结果的公示",
+      "url": "https://www.chinania.org.cn/html/xiehuidongtai/xiehuitongzhi/2026/0824/61815.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-07",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "中国有色金属工业协会对2026年度有色金属企业管理现代化创新成果审定结果进行公示，覆盖有色行业管理创新成果。",
+      "embed": "block",
+      "tags": [
+        "政策",
+        "技术"
+      ]
+    },
+    {
+      "id": "950836c35308",
+      "title": "深化产融协同 共促黄金市场高质量发展——中国黄金协会赴上海黄金交易所拜访交流",
+      "url": "https://www.cngold.org.cn/news/show-9515.html",
+      "source": "中国黄金协会",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-07",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "8月21日，中国黄金协会党委书记、副会长严弟勇带队赴上海黄金交易所拜访，与上金所总裁孔燕座谈。双方明确将健全长效合作机制，在产业调研、风险防控、政策研究、行业交流等领域协同发力，以深度产融融合助力行业提质升级、共促黄金市场稳健高质量发展。",
+      "embed": "block",
+      "tags": [
+        "金",
+        "政策"
+      ]
+    },
+    {
       "id": "b85fcba28125",
       "title": "BMI：未来5年铁矿石产量增速加快",
       "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260901_10303964.htm",
@@ -1297,6 +1349,59 @@
       "embed": "ok",
       "tags": [
         "稀土",
+        "国际"
+      ]
+    },
+    {
+      "id": "e6da6ffe8ebc",
+      "title": "铟泰公司签署布鲁克稀土矿承购协议",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202608/t20260824_10297599.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-07",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "铟泰公司签署加拿大布鲁克稀土矿承购协议，海外稀土供应链布局推进。",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "铟",
+        "国际"
+      ]
+    },
+    {
+      "id": "e1f6b4458890",
+      "title": "美国用量子技术赋能关键矿产填图",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/kykj/202608/t20260824_10297596.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-07",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "美国采用量子技术开展关键矿产地质填图工作，提升识别精度。",
+      "embed": "ok",
+      "tags": [
+        "技术"
+      ]
+    },
+    {
+      "id": "512c544f2a09",
+      "title": "格陵兰萨法托克铌稀土矿获勘查许可",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260824_10297598.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-07",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "格陵兰萨法托克铌稀土矿获颁勘查许可，该项目为大型稀土-铌多金属矿，是新一轮关键矿产勘查的重点项目之一。",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "铌",
+        "找矿",
         "国际"
       ]
     }
