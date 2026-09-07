@@ -279,6 +279,28 @@ def write_news_data_js(data_dir, out_path):
         except Exception as e:
             print('[warn] 读取失败 %s: %s' % (fn, e), file=sys.stderr)
             continue
+    # 同一公告可能因抓取器 URL 形态不同（如 PDF 直链 vs cninfo 详情页）产生重复记录；
+    # 按 title 归并去重：优先保留 static.cninfo.com.cn/finalpage PDF 直链（更稳定），
+    # 剔除 cninfo.com.cn/new/disclosure/detail 详情页形态，避免「今日要闻/问答」出现重复。
+    # 仅对「并购与投资」类公告做此归并，避免误杀不同来源的同名新闻。
+    def _is_pdf(u): return 'static.cninfo.com.cn/finalpage/' in (u or '')
+    merged = []
+    seen_ma_title = {}
+    for r in rows:
+        if r.get('category') == '并购与投资':
+            t = r.get('title', '')
+            if t in seen_ma_title:
+                # 若已有 detail 形态而本条为 PDF 直链 → 用 PDF 替换
+                if _is_pdf(r.get('url', '')) and not _is_pdf(seen_ma_title[t].get('url', '')):
+                    merged.remove(seen_ma_title[t])
+                    seen_ma_title[t] = r
+                    merged.append(r)
+                continue
+            seen_ma_title[t] = r
+            merged.append(r)
+        else:
+            merged.append(r)
+    rows = merged
     rows.sort(key=lambda r: (r.get('orig_date_full', ''), r.get('id', '')), reverse=True)
     # 搜索库保留窗口：news-data.js 导出最近 RETAIN_DAYS 天，避免随历史无限膨胀
     RETAIN_DAYS = 365
