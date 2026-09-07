@@ -125,7 +125,7 @@ new_price_html = (
 html = re.sub(old_price_pattern, lambda m: new_price_html, html, flags=re.DOTALL)
 # 替换后校验：两容器各一个、LME 6 slug、div 收支为 0
 assert html.count('id="priceCardsShfe"')==1 and html.count('id="priceCardsLme"')==1
-assert html.count("price-cards-lme")==1
+assert 'class="price-cards price-cards-lme" id="priceCardsLme"' in html
 for _sl in ['lcpt','lalt','lldt','lznt','lnkt','ltnt']:
     assert f'data-slug="{_sl}"' in html, _sl
 assert len(re.findall(r'<div\b',html))==html.count('</div>'), 'div balance broken'
@@ -147,15 +147,21 @@ if pos_today < 0 or pos_archive < 0 or pos_install < 0:
     print("ERROR: Could not find all markers!")
     exit(1)
 
-# Find the real end of archiveSection (rightsSection now lives between archive and install)
+# Find real ends of todaySection and archiveSection (specialSection now lives between them)
+today_div_start = html.find('<div class="section" id="todaySection"', pos_today)
+today_div_end = find_matching_close(html, today_div_start)
 archive_div_start = html.find('<div class="section" id="archiveSection"', pos_archive)
 archive_div_end = find_matching_close(html, archive_div_start)
+if today_div_end < 0:
+    print("ERROR: Could not find closing tag for todaySection!")
+    exit(1)
 if archive_div_end < 0:
     print("ERROR: Could not find closing tag for archiveSection!")
     exit(1)
 
 # Extract old sections
-old_today_section = html[pos_today:pos_archive]  # from today marker to archive marker
+old_today_section = html[pos_today:today_div_end]  # today marker through closing </div>
+special_block = html[today_div_end:pos_archive]    # preserve specialSection (now between today and archive) as-is
 old_archive_section = html[pos_archive:archive_div_end]  # archive comment through closing </div>
 rights_block = html[archive_div_end:pos_install]  # preserve rightsSection (and any spacer) as-is
 
@@ -272,8 +278,8 @@ new_archive = (
     '</div>\n'
 )
 
-# Replace old today+archive while preserving rightsSection (now after archiveSection)
-html = html[:pos_today] + new_today + '\n' + new_archive + rights_block + html[pos_install:]
+# Replace old today+archive while preserving specialSection (between today and archive) and rightsSection
+html = html[:pos_today] + new_today + special_block + '\n' + new_archive + rights_block + html[pos_install:]
 
 print(f"Step 6: Sections replaced. New size: {len(html)} chars")
 
