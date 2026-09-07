@@ -116,10 +116,10 @@ def parse_all(html, report_date=''):
     - 锚点用 </body> 兜底，避免"区段最后一条新闻无前瞻锚点"而漏解析
     """
     pat = re.compile(
-        r'<div class="section" id="([a-zA-Z]+)">'          # g1: section id
-        r'|<div class="sub-cat">([^<]*)'                    # g2: sub-cat
-        r'|<div class="sp-cat">([^<]*)'                     # g3: sp-cat
-        r'|<div class="news-item([^"]*)"(.*?)(?=<div class="section" id=|<div class="sub-cat">|<div class="sp-cat">|<div class="news-item|</body>)',  # g4/g5
+        r'<div class="section" id="([a-zA-Z]+)"[^>]*>'      # g1: section id
+        r'|<div class="sub-cat"[^>]*>([^<]*)'               # g2: sub-cat
+        r'|<div class="sp-cat"[^>]*>([^<]*)'                # g3: sp-cat
+        r'|<div class="news-item([^"]*)"(.*?)(?=<div class="section" id=|<div class="sub-cat"[^>]*>|<div class="sp-cat"[^>]*>|<div class="news-item|</body>)',  # g4/g5
         re.S)
     items = []
     cur_cat = '行业动态'
