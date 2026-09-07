@@ -1,42 +1,67 @@
 {
  "date": "2026-09-07",
- "total": 30,
- "market_index": 51,
+ "total": 73,
+ "market_index": 52,
  "market_label": "中性",
  "by_commodity": {
   "铝": {
-   "score": 56,
-   "count": 1,
+   "score": 55,
+   "count": 6,
    "label": "中性"
   },
-  "铅": {
-   "score": 56,
-   "count": 1,
+  "锂": {
+   "score": 54,
+   "count": 8,
    "label": "中性"
   },
   "铂族": {
-   "score": 56,
-   "count": 1,
+   "score": 54,
+   "count": 4,
    "label": "中性"
   },
-  "锌": {
+  "铜": {
+   "score": 53,
+   "count": 21,
+   "label": "中性"
+  },
+  "金": {
+   "score": 53,
+   "count": 33,
+   "label": "中性"
+  },
+  "铅": {
    "score": 53,
    "count": 2,
    "label": "中性"
   },
-  "金": {
-   "score": 52,
-   "count": 8,
+  "稀土": {
+   "score": 53,
+   "count": 7,
    "label": "中性"
   },
-  "铜": {
-   "score": 51,
-   "count": 5,
+  "银": {
+   "score": 53,
+   "count": 3,
+   "label": "中性"
+  },
+  "镍": {
+   "score": 52,
+   "count": 7,
+   "label": "中性"
+  },
+  "锌": {
+   "score": 52,
+   "count": 3,
+   "label": "中性"
+  },
+  "铀": {
+   "score": 52,
+   "count": 3,
    "label": "中性"
   },
   "钨": {
    "score": 50,
-   "count": 2,
+   "count": 3,
    "label": "中性"
   },
   "锑": {
@@ -46,17 +71,22 @@
   },
   "锗": {
    "score": 50,
-   "count": 1,
+   "count": 2,
    "label": "中性"
   },
   "钼": {
    "score": 50,
-   "count": 1,
+   "count": 2,
    "label": "中性"
   },
-  "锂": {
+  "钴": {
    "score": 50,
-   "count": 1,
+   "count": 4,
+   "label": "中性"
+  },
+  "锡": {
+   "score": 50,
+   "count": 2,
    "label": "中性"
   },
   "铁矿": {
@@ -64,37 +94,37 @@
    "count": 1,
    "label": "中性"
   },
-  "镍": {
-   "score": 44,
+  "钪": {
+   "score": 50,
    "count": 1,
    "label": "中性"
   }
  },
  "themes": [
   {
-   "theme": "政策",
-   "count": 7,
-   "score": 51
-  },
-  {
-   "theme": "技术",
-   "count": 7,
-   "score": 52
-  },
-  {
-   "theme": "找矿",
-   "count": 6,
-   "score": 52
-  },
-  {
    "theme": "国际",
-   "count": 4,
+   "count": 24,
    "score": 54
   },
   {
+   "theme": "找矿",
+   "count": 18,
+   "score": 53
+  },
+  {
+   "theme": "技术",
+   "count": 14,
+   "score": 53
+  },
+  {
+   "theme": "政策",
+   "count": 9,
+   "score": 51
+  },
+  {
    "theme": "价格",
-   "count": 1,
-   "score": 56
+   "count": 8,
+   "score": 54
   }
  ],
  "samples": [
@@ -112,5 +142,5 @@
    ]
   }
  ],
- "source": "keyword-rule（基于 index.html 收录 30 条）"
+ "source": "keyword-rule（基于 index.html 收录 73 条）"
 }

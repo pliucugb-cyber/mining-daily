@@ -9,7 +9,7 @@
 - 保留：data-slug / digestStrip / qaFab / pchartMask / themeToggle / rightsSection
 修复：sub-cat/sp-cat 现在带 data-page-node-id 属性，正则需容错 [^>]*
 """
-import re, datetime
+import re, datetime, json, glob
 from source_whitelist import is_allowed
 
 
@@ -55,6 +55,21 @@ i_t = html.find(TAG_TODAY)
 i_a = html.find(TAG_ARCH)
 i_r = html.find(TAG_RIGHTS)
 assert 0 <= i_t < i_a < i_r, 'markers not found'
+
+# 用 marker 注释（而非 div 起点）作边界，避免把旧 marker 带入导致重复
+m_today = html.find('<!-- ==================== 今日新增')
+assert m_today != -1, '今日新增 marker missing'
+
+# 保留找矿专项容器（位于今日区与往期区之间，由前端 initSpecial 运行时填充，重建时不能丢弃）
+# 注意：专项容器之后紧跟着「往期内容」marker 注释，须截断在 marker 之前，否则会与 new_arch_block 的 marker 重复
+sp_start = html.find('<div class="section" id="specialSection"')
+arch_marker_pos = html.find('<!-- ==================== 往期内容')
+if sp_start != -1 and arch_marker_pos != -1 and arch_marker_pos > sp_start:
+    special_block = html[sp_start:arch_marker_pos]
+elif sp_start != -1:
+    special_block = html[sp_start:i_a]
+else:
+    special_block = ''
 
 today_raw = html[i_t:i_a]
 arch_raw  = html[i_a:i_r]
@@ -121,6 +136,62 @@ CAT_ZK = '🔍 找矿成果与勘查技术'
 CAT_HY = '🏭 行业动态'
 CAT_GJ = '🌐 国际矿业动态'
 
+# ============ 3.5 从累计库回补 30 天窗口（防止历史条目因窗口滚动丢失） ============
+CAT_MAP = {
+    '行业动态': CAT_HY,
+    '国际矿业动态': CAT_GJ,
+    '找矿成果与勘查技术': CAT_ZK,
+    '培训与学术': CAT_HY,
+    '政策法规': CAT_HY,
+}
+LIB_SKIP = {'矿权交易', '并购与投资'}   # 矿权→rightsSection（前端渲染）；并购→inject_ma 独立子分类
+
+def _esc(s):
+    return (s or '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
+def _lib_item(e):
+    url = e.get('url', '')
+    if not url:
+        return None
+    cat = CAT_MAP.get(e.get('category', ''))
+    if not cat:
+        return None
+    title = _esc(e.get('title', ''))
+    src = _esc(e.get('source', ''))
+    od = e.get('orig_date', '') or (e.get('orig_date_full', '') or '')[5:]
+    summary = _esc(e.get('summary', ''))
+    embed = e.get('embed', 'ok') or 'ok'
+    return (cat,
+        '<div class="news-item" data-url="%s" data-embed="%s"><div class="news-head"><span class="dot"></span>'
+        '<a class="news-title" href="%s" target="_blank">%s</a></div>'
+        '<div class="news-meta"><span class="src">%s</span> · %s</div><div class="news-summary">%s</div></div>'
+        % (url, embed, url, title, src, od, summary))
+
+_lib_pool = []
+for _fn in sorted(glob.glob('data/news_2026-*.json')):
+    try:
+        _lib = json.load(open(_fn, encoding='utf-8'))['news']
+    except Exception:
+        continue
+    for _e in _lib:
+        if _e.get('category') in LIB_SKIP:
+            continue
+        _odf = _e.get('orig_date_full', '') or ''
+        if _odf < CUTOFF_DT.isoformat():
+            continue
+        _url = _e.get('url', '')
+        if not _url or _url in seen_url:
+            continue
+        _it = _lib_item(_e)
+        if not _it:
+            continue
+        _lib_pool.append((_odf, _url, _it))
+_lib_pool.sort(key=lambda t: t[0], reverse=True)
+for _odf, _url, _it in _lib_pool:
+    seen_url.add(_url)
+    merge_seq.append(_it)
+print('library backfill added:', len(_lib_pool))
+
 new_items = [
     (CAT_ZK, ni('http://www.xgsnrc.cgs.gov.cn/gzdt/aqsc/202609/t20260905_867989.html', '中国地质调查局西宁中心', '09-05',
         '以案为鉴筑牢安全防线 精细钻探夯实开发根基——柳园铭扬铜镍矿第三孔支撑性勘探顺利开钻',
@@ -181,13 +252,13 @@ new_today_block = ('<!-- ==================== 今日新增（%s 抓取） ======
 
 new_arch_block = ('<!-- ==================== 往期内容 ==================== -->\n'
     '<div class="section" id="archiveSection">\n'
-    '<div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近14天）'
+    '<div class="section-title"><span class="icon">📰</span> 往期内容（滚动保留最近30天）'
     '<span class="news-count" id="archiveCount">%d条</span></div>\n'
     '<div class="fold-toggle" id="foldToggle" style="display:none" onclick="toggleOldFold()">▸ 展开更早内容</div>\n'
     % arch_n + ''.join(arch_groups) + '</div>\n')
 
-# 以 rightsSection 为界重建今日/往期区，保留矿权专区容器与「详细安装指引」注释 marker
-html = html[:i_t] + new_today_block + new_arch_block + html[i_r:]
+# 以 rightsSection 为界重建今日/往期区，保留找矿专项容器、矿权专区容器与「详细安装指引」注释 marker
+html = html[:m_today] + new_today_block + special_block + new_arch_block + html[i_r:]
 # 移除旧的 canon 今日新增注释标记，避免最终出现两个「今日新增」marker 触发 preflight 失败
 html = html.replace('<!-- ==================== 今日新增 ==================== -->', '', 1)
 
