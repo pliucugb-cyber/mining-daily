@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-1806" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-1829" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -2600,12 +2600,15 @@ function renderDigest(){
     dateEl.textContent=(anchor?anchor.replace(/-/g,'.'):(dt.getFullYear()+'.'+(dt.getMonth()+1)+'.'+dt.getDate()))+' 星期'+week[dt.getDay()];
   }
   // 优先取"今日收录"的条目（n=first_seen，新闻可能发布于前一日），
-  // 无收录标记时退回发布日期==今日，再退回全库最新一天
-  var today=QA_ROWS.filter(function(r){return r.n===anchor;});
-  if(!today.length)today=QA_ROWS.filter(function(r){return r.d===anchor;});
+  // 无收录标记时退回发布日期==今日，再退回全库最新一天。
+  // 剔除「并购与投资」类：这类是上市公司合规公告，虽今日入库但发布日期多为往日，
+  // 属"数据披露"而非"今日新闻要闻"，避免把往日内容混进今日热点。
+  function _isDigestNews(r){return r.c!=='并购与投资';}
+  var today=QA_ROWS.filter(function(r){return r.n===anchor&&_isDigestNews(r);});
+  if(!today.length)today=QA_ROWS.filter(function(r){return r.d===anchor&&_isDigestNews(r);});
   if(!today.length){                       // 当日无数据时退回全库最新一天
-    var max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>max)max=r.d;});
-    today=QA_ROWS.filter(function(r){return r.d===max;});
+    var max='';QA_ROWS.forEach(function(r){if(_isDigestNews(r)&&r.d&&r.d>max)max=r.d;});
+    today=QA_ROWS.filter(function(r){return _isDigestNews(r)&&r.d===max;});
   }
   if(!today.length){
     list.innerHTML='<li class="digest-empty">暂无可提取的要闻（全库为空）</li>';
