@@ -1,6 +1,6 @@
 {
  "date": "2026-09-07",
- "total": 28,
+ "total": 30,
  "market_index": 51,
  "market_label": "中性",
  "by_commodity": {
@@ -32,6 +32,11 @@
   "铜": {
    "score": 51,
    "count": 5,
+   "label": "中性"
+  },
+  "钨": {
+   "score": 50,
+   "count": 2,
    "label": "中性"
   },
   "锑": {
@@ -67,6 +72,11 @@
  },
  "themes": [
   {
+   "theme": "政策",
+   "count": 7,
+   "score": 51
+  },
+  {
    "theme": "技术",
    "count": 7,
    "score": 52
@@ -75,11 +85,6 @@
    "theme": "找矿",
    "count": 6,
    "score": 52
-  },
-  {
-   "theme": "政策",
-   "count": 5,
-   "score": 51
   },
   {
    "theme": "国际",
@@ -107,5 +112,5 @@
    ]
   }
  ],
- "source": "keyword-rule（基于 index.html 收录 28 条）"
+ "source": "keyword-rule（基于 index.html 收录 30 条）"
 }

@@ -12,6 +12,7 @@
 - cngold.org.cn          中国黄金协会
 - chinamining.org.cn     中国矿业网 / 中国矿业联合会
 - zgkyb.com              中国矿业报
+- cninfo.com.cn          巨潮资讯网（A股/北交所/港股官方披露平台，并购/投资类公告来源，2026-09-07 新增）
 
 使用方式：
     python source_whitelist.py --check-url <url>
@@ -33,6 +34,7 @@ ALLOWED_DOMAINS = [
     "cngold.org.cn",
     "chinamining.org.cn",
     "zgkyb.com",
+    "cninfo.com.cn",
 ]
 
 # 非新闻来源的功能/统计/API 链接，校验时跳过
