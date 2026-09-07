@@ -2,7 +2,7 @@
 """
 矿业新闻日报信源白名单校验工具。
 
-约定信源（memory 2026-09-07 固化，2026-09-07 晚扩展 2 个）：
+约定信源（memory 2026-09-07 固化，2026-09-07 晚扩展 4 个）：
 - ky.mnr.gov.cn          全国矿业权市场网（矿权出让/转让/结果）
 - mnr.gov.cn             自然资源部官网
 - cgs.gov.cn             中国地质调查局（含各中心子域，如 xgsnrc.cgs.gov.cn）
@@ -13,6 +13,11 @@
 - chinamining.org.cn     中国矿业网 / 中国矿业联合会
 - zgkyb.com              中国矿业报
 - cninfo.com.cn          巨潮资讯网（A股/北交所/港股官方披露平台，并购/投资类公告来源，2026-09-07 新增）
+- smm.cn                 上海有色网 SMM（有色金属现货基准价发布方；补价格行情、库存/港口出港量、
+                         钛/铌/钽/锑等小金属快讯。覆盖 www.smm.cn / news.smm.cn 等子域。
+                         2026-09-07 覆盖度核查 P0 新增。注意部分深度报告付费，取公开资讯页）
+- antaike.com            安泰科（中国有色金属工业协会下属研究机构；补行业分析、产量数据、政策解读。
+                         2026-09-07 覆盖度核查 P0 新增）
 
 使用方式：
     python source_whitelist.py --check-url <url>
@@ -35,6 +40,9 @@ ALLOWED_DOMAINS = [
     "chinamining.org.cn",
     "zgkyb.com",
     "cninfo.com.cn",
+    # 2026-09-07 覆盖度核查 P0 新增（补价格行情/贸易库存/小金属/行业分析缺口）
+    "smm.cn",        # 上海有色网（含 www.smm.cn / news.smm.cn 等子域）
+    "antaike.com",   # 安泰科（中国有色金属工业协会下属研究机构）
 ]
 
 # 非新闻来源的功能/统计/API 链接，校验时跳过
