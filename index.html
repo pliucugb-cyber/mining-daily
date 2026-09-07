@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260907-1533" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260907-1545" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -2333,7 +2333,7 @@ function renderBrief(d){
     var st=d.stats||{};
     var n=st.new_count;
     sEl.textContent=(typeof n==='number'&&n>0)
-      ? ('今日收录 '+n+' 条 · 按行情/政策/勘查/矿权分类摘要')
+      ? ('今日收录 '+n+' 条 · 按行情/政策/勘查/并购/矿权分类摘要')
       : '每日 9:30 随日报生成';
   }
   var main=document.getElementById('briefMain');
@@ -3756,7 +3756,7 @@ function qaFloatSearch(){
   var range=parseInt((document.getElementById('qaFloatRange')||{}).value,10)||0;
   if(q){qaFloatAdd('user',q,'',{md:false});inp.value='';}
   if(!q&&!mineral&&!topic&&!range){
-    qaFloatAdd('ai','请选择矿种 / 主题 / 时间，或输入关键词后点「检索」。','',{md:false});
+    // 未输入条件时不弹提示词式消息，静默返回即可
     return;
   }
   var words=q?q.split(/\s+/).filter(Boolean):[],from='';
@@ -3775,7 +3775,7 @@ function qaFloatSearch(){
     if(mineral)cond.push('矿种='+qaEsc(mineral));
     if(topic)cond.push('主题='+qaEsc(topic));
     if(from)cond.push(from+' 起');
-    html='<div>命中 <b>'+hits.length+'</b> 条'+(cond.length?'　'+cond.join('　'):'')+'，最新 8 条：</div>';
+    html='<div>找到 <b>'+hits.length+'</b> 条相关新闻'+(cond.length?' · '+cond.join(' · '):'')+'：</div>';
     if(QA_TREND)html+='<div class="qa-trend">'+qaEsc(qaTrendText(hits))+'</div>';
     var lim=Math.min(hits.length,8);
     for(var i=0;i<lim;i++){
@@ -4149,7 +4149,7 @@ function qaClearHistory(){
   try{localStorage.removeItem(QA_HISTORY_KEY);}catch(e){}
   var body=document.getElementById('qaFloatBody');if(!body)return;
   body.innerHTML='';
-  qaFloatAdd('ai','全库 '+QA_ROWS.length+' 条新闻可检索。输入关键词，或先选矿种 / 主题 / 时间再点「检索」。','本地检索 · 零依赖',{md:false});
+  qaFloatAdd('ai','本地新闻库 '+QA_ROWS.length+' 条。','本地检索 · 零依赖',{md:false});
 }
 function qaCopyAi(btn){
   var msg=btn.closest('.qa-msg');if(!msg)return;
@@ -4552,7 +4552,7 @@ function toggleTheme(){
     if(fb.children.length)fb.innerHTML='';
     qaLoadHistory();
     if(!fb.children.length){
-      qaFloatAdd('ai','全库 '+QA_ROWS.length+' 条新闻可检索。输入关键词，或先选矿种 / 主题 / 时间再点「检索」。','本地检索 · 零依赖',{md:false});
+      qaFloatAdd('ai','本地新闻库 '+QA_ROWS.length+' 条。','本地检索 · 零依赖',{md:false});
     }
   }
 
