@@ -105,6 +105,23 @@ def fetch(url, last_domain_ts):
         time.sleep(wait)
     last_domain_ts[domain] = time.time()
 
+    # PDF 直链：用 HEAD 探测可达性即可，不必下载全文做关键词匹配
+    if url.lower().endswith('.pdf'):
+        req = urllib.request.Request(url, method='HEAD', headers={
+            'User-Agent': UA,
+            'Accept': 'application/pdf,*/*;q=0.8',
+        })
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+                ct = resp.headers.get('Content-Type', '')
+                if resp.status == 200 and ('pdf' in ct.lower() or resp.getheader('Content-Length')):
+                    return 200, int(resp.headers.get('Content-Length', 0)), '[PDF]'
+                return resp.status, 0, ''
+        except urllib.error.HTTPError as e:
+            return e.code, 0, ''
+        except Exception as e:
+            return 0, 0, f'[NETWORK ERROR] {e}'
+
     req = urllib.request.Request(url, headers={
         'User-Agent': UA,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -136,6 +153,7 @@ def check_one(item, last_domain_ts):
     if not item.get('url_consistent', True):
         findings.append('❌ 同一新闻条目内 data-url 与标题链接 href 不一致（HTML 内部错配）')
 
+    is_pdf = url.lower().endswith('.pdf')
     status_code, body_len, body_text = fetch(url, last_domain_ts)
 
     # 规则 1：HTTP 状态码
@@ -151,13 +169,13 @@ def check_one(item, last_domain_ts):
     elif status_code >= 300:
         findings.append(f'⚠️ HTTP {status_code}（重定向）')
 
-    # 规则 2：返回内容过短
-    if status_code == 200 and body_len < LIST_PAGE_THRESHOLD:
+    # 规则 2：返回内容过短（PDF 直链跳过，以 HEAD 状态为准）
+    if status_code == 200 and body_len < LIST_PAGE_THRESHOLD and not is_pdf:
         findings.append(f'⚠️ 内容仅 {body_len}B（< 5KB，列表页嫌疑——参数化 URL 失效）')
 
-    # 规则 3：标题关键词匹配
+    # 规则 3：标题关键词匹配（PDF 直链跳过，HEAD 已确认可达）
     keywords = keywords_of(title)
-    if status_code == 200 and keywords:
+    if status_code == 200 and keywords and not is_pdf:
         hit = sum(1 for k in keywords if k in body_text)
         if hit == 0:
             findings.append(f'❌ 标题关键词 0/{len(keywords)} 命中（{keywords[:3]}…）——可能错挂源或 URL 错配')

@@ -237,13 +237,18 @@ def build_items(report_date, days, mining_names):
             continue
         seen_ids.add(aid)
         full, mmdd = bj_date(a.get("announcementTime") or 0)
-        org = a.get("orgId") or ""
-        plate = PLATE_MAP.get(a.get("pageColumn"), "szse")
-        url = "https://www.cninfo.com.cn/new/disclosure/detail?plate=%s&orgId=%s&announcementId=%s" % (plate, org, aid)
+        # 巨潮 SPA 详情页在部分环境/浏览器下打不开，改用官方 PDF 直链更稳。
+        adjunct = (a.get("adjunctUrl") or "").strip()
+        if adjunct and not adjunct.startswith("http"):
+            url = "https://static.cninfo.com.cn/" + adjunct.lstrip("/")
+        else:
+            org = a.get("orgId") or ""
+            plate = PLATE_MAP.get(a.get("pageColumn"), "szse")
+            url = "https://www.cninfo.com.cn/new/disclosure/detail?plate=%s&orgId=%s&announcementId=%s" % (plate, org, aid)
         mtype = ma_type(title)
         summary = "%s（%s）披露《%s》，涉及%s。" % (sec, a.get("secCode") or "", title, mtype)
         out.append({
-            "id": hashlib.md5(url.encode("utf-8")).hexdigest()[:12],
+            "id": hashlib.md5(aid.encode("utf-8")).hexdigest()[:12],
             "url": url,
             "title": title,
             "source": "巨潮资讯网·" + sec,

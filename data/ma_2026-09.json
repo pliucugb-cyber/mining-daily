@@ -1,11 +1,11 @@
 {
   "month": "2026-09",
-  "updated_at": "2026-09-07T15:32:12+08:00",
+  "updated_at": "2026-09-07T15:58:00+08:00",
   "count": 2,
   "news": [
     {
-      "id": "b39388ec0f1a",
-      "url": "https://www.cninfo.com.cn/new/disclosure/detail?plate=shse&orgId=gssh0600549&announcementId=1225548634",
+      "id": "0a5efc5c1b25",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-05/1225548634.PDF",
       "title": "兴业证券股份有限公司关于厦门钨业股份有限公司收购报告书之2026年半年度持续督导意见暨持续督导总结报告",
       "source": "巨潮资讯网·厦门钨业",
       "orig_date": "09-05",
@@ -16,14 +16,11 @@
       "sec_code": "600549",
       "ma_type": "股权/资产收购",
       "summary": "厦门钨业（600549）披露《兴业证券股份有限公司关于厦门钨业股份有限公司收购报告书之2026年半年度持续督导意见暨持续督导总结报告》，涉及股权/资产收购。",
-      "tags": [
-        "并购",
-        "钨"
-      ]
+      "tags": ["钨", "并购"]
     },
     {
-      "id": "9aef3e384f85",
-      "url": "https://www.cninfo.com.cn/new/disclosure/detail?plate=szse&orgId=9900046057&announcementId=1225547876",
+      "id": "16cd3f363920",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-05/1225547876.PDF",
       "title": "兴业证券股份有限公司关于厦门厦钨新能源材料股份有限公司收购报告书之2026年半年度持续督导意见暨持续督导总结报告",
       "source": "巨潮资讯网·厦钨新能",
       "orig_date": "09-05",
@@ -34,10 +31,7 @@
       "sec_code": "688778",
       "ma_type": "股权/资产收购",
       "summary": "厦钨新能（688778）披露《兴业证券股份有限公司关于厦门厦钨新能源材料股份有限公司收购报告书之2026年半年度持续督导意见暨持续督导总结报告》，涉及股权/资产收购。",
-      "tags": [
-        "并购",
-        "钨"
-      ]
+      "tags": ["钨", "并购"]
     }
   ]
 }
