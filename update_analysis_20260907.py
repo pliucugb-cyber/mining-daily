@@ -203,13 +203,14 @@ def fmt_bullet(n):
     return '- %s%s' % (body, '（%s）' % s if s else '')
 
 def recent_items(category, limit=5):
-    arr = [n for n in news if n.get('category') == category]
+    # 今日简报只取「今日新增」条目，避免把往期内容塞进「今日简报」
+    arr = [n for n in news if n.get('category') == category and n.get('is_new')]
     arr.sort(key=lambda x: x.get('orig_date_full', ''), reverse=True)
     return arr[:limit]
 
 policy_text = '\n'.join(fmt_bullet(n) for n in recent_items('行业动态')) or '今日暂无新的政策与产业动态。'
 tech_text = '\n'.join(fmt_bullet(n) for n in recent_items('找矿成果与勘查技术')) or '今日暂无新的勘查与技术动态。'
-ma_text = '\n'.join(fmt_bullet(n) for n in recent_items('并购与投资')) or '近 14 日窗口内暂无新增有色金属矿企并购/投资类公告。'
+ma_text = '\n'.join(fmt_bullet(n) for n in recent_items('并购与投资')) or '今日暂无新增并购/投资类公告。'
 
 report = """**行情：**
 周一交易时段进行中，国内上期所最新官方收盘仍为 09-04（上周五）数据，价格卡沿用并显示；LME 09-07 电子盘窄幅波动——铜 14,400.5 美元/吨（+0.15%）、锌 3,969.5（+0.74%）、铅 1,913.5（+0.37%）偏强，铝 3,295.5（-0.02%）、镍 16,805.0（-0.18%）、锡 54,770.0（-0.15%）走弱。国内基本金属延续"金强锂弱"：上海金 965.96 元/克（+0.79%）、白银 16,250 元/千克（+1.28%）偏强；碳酸锂主力 09-04 收 141,940 元/吨（-5.30%）仍为最弱品种；沪锌 +0.51%、沪铜 +0.34% 偏强，沪镍 -0.86%、沪铝 -0.33% 走弱。详见下方金属价格板块。
