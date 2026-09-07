@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-0016" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-0210" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -891,6 +891,7 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 .section-title.rights{background:linear-gradient(135deg,#0e7490,#0891b2);color:#fff}
 #rightsSection{padding:10px 18px 26px}
 .rights-note{font-size:12.5px;color:#5b6b7a;line-height:1.65;padding:2px 4px 14px}
+.expo-note{font-size:12.5px;color:#5b6b7a;line-height:1.65;padding:2px 4px 12px}
 .rights-toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px;padding:12px 14px;background:#f8fafc;border:1px solid #e6edf3;border-radius:12px}
 .rights-filters{display:flex;flex-wrap:wrap;gap:12px}
 .rights-filters label{font-size:12px;color:#4a5568;display:flex;align-items:center;gap:6px;font-weight:600}
@@ -948,6 +949,7 @@ body.dark .rights-more-btn:hover{background:#123a5c;color:#a5e3ff;border-color:#
 body.dark .section-title.rights{background:linear-gradient(135deg,#0e7490,#0891b2)}
 body.dark #rightsSection{background:#0f141c}
 body.dark .rights-note{color:#8b9bad}
+body.dark .expo-note{color:#8b9bad}
 body.dark .rights-toolbar{background:#131a23;border-color:#2c3845}
 body.dark .rights-filters label{color:#94a3b8}
 body.dark .rights-filters select{background:#243140;border-color:#2c3845;color:#c9d6e2}
@@ -4665,6 +4667,89 @@ function setupExportButtons(){
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setupNewsFilterBar(); setupExportButtons(); });
 else { setupNewsFilterBar(); setupExportButtons(); }
+
+/* ===== 会展预告独立板块（2026-09-08 新增）=====
+   背景：候选池里会议/论坛/展会/年会类条目占比高（SMM 源尤其多），但它们不是
+   「行业事件」，混在今日要闻里会挤掉真正的行情与项目动态。
+   做法：加载后扫描今日区与往期区，命中会展特征的条目移到独立 #expoSection，
+   并摘掉 is-new / NEW 角标——这样它们不再计入「今日新增」名额。
+   判定 = 会展词 ∩ 动作词 − 实质事件词（避免把「矿业大会宣布新探矿权出让」误搬走）。 */
+(function(){
+  var EXPO_WORDS=['大会','年会','论坛','峰会','研讨会','博览会','展会','展览会','推介会',
+                  '交流会','洽谈会','对接会','沙龙','展览','会议'];
+  var EXPO_ACTION=['召开','举行','举办','开幕','落幕','收官','闭幕','将于','即将','预告',
+                   '报名','邀请','倒计时','参展','参会','圆满','启幕','直播','议程','出席'];
+  var EXPO_SKIP=['收购','投产','勘探','发现','涨价','签约','中标','获批','事故','停产',
+                 '复产','产量','利润','业绩预告','资源量','储量','矿权','出让','挂牌',
+                 '拍卖','减产','罢工','禁令','关税','出口管制','复产','投产','增产'];
+  function titleOf(el){var a=el.querySelector('.news-title');return a?(a.textContent||''):'';}
+  function isExpo(t){
+    if(!t) return false;
+    var i,hit=false;
+    for(i=0;i<EXPO_WORDS.length;i++){ if(t.indexOf(EXPO_WORDS[i])>=0){hit=true;break;} }
+    if(!hit) return false;
+    for(i=0;i<EXPO_SKIP.length;i++){ if(t.indexOf(EXPO_SKIP[i])>=0) return false; }
+    for(i=0;i<EXPO_ACTION.length;i++){ if(t.indexOf(EXPO_ACTION[i])>=0) return true; }
+    // 会议本体名（如「…发展论坛」「第八届全球铝土矿大会」）没有任何动作词，
+    // 但带「届」或以会展词收尾，同样属于会展条目。
+    if(t.indexOf('届')>=0) return true;
+    for(i=0;i<EXPO_WORDS.length;i++){
+      var w=EXPO_WORDS[i];
+      if(t.length>=w.length && t.lastIndexOf(w)===t.length-w.length) return true;
+    }
+    return false;
+  }
+  function addToc(n){
+    var ref=document.querySelector('.toc-main-item[data-target="specialSection"]');
+    if(!ref||!ref.parentNode) return;
+    if(document.querySelector('.toc-main-item[data-target="expoSection"]')) return;
+    var d=document.createElement('div');
+    d.className='toc-main-item'; d.setAttribute('data-target','expoSection');
+    d.textContent='🎪 会展预告';
+    d.onclick=function(){ if(typeof scrollToSection==='function') scrollToSection('expoSection',this); };
+    ref.parentNode.insertBefore(d, ref.nextSibling);
+  }
+  function init(){
+    try{
+      var secs=[document.getElementById('todaySection'),document.getElementById('archiveSection')];
+      var picked=[];
+      secs.forEach(function(sec){
+        if(!sec) return;
+        Array.prototype.slice.call(sec.querySelectorAll('.news-item')).forEach(function(el){
+          if(isExpo(titleOf(el))) picked.push(el);
+        });
+      });
+      if(!picked.length) return;
+      var host=document.getElementById('expoSection');
+      if(!host){
+        host=document.createElement('div');
+        host.className='section'; host.id='expoSection';
+        host.innerHTML='<div class="section-title"><span class="icon">🎪</span> 会展预告'
+          + '<span class="news-count" id="expoCount">0条</span></div>'
+          + '<div class="expo-note">会议、论坛、展会、年会类信息独立成区，不占用今日要闻名额。</div>'
+          + '<div id="expoList"></div>';
+        var anchor=document.getElementById('specialSection');
+        if(anchor&&anchor.parentNode) anchor.parentNode.insertBefore(host,anchor.nextSibling);
+        else if(secs[1]&&secs[1].parentNode) secs[1].parentNode.insertBefore(host,secs[1]);
+        else document.body.appendChild(host);
+      }
+      var list=host.querySelector('#expoList')||host;
+      picked.forEach(function(el){
+        el.classList.remove('is-new');
+        var b=el.querySelector('.badge-new'); if(b&&b.parentNode) b.parentNode.removeChild(b);
+        list.appendChild(el);
+      });
+      host.style.display='';
+      var c=host.querySelector('#expoCount'); if(c) c.textContent=picked.length+'条';
+      addToc(picked.length);
+      if(typeof refresh==='function'){ try{refresh();}catch(e){} }
+    }catch(e){}
+  }
+  if(document.readyState==='loading')
+    document.addEventListener('DOMContentLoaded',function(){ setTimeout(init,0); });
+  else setTimeout(init,0);
+  window.__expoIsExpo=isExpo;
+})();
 
 /* ===== 主题切换（2026-09-05 新增）=====
    手动切换后写入 localStorage，之后不再跟随系统；
