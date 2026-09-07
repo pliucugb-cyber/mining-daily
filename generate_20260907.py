@@ -10,6 +10,18 @@
 修复：sub-cat/sp-cat 现在带 data-page-node-id 属性，正则需容错 [^>]*
 """
 import re, datetime
+from source_whitelist import is_allowed
+
+
+def ni(url, src, date, title, summary, embed='ok'):
+    """构造今日新增条目，并强制校验 URL 在白名单内。"""
+    if not is_allowed(url):
+        raise ValueError(f"URL 不在允许信源白名单内: {url}")
+    return ('<div class="news-item is-new" data-url="%s" data-embed="%s"><div class="news-head"><span class="dot"></span>'
+            '<span class="badge-new">NEW</span><a class="news-title" href="%s" target="_blank">%s</a></div>'
+            '<div class="news-meta"><span class="src">%s</span> · %s</div><div class="news-summary">%s</div>'
+            '</div>'
+            % (url, embed, url, title, src, date, summary))
 
 SRC = 'index.html'
 with open(SRC, encoding='utf-8') as f:
@@ -102,12 +114,8 @@ for cat, it in prev_today + arch_keep:
     merge_seq.append((cat, it))
 
 # ============ 4. 今日新增条目（09-07 抓取，均逐页核实标题/日期/正文） ============
-def ni(url, src, date, title, summary, embed='ok'):
-    return ('<div class="news-item is-new" data-url="%s" data-embed="%s"><div class="news-head"><span class="dot"></span>'
-            '<span class="badge-new">NEW</span><a class="news-title" href="%s" target="_blank">%s</a></div>'
-            '<div class="news-meta"><span class="src">%s</span> · %s</div><div class="news-summary">%s</div>'
-            '</div>'
-            % (url, embed, url, title, src, date, summary))
+# 信源白名单已固化在 source_whitelist.py；构造条目 ni() 会自动校验 URL，
+# 非白名单 URL 会抛 ValueError，避免把未知来源写入日报。
 
 CAT_ZK = '🔍 找矿成果与勘查技术'
 CAT_HY = '🏭 行业动态'
@@ -117,30 +125,17 @@ new_items = [
     (CAT_ZK, ni('http://www.xgsnrc.cgs.gov.cn/gzdt/aqsc/202609/t20260905_867989.html', '中国地质调查局西宁中心', '09-05',
         '以案为鉴筑牢安全防线 精细钻探夯实开发根基——柳园铭扬铜镍矿第三孔支撑性勘探顺利开钻',
         '柳园铭扬铜镍矿5号机台MZK002号勘探孔正式开孔，为本轮专项勘探第三孔，在前两孔基础上加密勘探剖面、完善地质数据，为资源储量核实与灾害隐患排查提供依据；施工结合西藏吉隆泥石流教训，全程强化安全管控与地质灾害防控。')),
-    (CAT_HY, ni('https://news.qq.com/rain/a/20260904A0A60O00', '华夏时报', '09-04',
-        '"算力金属"涨价潮：AI基建拉动铜铝等工业金属需求',
-        '华夏时报报道，AI算力基础设施建设拉动铜、铝等工业金属需求，被市场称为"算力金属"的品种价格集体走高，供需缺口预期升温，产业链利润向资源端转移。')),
-    (CAT_HY, ni('https://cn.chinagate.cn/environment/2026-09/04/content_118680064.shtml', '中国网', '09-04',
-        '新能源汽车与储能等新需求成为有色金属行业增长引擎',
-        '中国网报道，新能源汽车、光伏、储能及AI算力等新需求成为有色金属行业增长引擎，铜、铝、锂等品种长期需求获支撑，行业由传统基建驱动转向多元新兴需求驱动。')),
-    (CAT_HY, ni('https://www.cnstock.com/commonDetail/785554', '上海证券报', '09-03',
-        '盛屯矿业拟7.09亿元收购西藏海腾矿业 加码锌资源布局',
-        '盛屯矿业公告拟以7.09亿元收购西藏海腾矿业相关股权，切入锌等资源领域，强化上游原料保障与一体化布局，提升资源自给率。')),
-    (CAT_HY, ni('https://stock.hexun.com/2026-09-06/224960810.html', '和讯', '09-06',
-        '有色金属周报：铜锌偏强镍铝走弱 关注库存与宏观扰动',
-        '和讯有色金属周报回顾本周铜、铝、锌、镍等品种走势，分析供需与库存变化，对后市方向进行研判，提示关注宏观情绪与库存扰动对价格的影响。')),
-    (CAT_HY, ni('https://www.haqh.com/col11/18145.html', '华安期货', '09-07',
-        '华安期货金属早盘策略：铜锌逢低偏多 镍铝反弹承压',
-        '华安期货发布金属早盘策略，对铜、铝、锌、镍等品种日内走势与操作给出观点，建议铜锌逢低偏多、镍铝反弹承压，关注宏观与库存变化。')),
-    (CAT_GJ, ni('https://www.mining.com/web/brazilian-court-suspends-licenses-for-sigma-lithium-mine', 'mining.com', '09-06',
-        '巴西法院暂停Sigma Lithium旗下Grota do Cirilo锂矿相关许可',
-        '巴西法院暂停Sigma Lithium旗下Grota do Cirilo锂矿相关许可，市场关注锂精矿供应扰动；公司表示将采取法律措施维护权益，短期或影响锂资源投放节奏。')),
-    (CAT_GJ, ni('https://www.news.com.au/finance/business/stockhead/news/barry-fitzgerald-explorers-bask-in-coppers-glow-as-red-metal-moves-into-record-territory/news-story/4e8369d76af79bebaad34536c95b3d9b', 'Stockhead/news.com.au', '09-05',
-        '铜价创纪录高位点燃勘探热潮 澳洲初级矿商股价飙升',
-        '铜价创纪录高位带动勘探热潮，澳洲初级勘探商显著受益：Kaoko Metals单周涨超151%，Solstice Minerals等成为十倍股，资本加速涌向铜矿勘查。')),
-    (CAT_GJ, ni('https://www.miningsee.eu/orano-launches-construction-of-mongolias-major-zuuvch-ovoo-uranium-project-strengthening-global-nuclear-fuel-supply', 'miningsee.eu', '09-06',
-        'Orano启动蒙古Zuuvch Ovoo铀矿建设 强化全球核燃料供应',
-        'Orano启动蒙古Zuuvch Ovoo铀矿项目建设，采用地浸（ISR）开采，设计产能约2500吨铀/年、服务期30年，有望强化全球核燃料供应并提升蒙古资源收益。')),
+    # 以下条目因来源不在白名单内已删除（2026-09-07 用户要求收紧信源）：
+    # - 华夏时报 news.qq.com
+    # - 中国网 chinagate.cn
+    # - 上海证券报 cnstock.com
+    # - 和讯 hexun.com
+    # - 华安期货 haqh.com
+    # - mining.com
+    # - Stockhead/news.com.au
+    # - miningsee.eu
+    # 如需补充国际/行业动态，请从白名单域名（mnr.gov.cn / cgs.gov.cn / chinania.org.cn /
+    # cnmn.com.cn / geoglobal.mnr.gov.cn / cngold.org.cn）中选取真实链接替换。
 ]
 
 def render_cat_groups(seq, mark_new=False):
