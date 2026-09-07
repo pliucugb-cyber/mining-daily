@@ -19,6 +19,25 @@
 - antaike.com            安泰科（中国有色金属工业协会下属研究机构；补行业分析、产量数据、政策解读。
                          2026-09-07 覆盖度核查 P0 新增）
 
+境外信源（2026-09-08 覆盖度核查 P2 新增，均经国内网络实测可达，详见文件尾「境外源准入规则」）：
+- metal.com              SMM 上海有色网国际站（英文）。含 www.metal.com / news.metal.com。
+                         ⚠️ 最优境外源：中国团队运营、境内直连无墙、英文内容、有色全品种，
+                            且自带 SHFE/LME 库存与进口套利数据（补「贸易进出口/库存 0%」缺口）
+- icsg.org               国际铜研究组（ICSG）：铜供需平衡、产量、库存月度数据
+- ilzsg.org              国际铅锌研究组（ILZSG）：铅锌供需与库存
+- insg.org               国际镍研究组（INSG）：镍供需与库存
+- world-aluminium.org    国际铝业协会（IAI）：全球原铝产量月度数据
+- lme.com                伦敦金属交易所（LME）官方：与站内 LME 六金属卡片直接对口
+- mining.com             全球矿业新闻综合（英文，量大日更）⚠️ 须排除 sponsored 广告路径
+- kitco.com              贵金属行情与矿业新闻（金银铂钯）
+- gold.org               世界黄金协会
+
+已被实测否决、禁止引入的境外源（勿重复提议）：
+- reuters.com / bloomberg.com  → 国内不可达（HTTP 000，对照组百度/腾讯 200 正常）
+- usgs.gov / minerals.usgs.gov → 反爬拦截，正文返回 0 字节
+- mining-journal.com / fastmarkets.com → 付费墙（付费关键词命中 10 次 / 订阅制）
+- cochilco.cl                → 国内不可达
+
 使用方式：
     python source_whitelist.py --check-url <url>
     python source_whitelist.py --check-file <html_or_json>
@@ -43,6 +62,25 @@ ALLOWED_DOMAINS = [
     # 2026-09-07 覆盖度核查 P0 新增（补价格行情/贸易库存/小金属/行业分析缺口）
     "smm.cn",        # 上海有色网（含 www.smm.cn / news.smm.cn 等子域）
     "antaike.com",   # 安泰科（中国有色金属工业协会下属研究机构）
+    # ===== 2026-09-08 覆盖度核查 P2：境外源（全部经国内网络实测可达才准入） =====
+    # 准入硬门槛：① 国内 curl 实测 HTTP 非 000 且正文非空；② 无付费墙/注册墙；
+    #            ③ 与有色金属行业直接相关。三项缺一不入。
+    "metal.com",             # SMM 国际站（英文，境内直连，含库存/进口套利数据）★首选
+    "icsg.org",              # 国际铜研究组
+    "ilzsg.org",             # 国际铅锌研究组
+    "insg.org",              # 国际镍研究组
+    "world-aluminium.org",   # 国际铝业协会（IAI）
+    "lme.com",               # 伦敦金属交易所
+    "mining.com",            # 全球矿业新闻（须排除 /sponsored-content/ 与 /joint-venture/ 广告路径）
+    "kitco.com",             # 贵金属
+    "gold.org",              # 世界黄金协会
+]
+
+# 境外源采编禁用路径（2026-09-08）：这些路径是广告/软文，不是新闻，采编时必须跳过。
+# 白名单校验不拦截（域名合法），但自动化 prompt 已写死须排除。
+FOREIGN_SPONSORED_PATTERNS = [
+    re.compile(r"mining\.com/(sponsored-content|joint-venture)/", re.I),
+    re.compile(r"servedbyadbutler\.com", re.I),
 ]
 
 # 非新闻来源的功能/统计/API 链接，校验时跳过
@@ -59,7 +97,10 @@ def is_allowed(url: str) -> bool:
         return False
     try:
         parsed = urlparse(url.strip())
-        host = (parsed.netloc or parsed.path).lower().lstrip("www.")
+        host = (parsed.netloc or parsed.path).lower()
+        # 2026-09-08 修复：原用 lstrip("www.") 属按「字符集」剥离而非按前缀，
+        # 会把 world-aluminium.org 误剥成 orld-aluminium.org 导致合法源被拒。
+        host = host[4:] if host.startswith("www.") else host
     except Exception:
         return False
     if not host:
