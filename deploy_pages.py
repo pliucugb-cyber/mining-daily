@@ -62,6 +62,7 @@ OPTIONAL = [
     'morning_report.json',
     'alerts.json',
     'knowledge.json',
+    'mobile-preview.html',   # 手机调试预览页（2026-09-07 曾被白名单漏掉导致线上 404）
 ]
 
 
