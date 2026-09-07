@@ -1,10 +1,10 @@
 {
  "date": "2026-09-07",
- "total": 46,
+ "total": 28,
  "market_index": 51,
  "market_label": "中性",
  "by_commodity": {
-  "铀": {
+  "铝": {
    "score": 56,
    "count": 1,
    "label": "中性"
@@ -19,29 +19,19 @@
    "count": 1,
    "label": "中性"
   },
-  "铜": {
-   "score": 52,
-   "count": 10,
-   "label": "中性"
-  },
-  "铝": {
-   "score": 51,
-   "count": 5,
+  "锌": {
+   "score": 53,
+   "count": 2,
    "label": "中性"
   },
   "金": {
-   "score": 51,
-   "count": 14,
+   "score": 52,
+   "count": 8,
    "label": "中性"
   },
-  "锌": {
+  "铜": {
    "score": 51,
    "count": 5,
-   "label": "中性"
-  },
-  "铁矿": {
-   "score": 50,
-   "count": 2,
    "label": "中性"
   },
   "锑": {
@@ -60,31 +50,31 @@
    "label": "中性"
   },
   "锂": {
-   "score": 48,
-   "count": 3,
+   "score": 50,
+   "count": 1,
+   "label": "中性"
+  },
+  "铁矿": {
+   "score": 50,
+   "count": 1,
    "label": "中性"
   },
   "镍": {
-   "score": 46,
-   "count": 3,
+   "score": 44,
+   "count": 1,
    "label": "中性"
   }
  },
  "themes": [
   {
-   "theme": "找矿",
-   "count": 11,
-   "score": 53
-  },
-  {
    "theme": "技术",
-   "count": 9,
-   "score": 51
+   "count": 7,
+   "score": 52
   },
   {
-   "theme": "国际",
-   "count": 8,
-   "score": 53
+   "theme": "找矿",
+   "count": 6,
+   "score": 52
   },
   {
    "theme": "政策",
@@ -92,87 +82,17 @@
    "score": 51
   },
   {
+   "theme": "国际",
+   "count": 4,
+   "score": 54
+  },
+  {
    "theme": "价格",
-   "count": 3,
-   "score": 50
+   "count": 1,
+   "score": 56
   }
  ],
  "samples": [
-  {
-   "t": "铜价创纪录高位点燃勘探热潮 澳洲初级矿商股价飙升",
-   "s": "Stockhead/news.com.au",
-   "d": "2026-09-05",
-   "score": 60,
-   "commodities": [
-    "铜"
-   ],
-   "themes": [
-    "找矿",
-    "国际"
-   ]
-  },
-  {
-   "t": "新能源汽车与储能等新需求成为有色金属行业增长引擎",
-   "s": "中国网",
-   "d": "2026-09-04",
-   "score": 56,
-   "commodities": [
-    "铜",
-    "铝",
-    "金",
-    "锂"
-   ],
-   "themes": []
-  },
-  {
-   "t": "盛屯矿业拟7.09亿元收购西藏海腾矿业 加码锌资源布局",
-   "s": "上海证券报",
-   "d": "2026-09-03",
-   "score": 56,
-   "commodities": [
-    "锌"
-   ],
-   "themes": []
-  },
-  {
-   "t": "Orano启动蒙古Zuuvch Ovoo铀矿建设 强化全球核燃料供应",
-   "s": "miningsee.eu",
-   "d": "2026-09-06",
-   "score": 56,
-   "commodities": [
-    "铀"
-   ],
-   "themes": [
-    "国际"
-   ]
-  },
-  {
-   "t": "\"算力金属\"涨价潮：AI基建拉动铜铝等工业金属需求",
-   "s": "华夏时报",
-   "d": "2026-09-04",
-   "score": 50,
-   "commodities": [
-    "铜",
-    "铝",
-    "金"
-   ],
-   "themes": [
-    "价格"
-   ]
-  },
-  {
-   "t": "华安期货金属早盘策略：铜锌逢低偏多 镍铝反弹承压",
-   "s": "华安期货",
-   "d": "2026-09-07",
-   "score": 50,
-   "commodities": [
-    "铜",
-    "铝",
-    "锌",
-    "镍"
-   ],
-   "themes": []
-  },
   {
    "t": "以案为鉴筑牢安全防线 精细钻探夯实开发根基——柳园铭扬铜镍矿第三孔支撑性勘探顺利开钻",
    "s": "中国地质调查局西宁中心",
@@ -185,34 +105,7 @@
    "themes": [
     "找矿"
    ]
-  },
-  {
-   "t": "有色金属周报：铜锌偏强镍铝走弱 关注库存与宏观扰动",
-   "s": "和讯",
-   "d": "2026-09-06",
-   "score": 44,
-   "commodities": [
-    "铜",
-    "铝",
-    "锌",
-    "镍"
-   ],
-   "themes": [
-    "价格"
-   ]
-  },
-  {
-   "t": "巴西法院暂停Sigma Lithium旗下Grota do Cirilo锂矿相关许可",
-   "s": "mining.com",
-   "d": "2026-09-06",
-   "score": 38,
-   "commodities": [
-    "锂"
-   ],
-   "themes": [
-    "国际"
-   ]
   }
  ],
- "source": "keyword-rule（基于 index.html 收录 46 条）"
+ "source": "keyword-rule（基于 index.html 收录 28 条）"
 }

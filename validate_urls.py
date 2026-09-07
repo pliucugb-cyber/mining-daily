@@ -50,11 +50,13 @@ def extract_news_items():
     """
     text = OUTPUT_HTML.read_text(encoding='utf-8')
     items = []
+    # 注意：实际页面里 news-item / news-title / src 常带 data-page-node-id 等额外属性，
+    # 正则必须对属性顺序与多余属性容错（否则会漏掉绝大多数条目的链接校验）。
     pattern = re.compile(
-        r'<div class="news-item[^"]*" data-url="([^"]+)"[^>]*>'
-        r'.*?<a class="news-title" href="([^"]+)" target="_blank">([^<]+)</a>'
-        r'.*?<span class="src">([^<]+)</span>\s*·\s*([^<]+)'
-        r'.*?<div class="news-summary">([^<]+)</div>',
+        r'<div class="news-item[^"]*"[^>]*\bdata-url="([^"]+)"[^>]*>'
+        r'.*?<a class="news-title"[^>]*\bhref="([^"]+)"[^>]*\btarget="_blank"[^>]*>([^<]+)</a>'
+        r'.*?<span class="src"[^>]*>([^<]+)</span>\s*[·•\-–—]?\s*([^<]+)'
+        r'.*?<div class="news-summary"[^>]*>([^<]*)</div>',
         re.S
     )
     for m in pattern.finditer(text):
