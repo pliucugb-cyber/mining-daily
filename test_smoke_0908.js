@@ -93,6 +93,26 @@ setTimeout(() => {
     check('热榜与要闻无重复条目', cross === 0, '重叠 ' + cross + ' 对' + (worst ? ' maxSim=' + worst.toFixed(2) : ''));
   }
 
+  // ③b 换一换（2026-09-08 晚新增：头条式轮换）
+  const rbtn = doc.getElementById('hotRefreshBtn');
+  check('③b 换一换按钮存在且可见', !!rbtn && rbtn.style.display !== 'none');
+  const beforeTitles = [...doc.querySelectorAll('#hotListBody .hot-title')].map(a => a.textContent);
+  if (rbtn) {
+    rbtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+    const afterTitles = [...doc.querySelectorAll('#hotListBody .hot-title')].map(a => a.textContent);
+    check('③b 点击换一换后条目变化', JSON.stringify(beforeTitles) !== JSON.stringify(afterTitles));
+    const hotAfter = doc.querySelectorAll('#hotListBody li.hot-item');
+    check('③b 换一换后仍 1~5 条', hotAfter.length >= 1 && hotAfter.length <= 5, '实际 ' + hotAfter.length);
+    let cycled = false;
+    const pages = Math.ceil(((window.__hotPool || []).length) / 5) || 1;
+    for (let i = 1; i <= pages; i++) {
+      rbtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+      const cur = [...doc.querySelectorAll('#hotListBody .hot-title')].map(a => a.textContent);
+      if (JSON.stringify(cur) === JSON.stringify(beforeTitles)) { cycled = true; break; }
+    }
+    check('③b 连点可循环回绕到第一页', cycled, 'pool=' + (window.__hotPool || []).length + ' pages=' + pages);
+  }
+
   console.log('\n===== ④ 会展预告迁至侧栏迷你卡 =====');
   const mini = doc.getElementById('expoMini');
   check('侧栏迷你卡容器存在', !!mini);
