@@ -203,6 +203,22 @@ setTimeout(() => {
   check('⑦ AI 按钮不误标「AI 本地」（代理可用）', !!qaAiBtn && qaAiBtn.textContent !== '✨ AI 本地', qaAiBtn ? qaAiBtn.textContent : '无按钮');
   check('⑦ 检索/AI 按钮存在', !!doc.getElementById('qaFloatSearch') && !!qaAiBtn);
 
+  console.log('\n===== ⑧ 本地持久化链路（lsSet 回归守护） =====');
+  // 2026-09-08 晚：lsSet 曾写成 window.lsSet 自调用（无限递归被吞），09-06 起所有本地存储静默失效
+  try {
+    doc.defaultView.lsSet('md_test_key', 'v1');
+    check('⑧ lsSet 真实写入 localStorage', doc.defaultView.localStorage.getItem('md_test_key') === 'v1');
+  } catch (e) {
+    check('⑧ lsSet 真实写入 localStorage', false, e.message);
+  }
+  try {
+    doc.defaultView.markAllRead();
+    const readN = doc.querySelectorAll('.news-item.read').length;
+    check('⑧ markAllRead 后已读条数 > 0', readN > 0, 'read=' + readN);
+  } catch (e) {
+    check('⑧ markAllRead 后已读条数 > 0', false, e.message);
+  }
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));
