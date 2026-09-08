@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-1050" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-1145" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -3368,7 +3368,7 @@ function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){retu
 //   ① localStorage('MD_DS_KEY')：每位使用者填自己的 Key，只存在本人浏览器，不上传、不入库
 //   ② window.MD_AI_ENDPOINT：自建后端代理地址（Key 放代理侧环境变量），公司网络若可达可启用
 //   ③ 都没有 → 返回 ''，AI 区块自动降级为本地检索摘要（localAiSummary），页面其余功能不受影响
-var QA_API_BASE='';
+var QA_API_BASE='https://mining-daily-qa.netlify.app';
 var MD_AI_KEY_STORE='MD_DS_KEY';
 function getDsKey(){
   try{
