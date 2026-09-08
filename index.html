@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2147" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2156" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -3719,14 +3719,16 @@ function qaAiProbe(){
   // 2026-09-08：Key 不再内嵌（公开静态页藏不住）。改为使用者自填，存 localStorage；
   // 有 Key 点亮 AI 按钮，无 Key 走本地知识库兜底，页面其余功能不受影响。
   var b=document.getElementById('qaFloatAi');
-  if(getDsKey()){
+  // 2026-09-08 晚修正：优先走 Netlify 代理（Key 在平台环境变量），无需使用者自填 Key，
+  // 此时按钮不应显示「AI 本地」误导；仅当既无代理又无自填 Key 时才降级提示。
+  if(getDsKey()||(typeof QA_API_BASE!=='undefined'&&QA_API_BASE)){
     QA_AI_ON=true;
     if(b){b.disabled=false;b.textContent='✨ AI 回答';
-      b.title='让 AI 读完相关新闻后组织语言作答（Ctrl+Enter）';}
+      b.title='让 AI 读完相关新闻后组织语言作答（Enter 检索 / 点此 AI 问答）';}
   }else{
     QA_AI_ON=false;
     if(b){b.disabled=false;b.textContent='✨ AI 本地';
-      b.title='未配置 API key，点击将使用本地知识库兜底回答';}
+      b.title='未配置 AI 服务，点击将使用本地知识库兜底回答';}
   }
 }
 function qaAiQuota(){
@@ -4790,11 +4792,18 @@ function qaSaveHistory(){
     lsSet(QA_HISTORY_KEY,JSON.stringify(out));
   }catch(e){}
 }
+// 欢迎语（2026-09-08 晚：原「本地新闻库 N 条。」信息量为零，改为说明面板能力）
+function qaWelcomeText(){
+  var up=QA_UPDATED?('（更新于 '+QA_UPDATED+'）'):'';
+  return '👋 本地新闻库共 '+QA_ROWS.length+' 条'+up+'。'
+    +'\n\n输入关键词点「检索」全库查找原文；点「AI」让 AI 读完相关新闻后作答；'
+    +'也可先用上方矿种 / 主题 / 时间筛选缩小范围。';
+}
 function qaClearHistory(){
   try{localStorage.removeItem(QA_HISTORY_KEY);}catch(e){}
   var body=document.getElementById('qaFloatBody');if(!body)return;
   body.innerHTML='';
-  qaFloatAdd('ai','本地新闻库 '+QA_ROWS.length+' 条。','本地检索 · 零依赖',{md:false});
+  qaFloatAdd('ai',qaWelcomeText(),'本地知识库 · 零依赖',{md:true});
 }
 function qaCopyAi(btn){
   var msg=btn.closest('.qa-msg');if(!msg)return;
@@ -5242,9 +5251,9 @@ function toggleTheme(){
   </div>
   <div class="qa-float-body" id="qaFloatBody" data-page-node-id="nd0EyI5kVl0DOVnIlIBaWb"></div>
   <div class="qa-float-foot" data-page-node-id="ClSV4Aqm5KW0LZGGVEAZMx">
-    <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="问点什么：稀土政策 / 锂价走势…" autocomplete="off" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX">
+    <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="" aria-label="输入问题" autocomplete="off" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX">
     <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词" onclick="qaFloatSearch()" data-page-node-id="DcqZEFlU8VgjnfLfZc4l82">检索</button>
-    <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答（DeepSeek 直连）" onclick="qaFloatAsk()" data-page-node-id="qJ4h2ouUiWwBV8nMhyMoNF">AI</button>
+    <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答" onclick="qaFloatAsk()" data-page-node-id="qJ4h2ouUiWwBV8nMhyMoNF">AI</button>
   </div>
   <div class="qa-float-tip" data-page-node-id="IPv0ocqpX9nxwxqSsIOHLK">💡 问答历史仅存在本机浏览器，换设备 / 清缓存会丢失；长期留存请点「📤 导出」</div>
 </div>
@@ -5310,7 +5319,7 @@ function toggleTheme(){
     if(fb.children.length)fb.innerHTML='';
     qaLoadHistory();
     if(!fb.children.length){
-      qaFloatAdd('ai','本地新闻库 '+QA_ROWS.length+' 条。','本地检索 · 零依赖',{md:false});
+      qaFloatAdd('ai',qaWelcomeText(),'本地知识库 · 零依赖',{md:true});
     }
   }
 
@@ -5324,6 +5333,9 @@ function toggleTheme(){
   }
   var sb=document.getElementById('qaFloatSearch');if(sb)sb.addEventListener('click',qaFloatSearch);
   var ab=document.getElementById('qaFloatAi');if(ab)ab.addEventListener('click',qaFloatAsk);
+  // 2026-09-08 晚修复：qaAiProbe 此前只在脚本解析期调用（那时 #qaFloatAi 还没渲染，b 恒为 null，
+  // 探针从未生效过）；面板 DOM 就绪后这里补一次，按钮文案/提示才能按「代理可用/需自填 Key」正确显示。
+  try{ qaAiProbe(); }catch(e){}
   document.addEventListener('keydown',function(e){
     if(e.key!=='Escape')return;
     pcChartClose();
