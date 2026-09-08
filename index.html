@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2210" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2218" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1229,6 +1229,20 @@ body.dark .top-movers{background:rgba(255,255,255,.04)}
 .price-card[data-rank] .pc-name::before{content:attr(data-rank);color:var(--ink-500);background:var(--surface-3);border-radius:var(--r-sm);padding:0 4px;margin-right:6px;font-size:var(--fs-nano);font-weight:600;flex-shrink:0}
 .price-card.stale .pc-name::after{content:'昨';color:var(--ink-500);background:var(--surface-3);border-radius:var(--r-sm);padding:0 4px;margin-left:6px;font-size:var(--fs-nano);font-weight:500;flex-shrink:0}
 </style>
+<style id="rightsSumStyle">
+/* 今日矿权摘要卡链接排版优化（2026-09-08 晚）：原 JS 内联蓝链 3px 间距太挤、默认下划线刺眼。
+   改为设计系统风格：品牌色无下划线 + 圆点引导 + 舒适行距 + hover 浅底。浅深色两套。 */
+.news-summary .rr-link{display:block;position:relative;padding:6px 10px 6px 22px;margin:2px 0;font-size:var(--fs-body);line-height:1.6;color:var(--brand);text-decoration:none;border-radius:var(--r-sm);transition:background .15s}
+.news-summary .rr-link::before{content:'';position:absolute;left:9px;top:50%;transform:translateY(-50%);width:5px;height:5px;border-radius:50%;background:var(--line-2)}
+.news-summary .rr-link:hover{background:var(--surface-2);text-decoration:none}
+.news-summary .rr-link:hover::before{background:var(--brand)}
+.news-summary .rr-link:visited{color:var(--ink-500)}
+body.dark .news-summary .rr-link{color:#7fb3e8}
+body.dark .news-summary .rr-link::before{background:#3a4a5c}
+body.dark .news-summary .rr-link:hover{background:var(--surface-2)}
+body.dark .news-summary .rr-link:hover::before{background:#7fb3e8}
+body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
+</style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
 <script>
@@ -1803,7 +1817,7 @@ body.dark .top-movers{background:rgba(255,255,255,.04)}
       var links=results.map(function(r){
         var u=escA(r.u||r.url||'#rightsSection');
         var t=escT((r.t||r.title||'').trim());
-        return '<a class="rr-link" style="display:block;margin:3px 0;color:#1a73e8" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>';
+        return '<a class="rr-link" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>';
       }).join('');
       html='<div class="news-item is-new" data-url="#rightsSection" data-rights-summary="1" data-embed="ok">'
          + '<div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span>'
