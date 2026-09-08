@@ -226,6 +226,12 @@ setTimeout(() => {
     check('⑧ markAllRead 后已读条数 > 0', false, e.message);
   }
 
+  console.log('\n===== ⑨ 矿权区单视图（表格已删回归守护） =====');
+  check('⑨ 表格结构已删', !doc.getElementById('rightsTable') && !doc.getElementById('rightsTableWrap') && !doc.getElementById('rightsTableBody'));
+  check('⑨ 视图切换按钮已删', doc.querySelectorAll('.rights-view-btn').length === 0);
+  const rc9 = doc.getElementById('rightsCards');
+  check('⑨ 列表容器仍在且已渲染', !!rc9 && rc9.querySelectorAll('.rights-row').length >= 1, 'rows=' + (rc9 ? rc9.querySelectorAll('.rights-row').length : 0));
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));
