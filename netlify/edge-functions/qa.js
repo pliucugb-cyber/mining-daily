@@ -2,16 +2,21 @@
  * qa.js —— 矿业新闻日报 · AI 问答边缘代理（Netlify Edge Functions / Deno runtime）
  *
  * 为什么需要它：
- *   站点是 GitHub Pages 公开静态页，任何写进 index.html 的 Key 都等于公开（curl 即得）。
- *   本函数把 Key 存在 Netlify 环境变量里，浏览器只跟本函数通信，Key 永不出现在前端。
- *   同事打开页面直接用，无需自己填 Key。
+ *   站点是 GitHub Pages 公开静态页，任何写进 index.html 的 Key 都等于公开（curl 即得，
+ *   混淆不是加密）。本函数把 Key 存在 Netlify 环境变量里，浏览器只跟本函数通信，
+ *   Key 永不出现在前端代码或页面里。同事打开页面直接用，无需自己填 Key。
  *
- * 接口（与前端 QA_API_BASE 约定一致）：
+ * 接口：
  *   GET  /api/health  → { ok, has_key, model }
- *   POST /api/qa      → { answer, question, source, cited, refs }
- *   请求体：{ question: string, context: [{d,t,s,u}] }  context 为前端本地检索到的相关新闻
+ *   POST /api/qa      → 透传模式返回 DeepSeek 原始 JSON；简化模式返回 {answer, refs}
  *
- * 部署：见 ../README-netlify.md
+ * 两种调用约定：
+ *   ① 透传模式（前端默认）：{ messages:[{role,content}...], max_tokens, temperature }
+ *      —— 前端已构造好完整对话（含 system prompt 与检索到的新闻上下文），
+ *         本函数只负责加 Key 转发，并原样返回 DeepSeek 响应，前端解析逻辑无需改动。
+ *   ② 简化模式：{ question, context:[{d,t,s,u}] } —— 供脚本/调试使用。
+ *
+ * 部署：见 ../README.md
  */
 
 // ── 允许的跨域来源（防 Key 被任意第三方站点盗用额度）──
@@ -20,7 +25,7 @@ function isAllowedOrigin(origin) {
   if (/^https:\/\/[\w.-]+\.github\.io$/.test(origin)) return true;        // GitHub Pages
   if (/^https:\/\/[\w.-]+\.netlify\.app$/.test(origin)) return true;      // Netlify 自身
   if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true; // 本地调试
-  // 若日后绑了自定义域名，在此追加
+  // 若日后绑定自定义域名，在此追加
   return false;
 }
 
@@ -35,7 +40,7 @@ function corsHeaders(origin) {
   };
 }
 
-// ── 无 Key / 调用失败时的关键词兜底，保证问答功能永远可用 ──
+// ── 无 Key / 调用失败时的关键词兜底，保证问答永远有回应 ──
 const QA_TEMPLATES = [
   [['铜', 'Cu'], '铜（Cu）是有色金属中的重要品种，广泛应用于电力、建筑、交通等领域。'],
   [['铝', 'Al'], '铝（Al）具有轻质、耐腐蚀等特性，广泛应用于航空航天、汽车制造、包装容器等领域。'],
@@ -63,27 +68,23 @@ function keywordFallback(q) {
     '（当前为无密钥兜底模式，代理端配置 DEEPSEEK_API_KEY 后可获得 AI 深度解答）');
 }
 
-async function askDeepSeek(apiKey, question, context) {
-  const system = ('你是资深矿业行业分析师，服务于「矿业新闻日报」产品。' +
-    '回答要简洁专业、不啰嗦、用中文。' +
-    '如果提供了相关新闻条目，请自然引用并注明来源与日期；' +
-    '若没有相关新闻，请明确说明这是基于通用知识的回答，并建议用户查证官方信息。' +
-    '不要编造数据、价格或政策细节。');
+// DeepSeek 兼容的降级响应：即使走兜底，也返回与真实响应同构的 JSON，
+// 前端按 choices[0].message.content 解析即可，无需分支处理。
+function fallbackResponse(text, warning) {
+  return {
+    choices: [{ message: { role: 'assistant', content: text }, finish_reason: 'stop' }],
+    _fallback: true,
+    _warning: warning || '',
+  };
+}
 
-  let user = '用户问题：' + question + '\n\n';
-  if (Array.isArray(context) && context.length) {
-    user += '以下为前端检索到的相关本地新闻条目（仅供参考，请以公开权威信息为准）：\n';
-    context.slice(0, 12).forEach((c, i) => {
-      const d = c.d || '';
-      const t = c.t || c.title || '';
-      const s = c.s || c.source || '';
-      user += `${i + 1}. [${d}] ${t}${s ? '（' + s + '）' : ''}\n`;
-    });
-    user += '\n';
-  } else {
-    user += '（前端未提供相关新闻，请基于通用知识回答。）\n\n';
-  }
-  user += '请直接给出回答，无需寒暄。';
+async function callDeepSeek(apiKey, payload) {
+  const body = Object.assign({
+    model: 'deepseek-chat',
+    max_tokens: 1000,
+    temperature: 0.3,
+    stream: false,
+  }, payload || {});
 
   const resp = await fetch('https://api.deepseek.com/chat/completions', {
     method: 'POST',
@@ -91,27 +92,15 @@ async function askDeepSeek(apiKey, question, context) {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + apiKey,
     },
-    body: JSON.stringify({
-      model: 'deepseek-chat',
-      messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: user },
-      ],
-      max_tokens: 800,
-      temperature: 0.3,
-      stream: false,
-    }),
+    body: JSON.stringify(body),
   });
 
+  const data = await resp.json().catch(() => ({}));
   if (!resp.ok) {
-    const txt = await resp.text().catch(() => '');
-    throw new Error('DeepSeek HTTP ' + resp.status + ' ' + txt.slice(0, 200));
+    const msg = (data && data.error && data.error.message) || ('HTTP ' + resp.status);
+    throw new Error(msg);
   }
-  const data = await resp.json();
-  const content = data && data.choices && data.choices[0] && data.choices[0].message &&
-    data.choices[0].message.content;
-  if (!content) throw new Error('DeepSeek 返回为空');
-  return content.trim();
+  return data;
 }
 
 export default async (request, context) => {
@@ -137,53 +126,72 @@ export default async (request, context) => {
       return new Response(JSON.stringify({ error: 'method not allowed' }),
         { status: 405, headers: corsHeaders(origin) });
     }
+
     let body = {};
     try {
       body = await request.json();
     } catch (e) {
       body = {};
     }
-    const question = String(body.question || '').trim();
-    const ctx = Array.isArray(body.context) ? body.context : [];
 
+    // 取出「用户问题」用于兜底文案（透传模式下从最后一条 user 消息里取）
+    let question = String(body.question || '').trim();
+    const msgs = Array.isArray(body.messages) ? body.messages : [];
+    if (!question && msgs.length) {
+      for (let i = msgs.length - 1; i >= 0; i--) {
+        if (msgs[i] && msgs[i].role === 'user') { question = String(msgs[i].content || ''); break; }
+      }
+    }
     if (!question) {
-      return new Response(JSON.stringify({ answer: '请输入您要查询的矿业相关问题。' }),
+      return new Response(JSON.stringify(fallbackResponse('请输入您要查询的矿业相关问题。')),
         { status: 200, headers: corsHeaders(origin) });
     }
 
     const apiKey = Deno.env.get('DEEPSEEK_API_KEY');
     if (!apiKey) {
-      return new Response(JSON.stringify({
-        answer: keywordFallback(question),
-        question: question,
-        source: 'keyword-fallback',
-        cited: 0,
-        refs: [],
-      }), { status: 200, headers: corsHeaders(origin) });
+      // 未配置环境变量：降级关键词兜底，不让用户看到报错
+      return new Response(JSON.stringify(
+        fallbackResponse(keywordFallback(question), 'DEEPSEEK_API_KEY 未配置')),
+        { status: 200, headers: corsHeaders(origin) });
     }
 
     try {
-      const answer = await askDeepSeek(apiKey, question, ctx);
-      const refs = ctx.slice(0, 8).map((c) => ({
-        d: c.d || '', t: c.t || c.title || '', u: c.u || c.url || '',
-      })).filter((r) => r.u);
-      return new Response(JSON.stringify({
-        answer: answer,
-        question: question,
-        source: 'deepseek',
-        cited: ctx.length,
-        refs: refs,
-      }), { status: 200, headers: corsHeaders(origin) });
+      let data;
+      if (msgs.length) {
+        // ① 透传模式：前端已构造完整对话
+        data = await callDeepSeek(apiKey, {
+          messages: msgs,
+          max_tokens: body.max_tokens || 1000,
+          temperature: body.temperature == null ? 0.3 : body.temperature,
+        });
+      } else {
+        // ② 简化模式：question + context
+        const ctx = Array.isArray(body.context) ? body.context : [];
+        let user = '用户问题：' + question + '\n\n';
+        if (ctx.length) {
+          user += '以下为本地检索到的相关新闻条目（仅供参考，请以公开权威信息为准）：\n';
+          ctx.slice(0, 12).forEach((c, i) => {
+            const d = c.d || '', t = c.t || c.title || '', s = c.s || c.source || '';
+            user += `${i + 1}. [${d}] ${t}${s ? '（' + s + '）' : ''}\n`;
+          });
+          user += '\n';
+        }
+        user += '请直接给出回答，无需寒暄。';
+        data = await callDeepSeek(apiKey, {
+          messages: [
+            { role: 'system', content: '你是资深矿业行业分析师。回答简洁专业、用中文，不编造数据。' },
+            { role: 'user', content: user },
+          ],
+          max_tokens: body.max_tokens || 800,
+          temperature: body.temperature == null ? 0.3 : body.temperature,
+        });
+      }
+      return new Response(JSON.stringify(data), { status: 200, headers: corsHeaders(origin) });
     } catch (e) {
-      // 上游失败时降级到关键词兜底，不让用户看到报错
-      return new Response(JSON.stringify({
-        answer: keywordFallback(question),
-        question: question,
-        source: 'keyword-fallback',
-        cited: 0,
-        refs: [],
-        warning: (e && e.message) ? e.message : String(e),
-      }), { status: 200, headers: corsHeaders(origin) });
+      // 上游失败：降级兜底（同构响应），前端无需特殊处理
+      return new Response(JSON.stringify(
+        fallbackResponse(keywordFallback(question), (e && e.message) ? e.message : String(e))),
+        { status: 200, headers: corsHeaders(origin) });
     }
   }
 
