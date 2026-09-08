@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="eHApwDQBH4DgYngTE3wpCi">
+<head data-page-node-id="w90qxVCK3TRTFs1KHl6iNO">
+<meta charset="UTF-8" data-page-node-id="roAeA34A4KgQrbyXSTbVBf">
+<meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="r517xqWhCTu7Moh7na16BW">
+<title>矿业日报 · 5 条优化建议预览</title>
+<style>
+:root{
+  --ink-900:#16202b;--ink-700:#3d4b5a;--ink-500:#6b7a89;--ink-300:#94a3b8;
+  --line-1:#e5eaf0;--line-2:#c9d6e2;--surface:#fff;--surface-2:#f5f7fa;--surface-3:#eef2f6;
+  --brand:#0e7490;--brand-soft:#e6f4f7;--up:#d93a2b;--down:#128a5f;
+  --r-sm:4px;--r-md:8px;--r-lg:12px;
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;
+  --fs-nano:10px;--fs-meta:12px;--fs-caption:13px;--fs-body:14px;--fs-h3:16px;--fs-h2:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--surface-2);color:var(--ink-900);padding:var(--s5);line-height:1.6}
+.page{max-width:1180px;margin:0 auto}
+h1{font-size:var(--fs-h2);margin-bottom:var(--s2)}
+.lead{color:var(--ink-500);font-size:var(--fs-body);margin-bottom:var(--s5)}
+.proposal{background:var(--surface);border:1px solid var(--line-1);border-radius:var(--r-lg);padding:var(--s5);margin-bottom:var(--s5)}
+.p-head{display:flex;align-items:baseline;gap:var(--s2);margin-bottom:var(--s2)}
+.p-num{background:var(--brand);color:#fff;font-size:var(--fs-meta);font-weight:600;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.p-title{font-size:var(--fs-h3);font-weight:600}
+.p-desc{color:var(--ink-500);font-size:var(--fs-caption);margin-bottom:var(--s4)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+@media(max-width:900px){.pair{grid-template-columns:1fr}}
+.box{border:1px solid var(--line-1);border-radius:var(--r-md);overflow:hidden}
+.box-tag{font-size:var(--fs-nano);letter-spacing:.5px;padding:3px 10px;background:var(--surface-3);color:var(--ink-500)}
+.box-tag.new{background:var(--brand-soft);color:var(--brand);font-weight:600}
+.box-body{padding:var(--s3) var(--s4)}
+
+/* ===== 价格区复刻 ===== */
+.price-strip-note{font-size:var(--fs-meta);color:var(--ink-300);margin-bottom:var(--s2);display:block}
+.pill{display:inline-block;font-size:var(--fs-nano);font-weight:600;padding:2px 10px;border-radius:999px;margin:0 0 var(--s1) 0}
+.pill.cn{color:var(--brand);background:var(--brand-soft)}
+.pill.lme{color:var(--ink-700);background:var(--surface-3)}
+.prow{display:grid;grid-template-columns:minmax(72px,1fr) auto auto 1fr;align-items:baseline;gap:0 var(--s2);padding:var(--s2) 0 var(--s2) var(--s3);border-bottom:1px solid var(--line-1);position:relative;font-size:var(--fs-body)}
+.prow::before{content:'';position:absolute;top:2px;left:0;bottom:2px;width:3px;border-radius:2px;background:var(--ink-300)}
+.prow.up::before{background:var(--up)}
+.prow.down::before{background:var(--down)}
+.prow:last-child{border-bottom:0}
+.p-name{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-val{font-weight:600;font-size:var(--fs-h3);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.p-unit{color:var(--ink-500);font-size:var(--fs-meta);white-space:nowrap}
+.p-chg{text-align:right;font-weight:500;font-size:var(--fs-caption);font-variant-numeric:tabular-nums;white-space:nowrap}
+.up .p-chg{color:var(--up)}
+.down .p-chg{color:var(--down)}
+.lme-block{background:var(--surface-2);border-radius:var(--r-md);padding:var(--s1) var(--s2) var(--s2);margin-top:var(--s3)}
+
+/* 建议1 排行条 */
+.top-movers{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center;background:var(--surface-2);border:1px solid var(--line-1);border-radius:var(--r-md);padding:var(--s2) var(--s3);margin-bottom:var(--s3);font-size:var(--fs-caption)}
+.mv{display:inline-flex;align-items:center;gap:6px}
+.mv b{font-weight:600}
+.mv.up{color:var(--up)}
+.mv.down{color:var(--down)}
+.mv-sep{color:var(--line-2)}
+
+/* 建议2 时间角标 */
+.tag-stale{font-size:var(--fs-nano);color:var(--ink-500);background:var(--surface-3);border-radius:var(--r-sm);padding:1px 4px;margin-left:6px;vertical-align:1px}
+
+/* 建议3 排序开关 */
+.sortbar{display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s2)}
+.sortbtn{font-size:var(--fs-meta);border:1px solid var(--line-2);background:var(--surface);color:var(--ink-700);border-radius:999px;padding:3px 12px;cursor:pointer}
+.sortbtn.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.rank{color:var(--ink-300);font-size:var(--fs-nano);margin-left:6px}
+
+/* 建议4 热榜 */
+.hot-item{display:flex;align-items:center;gap:var(--s2);padding:var(--s2) 0;border-bottom:1px solid var(--line-1);font-size:var(--fs-caption)}
+.hot-item:last-child{border-bottom:0}
+.hot-fire{font-size:var(--fs-nano);color:var(--up);background:var(--brand-soft);padding:1px 5px;border-radius:var(--r-sm)}
+.hot-body{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hot-bar{width:52px;height:3px;background:var(--line-1);border-radius:2px;overflow:hidden;flex-shrink:0}
+.hot-bar i{display:block;height:100%;background:var(--up)}
+
+/* 建议5 并排 */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+.spread{font-size:var(--fs-nano);color:var(--ink-500);background:var(--surface-3);border-radius:var(--r-sm);padding:1px 5px;margin-left:6px}
+.note{font-size:var(--fs-nano);color:var(--ink-300);margin-top:var(--s2)}
+</style>
+</head>
+<body data-page-node-id="tIELbmssfwgBY95U18CBnL">
+<div class="page" data-page-node-id="pbmANn0YrSAuRiEABmspDb">
+<h1 data-page-node-id="ouVhlS9XvNqR2tnbHeGnED">矿业日报 · 5 条优化建议预览</h1>
+<p class="lead" data-page-node-id="4UoyEM4M0TKv9cUbsZdAZo">左边「现状」、右边「改后」。全部使用页面真实设计 token 复刻，数据为示意。</p>
+
+<!-- 1 -->
+<div class="proposal" data-page-node-id="aAoibLY2iRMj80jrykfKOU">
+  <div class="p-head" data-page-node-id="ZrwArPoqYp2whSApvJLhss"><span class="p-num" data-page-node-id="oHtEqKzeejmI63qkQpgDdC">1</span><span class="p-title" data-page-node-id="wVVO0JKgKfK7GD0yTQ1eEN">涨跌幅排行条</span></div>
+  <p class="p-desc" data-page-node-id="pAYvGZsB1SHztj6lKqwmWR">价格区顶部加一条横幅，自动挑出当日涨/跌最大的品种。早上打开一眼知道今天哪个金属有故事，不用扫 16 行。</p>
+  <div class="pair" data-page-node-id="jWWarFJwJ7DjnaRJHbSCNO">
+    <div class="box" data-page-node-id="ICVoDRif8XARM3c5i5ao9k"><div class="box-tag" data-page-node-id="mxrhmq3YUVvCmaVhynzwkP">现状</div><div class="box-body" data-page-node-id="Xyod77GFqv38PtPt8eiwRy">
+      <span class="price-strip-note" data-page-node-id="wC0DETbFE1olJy47JLonpm">2026-09-08 更新 · 点击卡片看走势</span>
+      <span class="pill cn" data-page-node-id="38De9BBESOixIcBdoKhYnt">国内盘 · 人民币</span>
+      <div class="prow up" data-page-node-id="ZikgjG45uFNlL0diIXiMOc"><span class="p-name" data-page-node-id="SJeBafG3AZIY9YcgD4uvuN">沪锡 SHFE</span><span class="p-val" data-page-node-id="nw5ammmDKvGIYJv1xZ3AiK">271,500</span><span class="p-unit" data-page-node-id="2ij0QDbiUeeQOcsvZeSgQA">元/吨</span><span class="p-chg" data-page-node-id="vjSmhtFjgwdnXkG0vDIWFj">▲ +3,590 (+1.34%)</span></div>
+      <div class="prow up" data-page-node-id="cFj9dMHNitJI5fEShAtwcH"><span class="p-name" data-page-node-id="ZIfE5suy3vi2YOAXxst7DO">沪铜 SHFE</span><span class="p-val" data-page-node-id="UJNBwbopb9C1qI1p6ZUTx7">109,410</span><span class="p-unit" data-page-node-id="NUjF0qrMRIkv98kADpr5F6">元/吨</span><span class="p-chg" data-page-node-id="uhMliPaxxy7HoWxolfCuUv">▲ +630 (+0.58%)</span></div>
+      <div class="prow down" data-page-node-id="T1qK2EgalF80r7EtqOXtN0"><span class="p-name" data-page-node-id="PX9YoB7P6rRHluOJnpaMtG">沪金 上金所</span><span class="p-val" data-page-node-id="84x5d0jblsEf4dSCZhAhzn">832.15</span><span class="p-unit" data-page-node-id="ncDJbBEhbi9NkKDQc5tWOg">元/克</span><span class="p-chg" data-page-node-id="n6iDBlm7doehD5Bp5NweV3">▼ -3.52 (-0.42%)</span></div>
+    </div></div>
+    <div class="box" data-page-node-id="QSWlZ4OoiuPNXbHAl516tm"><div class="box-tag new" data-page-node-id="aiI4wKMxiDZLCmbLnyWYRd">改后</div><div class="box-body" data-page-node-id="zyjCZKhq7YzXiiwg9Qjfzz">
+      <div class="top-movers" data-page-node-id="UBckY4sGvvM4oFRSn4lVxB">
+        <span data-page-node-id="Wu9di1i0LMKWnD70SH6wek">🔥 今日异动</span>
+        <span class="mv up" data-page-node-id="mE3FAIZitPHR53Kg9KAWro">沪锡 <b data-page-node-id="r7K1vAtEYuEcPA9Rd4BiQb">+1.34%</b></span>
+        <span class="mv-sep" data-page-node-id="EBwcDZxdYCCSdQ9MvESGFl">|</span>
+        <span class="mv down" data-page-node-id="bzWxnmDYAzHCxTOAED4OhE">沪金 <b data-page-node-id="DkVrJdByBOUfseUig7Pdz0">-0.42%</b></span>
+        <span class="mv-sep" data-page-node-id="JqVNtShh59R43LI1X1ign8">|</span>
+        <span class="mv up" data-page-node-id="ugVV2R9uPl8YtUJKzJ5Pi4">LME 镍 <b data-page-node-id="uC7owOGVQf9YEGUkhB2PTy">+0.86%</b></span>
+      </div>
+      <span class="pill cn" data-page-node-id="uuDAauZNEcRrT6hOw9Bm3X">国内盘 · 人民币</span>
+      <div class="prow up" data-page-node-id="zPOYMtCXZRN58yyBbwXwhW"><span class="p-name" data-page-node-id="Xk7vArtJT3zvEnUXJ2n6ZK">沪锡 SHFE</span><span class="p-val" data-page-node-id="7SBxEGh4E9nnSq2eE6c8tp">271,500</span><span class="p-unit" data-page-node-id="TTKb48yp1BAgJ5pjMHFw0l">元/吨</span><span class="p-chg" data-page-node-id="9NZjE3wdGFWh29kNXa7oAY">▲ +3,590 (+1.34%)</span></div>
+      <div class="prow up" data-page-node-id="QqajVNnIpoLD7gsDBMLfK5"><span class="p-name" data-page-node-id="yMG30U6ON8TLUzPSS0UqeE">沪铜 SHFE</span><span class="p-val" data-page-node-id="BnWIf5xkTUTlRbIb8tf7TW">109,410</span><span class="p-unit" data-page-node-id="fLGMgFpmfpYcePLmL9jBWd">元/吨</span><span class="p-chg" data-page-node-id="ndRHPyrGu33aDlQJO34WVQ">▲ +630 (+0.58%)</span></div>
+      <div class="prow down" data-page-node-id="GWdeU6VSSnXzn04Tcqw6ze"><span class="p-name" data-page-node-id="g78OiIT2uGFD8ojjPxP0DG">沪金 上金所</span><span class="p-val" data-page-node-id="CBgyChrb16IXSFxpwFfYcV">832.15</span><span class="p-unit" data-page-node-id="cojGPbX1gzCWZ07roK9QmM">元/克</span><span class="p-chg" data-page-node-id="FgETxDAjr0D9v21yGfUGcL">▼ -3.52 (-0.42%)</span></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- 2 -->
+<div class="proposal" data-page-node-id="0M41DnzEuE4wFU5CmtHJuD">
+  <div class="p-head" data-page-node-id="7y7dMGyFNAvuac1f0zdEim"><span class="p-num" data-page-node-id="e7eEbCYfDEDF7pJ6a4ZHhb">2</span><span class="p-title" data-page-node-id="Qf8zkkwFDvHDDBv8SSD84Z">“昨”数据角标</span></div>
+  <p class="p-desc" data-page-node-id="9JI7xbUKABEpmRlaxt4We7">电解钴这类没有当日源的品种，现在靠名称里的日期（<code data-page-node-id="X5aWEVgP7fsei0AWTnPKuu">09-1…</code>）勉强区分，容易被截断。改成在涨跌列加「昨」角标，一眼分清实时值与昨日值。</p>
+  <div class="pair" data-page-node-id="rdoeEIk37gc6Evro5AbfwU">
+    <div class="box" data-page-node-id="lUBamPDhU8YQXQEFurXgAF"><div class="box-tag" data-page-node-id="1Icm2DgkkZxVZ6zrMqD4yz">现状</div><div class="box-body" data-page-node-id="0BGB2LqCUIHc0HG64e2PSj">
+      <div class="prow up" data-page-node-id="HtqFyJl900BAMHP8lXXuRM"><span class="p-name" data-page-node-id="VsSuzCCopTJEpEMjLBdDLc">沪铜 SHFE</span><span class="p-val" data-page-node-id="88AB3bZANN4TMfAP8ZBLMC">109,410</span><span class="p-unit" data-page-node-id="qrUZLQ2wb7YxXuA96NGCHF">元/吨</span><span class="p-chg" data-page-node-id="fDOYqyIemp3MNjzHSP8WDk">▲ +630 (+0.58%)</span></div>
+      <div class="prow" data-page-node-id="k2YzXdETsOUgHajDJpIobT"><span class="p-name" data-page-node-id="HQ3nUSGrCOqqk78rXkpjME">电解钴 SMM 09-12</span><span class="p-val" data-page-node-id="9XREdJMnWI0wvfXMHyaAhX">268,000</span><span class="p-unit" data-page-node-id="kvUI3jkQxJEKaRDQEZzA28">元/吨</span><span class="p-chg" data-page-node-id="Vy5iUPrt0WCpZC2bwD0cSL">— 昨日</span></div>
+    </div></div>
+    <div class="box" data-page-node-id="ZIydGV125O68SrFGkAVGpA"><div class="box-tag new" data-page-node-id="nPiAd3zBFd3MXYAV20WHmr">改后</div><div class="box-body" data-page-node-id="ycyguQpURWKGaCSSWza7NA">
+      <div class="prow up" data-page-node-id="wTKGJfFFWkxW1zFlYuCJiq"><span class="p-name" data-page-node-id="Hs8R6jzZy8FfstOBxtEScZ">沪铜 SHFE</span><span class="p-val" data-page-node-id="3A2XG2Dg8sVuS04jyU3K3t">109,410</span><span class="p-unit" data-page-node-id="GD7uTkHFmJxvGlXQlHzCCm">元/吨</span><span class="p-chg" data-page-node-id="AHtpZGZ5P4M6AXJQVFbREW">▲ +630 (+0.58%)</span></div>
+      <div class="prow" data-page-node-id="i2Viw4e2CNKouc1GObxeep"><span class="p-name" data-page-node-id="8IauOTheiGW9EEx0neUA9L">电解钴 SMM</span><span class="p-val" data-page-node-id="qAGpVHa2UCXHgSvAl9aczk">268,000</span><span class="p-unit" data-page-node-id="V0Cm9yLV9R64LQKlmKHF05">元/吨</span><span class="p-chg" data-page-node-id="TnEbTybFqu9UCKobMD8ZER">— <span class="tag-stale" data-page-node-id="GH0usxCyDrDaYPefUrDCOn">昨</span></span></div>
+      <div class="note" data-page-node-id="wQNlGkCKob5U2YcPChvMag">品名不再塞日期，涨跌幅列空间更宽</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- 3 -->
+<div class="proposal" data-page-node-id="uK4lXYUFP6KzK5oamtMY71">
+  <div class="p-head" data-page-node-id="qtmXCghlGHLL2fY2BiEFzH"><span class="p-num" data-page-node-id="gnXVYtGEUkSXQPgmR1iiRH">3</span><span class="p-title" data-page-node-id="jJ7hWDe8xJIWTyXMGMdu36">按涨跌幅排序开关</span></div>
+  <p class="p-desc" data-page-node-id="GlTEq58wsUzCQOQJmV4tx0">默认按固定品种顺序；点一下「按涨跌排序」，异动品种自动浮到顶部。看行情时比固定顺序好用，写日报时还是原顺序。</p>
+  <div class="pair" data-page-node-id="vlGyejRwmSJ9BWhvUiIHnx">
+    <div class="box" data-page-node-id="9hcc74DqJ72xkmohmnABlF"><div class="box-tag" data-page-node-id="4rqHjSogbVQSJU6AIWadTl">现状（固定顺序）</div><div class="box-body" data-page-node-id="NS36twbm5GyMtyipUD84OW">
+      <div class="prow up" data-page-node-id="XRUVYCDIo5Tz8J7QmO9RDN"><span class="p-name" data-page-node-id="F67DCyBoAryZrxuimUzonz">沪铜 SHFE</span><span class="p-val" data-page-node-id="hVJ1YKICsnlKuMEzTRP6y3">109,410</span><span class="p-unit" data-page-node-id="jo3SnJjtuFwXU01TDU2hWN">元/吨</span><span class="p-chg" data-page-node-id="KccK2TYKtWHSLaNrIm1Z7E">▲ +630 (+0.58%)</span></div>
+      <div class="prow up" data-page-node-id="aZ8w1pyj5dfVZSvOZ5bj5x"><span class="p-name" data-page-node-id="hHPbHEMNhdXUYQzTVOtdZ0">沪铝 SHFE</span><span class="p-val" data-page-node-id="HoIxC4b1p8X8aVXNKDP5ZK">24,420</span><span class="p-unit" data-page-node-id="bxB7kxAJMf3UO4YqP3T0yG">元/吨</span><span class="p-chg" data-page-node-id="GCIEgBAlJz486J3k2T6tgq">▲ +130 (+0.54%)</span></div>
+      <div class="prow up" data-page-node-id="eJrFjn3jo0ZTIIJXb3DF3I"><span class="p-name" data-page-node-id="aGVckXVmmdSEtySDTQZEpL">沪锡 SHFE</span><span class="p-val" data-page-node-id="3u4EloXZ8GdQZAFaWeq5VY">271,500</span><span class="p-unit" data-page-node-id="PLmIkH7X6TIVGzcNraFs3i">元/吨</span><span class="p-chg" data-page-node-id="M4x8OUDYCvhZWfcbSDGxio">▲ +3,590 (+1.34%)</span></div>
+      <div class="prow down" data-page-node-id="F9iJsF7yP4xi1no9luW7DN"><span class="p-name" data-page-node-id="J8r8lgtcCKxvzXbKEMYTJI">沪金 上金所</span><span class="p-val" data-page-node-id="CaSIdhIDhQCjvMBZvI2462">832.15</span><span class="p-unit" data-page-node-id="axDOvXxJpdIFWMDDpSH0cr">元/克</span><span class="p-chg" data-page-node-id="VYrG4k2eYP0DIdIJJFLP6P">▼ -3.52 (-0.42%)</span></div>
+    </div></div>
+    <div class="box" data-page-node-id="IKpGhKJdwZkE3fUtVD9W2l"><div class="box-tag new" data-page-node-id="tfo8lfCruELxlwLVPEodlr">改后（点击后）</div><div class="box-body" data-page-node-id="vQfsLZMCKbOE4VbEBe01sg">
+      <div class="sortbar" data-page-node-id="NqbAd4NqxDzbGBFcgN12Kk">
+        <span class="sortbtn" data-page-node-id="7ScsZUbJFU0F8jnb3kBuGP">默认顺序</span>
+        <span class="sortbtn on" data-page-node-id="g65KtXpjEqC1YzGe2ByHNg">按涨跌排序</span>
+      </div>
+      <div class="prow up" data-page-node-id="0fDVBkjFFjIqs3Vij4JBHS"><span class="p-name" data-page-node-id="7wMt42NpomgqE0kUF6TbB0">沪锡 SHFE<span class="rank" data-page-node-id="ZntEfz4E6YYLFtoSpOnOgw">1</span></span><span class="p-val" data-page-node-id="sACgeyPJG2e1t9Sb3O1QMl">271,500</span><span class="p-unit" data-page-node-id="pkzAjXJPDWepWll7c4KsUi">元/吨</span><span class="p-chg" data-page-node-id="Mu2OmHWSCmIje13BrJA9NO">▲ +3,590 (+1.34%)</span></div>
+      <div class="prow up" data-page-node-id="XuzDOwvnlxEbTWBueHbt32"><span class="p-name" data-page-node-id="3AXFamAOOXz5R4ipcXzVL8">沪铜 SHFE<span class="rank" data-page-node-id="ZnqbLDHhPC5fbTRdRFoSYd">2</span></span><span class="p-val" data-page-node-id="1s71C7mtkkQuEMToGSXNPn">109,410</span><span class="p-unit" data-page-node-id="Wc2U0NIwL1yxegWKbpEq5y">元/吨</span><span class="p-chg" data-page-node-id="5nTqZuRxsAIWGdlzaFNVNU">▲ +630 (+0.58%)</span></div>
+      <div class="prow up" data-page-node-id="KcstHASR21HN3uwOUt1zG8"><span class="p-name" data-page-node-id="ZpF9pXAFOKFXxSXd81AUWp">沪铝 SHFE<span class="rank" data-page-node-id="YqHXFAKYGAbKCwNjuwDUTS">3</span></span><span class="p-val" data-page-node-id="xIIohE3m74sjjEF7I4wi2V">24,420</span><span class="p-unit" data-page-node-id="BYo4GvXuMWWV5C4EOo3no5">元/吨</span><span class="p-chg" data-page-node-id="S6mg565cwkz2s2CeJTG6kw">▲ +130 (+0.54%)</span></div>
+      <div class="prow down" data-page-node-id="WECr6BuPEVjtQxSChFAGFF"><span class="p-name" data-page-node-id="oNsTJiWSToJBUGSxFpQ9ia">沪金 上金所<span class="rank" data-page-node-id="zU6BS3D1ANhkTM7quRPbcX">4</span></span><span class="p-val" data-page-node-id="XSFPJDIWlPZSkrUO4s1E5L">832.15</span><span class="p-unit" data-page-node-id="6mQ7xEqUEwc3f9mC7K3wum">元/克</span><span class="p-chg" data-page-node-id="pxtObMgZ822epLFhEkzs8e">▼ -3.52 (-0.42%)</span></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- 4 -->
+<div class="proposal" data-page-node-id="eqxf4sgMWoFPTpyQy3SmmB">
+  <div class="p-head" data-page-node-id="pwEa3gHDsrjIQNw8Ys1Txd"><span class="p-num" data-page-node-id="Ta0N00zN6yCMynMP71c6xs">4</span><span class="p-title" data-page-node-id="b0cKTexU3qlHqUuc8jS1nt">热榜加热度条</span></div>
+  <p class="p-desc" data-page-node-id="8UfDigUdxasm2wvDoJgKmv">右栏热榜每条后面加一根 3px 细条表示相对热度，让它更像“榜”。纯装饰，不占阅读宽度。</p>
+  <div class="pair" data-page-node-id="FZO0OL8BB8tZrXKbB7P7UD">
+    <div class="box" data-page-node-id="MNwM97wTIY1MY10VkcCWeW"><div class="box-tag" data-page-node-id="6MyP20qiFF5HXuKHvMmTFR">现状</div><div class="box-body" data-page-node-id="pDEXTgLYoPFpvq2yI9DFaX">
+      <div class="hot-item" data-page-node-id="X2IoGS1c3QlEwxiTxsqx00"><span class="hot-fire" data-page-node-id="e8HYbTwj3Y4HGM7oup6Owr">🔥 热</span><span class="hot-body" data-page-node-id="AV8xFXBarSDihfMtz7Zl9g">自然资源部发布新一轮找矿突破战略行动进展</span></div>
+      <div class="hot-item" data-page-node-id="rLEcOed2fr3JLmUYtBNtrZ"><span class="hot-fire" data-page-node-id="NAnTNoj9GUvInnBOW0L8XM">🔥 热</span><span class="hot-body" data-page-node-id="3Ifp4YGKHqV3gArE3IMEGq">LME 铜库存连续三日下降至 12.4 万吨</span></div>
+      <div class="hot-item" data-page-node-id="ye3zM1gKQQ8eEnkSooKSHr"><span class="hot-fire" data-page-node-id="qBJGfEjqo3fWB37Tqr528F">🔥 热</span><span class="hot-body" data-page-node-id="L4xcMtYz0HlVM2CsWxIX7s">紫金矿业完成某金矿 60% 股权收购</span></div>
+    </div></div>
+    <div class="box" data-page-node-id="X4UtZ33ID7bItuGBkZlFZ3"><div class="box-tag new" data-page-node-id="pJyNZhFT8s1LJO3m2WymQZ">改后</div><div class="box-body" data-page-node-id="8DWn2tfVvS7FOMT5lMD9c0">
+      <div class="hot-item" data-page-node-id="DbCXaMxg3HTgVr7A6dnW4o"><span class="hot-fire" data-page-node-id="4meSmHoJYWNe81GA5sCvy3">🔥 热</span><span class="hot-body" data-page-node-id="MRjixRdWqIRsJbrXznAz0v">自然资源部发布新一轮找矿突破战略行动进展</span><span class="hot-bar" data-page-node-id="YTHMq0CXHgBu9LavcslDY1"><i style="width:100%" data-page-node-id="VePJMAxFHg9UvUjaNRleKg"></i></span></div>
+      <div class="hot-item" data-page-node-id="2bbAfzj3ZcUDwBCsUHizFa"><span class="hot-fire" data-page-node-id="9T7GeFY7m0LbycgLDofkyM">🔥 热</span><span class="hot-body" data-page-node-id="CDyOyDZsQwEm1B5zChNFsj">LME 铜库存连续三日下降至 12.4 万吨</span><span class="hot-bar" data-page-node-id="0YS7lkz2nELlwzSprQA5MZ"><i style="width:74%" data-page-node-id="1ntIEnTazPugdCtqPKTchM"></i></span></div>
+      <div class="hot-item" data-page-node-id="Gv7HCco1otcXpTsGfy3AVi"><span class="hot-fire" data-page-node-id="bdhVpWacqf1TOCmY0FUTRr">🔥 热</span><span class="hot-body" data-page-node-id="E7CdAmJe5xBO5GudLAqOTW">紫金矿业完成某金矿 60% 股权收购</span><span class="hot-bar" data-page-node-id="rU2qGOF0IgwgQWjSHCVCNE"><i style="width:52%" data-page-node-id="xrtInw9mBKSuk8lqY9BZFR"></i></span></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- 5 -->
+<div class="proposal" data-page-node-id="amc2K6AqCCwdB0kc6oK619">
+  <div class="p-head" data-page-node-id="AeAAzKN7uU3wDHvXOpiRlF"><span class="p-num" data-page-node-id="jspbE2XHfMzrnzI2nwwgEz">5</span><span class="p-title" data-page-node-id="CGQl4yv1nczTfB4v02TrsI">宽屏下国内外并排（含内外价差）</span></div>
+  <p class="p-desc" data-page-node-id="i5lBMcPyK5rLpEP0nhSBSr">屏幕 ≥1440px 时，国内外两栏同屏，并在 LME 行后标注内外价差。做进出口、套利分析时最直观。改动最大，建议最后考虑。</p>
+  <div class="box" data-page-node-id="TWsXK3OEbPwFEFVWdPrObh"><div class="box-tag" data-page-node-id="7OEK3E06bkAys0dsBY9CBL">现状：上下两块</div><div class="box-body" data-page-node-id="Z6NXgJUI0jUovwUrt4XbXE">
+    <span class="pill cn" data-page-node-id="aVHQwEVerO3unxKWSG8i1E">国内盘 · 人民币</span>
+    <div class="prow up" data-page-node-id="vGQ9hmO82fzlXm0Clg2VEu"><span class="p-name" data-page-node-id="ivJAF5jE5GbUfy97hov5gT">沪铜 SHFE</span><span class="p-val" data-page-node-id="aLBMLi2FLD6UGWXOXzBBGp">109,410</span><span class="p-unit" data-page-node-id="0DCPbnjxdmulT90x5TUDMA">元/吨</span><span class="p-chg" data-page-node-id="7Qb8jsAD7M8hpZTTTHoJHd">▲ +630 (+0.58%)</span></div>
+    <div class="lme-block" data-page-node-id="YJq0QMoCoiqIeRYTDBGz5I"><span class="pill lme" data-page-node-id="aGQepmFBbejdvBl4GsDOUY">LME 外盘 · 美元/吨</span>
+      <div class="prow up" data-page-node-id="Uo7VAuVwAn0MqGHagVBZY8"><span class="p-name" data-page-node-id="PC7zqBM9PRdoe6F8owPh3L">LME 铜</span><span class="p-val" data-page-node-id="bQEElPAkK8NAeY5w8nzk2X">14,521</span><span class="p-unit" data-page-node-id="VzsY4KruzattvDDbsphemL">美元/吨</span><span class="p-chg" data-page-node-id="ZFkn5hRV4UgqaZluFLrltQ">▲ +27 (+0.19%)</span></div>
+    </div>
+  </div></div>
+  <div class="box" style="margin-top:var(--s3)" data-page-node-id="WOCrgilXTfS4jCgf1gtCRi"><div class="box-tag new" data-page-node-id="KoflnSoxPUIBCo7PqqnB29">改后：宽屏左右并排</div><div class="box-body" data-page-node-id="QGA51Xw3SFEVKkqJckNEMl">
+    <div class="dual" data-page-node-id="lXy2qiWD1WxU6CVOU9sMLf">
+      <div data-page-node-id="8AvuuBkj1MdQu0YxpcFjmQ"><span class="pill cn" data-page-node-id="UqQeFkQpfahaZdVfzESBME">国内盘 · 人民币</span>
+        <div class="prow up" data-page-node-id="vC8GIdDvbLFgA6REJbKzRk"><span class="p-name" data-page-node-id="FYdXg8yLjtnGD1p1tHCKmD">沪铜 SHFE</span><span class="p-val" data-page-node-id="NMooT2Z01VaiLlFfJxz15L">109,410</span><span class="p-unit" data-page-node-id="MYJfPqBQfPynSF9pdcmfNE">元/吨</span><span class="p-chg" data-page-node-id="scCCxYFUvPi2zGwkBGYuyk">▲ +0.58%</span></div>
+        <div class="prow up" data-page-node-id="ARIwsSuq5PweBI4nH9Uegh"><span class="p-name" data-page-node-id="EAYsQGCrA1z95wqbAtK26B">沪铝 SHFE</span><span class="p-val" data-page-node-id="GoHCioTUIYHOzAVvoxEKSh">24,420</span><span class="p-unit" data-page-node-id="rnxNj02kphULWHvyJ1ES2U">元/吨</span><span class="p-chg" data-page-node-id="gCuCtz6OAyRqjuW6UMPgRf">▲ +0.54%</span></div>
+      </div>
+      <div data-page-node-id="Dy7wGLGUjp9ICQtCB0P0Jy"><span class="pill lme" data-page-node-id="BTA8I1uLDumQ8HUfQlkUge">LME 外盘 · 美元/吨</span>
+        <div class="prow up" data-page-node-id="swnElFYIrOwduZXfzcStx5"><span class="p-name" data-page-node-id="65q33nXEJxesMSIhanMLXi">LME 铜<span class="spread" data-page-node-id="PCVEaGncVEbQcgKHtjWqHk">内外 +1,240</span></span><span class="p-val" data-page-node-id="E8UGAcjuQYMDE1psDbmMit">14,521</span><span class="p-unit" data-page-node-id="W4eC6rcNMdTcGsJRxi8jxa">美元/吨</span><span class="p-chg" data-page-node-id="JawqbGoXy7FDOr9iaTgDnn">▲ +0.19%</span></div>
+        <div class="prow up" data-page-node-id="gZCKsjgUAkUXa30J7S6H0I"><span class="p-name" data-page-node-id="5k8XtrRHIhwdqsRqzhM7xM">LME 铝<span class="spread" data-page-node-id="eYGXksHByEhtesMGJNbbWy">内外 -860</span></span><span class="p-val" data-page-node-id="gGBs4LK6znbSBECcDxINdr">2,905</span><span class="p-unit" data-page-node-id="YPoPPmDCUrOKQDMREAbEHg">美元/吨</span><span class="p-chg" data-page-node-id="DZj7LRskQRw5UEYhNlfOnf">▲ +0.42%</span></div>
+      </div>
+    </div>
+    <div class="note" data-page-node-id="TuvzNjPf9WWabcwFhRZcd1">「内外 +1,240」= 按当日汇率折算后的国内价 − 外盘价，正值为内盘升水</div>
+  </div></div>
+</div>
+
+</div>
+</body>
+</html>
