@@ -96,7 +96,7 @@ setTimeout(() => {
   console.log('\n===== ④ 会展预告迁至侧栏迷你卡 =====');
   const mini = doc.getElementById('expoMini');
   check('侧栏迷你卡容器存在', !!mini);
-  check('迷你卡在 .toc-sidebar 内', !!(mini && mini.closest('.toc-sidebar')));
+  check('迷你卡在右栏 col-rail 内', !!(mini && mini.closest('.col-rail')));
   // 「另有 N 场会议」是统计提示行，不计入条目数
   const miniItems = [...doc.querySelectorAll('#expoMiniList li')].filter(li => !li.classList.contains('expo-mini-more'));
   check('迷你卡条目 ≤5（或为空＝今日无会展）', miniItems.length <= 5, '实际 ' + miniItems.length + ' 条');
@@ -135,7 +135,7 @@ setTimeout(() => {
   const css = html;
   check('已读整体降透明度', /\.news-item\.read\{opacity:\.6\}/.test(css));
   check('已读圆点改空心灰环', /\.news-item\.read \.dot\{background:transparent;box-shadow:inset 0 0 0 2px/.test(css));
-  check('未读圆点仍为实心蓝', /\.dot\{width:9px;height:9px;border-radius:50%;background:#2980b9/.test(css));
+  check('未读圆点仍为实心品牌色', /\.dot\{width:9px;height:9px;border-radius:\s*50%;background:(#2980b9|var\(--brand\))/.test(css));
 
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
