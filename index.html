@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2100" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2112" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -224,7 +224,15 @@ body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
 .btn-special.active{background:#b45309;color:#fff;border-color:#b45309}
 /* ===== 矿业热榜（9-03 新增，类似今日头条右侧编号榜） ===== */
 .section-title.hotlist{background:var(--surface-2);border-left-color:var(--up)}
-.section-title.hotlist .hl-tag{display:inline-block;background:var(--up);color:#fff;font-size: var(--fs-meta);font-weight:700;padding:2px var(--s3);border-radius: var(--r-lg);margin-left:4px;letter-spacing:.5px}
+/* 「换一换」按钮（2026-09-08：替代 TOP 5 徽章 + N条 计数，头条式轮换） */
+.hl-refresh{margin-left:auto;font-family:inherit;font-size:var(--fs-meta);color:var(--ink-500);background:none;border:none;cursor:pointer;padding:2px 8px;border-radius:var(--r-sm);display:inline-flex;align-items:center;gap:3px;white-space:nowrap;transition:color .15s,background .15s}
+.hl-refresh:hover{color:var(--up);background:rgba(231,76,60,.08)}
+.hl-refresh:active{transform:translateY(1px)}
+body.dark .hl-refresh{color:var(--ink-500)}
+body.dark .hl-refresh:hover{color:#ff8a80;background:rgba(255,138,128,.1)}
+/* 换一换后的淡入动画 */
+.hotlist-list.hl-swap li.hot-item{animation:hlFadeIn .25s ease}
+@keyframes hlFadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
 .section-title.hotlist .hl-sub{font-size: var(--fs-meta);color:var(--ink-300);font-weight:400;margin-left:auto}
 .hotlist-list{margin:var(--s2) var(--s4) var(--s4);padding:0;list-style:none;background:var(--surface);border:1px solid var(--line-1);border-radius: var(--r-lg);overflow:hidden}
 .hotlist-list li.hot-item{display:flex;align-items:flex-start;gap:var(--s3);padding:var(--s3) var(--s4);border-bottom:1px solid #f4f6f8;transition:background .15s;cursor:pointer}
@@ -928,8 +936,7 @@ body.dark .qa-trend{background:var(--bg);border-color:var(--line-1);color:var(--
 }
 /* ===== 矿业热榜手机版（9-03 新增） ===== */
 @media(max-width:600px){
-  .section-title.hotlist .hl-tag{font-size: var(--fs-nano);padding:1px var(--s2)}
-  .section-title.hotlist .hl-sub{display:none}
+  .section-title.hotlist .hl-refresh{font-size:var(--fs-caption);padding:2px 6px}
   .hotlist-list{margin:var(--s2) var(--s3) var(--s3)}
   .hotlist-list li.hot-item{padding:var(--s3) var(--s3);gap:var(--s3);-webkit-tap-highlight-color:rgba(231,76,60,.16)}
   .hot-rank{min-width:24px;height:24px;line-height:24px;font-size: var(--fs-meta)}
@@ -1431,7 +1438,7 @@ body.dark .top-movers{background:rgba(255,255,255,.04)}
 </div>
 <aside class="col-rail">
 <div class="section hotlist-section" id="hotListSection" data-page-node-id="uBMIRSDR2EuU4OTPkhWNQv">
-  <div class="section-title hotlist" data-page-node-id="GhrYyT0PPQKfC8etws6ZJb"><span class="icon" data-page-node-id="N6a3UBumibhWM2AABsuhNB">🔥</span> 矿业热榜 <span class="hl-tag" data-page-node-id="0GF3jVCtdmBBpkDdhNAxSm">TOP 5</span> <!-- hl-sub「按来源权威 × 时效 × 关键词」2026-09-06 移除：排序口径属内部实现，不必摊在标题上 --> <span class="news-count" id="hotListCount" data-page-node-id="yDy95beCpuSu2aQWIyamd4">加载中…</span></div>
+  <div class="section-title hotlist" data-page-node-id="GhrYyT0PPQKfC8etws6ZJb"><span class="icon" data-page-node-id="N6a3UBumibhWM2AABsuhNB">🔥</span> 矿业热榜 <!-- hl-tag「TOP 5」与右侧「N条」语义重复，2026-09-08 晚移除，改为「换一换」轮换按钮 --> <button type="button" class="hl-refresh" id="hotRefreshBtn" title="换一批榜单条目">↻ 换一换</button></div>
   <ol class="hotlist-list" id="hotListBody" data-page-node-id="DVwhr9dloZ9ES9z9CxfSs6">
     <li class="hotlist-loading" data-page-node-id="pCHzCgmA1AxRMAIr3oHdfe">热榜加载中…</li>
   </ol>
@@ -2876,13 +2883,14 @@ function updateActiveSection(){
 }
 window.addEventListener('scroll',updateActiveSection,{passive:true});
 // ===== 矿业热榜（9-03 新增，类似今日头条热榜） =====
+// 2026-09-08 晚改造：仿头条「换一换」——去重后的完整候选池存 __hotPool，
+// 每页显示 HOT_N 条，点击「换一换」翻页（循环），条目不够一页时按钮自动隐藏。
+var __hotPool=[], __hotPage=0;
 function renderHotNews(d){
   var body=document.getElementById('hotListBody');
-  var cnt=document.getElementById('hotListCount');
   if(!body)return;
   var arr=(d&&Array.isArray(d.hot))?d.hot:[];
-  // 2026-09-08 改造：热榜与「今日要闻」互斥（同一条不重复出现）+ 跨源同事件去重 + 控制在 HOT_N 条。
-  // 背景：两者原本都从同一个库打分，茶亭铜金矿这类新闻在两栏都排第 1，读者看到重复。
+  // 热榜与「今日要闻」互斥（同一条不重复出现）+ 跨源同事件去重；不再提前截断，整池保留供换一换轮换。
   if(arr.length){
     try{
       var dp=(typeof computeDigestPicks==='function')?(computeDigestPicks()||[]):[];
@@ -2898,35 +2906,64 @@ function renderHotNews(d){
         }
         if(!dup)for(j2=0;j2<chosen.length;j2++){ if(mdTitleSim(chosen[j2].t,n0.t)>=0.5){dup=true;break;} }
         if(!dup)chosen.push(n0);
-        if(chosen.length>=HOT_N)break;
       }
-      arr=chosen;
-    }catch(e){ arr=arr.slice(0,HOT_N); }
+      __hotPool=chosen;
+    }catch(e){ __hotPool=arr.slice(0); }
+  }else{
+    __hotPool=[];
   }
-  if(!arr.length){
+  __hotPage=0;
+  renderHotPage();
+}
+function renderHotPage(){
+  var body=document.getElementById('hotListBody');
+  if(!body)return;
+  var cnt=document.getElementById('hotListCount');
+  if(!__hotPool.length){
     body.innerHTML='<li class="hotlist-empty">今日热榜暂无数据（新闻源未更新）</li>';
     if(cnt)cnt.textContent='0条';
+    var b0=document.getElementById('hotRefreshBtn');
+    if(b0)b0.style.display='none';
     return;
   }
-  body.innerHTML=arr.map(function(n,idx){
+  var pages=Math.ceil(__hotPool.length/HOT_N);
+  if(__hotPage>=pages)__hotPage=0;
+  var show=__hotPool.slice(__hotPage*HOT_N,__hotPage*HOT_N+HOT_N);
+  body.innerHTML=show.map(function(n,idx){
     var t=String(n.t||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
     var s=n.s?String(n.s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}):'';
     var u=String(n.u||'#').replace(/"/g,'&quot;');
     var dStr=n.d?' · '+String(n.d).slice(5):'';
     var fire=n.hot?'<span class="hot-fire">🔥 热</span>':'';
-    var rankCls=n.rank<=3?'top'+n.rank:'';
-    // 2026-09-08：热度条（按榜内相对位置递减，纯装饰）
+    // 热度条（按当前页相对位置递减，纯装饰）
     var barW=Math.max(40,100-idx*15);
     var bar='<span class="hot-bar"><i style="width:'+barW+'%"></i></span>';
-    return '<li class="hot-item '+rankCls+'" data-url="'+u+'">'
+    return '<li class="hot-item" data-url="'+u+'">'
       +'<div class="hot-body">'
       +fire
       +'<a class="hot-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'
       +'<div class="hot-meta"><span>'+s+'</span><span>'+dStr+'</span></div>'
       +'</div>'+bar+'</li>';
   }).join('');
-  if(cnt)cnt.textContent=arr.length+'条';
+  var btn=document.getElementById('hotRefreshBtn');
+  if(btn)btn.style.display=(pages>1)?'':'none';
 }
+function hotShuffle(){
+  var pages=Math.ceil(__hotPool.length/HOT_N);
+  if(pages<=1)return;
+  __hotPage=(__hotPage+1)%pages;
+  renderHotPage();
+  var body=document.getElementById('hotListBody');
+  if(body&&body.classList){
+    body.classList.remove('hl-swap');
+    try{ void body.offsetWidth; }catch(e){}
+    body.classList.add('hl-swap');
+  }
+}
+(function(){
+  var btn=document.getElementById('hotRefreshBtn');
+  if(btn)btn.addEventListener('click',hotShuffle);
+})();
 // ===== 热榜本地兜底（2026-09-04 新增）=====
 // 背景：站点有两种运行形态——带后端 server.py 的部署，以及 GitHub Pages 这类纯静态托管。
 // 纯静态下 /api/hot-news 不存在，不做兜底热榜就会显示"加载失败"。
