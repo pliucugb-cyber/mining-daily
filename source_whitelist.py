@@ -74,6 +74,17 @@ ALLOWED_DOMAINS = [
     "mining.com",            # 全球矿业新闻（须排除 /sponsored-content/ 与 /joint-venture/ 广告路径）
     "kitco.com",             # 贵金属
     "gold.org",              # 世界黄金协会
+    # ===== 2026-09-08 覆盖度核查 P1 新增 =====
+    "ccmn.cn",               # 长江有色网（现货视角资讯，与 SMM 互补）
+    "szse.cn",               # 深圳证券交易所（公告直连，巨潮备份链路；含 disc.szse.cn）
+]
+
+# 白名单子域默认放行，但少数子域是营销/广告页而非新闻，必须显式否决。
+# 2026-09-08：长江有色的商城与广告跳转子域会随主域 ccmn.cn 一起被放行，
+# 若不拉黑，商城产品报价页可能被当成新闻收录。
+BLOCKED_HOSTS = [
+    "mall.ccmn.cn",   # 长江有色商城（「供应优质黄铜棒 网上协商价格」类产品页）
+    "ad.ccmn.cn",     # 长江有色广告跳转
 ]
 
 # 境外源采编禁用路径（2026-09-08）：这些路径是广告/软文，不是新闻，采编时必须跳过。
@@ -104,6 +115,9 @@ def is_allowed(url: str) -> bool:
     except Exception:
         return False
     if not host:
+        return False
+    # 显式否决优先于白名单：商城/广告子域随主域放行，必须单独拦掉
+    if host in BLOCKED_HOSTS:
         return False
     for d in ALLOWED_DOMAINS:
         if host == d or host.endswith("." + d):

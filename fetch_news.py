@@ -167,7 +167,12 @@ SOURCES = [
         "source": "中国有色金属工业协会",
         "foreign": False,
         "enabled": True,
-        "note": "首页混入 news.cn 时政链接，靠 NOISE_KEYWORDS 过滤",
+        # 2026-09-08 修复：长期「115 raw -> 0 kept」不是正则问题（正则能解出 115 条，
+        # 逐层过滤后仍有 76 条存活），而是**协会更新频率低**：沿用新闻源的 2 天窗口时，
+        # 一周一批的协会动态几乎全被日期过滤掉。放宽到 7 天后稳定出 15~22 条。
+        "lookback": 7,
+        "max_items": 60,
+        "note": "首页混入 news.cn 时政链接，靠 NOISE_KEYWORDS 过滤；回看窗口 7 天",
     },
     {
         "key": "cnmn",
@@ -297,6 +302,50 @@ SOURCES = [
         "extra_exclude": NONMETALLIC_KW,
         "note": "产出归 rightsSection（gen_today.strip_rights_html 会从主列表剥离 ky 链接）；"
                 "首页约 7 成是砂石土/地热，靠 NONMETALLIC_KW 剔除",
+    },
+    # -------------------------------------------------------------------
+    # 2026-09-08 P1：长江有色（ccmn.cn）+ 深交所公告直连（szse.cn）
+    #   ccmn    → 现货视角的品种资讯，与 SMM 互补（SMM 偏咨询定价，长江有色偏现货成交）
+    #   szse    → 深交所官方公告接口，作为巨潮(cninfo)的备份链路
+    #             （cninfo 实测会 504；两者内容重叠，跨源去重会自动只留一条）
+    # -------------------------------------------------------------------
+    {
+        "key": "cjys",
+        "name": "长江有色网",
+        "list_url": "https://www.ccmn.cn/",
+        "kind": "html",
+        # 详情页形如 /news/ZX003/202609/<32位hex>.html；只认 www.ccmn.cn 且必须带 .html，
+        # 天然排除 mall.ccmn.cn（商城产品页）与各类二级广告域。
+        "link_re": r"(https://www\.ccmn\.cn/news/[A-Z]+\d*/\d{6}/[0-9a-f]{16,}\.html)",
+        "href_tpl": "{g1}",
+        "category": "行业动态",
+        "source": "长江有色网",
+        "foreign": False,
+        "enabled": True,
+        "max_items": 60,
+        # URL 只精确到 /202609/（无日），且 hash 头两位会被误读成「日」，必须强制回查详情页
+        "date_from_detail": True,
+        "force_date_from_detail": True,
+        # 「XX日报/周报/月评」是报价专栏，无事件价值；商城词防止链接模式变动后漏进来
+        "extra_exclude": ["日报", "周报", "月评",
+                          "网上协商价格", "现货供应", "厂家供货", "批发"],
+        "note": "与 SMM 互补的现货视角；列表页不显示日期，靠 date_from_detail 逐条回查",
+    },
+    {
+        "key": "szse",
+        "name": "深圳证券交易所 上市公司公告",
+        "list_url": "http://www.szse.cn/api/disc/announcement/annList",
+        "kind": "szse",
+        "search_keys": ["矿业", "有色", "锂", "稀土", "铜", "铝", "黄金", "镍", "钴", "锌"],
+        "category": "上市公司公告",
+        "source": "深圳证券交易所",
+        "foreign": False,
+        "enabled": True,
+        "max_items": 60,
+        "lookback": 3,        # 与 cninfo 对齐：公告是硬性时点
+        "extra_exclude": ANNOUNCE_NOISE,
+        "note": "JSON POST 接口；PDF 直链 http://disc.szse.cn/download<attachPath>；"
+                "与 cninfo 内容高度重叠，作备份链路，跨源去重只留一条",
     },
 ]
 
@@ -594,6 +643,84 @@ def parse_cninfo(cfg, report_date, days):
     return out
 
 
+def parse_szse(cfg, report_date, days):
+    """深交所上市公司公告检索（kind='szse'）。
+
+    实测要点（2026-09-08）：
+    - 与巨潮不同：这是 **JSON body** 接口（Content-Type: application/json），
+      不是 x-www-form-urlencoded，直接复用 http_post 会被拒。
+    - 日期区间用 seDate: [起, 止] 数组，不是字符串区间。
+    - publishTime 已是「YYYY-MM-DD HH:MM:SS」，直接取前 10 位即可。
+    - 附件是 PDF：http://disc.szse.cn/download + attachPath。
+    """
+    start = (datetime.date.fromisoformat(report_date)
+             - datetime.timedelta(days=max(0, days - 1))).isoformat()
+    referer = "http://www.szse.cn/disclosure/listed/fixed/index.html"
+    out, seen = [], set()
+    for kw in cfg.get("search_keys", []):
+        payload = json.dumps({
+            "seDate": [start, report_date], "stock": [],
+            "channelCode": ["listedNotice_disc"],
+            "pageSize": 30, "pageNum": 1, "searchKey": [kw],
+        }).encode("utf-8")
+        txt = _post_json(cfg["list_url"], payload, referer=referer)
+        if not txt:
+            continue
+        try:
+            j = json.loads(txt)
+        except Exception:
+            continue
+        for a in (j.get("data") or []):
+            title = clean_text(a.get("title") or "")
+            if not title or len(title) < 8:
+                continue
+            attach = (a.get("attachPath") or "").lstrip("/")
+            if not attach:
+                continue
+            url = "http://disc.szse.cn/download/" + attach
+            if url in seen:
+                continue
+            seen.add(url)
+            d = (a.get("publishTime") or "")[:10]
+            names = a.get("secName") or []
+            codes = a.get("secCode") or []
+            secname = clean_text(names[0]) if names else ""
+            code = codes[0] if codes else ""
+            out.append({
+                "title": title,
+                "url": url,
+                "date": d,
+                "summary": "%s（%s）在深交所披露：%s" % (secname, code, title)
+                           if secname else title,
+            })
+    return out
+
+
+def _post_json(url, payload, referer="", timeout=TIMEOUT, retries=1):
+    """application/json POST（深交所接口专用）。失败返回 ''。"""
+    for _ in range(retries + 1):
+        try:
+            headers = {
+                "User-Agent": UA,
+                "Content-Type": "application/json; charset=UTF-8",
+                "Accept": "application/json, text/plain, */*",
+                "Accept-Encoding": "gzip",
+                "Referer": referer,
+            }
+            req = urllib.request.Request(url, data=payload, headers=headers)
+            with urllib.request.urlopen(req, timeout=timeout, context=CTX) as r:
+                raw = r.read()
+                if r.headers.get("Content-Encoding") == "gzip":
+                    try:
+                        raw = gzip.decompress(raw)
+                    except Exception:
+                        pass
+                return raw.decode("utf-8", "ignore")
+        except Exception:
+            continue
+    return ""
+
+
 # ============================================================================
 # 过滤层
 # ============================================================================
@@ -695,6 +822,25 @@ def extract_date(url, rss_date, fallback, text=""):
     return fallback
 
 
+def _date_from_detail(url, limit=200):
+    """URL 里无确切日期时，回详情页取发布日期（长江有色 URL 只到 /202609/）。
+
+    只取正文前 4000 字符里的第一个 YYYY-MM-DD / YYYY年M月D日，
+    避免把页脚版权年份等噪声当成发布日。
+    """
+    h = http_get(url, timeout=15, retries=1)
+    if h.startswith("__ERR__"):
+        return ""
+    h = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", h)[:limit * 20]
+    m = re.search(r"(20\d{2})[-年/](\d{1,2})[-月/](\d{1,2})", h)
+    if not m:
+        return ""
+    try:
+        return "%s-%02d-%02d" % (m.group(1), int(m.group(2)), int(m.group(3)))
+    except Exception:
+        return ""
+
+
 def norm_title(t):
     """标题归一：去标点空白，用于跨源去重（同一事件多源报道只留一条）"""
     return re.sub(r"[\s\W_]+", "", t or "").lower()
@@ -727,6 +873,8 @@ def run_source(cfg, report_date, days, use_detail):
     days = int(cfg.get("lookback", days))
     if cfg["kind"] == "cninfo":
         raw = parse_cninfo(cfg, report_date, days)
+    elif cfg["kind"] == "szse":
+        raw = parse_szse(cfg, report_date, days)
     else:
         html_text = http_get(cfg["list_url"])
         if html_text.startswith("__ERR__"):
@@ -765,7 +913,19 @@ def run_source(cfg, report_date, days, use_detail):
         seen_url.add(url)
         seen_title.add(nt)
 
-        d = extract_date(url, r.get("date", ""), report_date, title)
+        # 日期：优先 URL/RSS 里的确切日期；URL 无日期、或源声明「URL 日期不可信」
+        # 时回详情页取。长江有色的 URL 形如 /news/ZX003/202609/<hash>.html，hash
+        # 以 09/16 开头时会被 extract_date 误读成 09-09 / 09-16 这类**未来日期**，
+        # 所以该源必须强制回查详情页，不能信 URL。
+        d = ""
+        if not cfg.get("force_date_from_detail"):
+            d = extract_date(url, r.get("date", ""), "", title)
+        if (not d or cfg.get("force_date_from_detail")) and cfg.get("date_from_detail"):
+            d = _date_from_detail(url) or d
+        if not d:
+            d = report_date
+        if cfg.get("force_date_from_detail") and d > report_date:
+            continue        # 未来日期必是 URL 误读，宁可丢也不收
         if d < cutoff:
             continue
         summary = r.get("summary") or ""
