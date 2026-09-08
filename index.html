@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2139" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2147" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -139,6 +139,8 @@ body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
 .dot{width:9px;height:9px;border-radius: 50%;background:var(--brand);flex-shrink:0;margin-top:var(--s2);transition:background .2s,box-shadow .2s}
 .news-item.read .dot{background:transparent;box-shadow:inset 0 0 0 2px #c8d0d8}
 .badge-new{background:var(--up);color:#fff;font-size: var(--fs-meta);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:600;flex-shrink:0;margin-top:var(--s1);animation:pulse 1.5s infinite}
+/* 旧闻补录标（2026-09-08 晚）：发布日期距报告日>2天的今日区条目，NEW 降级为灰色「补录」 */
+.badge-backfill{background:var(--surface-3);color:var(--ink-500);border:1px solid var(--line-2);font-size: var(--fs-meta);padding:0 var(--s2);border-radius: var(--r-sm);font-weight:500;flex-shrink:0;margin-top:var(--s1)}
 .badge-orig-date{display:inline-block;background:var(--surface-3);color:var(--ink-500);font-size: var(--fs-nano);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:500;margin-left:8px;vertical-align:1px;white-space:nowrap}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 .news-title{color:var(--ink-900);text-decoration:none;font-weight:var(--fw-medium);font-size: var(--fs-h3);line-height:1.5}
@@ -689,6 +691,7 @@ body.dark .news-count{color:var(--ink-500)}
 body.dark .news-item.read .news-title{color:var(--ink-300);font-weight:var(--fw-regular)}
 body.dark .news-item.read .dot{background:transparent;box-shadow:inset 0 0 0 2px #4a5765}
 body.dark .badge-new{background:#c0392b;color:#fff}
+body.dark .badge-backfill{background:#243040;color:#8fa0b0;border-color:#31404f}
 body.dark .news-meta .src{color:#45b7a4}
 body.dark .btn-star{color:#5a6875}
 body.dark .btn-star:hover{color:#f5b041}
@@ -2390,8 +2393,36 @@ function initArchiveFold(){
   _afSaveMap(_AF_LS_DAY, dayMap);
 }
 
+// 旧闻补录降级（2026-09-08 晚）：今日区 is-new 条目若原文发布日期（.news-meta「· MM-DD」）
+// 距报告日超过 2 天，摘掉 NEW 徽章、换成灰色「补录」标——补录的漏稿不该顶着红标冒充「刚发生」。
+// 只处理今日区（往期区本就无 NEW）；幂等，重复调用无副作用（降级后不再命中 is-new）。
+function demoteStaleNew(){
+  var anchor='';
+  try{anchor=(typeof qaReportDate==='function')?(qaReportDate()||''):'';}catch(e){}
+  if(!anchor||anchor.length<10)return;
+  var base=new Date(+anchor.slice(0,4),+anchor.slice(5,7)-1,+anchor.slice(8,10));
+  var todaySection=document.getElementById('todaySection');
+  if(!todaySection)return;
+  todaySection.querySelectorAll('.news-item.is-new').forEach(function(el){
+    var meta=el.querySelector('.news-meta');
+    if(!meta)return;
+    var m=(meta.textContent||'').match(/(\d{2})-(\d{2})/);
+    if(!m)return;
+    var d=new Date(base.getFullYear(),+m[1]-1,+m[2]);
+    if((base-d)/86400000<=2)return; // 2 天内算时效内，保留 NEW
+    el.classList.remove('is-new');
+    var b=el.querySelector('.badge-new');
+    if(b){
+      var tag=document.createElement('span');
+      tag.className='badge-backfill';
+      tag.textContent='补录';
+      b.parentNode.replaceChild(tag,b);
+    }
+  });
+}
 // 刷新显示状态
 function refresh(){
+  demoteStaleNew();
   const s=getReadSet();
   let unread=0,newUnread=0;
   document.querySelectorAll('.news-item:not(.arch-fav)').forEach(el=>{
