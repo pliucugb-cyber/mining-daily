@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2120" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2128" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -81,7 +81,11 @@ body.dark .toc-count-fresh.is-empty{color:var(--ink-500);background:var(--surfac
 .col-rail .expo-mini{background:var(--surface);border:1px solid var(--line-1);border-radius: var(--r-lg);padding:var(--s4) var(--s4);margin-top:0;box-shadow: var(--shadow-md)}
 .col-rail .expo-mini-head{font-size: var(--fs-h3);font-weight:800;color:var(--ink-900);margin-bottom:var(--s2);letter-spacing:.3px}
 .col-rail .expo-mini-list li{padding:var(--s2) 38px var(--s2) var(--s3)}
-.col-rail .expo-mini-more{padding:3px var(--s3)!important;color:var(--ink-300);font-size: var(--fs-meta)}
+/* 会展全量展示 + 限高滚动（2026-09-08：去掉「另有 N 场」死文本；裁半行提示可滚） */
+.col-rail .expo-mini-list{max-height:185px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--line-2) transparent}
+.col-rail .expo-mini-list::-webkit-scrollbar{width:4px}
+.col-rail .expo-mini-list::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:2px}
+.col-rail .expo-mini-list::-webkit-scrollbar-track{background:transparent}
 /* 热榜（去序号后列表更紧凑、贴近顶部） */
 .col-rail .hotlist-list{margin:0}
 .col-rail .hotlist-list li.hot-item{padding:var(--s3) var(--s4)}
@@ -1101,7 +1105,7 @@ body.dark .qa-alert-item.down{background:#16301f;color:#86efac}
 .expo-mini-list a{color:#33475b;text-decoration:none;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .expo-mini-list a:hover{color:#b45009}
 .expo-mini-date{position:absolute;right:6px;top:5px;font-size: var(--fs-nano);color:#93a3b2}
-.expo-mini-more{padding:3px var(--s2)!important;color:var(--ink-300);font-size: var(--fs-meta)}
+body.dark .expo-mini-list::-webkit-scrollbar-thumb{background:#2a3a4a}
 body.dark .expo-mini{border-top-color:var(--line-1)}
 body.dark .expo-mini-head{color:#8fa3b5}
 body.dark .expo-mini-list a{color:var(--ink-700)}
@@ -5037,7 +5041,6 @@ else { setupNewsFilterBar(); setupExportButtons(); }
   var EXPO_SKIP=['收购','投产','勘探','发现','涨价','签约','中标','获批','事故','停产',
                  '复产','产量','利润','业绩预告','资源量','储量','矿权','出让','挂牌',
                  '拍卖','减产','罢工','禁令','关税','出口管制','复产','投产','增产'];
-  var EXPO_MINI_N=5;
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function isDesktop(){ try{ return !(window.matchMedia&&window.matchMedia('(max-width:1100px)').matches); }catch(e){ return true; } }
   function titleOf(el){var a=el.querySelector('.news-title');return a?(a.textContent||''):'';}
@@ -5092,13 +5095,13 @@ else { setupNewsFilterBar(); setupExportButtons(); }
         picked=uniq;
       }
       var html='';
-      picked.slice(0,EXPO_MINI_N).forEach(function(el){
+      // 2026-09-08 晚：全量展示（列表限高 185px 滚动），去掉「另有 N 场会议」死文本——
+      // 有多少展多少，放不下用户自己滚，条目链接全部可点。
+      picked.forEach(function(el){
         var t=titleOf(el).trim(),u=urlOf(el),d=dateOf(el);
         html+='<li><a href="'+esc(u)+'" target="_blank" rel="noopener" title="'+esc(t)+'">'+esc(t)+'</a>'
             +(d?'<span class="expo-mini-date">'+esc(d)+'</span>':'')+'</li>';
       });
-      if(picked.length>EXPO_MINI_N)
-        html+='<li class="expo-mini-more">另有 '+(picked.length-EXPO_MINI_N)+' 场会议</li>';
       ul.innerHTML=html;
       box.style.display='';
       // 条目移入隐藏容器：仍在 DOM 内（保留已读/收藏/搜索），但主区不再重复展示
