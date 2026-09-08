@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-1845" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-1851" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -55,20 +55,23 @@ body.dark .toc-count-fresh.is-empty{color:#94a3b8;background:#243140}
 .col-rail .section{margin-bottom:14px}
 .col-rail .hotlist-list{margin:6px 0 8px}
 .col-rail .section-title{margin:0}
-.side-card{background:#fff;border:1px solid #eef2f7;border-radius:12px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.side-card-title{font-size:15px;font-weight:800;color:#1a3a5c;margin-bottom:10px}
-.side-card-list{list-style:none;margin:0;padding:0}
-.side-card-list li{display:flex;align-items:center;gap:8px;font-size:13px;color:#33475c;padding:5px 0}
-.side-card-list .badge-new,.side-card-list .badge-strategy,.side-card-list .tag-chip{margin:0}
+/* 右栏会展卡（2026-09-08 迁入右栏，卡片化） */
+.col-rail .expo-mini{background:#fff;border:1px solid #eef2f7;border-radius:12px;padding:14px 15px;margin-top:0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.col-rail .expo-mini-head{font-size:14px;font-weight:800;color:#1a3a5c;margin-bottom:8px;letter-spacing:.3px}
+.col-rail .expo-mini-list li{padding:6px 38px 6px 9px}
+.col-rail .expo-mini-more{padding:3px 9px!important;color:#9aa7b3;font-size:11px}
+/* 热榜（去序号后列表更紧凑、贴近顶部） */
+.col-rail .hotlist-list{margin:0}
+.col-rail .hotlist-list li.hot-item{padding:12px 16px}
+.col-rail .hot-title{font-size:14px}
 @media(min-width:1101px){
   .news-grid{grid-template-columns:minmax(0,1fr) 306px}
-  .col-rail{position:sticky;top:92px;max-height:calc(100vh - 110px);overflow-y:auto}
+  .col-rail{position:sticky;top:16px;max-height:calc(100vh - 30px);overflow-y:auto}
   .col-rail::-webkit-scrollbar{width:5px}
   .col-rail::-webkit-scrollbar-thumb{background:#c8d6e5;border-radius:3px}
 }
-body.dark .side-card{background:#1e2733;border-color:#2c3845}
-body.dark .side-card-title{color:#e8eef3}
-body.dark .side-card-list li{color:#c2cfdb}
+body.dark .col-rail .expo-mini{background:#1e2733;border-color:#2c3845}
+body.dark .col-rail .expo-mini-head{color:#e8eef3}
 /* 头部 */
 .header{background:linear-gradient(135deg,#1a3a5c 0%,#2c5f8a 100%);color:#fff;border-radius:12px;padding:24px 20px;margin-bottom:14px}
 .header h1{font-size:22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -1152,7 +1155,7 @@ window.gcTotal=function(data){
 <div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#f39c12" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
 <div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#8e44ad" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
 <div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
-<div class="expo-mini" id="expoMini" style="display:none"><div class="expo-mini-head">🎪 近期会展</div><ul class="expo-mini-list" id="expoMiniList"></ul></div>
+
 <div class="toc-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="8iwVYYySScb07F8bSYmelj">↑ 返回顶部</div>
 </nav>
 <div class="container" data-page-node-id="uS5RB3Y6VbZBc8kC6gZyLP">
@@ -1345,14 +1348,7 @@ window.gcTotal=function(data){
     <li class="hotlist-loading" data-page-node-id="pCHzCgmA1AxRMAIr3oHdfe">热榜加载中…</li>
   </ol>
 </div>
-<div class="side-card">
-<div class="side-card-title">📌 标注说明</div>
-<ul class="side-card-list">
-<li><span class="badge-new">NEW</span> 今日新收录</li>
-<li><span class="badge-strategy">战略</span> 找矿突破战略行动</li>
-<li><span class="tag-chip">重大</span> 重点事件</li>
-</ul>
-</div>
+<div class="expo-mini" id="expoMini" style="display:none"><div class="expo-mini-head">🎪 近期会展</div><ul class="expo-mini-list" id="expoMiniList"></ul></div>
 </aside>
 </div>
 <!-- 移动端 PWA 安装浮条 -->
@@ -2832,7 +2828,6 @@ function renderHotNews(d){
     var fire=n.hot?'<span class="hot-fire">🔥 热</span>':'';
     var rankCls=n.rank<=3?'top'+n.rank:'';
     return '<li class="hot-item '+rankCls+'" data-url="'+u+'">'
-      +'<span class="hot-rank">'+(n.rank<10?'0':'')+n.rank+'</span>'
       +'<div class="hot-body">'
       +fire
       +'<a class="hot-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'
