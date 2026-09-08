@@ -113,6 +113,33 @@ setTimeout(() => {
     check('③b 连点可循环回绕到第一页', cycled, 'pool=' + (window.__hotPool || []).length + ' pages=' + pages);
   }
 
+  // ③c 旧闻补录降级（2026-09-08 晚：发布日期距报告日>2天的今日区条目，NEW -> 灰色「补录」）
+  const todaySec = doc.getElementById('todaySection');
+  check('③c 今日区存在', !!todaySec);
+  if (todaySec) {
+    const now = new Date();
+    let anchor = '';
+    try { anchor = (typeof window.qaReportDate === 'function') ? (window.qaReportDate() || '') : ''; } catch (e) {}
+    if (!anchor) anchor = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+    const base = new Date(+anchor.slice(0, 4), +anchor.slice(5, 7) - 1, +anchor.slice(8, 10));
+    let staleLeft = 0, freshBadged = 0, backfillN = 0;
+    todaySec.querySelectorAll('.news-item').forEach(el => {
+      const meta = el.querySelector('.news-meta');
+      const m = meta ? (meta.textContent || '').match(/(\d{2})-(\d{2})/) : null;
+      if (!m) return;
+      const d = new Date(base.getFullYear(), +m[1] - 1, +m[2]);
+      const stale = (base - d) / 86400000 > 2;
+      const hasNew = !!el.querySelector('.badge-new') && el.classList.contains('is-new');
+      const hasBf = !!el.querySelector('.badge-backfill');
+      if (hasBf) backfillN++;
+      if (stale && hasNew) staleLeft++;
+      if (!stale && hasBf) freshBadged++;
+    });
+    check('③c 超期条目不再带 NEW', staleLeft === 0, '残留 ' + staleLeft + ' 条');
+    check('③c 时效内条目不被误标补录', freshBadged === 0, '误标 ' + freshBadged + ' 条');
+    check('③c 补录标已生成（当前数据应为 4 条左右）', backfillN >= 1, 'backfill=' + backfillN);
+  }
+
   console.log('\n===== ④ 会展预告迁至侧栏迷你卡 =====');
   const mini = doc.getElementById('expoMini');
   check('侧栏迷你卡容器存在', !!mini);
