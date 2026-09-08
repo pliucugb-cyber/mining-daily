@@ -3,6 +3,34 @@
 Works by in-place modification of the old HTML file.
 """
 import re
+import sys
+import datetime
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 过期守卫（2026-09-08 加入，勿删）
+#
+# 本脚本是「基于旧 HTML 原地修改」的老一代生成器，内部硬编码了 2026-09-04 的日期
+# 与一批 09-03 的今日区内容：
+#   - STEP 1/2/3/4/7/8 全是硬编码日期的 html.replace()，日期对不上会「静默跳过」
+#   - STEP 6 的 new_today 是写死的 09-03 新闻常量
+# 也就是说：只要日期不符还让它跑完，它会不报错地把「今日新增」整区覆盖成 09-03 的旧稿。
+# 这属于最危险的一类失败——不报错、直接污染线上页面。
+# 因此日期不符时直接中止，绝不静默执行。
+#
+# 注：2026-09-08 起实际生效的生成器是当日的 generate_YYYYMMDD.py，本脚本仅作留档与兜底。
+# ─────────────────────────────────────────────────────────────────────────────
+_HARDCODED_DATE = '2026-09-04'
+_TODAY = datetime.date.today().isoformat()
+if _TODAY != _HARDCODED_DATE:
+    sys.exit(
+        '\n[gen_today.py] 已中止：本脚本仅适配 %s，今天是 %s。\n'
+        '  原因：脚本内 STEP 1/2/3/4/7/8 为硬编码日期 replace，STEP 6 的 new_today\n'
+        '  是写死的 09-03 内容。日期不符时这些 replace 会静默跳过，并把今日区整区\n'
+        '  覆盖成 09-03 旧稿 —— 不报错却直接污染页面，故宁可中止。\n'
+        '  请使用当日的 generate_YYYYMMDD.py；如需继续用本脚本，请先更新其中的\n'
+        '  硬编码日期与 new_today 常量。\n'
+        % (_HARDCODED_DATE, _TODAY)
+    )
 
 
 def strip_rights_html(h):

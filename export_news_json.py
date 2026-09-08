@@ -358,9 +358,23 @@ def main():
     stats = merge_into_months([dict(e) for e in news], DATA_DIR, report_date)
 
     sources = sorted({e['source'] for e in news if e['source']})
-    # 页面实际渲染的 news-item 总数/今日新增数（含专项区与今日区重复出现的同一URL）
-    page_total = len(re.findall(r'<div class="news-item', html))
-    page_new = len(re.findall(r'<div class="news-item[^"]*is-new', html))
+    # 页面实际渲染的 news-item 总数/今日新增数
+    # 口径（2026-09-08 修正）：只统计「今日区 + 专项区 + 往期区」，排除 rightsSection。
+    # 矿权专区内的卡片由 renderRightsSection() 从 NEWS_DATA 渲染，不属于新闻条目，
+    # 计入会让 page_total 虚高（实测 2026-09-08：全页 112 条 vs 实际 110 条，
+    # 差的 2 条正是 rightsSection 内的卡片），导致与 meta.total 长期对不上。
+    _p_today = html.find('id="todaySection"')
+    _p_rights = html.find('id="rightsSection"')
+    if _p_today >= 0 and _p_rights > _p_today:
+        _seg = html[_p_today:_p_rights]
+        page_total = len(re.findall(r'<div class="news-item', _seg))
+        page_new = len(re.findall(r'<div class="news-item[^"]*is-new', _seg))
+    else:
+        # 边界定位失败时退回全页统计，但必须显式告警，杜绝「静默口径偏差」
+        print('  [warn] 未定位到 todaySection/rightsSection 边界，'
+              'page_total 退回全页统计（可能高于 meta.total）')
+        page_total = len(re.findall(r'<div class="news-item', html))
+        page_new = len(re.findall(r'<div class="news-item[^"]*is-new', html))
     result = {
         'meta': {
             'report_date': report_date,
