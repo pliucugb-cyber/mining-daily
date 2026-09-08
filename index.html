@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2218" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2224" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -221,7 +221,10 @@ body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
 .section-title.special{background:var(--surface-2);border-left-color:var(--warning)}
 .sp-cat{padding:var(--s4) var(--s5) var(--s3) var(--s5);font-size: var(--fs-h2);font-weight:var(--fw-semibold);color:var(--ink-900);background:var(--surface-2);border-left:3px solid var(--warning);margin:var(--s2) var(--s4) 0;border-radius: 0 var(--r-md) var(--r-md) 0;letter-spacing:.3px;scroll-margin-top:80px;display:flex;align-items:center}
 .sp-cat .sub-count{font-size: var(--fs-meta);color:#b45309;font-weight:600;margin-left:6px;background:var(--surface);padding:1px var(--s2);border-radius: var(--r-lg);border:1px solid #f0d488}
-.badge-strategy{background:var(--tag-strategy-bg);color:#fff;font-size: var(--fs-meta);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:700;flex-shrink:0;margin-top:var(--s1);letter-spacing:.5px}
+.badge-strategy{background:var(--tag-strategy);color:#fff;font-size: var(--fs-meta);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:700;flex-shrink:0;margin-top:var(--s1);letter-spacing:.5px}
+/* 2026-09-08 晚修复：浅色模式原用 --tag-strategy-bg(#eeedfe 浅底) 配白字，几乎看不见；
+   改用 --tag-strategy(#4f46e5) 实色底。深色下 #8b8cf9 太亮配白字对比不足，用更深的靛蓝。 */
+body.dark .badge-strategy{background:#4338ca;color:#fff}
 .news-item.is-special{background:var(--surface-2)}
 .sp-list .news-item.sp-from-archive{background:var(--surface-2);border-left:3px solid var(--ink-300)}
 .sp-list .news-item.sp-from-archive .news-meta::after{content:"往期";font-size: var(--fs-nano);background:#e2e8f0;color:var(--ink-700);padding:1px var(--s2);border-radius: var(--r-md);font-weight:600;letter-spacing:.3px;margin-left:8px;white-space:nowrap}
