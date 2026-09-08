@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2133" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2139" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -314,8 +314,6 @@ body.dark .digest-list a:hover{color:#ff7a7a}
 .brief-sec:first-child{margin-top:0}
 .brief-sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,#dfe6ee,transparent)}
 .brief-md ul:last-child{margin-bottom:0}
-.brief-risk{margin-top:var(--s3);padding-top:var(--s3);border-top:1px dashed #dfe6ee;font-size: var(--fs-body);color:#8a4b12;line-height:1.68}
-.brief-risk b{color:#a04000}
 .brief-alert{padding:var(--s2) 0;border-bottom:1px dashed var(--line-1);font-size: var(--fs-meta);line-height:1.5}
 .brief-alert:last-child{border-bottom:none}
 .ba-line{display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap}
@@ -346,8 +344,6 @@ body.dark .brief-sec{color:#9fc4e8}
 body.dark .brief-more{background:var(--bg);border-color:var(--line-1);color:#9fc4e8}
 body.dark .brief-more:hover{background:var(--surface)}
 body.dark .brief-sec::after{background:linear-gradient(90deg,#2c3845,transparent)}
-body.dark .brief-risk{color:#f0b47a;border-top-color:var(--line-1)}
-body.dark .brief-risk b{color:#ffc78a}
 body.dark .brief-alert{border-bottom-color:var(--line-1)}
 body.dark .ba-name{color:var(--ink-700)}
 body.dark .ba-detail{color:var(--ink-500)}
@@ -2756,14 +2752,13 @@ function renderBrief(d){
   }
   var main=document.getElementById('briefMain');
   if(main){
-    var body=rep,risk='';
-    var ri=rep.indexOf('**风险提示：**');
-    if(ri>=0){risk=rep.slice(ri).replace(/^\*\*风险提示：\*\*\s*/,'');body=rep.slice(0,ri);}
+    // 2026-09-08 晚：风险提示节已按用户要求整体移除（数据层模板同步删除），即便历史 JSON 里带着也不渲染
+    var body=rep.replace(/^\*\*总览：\*\*\s*/,'').trim();
+    var ri=body.indexOf('**风险提示：**');
+    if(ri>=0)body=body.slice(0,ri).trim();
     // 注意：不要再截断「今日头条」等分节——简报定位是当日全部内容的分类摘要，
     // 之前因「今日5件事」卡而截断，去重删卡后只剩行情段，非价格内容全被吞掉（2026-09-06 事故）
-    body=body.replace(/^\*\*总览：\*\*\s*/,'').trim();
     var h=briefMd(body);
-    if(String(risk).trim())h+='<div class="brief-risk"><b>⚠ 风险提示：</b>'+briefMd(risk)+'</div>';
     main.innerHTML=h||'<div class="brief-empty">今日简报暂未生成</div>';
   }
   setupBriefClamp();
