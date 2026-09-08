@@ -190,6 +190,19 @@ setTimeout(() => {
   check('已读圆点改空心灰环', /\.news-item\.read \.dot\{background:transparent;box-shadow:inset 0 0 0 2px/.test(css));
   check('未读圆点仍为实心品牌色', /\.dot\{width:9px;height:9px;border-radius:\s*50%;background:(#2980b9|var\(--brand\))/.test(css));
 
+  console.log('\n===== ⑦ 新闻问答面板 =====');
+  const qaInput = doc.getElementById('qaFloatInput');
+  check('⑦ 输入框不显示占位提示词', !!qaInput && !qaInput.getAttribute('placeholder'));
+  check('⑦ 输入框保留 aria-label（可访问性）', !!qaInput && !!qaInput.getAttribute('aria-label'));
+  const qaBody = doc.getElementById('qaFloatBody');
+  const firstMsg = qaBody ? qaBody.querySelector('.qa-msg.ai .qa-msg-bubble') : null;
+  const welcome = firstMsg ? firstMsg.textContent : '';
+  check('⑦ 欢迎语含库条数', /本地新闻库共 \d+ 条/.test(welcome), welcome.slice(0, 40));
+  check('⑦ 欢迎语含检索/AI 引导', welcome.includes('检索') && welcome.includes('AI'));
+  const qaAiBtn = doc.getElementById('qaFloatAi');
+  check('⑦ AI 按钮不误标「AI 本地」（代理可用）', !!qaAiBtn && qaAiBtn.textContent !== '✨ AI 本地', qaAiBtn ? qaAiBtn.textContent : '无按钮');
+  check('⑦ 检索/AI 按钮存在', !!doc.getElementById('qaFloatSearch') && !!qaAiBtn);
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));
