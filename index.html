@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2028" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2047" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1196,6 +1196,22 @@ body.dark .price-card[data-slug]:hover{background:var(--surface-2)}
   .price-cards{grid-template-columns:1fr;gap:0}
   .price-card{grid-template-columns:minmax(48px,1fr) auto auto 1fr;gap:0 var(--s1);padding:var(--s2) 0 var(--s2) var(--s3)}
 }
+/* ===== 价格区增强（2026-09-08）：异动排行条 / 昨数据角标 / 按涨跌排序 / 热榜热度条 =====
+   角标与名次均用 CSS 伪元素 + 属性渲染，不进 textContent，避免污染价格 CSV 导出与预警解析。 */
+.top-movers{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center;background:var(--surface-2);border:1px solid var(--line-1);border-radius:var(--r-md);padding:var(--s2) var(--s3);margin:0 0 var(--s3);font-size:var(--fs-caption)}
+.top-movers .mv{display:inline-flex;align-items:center;gap:5px}
+.top-movers .mv b{font-weight:600;font-variant-numeric:tabular-nums}
+.top-movers .mv.up{color:var(--up)}
+.top-movers .mv.down{color:var(--down)}
+.top-movers .mv-sep{color:var(--line-2)}
+body.dark .top-movers{background:rgba(255,255,255,.04)}
+.sortbar{display:flex;gap:var(--s2);margin:0 0 var(--s2)}
+.sortbtn{font-family:inherit;font-size:var(--fs-meta);border:1px solid var(--line-2);background:var(--surface);color:var(--ink-700);border-radius:999px;padding:3px 12px;cursor:pointer}
+.sortbtn.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.price-card[data-rank] .pc-name::before{content:attr(data-rank);color:var(--ink-500);background:var(--surface-3);border-radius:var(--r-sm);padding:0 4px;margin-right:6px;font-size:var(--fs-nano);font-weight:600;flex-shrink:0}
+.price-card.stale .pc-name::after{content:'昨';color:var(--ink-500);background:var(--surface-3);border-radius:var(--r-sm);padding:0 4px;margin-left:6px;font-size:var(--fs-nano);font-weight:500;flex-shrink:0}
+.hot-bar{width:44px;height:3px;background:var(--line-1);border-radius:2px;overflow:hidden;flex-shrink:0;margin-top:6px}
+.hot-bar i{display:block;height:100%;background:var(--up)}
 </style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
@@ -2886,19 +2902,22 @@ function renderHotNews(d){
     if(cnt)cnt.textContent='0条';
     return;
   }
-  body.innerHTML=arr.map(function(n){
+  body.innerHTML=arr.map(function(n,idx){
     var t=String(n.t||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
     var s=n.s?String(n.s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}):'';
     var u=String(n.u||'#').replace(/"/g,'&quot;');
     var dStr=n.d?' · '+String(n.d).slice(5):'';
     var fire=n.hot?'<span class="hot-fire">🔥 热</span>':'';
     var rankCls=n.rank<=3?'top'+n.rank:'';
+    // 2026-09-08：热度条（按榜内相对位置递减，纯装饰）
+    var barW=Math.max(40,100-idx*15);
+    var bar='<span class="hot-bar"><i style="width:'+barW+'%"></i></span>';
     return '<li class="hot-item '+rankCls+'" data-url="'+u+'">'
       +'<div class="hot-body">'
       +fire
       +'<a class="hot-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'
       +'<div class="hot-meta"><span>'+s+'</span><span>'+dStr+'</span></div>'
-      +'</div></li>';
+      +'</div>'+bar+'</li>';
   }).join('');
   if(cnt)cnt.textContent=arr.length+'条';
 }
@@ -5228,6 +5247,160 @@ function toggleTheme(){
     pcChartClose();
     qaFloatClose();
   });
+})();
+</script>
+<script>
+/* ===== 2026-09-08 价格区增强 =====
+   ① 今日异动排行条：自动挑出当日涨/跌最大的品种
+   ② 「昨」角标：无当日数据的品种（如电解钴 SMM 现货）打标，与实时价区分
+   ③ 按涨跌排序开关：异动品种浮顶，默认顺序可随时切回
+   说明：角标与名次一律用 CSS 伪元素 + 属性渲染（不写进 textContent），
+        因此价格 CSV 导出、价格预警解析读到的数据不受影响。 */
+(function(){
+  if(window.__mdPriceEnhanceLoaded)return;
+  window.__mdPriceEnhanceLoaded=true;
+  var IDS=['priceCardsShfe','priceCardsLme'];
+  var origOrder={};
+  var sortMode='default';
+
+  function cards(id){
+    var w=document.getElementById(id);
+    return w?Array.prototype.slice.call(w.querySelectorAll('.price-card')):[];
+  }
+  function pctOf(card){
+    var c=card.querySelector('.pc-chg');
+    if(!c)return null;
+    var m=(c.textContent||'').match(/(-?\d+(?:\.\d+)?)\s*%/);
+    if(!m)return null;
+    var p=parseFloat(m[1]);
+    if(isNaN(p))return null;
+    if(card.classList.contains('down')&&p>0)p=-p;
+    return p;
+  }
+  function nameOf(card){
+    var n=card.querySelector('.pc-name');
+    if(!n)return '';
+    var tag=n.querySelector('.pc-tag');
+    var txt=n.textContent||'';
+    if(tag)txt=txt.split(tag.textContent).join('');
+    return txt.replace(/\s+/g,'').trim();
+  }
+  function snapshot(force){
+    IDS.forEach(function(id){
+      var w=document.getElementById(id);
+      if(!w)return;
+      var prev=origOrder[id];
+      if(!force&&prev&&prev.length&&w.contains(prev[0]))return;   // 节点仍在线，不重复快照
+      origOrder[id]=cards(id);
+    });
+  }
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+  /* ② 昨角标 */
+  function staleMark(){
+    IDS.forEach(function(id){
+      cards(id).forEach(function(card){
+        var p=pctOf(card);
+        card.classList.toggle('stale', p===null);
+      });
+    });
+  }
+
+  /* ① 异动排行条 */
+  function topMovers(){
+    var strip=document.getElementById('priceStrip');
+    if(!strip)return;
+    var items=[];
+    IDS.forEach(function(id){
+      cards(id).forEach(function(card){
+        var p=pctOf(card);
+        if(p===null)return;
+        items.push({n:nameOf(card),p:p,lme:id==='priceCardsLme'});
+      });
+    });
+    var box=document.getElementById('priceTopMovers');
+    if(items.length<2){ if(box&&box.parentNode)box.parentNode.removeChild(box); return; }
+    var ups=items.filter(function(x){return x.p>0;}).sort(function(a,b){return b.p-a.p;});
+    var downs=items.filter(function(x){return x.p<0;}).sort(function(a,b){return a.p-b.p;});
+    var pick=[];
+    if(ups[0])pick.push(ups[0]);
+    if(downs[0])pick.push(downs[0]);
+    var lmeUp=ups.filter(function(x){return x.lme;})[0];
+    if(lmeUp&&pick.length<3&&!pick.some(function(x){return x.n===lmeUp.n;}))pick.push(lmeUp);
+    if(pick.length<2&&ups[1])pick.push(ups[1]);
+    if(!pick.length)return;
+    var html=pick.map(function(x){
+      return '<span class="mv '+(x.p>0?'up':'down')+'">'+esc(x.n)+' <b>'+(x.p>0?'+':'')+x.p.toFixed(2)+'%</b></span>';
+    }).join('<span class="mv-sep">|</span>');
+    if(!box){
+      box=document.createElement('div');
+      box.id='priceTopMovers';
+      box.className='top-movers';
+      var note=document.getElementById('priceStripNote');
+      if(note&&note.parentNode)note.parentNode.insertBefore(box,note.nextSibling);
+      else strip.insertBefore(box,strip.firstChild);
+    }
+    box.innerHTML='<span>🔥 今日异动</span><span class="mv-sep">|</span>'+html;
+  }
+
+  /* ③ 排序开关 */
+  function setSort(mode){
+    sortMode=mode;
+    var bar=document.getElementById('priceSortBar');
+    if(bar)bar.querySelectorAll('.sortbtn').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-mode')===mode);
+    });
+    IDS.forEach(function(id){
+      var w=document.getElementById(id);
+      if(!w)return;
+      var arr=(origOrder[id]||cards(id)).slice();
+      if(mode==='pct'){
+        arr.sort(function(a,b){
+          var pa=pctOf(a),pb=pctOf(b);
+          if(pa===null&&pb===null)return 0;
+          if(pa===null)return 1;
+          if(pb===null)return -1;
+          return pb-pa;
+        });
+        arr.forEach(function(c,i){ c.setAttribute('data-rank',String(i+1)); w.appendChild(c); });
+      }else{
+        arr.forEach(function(c){ c.removeAttribute('data-rank'); w.appendChild(c); });
+      }
+    });
+  }
+  function sortBar(){
+    if(document.getElementById('priceSortBar'))return;
+    var strip=document.getElementById('priceStrip');
+    if(!strip)return;
+    var bar=document.createElement('div');
+    bar.id='priceSortBar';
+    bar.className='sortbar';
+    bar.innerHTML='<button type="button" class="sortbtn on" data-mode="default">默认顺序</button>'
+                 +'<button type="button" class="sortbtn" data-mode="pct">按涨跌排序</button>';
+    bar.addEventListener('click',function(e){
+      var b=e.target&&e.target.closest?e.target.closest('.sortbtn'):null;
+      if(!b)return;
+      setSort(b.getAttribute('data-mode'));
+    });
+    var anchor=document.getElementById('priceTopMovers');
+    if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(bar,anchor.nextSibling);
+    else strip.insertBefore(bar,strip.firstChild);
+  }
+
+  function run(){
+    try{
+      snapshot(false);
+      staleMark();
+      topMovers();
+      sortBar();
+      if(sortMode!=='default')setSort(sortMode);   // 价格异步刷新后保持当前排序
+    }catch(err){ console.warn('priceEnhance:',err); }
+  }
+  window.__mdPriceEnhance=run;
+  run();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);
+  setTimeout(run,1200);
+  setTimeout(run,3000);
 })();
 </script>
 </body>
