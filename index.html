@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-1152" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-1345" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -78,13 +78,17 @@ body.dark .toc-count-fresh.is-empty{color:#94a3b8;background:#243140}
 /* 新闻条目 */
 .news-item{padding:13px 18px;border-bottom:1px solid #f4f6f8;transition:opacity .3s;position:relative;cursor:pointer}
 .news-item:last-child{border-bottom:none}
-.news-item.read{opacity:1}
-.news-item.read .news-title{color:#94a3b8;font-weight:500}
-/* 2026-09-06 简化：标题后的「已读」文字标签已移除——左侧圆点变灰 + 标题变浅已足够表意，
-   每条再挂一个文字徽章属重复标注（已读状态另有「↶ 标为未读」按钮可操作） */
+/* 2026-09-08 加强：原实现只改标题颜色和圆点底色，对比度太弱，读者反馈"看不出已读未读"。
+   现改三处同时生效：整体降透明度 + 标题明显变浅 + 左侧圆点由实心蓝变空心灰环。
+   未读 = 实心蓝点 + 深色标题 + 100% 不透明；已读 = 空心灰环 + 浅灰标题 + 60% 不透明。
+   标题后的「已读」文字标签已于 09-06 移除（圆点+颜色已表意，另设「↶ 标为未读」按钮）。 */
+.news-item.read{opacity:.6}
+.news-item.read:hover{opacity:.92}
+.news-item.read .news-title{color:#8b98a5;font-weight:500}
+.news-item.read .news-summary{color:#aab5c0}
 .news-head{display:flex;align-items:flex-start;gap:8px}
-.dot{width:9px;height:9px;border-radius:50%;background:#2980b9;flex-shrink:0;margin-top:7px}
-.news-item.read .dot{background:#bdc3c7}
+.dot{width:9px;height:9px;border-radius:50%;background:#2980b9;flex-shrink:0;margin-top:7px;transition:background .2s,box-shadow .2s}
+.news-item.read .dot{background:transparent;box-shadow:inset 0 0 0 2px #c8d0d8}
 .badge-new{background:#e74c3c;color:#fff;font-size:11px;padding:1px 7px;border-radius:4px;font-weight:600;flex-shrink:0;margin-top:4px;animation:pulse 1.5s infinite}
 .badge-orig-date{display:inline-block;background:#f0f4f8;color:#6b7280;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500;margin-left:8px;vertical-align:1px;white-space:nowrap}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
@@ -212,7 +216,11 @@ body.dark .hot-title:hover{color:#ff7a7a}
 .digest-list a{color:#1a3a5c;text-decoration:none;transition:color .15s}
 .digest-list a:hover{color:#e74c3c}
 .digest-link{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 要闻条目右侧的日期标签：非当日发布的旧稿显示，避免读者误以为是今天的新闻 */
+.digest-dtag{position:absolute;right:0;top:7px;font-size:11.5px;color:#98a4b0;background:#f4f7fa;border-radius:4px;padding:1px 5px;font-weight:600;white-space:nowrap}
+.digest-list li{padding-right:52px}
 .digest-empty{padding:6px 0 2px;color:#9aa7b3;font-size:13px}
+body.dark .digest-dtag{background:#2a3644;color:#8fa3b5}
 body.dark .digest-strip{background:#1e2733;border-color:#2c3845}
 body.dark .digest-title{color:#e8eef3}
 body.dark .digest-list li{border-bottom-color:#2c3845}
@@ -612,8 +620,10 @@ body.dark .btn-filter{background:#263140;color:#cfe0ee}
 body.dark .btn-filter:hover{background:#2f3d4d}
 body.dark .btn-filter.active{background:#3d5a7a;color:#fff}
 body.dark .news-count{color:#93a5b5}
-body.dark .news-item.read .news-title{color:#8b98a5}
-body.dark .news-item.read .dot{background:#4a5765}
+body.dark .news-item.read{opacity:.55}
+body.dark .news-item.read:hover{opacity:.88}
+body.dark .news-item.read .news-title{color:#78858f}
+body.dark .news-item.read .dot{background:transparent;box-shadow:inset 0 0 0 2px #4a5765}
 body.dark .badge-new{background:#c0392b;color:#fff}
 body.dark .news-meta .src{color:#45b7a4}
 body.dark .btn-star{color:#5a6875}
@@ -910,6 +920,31 @@ body.dark .qa-trend{background:#161d26;border-color:#2c3845;color:#8b9bad}
 .rights-view-btn{padding:6px 14px;border:1px solid #cfe3ea;background:#fff;border-radius:8px;font-size:12.5px;color:#0e7490;cursor:pointer;font-weight:600}
 .rights-view-btn:hover{background:#e0f2fe}
 .rights-view-btn.active{background:#0e7490;color:#fff;border-color:#0e7490}
+/* 2026-09-08：矿权卡片网格 → 一行一宗紧凑列表（读者反馈大卡片排版太占地方、观感差） */
+.rights-list{display:flex;flex-direction:column;gap:0;border:1px solid #e7edf4;border-radius:10px;overflow:hidden}
+.rights-row{display:flex;align-items:center;gap:8px;padding:8px 11px;border-bottom:1px solid #f1f5f9;font-size:13px;line-height:1.4}
+.rights-row:last-of-type{border-bottom:none}
+.rights-row:hover{background:#f8fbfe}
+.rr-mineral{flex:0 0 auto;min-width:34px;text-align:center;font-size:12px;font-weight:700;color:#0e7490;background:#e6f4f7;border-radius:5px;padding:1px 6px}
+.rr-title{flex:1 1 auto;min-width:0;color:#1a3a5c;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rr-title:hover{color:#0e7490;text-decoration:underline}
+.rr-region{flex:0 0 auto;max-width:150px;color:#7b8a99;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rr-method{flex:0 0 auto;font-size:11.5px;padding:1px 6px;border-radius:4px;background:#f1f5f9;color:#5b6b7c}
+.rr-num{flex:0 0 auto;color:#33475b;font-size:12px;font-variant-numeric:tabular-nums}
+.rights-row .rc-deadline{flex:0 0 auto;font-size:11.5px}
+.rr-date{flex:0 0 auto;color:#a3b1bf;font-size:11.5px;font-variant-numeric:tabular-nums}
+body.dark .rights-list{border-color:#2c3845}
+body.dark .rights-row{border-bottom-color:#232e3a}
+body.dark .rights-row:hover{background:#1b2531}
+body.dark .rr-title{color:#c9d6e2}
+body.dark .rr-mineral{background:#123240;color:#7fd3e8}
+body.dark .rr-method{background:#243040;color:#9fb0c0}
+body.dark .rr-num{color:#c9d6e2}
+@media(max-width:760px){
+  .rights-row{flex-wrap:wrap}
+  .rr-region,.rr-date{display:none}
+  .rr-title{flex:1 1 100%;order:-1;white-space:normal}
+}
 .rights-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
 .rights-card{background:#fff;border:1px solid #dfe6ee;border-radius:14px;padding:17px 18px;display:flex;flex-direction:column;gap:11px;transition:box-shadow .18s,transform .18s,border-color .18s;box-shadow:0 2px 8px rgba(13,60,78,.06)}
 .rights-card:hover{box-shadow:0 8px 26px rgba(14,116,144,.15);transform:translateY(-2px);border-color:#c5d3e0}
@@ -1018,6 +1053,21 @@ body.dark .qa-sub-num,body.dark .qa-sub-text{border-color:#3a4756;background:#16
 body.dark .qa-sub-empty{color:#7d8ea0}
 body.dark .qa-alert-item.up{background:#3a1f1c;color:#ff9b8e}
 body.dark .qa-alert-item.down{background:#16301f;color:#86efac}
+/* ==================== 侧栏「近期会展」迷你卡（2026-09-08）==================== */
+.expo-mini{margin-top:10px;padding-top:9px;border-top:1px dashed #e6ecf2}
+.expo-mini-head{font-size:12px;font-weight:800;color:#5b6b7c;margin-bottom:5px;letter-spacing:.5px}
+.expo-mini-list{list-style:none;margin:0;padding:0}
+.expo-mini-list li{position:relative;padding:5px 34px 5px 8px;font-size:12px;line-height:1.45;border-radius:6px}
+.expo-mini-list li:hover{background:#f6f9fc}
+.expo-mini-list a{color:#33475b;text-decoration:none;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.expo-mini-list a:hover{color:#b45009}
+.expo-mini-date{position:absolute;right:6px;top:5px;font-size:10.5px;color:#93a3b2}
+.expo-mini-more{padding:3px 8px!important;color:#9aa7b3;font-size:11px}
+body.dark .expo-mini{border-top-color:#2c3845}
+body.dark .expo-mini-head{color:#8fa3b5}
+body.dark .expo-mini-list a{color:#c9d6e2}
+body.dark .expo-mini-list li:hover{background:#1c2734}
+@media(max-width:1100px){.expo-mini{display:none!important}}
 /* ==================== 2026-09-06 晚：日报 PDF 导出打印样式 ==================== */
 @media print{
   html,body{background:#fff!important}
@@ -1076,12 +1126,12 @@ window.gcTotal=function(data){
 <div class="toc-title" data-page-node-id="8LRX6eNrJaUyp2fpou5rph">📑 目录导航</div>
 <div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="mcjfrkVHVCvuozlWyll2ET">📋 全部内容</div>
 <div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)" data-page-node-id="EFrXr8SMUaesjIaDEYAhDR">🔥 今日新增 <span class="toc-count toc-count-fresh" id="tocTodayCount">32</span></div>
-<div class="toc-main-item" data-target="specialSection" onclick="scrollToSection('specialSection',this)" style="color:#b45009" data-page-node-id="bVIAHgApeTJfE4aC3AKyn3">⛏️ 找矿专项</div>
 <div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容</div>
 <div class="toc-main-item" data-target="rightsSection" onclick="scrollToSection('rightsSection',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易</div>
 <div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#f39c12" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
 <div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#8e44ad" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
 <div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
+<div class="expo-mini" id="expoMini" style="display:none"><div class="expo-mini-head">🎪 近期会展</div><ul class="expo-mini-list" id="expoMiniList"></ul></div>
 <div class="toc-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="8iwVYYySScb07F8bSYmelj">↑ 返回顶部</div>
 </nav>
 <div class="container" data-page-node-id="uS5RB3Y6VbZBc8kC6gZyLP">
@@ -1154,22 +1204,6 @@ window.gcTotal=function(data){
 <div class="news-item is-new" data-url="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html" target="_blank">新一轮找矿突破战略行动再获标志性成果 安徽茶亭铜金矿勘查取得重大突破</a></div><div class="news-meta"><span class="src">自然资源部</span> · 09-02</div><div class="news-summary">安徽省宣城市茶亭地区铜金矿勘查取得重大突破，矿床位于长江中下游成矿带南陵—宣城铜金矿集区，为火山岩覆盖区新发现的隐伏斑岩型铜金矿床，主矿体长约1.2千米、宽约1.1千米，单孔矿体最大视厚度1371米；初步估算铜潜在资源超数个大型铜矿规模、金达十余个大型金矿规模，深部尚未揭穿。西藏玉龙铜业2025年10月以86亿元竞得探矿权，4个月完成钻探近十万米，唐菊兴院士任勘查项目负责人。</div></div><div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202609/t20260907_10307771.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202609/t20260907_10307771.htm" target="_blank">智利坎加洛铜矿等项目进展</a></div><div class="news-meta"><span class="src">全球矿产资源信息系统</span> · 09-07</div><div class="news-summary">奥斯奎斯特（AUSQUEST）公司宣布其智利坎加洛（Cangallo）斑岩铜矿两孔将矿体自地表向下延伸800米，证实存在高品位给矿构造：北部孔自34米深处见矿355.8米，铜品位0.31%、金0.05克/吨，含10米厚铜0.71%、金0.08克/吨矿体；南部首孔自178米见矿348米，铜0.23%、金0.08克/吨。另太阳石金属在厄瓜多尔布拉马德罗斯项目梅罗纳尔、波罗蒂洛两矿床钻探与探槽均见矿。</div></div><div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473763" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473763" target="_blank">具身智能、矿山大模型、数字孪生同台亮相 2026AI+矿山安全大会召开</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-07</div><div class="news-summary">8月29日，2026AI+矿山安全大会在山东招远举行，主题「数智驱控 安全共生」，300余位院士专家与企业代表参会，现场分享具身智能、矿山大模型、智能凿岩、数字孪生等成果。中国工程院院士王国法作《数智技术赋能安全高效采矿》主题报告，指出智慧矿山建设存在智能装备环境适应性不足、系统常态化运行率偏低、系统间数据壁垒突出等痛点，强调数智矿山首要价值在于筑牢安全防线。</div></div><div class="sub-cat" data-page-node-id="">🏭 行业动态<span class="sub-count" data-page-node-id="">16条新增</span></div>
 <div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473762" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473762" target="_blank">金钛股份在北交所上市</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-07</div><div class="news-summary">9月3日，朝阳金达钛业股份有限公司（证券简称：金钛股份，证券代码：920071）在北京证券交易所挂牌上市，成为我国首家主营业务为高品质海绵钛产品的上市企业。</div></div><div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473785" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473785" target="_blank">易控智驾携手紫金矿业斩获"数据要素×"大赛双赛区一等奖</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-07</div><div class="news-summary">2026年"数据要素×"大赛西藏分赛与福建分赛结果揭晓，易控智驾科技股份有限公司携手紫金矿业集团，凭借在巨龙铜矿、紫金山金铜矿的无人矿卡应用成果连续荣获一等奖。巨龙铜矿地处西藏5400米高寒地区，已规模化投运60台纯电动无人矿卡，通过多源感知融合、分布式制动与自适应控制、动态轨迹预测与协同调度，解决冻融湿滑路面与多车型混行难题。</div></div><div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473767" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473767" target="_blank">双桅杆擎起高原新地标——中国十五冶卢安夏新矿永久井架吊装纪实</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-07</div><div class="news-summary">当地时间8月14日，赞比亚卢安夏新矿穆南混合井永久井架一对直径4米、净重26吨天轮精准吊装就位，下天轮标高46米、上天轮52米。自7月30日304吨斜架双桅杆整体吊装、8月1日立架分节对接至本次双天轮就位，中国十五冶半个月内完成3场关键节点施工，首次在海外应用双桅杆旋转吊装工艺。卢安夏铜矿2009年被中国有色集团收购后重启，新矿由穆南浅部与玛希巴联合开采、28#井深部硫化矿3座矿山组成。</div></div><div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473775" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473775" target="_blank">五矿铍业核心产品入选央企机器人十大高价值应用场景</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-07</div><div class="news-summary">8月19日至23日2026世界机器人大会在北京举办，五矿铍业有限责任公司携核心产品高性能铍铜合金参展，该产品成功入选中央企业机器人十大高价值应用场景展示序列，落地特种涉爆高危作业场景与人形机器人核心零部件两大赛道。高性能铍铜合金是人形机器人、高端工业机械臂所需的核心精密材料。</div></div><div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473765" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473765" target="_blank">西矿信息荣获第十五届中国创新创业大赛青海赛区企业组一等奖</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-07</div><div class="news-summary">2026年第十五届中国创新创业大赛落幕，西部矿业集团西矿信息参赛项目「未来信息领域—矿山生产运营一体化数智管控平台」斩获青海赛区企业组一等奖。该项目紧扣矿山数字化转型需求，针对高海拔复杂作业环境开展技术攻坚，在平台架构设计、多源数据融合、现场场景适配等方面实现创新突破。</div></div><div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473771" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473771" target="_blank">云铝股份召开深化"一本部多基地"集中管控改革推进会</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-07</div><div class="news-summary">8月17日，云铝股份召开深化「一本部多基地」集中管控改革推进会，紧扣「强本部、强管控」核心思路，从制度、流程、数据三方面明确改革要求，提出实现「重构定位、重塑体系、重理边界」，强化「五个量化管理」，建立职责清单与风险清单，推动业务工作从「事务统计型」向「统筹管控型」转型。</div></div><div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473774" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473774" target="_blank">陕西黄金集团西安秦金打出市场开拓"组合拳"</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-07</div><div class="news-summary">今年以来，陕西黄金集团西安秦金围绕渠道拓展、客户深耕、人才筑基三条主线发力：线上运营官方微信公众号、筹建抖音官方账号，线下参加行业展会与区域博览会对接潜在客户；依托高端化、差异化产品优势为客户量身定制合作方案，已与行业头部企业达成初步合作意向；拟启动营销人才专项培养计划，覆盖一线销售与中层骨干。</div></div><div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473737" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473737" target="_blank">西北有色地矿集团712总队公司实现"时间过半、任务过半"目标</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-03</div><div class="news-summary">截至6月底，西北有色地矿集团七一二总队公司经营收入完成年度目标的50.22%、利润总额完成52.12%。上半年地质勘查、民生地质、工程施工、装备制造四大板块累计落地实体项目93项，新签合同总额完成年度目标80%，在新疆、内蒙古等省外市场实现「零的突破」，塞拉利昂海外项目成功落地，非金属地质勘查短板同步补齐。</div></div><div class="news-item is-new" data-url="https://www.mnr.gov.cn/dt/ywbb/202609/t20260904_2937656.html" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.mnr.gov.cn/dt/ywbb/202609/t20260904_2937656.html" target="_blank">2026中国国际矿业大会将于9月10日开幕</a></div><div class="news-meta"><span class="src">自然资源部</span> · 09-04</div><div class="news-summary">以「合作共赢，绿色智能」为主题的2026（第二十八届）中国国际矿业大会将于9月10日至12日在天津梅江会展中心举办，在往届论坛、展览两大板块基础上新增矿业权交易板块。论坛设28场（主题1场、高层6场、专题21场），展览面积6.5万平方米创历届新高，并设置矿业权转让大市场、专场推介、项目签约等功能；已吸引全球25个国家658家企业参展。</div></div><div class="news-item is-new" data-url="http://gi.mnr.gov.cn/202609/t20260904_2937623.html" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="http://gi.mnr.gov.cn/202609/t20260904_2937623.html" target="_blank">2026年矿区生态修复典型案例评选结果公示</a></div><div class="news-meta"><span class="src">自然资源部</span> · 09-04</div><div class="news-summary">自然资源部国土空间生态修复司公示2026年矿区生态修复典型案例评选结果，分废弃矿山生态修复、生产矿山、矿业遗迹三类共21个案例入选，覆盖北京、浙江、安徽、江西、湖北、湖南、重庆、河北、内蒙古、陕西等省份，涉及铁矿、金矿、钼矿、铝土矿、磷矿、石灰岩、煤矿等矿种，公示期由省级推荐并接受社会监督。</div></div><div class="news-item is-new" data-url="http://static.cninfo.com.cn/finalpage/2026-09-08/1225551090.PDF" data-embed="pdf"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="http://static.cninfo.com.cn/finalpage/2026-09-08/1225551090.PDF" target="_blank">中信金属：关于参加中信股份2026年中期业绩联合发布会情况的公告</a></div><div class="news-meta"><span class="src">巨潮资讯网</span> · 09-08</div><div class="news-summary">中信金属股份有限公司公告参加中信股份2026年中期业绩联合发布会相关情况。中信金属主营铌、铜、铝等有色金属及铁矿石贸易与矿业投资，中期业绩发布内容涉及海外矿山项目运营与大宗商品贸易板块表现。</div></div><div class="news-item is-new" data-url="http://disc.szse.cn/download/disc/disk03/finalpage/2026-09-08/ba888bf4-8062-4f9b-b17c-d430d4ca975a.PDF" data-embed="pdf"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="http://disc.szse.cn/download/disc/disk03/finalpage/2026-09-08/ba888bf4-8062-4f9b-b17c-d430d4ca975a.PDF" target="_blank">电投能源：关于铝业期货套期保值年度计划方案调整暨关联交易公告</a></div><div class="news-meta"><span class="src">深圳证券交易所</span> · 09-08</div><div class="news-summary">内蒙古电投能源股份有限公司公告调整铝业期货套期保值年度计划方案，涉及关联交易事项，中信证券同步出具核查意见。电投能源主营煤炭与电解铝，套保方案调整反映铝价波动加剧背景下的风险管理需求。</div></div><div class="news-item is-new" data-url="http://static.cninfo.com.cn/finalpage/2026-09-07/1225549272.PDF" data-embed="pdf"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="http://static.cninfo.com.cn/finalpage/2026-09-07/1225549272.PDF" target="_blank">盛达资源：关于子公司德运矿业完成探矿权延续登记的公告</a></div><div class="news-meta"><span class="src">巨潮资讯网</span> · 09-07</div><div class="news-summary">盛达资源公告其子公司德运矿业已完成探矿权延续登记，相关矿权有效期得以延续，为公司后续地质勘查与资源增储工作奠定权属基础。盛达资源主营白银等贵金属矿产资源开发。</div></div><div class="news-item is-new" data-url="http://static.cninfo.com.cn/finalpage/2026-09-07/1225550300.PDF" data-embed="pdf"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="http://static.cninfo.com.cn/finalpage/2026-09-07/1225550300.PDF" target="_blank">中色股份：关于控股子公司中色印尼达瑞矿业有限公司收到法院通知的公告</a></div><div class="news-meta"><span class="src">巨潮资讯网</span> · 09-07</div><div class="news-summary">中国有色金属建设股份有限公司公告，其控股子公司中色印尼达瑞矿业有限公司收到法院通知。达瑞矿业为公司在印度尼西亚的铅锌矿项目平台，相关诉讼进展可能对公司海外项目推进产生影响。</div></div><div class="news-item is-new" data-url="http://static.cninfo.com.cn/finalpage/2026-09-07/1225552242.PDF" data-embed="pdf"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="http://static.cninfo.com.cn/finalpage/2026-09-07/1225552242.PDF" target="_blank">蓝晓科技：关于签订盐湖提锂日常经营合同的公告</a></div><div class="news-meta"><span class="src">巨潮资讯网</span> · 09-07</div><div class="news-summary">西安蓝晓科技新材料股份有限公司公告签订盐湖提锂日常经营合同。公司主营吸附分离树脂与盐湖提锂成套装置，合同签署反映盐湖提锂产能建设与锂资源开发需求延续。</div></div><div class="news-item is-new" data-url="https://www.ccmn.cn/news/ZX018/202609/be746e71851d49e1baca731d7084d796.html" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.ccmn.cn/news/ZX018/202609/be746e71851d49e1baca731d7084d796.html" target="_blank">再生铅占精铅近50%！废电瓶高成本卡住冶炼利润，铅酸电池旺季备货能否接力</a></div><div class="news-meta"><span class="src">长江有色网</span> · 09-07</div><div class="news-summary">国内再生铅占精铅供应比重已升至近50%，废电瓶作为核心原料采购价格持续高企，将冶炼厂利润卡在狭窄区间，成本刚性成为铅价难以深跌的底层逻辑。沪铅2610合约报16235元/吨、涨120元，长江现货1#铅均价16300元/吨、涨75元。再生铅冶炼厂在成本线附近维持开工，部分边际产能逼近停减产临界点；需求端铅酸电池旺季尾声排产边际走弱。</div></div><div class="sub-cat" data-page-node-id="">🌐 国际矿业动态<span class="sub-count" data-page-node-id="">13条新增</span></div>
 <div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260908_10308871.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260908_10308871.htm" target="_blank">南非希望重回超级矿业大国行列</a></div><div class="news-meta"><span class="src">全球矿产资源信息系统</span> · 09-08</div><div class="news-summary">据Miningnews.net报道，南非正寻求重回全球矿业大国行列，政府与行业组织目标是在2028年2月前使新投资回升到500亿兰特（约44亿澳元）。南非矿产委员会代表查巴纳在珀斯非澳会议（Africa Down Under）上表示，下一步重点是吸引外部投资。1980年矿业曾占南非GDP的21%，2025年该比例仅5.8%，矿山老化、勘探投资不足与审批缓慢是主因。</div></div><div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260908_10308872.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260908_10308872.htm" target="_blank">哥伦比亚取消10项限制矿业政策</a></div><div class="news-meta"><span class="src">全球矿产资源信息系统</span> · 09-08</div><div class="news-summary">据Mining.com报道，为落实阿韦拉多·德拉埃斯普列亚总统重振矿业投资、挖掘铜矿资源潜力的指示，哥伦比亚新政府废除10项限制自然资源勘查开采的政策。矿业部部长阿尔博莱达在卡塔赫纳矿业会议上宣布，前左翼政府时期以环境与土地利用名义出台的措施「设计得很差」，实际阻碍了投资与勘探。该国铜、金、煤、镍潜力大，但冗长许可、监管混乱与安全风险长期限制投资。</div></div><div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202609/t20260907_10307769.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202609/t20260907_10307769.htm" target="_blank">7月份美国铜进口量创历史新高</a></div><div class="news-meta"><span class="src">全球矿产资源信息系统</span> · 09-07</div><div class="news-summary">据矿业周刊援引路透社报道，美国7月精炼铜和铜合金进口量达225094吨，为1990年以来最高月度水平，环比增长78%、同比增长8%，贸易商在美方可能加征关税前大量进口。美国商务部原定6月30日前宣布铜市场最新政策但迟迟未出，不确定性推动美国商品交易所铜库存升至创纪录的764597短吨（693630公吨），连续53天上升。美国铜进口46%来自智利，其次刚果（金）占1/4。</div></div><div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260907_10307772.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260907_10307772.htm" target="_blank">淡水河谷搁置贱金属业务分拆上市</a></div><div class="news-meta"><span class="src">全球矿产资源信息系统</span> · 09-07</div><div class="news-summary">据Mining.com报道，因巴西国内担心失去对战略矿业资产的控制，淡水河谷（Vale）已搁置其关键矿产业务单独IPO计划。总部位于伦敦的淡水河谷贱金属有限公司（VBM）2023年从母公司拆分成立并筹备上市，承接淡水河谷在加拿大、巴西、日本、英国、印尼的铜、镍、钴资产。2月VBM曾同意出售其加拿大合资企业多数股份，以支撑淡水河谷未来10年铜产量翻番目标——过去一年铜价上涨45%，涨幅近镍的4倍。</div></div><div class="news-item is-new" data-url="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260907_10307773.htm" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260907_10307773.htm" target="_blank">国际锌价逼近4年来新高</a></div><div class="news-meta"><span class="src">全球矿产资源信息系统</span> · 09-07</div><div class="news-summary">上周五（9月4日）国际矿产品价格多数下跌，锌价逼近四年来新高：LME锌收于3940.00美元/吨、上涨1.09%；铝3294.50美元/吨、跌0.69%；铅1905.00美元/吨、跌0.08%；镍16810.00美元/吨、跌0.50%；锡54850.00美元/吨、涨0.18%。62%品位铁矿粉收于99.65美元/吨、涨0.30%；铀（U3O8）89.50美元/磅持平。COMEX黄金收于4432.6美元/盎司（约142.5美元/克，按1金衡盎司≈31.1035克换算）、跌0.92%；白银65.99美元/盎司、跌1.45%。</div></div><div class="news-item is-new" data-url="https://www.ccmn.cn/news/ZX018/202609/f1e611359ea74c178587444cfd8b6b24.html" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.ccmn.cn/news/ZX018/202609/f1e611359ea74c178587444cfd8b6b24.html" target="_blank">再度延期！澳洲 Aurukun 铝土矿审批推迟至明年2月，1500万吨项目命运未定</a></div><div class="news-meta"><span class="src">长江有色网</span> · 09-07</div><div class="news-summary">国家环境保护机构发布通知，将嘉能可与三菱商事联合开发的澳大利亚约克角半岛Aurukun铝土矿项目审批决议时间延长至明年2月12日，延期时长超过100个工作日。这是该项目继6月之后第二次审批延期，这座规划年产1500万吨的铝土矿项目落地节奏再度延后。</div></div><div class="news-item is-new" data-url="https://www.ccmn.cn/news/ZX018/202609/d8fa9b0e0d9940a99228c8415209a260.html" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.ccmn.cn/news/ZX018/202609/d8fa9b0e0d9940a99228c8415209a260.html" target="_blank">从90%跌至67%！MHP钴计价大幅回落，电池企业压价，印尼HPAL厂商利润承压</a></div><div class="news-meta"><span class="src">长江有色网</span> · 09-07</div><div class="news-summary">据三位知情人士透露，国内电动汽车电池制造企业正对MHP（氢氧化镍钴）原料中的钴提出更大幅度降价诉求，钴计价系数从此前约90%回落至67%。印尼HPAL高压酸浸企业本身已面临镍矿、硫磺原料成本上行压力，钴计价下调将进一步挤压其利润空间。</div></div><div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473780" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473780" target="_blank">亚行新融资机制旨在重塑亚太关键矿产供应链格局</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-07</div><div class="news-summary">亚洲开发银行在乌兹别克斯坦举行的第五十九届年会上推出「关键矿产到制造端」融资伙伴关系机制，推动亚太经济体从单纯矿产开采向本土加工、制造、回收等高附加值环节延伸。文章指出亚太普遍存在「富资源、穷链条」格局：印尼镍储量占全球约四成，菲律宾镍矿出口占矿业总产值60%以上但高度依赖原矿出口，蒙古国依赖奥尤陶勒盖铜精矿，哈萨克斯坦铬、铀资源富集但深加工链条薄弱，澳大利亚锂辉石精矿多需境外冶炼。</div></div><div class="news-item is-new" data-url="https://www.cnmn.com.cn/ShowNews1.aspx?id=473779" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.cnmn.com.cn/ShowNews1.aspx?id=473779" target="_blank">ITA发布更新版锡行业生命周期评价基准</a></div><div class="news-meta"><span class="src">中国有色金属报</span> · 09-07</div><div class="news-summary">国际锡业协会（ITA）发布第二项全行业生命周期评价（LCA）结果，量化精锡生产的环境影响。该研究以2024年为基准年，更新2018/2019年基准，ITA成员企业100%参与、合计产量约占全球精锡产量51%，由Sphera Solutions依ISO 14040/14044标准开展，覆盖采矿、再生物料利用、选矿、冶炼和精炼环节，指标含全球变暖潜势、一次能源需求、蓝水消耗、富营养化、酸化与光化学臭氧生成潜势。</div></div><div class="news-item is-new" data-orig-title="Critical minerals security collides with decades-long mine timelines" data-url="https://www.mining.com/critical-minerals-security-collides-with-decades-long-mine-timelines" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.mining.com/critical-minerals-security-collides-with-decades-long-mine-timelines" target="_blank">关键矿产安全撞上数十年矿山周期：北美自主化目标与现实脱节</a></div><div class="news-meta"><span class="src">MINING.COM</span> · 09-08</div><div class="news-summary">北美降低对华关键矿产依赖的努力正遭遇许可改革无法解决的瓶颈——判断项目技术与经济可行性仍需多年。在美国，一个矿床从发现到商业化生产往往超过30年，而国家安全与采购目标的时间尺度只有数年。修订后的《国防联邦采购条例补充规定》（DFARS）将于2027年1月生效，要求特定国防用途材料来自非对手国家，并自2026年1月1日起禁用中国原产稀土磁体及相关材料；受访企业界人士认为以当前产能无法按期达标。（原题：Critical minerals security collides with decades-long mine timelines）</div></div><div class="news-item is-new" data-orig-title="ACG Metals to acquire Keşkek gold project" data-url="https://www.mining.com/acg-metals-to-acquire-keskek-gold-project" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://www.mining.com/acg-metals-to-acquire-keskek-gold-project" target="_blank">ACG Metals 逾700万美元收购土耳其 Keşkek 金矿项目</a></div><div class="news-meta"><span class="src">MINING.COM</span> · 09-08</div><div class="news-summary">ACG Metals（LON: ACG）与 Meta Nikel Kobalt Madencilik 签署约束性协议，以逾700万美元收购含土耳其 Keşkek 金矿项目的采矿许可证100%权益：先期支付400万美元，2027年中实现首次黄金生产后再付385万美元。项目距公司 Gediktepe 矿约70公里（43英里），许可证面积666公顷，所产氧化矿将供现有堆浸设施处理，回收率已提升至约85%；公司称新增黄金产能有望使铜当量年产量从2万吨翻倍至4万吨，并延长 Gediktepe 金矿服务年限数年。（原题：ACG Metals to acquire Keşkek gold project）</div></div><div class="news-item is-new" data-orig-title="MMG Dugald River Signs 2027–2028 Zinc Concentrate Sales Agreement" data-url="https://news.metal.com/en/newscontent/104101668-mmg-dugald-river-signs-2027" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://news.metal.com/en/newscontent/104101668-mmg-dugald-river-signs-2027" target="_blank">五矿资源 Dugald River 签署2027—2028年锌精矿销售协议</a></div><div class="news-meta"><span class="src">SMM 国际站</span> · 09-07</div><div class="news-summary">五矿资源（MMG）9月7日公告，其子公司 Dugald River 与五矿北欧（Minmetals North-Europe）签署锌精矿销售协议，2027年和2028年每年销售约2万干吨，年度交易上限5000万美元。定价以LME特高级锌与LBMA白银价格扣减加工费（TC）确定，以CIF条件交付。Dugald River 位于澳大利亚昆士兰州，是MMG主力锌矿之一。（原题：MMG Dugald River Signs 2027–2028 Zinc Concentrate Sales Agreement）</div></div><div class="news-item is-new" data-orig-title="EU Industry Chief Proposes Ban on Waste Exports to Non-OECD Nations" data-url="https://news.metal.com/en/newscontent/104101639-eu-industry-chief-proposes-ban-on-waste-exports-to-non-oecd-nations" data-embed="ok"><div class="news-head"><span class="dot"></span><span class="badge-new">NEW</span><a class="news-title" href="https://news.metal.com/en/newscontent/104101639-eu-industry-chief-proposes-ban-on-waste-exports-to-non-oecd-nations" target="_blank">欧盟拟全面禁止向非OECD国家出口废弃物，铝废料在列</a></div><div class="news-meta"><span class="src">SMM 国际站</span> · 09-07</div><div class="news-summary">路透布鲁塞尔9月4日电，欧盟产业主管斯特凡纳·塞茹尔内（Stephane Sejourne）提议全面禁止向非OECD国家出口废弃物，铝废料亦在禁止之列，其内阁于周五作出上述表示。塞茹尔内原定于9月23日提出仅限制废料出口的贸易措施，但内部磋商显示该工具覆盖范围有限，最终改为提出全面禁令。若落地将显著影响全球再生铝原料流向。（原题：EU Industry Chief Proposes Ban on Waste Exports to Non-OECD Nations）</div></div></div>
-<div class="section" id="specialSection" data-page-node-id="CqTFgKElClaqCI6MWSZSDO">
-<div class="section-title special" data-page-node-id="iWYe9fejQ1sHTqB44Zid0B"><span class="icon" data-page-node-id="FB7aq1c3M17xSYaQ49fPf0">⛏️</span> 新一轮找矿突破战略行动 · 专项<span class="news-count" id="specialCount" data-page-node-id="chXwl3Y2iNFcrRHgWzQ0Jd"></span></div>
-<div class="sp-cat" data-page-node-id="3ScqboTyrH1jShsDwrho6m">📌 政策与部署<span class="sub-count" id="spCount-policy" data-page-node-id="2khXKJjk0Zy9CtmQyO9jWH">0条</span></div>
-<div class="sp-list" id="spList-policy" data-page-node-id="lqqExX1i8UZwiWEPAufhIN">
-</div>
-<div class="sp-cat" data-page-node-id="RDGkZExzc5DfnmEkuEDfLD">🏔️ 找矿成果与新发现<span class="sub-count" id="spCount-result" data-page-node-id="s91zJs3oC8WiVfl3pUPyze">0条</span></div>
-<div class="sp-list" id="spList-result" data-page-node-id="GtMcpqFBl7G44YQ1HKFC71">
-</div>
-<div class="sp-cat" data-page-node-id="A9Q0iEBCDE3cBgYKZZd489">🔬 勘查技术与装备<span class="sub-count" id="spCount-tech" data-page-node-id="6NEhPTvgP67fhCAklXmVGC">0条</span></div>
-<div class="sp-list" id="spList-tech" data-page-node-id="TbZGFvprXke1QEVc0glX35">
-</div>
-<div class="sp-cat" data-page-node-id="eGBJpAo4CbA8ZLztcRP7BC">🌏 战略矿产与资源安全<span class="sub-count" id="spCount-security" data-page-node-id="qGE7G8OEmlo2alaxaU6x2w">0条</span></div>
-<div class="sp-list" id="spList-security" data-page-node-id="x94vJbC3evp9HdEw4gh9tS">
-
-</div>
-</div>
 
 <!-- ==================== 往期内容 ==================== -->
 <div class="section" id="archiveSection">
@@ -1226,7 +1260,7 @@ window.gcTotal=function(data){
     <button class="rights-view-btn" data-view="table" type="button" data-page-node-id="rGR2SHy4RJt4h8Y1cR2Y9o">▤ 表格</button>
   </div>
 </div>
-<div class="rights-cards" id="rightsCards" data-page-node-id="rGS2SHy4RJt4h8Y1cR2Y9p"></div>
+<div class="rights-list" id="rightsCards" data-page-node-id="rGS2SHy4RJt4h8Y1cR2Y9p"></div>
 <div class="rights-table-wrap" id="rightsTableWrap" hidden data-page-node-id="rGT2SHy4RJt4h8Y1cR2Y9q">
 <table class="rights-table" id="rightsTable" data-page-node-id="rGU2SHy4RJt4h8Y1cR2Y9r">
 <thead data-page-node-id="rGV2SHy4RJt4h8Y1cR2Y9s"><tr data-page-node-id="rGW2SHy4RJt4h8Y1cR2Y9t">
@@ -1419,9 +1453,18 @@ window.gcTotal=function(data){
     if(!window.NEWS_DATA||!window.NEWS_DATA.news) return [];
     // 矿权交易结构化专区只展示「矿业权市场」官方出让/转让公告（ky.mnr.gov.cn），
     // 避免把其它来源被归类为矿权交易的普通新闻混入卡片。
-    return window.NEWS_DATA.news.filter(function(it){
+    var arr=window.NEWS_DATA.news.filter(function(it){
       return it.s==="矿业权市场" || /ky\.mnr\.gov\.cn/.test(it.u||"");
     }).map(parseRights);
+    // 同一宗公告在数据里常存两个 URL（列表页 + 详情页 / PDF 直链），若按 URL 去重会渲染两遍。
+    // 这里按归一化标题去重（与「并购公告去重不能按 URL」是同一类坑）。
+    var seen={},out=[];
+    arr.forEach(function(r){
+      var k=String((r.it&&r.it.t)||"").replace(/[^一-龥A-Za-z0-9]/g,"");
+      if(!k||seen[k])return;
+      seen[k]=1;out.push(r);
+    });
+    return out;
   }
   function renderRightsSection(){
     var data=getRightsData();
@@ -1525,13 +1568,19 @@ window.gcTotal=function(data){
       var extra='';
       if(r.rightsType==="result" && r.bidder) extra='<div class="rc-extra">竞得人：'+esc(r.bidder)+'</div>';
       else if(r.rightsType==="transfer" && (r.transferor || r.transferee)) extra='<div class="rc-extra">'+esc(r.transferor||'—')+' → '+esc(r.transferee||'—')+'</div>';
-      return '<div class="rights-card" data-method="'+r.method+'" data-mineral="'+r.mineral+'">'
-        +'<div class="rc-top"><span class="rc-method rc-m-'+r.method+'">'+r.method+'</span>'+mineralHtml+badge+'</div>'
-        +'<div class="rc-title"><a href="'+r.it.u+'" target="_blank" rel="noopener">'+esc(r.it.t)+'</a></div>'
-        +(r.region?'<div class="rc-region">📍 '+esc(r.region)+'</div>':'')
-        +'<div class="rc-grid">'+grid4+'</div>'
-        +extra
-        +'<div class="rc-src">'+esc(r.it.s)+' · '+r.it.d.slice(5)+'</div>'
+      // 金额摘要：按业务类型取最相关的那个数字（结果看成交价，转让看面积，出让看起始价）
+      var numTxt="";
+      if(r.rightsType==="result") numTxt=(r.dealPrice==null?"—":r.dealPrice.toLocaleString("zh-CN")+" 万元");
+      else if(r.rightsType==="transfer") numTxt=(r.area==null?"—":fmtArea(r.area));
+      else numTxt=(r.price==null?"—":r.price.toLocaleString("zh-CN")+" 万元");
+      return '<div class="rights-row" data-method="'+r.method+'" data-mineral="'+r.mineral+'">'
+        +'<span class="rr-mineral">'+(r.mineral||"—")+'</span>'
+        +'<a class="rr-title" href="'+r.it.u+'" target="_blank" rel="noopener" title="'+esc(r.it.t)+'">'+esc(r.it.t)+'</a>'
+        +(r.region?'<span class="rr-region">📍 '+esc(r.region)+'</span>':'')
+        +'<span class="rr-method">'+r.method+'</span>'
+        +'<span class="rr-num">'+numTxt+'</span>'
+        +badge
+        +'<span class="rr-date">'+r.it.d.slice(5)+'</span>'
         +'</div>';
     }).join("")+'<div class="rights-more">'+rightsMoreBtn(list.length, shownList.length)+'</div>';
     if(tableBody){
@@ -1591,6 +1640,13 @@ window.gcTotal=function(data){
       if(n!==today && d!==today) return;
       results.push(r);
     });
+    // 同一宗结果可能有「列表页 + 详情页」两个 URL → 按归一化标题去重，聚合条里只列一次
+    var _seen={};
+    results=results.filter(function(r){
+      var k=String(r.t||r.title||"").replace(/[^一-龥A-Za-z0-9]/g,"");
+      if(!k||_seen[k])return false;
+      _seen[k]=1;return true;
+    });
     if(results.length===0) return;
     if(document.querySelector('.news-item[data-rights-summary="1"]')) return;
     var foundMinerals=[];
@@ -1627,9 +1683,9 @@ window.gcTotal=function(data){
     }
     var todaySection=document.getElementById('todaySection');
     if(!todaySection) return;
-    var titleDiv=todaySection.querySelector('.section-title');
+    // 2026-09-08：读者反馈矿权只需"大致浏览"，不应占据今日新增的头条位置 → 改为追加到末尾
     var wrapper=document.createElement('div');
-    todaySection.insertBefore(wrapper, titleDiv?titleDiv.nextSibling:todaySection.firstChild);
+    todaySection.appendChild(wrapper);
     wrapper.outerHTML=html;
     if(typeof refresh==='function') refresh();
   }
@@ -1838,47 +1894,13 @@ function specialCategoryOf(el){
   return 'tech';
 }
 function initSpecial(){
-  const spSec=document.getElementById('specialSection');
-  if(!spSec)return;
-  // 工具：从节点提取日期（取 .news-meta 里的 "MM-DD"）
-  function _mmdd(el){
-    const m=((el.querySelector('.news-meta')||{}).textContent||'').match(/(\d{1,2})-(\d{1,2})/);
-    if(!m)return 9999; // 找不到日期排到最后
-    const now=new Date();const y=now.getFullYear();
-    let d=new Date(y, parseInt(m[1])-1, parseInt(m[2]));
-    if(d>now)d=new Date(y-1, parseInt(m[1])-1, parseInt(m[2])); // 跨年
-    return Math.floor((now-d)/86400000);
-  }
-  // 1) 今日新增里命中的战略新闻 → 搬进专项区（动态更新，第二天被替换/过期）
-  document.querySelectorAll('#todaySection .news-item').forEach(el=>{
+  // 2026-09-08 改造：找矿专项区已取消。原实现会把命中"找矿"的条目 DOM 搬移到专项区，
+  // 造成同一话题被拆到两处看（读者反馈"专项里的内容基本都是前面的"）。
+  // 现在只补「战略」徽章做标记，条目留在今日新增 / 往期内容的原位（子分类：找矿成果与勘查技术）。
+  document.querySelectorAll('#todaySection .news-item, #archiveSection .news-item').forEach(el=>{
     if(el.classList.contains('arch-fav'))return;
-    if(el.classList.contains('is-special'))return; // 已在专项区（自动化生成时预分好类）
     if(!isSpecialNews(el))return;
     el.classList.add('is-special');
-    const cat=specialCategoryOf(el);
-    const list=document.getElementById('spList-'+cat);
-    if(list)list.appendChild(el); // 移动DOM（已读/收藏/浏览记录随节点走，不重复）
-  });
-  // 1.5) 往期里命中的战略新闻（最近14天内）：直接搬进专项区，原位置移除（与今日新增一致，专项/往期互斥）
-  //      超过 14 天的只打标记不移动（避免专项区无限堆）
-  const ARCHIVE_SP_DAYS=14;
-  document.querySelectorAll('#archiveSection .news-item').forEach(el=>{
-    if(el.classList.contains('arch-fav'))return;
-    if(el.classList.contains('is-special'))return;
-    if(!isSpecialNews(el))return;
-    const days=_mmdd(el);
-    if(days<=ARCHIVE_SP_DAYS){
-      // 近14天：直接移动 DOM 到专项区，往期原位置不再保留（专项区与往期区互斥，不重复展示）
-      el.classList.add('is-special');
-      const cat=specialCategoryOf(el);
-      const list=document.getElementById('spList-'+cat);
-      if(list)list.appendChild(el);
-    }else{
-      el.classList.add('is-special'); // 远期：只打标记，不移动 DOM
-    }
-  });
-  // 2) 给所有专项新闻补"战略"徽章（含自动化生成时预放入的）
-  document.querySelectorAll('.news-item.is-special').forEach(el=>{
     const head=el.querySelector('.news-head');
     if(!head||head.querySelector('.badge-strategy'))return;
     const badge=document.createElement('span');
@@ -1887,30 +1909,6 @@ function initSpecial(){
     badge.title='新一轮找矿突破战略行动相关';
     head.insertBefore(badge,head.querySelector('.news-title'));
   });
-  // 3) 重算今日新增各子类计数（部分新闻移走后数字不再准确）
-  document.querySelectorAll('#todaySection .sub-cat').forEach(cat=>{
-    let n=0,sib=cat.nextElementSibling;
-    while(sib&&!sib.classList.contains('sub-cat')){
-      if(sib.classList&&sib.classList.contains('news-item'))n++;
-      sib=sib.nextElementSibling;
-    }
-    const cnt=cat.querySelector('.sub-count');
-    if(cnt)cnt.textContent=n+'条新增';
-  });
-  // 3.5) 重算往期内容各子类计数（往期命中战略新闻被移走后，静态数字偏高，需同步）
-  document.querySelectorAll('#archiveSection .sub-cat').forEach(cat=>{
-    let n=0,sib=cat.nextElementSibling;
-    while(sib&&!sib.classList.contains('sub-cat')){
-      if(sib.classList&&sib.classList.contains('news-item'))n++;
-      sib=sib.nextElementSibling;
-    }
-    const cnt=cat.querySelector('.sub-count');
-    if(cnt)cnt.textContent=n+'条';
-  });
-  // 4) 专项区整区为空则隐藏（只数专项区内的，不含往期里打标的）
-  const total=spSec.querySelectorAll('.sp-list .news-item.is-special').length;
-  if(!total)spSec.style.display='none';
-  updateSpecialCounts();
 }
 
 // 修复专项区与今日区同 URL 重复：initSpecial 搬入专项区后，今日区残留下同 URL 条目
@@ -2762,6 +2760,28 @@ function renderHotNews(d){
   var cnt=document.getElementById('hotListCount');
   if(!body)return;
   var arr=(d&&Array.isArray(d.hot))?d.hot:[];
+  // 2026-09-08 改造：热榜与「今日要闻」互斥（同一条不重复出现）+ 跨源同事件去重 + 控制在 HOT_N 条。
+  // 背景：两者原本都从同一个库打分，茶亭铜金矿这类新闻在两栏都排第 1，读者看到重复。
+  if(arr.length){
+    try{
+      var dp=(typeof computeDigestPicks==='function')?(computeDigestPicks()||[]):[];
+      var chosen=[],i2,j2,dup;
+      for(i2=0;i2<arr.length;i2++){
+        var n0=arr[i2];dup=false;
+        // 会展类条目已归入左侧「近期会展」迷你卡，热榜不再重复展示
+        if(!dup&&typeof window.__expoIsExpo==='function'){
+          try{ if(window.__expoIsExpo(n0.t))dup=true; }catch(e){}
+        }
+        for(j2=0;j2<dp.length;j2++){
+          if(mdTitleSim(dp[j2].t,n0.t)>=0.5||(dp[j2].u&&n0.u&&dp[j2].u===n0.u)){dup=true;break;}
+        }
+        if(!dup)for(j2=0;j2<chosen.length;j2++){ if(mdTitleSim(chosen[j2].t,n0.t)>=0.5){dup=true;break;} }
+        if(!dup)chosen.push(n0);
+        if(chosen.length>=HOT_N)break;
+      }
+      arr=chosen;
+    }catch(e){ arr=arr.slice(0,HOT_N); }
+  }
   if(!arr.length){
     body.innerHTML='<li class="hotlist-empty">今日热榜暂无数据（新闻源未更新）</li>';
     if(cnt)cnt.textContent='0条';
@@ -2834,12 +2854,12 @@ function fetchHotNews(){
     .then(function(r){return r.ok?r.json():null;})
     .then(function(d){
       if(d&&Array.isArray(d.hot)&&d.hot.length){renderHotNews(d);return;}
-      renderHotNews({hot:computeHotNewsLocal(10),local:true});
+      renderHotNews({hot:computeHotNewsLocal(HOT_N*4),local:true});
     })
     .catch(function(){
       // 纯静态部署（GitHub Pages）没有后端接口 → 退回全库本地计算，热榜功能不缺失
       try{
-        var arr=computeHotNewsLocal(10);
+        var arr=computeHotNewsLocal(HOT_N*4);
         if(arr.length){renderHotNews({hot:arr,local:true});return;}
       }catch(e){console.warn('computeHotNewsLocal:',e);}
       var body=document.getElementById('hotListBody');
@@ -2847,6 +2867,65 @@ function fetchHotNews(){
     });
 }
 // ===== 今日要闻摘要条（9-04 新增，纯前端：从全库挑当日关键信息，按来源权威×关键信息词打分）=====
+// 2026-09-08 改造：
+//   ① 跨源同事件去重——同一新闻被多家网站报道（URL 不同、标题几乎一样）时只留分数最高的一条；
+//   ② 优先"当日发布"，不足再用"今日收录"补，并对非当日条目标注日期，
+//      避免读者看到旧新闻却以为发生在今天（原逻辑是"今日收录"优先，旧稿也会进要闻）。
+var HOT_N=5;      // 矿业热榜条数（用户要求 4~5 条）
+var DIGEST_N=4;   // 今日要闻条数
+window.__digestPicks=null;   // 缓存要闻选中项，供热榜排除（两栏互斥不重复）
+
+// 标题归一化：只保留中英文与数字，去掉标点/空格/书名号，便于相似比较
+function mdNormTitle(t){return String(t||'').replace(/[^一-龥A-Za-z0-9]/g,'');}
+// 标题相似度：2-gram Jaccard。含子串关系视为高相似（同一事件的不同报道标题常互相包含）
+function mdTitleSim(a,b){
+  a=mdNormTitle(a);b=mdNormTitle(b);
+  if(!a||!b)return 0;
+  if(a===b)return 1;
+  if(a.indexOf(b)>=0||b.indexOf(a)>=0)return 0.95;
+  var A={},B={},i,k,inter=0,uni=0;
+  for(i=0;i<a.length-1;i++)A[a.substr(i,2)]=1;
+  for(i=0;i<b.length-1;i++)B[b.substr(i,2)]=1;
+  for(k in A){uni++;if(B[k])inter++;}
+  for(k in B){if(!A[k])uni++;}
+  return uni?inter/uni:0;
+}
+// 从候选数组里挑 n 条，跳过与已选标题相似（>=0.5）的条目
+function mdPickDistinct(cands,n){
+  var picks=[];
+  for(var i=0;i<cands.length;i++){
+    var dup=false;
+    for(var j=0;j<picks.length;j++){
+      if(mdTitleSim(picks[j].r.t,cands[i].r.t)>=0.5){dup=true;break;}
+    }
+    if(!dup)picks.push(cands[i]);
+    if(picks.length>=n)break;
+  }
+  return picks;
+}
+// 要闻选条：返回条目数组（供要闻与热榜共用，保证两栏互斥）
+function computeDigestPicks(){
+  if(window.__digestPicks)return window.__digestPicks;
+  var anchor=qaReportDate();
+  function ok(r){return r.c!=='并购与投资'&&r.t&&r.u;}
+  // 1) 优先"当日发布"的条目
+  var pool=QA_ROWS.filter(function(r){return ok(r)&&r.d===anchor;});
+  // 2) 不足 DIGEST_N 时，用"今日收录但非当日发布"的按分数补齐
+  if(pool.length<DIGEST_N){
+    var extra=QA_ROWS.filter(function(r){return ok(r)&&r.n===anchor&&r.d!==anchor;})
+      .sort(function(a,b){return digestScore(b)-digestScore(a);});
+    for(var i=0;i<extra.length&&pool.length<DIGEST_N*3;i++)pool.push(extra[i]);
+  }
+  // 3) 仍为空则退回全库最新一天
+  if(!pool.length){
+    var max='';QA_ROWS.forEach(function(r){if(ok(r)&&r.d&&r.d>max)max=r.d;});
+    pool=QA_ROWS.filter(function(r){return ok(r)&&r.d===max;});
+  }
+  var cands=pool.map(function(r){return {r:r,sc:digestScore(r)};})
+    .sort(function(a,b){return b.sc-a.sc||(b.r.d||'').localeCompare(a.r.d||'');});
+  window.__digestPicks=mdPickDistinct(cands,DIGEST_N).map(function(p){return p.r;});
+  return window.__digestPicks;
+}
 var DIGEST_SRC=[[ '自然资源部',30],['新华社',26],['新华网',26],['人民日报',26],['工信部',24],['发展改革委',24],['中国地质调查局',24],['商务部',20],['财政部',20],['中国黄金协会',18],['中国矿业报',18],['中国有色金属工业协会',16],['SMM',14],['矿业界',12]];
 var DIGEST_KW=[['找矿突破',30],['新发现',26],['储量',24],['投产',20],['政策',20],['印发',18],['突破',16],['开工',16],['并购',14],['万吨',12],['稀土',10],['锗',10],['镓',10],['钨',8],['锂',8],['铜',6],['金',6],['银',5]];
 function digestScore(r){
@@ -2866,27 +2945,16 @@ function renderDigest(){
     var dt=anchor?new Date(anchor+'T00:00:00'):new Date();
     dateEl.textContent=(anchor?anchor.replace(/-/g,'.'):(dt.getFullYear()+'.'+(dt.getMonth()+1)+'.'+dt.getDate()))+' 星期'+week[dt.getDay()];
   }
-  // 优先取"今日收录"的条目（n=first_seen，新闻可能发布于前一日），
-  // 无收录标记时退回发布日期==今日，再退回全库最新一天。
-  // 剔除「并购与投资」类：这类是上市公司合规公告，虽今日入库但发布日期多为往日，
-  // 属"数据披露"而非"今日新闻要闻"，避免把往日内容混进今日热点。
-  function _isDigestNews(r){return r.c!=='并购与投资';}
-  var today=QA_ROWS.filter(function(r){return r.n===anchor&&_isDigestNews(r);});
-  if(!today.length)today=QA_ROWS.filter(function(r){return r.d===anchor&&_isDigestNews(r);});
-  if(!today.length){                       // 当日无数据时退回全库最新一天
-    var max='';QA_ROWS.forEach(function(r){if(_isDigestNews(r)&&r.d&&r.d>max)max=r.d;});
-    today=QA_ROWS.filter(function(r){return _isDigestNews(r)&&r.d===max;});
-  }
-  if(!today.length){
+  // 选条逻辑见 computeDigestPicks()：优先当日发布 → 今日收录补齐 → 全库最新一天；并做跨源同事件去重
+  var picks=computeDigestPicks();
+  if(!picks.length){
     list.innerHTML='<li class="digest-empty">暂无可提取的要闻（全库为空）</li>';
     return;
   }
-  var picks=today.map(function(r){return {r:r,sc:digestScore(r)};})
-    .sort(function(a,b){return b.sc-a.sc||(b.r.d||'').localeCompare(a.r.d||'');})
-    .slice(0,4);
-  list.innerHTML=picks.map(function(p){
-    var r=p.r;
-    return '<li data-url="'+digestEsc(r.u)+'"><a class="digest-link" href="'+digestEsc(r.u)+'" target="_blank" rel="noopener" title="'+digestEsc(r.t)+'">'+digestEsc(r.t)+'</a></li>';
+  list.innerHTML=picks.map(function(r){
+    // 非当日发布的条目标注日期，避免读者误以为是今天的新闻
+    var dtag=(r.d&&r.d!==anchor)?'<span class="digest-dtag">'+digestEsc(String(r.d).slice(5))+'</span>':'';
+    return '<li data-url="'+digestEsc(r.u)+'"><a class="digest-link" href="'+digestEsc(r.u)+'" target="_blank" rel="noopener" title="'+digestEsc(r.t)+'">'+digestEsc(r.t)+'</a>'+dtag+'</li>';
   }).join('');
 }
 
@@ -2999,12 +3067,12 @@ function fetchAiAnalyze(){
     });
 }
 
-initSpecial();   // 找矿突破专项：先归类移动，再注入标签/星标（避免折叠逻辑处理前移走）
+initSpecial();   // 战略徽章标记（专项区已于 2026-09-08 取消，此处不再搬移 DOM）
 fetchHotNews();   // 9-03 矿业热榜 Top 10
 // fetchAiAnalyze 已停用（2026-09-08）：AI 深度解析区块整体移除——静态托管下 api/ai-analyze
 // 必然 404，只会落到 localAiSummary 的全量新闻罗列，读者反馈"太杂太乱"。
 // AI 能力保留在左下角悬浮球问答（qaFab → /api/qa Netlify 代理）。下方函数保留作历史参考，勿再调用。
-dedupSpecialInToday();   // 修复专项区与今日区同URL重复：已搬入专项区的今日条目从今日区隐藏
+// dedupSpecialInToday() 已停用（2026-09-08）：专项区取消后不再搬移 DOM，无重复可去。
 injectTags();
 injectStars();
 renderArchivedFavs();
@@ -4783,11 +4851,13 @@ function setupExportButtons(){
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setupNewsFilterBar(); setupExportButtons(); });
 else { setupNewsFilterBar(); setupExportButtons(); }
 
-/* ===== 会展预告独立板块（2026-09-08 新增）=====
+/* ===== 会展预告（2026-09-08 改造：主区独立区块 → 左侧栏迷你卡）=====
    背景：候选池里会议/论坛/展会/年会类条目占比高（SMM 源尤其多），但它们不是
-   「行业事件」，混在今日要闻里会挤掉真正的行情与项目动态。
-   做法：加载后扫描今日区与往期区，命中会展特征的条目移到独立 #expoSection，
-   并摘掉 is-new / NEW 角标——这样它们不再计入「今日新增」名额。
+   「行业事件」，混在今日新增里会挤掉真正的行情与项目动态。
+   原做法：在主区新建 #expoSection 把条目搬过去 → 占主区一整块，要滚到中段才看得到。
+   现做法：桌面端把条目收进左侧栏「近期会展」迷你卡，打开页面即可见；
+           条目本身移入隐藏容器（仍在 DOM 内，保留已读/收藏/搜索），主区不再重复出现。
+   移动端（<=1100px）侧栏退化为顶部横条，迷你卡不展示，条目留在原位。
    判定 = 会展词 ∩ 动作词 − 实质事件词（避免把「矿业大会宣布新探矿权出让」误搬走）。 */
 (function(){
   var EXPO_WORDS=['大会','年会','论坛','峰会','研讨会','博览会','展会','展览会','推介会',
@@ -4797,7 +4867,15 @@ else { setupNewsFilterBar(); setupExportButtons(); }
   var EXPO_SKIP=['收购','投产','勘探','发现','涨价','签约','中标','获批','事故','停产',
                  '复产','产量','利润','业绩预告','资源量','储量','矿权','出让','挂牌',
                  '拍卖','减产','罢工','禁令','关税','出口管制','复产','投产','增产'];
+  var EXPO_MINI_N=5;
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function isDesktop(){ try{ return !(window.matchMedia&&window.matchMedia('(max-width:1100px)').matches); }catch(e){ return true; } }
   function titleOf(el){var a=el.querySelector('.news-title');return a?(a.textContent||''):'';}
+  function urlOf(el){var a=el.querySelector('.news-title');return a?(a.getAttribute('href')||'#'):'#';}
+  function dateOf(el){
+    var m=((el.querySelector('.news-meta')||{}).textContent||'').match(/(\d{1,2})-(\d{1,2})/);
+    return m?m[0]:'';
+  }
   function isExpo(t){
     if(!t) return false;
     var i,hit=false;
@@ -4814,18 +4892,12 @@ else { setupNewsFilterBar(); setupExportButtons(); }
     }
     return false;
   }
-  function addToc(n){
-    var ref=document.querySelector('.toc-main-item[data-target="specialSection"]');
-    if(!ref||!ref.parentNode) return;
-    if(document.querySelector('.toc-main-item[data-target="expoSection"]')) return;
-    var d=document.createElement('div');
-    d.className='toc-main-item'; d.setAttribute('data-target','expoSection');
-    d.textContent='🎪 会展预告';
-    d.onclick=function(){ if(typeof scrollToSection==='function') scrollToSection('expoSection',this); };
-    ref.parentNode.insertBefore(d, ref.nextSibling);
-  }
   function init(){
     try{
+      if(!isDesktop()) return;                      // 移动端侧栏为顶部横条，不展示迷你卡
+      var box=document.getElementById('expoMini');
+      var ul=document.getElementById('expoMiniList');
+      if(!box||!ul) return;
       var secs=[document.getElementById('todaySection'),document.getElementById('archiveSection')];
       var picked=[];
       secs.forEach(function(sec){
@@ -4835,28 +4907,34 @@ else { setupNewsFilterBar(); setupExportButtons(); }
         });
       });
       if(!picked.length) return;
-      var host=document.getElementById('expoSection');
-      if(!host){
-        host=document.createElement('div');
-        host.className='section'; host.id='expoSection';
-        host.innerHTML='<div class="section-title"><span class="icon">🎪</span> 会展预告'
-          + '<span class="news-count" id="expoCount">0条</span></div>'
-          + '<div class="expo-note">会议、论坛、展会、年会类信息独立成区，不占用今日要闻名额。</div>'
-          + '<div id="expoList"></div>';
-        var anchor=document.getElementById('specialSection');
-        if(anchor&&anchor.parentNode) anchor.parentNode.insertBefore(host,anchor.nextSibling);
-        else if(secs[1]&&secs[1].parentNode) secs[1].parentNode.insertBefore(host,secs[1]);
-        else document.body.appendChild(host);
+      // 跨源去重：同一场会议常被多家媒体报道，标题高度相似只留最早一条
+      // （与今日要闻 mdPickDistinct 同一套相似度，复用 window.mdTitleSim）
+      var sim=(typeof window.mdTitleSim==='function')?window.mdTitleSim:null;
+      if(sim){
+        var uniq=[];
+        for(var pi=0;pi<picked.length;pi++){
+          var dup=false;
+          for(var pj=0;pj<uniq.length;pj++){
+            if(sim(titleOf(uniq[pj]),titleOf(picked[pi]))>=0.5){dup=true;break;}
+          }
+          if(!dup)uniq.push(picked[pi]);
+        }
+        picked=uniq;
       }
-      var list=host.querySelector('#expoList')||host;
-      picked.forEach(function(el){
-        el.classList.remove('is-new');
-        var b=el.querySelector('.badge-new'); if(b&&b.parentNode) b.parentNode.removeChild(b);
-        list.appendChild(el);
+      var html='';
+      picked.slice(0,EXPO_MINI_N).forEach(function(el){
+        var t=titleOf(el).trim(),u=urlOf(el),d=dateOf(el);
+        html+='<li><a href="'+esc(u)+'" target="_blank" rel="noopener" title="'+esc(t)+'">'+esc(t)+'</a>'
+            +(d?'<span class="expo-mini-date">'+esc(d)+'</span>':'')+'</li>';
       });
-      host.style.display='';
-      var c=host.querySelector('#expoCount'); if(c) c.textContent=picked.length+'条';
-      addToc(picked.length);
+      if(picked.length>EXPO_MINI_N)
+        html+='<li class="expo-mini-more">另有 '+(picked.length-EXPO_MINI_N)+' 场会议</li>';
+      ul.innerHTML=html;
+      box.style.display='';
+      // 条目移入隐藏容器：仍在 DOM 内（保留已读/收藏/搜索），但主区不再重复展示
+      var vault=document.getElementById('expoVault');
+      if(!vault){ vault=document.createElement('div'); vault.id='expoVault'; vault.style.display='none'; document.body.appendChild(vault); }
+      picked.forEach(function(el){ el.classList.remove('is-new'); vault.appendChild(el); });
       if(typeof refresh==='function'){ try{refresh();}catch(e){} }
     }catch(e){}
   }
