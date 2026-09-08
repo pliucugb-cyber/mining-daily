@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-0959" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-1033" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -512,6 +512,15 @@ body.dark .qa-float-btn{background:#2c3845;color:#c9d6e2}
 .ai-loading,.ai-empty,.ai-disabled{padding:18px;text-align:center;color:#9aa7b3;font-size:13px;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1}
 .ai-disabled{color:#64748b}
 .ai-disabled code{background:#e2e8f0;padding:1px 5px;border-radius:3px;font-family:Consolas,monospace;font-size:12px;color:#475569}
+/* 2026-09-08：AI Key 自填入口（Key 只存 localStorage，不进代码库） */
+.ai-keybox{display:flex;gap:8px;margin:12px auto 8px;max-width:420px}
+.ai-keybox input{flex:1;min-width:0;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:13px;font-family:Consolas,monospace;background:#fff;color:#1e293b;outline:none}
+.ai-keybox input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+.ai-keybox button{padding:8px 16px;border:none;border-radius:6px;background:#3b82f6;color:#fff;font-size:13px;cursor:pointer;white-space:nowrap}
+.ai-keybox button:hover{background:#2563eb}
+.ai-keytip{font-size:12px;color:#94a3b8;line-height:1.6;max-width:420px;margin:0 auto}
+body.dark .ai-keybox input{background:#1e293b;border-color:#3d4a5c;color:#e2e8f0}
+body.dark .ai-keytip{color:#7d8b9c}
 .ai-quota{font-size:11.5px;color:#9aa7b3;margin-top:6px;text-align:right}
 body.dark .ai-item{background:#1e2733;border-color:#2c3845;border-left-color:#6366f1}
 body.dark .ai-item-title{color:#c9d6e2}
@@ -2000,13 +2009,56 @@ function applyFilter(){
     const vis=list?list.querySelectorAll('.news-item:not(.hidden)').length:0;
     cat.style.display=vis?'':'none';
   });
-  // 隐藏空区块（installGuideSection 是静态说明区，跳过新闻数判断常显）
+  refreshSectionVisibility();
+}
+
+// 【2026-09-08 P0-2 修复】热榜 / AI 深度解析两个区块从上线起从未显示过。
+// 根因：原逻辑只统计 .news-item，而热榜内容是 li.hot-item、AI 在 .ai-list 内，
+// 计数恒为 0 → 被 display:none；且该判断只在 applyFilter 里跑一次，跑在异步渲染之前，
+// 等数据渲染完再没有任何代码恢复显示。
+// 修复：① 按各区块真实子元素判断 ② 抽成函数，异步渲染后由 mdRefreshSections() 重新评估。
+function refreshSectionVisibility(){
   document.querySelectorAll('.section').forEach(sec=>{
+    // 静态说明区：跳过新闻数判断常显
     if(sec.id==='installGuideSection'||sec.id==='archivedFavSection'||sec.id==='rightsSection')return;
-    const vis=sec.querySelectorAll('.news-item:not(.hidden)').length;
+    var vis;
+    if(sec.id==='hotListSection'){
+      vis=sec.querySelectorAll('li.hot-item').length;          // 热榜用 li.hot-item
+    }else if(sec.id==='aiSection'){
+      var b=document.getElementById('aiBody');
+      // AI：有子节点、且不是「加载中/空/未配置」三类占位，才算真内容
+      // .ai-disabled（未配置 Key）必须显示：那里是使用者填写 Key 的入口，藏起来就永远配不上
+      vis=(b&&b.children.length&&!b.querySelector('.ai-loading,.ai-empty'))?1:0;
+    }else{
+      vis=sec.querySelectorAll('.news-item:not(.hidden)').length;
+    }
     sec.style.display=vis?'':'none';
   });
 }
+// 供异步渲染完成后回调（含多次延时兜底，覆盖 fetch 时序不确定的情况）
+function mdRefreshSections(){
+  try{ refreshSectionVisibility(); }catch(e){ console.warn('mdRefreshSections:',e); }
+}
+window.mdRefreshSections=mdRefreshSections;
+
+// AI Key 自填入口的交互绑定（由 ai-disabled 渲染后调用）
+function mdBindAiKeyBox(){
+  var btn=document.getElementById('aiKeySave'), inp=document.getElementById('aiKeyInput');
+  if(!btn||!inp) return;
+  function save(){
+    var v=(inp.value||'').trim();
+    if(!window.mdSetDsKey(v)){
+      alert('Key 格式不正确：应以 sk- 开头且长度足够。请到 DeepSeek 控制台复制完整 Key。');
+      return;
+    }
+    try{ qaAiProbe(); }catch(e){}
+    alert('已启用 AI 解析，页面将刷新以重新生成内容。');
+    try{ location.reload(); }catch(e){}
+  }
+  btn.onclick=save;
+  inp.onkeydown=function(e){ if(e.key==='Enter'){ save(); } };
+}
+window.mdBindAiKeyBox=mdBindAiKeyBox;
 function toggleFilter(){setFilter(filterMode==='new'?'none':'new')}
 function toggleSpecialFilter(){
   setFilter(filterMode==='special'?'none':'special');
@@ -2852,7 +2904,14 @@ function renderAiAnalyze(d){
   if(!d){body.innerHTML='<div class="ai-empty">AI 解析加载失败，请稍后刷新</div>';if(cnt)cnt.textContent='加载失败';return;}
   if(d.enabled===false){
     // 未配置 key
-    body.innerHTML='<div class="ai-disabled">🤖 AI 解析未配置<br>需在服务端设置环境变量 <code>DEEPSEEK_API_KEY</code> 后重启生效。<br>设置后今日 7 条新闻的「要点 / 启示 / 风险」将自动生成并缓存。</div>';
+    body.innerHTML='<div class="ai-disabled">🤖 AI 解析未配置 API Key'
+      +'<div class="ai-keybox">'
+      +'<input type="password" id="aiKeyInput" placeholder="粘贴你的 DeepSeek Key（sk- 开头）" autocomplete="off" spellcheck="false">'
+      +'<button type="button" id="aiKeySave">启用</button>'
+      +'</div>'
+      +'<div class="ai-keytip">Key 仅保存在你本机浏览器（localStorage），不上传、不进代码库；每台设备填一次即可。'
+      +'未配置时自动使用本地检索摘要，页面其余功能不受影响。</div></div>';
+    setTimeout(mdBindAiKeyBox,0);
     if(cnt)cnt.textContent='未配置';
     return;
   }
@@ -3335,6 +3394,9 @@ window.mdSetDsKey=mdSetDsKey; window.mdClearDsKey=mdClearDsKey; window.getDsKey=
   setupCardOpen();   // 整张卡片点击打开原文（标题/按钮仍各自处理）
   qaAiProbe();
   renderLmePrices();
+  // P0-2：热榜/AI 的数据由异步 fetch 渲染，applyFilter 跑在它们之前。
+  // 这里在多个时点重新评估区块可见性，确保渲染完成后能真正显示出来。
+  [0,300,1200,3000].forEach(function(d){ setTimeout(mdRefreshSections,d); });
 })();
 // ===== LME 6 大基本金属价格（2026-09-02 新增，数据源 lme-data.js，由 fetch_lme.py 每日更新）=====
 // 2026-09-06 晚改版：价格区为上下两行（首行 priceCardsShfe=国内+金银锂钴，次行 priceCardsLme=LME，
@@ -3387,7 +3449,8 @@ function renderLmePrices(){
 }
 var QA_AI_ON=false,QA_AI_BUSY=false,QA_LEFT=0,QA_AI_PROBE_OK=false;
 function qaAiProbe(){
-  // 前端直连方案：key 已内嵌，无需探测后端。只要 key 可解码即点亮 AI 按钮。
+  // 2026-09-08：Key 不再内嵌（公开静态页藏不住）。改为使用者自填，存 localStorage；
+  // 有 Key 点亮 AI 按钮，无 Key 走本地知识库兜底，页面其余功能不受影响。
   var b=document.getElementById('qaFloatAi');
   if(getDsKey()){
     QA_AI_ON=true;
