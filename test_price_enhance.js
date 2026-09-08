@@ -105,6 +105,16 @@ setTimeout(() => {
     check('③ 还原后无 data-rank', !shfe.querySelector('.price-card[data-rank]'));
   }
 
+  // ⑤ 工具行布局（异动条/排序开关不得挤进标题行，防折行）
+  const toolbar = doc2.querySelector('#priceStrip .price-toolbar');
+  check('⑤ 工具行容器已生成', !!toolbar);
+  if (toolbar) {
+    check('⑤ 异动条在工具行内', toolbar.contains(doc2.getElementById('priceTopMovers')));
+    check('⑤ 排序开关在工具行内', toolbar.contains(doc2.getElementById('priceSortBar')));
+    const head = doc2.querySelector('#priceStrip .price-strip-head');
+    check('⑤ 标题行内无异动条/排序开关', head && !head.querySelector('.top-movers') && !head.querySelector('.sortbar'));
+  }
+
   // ④ 热榜热度条
   const bars = doc2.querySelectorAll('#hotListBody .hot-bar i');
   check('④ 热榜热度条已生成', bars.length >= 1, 'count=' + bars.length);
