@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2350" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2357" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -251,10 +251,12 @@ body.dark .hl-refresh:hover{color:#ff8a80;background:rgba(255,138,128,.1)}
 .hotlist-list li.hot-item.top2 .hot-rank{background:var(--up);color:#fff}
 .hotlist-list li.hot-item.top3 .hot-rank{background:var(--up);color:#fff}
 .hot-body{flex:1;min-width:0}
-.hot-title{display:block;font-size: var(--fs-h3);font-weight:500;color:#0e3d6b;text-decoration:none;line-height:1.45;border-bottom:1px dashed transparent;transition:color .15s,border-color .15s;word-break:break-word}
+/* 2026-09-08 深夜：标题与「热/新」徽章同一行内联排（徽章原为独立块，会单独占一行、把标题挤下去） */
+.hot-line{font-size: var(--fs-h3);line-height:1.45;word-break:break-word}
+.hot-title{display:inline;font-size: var(--fs-h3);font-weight:500;color:#0e3d6b;text-decoration:none;line-height:1.45;border-bottom:1px dashed transparent;transition:color .15s,border-color .15s;word-break:break-word}
 .hot-title:hover{color:var(--up);border-bottom-color:var(--up)}
 .hot-meta{font-size: var(--fs-meta);color:var(--ink-300);margin-top:var(--s1);display:flex;gap:var(--s2);flex-wrap:wrap;align-items:center}
-.hot-fire{display:inline-block;font-size: var(--fs-meta);color:#fff;background:var(--up);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:700;flex-shrink:0}
+.hot-fire{display:inline-block;font-size: var(--fs-meta);color:#fff;background:var(--up);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:700;flex-shrink:0;margin-left:6px;vertical-align:1px}
 /* 「新」徽章（2026-09-08 晚）：仅当日发布条目；蓝底与「热」红底区分 */
 .hot-new{display:inline-block;font-size: var(--fs-meta);color:#fff;background:var(--brand);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:700;flex-shrink:0;margin-left:4px}
 .hotlist-loading{padding:var(--s5);text-align:center;color:var(--ink-300);font-size: var(--fs-body)}
@@ -2001,7 +2003,23 @@ function setFilter(mode){
   if(unBtn)unBtn.classList.toggle('active',mode==='unread');
   document.getElementById('favBtn').classList.toggle('active',mode==='fav');
   document.getElementById('historyBtn').classList.toggle('active',mode==='history');
+  // 2026-09-08 深夜：筛选后大量条目被隐藏、页面骤然变短，浏览器会把滚动位置夹回页首，
+  // 用户点「收藏/历史」就像被弹回顶部。这里先记住位置再还原；确实撑不住时滚到首条命中结果。
+  const _y=(window.pageYOffset||document.documentElement.scrollTop||0);
   applyFilter();
+  keepViewportAfterFilter(_y);
+}
+function keepViewportAfterFilter(prevY){
+  requestAnimationFrame(function(){
+    var maxY=Math.max(0,(document.documentElement.scrollHeight||0)-(window.innerHeight||0));
+    if(prevY>0&&prevY<=maxY){ window.scrollTo(0,prevY); return; }
+    if(prevY===0)return;
+    var first=null;
+    document.querySelectorAll('.news-item').forEach(function(el){
+      if(!first&&el.offsetParent!==null)first=el;
+    });
+    if(first&&first.scrollIntoView)first.scrollIntoView({block:'center'});
+  });
 }
 function toggleUnreadFilter(){setFilter(filterMode==='unread'?'none':'unread')}
 function applyFilter(){
@@ -2910,10 +2928,13 @@ function renderHotPage(){
     var isNew=!!nD&&nD===anchor;
     var fire=n.hot?'<span class="hot-fire">🔥 热</span>':'';
     var fresh=isNew?'<span class="hot-new">新</span>':'';
+    // 徽章放在标题之后内联排（2026-09-08 深夜）：原来放在标题前且徽章为块级，会独占一行
     return '<li class="hot-item" data-url="'+u+'">'
       +'<div class="hot-body">'
-      +fire+fresh
+      +'<div class="hot-line">'
       +'<a class="hot-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'
+      +fire+fresh
+      +'</div>'
       +'<div class="hot-meta"><span>'+s+'</span><span>'+dStr+'</span></div>'
       +'</div></li>';
   }).join('');
