@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2011" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2028" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -28,7 +28,7 @@
 --up:#d93a2b;--down:#128a5f;--flat:#6b7a89;
 --success:#128a5f;--warning:#b7791f;--danger:#c0392b;--info:#0e7490;
 --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
---font-num:"SF Mono","JetBrains Mono",ui-monospace,Consolas,monospace;
+--font-num:"Segoe UI",-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
 --fs-display:24px;--fs-h1:20px;--fs-h2:16px;--fs-h3:14px;--fs-body:13px;--fs-meta:12px;--fs-nano:10px;
 --fw-regular:400;--fw-medium:500;--fw-semibold:600;
 --r-sm:4px;--r-md:8px;--r-lg:12px;
@@ -1167,11 +1167,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .price-strip{padding:var(--s3) var(--s4) var(--s2)}
 .price-strip-head{margin-bottom:var(--s2)}
 .price-strip-title{font-weight:var(--fw-semibold)}
-.price-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));gap:0 var(--s5);overflow:visible;padding-bottom:0}
+.price-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:0 var(--s5);overflow:visible;padding-bottom:0}
 .price-cards-lme{margin-top:var(--s3)}
-.price-cards::before{grid-column:1/-1;font-size: var(--fs-nano);color:var(--ink-300);letter-spacing:.5px;padding:var(--s1) var(--s3)}
-#priceCardsShfe::before{content:'国内 · SHFE / 上金所 / 广期所'}
-#priceCardsLme::before{content:'LME · 美元/吨'}
+/* 分组标签：pill 徽章，国内=品牌青 / LME=深蓝灰，一眼区分两个盘 */
+.price-cards::before{grid-column:1/-1;justify-self:start;font-size:var(--fs-nano);font-weight:var(--fw-semibold);letter-spacing:.5px;padding:2px 10px;border-radius:999px;margin:0 0 var(--s1) var(--s2)}
+#priceCardsShfe::before{content:'国内盘 · 人民币';color:var(--brand);background:var(--brand-soft)}
+#priceCardsLme::before{content:'LME 外盘 · 美元/吨';color:var(--ink-700);background:var(--surface-3)}
+/* LME 块整体加浅底色块，与国内盘形成第二重视觉区分 */
+#priceCardsLme{background:var(--surface-2);border-radius:var(--r-md);padding:var(--s1) var(--s2) var(--s2)}
+body.dark #priceCardsLme{background:rgba(255,255,255,.04)}
 .price-card{display:grid;grid-template-columns:minmax(72px,1fr) auto auto 1fr;align-items:baseline;gap:0 var(--s2);min-width:0;padding:var(--s2) var(--s2) var(--s2) var(--s3);background:transparent;border:0;border-bottom:1px solid var(--line-1);border-radius:0;position:relative}
 /* 涨跌标识：顶部 3px 横条 -> 左侧 3px 竖条 */
 .price-card::before{content:'';position:absolute;top:2px;left:0;right:auto;bottom:2px;width:3px;height:auto;background:var(--ink-300);border-radius:2px}
@@ -1179,7 +1183,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .price-card.down::before{background:var(--down)}
 .pc-name{display:flex;align-items:baseline;gap:var(--s1);justify-content:flex-start;font-weight:var(--fw-medium);white-space:nowrap;overflow:hidden;min-width:0}
 .pc-name .pc-tag{margin-left:0;flex-shrink:0}
-.pc-value{margin-top:0;font-size: var(--fs-h3);font-weight:var(--fw-semibold);text-align:right;white-space:nowrap}
+.pc-value{margin-top:0;font-size: var(--fs-h3);font-weight:var(--fw-semibold);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .pc-unit{margin-top:0;white-space:nowrap}
 .pc-chg{margin-top:0;text-align:right;font-weight:var(--fw-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 /* 紧凑行内不做抬升与浮层，改用底色反馈 */
@@ -1261,7 +1265,7 @@ body.dark .price-card[data-slug]:hover{background:var(--surface-2)}
 <div class="price-strip" id="priceStrip" data-page-node-id="hdrDNMcYiXF1Pahzpub7wE">
 <div class="price-strip-head" data-page-node-id="LTuQP5kPZ3nRzoSodJriPD">
 <span class="price-strip-title" data-page-node-id="EziLhE8fq4fekt5gooiUD2">📊 金属价格</span>
-<span class="price-strip-note" id="priceStripNote">2026-09-08 更新 · 首行国内（元/吨） 次行 LME（美元/吨） · 金属顺序一致 · 点击卡片看走势</span>
+<span class="price-strip-note" id="priceStripNote">2026-09-08 更新 · 点击卡片看走势</span>
 </div>
 <div class="price-cards" id="priceCardsShfe"><div data-slug="cum" class="price-card up"><div class="pc-name">沪铜 <span class="pc-tag">SHFE</span></div><div class="pc-value">109,410</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +630 (+0.58%)</div></div><div data-slug="alm" class="price-card up"><div class="pc-name">沪铝 <span class="pc-tag">SHFE</span></div><div class="pc-value">24,420</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +130 (+0.54%)</div></div><div data-slug="pbm" class="price-card up"><div class="pc-name">沪铅 <span class="pc-tag">SHFE</span></div><div class="pc-value">16,210</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +80 (+0.50%)</div></div><div data-slug="znm" class="price-card up"><div class="pc-name">沪锌 <span class="pc-tag">SHFE</span></div><div class="pc-value">27,095</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +350 (+1.31%)</div></div><div data-slug="nim" class="price-card up"><div class="pc-name">沪镍 <span class="pc-tag">SHFE</span></div><div class="pc-value">127,820</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +40 (+0.03%)</div></div><div data-slug="snm" class="price-card up"><div class="pc-name">沪锡 <span class="pc-tag">SHFE</span></div><div class="pc-value">418,870</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +2,410 (+0.58%)</div></div><div data-slug="au9999" class="price-card down"><div class="pc-name">上海金 <span class="pc-tag">Au99.99</span></div><div class="pc-value">950.78</div><div class="pc-unit">元/克</div><div class="pc-chg">&#9660; -15.18 (-1.57%)</div></div><div data-slug="agtd" class="price-card down"><div class="pc-name">白银 <span class="pc-tag">Ag(T+D)</span></div><div class="pc-value">15,990</div><div class="pc-unit">元/千克</div><div class="pc-chg">&#9660; -260 (-1.60%)</div></div><div data-slug="lcm" class="price-card up"><div class="pc-name">碳酸锂 <span class="pc-tag">主力连续</span></div><div class="pc-value">142,200</div><div class="pc-unit">元/吨</div><div class="pc-chg">&#9650; +260 (+0.18%)</div></div><div class="price-card "><div class="pc-name">电解钴 <span class="pc-tag">SMM 09-07</span></div><div class="pc-value">304,940</div><div class="pc-unit">元/吨</div><div class="pc-chg">上日 304,940（SMM 未更新）</div></div></div>
 <div class="price-cards price-cards-lme" id="priceCardsLme"><div data-slug="lcpt" class="price-card up"><div class="pc-name">LME 铜 <span class="pc-tag">LME</span></div><div class="pc-value">14,521.00</div><div class="pc-unit">美元/吨</div><div class="pc-chg">&#9650; +27.00 (+0.19%)</div></div><div data-slug="lalt" class="price-card up"><div class="pc-name">LME 铝 <span class="pc-tag">LME</span></div><div class="pc-value">3,313.50</div><div class="pc-unit">美元/吨</div><div class="pc-chg">&#9650; +1.00 (+0.03%)</div></div><div data-slug="lldt" class="price-card down"><div class="pc-name">LME 铅 <span class="pc-tag">LME</span></div><div class="pc-value">1,897.50</div><div class="pc-unit">美元/吨</div><div class="pc-chg">&#9660; -2.00 (-0.11%)</div></div><div data-slug="lznt" class="price-card up"><div class="pc-name">LME 锌 <span class="pc-tag">LME</span></div><div class="pc-value">3,994.50</div><div class="pc-unit">美元/吨</div><div class="pc-chg">&#9650; +5.00 (+0.13%)</div></div><div data-slug="lnkt" class="price-card up"><div class="pc-name">LME 镍 <span class="pc-tag">LME</span></div><div class="pc-value">16,695.00</div><div class="pc-unit">美元/吨</div><div class="pc-chg">&#9650; +5.00 (+0.03%)</div></div><div data-slug="ltnt" class="price-card up"><div class="pc-name">LME 锡 <span class="pc-tag">LME</span></div><div class="pc-value">55,085.00</div><div class="pc-unit">美元/吨</div><div class="pc-chg">&#9650; +105.00 (+0.19%)</div></div></div>
@@ -3604,7 +3608,7 @@ function renderLmePrices(){
     var note=document.getElementById('priceStripNote');
     if(note&&D.updated){
       var dt=D.updated.substring(0,10);
-      note.textContent=dt+' 更新 · 首行国内（人民币） 次行 LME（美元/吨，日K收盘） · 金属顺序一致 · 点击卡片看走势';
+      note.textContent=dt+' 更新 · 点击卡片看走势';
     }
   }catch(e){console.warn('renderLmePrices:',e);}
 }
