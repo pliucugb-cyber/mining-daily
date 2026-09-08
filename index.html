@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2156" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2203" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1852,7 +1852,9 @@ const FAV_KEY='mining_daily_favorites';
 const HISTORY_KEY='mining_daily_history';
 
 // 2026-09-06 晚：统一 localStorage 写入封装（隐私模式/配额满时静默失败，不中断交互）
-function lsSet(k,v){try{window.lsSet(k,v);}catch(e){}}
+// ⚠️ 2026-09-08 晚修复严重回归：原写法 window.lsSet(k,v) 是自调用（顶层函数声明即 window 属性），
+// 无限递归被 try/catch 吞掉 → 09-06 23:20 起所有 lsSet 写入静默失效（已读/收藏/历史/主题/QA 历史等全没存上）。
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 function getReadSet(){try{return new Set(JSON.parse(localStorage.getItem(STORE_KEY)||'[]'))}catch(e){return new Set()}}
 function saveReadSet(s){lsSet(STORE_KEY,JSON.stringify([...s]))}
 // 收藏存储：新格式为对象数组 {url,title,date,src}；旧格式（纯URL字符串数组）自动迁移
