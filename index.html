@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2305" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2312" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -228,9 +228,10 @@ body.dark .badge-strategy{background:#4338ca;color:#fff}
 .news-item.is-special{background:var(--surface-2)}
 .sp-list .news-item.sp-from-archive{background:var(--surface-2);border-left:3px solid var(--ink-300)}
 .sp-list .news-item.sp-from-archive .news-meta::after{content:"往期";font-size: var(--fs-nano);background:#e2e8f0;color:var(--ink-700);padding:1px var(--s2);border-radius: var(--r-md);font-weight:600;letter-spacing:.3px;margin-left:8px;white-space:nowrap}
-.btn-special{background:#f5e6bc;color:#92400e;border:1px solid #e6c86e}
-.btn-special:hover{background:#eed9a4}
-.btn-special.active{background:#b45309;color:#fff;border-color:#b45309}
+/* 「战略」筛选按钮：与 .badge-strategy 徽章同色系（靛蓝），专项金色调已废弃 */
+.btn-special{background:#e0e7ff;color:#3730a3;border:1px solid #c7d2fe}
+.btn-special:hover{background:#c7d2fe}
+.btn-special.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
 /* ===== 矿业热榜（9-03 新增，类似今日头条右侧编号榜） ===== */
 .section-title.hotlist{background:var(--surface-2);border-left-color:var(--up)}
 /* 「换一换」按钮（2026-09-08：替代 TOP 5 徽章 + N条 计数，头条式轮换） */
@@ -736,8 +737,8 @@ body.dark .section-title.special{background:var(--surface-2)}
 body.dark .news-item.is-special{background:var(--surface-2)}
 body.dark .sp-list .news-item.sp-from-archive{background:var(--surface-2);border-left-color:#64748b}
 body.dark .sp-list .news-item.sp-from-archive .news-meta::after{background:#33404f;color:var(--ink-700)}
-body.dark .btn-special{background:#3a3120;color:#f0d18a;border-color:#6b5a2e}
-body.dark .btn-special:hover{background:#4a3f28}
+body.dark .btn-special{background:#2a2a52;color:#c7d2fe;border-color:#4338ca}
+body.dark .btn-special:hover{background:#33336a}
 /* ---- 热榜 ---- */
 body.dark .section-title.hotlist{background:var(--surface-2)}
 body.dark .section-title.hotlist .hl-sub{color:var(--ink-500)}
@@ -1302,7 +1303,7 @@ body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
 <div class="stat-item" data-page-node-id="ejCuf2fXHfB3cyRPOf9dRR"><span class="stat-num unread" id="unreadCount" data-page-node-id="v1vidu9uGTqw3sW6iSpU8P">0</span> 条未读</div>
 <button class="btn btn-filter" id="filterBtn" onclick="toggleFilter()" data-page-node-id="1XbkppHk2kb9XOvQJvErbE">只看新增</button>
 <button class="btn btn-unread" id="unreadBtn" onclick="toggleUnreadFilter()" title="只看未读新闻，已读自动隐藏" style="margin-left:8px" data-page-node-id="1nOFKduaEohpYtuH40b9P7">📭 未读 <span id="unreadBtnCount" data-page-node-id="6fvptHbZG3KK6MuVoTRMtL">0</span></button>
-<button class="btn btn-special" id="specialBtn" onclick="toggleSpecialFilter()" title="只看与新一轮找矿突破战略行动相关的新闻" style="margin-left:8px" data-page-node-id="SwqabUoMhhdIECcKQt99zH">⛏️ 专项 <span id="specialCountNum" data-page-node-id="aFDvR8jlFT5s81RK6xpcBJ">0</span></button>
+<button class="btn btn-special" id="specialBtn" onclick="toggleSpecialFilter()" title="只看带「战略」徽章的重点条目（找矿突破战略行动等相关）" style="margin-left:8px" data-page-node-id="SwqabUoMhhdIECcKQt99zH">⭐ 战略 <span id="specialCountNum" data-page-node-id="aFDvR8jlFT5s81RK6xpcBJ">0</span></button>
 <button class="btn btn-restore" onclick="clearAllRead()" title="一键清除所有已读记录，全部恢复为未读状态" style="margin-left:8px" data-page-node-id="CPs0HBYiw0DnwCX25prPhR">↻ 全部恢复未读</button>
 <button class="btn btn-fav" id="favBtn" onclick="toggleFavFilter()" style="margin-left:8px" data-page-node-id="K0o8bP8sEDDux0RFSDCOyp">★ 收藏 <span id="favCount" data-page-node-id="cBnMAVraCTfo5KqA6fHJvY">0</span></button>
 <button class="btn btn-history" id="historyBtn" onclick="toggleHistoryFilter()" data-page-node-id="B7TsZS1oqXHnHoB2YE9nVl">📋 历史 <span id="historyCount" data-page-node-id="51fcqI1Cwae2JyLnZVG45j">0</span></button>
@@ -2129,12 +2130,9 @@ function mdBindAiKeyBox(){
 window.mdBindAiKeyBox=mdBindAiKeyBox;
 function toggleFilter(){setFilter(filterMode==='new'?'none':'new')}
 function toggleSpecialFilter(){
+  // 2026-09-08：找矿专项区已取消，is-special 条目现在原位显示（带「战略」徽章），
+  // 点按仅切换筛选，不再滚动到已不存在的 specialSection。
   setFilter(filterMode==='special'?'none':'special');
-  if(filterMode==='special'){
-    const sp=document.getElementById('specialSection');
-    if(sp)window.scrollTo({top:sp.getBoundingClientRect().top+window.pageYOffset-80,behavior:'smooth'});
-    document.querySelectorAll('.toc-main-item').forEach(i=>i.classList.remove('active'));
-  }
 }
 function toggleFavFilter(){setFilter(filterMode==='fav'?'none':'fav')}
 function toggleHistoryFilter(){setFilter(filterMode==='history'?'none':'history')}
