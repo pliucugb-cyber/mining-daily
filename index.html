@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-1033" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-1040" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1464,6 +1464,9 @@ window.gcTotal=function(data){
       }
       return true;
     });
+    // 暴露「筛选后全量」给 CSV 导出用：卡片/表格受 RIGHTS_COLLAPSE_AT 折叠限制
+    // 只渲染前 N 条，若导出时读 DOM 会只拿到 8 条，让用户误以为是全量。
+    window.__rightsFullList=list;
     function score(r){
       if(r.deadline){
         var d=daysBetween(new Date(r.deadline.replace(/-/g,"/")), ref);
@@ -4710,24 +4713,45 @@ function exportPriceCsv(){
   downloadCsv('矿业日报_金属价格_'+csvDate()+'.csv', rows);
 }
 function exportRightsCsv(){
-  var tb=document.getElementById('rightsTableBody'); if(!tb){alert('矿权数据未加载');return;}
-  var rows=[['矿种','标题','地区','出让方式','起始价','保证金','面积','截标日','链接']];
-  tb.querySelectorAll('tr').forEach(function(tr){
-    var td=tr.querySelectorAll('td'); if(td.length<8)return;
-    var link=td[1].querySelector('a');
-    var region=td[1].querySelector('span');
-    rows.push([
-      td[0].textContent.trim(),
-      (link?link.textContent:td[1].textContent).replace(/\s+/g,' ').trim(),
-      region?region.textContent.trim():'',
-      td[2].textContent.trim(),
-      td[3].textContent.trim(),
-      td[4].textContent.trim(),
-      td[5].textContent.trim(),
-      td[6].textContent.trim(),
-      link?link.href:''
-    ]);
-  });
+  // 2026-09-08 修正：原实现从 DOM 表格逐行读，而表格受 RIGHTS_COLLAPSE_AT 折叠限制
+  // 只渲染前 8 条，导致导出的 CSV 也只有 8 条（全库其实有几十条），用户误拿到全量。
+  // 改为从渲染时暴露的「筛选后全量」__rightsFullList 生成；DOM 读取仅作兜底。
+  var rows=[['矿种','标题','地区','出让方式','价格(万元)','竞得人/保证金(万元)','面积(km²)','日期','链接']];
+  function c(v){ return (v==null||v==='')?'—':String(v).replace(/\s+/g,' ').trim(); }
+  function dd(d){ return d?String(d).slice(5):'—'; }
+  var full=window.__rightsFullList;
+  if(full && full.length){
+    full.forEach(function(r){
+      var price='—', second='—';
+      if(r.rightsType==='result'){ price=(r.dealPrice!=null?r.dealPrice:'—'); second=r.bidder||'—'; }
+      else if(r.rightsType==='transfer'){ price='—'; second=(r.transferor||'—')+' → '+(r.transferee||'—'); }
+      else { price=(r.price==null?'—':r.price); second=(r.deposit==null?'—':r.deposit); }
+      rows.push([
+        c(r.mineral), c(r.it&&r.it.t), c(r.region), c(r.method),
+        c(price), c(second), c(r.area), dd(r.deadline), (r.it&&r.it.u)||''
+      ]);
+    });
+  }else{
+    // 兜底：数据源不可用时退回读 DOM（此时仍受折叠限制）
+    var tb=document.getElementById('rightsTableBody'); if(!tb){alert('矿权数据未加载');return;}
+    tb.querySelectorAll('tr').forEach(function(tr){
+      var td=tr.querySelectorAll('td'); if(td.length<8)return;
+      var link=td[1].querySelector('a');
+      var region=td[1].querySelector('span');
+      rows.push([
+        td[0].textContent.trim(),
+        (link?link.textContent:td[1].textContent).replace(/\s+/g,' ').trim(),
+        region?region.textContent.trim():'',
+        td[2].textContent.trim(),
+        td[3].textContent.trim(),
+        td[4].textContent.trim(),
+        td[5].textContent.trim(),
+        td[6].textContent.trim(),
+        link?link.href:''
+      ]);
+    });
+  }
+  if(rows.length<=1){ alert('当前筛选条件下没有可导出的矿权数据'); return; }
   downloadCsv('矿业日报_矿权出让_'+csvDate()+'.csv', rows);
 }
 function setupExportButtons(){
