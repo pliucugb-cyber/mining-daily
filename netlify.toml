@@ -1,0 +1,20 @@
+# 矿业新闻日报 · AI 问答代理（纯边缘函数，无构建步骤、无站点文件被发布）
+# 注意：本文件必须放在仓库根目录 —— Netlify 约定边缘函数目录为 <根目录>/netlify/edge-functions，
+# 若把 netlify/ 本身当作部署根目录，会去找 netlify/netlify/edge-functions，导致 0 个函数被打包。
+# Key 不在这里，也不在代码里 —— 只在 Netlify 站点环境变量 DEEPSEEK_API_KEY 中。
+
+[build]
+  publish = "netlify/public"   # 占位静态页，本站点实际只提供 API
+  command = ""                 # 无需构建
+
+[[edge_functions]]
+  function = "qa"
+  path = "/api/*"
+
+# 安全响应头
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "no-referrer"

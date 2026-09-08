@@ -20,33 +20,39 @@
 | 文件 | 作用 |
 |---|---|
 | `edge-functions/qa.js` | 代理主体：`/api/health`、`/api/qa`，无 Key 时自动降级关键词兜底 |
-| `netlify.toml` | 路由 `/api/*` + 安全响应头 |
-| `public/.gitkeep` | 占位（本站点不托管页面） |
+| `../netlify.toml` | **仓库根目录**（不是本目录）：路由 `/api/*` + 安全响应头 |
+| `public/index.html` | 占位首页（本站点实际只提供 API） |
 
-## 部署（三种方式，任选其一）
+⚠️ `netlify.toml` 必须放在**仓库根目录**。Netlify 约定 Edge Function 目录是
+`<部署根目录>/netlify/edge-functions`；若把 `netlify/` 自身当部署根目录，
+它会去找 `netlify/netlify/edge-functions`，结果是**打包 0 个函数、接口 404**。
 
-### 方式 A：Netlify 网页拖拽（Key 不经手任何人，最安全）
-
-1. 打开 <https://app.netlify.com/drop>，把 `netlify` 目录整个拖进去
-2. 站点设置 → Environment variables → 新增 `DEEPSEEK_API_KEY` = 你的 Key
-3. Deploys → Trigger deploy
-4. 把站点域名（形如 `https://xxxx-xxxx.netlify.app`）填回 `index.html` 的 `QA_API_BASE`
-
-### 方式 B：Netlify CLI（可脚本化）
+## 部署（已验证可用的方式）
 
 ```bash
-cd netlify
-npm i -g netlify-cli          # 或 npx netlify
-netlify login                 # 绑定账号（换电脑重做这步即可）
-netlify sites:create --name mining-daily-qa
-netlify env:set DEEPSEEK_API_KEY "<你的Key>"
-netlify deploy --prod
+# 一次安装 CLI
+npm --prefix ~/.workbuddy/binaries/node/workspace install netlify-cli
+
+# 建站 + 部署（首次）；之后改了 qa.js 或环境变量用 --redeploy
+python netlify_deploy.py
+python netlify_deploy.py --redeploy
 ```
 
-### 方式 C：连 GitHub 仓库自动部署
+凭据读环境变量 `NETLIFY_TOKEN`，或本地 `netlify_token.txt`（已 gitignore）。
 
-Netlify 新建站点 → Import from Git → 选本仓库 → Base directory 填 `netlify` →
-环境变量填 `DEEPSEEK_API_KEY` → 之后推送即自动部署。
+### ⚠️ 两个必须知道的坑
+
+1. **必须用 CLI 部署，不能用 API 直传。** 直传 API（POST deploys + PUT 文件）
+   不会打包 Edge Function（实测 `required_edge_functions` 为空），只有 CLI 会 esbuild 打包。
+2. **新站点默认是「私有」，访客会被 401 踢到登录页。** Netlify 自 2026-07-28 起
+   新项目默认私有，且**只能在网页端改**，API 改不动：
+   `Project configuration → General → Visitor access → Project visibility`
+   → Production deploys 选 **Public** → Save。
+
+## 环境变量
+
+`Project configuration → Environment variables` 新增 `DEEPSEEK_API_KEY`。
+改完**必须重新部署一次**（`python netlify_deploy.py --redeploy`），Edge Function 才读得到新值。
 
 ## 部署后验证
 
@@ -64,7 +70,8 @@ curl -X POST https://<你的站点>.netlify.app/api/qa \
 
 ## 更换 / 作废 Key
 
-只需在 Netlify 站点环境变量里改 `DEEPSEEK_API_KEY`，**无需改代码、无需重新部署页面**。
+在 Netlify 站点环境变量里改 `DEEPSEEK_API_KEY`，改完跑一次 `python netlify_deploy.py --redeploy`；
+页面代码不用动。
 
 ## 为什么不用 Cloudflare Workers
 
