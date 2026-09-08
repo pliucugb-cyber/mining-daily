@@ -12,7 +12,29 @@ from pathlib import Path
 
 API_URL = "https://futsseapi.eastmoney.com/list/COMEX,NYMEX,COBOT,SGX,NYBOT,LME,MDEX,TOCOM,IPE"
 PAGE_SIZE = 50
-TOKEN = "58b2fa8f54638b60b87d69b31969089c"
+
+# 【2026-09-08 安全整改】token 不再硬编码（原明文已随 git 推到公开仓库，视为泄露）。
+# 读取优先级：① 环境变量 LME_TOKEN  ② 同目录 lme_token.txt（已加入 .gitignore，不会入库）
+# 两者都没有时不静默降级——直接抛错，避免 LME 六卡悄悄变成「暂无数据」而无人察觉。
+def _load_token():
+    import os
+    v = (os.environ.get("LME_TOKEN") or "").strip()
+    if v:
+        return v
+    f = Path(__file__).parent / "lme_token.txt"
+    if f.exists():
+        v = f.read_text(encoding="utf-8").strip()
+        if v:
+            return v
+    raise SystemExit(
+        "[fetch_lme] 缺少 LME token。请任选其一配置：\n"
+        "  1) 设置环境变量 LME_TOKEN=<token>\n"
+        "  2) 在本文件同目录创建 lme_token.txt 并写入 token（已在 .gitignore 中，不会入库）\n"
+        "原硬编码 token 已泄露，请一并到东财侧轮换。"
+    )
+
+
+TOKEN = _load_token()
 OUT = Path(__file__).parent / "lme_data.json"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
 
