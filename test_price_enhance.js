@@ -1,6 +1,6 @@
 /**
  * 2026-09-08 价格区增强功能测试（jsdom）
- * 覆盖：① 今日异动排行条 ② 「昨」角标 ③ 按涨跌排序开关 ④ 热榜热度条
+ * 覆盖：① 今日异动排行条 ② 「昨」角标 ③ 按涨跌排序开关 ④ 热榜徽章（热/新）+ 热度条移除
  * 运行：node test_price_enhance.js
  */
 const fs = require('fs');
@@ -115,14 +115,30 @@ setTimeout(() => {
     check('⑤ 标题行内无异动条/排序开关', head && !head.querySelector('.top-movers') && !head.querySelector('.sortbar'));
   }
 
-  // ④ 热榜热度条
-  const bars = doc2.querySelectorAll('#hotListBody .hot-bar i');
-  check('④ 热榜热度条已生成', bars.length >= 1, 'count=' + bars.length);
-  if (bars.length >= 2) {
-    const w1 = parseFloat(bars[0].style.width), w2 = parseFloat(bars[1].style.width);
-    check('④ 热度条递减（首条最热）', w1 >= w2, w1 + '% -> ' + w2 + '%');
-    check('④ 热度条宽度在 40~100%', w1 >= 40 && w1 <= 100, w1 + '%');
+  // ④ 热榜徽章：热=热词命中（n.hot），新=当日发布（d===报告日）；热度条已移除
+  check('④ 热度条已移除', doc2.querySelectorAll('#hotListBody .hot-bar').length === 0);
+  const pool = window.__hotPool || [];
+  let anchor = '';
+  try { anchor = (typeof window.qaReportDate === 'function') ? (window.qaReportDate() || '') : ''; } catch (e) {}
+  if (!anchor) {
+    const now = new Date();
+    anchor = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   }
+  let badgeOk = true, hotN = 0, newN = 0;
+  doc2.querySelectorAll('#hotListBody li.hot-item').forEach(li => {
+    const t = (li.querySelector('.hot-title') || {}).textContent || '';
+    const row = pool.find(p => p.t === t);
+    let d = row ? String(row.d || '') : '';
+    if (d.length === 5 && d.charAt(2) === '-') d = anchor.slice(0, 4) + '-' + d;
+    const hasNew = !!li.querySelector('.hot-new');
+    const hasHot = !!li.querySelector('.hot-fire');
+    if (hasNew !== (!!d && d === anchor)) badgeOk = false;
+    if (hasHot !== !!(row && row.hot)) badgeOk = false;
+    if (hasNew) newN++;
+    if (hasHot) hotN++;
+  });
+  check('④ 徽章逻辑逐条一致（热=热词命中，新=当日发布）', badgeOk, '热×' + hotN + ' 新×' + newN + ' pool=' + pool.length);
+  check('④ 至少出现一种徽章', hotN + newN >= 1, '热×' + hotN + ' 新×' + newN);
 
   // 无阻塞性 JS 错误
   check('无阻塞性 JS 错误', errors.length === 0, errors.slice(0, 2).join(' | '));
