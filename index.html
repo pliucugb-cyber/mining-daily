@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2112" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2120" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -247,6 +247,8 @@ body.dark .hl-refresh:hover{color:#ff8a80;background:rgba(255,138,128,.1)}
 .hot-title:hover{color:var(--up);border-bottom-color:var(--up)}
 .hot-meta{font-size: var(--fs-meta);color:var(--ink-300);margin-top:var(--s1);display:flex;gap:var(--s2);flex-wrap:wrap;align-items:center}
 .hot-fire{display:inline-block;font-size: var(--fs-meta);color:#fff;background:var(--up);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:700;flex-shrink:0}
+/* 「新」徽章（2026-09-08 晚）：仅当日发布条目；蓝底与「热」红底区分 */
+.hot-new{display:inline-block;font-size: var(--fs-meta);color:#fff;background:var(--brand);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:700;flex-shrink:0;margin-left:4px}
 .hotlist-loading{padding:var(--s5);text-align:center;color:var(--ink-300);font-size: var(--fs-body)}
 .hotlist-empty{padding:var(--s5);text-align:center;color:var(--ink-300);font-size: var(--fs-body)}
 body.dark .hotlist-list{background:var(--surface);border-color:var(--line-1)}
@@ -1223,8 +1225,6 @@ body.dark .top-movers{background:rgba(255,255,255,.04)}
 @media(max-width:768px){.price-toolbar .top-movers{flex-wrap:wrap}}
 .price-card[data-rank] .pc-name::before{content:attr(data-rank);color:var(--ink-500);background:var(--surface-3);border-radius:var(--r-sm);padding:0 4px;margin-right:6px;font-size:var(--fs-nano);font-weight:600;flex-shrink:0}
 .price-card.stale .pc-name::after{content:'昨';color:var(--ink-500);background:var(--surface-3);border-radius:var(--r-sm);padding:0 4px;margin-left:6px;font-size:var(--fs-nano);font-weight:500;flex-shrink:0}
-.hot-bar{width:44px;height:3px;background:var(--line-1);border-radius:2px;overflow:hidden;flex-shrink:0;margin-top:6px}
-.hot-bar i{display:block;height:100%;background:var(--up)}
 </style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
@@ -2929,21 +2929,31 @@ function renderHotPage(){
   var pages=Math.ceil(__hotPool.length/HOT_N);
   if(__hotPage>=pages)__hotPage=0;
   var show=__hotPool.slice(__hotPage*HOT_N,__hotPage*HOT_N+HOT_N);
+  // 徽章口径（2026-09-08 晚定案）：
+  //   热 = 标题命中 HOT_KW 热词表（突破/重大/战略/首次/关键矿产…），打分 +20 → computeHotNewsLocal 的 n.hot
+  //   新 = 发布日期 === 报告日（qaReportDate，兼容 MM-DD 短格式归一化），即当日发布
+  //   两者都命中则并排显示，热在前。热度条已按用户要求移除（装饰意义不大）。
+  var anchor=(typeof qaReportDate==='function')?(qaReportDate()||''):'';
+  if(!anchor){
+    var _now=new Date();
+    anchor=_now.getFullYear()+'-'+String(_now.getMonth()+1).replace(/^(\d)$/,'0$1')+'-'+String(_now.getDate()).replace(/^(\d)$/,'0$1');
+  }
   body.innerHTML=show.map(function(n,idx){
     var t=String(n.t||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
     var s=n.s?String(n.s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}):'';
     var u=String(n.u||'#').replace(/"/g,'&quot;');
     var dStr=n.d?' · '+String(n.d).slice(5):'';
+    var nD=n.d?String(n.d):'';
+    if(nD.length===5&&nD.charAt(2)==='-')nD=anchor.slice(0,4)+'-'+nD;
+    var isNew=!!nD&&nD===anchor;
     var fire=n.hot?'<span class="hot-fire">🔥 热</span>':'';
-    // 热度条（按当前页相对位置递减，纯装饰）
-    var barW=Math.max(40,100-idx*15);
-    var bar='<span class="hot-bar"><i style="width:'+barW+'%"></i></span>';
+    var fresh=isNew?'<span class="hot-new">新</span>':'';
     return '<li class="hot-item" data-url="'+u+'">'
       +'<div class="hot-body">'
-      +fire
+      +fire+fresh
       +'<a class="hot-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'
       +'<div class="hot-meta"><span>'+s+'</span><span>'+dStr+'</span></div>'
-      +'</div>'+bar+'</li>';
+      +'</div></li>';
   }).join('');
   var btn=document.getElementById('hotRefreshBtn');
   if(btn)btn.style.display=(pages>1)?'':'none';
