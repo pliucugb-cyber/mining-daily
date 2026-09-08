@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2240" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2253" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -961,10 +961,6 @@ body.dark .qa-trend{background:var(--bg);border-color:var(--line-1);color:var(--
 .rights-filters label{font-size: var(--fs-meta);color:#4a5568;display:flex;align-items:center;gap:var(--s2);font-weight:600}
 .rights-filters select{padding:var(--s2) var(--s3);border:1px solid #d5deea;border-radius: var(--r-md);font-size: var(--fs-meta);background:var(--surface);color:#33414f;cursor:pointer;outline:none}
 .rights-filters select:focus{border-color:var(--brand)}
-.rights-views{display:flex;gap:var(--s2)}
-.rights-view-btn{padding:var(--s2) var(--s4);border:1px solid #cfe3ea;background:var(--surface);border-radius: var(--r-md);font-size: var(--fs-meta);color:var(--brand);cursor:pointer;font-weight:600}
-.rights-view-btn:hover{background:var(--brand-soft)}
-.rights-view-btn.active{background:var(--brand);color:#fff;border-color:var(--brand)}
 /* 2026-09-08：矿权卡片网格 → 一行一宗紧凑列表（读者反馈大卡片排版太占地方、观感差） */
 .rights-list{display:flex;flex-direction:column;gap:0;border:1px solid #e7edf4;border-radius: var(--r-lg);overflow:hidden}
 .rights-row{display:flex;align-items:center;gap:var(--s2);padding:var(--s2) var(--s3);border-bottom:1px solid #f1f5f9;font-size: var(--fs-body);line-height:1.4}
@@ -1017,19 +1013,9 @@ body.dark .rr-num{color:var(--ink-700)}
 .rc-grid b{font-size: var(--fs-body);color:#33475c;font-weight:800}
 .rc-grid b.na{color:#cbd5e1;font-weight:500}
 .rc-src{font-size: var(--fs-meta);color:var(--ink-300);border-top:1px dashed var(--line-2);padding-top:var(--s3);margin-top:2px}
-.rights-table-wrap{overflow-x:auto;border:1px solid #dfe6ee;border-radius: var(--r-lg);box-shadow: var(--shadow-md)}
-.rights-table{width:100%;border-collapse:collapse;font-size: var(--fs-meta);min-width:660px}
-.rights-table th,.rights-table td{padding:var(--s3) var(--s3);text-align:left;border-bottom:1px solid var(--line-1);white-space:nowrap}
-.rights-table th{background:var(--surface-3);color:var(--ink-700);font-weight:700;position:sticky;top:0;cursor:pointer;user-select:none}
-.rights-table th[data-sort]:hover{color:var(--brand)}
-.rights-table tbody tr:hover{background:var(--surface-2)}
-.rights-table td.rp-mineral,.rights-table td.rp-method{font-weight:600}
-.rights-table a{color:var(--brand);text-decoration:none}
-.rights-table a:hover{text-decoration:underline}
 .rights-empty{padding:var(--s6);text-align:center;color:var(--ink-300);font-size: var(--fs-body)}
 /* ---- 矿权卡片/表格 折叠更多按钮（2026-09-07） ---- */
 .rights-more{grid-column:1/-1;text-align:center;padding:var(--s4) 0 2px}
-.rights-more-row td{text-align:center;padding:var(--s4) 0 var(--s2);border-bottom:none;background:transparent}
 .rights-more-btn{font-size: var(--fs-body);font-weight:600;color:var(--brand);background:#f0f9ff;border:1px solid #bae6fd;border-radius: var(--r-lg);padding:var(--s2) var(--s5);cursor:pointer;transition:all .15s}
 .rights-more-btn:hover{background:var(--brand-soft);border-color:#7dd3fc;color:#0c5b76}
 .rights-more-btn:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
@@ -1042,9 +1028,6 @@ body.dark .expo-note{color:var(--ink-500)}
 body.dark .rights-toolbar{background:#131a23;border-color:var(--line-1)}
 body.dark .rights-filters label{color:var(--ink-500)}
 body.dark .rights-filters select{background:var(--surface-3);border-color:var(--line-1);color:var(--ink-700)}
-body.dark .rights-view-btn{background:var(--surface);border-color:var(--line-1);color:#67e8f9}
-body.dark .rights-view-btn:hover{background:var(--surface-3)}
-body.dark .rights-view-btn.active{background:#0e7490;color:#fff;border-color:#0e7490}
 body.dark .rights-card{background:var(--bg);border-color:var(--line-1);box-shadow: var(--shadow-md)}
 body.dark .rights-card:hover{box-shadow: var(--shadow-lg);border-color:#3a4a5a}
 body.dark .rc-mineral{background:var(--surface-3);color:var(--ink-700)}
@@ -1055,17 +1038,11 @@ body.dark .rc-grid b.na{color:#5a6a7a}
 body.dark .rc-grid span{color:#7d8ea0}
 body.dark .rc-src{color:#7d8ea0;border-top-color:var(--line-1)}
 body.dark .rc-extra{background:var(--surface);color:#9caebf}
-body.dark .rights-table-wrap{border-color:var(--line-1);box-shadow: var(--shadow-md)}
-body.dark .rights-table th{background:var(--surface);color:var(--ink-500)}
-body.dark .rights-table td{border-bottom-color:var(--line-1)}
-body.dark .rights-table tbody tr:hover{background:var(--surface)}
-body.dark .rights-table a{color:#67e8f9}
 body.dark .rights-empty{color:#7d8ea0}
 @media(max-width:600px){
   #rightsSection{padding:var(--s2) var(--s3) var(--s5)}
   .rights-toolbar{flex-direction:column;align-items:stretch;gap:var(--s3);padding:var(--s3) var(--s3)}
   .rights-filters{justify-content:space-between}
-  .rights-views{justify-content:flex-end}
   .rights-cards{grid-template-columns:1fr;gap:var(--s4)}
   .rights-card{padding:var(--s4) var(--s4)}
   .rc-title{font-size: var(--fs-h3);line-height:1.5}
@@ -1398,27 +1375,9 @@ body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
       </select>
     </label>
   </div>
-  <div class="rights-views" data-page-node-id="rGP2SHy4RJt4h8Y1cR2Y9m">
-    <button class="rights-view-btn active" data-view="cards" type="button" data-page-node-id="rGQ2SHy4RJt4h8Y1cR2Y9n">▦ 卡片</button>
-    <button class="rights-view-btn" data-view="table" type="button" data-page-node-id="rGR2SHy4RJt4h8Y1cR2Y9o">▤ 表格</button>
-  </div>
+  <!-- 2026-09-08 深夜：卡片/表格双视图已删（内容 80% 重复，数值对比交给矿权CSV），只留紧凑列表 -->
 </div>
 <div class="rights-list" id="rightsCards" data-page-node-id="rGS2SHy4RJt4h8Y1cR2Y9p"></div>
-<div class="rights-table-wrap" id="rightsTableWrap" hidden data-page-node-id="rGT2SHy4RJt4h8Y1cR2Y9q">
-<table class="rights-table" id="rightsTable" data-page-node-id="rGU2SHy4RJt4h8Y1cR2Y9r">
-<thead data-page-node-id="rGV2SHy4RJt4h8Y1cR2Y9s"><tr data-page-node-id="rGW2SHy4RJt4h8Y1cR2Y9t">
-  <th data-sort="mineral" data-page-node-id="rGX2SHy4RJt4h8Y1cR2Y9u">矿种</th>
-  <th data-page-node-id="rGY2SHy4RJt4h8Y1cR2Y9v">项目 / 行政区</th>
-  <th data-page-node-id="rGZ2SHy4RJt4h8Y1cR2Y9w">类型</th>
-  <th data-sort="price" data-page-node-id="rH02SHy4RJt4h8Y1cR2Y9x">价格</th>
-  <th data-page-node-id="rH12SHy4RJt4h8Y1cR2Y9y">保证金/对手方</th>
-  <th data-page-node-id="rH22SHy4RJt4h8Y1cR2Y9z">面积 km²</th>
-  <th data-sort="deadline" data-page-node-id="rH32SHy4RJt4h8Y1cR2Y9A">截标/公示期</th>
-  <th data-page-node-id="rH42SHy4RJt4h8Y1cR2Y9B">原文</th>
-</tr></thead>
-<tbody id="rightsTableBody" data-page-node-id="rH52SHy4RJt4h8Y1cR2Y9C"></tbody>
-</table>
-</div>
 <div class="rights-empty" id="rightsEmpty" hidden data-page-node-id="rH62SHy4RJt4h8Y1cR2Y9D">当前筛选条件下无矿权交易条目。</div>
 </div>
 <!-- ==================== 详细安装指引 ==================== -->
@@ -1628,14 +1587,12 @@ body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
   function renderRightsSection(){
     var data=getRightsData();
     var cardsEl=document.getElementById("rightsCards");
-    var tableWrap=document.getElementById("rightsTableWrap");
-    var tableBody=document.getElementById("rightsTableBody");
     var emptyEl=document.getElementById("rightsEmpty");
     var countEl=document.getElementById("rightsCount");
     var tocEl=document.getElementById("tocRightsCount");
     if(!cardsEl) return;
     if(!data.length){
-      cardsEl.innerHTML=""; if(tableBody) tableBody.innerHTML="";
+      cardsEl.innerHTML="";
       if(emptyEl) emptyEl.hidden=false;
       if(countEl) countEl.textContent="0 条";
       if(tocEl) tocEl.textContent="0";
@@ -1742,38 +1699,6 @@ body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
         +'<span class="rr-date">'+r.it.d.slice(5)+'</span>'
         +'</div>';
     }).join("")+'<div class="rights-more">'+rightsMoreBtn(list.length, shownList.length)+'</div>';
-    if(tableBody){
-      tableBody.innerHTML=shownList.map(function(r){
-        var priceCell="—", depositCell="—";
-        if(r.rightsType==="result"){
-          priceCell=(r.dealPrice!=null?r.dealPrice.toLocaleString("zh-CN"):"—")+'<br><span style="color:#94a3b8;font-size: var(--fs-meta)">起始 '+((r.startPrice!=null?r.startPrice.toLocaleString("zh-CN"):"—"))+'</span>';
-          depositCell=r.bidder||"—";
-        }else if(r.rightsType==="transfer"){
-          priceCell="—";
-          depositCell=esc((r.transferor||'—')+' → '+(r.transferee||'—'));
-        }else{
-          priceCell=(r.price==null?"—":r.price.toLocaleString("zh-CN"));
-          depositCell=(r.deposit==null?"—":r.deposit.toLocaleString("zh-CN"));
-        }
-        var deadlineLabel=(r.rightsType==="result"||r.rightsType==="transfer")?"公示期":"截标日";
-        if(r.rightsType==="auction") deadlineLabel="拍卖日";
-        return '<tr>'
-          +'<td class="rp-mineral">'+(r.mineral||"—")+'</td>'
-          +'<td><a href="'+r.it.u+'" target="_blank" rel="noopener" title="'+esc(r.it.t)+'">'+esc(r.it.t)+(r.region?'<br><span style="color:#94a3b8;font-size: var(--fs-meta)">'+esc(r.region)+'</span>':'')+'</a></td>'
-          +'<td class="rp-method">'+r.method+'</td>'
-          +'<td>'+priceCell+'</td>'
-          +'<td>'+depositCell+'</td>'
-          +'<td>'+(r.area==null?"—":r.area)+'</td>'
-          +'<td>'+fmtDeadline(r.deadline)+'</td>'
-          +'<td><a href="'+r.it.u+'" target="_blank" rel="noopener">原文 ↗</a></td>'
-          +'</tr>';
-      }).join("")
-      + '<tr class="rights-more-row"><td colspan="7">'+rightsMoreBtn(list.length, shownList.length)+'</td></tr>';
-    }
-    var tableView=document.querySelector('.rights-view-btn[data-view="table"]');
-    var isTable=tableView && tableView.classList.contains("active");
-    cardsEl.style.display=isTable?"none":"";
-    if(tableWrap) tableWrap.hidden=!isTable;
     if(emptyEl) emptyEl.hidden=list.length>0;
     if(countEl) countEl.textContent=data.length+" 条"+(list.length!==data.length?"（筛后 "+list.length+"）":"");
     if(tocEl) tocEl.textContent=String(list.length);
@@ -1851,19 +1776,6 @@ body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
   function bindRights(){
     ["rightsFilterMethod","rightsFilterMineral","rightsFilterWindow"].forEach(function(id){
       var el=document.getElementById(id); if(el) el.addEventListener("change", renderRightsSection);
-    });
-    document.querySelectorAll(".rights-view-btn").forEach(function(b){
-      b.addEventListener("click", function(){
-        document.querySelectorAll(".rights-view-btn").forEach(function(x){ x.classList.remove("active"); });
-        b.classList.add("active"); renderRightsSection();
-      });
-    });
-    document.querySelectorAll("#rightsTable th[data-sort]").forEach(function(th){
-      th.addEventListener("click", function(){
-        var k=th.getAttribute("data-sort");
-        rightsSort.dir=(rightsSort.key===k && rightsSort.dir==="asc")?"desc":"asc";
-        rightsSort.key=k; renderRightsSection();
-      });
     });
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", function(){ renderRightsSection(); injectRightsResultSummary(); bindRights(); });
@@ -5056,24 +4968,8 @@ function exportRightsCsv(){
       ]);
     });
   }else{
-    // 兜底：数据源不可用时退回读 DOM（此时仍受折叠限制）
-    var tb=document.getElementById('rightsTableBody'); if(!tb){alert('矿权数据未加载');return;}
-    tb.querySelectorAll('tr').forEach(function(tr){
-      var td=tr.querySelectorAll('td'); if(td.length<8)return;
-      var link=td[1].querySelector('a');
-      var region=td[1].querySelector('span');
-      rows.push([
-        td[0].textContent.trim(),
-        (link?link.textContent:td[1].textContent).replace(/\s+/g,' ').trim(),
-        region?region.textContent.trim():'',
-        td[2].textContent.trim(),
-        td[3].textContent.trim(),
-        td[4].textContent.trim(),
-        td[5].textContent.trim(),
-        td[6].textContent.trim(),
-        link?link.href:''
-      ]);
-    });
+    // 2026-09-08 深夜：表格视图已删，数据源不可用时直接提示（__rightsFullList 由 renderRightsSection 始终填充）
+    alert('矿权数据未加载，请刷新页面后重试');
   }
   if(rows.length<=1){ alert('当前筛选条件下没有可导出的矿权数据'); return; }
   downloadCsv('矿业日报_矿权出让_'+csvDate()+'.csv', rows);
