@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-1145" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-1152" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1146,13 +1146,7 @@ window.gcTotal=function(data){
     <li class="hotlist-loading" data-page-node-id="pCHzCgmA1AxRMAIr3oHdfe">热榜加载中…</li>
   </ol>
 </div>
-<!-- ==================== AI 深度解析（9-04 新增，依赖 DEEPSEEK_API_KEY） ==================== -->
-<div class="section ai-section" id="aiSection" data-page-node-id="5v6ae9vLQpWjBxHVj9m0Ec">
-  <div class="section-title ai" data-page-node-id="FxYXhLETsyFSZomfgiMZ7A"><span class="icon" data-page-node-id="5lBbXFLRxHs5ZA5uN1sz3o">🤖</span> AI 深度解析 <!-- ai-tag「deepseek-chat」2026-09-06 移除：模型名对读者无意义 --> <span class="ai-sub" data-page-node-id="MObEXdUklDIGkNeMGeYKX4">今日 32 条新闻的智能解读</span> <span class="news-count" id="aiCount" data-page-node-id="XEzOBV0PGPuMqSXGjNRQwr">加载中…</span></div>
-  <div class="ai-list" id="aiBody" data-page-node-id="va8icQsMDSCRGsRUCA3ZEF">
-    <div class="ai-loading" data-page-node-id="PnFoXq8gUMWzrMDfZAAjyB">🤖 AI 解析加载中…</div>
-  </div>
-</div>
+<!-- AI 深度解析区块（2026-09-08 移除）：静态托管下 api/ai-analyze 必然 404，只会落到 localAiSummary 的全量新闻罗列，信息过载；AI 能力保留在左下角悬浮球问答（走 Netlify 代理） -->
 <!-- ==================== 今日新增（2026-09-08 抓取） ==================== -->
 <div class="section" id="todaySection">
 <div class="section-title today"><span class="icon">🔥</span> 今日新增（2026-09-08 抓取）<span class="news-count" id="todayCount">32条</span></div>
@@ -3007,7 +3001,9 @@ function fetchAiAnalyze(){
 
 initSpecial();   // 找矿突破专项：先归类移动，再注入标签/星标（避免折叠逻辑处理前移走）
 fetchHotNews();   // 9-03 矿业热榜 Top 10
-fetchAiAnalyze(); // 9-04 AI 深度解析
+// fetchAiAnalyze 已停用（2026-09-08）：AI 深度解析区块整体移除——静态托管下 api/ai-analyze
+// 必然 404，只会落到 localAiSummary 的全量新闻罗列，读者反馈"太杂太乱"。
+// AI 能力保留在左下角悬浮球问答（qaFab → /api/qa Netlify 代理）。下方函数保留作历史参考，勿再调用。
 dedupSpecialInToday();   // 修复专项区与今日区同URL重复：已搬入专项区的今日条目从今日区隐藏
 injectTags();
 injectStars();
