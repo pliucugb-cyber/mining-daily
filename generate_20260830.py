@@ -230,8 +230,8 @@ body_start = f'''</head>
 <div class="toc-main-item" data-target="specialSection" onclick="scrollToSection('specialSection',this)" style="color:#b45009">⛏️ 找矿专项 <span class="toc-count" id="tocSpecialCount" style="background:#fdf3d7;color:#b45009">0</span></div>
 <div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)">🔥 今日新增 <span class="toc-count" id="tocTodayCount">{new_total}</span></div>
 <div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)">📰 往期内容 <span class="toc-count" id="tocArchiveCount">{archive_total}</span></div>
-<div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({{top:0,behavior:'smooth'}})" style="color:#f39c12">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12">0</span></div>
-<div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({{top:0,behavior:'smooth'}})" style="color:#8e44ad">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad">0</span></div>
+<div class="toc-main-item" id="tocFavItem" onclick="toggleFavFilter()" style="color:#f39c12">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12">0</span></div>
+<div class="toc-main-item" id="tocHistoryItem" onclick="toggleHistoryFilter()" style="color:#8e44ad">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad">0</span></div>
 <div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490">📘</span></div>
 <div class="toc-back-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}})">↑ 返回顶部</div>
 </nav>

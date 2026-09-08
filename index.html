@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2357" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-0017" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1223,6 +1223,28 @@ body.dark .news-summary .rr-link:hover{background:var(--surface-2)}
 body.dark .news-summary .rr-link:hover::before{background:#7fb3e8}
 body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
 </style>
+<style>
+/* 2026-09-09 凌晨：筛选后跳到首条命中项时的定位高亮，1.4s 后自动消失 */
+.md-focus-flash{animation:mdFocusFlash 1.4s ease-out 1}
+@keyframes mdFocusFlash{
+  0%{box-shadow:0 0 0 3px rgba(79,70,229,.55);background:rgba(79,70,229,.10)}
+  70%{box-shadow:0 0 0 3px rgba(79,70,229,.28);background:rgba(79,70,229,.05)}
+  100%{box-shadow:0 0 0 0 rgba(79,70,229,0);background:transparent}
+}
+/* 筛选 0 命中的浮动提示 */
+.md-filter-tip{position:fixed;top:76px;left:50%;transform:translate(-50%,-8px);z-index:9998;
+  max-width:min(560px,90vw);padding:10px 16px;border-radius:8px;font-size:13px;line-height:1.5;
+  background:#1f2937;color:#fff;box-shadow:0 6px 22px rgba(15,23,42,.28);
+  opacity:0;pointer-events:none;transition:opacity .22s,transform .22s}
+.md-filter-tip.show{opacity:1;transform:translate(-50%,0)}
+body.dark .md-filter-tip{background:#e5e7eb;color:#111827;box-shadow:0 6px 22px rgba(0,0,0,.5)}
+body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
+@keyframes mdFocusFlashDark{
+  0%{box-shadow:0 0 0 3px rgba(129,140,248,.65);background:rgba(129,140,248,.14)}
+  70%{box-shadow:0 0 0 3px rgba(129,140,248,.32);background:rgba(129,140,248,.07)}
+  100%{box-shadow:0 0 0 0 rgba(129,140,248,0);background:transparent}
+}
+</style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
 <script>
@@ -1244,8 +1266,8 @@ body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
 <div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)" data-page-node-id="EFrXr8SMUaesjIaDEYAhDR">🔥 今日新增 <span class="toc-count toc-count-fresh" id="tocTodayCount">32</span></div>
 <div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容</div>
 <div class="toc-main-item" data-target="rightsSection" onclick="scrollToSection('rightsSection',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易</div>
-<div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#f39c12" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
-<div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#8e44ad" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
+<div class="toc-main-item" id="tocFavItem" onclick="toggleFavFilter()" style="color:#f39c12" title="只看收藏的条目，并自动定位到第一条" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
+<div class="toc-main-item" id="tocHistoryItem" onclick="toggleHistoryFilter()" style="color:#8e44ad" title="只看浏览过的条目，并自动定位到第一条" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
 <div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
 
 <div class="toc-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="8iwVYYySScb07F8bSYmelj">↑ 返回顶部</div>
@@ -1992,7 +2014,7 @@ let filterMode='none';
 let tagFilter=null;
 let newsSearchText='';
 let oldExpanded=false; // 往期内容中"超过14天旧闻"是否展开
-function setFilter(mode){
+function setFilter(mode,noScroll){
   filterMode=mode;
   if(mode!=='tag'){tagFilter=null;setChipActive(null)}
   document.getElementById('filterBtn').classList.toggle('active',mode==='new');
@@ -2003,30 +2025,146 @@ function setFilter(mode){
   if(unBtn)unBtn.classList.toggle('active',mode==='unread');
   document.getElementById('favBtn').classList.toggle('active',mode==='fav');
   document.getElementById('historyBtn').classList.toggle('active',mode==='history');
-  // 2026-09-08 深夜：筛选后大量条目被隐藏、页面骤然变短，浏览器会把滚动位置夹回页首，
-  // 用户点「收藏/历史」就像被弹回顶部。这里先记住位置再还原；确实撑不住时滚到首条命中结果。
+  // 2026-09-09 凌晨重写：筛选后要「落到命中项上」，而不是机械还原旧坐标。
+  // 旧实现只还原 prevY，但收藏/历史的命中项往往在往期区，还原后视口里仍是一片被隐藏的今日区 →
+  // 用户感觉「跳不过去」。新逻辑：原位已能看到命中就不动，否则滚到第一条命中并轻微高亮。
   const _y=(window.pageYOffset||document.documentElement.scrollTop||0);
   applyFilter();
-  keepViewportAfterFilter(_y);
+  syncTocActive(mode);
+  if(!noScroll)keepViewportAfterFilter(_y,mode);
 }
-function keepViewportAfterFilter(prevY){
-  requestAnimationFrame(function(){
-    var maxY=Math.max(0,(document.documentElement.scrollHeight||0)-(window.innerHeight||0));
-    if(prevY>0&&prevY<=maxY){ window.scrollTo(0,prevY); return; }
-    if(prevY===0)return;
-    var first=null;
-    document.querySelectorAll('.news-item').forEach(function(el){
-      if(!first&&el.offsetParent!==null)first=el;
-    });
-    if(first&&first.scrollIntoView)first.scrollIntoView({block:'center'});
+// 目录里的「我的收藏 / 浏览记录」与工具条按钮同步高亮
+function syncTocActive(mode){
+  var map={fav:'tocFavItem',history:'tocHistoryItem'};
+  document.querySelectorAll('.toc-main-item').forEach(function(it){
+    if(it.id==='tocFavItem'||it.id==='tocHistoryItem')return;
+    it.classList.remove('active');
+  });
+  ['tocFavItem','tocHistoryItem'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.classList.toggle('active',map[mode]===id);
   });
 }
+// 自身 + 所有祖先都没有 display:none / visibility:hidden 才算真可见。
+// 不用 offsetParent：它依赖布局，父级 section 被 display:none 时行为不可靠，且无法在无布局环境校验。
+function mdIsVisible(el){
+  if(!el||el.nodeType!==1)return false;
+  if(el.classList&&el.classList.contains('hidden'))return false;
+  var n=el;
+  while(n&&n.nodeType===1){
+    if(n.style&&n.style.display==='none')return false;
+    var st=(typeof window.getComputedStyle==='function')?window.getComputedStyle(n):null;
+    if(st&&(st.display==='none'||st.visibility==='hidden'))return false;
+    n=n.parentElement;
+  }
+  return true;
+}
+// 收集当前真实可见的命中条目
+function collectVisibleMatches(){
+  var out=[];
+  document.querySelectorAll('.news-item').forEach(function(el){
+    if(!mdIsVisible(el))return;
+    out.push(el);
+  });
+  return out;
+}
+// 筛选后 0 命中：给一句明确反馈，避免「页面一片空白」被误判成坏了
+function mdShowFilterEmpty(mode){
+  var tip=document.getElementById('mdFilterEmptyTip');
+  if(!tip){
+    tip=document.createElement('div');
+    tip.id='mdFilterEmptyTip';
+    tip.className='md-filter-tip';
+    document.body.appendChild(tip);
+  }
+  var msg;
+  if(mode==='fav')msg='还没有收藏任何条目 —— 点条目右侧的 ★ 即可收藏';
+  else if(mode==='history')msg='还没有浏览记录 —— 打开过的条目会自动记入这里';
+  else if(mode==='unread')msg='所有条目都已读 —— 可点「↻ 全部恢复未读」';
+  else if(mode==='new')msg='今日暂无新增条目';
+  else if(mode==='special')msg='暂无带「战略」徽章的条目';
+  else msg='没有符合当前条件的条目';
+  tip.textContent=msg;
+  tip.classList.add('show');
+  clearTimeout(window.__mdTipT);
+  window.__mdTipT=setTimeout(function(){try{tip.classList.remove('show')}catch(e){}},2600);
+}
+// 统一滚动出口，便于无布局环境下被替换校验
+function mdScrollTo(y,smooth){
+  try{
+    if(smooth){ window.scrollTo({top:y,behavior:'smooth'}); }
+    else{ window.scrollTo(0,y); }
+  }catch(e){ try{window.scrollTo(0,y);}catch(e2){} }
+}
+function keepViewportAfterFilter(prevY,mode){
+  mode=mode||filterMode;
+  // 双 rAF：等 section 显隐 / 子分类折叠等样式落地后再量高度，否则会读到旧布局
+  requestAnimationFrame(function(){requestAnimationFrame(function(){
+    var maxY=Math.max(0,(document.documentElement.scrollHeight||0)-(window.innerHeight||0));
+    if(mode==='none'){                       // 取消筛选：只还原位置，不主动跳
+      mdScrollTo(Math.min(prevY,maxY),false);
+      return;
+    }
+    var hits=collectVisibleMatches();
+    if(!hits.length){                        // 0 命中：给出空态提示，不乱跳
+      mdShowFilterEmpty(mode);
+      return;
+    }
+    var vh=window.innerHeight||0, i, r;
+    for(i=0;i<hits.length;i++){              // 视口内已有命中 → 不动（防止无谓抖动）
+      r=hits[i].getBoundingClientRect();
+      if(r.bottom>0&&r.top<vh*0.85)return;
+    }
+    var first=hits[0];
+    var top=(window.pageYOffset||document.documentElement.scrollTop||0);
+    var y=Math.max(0,Math.min(first.getBoundingClientRect().top+top-16,maxY));
+    mdScrollTo(y,true);
+    try{                                     // 轻微高亮，让用户确认「跳到这里了」
+      first.classList.remove('md-focus-flash');
+      void first.offsetWidth;
+      first.classList.add('md-focus-flash');
+      setTimeout(function(){first.classList.remove('md-focus-flash')},1400);
+    }catch(e){}
+  });});
+}
 function toggleUnreadFilter(){setFilter(filterMode==='unread'?'none':'unread')}
+// ===== 往期区日组自动展开（2026-09-09 凌晨）=====
+// 往期区按「日组」折叠，条目被折叠时带内联 display:none。筛选/搜索时若放着不管，
+// 命中项即使没被加 .hidden 也依然看不见 → 点「收藏/浏览记录」像是什么都没发生。
+// 这里在进入筛选时临时展开全部日组，退出筛选时按快照还原用户原本的折叠状态。
+var _dayGroupSnapshot=null;
+function mdSetDayGroup(head,collapsed){
+  if(!head)return;
+  head.setAttribute('data-collapsed',String(!!collapsed));
+  head.setAttribute('aria-expanded',String(!collapsed));
+  var arrow=head.querySelector('.day-arrow'); if(arrow)arrow.textContent=collapsed?'▸':'▾';
+  var n=head.nextElementSibling,cnt=0;
+  while(n&&cnt<500){
+    if(n.classList&&(n.classList.contains('day-group')||n.classList.contains('sub-cat')))break;
+    if(n.classList&&n.classList.contains('news-item')){ n.style.display=collapsed?'none':''; cnt++; }
+    n=n.nextElementSibling;
+  }
+}
+function mdAutoExpandDayGroups(active){
+  var heads=document.querySelectorAll('.day-group');
+  if(!heads.length)return;
+  if(active){
+    if(_dayGroupSnapshot)return;                       // 已展开过，别重复覆盖快照
+    _dayGroupSnapshot=[];
+    heads.forEach(function(h){ _dayGroupSnapshot.push({h:h,collapsed:h.getAttribute('data-collapsed')==='true'}); });
+    heads.forEach(function(h){ mdSetDayGroup(h,false); });
+  }else if(_dayGroupSnapshot){
+    _dayGroupSnapshot.forEach(function(r){ mdSetDayGroup(r.h,r.collapsed); });
+    _dayGroupSnapshot=null;
+  }
+}
 function applyFilter(){
   const favUrls=getFavUrls();
   const historyUrls=new Set(getHistory().map(h=>h.url));
   const readUrls=getReadSet();
   const mode=filterMode;
+  // 筛选/搜索激活 → 临时展开往期日组，保证命中项真的能露出来
+  mdAutoExpandDayGroups(mode!=='none'||!!newsSearchText);
   document.querySelectorAll('.news-item').forEach(el=>{
     let show=true;
     if(mode==='new')show=el.classList.contains('is-new');
@@ -2110,7 +2248,8 @@ function toggleSpecialFilter(){
 function toggleFavFilter(){setFilter(filterMode==='fav'?'none':'fav')}
 function toggleHistoryFilter(){setFilter(filterMode==='history'?'none':'history')}
 function showAll(){
-  setFilter('none');
+  // noScroll=true：本函数自己要回顶部，不能让 setFilter 的 rAF 还原把页面拖回原处
+  setFilter('none',true);
   document.querySelectorAll('.toc-main-item').forEach(i=>i.classList.remove('active'));
   window.scrollTo({top:0,behavior:'smooth'});
 }

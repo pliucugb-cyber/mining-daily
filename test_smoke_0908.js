@@ -255,6 +255,54 @@ setTimeout(() => {
   check('⑩ 累计访问行默认隐藏（取到数字才显示）', !!gcLine && gcLine.style.display === 'none');
   check('⑩ 矿权区标题不再自称「结构化卡片」', !/结构化卡片/.test((doc.getElementById('rightsSection') || {}).textContent || ''));
 
+  console.log('\n===== \u246a \u6536\u85cf/\u5386\u53f2\u7b5b\u9009\u5b9a\u4f4d\uff082026-09-09 \u51cc\u6668\uff09 =====');
+  // \u80cc\u666f\uff1a\u76ee\u5f55\u91cc\u7684\u300c\u6211\u7684\u6536\u85cf / \u6d4f\u89c8\u8bb0\u5f55\u300d\u539f onclick \u5c3e\u5df2\u6302\u4e86 window.scrollTo({top:0})\uff0c
+  // \u70b9\u5b8c\u6c38\u8fdc\u88ab\u5f39\u56de\u9876\u90e8\uff1b\u4e14\u5f80\u671f\u533a\u65e5\u7ec4\u6298\u53e0\u4f1a\u8ba9\u547d\u4e2d\u9879\u85cf\u5728\u5185\u8054 display:none \u91cc\u3002
+  try {
+    const tocFav = doc.getElementById('tocFavItem');
+    const tocHis = doc.getElementById('tocHistoryItem');
+    check('\u246a \u76ee\u5f55\u300c\u6211\u7684\u6536\u85cf\u300d\u4e0d\u518d\u5f3a\u5236\u6eda\u56de\u9876\u90e8', !!tocFav && !/scrollTo/.test(tocFav.getAttribute('onclick') || ''));
+    check('\u246a \u76ee\u5f55\u300c\u6d4f\u89c8\u8bb0\u5f55\u300d\u4e0d\u518d\u5f3a\u5236\u6eda\u56de\u9876\u90e8', !!tocHis && !/scrollTo/.test(tocHis.getAttribute('onclick') || ''));
+    check('\u246a \u65e5\u7ec4\u81ea\u52a8\u5c55\u5f00 / \u547d\u4e2d\u6536\u96c6 / \u7a7a\u6001\u63d0\u793a\u51fd\u6570\u9f50\u5907',
+      typeof window.mdAutoExpandDayGroups === 'function' &&
+      typeof window.collectVisibleMatches === 'function' &&
+      typeof window.mdShowFilterEmpty === 'function');
+
+    // jsdom \u65e0\u5e03\u5c40\uff1a\u624b\u5de5\u6253\u6869\uff08\u7b2c i \u4e2a\u6761\u76ee top = i*100\uff09\uff0c\u628a rAF \u540c\u6b65\u5316\uff0c\u65b9\u80fd\u6821\u9a8c\u771f\u5b9e\u5750\u6807
+    const all = Array.from(doc.querySelectorAll('.news-item')).filter(e => e.dataset && e.dataset.url);
+    all.forEach((el, i) => { el.getBoundingClientRect = () => ({ top: i * 100, bottom: i * 100 + 90, height: 90, left: 0, right: 600, width: 600 }); });
+    Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true });
+    Object.defineProperty(window, 'pageYOffset', { value: 0, configurable: true, writable: true });
+    Object.defineProperty(doc.documentElement, 'scrollHeight', { value: all.length * 100 + 2000, configurable: true });
+    const _scrolls = [];
+    window.scrollTo = function () { _scrolls.push(arguments.length === 1 ? arguments[0] : [arguments[0], arguments[1]]); };
+    const _raf = window.requestAnimationFrame;
+    window.requestAnimationFrame = cb => { cb(Date.now()); return 0; };
+
+    try { window.lsSet('mining_daily_favorites', '[]'); } catch (e) {}
+    const farIdx = 60;
+    window.toggleFav(all[farIdx].dataset.url);
+    _scrolls.length = 0;
+    window.toggleFavFilter();
+    const got = _scrolls.length ? (_scrolls[0].top != null ? _scrolls[0].top : _scrolls[0][1]) : null;
+    check('\u246a \u6536\u85cf\u7b5b\u9009\u6eda\u5230\u9996\u6761\u547d\u4e2d\u9879', got === farIdx * 100 - 16, 'got=' + got + ' \u671f\u671b=' + (farIdx * 100 - 16));
+
+    _scrolls.length = 0;
+    window.toggleFavFilter();
+    const back = _scrolls.length ? (_scrolls[0].top != null ? _scrolls[0].top : _scrolls[0][1]) : null;
+    check('\u246a \u9000\u51fa\u7b5b\u9009\u8fd8\u539f\u4f4d\u7f6e\u800c\u975e\u8df3\u9876', back === 0, 'back=' + back);
+
+    // 0 \u547d\u4e2d\uff1a\u5e94\u7ed9\u7a7a\u6001\u63d0\u793a\u4e14\u4e0d\u4e71\u8df3
+    try { window.lsSet('mining_daily_favorites', '[]'); } catch (e) {}
+    _scrolls.length = 0;
+    window.toggleFavFilter();
+    const tip = doc.getElementById('mdFilterEmptyTip');
+    check('\u246a 0 \u547d\u4e2d\u65f6\u7ed9\u7a7a\u6001\u63d0\u793a\u4e14\u4e0d\u4e71\u8df3', !!tip && tip.classList.contains('show') === true);
+
+    window.requestAnimationFrame = _raf;
+    try { window.lsSet('mining_daily_favorites', '[]'); } catch (e) {}
+  } catch (e) { check('\u246a \u6536\u85cf/\u5386\u53f2\u7b5b\u9009\u5b9a\u4f4d', false, e.message); }
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));
