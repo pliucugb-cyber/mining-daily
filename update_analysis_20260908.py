@@ -201,15 +201,21 @@ top_news = [{'d': n.get('orig_date_full', ''), 't': n['title'], 's': n['source']
             for n in new_items[:5]]
 
 
-def fmt_bullet(n):
+def fmt_bullet(n, max_len=80):
     body = (n.get('summary') or n.get('title') or '').strip()
     if not body:
         return ''
+    # 2026-09-08 晚精简：单条摘要超过 80 字时在句号处截断（截不到句号则硬截加省略号），
+    # 详情点进原文看，简报只保留扫读级信息量。
+    if len(body) > max_len:
+        cut = body[:max_len]
+        pos = cut.rfind('。')
+        body = cut[:pos + 1] if pos >= 30 else cut.rstrip('，、；：') + '…'
     s = n.get('source', '').strip()
     return '- %s%s' % (body, '（%s）' % s if s else '')
 
 
-def recent_items(category, limit=6):
+def recent_items(category, limit=4):
     arr = [n for n in news if n.get('category') == category and n.get('is_new')]
     arr.sort(key=lambda x: x.get('orig_date_full', ''), reverse=True)
     return arr[:limit]
@@ -241,7 +247,7 @@ if _lme_flat:
     lme_text += '，' + '、'.join(_lme_flat) + '持平'
 
 report = """**行情：**
-国内 09-07 收盘全线走强：沪锌 27,095 元/吨（+1.31%）领涨、沪铜 109,410 元/吨（+0.58%）、沪锡 418,870 元/吨（+0.58%）、沪铝 24,420 元/吨（+0.54%）、沪铅 16,210 元/吨（+0.50%）、沪镍 127,820 元/吨（+0.03%）；贵金属回调，上海金 950.78 元/克（-1.57%）、白银 15,990 元/千克（-1.60%）；碳酸锂 142,200 元/吨（+0.18%）止跌企稳；电解钴无当日源，沿用上日 SMM 304,940 元/吨。{lme_text}。伦铜受关税套利挤仓与海外大矿减产推动创历史新高，伦锌续刷逾 4 年新高，锌为当前最强品种；贵金属在美联储鹰派预期升温下高位回吐。
+国内 09-07 收盘走强：沪锌 27,095 元/吨（+1.31%）领涨，沪铜 109,410 元/吨（+0.58%）；贵金属回调，上海金 -1.57%、白银 -1.60%；碳酸锂 +0.18% 止跌企稳；电解钴沿用上日 SMM 304,940 元/吨。LME 09-08 收盘（美元/吨）：铜 14,517.5（+0.16%）创历史新高，锌 +0.13% 续刷逾 4 年新高、为当前最强品种，铅走弱；贵金属在美联储鹰派预期升温下高位回吐。（各品种完整报价见上方「金属价格」卡片）
 
 **政策与产业：**
 {policy_text}
@@ -259,9 +265,7 @@ report = """**行情：**
 - 江西省永丰县正坑金银铅矿详查探矿权转让公示（〔2026〕46号）：江西省地质矿产开发总公司 → 吉安金诺矿业有限公司，金矿，0.5600 平方千米。
 - 陕西省勉县铺沟铅锌矿采矿权转让公示（陕自然资转公示〔2026〕2号）：铅矿、锌矿，矿区面积 0.4474 平方千米，公示期 09-07 至 09-18。
 （以上 6 宗均为 09-07 发布、09-08 进入矿业权市场专区，详见「矿权交易」板块。）
-
-**风险提示：**
-铜价创历史新高后波动加剧，美国铜关税政策迟迟未落地、COMEX 库存连续 53 天升至 69.36 万公吨创纪录，一旦政策明朗存在挤仓反转与进口断崖风险；锌价逼近四年新高但需求端并未同步改善，警惕高位回调；MHP 钴计价系数由约 90% 回落至 67%，印尼 HPAL 厂商利润承压，或传导至镍钴供给；澳洲 Aurukun 铝土矿审批二次延期至 2027 年 2 月，1500 万吨项目投产节奏存在不确定性；欧盟拟全面禁止向非 OECD 国家出口含铝废料，再生铝原料流向或重构；贵金属在杰克逊霍尔鹰派信号发酵下高位回撤，注意利率预期反复。""".strip().format(policy_text=policy_text, tech_text=tech_text, ma_text=ma_text, lme_text=lme_text)
+""".strip().format(policy_text=policy_text, tech_text=tech_text, ma_text=ma_text, lme_text=lme_text)
 
 import collections as _c
 _cat = _c.Counter(n.get('category', '') for n in new_items)
