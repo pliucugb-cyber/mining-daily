@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2047" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2100" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -182,9 +182,9 @@ body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
 
 /* ===== 金属价格栏 ===== */
 .price-strip{background:var(--surface);border-radius: var(--r-lg);padding:var(--s4) var(--s4) var(--s3);margin-bottom:var(--s4);box-shadow: var(--shadow-md)}
-.price-strip-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:var(--s3)}
-.price-strip-title{font-size: var(--fs-h3);font-weight:700;color:var(--ink-900)}
-.price-strip-note{font-size: var(--fs-meta);color:var(--ink-500)}
+.price-strip-head{display:flex;justify-content:space-between;align-items:center;gap:var(--s3);margin-bottom:var(--s3)}
+.price-strip-title{font-size: var(--fs-h3);font-weight:700;color:var(--ink-900);white-space:nowrap;flex-shrink:0}
+.price-strip-note{font-size: var(--fs-meta);color:var(--ink-500);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .price-cards{display:flex;gap:var(--s3);overflow-x:auto;padding-bottom:var(--s2);scrollbar-width:thin;scrollbar-color:#c8d6e5 transparent}
 /* 2026-09-06 晚：国内外分两行展示（首行国内含金银锂钴、次行 LME，两行金属顺序一致） */
 .price-cards-lme{margin-top:var(--s2)}
@@ -1206,8 +1206,14 @@ body.dark .price-card[data-slug]:hover{background:var(--surface-2)}
 .top-movers .mv-sep{color:var(--line-2)}
 body.dark .top-movers{background:rgba(255,255,255,.04)}
 .sortbar{display:flex;gap:var(--s2);margin:0 0 var(--s2)}
-.sortbtn{font-family:inherit;font-size:var(--fs-meta);border:1px solid var(--line-2);background:var(--surface);color:var(--ink-700);border-radius:999px;padding:3px 12px;cursor:pointer}
+.sortbtn{font-family:inherit;font-size:var(--fs-meta);border:1px solid var(--line-2);background:var(--surface);color:var(--ink-700);border-radius:999px;padding:3px 12px;cursor:pointer;white-space:nowrap}
 .sortbtn.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+/* 标题行只留 标题+说明+CSV；异动条与排序开关收进独立工具行（2026-09-08 二次优化，防折行） */
+.price-toolbar{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s3);align-items:center;margin:0 0 var(--s3)}
+.price-toolbar .top-movers{flex:1 1 auto;min-width:0;margin:0;flex-wrap:nowrap;overflow:hidden}
+.price-toolbar .sortbar{margin:0;flex-shrink:0;flex-wrap:nowrap}
+.price-strip-head .nf-export-btn{margin-left:0;flex-shrink:0;white-space:nowrap}
+@media(max-width:768px){.price-toolbar .top-movers{flex-wrap:wrap}}
 .price-card[data-rank] .pc-name::before{content:attr(data-rank);color:var(--ink-500);background:var(--surface-3);border-radius:var(--r-sm);padding:0 4px;margin-right:6px;font-size:var(--fs-nano);font-weight:600;flex-shrink:0}
 .price-card.stale .pc-name::after{content:'昨';color:var(--ink-500);background:var(--surface-3);border-radius:var(--r-sm);padding:0 4px;margin-left:6px;font-size:var(--fs-nano);font-weight:500;flex-shrink:0}
 .hot-bar{width:44px;height:3px;background:var(--line-1);border-radius:2px;overflow:hidden;flex-shrink:0;margin-top:6px}
@@ -5307,6 +5313,19 @@ function toggleTheme(){
   }
 
   /* ① 异动排行条 */
+  /* 异动条与排序开关统一收进标题行下方的独立工具行，避免与标题挤一行导致折行 */
+  function ensureToolbar(){
+    var st=document.getElementById('priceStrip');
+    var tb=st?st.querySelector('.price-toolbar'):null;
+    if(!tb){
+      tb=document.createElement('div');
+      tb.className='price-toolbar';
+      var head=st?st.querySelector('.price-strip-head'):null;
+      if(head&&head.parentNode)head.parentNode.insertBefore(tb,head.nextSibling);
+      else if(st)st.insertBefore(tb,st.firstChild);
+    }
+    return tb;
+  }
   function topMovers(){
     var strip=document.getElementById('priceStrip');
     if(!strip)return;
@@ -5336,9 +5355,7 @@ function toggleTheme(){
       box=document.createElement('div');
       box.id='priceTopMovers';
       box.className='top-movers';
-      var note=document.getElementById('priceStripNote');
-      if(note&&note.parentNode)note.parentNode.insertBefore(box,note.nextSibling);
-      else strip.insertBefore(box,strip.firstChild);
+      ensureToolbar().appendChild(box);
     }
     box.innerHTML='<span>🔥 今日异动</span><span class="mv-sep">|</span>'+html;
   }
@@ -5382,9 +5399,7 @@ function toggleTheme(){
       if(!b)return;
       setSort(b.getAttribute('data-mode'));
     });
-    var anchor=document.getElementById('priceTopMovers');
-    if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(bar,anchor.nextSibling);
-    else strip.insertBefore(bar,strip.firstChild);
+    ensureToolbar().appendChild(bar);
   }
 
   function run(){
