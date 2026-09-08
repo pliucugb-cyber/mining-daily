@@ -215,13 +215,32 @@ def fmt_bullet(n, max_len=80):
     return '- %s%s' % (body, '（%s）' % s if s else '')
 
 
-def recent_items(category, limit=4):
+# 2026-09-08 深夜：纯公告类（参加业绩发布会、持续督导/核查意见、董事会监事会、权益变动、
+# 减持增持、问询函、停复牌、股东大会等公司治理/信披类）没有行业信息量，不进「政策与产业」。
+# 用户裁定：这类留并购节或剔除。注意只过滤政策节，并购节（并购与投资）保持原样。
+LOW_VALUE_NOTICE = [
+    '公告参加', '参加中信', '业绩说明会', '业绩发布会', '中期业绩联合发布会', '投资者关系',
+    '互动易', '接待调研', '机构调研', '持续督导', '核查意见', '法律意见书',
+    '股东大会', '董事会决议', '监事会', '独立董事', '换届', '薪酬',
+    '股票交易异常波动', '停牌', '复牌', '权益变动', '减持', '增持',
+    '问询函', '关注函', '监管函', '更正公告', '补充公告', '关于召开', '拟变更',
+]
+
+
+def is_low_value_notice(n):
+    t = text(n)
+    return any(w in t for w in LOW_VALUE_NOTICE)
+
+
+def recent_items(category, limit=4, drop_notice=False):
     arr = [n for n in news if n.get('category') == category and n.get('is_new')]
+    if drop_notice:
+        arr = [n for n in arr if not is_low_value_notice(n)]
     arr.sort(key=lambda x: x.get('orig_date_full', ''), reverse=True)
     return arr[:limit]
 
 
-policy_text = '\n'.join(fmt_bullet(n) for n in recent_items('行业动态')) or '今日暂无新的政策与产业动态。'
+policy_text = '\n'.join(fmt_bullet(n) for n in recent_items('行业动态', drop_notice=True)) or '今日暂无新的政策与产业动态。'
 tech_text = '\n'.join(fmt_bullet(n) for n in recent_items('找矿成果与勘查技术')) or '今日暂无新的勘查与技术动态。'
 ma_text = '\n'.join(fmt_bullet(n) for n in recent_items('并购与投资')) or '今日暂无新增并购/投资类公告（巨潮接口 09-08 返回 504，次日补抓）。'
 
