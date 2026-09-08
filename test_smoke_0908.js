@@ -232,6 +232,29 @@ setTimeout(() => {
   const rc9 = doc.getElementById('rightsCards');
   check('⑨ 列表容器仍在且已渲染', !!rc9 && rc9.querySelectorAll('.rights-row').length >= 1, 'rows=' + (rc9 ? rc9.querySelectorAll('.rights-row').length : 0));
 
+  console.log('\n===== ⑩ 计数口径一致（2026-09-08 深夜） =====');
+  // 子分类「N条新增」原是生成脚本写死的静态值，会展条目被收纳/旧闻降级后不再更新，
+  // 出现「3+16+13=32」与顶部「28 今日新增」对不上。现由 syncSubCounts() 按 DOM 重算。
+  try {
+    const newTotal = parseInt((doc.getElementById('newCount') || {}).textContent || '0', 10);
+    let sum = 0;
+    doc.querySelectorAll('#todaySection .sub-cat').forEach(c => {
+      const t = (c.querySelector('.sub-count') || {}).textContent || '';
+      const m = t.match(/(\d+)/);
+      if (m) sum += parseInt(m[1], 10);
+    });
+    check('⑩ 今日区子分类「新增」之和 = 顶部今日新增', sum === newTotal, '子分类=' + sum + ' 顶部=' + newTotal);
+  } catch (e) { check('⑩ 今日区子分类「新增」之和 = 顶部今日新增', false, e.message); }
+  try {
+    const titleN = parseInt(((doc.getElementById('todayCount') || {}).textContent || '').replace(/\D/g, ''), 10);
+    const realN = doc.querySelectorAll('#todaySection .news-item:not(.arch-fav)').length;
+    check('⑩ 区块标题条数 = 今日区实际条数', titleN === realN, '标题=' + titleN + ' 实际=' + realN);
+  } catch (e) { check('⑩ 区块标题条数 = 今日区实际条数', false, e.message); }
+  // 专项区取消后遗留：GoatCounter 后台未开通（403），默认隐藏避免常驻「累计访问 - 次」
+  const gcLine = doc.getElementById('gcStatLine');
+  check('⑩ 累计访问行默认隐藏（取到数字才显示）', !!gcLine && gcLine.style.display === 'none');
+  check('⑩ 矿权区标题不再自称「结构化卡片」', !/结构化卡片/.test((doc.getElementById('rightsSection') || {}).textContent || ''));
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));
