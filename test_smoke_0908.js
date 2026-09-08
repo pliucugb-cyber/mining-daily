@@ -138,6 +138,13 @@ setTimeout(() => {
     check('③c 超期条目不再带 NEW', staleLeft === 0, '残留 ' + staleLeft + ' 条');
     check('③c 时效内条目不被误标补录', freshBadged === 0, '误标 ' + freshBadged + ' 条');
     check('③c 补录标已生成（当前数据应为 4 条左右）', backfillN >= 1, 'backfill=' + backfillN);
+    // 2026-09-08 晚追加：补录条目不保留 is-special 底色强调
+    let spLeft = 0;
+    todaySec.querySelectorAll('.news-item .badge-backfill').forEach(b => {
+      const el = b.closest('.news-item');
+      if (el && el.classList.contains('is-special')) spLeft++;
+    });
+    check('③c 补录条目无 is-special 底色', spLeft === 0, '残留 ' + spLeft + ' 条');
   }
 
   console.log('\n===== ④ 会展预告迁至侧栏迷你卡 =====');
