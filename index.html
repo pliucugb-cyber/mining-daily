@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2312" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2318" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -173,6 +173,8 @@ body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
 /* 收藏/历史按钮 */
 .btn-fav{background:#f39c12;color:#fff}
 .btn-fav:hover{background:#e67e22}
+.btn-fav.is-zero{opacity:.45;filter:grayscale(.6)}   /* 收藏为 0 时淡化 */
+.btn-fav.is-zero:hover{opacity:.8}
 .btn-fav.active{background:#e67e22}
 .btn-history{background:#8e44ad;color:#fff}
 .btn-history:hover{background:#7d3c98}
@@ -1302,7 +1304,7 @@ body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
 <div class="stat-item" data-page-node-id="qdL7R3H5cQel1TGlaAOjBX"><span class="stat-num new" id="newCount" data-page-node-id="Kq8VtLiI4rbjaAAeq73UHm">0</span> 今日新增</div>
 <div class="stat-item" data-page-node-id="ejCuf2fXHfB3cyRPOf9dRR"><span class="stat-num unread" id="unreadCount" data-page-node-id="v1vidu9uGTqw3sW6iSpU8P">0</span> 条未读</div>
 <button class="btn btn-filter" id="filterBtn" onclick="toggleFilter()" data-page-node-id="1XbkppHk2kb9XOvQJvErbE">只看新增</button>
-<button class="btn btn-unread" id="unreadBtn" onclick="toggleUnreadFilter()" title="只看未读新闻，已读自动隐藏" style="margin-left:8px" data-page-node-id="1nOFKduaEohpYtuH40b9P7">📭 未读 <span id="unreadBtnCount" data-page-node-id="6fvptHbZG3KK6MuVoTRMtL">0</span></button>
+<button class="btn btn-unread" id="unreadBtn" onclick="toggleUnreadFilter()" title="只看未读新闻，已读自动隐藏" style="margin-left:8px" data-page-node-id="1nOFKduaEohpYtuH40b9P7">📭 未读</button>
 <button class="btn btn-special" id="specialBtn" onclick="toggleSpecialFilter()" title="只看带「战略」徽章的重点条目（找矿突破战略行动等相关）" style="margin-left:8px" data-page-node-id="SwqabUoMhhdIECcKQt99zH">⭐ 战略 <span id="specialCountNum" data-page-node-id="aFDvR8jlFT5s81RK6xpcBJ">0</span></button>
 <button class="btn btn-restore" onclick="clearAllRead()" title="一键清除所有已读记录，全部恢复为未读状态" style="margin-left:8px" data-page-node-id="CPs0HBYiw0DnwCX25prPhR">↻ 全部恢复未读</button>
 <button class="btn btn-fav" id="favBtn" onclick="toggleFavFilter()" style="margin-left:8px" data-page-node-id="K0o8bP8sEDDux0RFSDCOyp">★ 收藏 <span id="favCount" data-page-node-id="cBnMAVraCTfo5KqA6fHJvY">0</span></button>
@@ -1895,6 +1897,9 @@ function applyFavStates(){
 function updateFavCount(){
   const n=getFavs().length;
   document.getElementById('favCount').textContent=n;
+  // 收藏为 0 时按钮淡化置灰（2026-09-08 深夜），有收藏再点亮
+  const fb=document.getElementById('favBtn');
+  if(fb)fb.classList.toggle('is-zero',n===0);
   const t=document.getElementById('tocFavCount');
   if(t){
     t.textContent=n;
@@ -2377,7 +2382,7 @@ function refresh(){
   const allTotal=document.querySelectorAll('.news-item:not(.arch-fav):not(.sp-from-archive)').length;
   document.getElementById('newCount').textContent=newTotal;
   document.getElementById('unreadCount').textContent=unread;
-  document.getElementById('unreadBtnCount').textContent=unread;
+  // unreadBtnCount 已删（2026-09-08 深夜）：与左侧「N 条未读」统计数字重复
   document.getElementById('todayCount').textContent='共'+newTotal+'条';
   // spAll = 全部战略新闻（去重：原 archive 条目 + 今日命中，排除 .sp-from-archive 克隆体）
   // spInSection = 仅专项区内的（含克隆体）→ 给专项区标题旁的"共 N 条"
