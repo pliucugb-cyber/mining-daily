@@ -117,9 +117,12 @@ setTimeout(() => {
   const mini = doc.getElementById('expoMini');
   check('侧栏迷你卡容器存在', !!mini);
   check('迷你卡在右栏 col-rail 内', !!(mini && mini.closest('.col-rail')));
-  // 「另有 N 场会议」是统计提示行，不计入条目数
-  const miniItems = [...doc.querySelectorAll('#expoMiniList li')].filter(li => !li.classList.contains('expo-mini-more'));
-  check('迷你卡条目 ≤5（或为空＝今日无会展）', miniItems.length <= 5, '实际 ' + miniItems.length + ' 条');
+  // 2026-09-08 晚：全量展示 + 限高滚动，「另有 N 场」死文本已删
+  const miniItems = [...doc.querySelectorAll('#expoMiniList li')];
+  check('迷你卡无「另有 N 场」残留行', doc.querySelectorAll('#expoMiniList .expo-mini-more').length === 0);
+  check('迷你卡条目全部带链接（可点击）', miniItems.every(li => li.querySelector('a[href]')));
+  const vaultAll = doc.querySelectorAll('#expoVault .news-item').length;
+  check('迷你卡条目数 = 移入 vault 条数（无截断）', miniItems.length === vaultAll, 'list=' + miniItems.length + ' vault=' + vaultAll);
   let expoDup = 0;
   const expoTitles = miniItems.map(li => (li.querySelector('a') || {}).textContent || '').filter(Boolean);
   for (let i = 0; i < expoTitles.length; i++)
