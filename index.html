@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-1345" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-1930" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -19,6 +19,28 @@
 
 
 
+:root{
+--ink-900:#16202b;--ink-700:#3d4b5a;--ink-500:#6b7a89;--ink-300:#94a3b8;
+--line-1:#e5eaf0;--line-2:#d5dde5;
+--bg:#f5f7fa;--surface:#ffffff;--surface-2:#f5f7fa;--surface-3:#eef2f6;
+--brand:#0e7490;--brand-ink:#0b5a70;--brand-soft:#e6f4f7;--accent-hover:#128fa8;
+--tag-strategy:#4f46e5;--tag-strategy-bg:#eeedfe;--tag-major:#c0392b;--tag-major-bg:#fceaea;
+--up:#d93a2b;--down:#128a5f;--flat:#6b7a89;
+--success:#128a5f;--warning:#b7791f;--danger:#c0392b;--info:#0e7490;
+--font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+--font-num:"SF Mono","JetBrains Mono",ui-monospace,Consolas,monospace;
+--fs-display:24px;--fs-h1:20px;--fs-h2:16px;--fs-h3:14px;--fs-body:13px;--fs-meta:12px;--fs-nano:10px;
+--fw-regular:400;--fw-medium:500;--fw-semibold:600;
+--r-sm:4px;--r-md:8px;--r-lg:12px;
+--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;
+--shadow-xs:0 1px 2px rgba(16,32,43,.04);
+--shadow-sm:0 1px 3px rgba(0,55,112,.06);
+--shadow-md:0 4px 12px rgba(0,55,112,.08);
+--shadow-lg:0 12px 32px rgba(16,32,43,.12);
+--shadow-xl:0 24px 48px rgba(16,32,43,.16);
+--z-sticky:100;--z-sidebar:200;--z-fab:900;--z-mask:1000;--z-dialog:1010;--z-toast:1100;
+--dur:120ms;--ease:ease;
+}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;color:#2c3e50;line-height:1.6;padding-left:200px}
@@ -47,7 +69,31 @@ body.dark .toc-count-fresh.is-empty{color:#94a3b8;background:#243140}
 .toc-back-top{font-size:12px;color:#2980b9;padding:8px 11px;cursor:pointer;border-radius:6px;text-align:center;margin-top:6px;border-top:1px solid #f4f6f8;padding-top:10px}
 .toc-back-top:hover{background:#eef4fa}
 .toc-all{color:#34495e!important}
-.container{max-width:860px;margin:0 auto;padding:16px}
+.container{max-width:1360px;margin:0 auto;padding:16px}
+/* ===== 2026-09-08 双栏布局：桌面端「左主列 + 右栏」，消除右侧大片空白 ===== */
+.news-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}
+.col-main{min-width:0}
+.col-rail{min-width:0}
+.col-rail .section{margin-bottom:14px}
+.col-rail .hotlist-list{margin:6px 0 8px}
+.col-rail .section-title{margin:0}
+/* 右栏会展卡（2026-09-08 迁入右栏，卡片化） */
+.col-rail .expo-mini{background:#fff;border:1px solid #eef2f7;border-radius:12px;padding:14px 15px;margin-top:0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.col-rail .expo-mini-head{font-size:14px;font-weight:800;color:#1a3a5c;margin-bottom:8px;letter-spacing:.3px}
+.col-rail .expo-mini-list li{padding:6px 38px 6px 9px}
+.col-rail .expo-mini-more{padding:3px 9px!important;color:#9aa7b3;font-size:11px}
+/* 热榜（去序号后列表更紧凑、贴近顶部） */
+.col-rail .hotlist-list{margin:0}
+.col-rail .hotlist-list li.hot-item{padding:12px 16px}
+.col-rail .hot-title{font-size:14px}
+@media(min-width:1101px){
+  .news-grid{grid-template-columns:minmax(0,1fr) 306px}
+  .col-rail{position:sticky;top:16px;max-height:calc(100vh - 30px);overflow-y:auto}
+  .col-rail::-webkit-scrollbar{width:5px}
+  .col-rail::-webkit-scrollbar-thumb{background:#c8d6e5;border-radius:3px}
+}
+body.dark .col-rail .expo-mini{background:#1e2733;border-color:#2c3845}
+body.dark .col-rail .expo-mini-head{color:#e8eef3}
 /* 头部 */
 .header{background:linear-gradient(135deg,#1a3a5c 0%,#2c5f8a 100%);color:#fff;border-radius:12px;padding:24px 20px;margin-bottom:14px}
 .header h1{font-size:22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -573,6 +619,17 @@ body.dark .mobile-install-btn:hover{background:#3d7ab0}
 body.dark .mobile-install-close{background:#243140;color:#94a3b8}
 body.dark .mobile-install-close:hover{background:#2c3845}
 body.dark{background:#0f151c;color:#e8eef3}
+body.dark{
+--ink-900:#e8eef3;--ink-700:#b6c2ce;--ink-500:#8b9bad;--ink-300:#5f6f80;
+--line-1:#2a3542;--line-2:#35424f;
+--bg:#141b24;--surface:#1b2430;--surface-2:#202b38;--surface-3:#26313f;
+--brand:#38bdf8;--brand-ink:#7dd3fc;--brand-soft:#123040;--accent-hover:#7dd3fc;
+--tag-strategy:#8b8cf9;--tag-strategy-bg:#232a4d;--tag-major:#ff6b5b;--tag-major-bg:#3a2020;
+--up:#ff6b5b;--down:#35c48d;--flat:#8b9bad;
+--success:#35c48d;--warning:#e0a83a;--danger:#ff6b5b;--info:#38bdf8;
+--shadow-xs:none;--shadow-sm:none;--shadow-md:none;
+--shadow-lg:0 12px 32px rgba(0,0,0,.4);--shadow-xl:0 24px 48px rgba(0,0,0,.5);
+}
 body.dark .header{background:linear-gradient(135deg,#14293f 0%,#1d4364 100%)}
 body.dark .toc-sidebar{background:#161d26;border:1px solid #2c3845;box-shadow:0 2px 10px rgba(0,0,0,.35)}
 body.dark .toc-title{color:#7f8c9b;border-bottom-color:#2c3845}
@@ -1131,11 +1188,14 @@ window.gcTotal=function(data){
 <div class="toc-main-item" onclick="toggleFavFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#f39c12" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
 <div class="toc-main-item" onclick="toggleHistoryFilter();window.scrollTo({top:0,behavior:'smooth'})" style="color:#8e44ad" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
 <div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
-<div class="expo-mini" id="expoMini" style="display:none"><div class="expo-mini-head">🎪 近期会展</div><ul class="expo-mini-list" id="expoMiniList"></ul></div>
+
 <div class="toc-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="8iwVYYySScb07F8bSYmelj">↑ 返回顶部</div>
 </nav>
 <div class="container" data-page-node-id="uS5RB3Y6VbZBc8kC6gZyLP">
 
+
+<div class="news-grid">
+<div class="col-main">
 <div class="header" data-page-node-id="aHcFdn8z558XQjvQbHuDkk">
   <div class="header-actions" data-page-node-id="yJYZi46Jr7ZF8gVCztwhXK">
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式" data-page-node-id="2iDzxnPLAUp6us12HurPQU"><span class="theme-option light" data-page-node-id="Oaq0BbspbHbHEGiQqEAhXM">☀️</span><span class="theme-option dark" data-page-node-id="3WKWDNkc8RniCqHAgzYWdR">🌙</span></button>
@@ -1190,12 +1250,7 @@ window.gcTotal=function(data){
 <button class="btn btn-allread" onclick="markAllRead()" data-page-node-id="OIjMu9jnziI1P66Ap1NaBh">✓ 全部标为已读</button>
 </div>
 <!-- ==================== 矿业热榜（2026-09-03 新增，类似今日头条热榜） ==================== -->
-<div class="section hotlist-section" id="hotListSection" data-page-node-id="uBMIRSDR2EuU4OTPkhWNQv">
-  <div class="section-title hotlist" data-page-node-id="GhrYyT0PPQKfC8etws6ZJb"><span class="icon" data-page-node-id="N6a3UBumibhWM2AABsuhNB">🔥</span> 矿业热榜 <span class="hl-tag" data-page-node-id="0GF3jVCtdmBBpkDdhNAxSm">TOP 3</span> <!-- hl-sub「按来源权威 × 时效 × 关键词」2026-09-06 移除：排序口径属内部实现，不必摊在标题上 --> <span class="news-count" id="hotListCount" data-page-node-id="yDy95beCpuSu2aQWIyamd4">加载中…</span></div>
-  <ol class="hotlist-list" id="hotListBody" data-page-node-id="DVwhr9dloZ9ES9z9CxfSs6">
-    <li class="hotlist-loading" data-page-node-id="pCHzCgmA1AxRMAIr3oHdfe">热榜加载中…</li>
-  </ol>
-</div>
+
 <!-- AI 深度解析区块（2026-09-08 移除）：静态托管下 api/ai-analyze 必然 404，只会落到 localAiSummary 的全量新闻罗列，信息过载；AI 能力保留在左下角悬浮球问答（走 Netlify 代理） -->
 <!-- ==================== 今日新增（2026-09-08 抓取） ==================== -->
 <div class="section" id="todaySection">
@@ -1317,6 +1372,17 @@ window.gcTotal=function(data){
 <div class="section" id="archivedFavSection" style="display:none" data-page-node-id="TasvMnm8dhzmi0x8329aJO">
 <div class="section-title" data-page-node-id="MY70tmwCK1HAUzMGVg10cH">🗂️ 已归档收藏（原新闻已滚出页面，收藏记录永久保留）<span class="news-count" id="archFavCount" data-page-node-id="F8kZntuW6QGbm8uv9U8cGB">0条</span></div>
 <div id="archFavList" data-page-node-id="X01kqiSgMddXbZ403nODmV"></div>
+</div>
+</div>
+<aside class="col-rail">
+<div class="section hotlist-section" id="hotListSection" data-page-node-id="uBMIRSDR2EuU4OTPkhWNQv">
+  <div class="section-title hotlist" data-page-node-id="GhrYyT0PPQKfC8etws6ZJb"><span class="icon" data-page-node-id="N6a3UBumibhWM2AABsuhNB">🔥</span> 矿业热榜 <span class="hl-tag" data-page-node-id="0GF3jVCtdmBBpkDdhNAxSm">TOP 5</span> <!-- hl-sub「按来源权威 × 时效 × 关键词」2026-09-06 移除：排序口径属内部实现，不必摊在标题上 --> <span class="news-count" id="hotListCount" data-page-node-id="yDy95beCpuSu2aQWIyamd4">加载中…</span></div>
+  <ol class="hotlist-list" id="hotListBody" data-page-node-id="DVwhr9dloZ9ES9z9CxfSs6">
+    <li class="hotlist-loading" data-page-node-id="pCHzCgmA1AxRMAIr3oHdfe">热榜加载中…</li>
+  </ol>
+</div>
+<div class="expo-mini" id="expoMini" style="display:none"><div class="expo-mini-head">🎪 近期会展</div><ul class="expo-mini-list" id="expoMiniList"></ul></div>
+</aside>
 </div>
 <!-- 移动端 PWA 安装浮条 -->
 <div class="mobile-install-bar" id="mobileInstallBar" hidden data-page-node-id="cTqBS81GyD0fsjVmr5mIqo">
@@ -2795,7 +2861,6 @@ function renderHotNews(d){
     var fire=n.hot?'<span class="hot-fire">🔥 热</span>':'';
     var rankCls=n.rank<=3?'top'+n.rank:'';
     return '<li class="hot-item '+rankCls+'" data-url="'+u+'">'
-      +'<span class="hot-rank">'+(n.rank<10?'0':'')+n.rank+'</span>'
       +'<div class="hot-body">'
       +fire
       +'<a class="hot-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'

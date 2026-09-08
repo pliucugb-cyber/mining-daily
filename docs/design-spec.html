@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="DBraYEhF1C2TekB3af158B">
+<head data-page-node-id="EmBQ2VumrwNgCHTAt11Ltu">
+<meta charset="utf-8" data-page-node-id="qhgMTvxnvMwucKk9X1JO5f">
+<meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="agoeooZeA8HsdaTHZ4w1mX">
+<title>矿业日报 · 设计系统规范 v1</title>
+<style>
+  :root{
+    --ink-900:#16202b; --ink-700:#3d4b5a; --ink-500:#6b7a89; --ink-300:#94a3b8;
+    --line:#e5eaf0; --line-2:#d5dde5;
+    --surface:#ffffff; --surface-2:#f5f7fa; --surface-3:#eef2f6;
+    --brand:#0e7490; --brand-dark:#0b5a70; --brand-soft:#e6f4f7;
+    --up:#d93a2b; --down:#128a5f;
+    --bg:#f5f7fa;
+    --r-sm:4px; --r-md:8px; --r-lg:12px;
+    --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px;
+    --fs-note:10px; --fs-meta:12px; --fs-body:13px; --fs-sub:14px; --fs-sec:16px; --fs-head:20px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink-900);
+    font:400 var(--fs-body)/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+  .wrap{max-width:980px;margin:0 auto;padding:32px 24px 64px}
+  h1{font-size:24px;font-weight:600;margin:0 0 4px}
+  .sub{font-size:var(--fs-meta);color:var(--ink-500);margin:0 0 32px}
+  section{margin-bottom:var(--s6)}
+  h2{font-size:var(--fs-sec);font-weight:600;margin:0 0 var(--s4);
+    padding-left:var(--s3);border-left:3px solid var(--brand);line-height:1.3}
+  h3{font-size:var(--fs-sub);font-weight:600;margin:var(--s5) 0 var(--s2)}
+  p{margin:0 0 var(--s3)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:var(--s4);margin-bottom:var(--s4)}
+  .grid{display:grid;gap:var(--s3)}
+  .g6{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  .g4{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  .g3{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .sw{border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+  .sw .chip{height:52px}
+  .sw .lab{padding:6px 10px;font-size:var(--fs-note);color:var(--ink-700);
+    background:var(--surface);border-top:1px solid var(--line);line-height:1.5}
+  .sw .lab b{display:block;font-size:var(--fs-meta);font-weight:600;color:var(--ink-900)}
+  code{font-family:ui-monospace,Consolas,monospace;font-size:var(--fs-meta);
+    background:var(--surface-3);padding:1px 5px;border-radius:var(--r-sm)}
+  table{width:100%;border-collapse:collapse;font-size:var(--fs-meta);background:var(--surface);
+    border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+  th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:var(--surface-2);font-weight:600;color:var(--ink-700)}
+  tr:last-child td{border-bottom:none}
+  .demo-title{font-size:var(--fs-body);font-weight:600;margin:0 0 var(--s1)}
+  .demo-meta{font-size:var(--fs-meta);color:var(--ink-500);margin:0 0 6px}
+  .demo-sum{font-size:var(--fs-body);color:var(--ink-700);margin:0}
+  .row{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
+  .badge{font-size:var(--fs-note);padding:1px 6px;border-radius:var(--r-sm);
+    background:var(--brand-soft);color:var(--brand-dark)}
+  .chip-item{font-size:var(--fs-meta);padding:2px 8px;border-radius:var(--r-sm);
+    background:var(--surface-3);color:var(--ink-700)}
+  .btn{font-size:var(--fs-meta);padding:6px 12px;border-radius:var(--r-md);
+    border:1px solid var(--line-2);background:var(--surface);color:var(--ink-700)}
+  .btn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .px-row{display:grid;grid-template-columns:1fr auto auto;gap:var(--s3);
+    padding:8px 0;border-bottom:1px solid var(--line);align-items:baseline}
+  .px-row:last-child{border-bottom:none}
+  .px-name{font-size:var(--fs-meta);color:var(--ink-700)}
+  .px-val{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+  .px-chg{font-size:var(--fs-meta);font-variant-numeric:tabular-nums}
+  .up{color:var(--up)} .down{color:var(--down)}
+  .read .demo-title{color:var(--ink-300)}
+  .read .demo-sum{color:var(--ink-300)}
+  .note{font-size:var(--fs-meta);color:var(--ink-500);background:var(--surface-2);
+    border-radius:var(--r-md);padding:var(--s3) var(--s4);margin:0}
+  ul{margin:0;padding-left:20px} li{margin-bottom:4px}
+</style>
+</head>
+<body data-page-node-id="uhxQmaKSU8lp9C6udzEHaT">
+<div class="wrap" data-page-node-id="pSHxe1vv2MqFaIJwsH5knp">
+
+  <h1 data-page-node-id="zRY7iDIvVmvALjJcSmujpx">矿业日报 · 设计系统规范 v1</h1>
+  <p class="sub" data-page-node-id="Z0jDvX3EHT3gIKtbGC3Hi5">2026-09-08 · 目标：信息密度优先，同时保留留白呼吸感 · 适用于 index.html（PWA 静态页）</p>
+
+  <section data-page-node-id="X4L7v8ik0gMyIbhE6o3pcN">
+    <h2 data-page-node-id="3pmxCz9KMCiUp0ALl6wQXB">一、设计原则</h2>
+    <div class="grid g3" data-page-node-id="Bje1usKzpCvZVGnJ5ErzTO">
+      <div class="card" style="margin:0" data-page-node-id="xWuW2nFa4HBDbNuJu7h67V">
+        <div class="demo-title" data-page-node-id="GkgadKJ1SMnE5UpEmiuKJs">密度优先</div>
+        <p class="demo-sum" data-page-node-id="tbxejr0bijADXgrDNBywqt">一屏能看更多条。行高收紧到 1.6，元信息单行并排，取消冗余装饰。</p>
+      </div>
+      <div class="card" style="margin:0" data-page-node-id="Hz54JWtPBM3y9Fqwj7hidb">
+        <div class="demo-title" data-page-node-id="ER8qd3LMQIIY9TaeJbZ3wb">留白留够</div>
+        <p class="demo-sum" data-page-node-id="coaP4NWAXH8jV3d4tHDNGV">卡片内 16px、卡间距 16px、区块间距 32px。留白靠统一间距，不靠随机放大。</p>
+      </div>
+      <div class="card" style="margin:0" data-page-node-id="ez7Z6n66bLDFEvLykXYGuJ">
+        <div class="demo-title" data-page-node-id="IpCQCLZ5rEWPaGQFkYBW2b">一切走 token</div>
+        <p class="demo-sum" data-page-node-id="hf8xvzGvskDXIYi7mFe6iB">禁止手写数值。颜色 24 个、字号 6 级、圆角 3 级、间距 6 档。</p>
+      </div>
+    </div>
+  </section>
+
+  <section data-page-node-id="tUS6fanSjuaZ0pw7MENltr">
+    <h2 data-page-node-id="NpSv5HPiSk5HJXZR652Pq0">二、色彩系统</h2>
+    <h3 data-page-node-id="NBl2sAJEoXbDSAbTPJINN3">中性 · 文字与线条</h3>
+    <div class="grid g6" data-page-node-id="Dp4Yl26CjUpExHtDDNENck">
+      <div class="sw" data-page-node-id="QOQwPmeiMZqYQyuviMdRSw"><div class="chip" style="background:#16202b" data-page-node-id="nVZ6SeSC2azcxT61njNkob"></div><div class="lab" data-page-node-id="6dapTqP8iV5t1QPEUYhS31"><b data-page-node-id="A7txzczrdaaX3kQhUqzmZE">ink-900</b>#16202b · 标题/正文</div></div>
+      <div class="sw" data-page-node-id="AWMBaCEcMY4AbBWX663VcF"><div class="chip" style="background:#3d4b5a" data-page-node-id="DsSSq6lbEBNAuKDDDfiu1W"></div><div class="lab" data-page-node-id="kfdXPnPWZDXX4mmCNPAJdi"><b data-page-node-id="FcagZCAEp2eF0auWd2GO7F">ink-700</b>#3d4b5a · 摘要正文</div></div>
+      <div class="sw" data-page-node-id="a1eFcvs2cOkOhm814X4OWK"><div class="chip" style="background:#6b7a89" data-page-node-id="CTcIhbc5I6AOrpCaVWRuW9"></div><div class="lab" data-page-node-id="qLetbmIR0rVR4tnMr4MDxC"><b data-page-node-id="oVrWsRRBQ6Kvmz9sj6rr8d">ink-500</b>#6b7a89 · 次要/元信息</div></div>
+      <div class="sw" data-page-node-id="lhtNbUziPyMJRTz78jviCb"><div class="chip" style="background:#94a3b8" data-page-node-id="08bCcSnUnulTPLG99yvvrT"></div><div class="lab" data-page-node-id="W1ToFQEqKgNJYpCX0T0YK1"><b data-page-node-id="UmpCXCD9hEpGKaHRIHrIpH">ink-300</b>#94a3b8 · 弱化/已读</div></div>
+      <div class="sw" data-page-node-id="3gXnD47IgNG51Qx4DCro6c"><div class="chip" style="background:#e5eaf0" data-page-node-id="kIwtNXHGEIWmmFFlfd2L2C"></div><div class="lab" data-page-node-id="O3WQGjlB0ZF27DGrb8rPks"><b data-page-node-id="HVc6k4UDjMnv7hDXKuT3Sh">line</b>#e5eaf0 · 分隔线</div></div>
+      <div class="sw" data-page-node-id="XuvhEyKoQEFWsWtmEgGoIH"><div class="chip" style="background:#d5dde5" data-page-node-id="aXwrBCVFcgMbruNupdXhnu"></div><div class="lab" data-page-node-id="6RkmxITizulEQSnbohUH2w"><b data-page-node-id="oI8BAAp1oXUgUIdBwlYwGC">line-2</b>#d5dde5 · 控件边框</div></div>
+      <div class="sw" data-page-node-id="f5PIKQYUlHrcSst3EyxzLx"><div class="chip" style="background:#ffffff;border-bottom:1px solid #e5eaf0" data-page-node-id="zFTy47mox8xvoGUJZqkPyN"></div><div class="lab" data-page-node-id="qISKf1j5YYzJnArdIrRglt"><b data-page-node-id="mSS9R7SrN4nKd1RwRrQKO6">surface</b>#ffffff · 卡片</div></div>
+      <div class="sw" data-page-node-id="kw0hAafhxOUWBnNLlay5C4"><div class="chip" style="background:#f5f7fa" data-page-node-id="WPXaeImCjLBXjuIJk02t49"></div><div class="lab" data-page-node-id="wA40ThUDKg6B39JezEf3NV"><b data-page-node-id="H1XNenC8adXi3pk3EFRgGp">surface-2</b>#f5f7fa · 页底/表头</div></div>
+      <div class="sw" data-page-node-id="EVtDXdpJoTVSVlzJH0frcT"><div class="chip" style="background:#eef2f6" data-page-node-id="vAYjA1Bf6F3WFeqq7yf2pR"></div><div class="lab" data-page-node-id="uCaEev0NErDbmsocXrOemH"><b data-page-node-id="sO4DHTDxjSr23pW3RsYLq2">surface-3</b>#eef2f6 · 芯片底</div></div>
+    </div>
+
+    <h3 data-page-node-id="OboNQVQNtBE99IFIfdLVr0">品牌与语义</h3>
+    <div class="grid g6" data-page-node-id="X63Cj6kHJUQtRKouT5eOYJ">
+      <div class="sw" data-page-node-id="0FLdB0TdzTsTXnex0BpRdw"><div class="chip" style="background:#0e7490" data-page-node-id="5mOWptb1joHjGyh7BDDHIc"></div><div class="lab" data-page-node-id="2M8RH9jGlDIsjE078EaI48"><b data-page-node-id="EY6ubYjnXeK8S6Q37lWWik">brand</b>#0e7490 · 强调/选中</div></div>
+      <div class="sw" data-page-node-id="uFRQ1AeoQE4w9syTGQAnzJ"><div class="chip" style="background:#0b5a70" data-page-node-id="hdtAEZkiWDFxSJMEkuvM06"></div><div class="lab" data-page-node-id="ismnQhqFhNx3FSzF2uC8AF"><b data-page-node-id="0pCjMHgBNZE7n2CS6XtUiH">brand-dark</b>#0b5a70 · 品牌文字</div></div>
+      <div class="sw" data-page-node-id="daFKL12lm3Vky4wTH8pFDG"><div class="chip" style="background:#e6f4f7" data-page-node-id="oxGN0esLYuuUbqWzbqzXtu"></div><div class="lab" data-page-node-id="8WDJKtg5nrQ7DUCq1jaJB8"><b data-page-node-id="hPgJIaMAdMJeJj6QnrOWpT">brand-soft</b>#e6f4f7 · 徽章底</div></div>
+      <div class="sw" data-page-node-id="pjsR5CiB6fqXQDdxiXHkK7"><div class="chip" style="background:#d93a2b" data-page-node-id="nE1jb5uxbTT1e7HB0DQxSJ"></div><div class="lab" data-page-node-id="jmSQA9F5j0NEHvaPlxGwce"><b data-page-node-id="oXNHFHGEvlwQ8MHcSdlkV2">up 涨</b>#d93a2b · 红涨</div></div>
+      <div class="sw" data-page-node-id="de3MPDLW8urmoaDVpf7P6b"><div class="chip" style="background:#128a5f" data-page-node-id="hSHd6LMLwkPDiFL0qAF7kT"></div><div class="lab" data-page-node-id="ck5ki8zI7SsEx5l7uNATAd"><b data-page-node-id="mccvNb2RJMM5lEADVpmaBa">down 跌</b>#128a5f · 绿跌</div></div>
+      <div class="sw" data-page-node-id="XTDTe5x3uRZ8ooTH0qxJdr"><div class="chip" style="background:#4f46e5" data-page-node-id="GC6NEkgJseGWTj7jvk9VBd"></div><div class="lab" data-page-node-id="ZvsF9XkstTOF7Nuzpc0R9D"><b data-page-node-id="X59AUPCvPwiJcvtFrJNt84">strategy</b>#4f46e5 · 战略徽章</div></div>
+    </div>
+    <p class="note" style="margin-top:12px" data-page-node-id="NwLT75fotMvodkTzvCXFGQ">涨红跌绿按中国市场习惯。深色模式下：底 #141b24 / 卡 #1b2430 / 线 #2a3542 / 字 #e8eef3，品牌转 #38bdf8，涨 #ff6b5b，跌 #35c48d。</p>
+  </section>
+
+  <section data-page-node-id="mJGCmv9CqVBZ0x1oe7BSeg">
+    <h2 data-page-node-id="ntoHGsHd7bcVZDCwLkkJcx">三、字号阶梯（21 种 → 6 级）</h2>
+    <table data-page-node-id="CDMJcATk7rx1Gaj63zKiIc">
+      <tr data-page-node-id="dX8UFnGRRcsoYi37D8zbRi"><th data-page-node-id="6ewFLv77IBaiXIPXOwlnFP">Token</th><th data-page-node-id="PcCCCvBVUVu98hAIHW1M5N">值</th><th data-page-node-id="quHK6rP6LDva9D9oAABzp4">行高</th><th data-page-node-id="wdre0Vg4xNOv6fSSk1HvCV">用途</th><th data-page-node-id="tGJ4KRJCctzkSNTSfzHyll">替换掉的旧值</th></tr>
+      <tr data-page-node-id="QhZCLxwuKk3KYtj1CRfnTh"><td data-page-node-id="sbuO7C6OIdgY6hOzLsF4BW"><code data-page-node-id="Ve9hn8xSIdEuolcYC1xBLI">--fs-head</code></td><td data-page-node-id="635oHFkABnVUBUKMoGe1uZ">20px</td><td data-page-node-id="QAd9ev64TS4lUjcHZgBGXx">1.3</td><td data-page-node-id="OjEEZci0yLFSTok0UVzv9K">页面主标题</td><td data-page-node-id="g4wSB6ynu4mBBqVwS5GAXo">18 / 22 / 24px</td></tr>
+      <tr data-page-node-id="ziip0p5CHCqft7WyppVcYd"><td data-page-node-id="lytk6u4VDeAMg2fvDDR0JR"><code data-page-node-id="PFHtgNIl2ypU1oZjDGdEDL">--fs-sec</code></td><td data-page-node-id="EJnDRMx38IypdNm228FhRp">16px</td><td data-page-node-id="zbGKVDJMirCXTrehZAfTRu">1.4</td><td data-page-node-id="PLitqjs91Cb5U7TadyepLR">区块标题</td><td data-page-node-id="CytzUZVBh2FWDYpd8jQkaX">15 / 16 / 17px</td></tr>
+      <tr data-page-node-id="lSY7BBJtDmIM7VJrA5uOW9"><td data-page-node-id="YABixkbZMoS0yR45z09FHH"><code data-page-node-id="3gbTFTd5EQarwCKZe6aeLz">--fs-sub</code></td><td data-page-node-id="SboB6IsqBTf93BHiyXY31f">14px</td><td data-page-node-id="tkOp1tN7TrN42hWsqayCVD">1.5</td><td data-page-node-id="8o0DJb6M7ixnRibRLUjDmN">卡片标题</td><td data-page-node-id="eZBTjoEN1HGlRz6U7EfQbL">13.5 / 14 / 15px</td></tr>
+      <tr data-page-node-id="CDylDx5HU6lK29ZiudIk3A"><td data-page-node-id="8BKrTZqSm5FtA06DwdF6PB"><code data-page-node-id="YKTzlf34j0YyblgUP0AClJ">--fs-body</code></td><td data-page-node-id="mq3WgqZHYXZkjmJ3OPAMrA">13px</td><td data-page-node-id="EkT0mD7U07x1OSVh5L2ccJ">1.6</td><td data-page-node-id="EQCRzD1tPFRrHs7e8zVC9T">正文 / 摘要 / 列表项</td><td data-page-node-id="h72jJoSO3fbe1uAKa6fWie">12.5 / 13 / 13.5px</td></tr>
+      <tr data-page-node-id="NFi0Luy2IRNgcLtM8bXEuo"><td data-page-node-id="CzcFlgnhRvIcHHP0ayk7xT"><code data-page-node-id="yHeciX0edUB6CUPvBdZXFq">--fs-meta</code></td><td data-page-node-id="441uHND0Z4yM5cAaEJ6fvH">12px</td><td data-page-node-id="3xqXWDRAZpGHiF9HGqE8oQ">1.5</td><td data-page-node-id="3ikQESiVXqIDHZ9L4yYsv0">来源 / 时间 / 表头</td><td data-page-node-id="ivCO8rzHEjaBDx9lsH6G5q">11.5 / 12 / 12.5px</td></tr>
+      <tr data-page-node-id="j07NDvyGMEZCHS4GwI1HL3"><td data-page-node-id="RP2mrhSPMtZABPkJ25vteh"><code data-page-node-id="ZGLJu1U3Gg0PAGSKQz55Df">--fs-note</code></td><td data-page-node-id="XaTQ5qh9AjGdFdyfV5dQXd">10px</td><td data-page-node-id="mIB2JP1HmrqM823FSfg3EF">1.5</td><td data-page-node-id="TTDxaVZ7QRG6CGkqMImoGY">脚注 / 徽章</td><td data-page-node-id="ADHBHD3CLUSRGviPiIjDBt">10 / 11px</td></tr>
+    </table>
+    <p class="note" style="margin-top:12px" data-page-node-id="HsekOYe7BdCq7hiiPQgREn">禁止 11.5 / 12.5 / 13.5 这类半像素级字号——它们在 Windows 渲染下会发虚，也是"看着不精致"的主因之一。</p>
+  </section>
+
+  <section data-page-node-id="WOLu7BlEf7DOXSF80gJDgf">
+    <h2 data-page-node-id="Qcpa7cxfkvUKteM3ohmseB">四、间距与圆角</h2>
+    <table data-page-node-id="gHCuf5SALkPUmeD6T8f3qf">
+      <tr data-page-node-id="fCvjBcZUAWUs8JDHsfuq0c"><th data-page-node-id="lPUe2WC7DU9gwEbzPJiCTb">Token</th><th data-page-node-id="SwFuA8osZBQHBVJoaSla4I">值</th><th data-page-node-id="HEUT4uQIX8WPgto8usmPIj">用途</th><th data-page-node-id="Ne3qwLEG86lCCLR0BESBoN">Token</th><th data-page-node-id="dTuCJMt3uxLhNqCCqslyF7">值</th><th data-page-node-id="uAx7QlubFW12EMFhl0fnss">用途</th></tr>
+      <tr data-page-node-id="zOJPPDzCRJwvAhLmnXMrjv"><td data-page-node-id="Y8eqr9eVQpHMvFAwLFGRMl"><code data-page-node-id="W6RANvOMcUlmTCj99yn2C4">--s1</code></td><td data-page-node-id="griB8BslQtzgJmncIym4L7">4px</td><td data-page-node-id="MWRoJ3MPyqzghNx1CLHGE3">图标与文字间隙</td><td data-page-node-id="ExanNfvIAAw6FAYx93ScSn"><code data-page-node-id="AeeWQLJ3q3NDRFtnppbAtv">--r-sm</code></td><td data-page-node-id="jA0IDyLarv0CopdvY7XF9x">4px</td><td data-page-node-id="q447gtYMqBPDrm0Bqj6OjN">徽章 / 芯片</td></tr>
+      <tr data-page-node-id="1LLlCxnk1SVmgx732CILqs"><td data-page-node-id="TNpjLcwxWf6PrmJakP0NYB"><code data-page-node-id="KzoRWT0NoBD73QpdhWj4FH">--s2</code></td><td data-page-node-id="QBRYN7c4IirYIygMGs2SL1">8px</td><td data-page-node-id="1BVOqWCT9odjG9rDFfX78T">行内元素 gap</td><td data-page-node-id="ebcWjmGkOsI5v3ELdIc9nB"><code data-page-node-id="YY5Rjux1c2TpbUDjrxvA0B">--r-md</code></td><td data-page-node-id="KXN5lum3tkF1OBnE2StVh5">8px</td><td data-page-node-id="2CSvfI0PDazLZq1vBBvQMB">按钮 / 输入 / 小元素</td></tr>
+      <tr data-page-node-id="eHEXoEwaziK2A9j0JD667Q"><td data-page-node-id="BnAxLZnSsc3oXfKAL6OBBw"><code data-page-node-id="j3AlZl2fw9ltwW2FGXqAOT">--s3</code></td><td data-page-node-id="Pd5tY7dWJ7lKGC4MJUKlKb">12px</td><td data-page-node-id="vYMPT9UWPNxExqzN8dHs48">卡片内小间距</td><td data-page-node-id="QG9DZ8RFGEH5zPp4EaxZNh"><code data-page-node-id="u8McGeqo5DK9hvoAKL0mLk">--r-lg</code></td><td data-page-node-id="ifYz2obTJx6xHJipoFLhV2">12px</td><td data-page-node-id="15pdkx8oDgtMkChOKolAnf">卡片 / 面板</td></tr>
+      <tr data-page-node-id="fHl5gnJfXjmCxj9J8Vl5By"><td data-page-node-id="vOse2HzWWQSEreJbCwR49M"><code data-page-node-id="WOcp4GRs7xp5LSvRHYYGg2">--s4</code></td><td data-page-node-id="uv63iNheCyVtiIf48JcE7n">16px</td><td data-page-node-id="x0gh4mHs2RD0pG6F5lHcyA"><b data-page-node-id="TB1BOHSJ3S4eJAan271eGE">卡片内边距</b>（标准）</td><td colspan="3" data-page-node-id="04pwK1RHJKdvgTblIoT9U7"></td></tr>
+      <tr data-page-node-id="TKDrNAa1CW5ULXfg2begtr"><td data-page-node-id="YlIDXAGDtctEAwem1DdgO6"><code data-page-node-id="oCKS2wLL2CAPkCjqB1rsDq">--s5</code></td><td data-page-node-id="X9Iis6lR4E0CA8SSLTQfPO">24px</td><td data-page-node-id="6cC2JtWlUFxEekEy6jPEUB">卡片之间</td><td colspan="3" data-page-node-id="cpeEECDgC06ODzqyk5ra5B"></td></tr>
+      <tr data-page-node-id="WgF2CZHhYc4YFO9Au2OJHK"><td data-page-node-id="qf2rLDz9WvlAm0vFHWIjZM"><code data-page-node-id="DhR0u66sHWCD0QDdbWgrFo">--s6</code></td><td data-page-node-id="DqjhjRj8JFZXvnFdXQzHkS">32px</td><td data-page-node-id="B9QnKuraBUjla2Mmm1eqQW"><b data-page-node-id="BI8Yw7Q08U14rbMeIzbD0l">区块之间</b></td><td colspan="3" data-page-node-id="dtTtJnWMKUo29e9TEGnuac"></td></tr>
+    </table>
+    <p class="note" style="margin-top:12px" data-page-node-id="De1fBlYwNzvnAOfies3Wo1">现有 91 种 padding 组合全部收敛到以上 6 档；16 种 gap 收敛到 4 / 8 / 12 / 16。</p>
+  </section>
+
+  <section data-page-node-id="DsdCt4kYHecv4zsmi3CBlR">
+    <h2 data-page-node-id="i5mqaOQIuHtXtHMrvzVdHt">五、组件规范</h2>
+
+    <h3 data-page-node-id="TQypjXneMEG0IvvUgUqq7Y">5.1 新闻条目卡片</h3>
+    <div class="card" data-page-node-id="UnlxYMH1xFXoLimNf8LSRx">
+      <div class="row" style="margin-bottom:6px" data-page-node-id="XY4d1H1BoB47RhgV1jBmcH">
+        <span class="badge" data-page-node-id="7DYB3Hh5ynRm9xxLDri9Fv">NEW</span>
+        <span class="chip-item" data-page-node-id="Bxl1UnHxs4NQyJ1uStilvv">政策与产业</span>
+      </div>
+      <p class="demo-title" data-page-node-id="QLqDFgDbmKqZVii8AVa15S">自然资源部印发新一轮找矿突破战略行动年度实施方案</p>
+      <p class="demo-meta" data-page-node-id="AO0AElzCHwO8ALF9PDXqWZ">自然资源部 · 09-08 09:12</p>
+      <p class="demo-sum" data-page-node-id="ajWffACRAi1eXVXRhZ5RuW">方案明确 2026 年度重点矿种与勘查投入，突出铝土矿、铜、锂等紧缺矿种，要求各省建立项目台账并按季度调度。</p>
+    </div>
+    <div class="card read" data-page-node-id="UUJBBRjpwX7IsAJRKY05fW">
+      <p class="demo-title" data-page-node-id="gYoNtn2KCudwGR5QW3BlLw">（已读态）某矿业公司发布半年报，主营产品产量同比增长</p>
+      <p class="demo-meta" data-page-node-id="SfrnlaVtoTBemVVwndc9zH">巨潮资讯网 · 09-07 18:40</p>
+      <p class="demo-sum" data-page-node-id="YEUxuWuBAE7nhKArvwEZma">已读条目用 ink-300 文字色，不用整块透明度——透明度会让小字号在浅色背景上发灰难读。</p>
+    </div>
+
+    <h3 data-page-node-id="19HAU1TWix36O1D2XxIn1X">5.2 区块标题</h3>
+    <div class="card" data-page-node-id="OH1Aq4ZxtL4khGwxUicTNH">
+      <h2 style="margin:0 0 12px" data-page-node-id="94gps5fLzkodYB11UHXU5W">今日新增</h2>
+      <p class="demo-sum" data-page-node-id="h1j9Cb1aDl31mGDEvGJB3R">16px / 600 / 行高 1.4，左侧 3px 品牌色竖条，上间距 32px、下间距 12px。</p>
+    </div>
+
+    <h3 data-page-node-id="z6pdCJwxLsK8kIAqK6Omsb">5.3 价格行（密度核心）</h3>
+    <div class="card" data-page-node-id="8JAnjX3IVEZNtbalcJo5c4">
+      <div class="px-row" data-page-node-id="HxekcGnUM3xZKSLF4MZEIA"><span class="px-name" data-page-node-id="Pw7CnNRBu9qlu1P6w0jybl">沪铜 CU</span><span class="px-val" data-page-node-id="MTu1JaxdMIkdarQ7OD34iQ">78,420</span><span class="px-chg up" data-page-node-id="OXY7lRytlmCa95Kb0k0yUA">+1.24%</span></div>
+      <div class="px-row" data-page-node-id="N779VaHFYEmWx1kPUtIofT"><span class="px-name" data-page-node-id="C6odITobMcJvuQOalq83Vj">沪铝 AL</span><span class="px-val" data-page-node-id="vMGPhNaqmdEA9KWiuz83Pk">20,135</span><span class="px-chg up" data-page-node-id="wXleNPVPACUpJ7Bj9ysik5">+0.38%</span></div>
+      <div class="px-row" data-page-node-id="1ZsnTJeJzB2LbEtqOnGbpw"><span class="px-name" data-page-node-id="YxDEkKE6OGHWnmEJoBlSO1">沪锌 ZN</span><span class="px-val" data-page-node-id="ElWLgbeD6vtS0SaDZRDizv">24,680</span><span class="px-chg down" data-page-node-id="0QmNKugslxfR05xuSNlaql">−0.52%</span></div>
+      <div class="px-row" data-page-node-id="3RCZbiqI5QXZrz0SQzfCOf"><span class="px-name" data-page-node-id="P6RepXZ8seJyG6Ec8GBcwQ">LME 铜（美元/吨）</span><span class="px-val" data-page-node-id="OtyOBwFsI5rsPvtjulObYQ">9,821</span><span class="px-chg up" data-page-node-id="PETo6qTEjC1uAJE3DbiQDt">+0.91%</span></div>
+    </div>
+    <p class="note" data-page-node-id="Rs4BYnSEMrKRSB1aI5OHo8">价格用等宽数字 <code data-page-node-id="A9FAoEBVT150m6LHkccecd">font-variant-numeric: tabular-nums</code>，数字跳动时不会左右抖动。桌面端价格区改 2~3 列网格，一行一品，取代现在的 16 张大卡。</p>
+
+    <h3 data-page-node-id="Btz9gDtYKQaWMSmHcDQHLp">5.4 筛选器与按钮</h3>
+    <div class="card" data-page-node-id="djJgyyQyhNbDxJIfegQwSl"><div class="row" data-page-node-id="wqqVfLrlULu86Sy0LEGGxr">
+      <span class="btn on" data-page-node-id="F97FB54VkdXHlSpVLwAh2d">全部</span><span class="btn" data-page-node-id="YREcVmRkyeuBTBuLWpH69y">政策</span><span class="btn" data-page-node-id="E4CWzbx15ocg7KZTVPTAVZ">勘查</span><span class="btn" data-page-node-id="vzKskiQCWlWDBQGSrxHtKY">并购</span><span class="btn" data-page-node-id="OF2KmDYQNDzaSpki9opeob">矿权</span>
+    </div></div>
+  </section>
+
+  <section data-page-node-id="wuJNDKT4NpOicz4EvAvxPi">
+    <h2 data-page-node-id="qnWnab5qNMX8jOD3DbpYIb">六、落地计划</h2>
+    <table data-page-node-id="948ZI4FDHEtJgDOmVGT2mW">
+      <tr data-page-node-id="Ci17GhZzmrwmbTFVdHf59R"><th data-page-node-id="SMl00oJgDHWLgYNhJNC3p2">步骤</th><th data-page-node-id="C9hKxwG8d1crGt8ihdcLKI">动作</th><th data-page-node-id="Vd8FPbG3a7cplq32nNSCEY">风险</th></tr>
+      <tr data-page-node-id="XnOJnkNVOCSYacO3u5Z0CJ"><td data-page-node-id="SWlzQuVwsXtlaGATLGMI1U">1. 注入 token</td><td data-page-node-id="d6xXsRzFb765y9m9zU3Hdg">在 <code data-page-node-id="lpqD3RsO4wDHmz01Ey3Y9e">:root</code> 与 <code data-page-node-id="gT0s9HpuAaFiaLupHm8O26">body.dark</code> 下定义全部变量，不改任何选择器</td><td data-page-node-id="XQpboCU8OB1uvc8MQ9Dl48">无</td></tr>
+      <tr data-page-node-id="MrVmmaRm7ph7l5d1PbPCh9"><td data-page-node-id="QoIz5BDK8TcVGXRD6W6SLo">2. 替换硬编码</td><td data-page-node-id="KFvvw4JRe4tL6MAfP6Ledj">按映射表把颜色/字号/圆角/间距替换为变量；<b data-page-node-id="2EJCiAeOSw6g24bqxiTobe">不改 HTML 结构、不改 class 名</b></td><td data-page-node-id="K1vcqsUqH9rJHa8cxBSQLu">低</td></tr>
+      <tr data-page-node-id="M155k6Q1pWkRCOnAeaGFoX"><td data-page-node-id="2OyhPoFlJLLMZO7LoHsFtk">3. 组件统一</td><td data-page-node-id="KRkB9IbPTMKE4JHaC2eGMy">卡片、区块头、徽章、价格行、按钮按规范重写样式</td><td data-page-node-id="URirrdmTfGEz34CunISBqT">中</td></tr>
+      <tr data-page-node-id="9fyMpnACzNU7WjlFTCq7XK"><td data-page-node-id="8YPEAs7oL5l4ACI7XQIKrU">4. 价格区重构</td><td data-page-node-id="eVdui4j32hrFxdmHdFjs0S">16 张大卡 → 紧凑表格式（2~3 列），仅改 CSS 布局</td><td data-page-node-id="aJVPhfvPgTwvqB5iYc98R5">中</td></tr>
+    </table>
+    <h3 data-page-node-id="5v2fhe50VISrlYeEkScIHS">硬约束（不可破坏）</h3>
+    <ul data-page-node-id="rDKxhRVGLMh5FsLAF67SHi">
+      <li data-page-node-id="GXznRfWFXvQaKkA6WsbHLZ"><code data-page-node-id="gv0xDKROu0H9xqfGtTXyEk">class="section" id="todaySection / archiveSection / rightsSection"</code> 三个锚点字符串原样保留，否则每日生成脚本切分失败。</li>
+      <li data-page-node-id="wVbAuT5lBYgjG0uA7GM6ND">会展 IIFE（<code data-page-node-id="aLbaUJH1otx9zvkpbUzEcO">EXPO_WORDS</code> / <code data-page-node-id="y62PERSd5PUwbiTCJxNXvb">window.__expoIsExpo</code> / <code data-page-node-id="IWz6M8ClZW9tZPJalgTzxs">#expoMini</code>）、热榜 <code data-page-node-id="JDdz1OjGyHBAGEOHTCtiFf">#hotListSection</code>、矿权 <code data-page-node-id="QCdCh65QmzurQJ34GYHFxj">.rights-list/.rights-row</code> 相关选择器不得改名。</li>
+      <li data-page-node-id="X75GjjBoW7Hr3y9rfCRlGx">改完必须 bump <code data-page-node-id="NiADghTKnlzJXv2qMxP3uy">build-version</code> 与 <code data-page-node-id="3hKkhaTM5coxnOnrmiSVWd">sw.js</code> 的 <code data-page-node-id="IcBbCR0GI8MiPc6DE8hMbU">CACHE_NAME</code>，否则同事端被 PWA 旧缓存挡住。</li>
+      <li data-page-node-id="VFEfhlGKl4gra5CQWJTG9G">改完跑 <code data-page-node-id="7Iihcud0PtUVTGwyAuwquO">test_smoke_0908.js</code>（jsdom 25 项）+ <code data-page-node-id="377h6OZ6rWmf3rJHE6J66E">preflight_check.py</code>，再 <code data-page-node-id="DJExAOY3hZZ2iCAizRymDy">deploy_pages.py</code>。</li>
+    </ul>
+  </section>
+
+</div>
+</body>
+</html>
