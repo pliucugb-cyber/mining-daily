@@ -135,7 +135,9 @@ SOURCES = [
         "name": "全球矿产资源信息系统",
         "list_url": "https://geoglobal.mnr.gov.cn/",
         "kind": "html",
-        "link_re": r"\./zx/[\w/]+/(t\d{8}_\d+\.htm)",
+        # 2026-09-08 修复：旧正则只取文件名、丢掉子栏目目录（kydt/zhyw、kczygl/zcdt 等），
+        # 拼出的 /zx/t2026xxxx_xxxxx.htm 全部 404。必须把「子栏目/年月/」整段一起捕获。
+        "link_re": r"\./zx/((?:[\w\-]+/)+t\d{8}_\d+\.htm)",
         "href_tpl": "https://geoglobal.mnr.gov.cn/zx/{g1}",
         "category": "国际矿业动态",
         "source": "全球矿产资源信息系统",
