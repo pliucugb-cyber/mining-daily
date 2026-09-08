@@ -133,7 +133,10 @@ setTimeout(() => {
 
   console.log('\n===== ⑥ 已读样式对比度 =====');
   const css = html;
-  check('已读整体降透明度', /\.news-item\.read\{opacity:\.6\}/.test(css));
+  // 2026-09-08 step3 修订：禁用 opacity 做已读态（13px 中文会发灰糊），改用 --ink-300 文字色
+  check('已读改用文字色（非 opacity）', /\.news-item\.read \.news-title\{color:var\(--ink-300\)/.test(css)
+    && /\.news-item\.read \.news-summary\{color:var\(--ink-300\)/.test(css));
+  check('已读不再整块降透明度', !/\.news-item\.read\{opacity/.test(css));
   check('已读圆点改空心灰环', /\.news-item\.read \.dot\{background:transparent;box-shadow:inset 0 0 0 2px/.test(css));
   check('未读圆点仍为实心品牌色', /\.dot\{width:9px;height:9px;border-radius:\s*50%;background:(#2980b9|var\(--brand\))/.test(css));
 
