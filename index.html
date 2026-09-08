@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-2224" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-2232" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1380,6 +1380,7 @@ body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
         <option value="磷" data-page-node-id="rGF2SHy4RJt4h8Y1cR2Y9c">磷</option>
         <option value="铁" data-page-node-id="rGG2SHy4RJt4h8Y1cR2Y9d">铁</option>
         <option value="钨钼" data-page-node-id="rGH2SHy4RJt4h8Y1cR2Y9e">钨钼</option>
+        <option value="铌钽" data-page-node-id="">铌钽</option>
         <option value="多金属" data-page-node-id="rGI2SHy4RJt4h8Y1cR2Y9f">多金属</option>
       </select>
     </label>
@@ -1514,8 +1515,10 @@ body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
     var mm=m.match(/勘查矿种([一-龥]{1,4})矿/);
     if(mm) mineral=mm[1];
     else {
-      var order=["金","银","铜","铅","锌","镍","锡","锂","稀土","磷","铁","钨","钼"];
-      mineral=g.filter(function(x){return order.indexOf(x)>=0;})[0]||"";
+      var order=["金","银","铜","铅","锌","镍","锡","锂","稀土","磷","铁","钨","钼","铌","钽"];
+      // 2026-09-08 晚：铌钽组合优先（何家坪钽铌矿等此前识别为「—」）；铌钽为战略关键矿产，
+      // 标题含「钽铌/铌钽」时显示「铌钽」而非单字，再退回单字标签匹配。
+      mineral=/钽铌|铌钽/.test(t)?"铌钽":(g.filter(function(x){return order.indexOf(x)>=0;})[0]||"");
       if(!mineral && /铅锌/.test(t)) mineral="铅锌";
       if(!mineral && /钨钼/.test(t)) mineral="钨钼";
       if(!mineral && /多金属/.test(t)) mineral="多金属";
@@ -1771,7 +1774,7 @@ body.dark .news-summary .rr-link:visited{color:var(--ink-500)}
   function injectRightsResultSummary(){
     if(!window.NEWS_DATA || !window.NEWS_DATA.news) return;
     var today=qaReportDate();
-    var minerals=['铜','镍','铅','锌','铝','金','银','稀土','钨','钼','锡','锑','锂','钴'];
+    var minerals=['铜','镍','铅','锌','铝','金','银','稀土','钨','钼','锡','锑','锂','钴','铌','钽'];
     var results=[];
     window.NEWS_DATA.news.forEach(function(r){
       var u=r.u||r.url||'';
