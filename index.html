@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260908-1040" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260908-1050" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -4386,10 +4386,28 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
   if(bubble)bubble.innerHTML='<div class="qa-thinking"><span class="qa-dot"></span>DeepSeek 正在组织答案（约 10~30 秒，可先浏览上方参考来源）…</div>';
   // 2026-09-06 晚：35s 超时兜底，避免 DeepSeek 卡住时面板长期转圈
   var _ac=new AbortController();var _to=setTimeout(function(){_ac.abort();},35000);
-  fetch('https://api.deepseek.com/chat/completions',{
+  // 2026-09-08：两种调用方式，优先走代理
+  //   ① 代理模式（推荐 / 默认）：QA_API_BASE 指向 Netlify 边缘函数，Key 存在平台环境变量里。
+  //      本页是 GitHub Pages 公开静态页，任何写进页面的 Key 都等于公开（curl 即得），
+  //      故统一走代理——同事打开即用，无需自己填 Key。代理透传 DeepSeek 原始响应，
+  //      因此下面的解析逻辑与直连完全一致。
+  //   ② 直连模式（兜底）：仅当未配置代理地址时，才使用使用者自填的 Key（localStorage）。
+  var _proxyBase=(typeof QA_API_BASE!=='undefined'&&QA_API_BASE)?String(QA_API_BASE).replace(/\/+$/,''):'';
+  var _dsMessages=dsMessages.concat([{role:'user',content:user}]);
+  var _url,_headers,_body;
+  if(_proxyBase){
+    _url=_proxyBase+'/api/qa';
+    _headers={'Content-Type':'application/json'};
+    _body=JSON.stringify({messages:_dsMessages,max_tokens:1000,temperature:0.3});
+  }else{
+    _url='https://api.deepseek.com/chat/completions';
+    _headers={'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()};
+    _body=JSON.stringify({model:'deepseek-chat',messages:_dsMessages,max_tokens:1000,temperature:0.3,stream:false});
+  }
+  fetch(_url,{
     method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()},
-    body:JSON.stringify({model:'deepseek-chat',messages:dsMessages.concat([{role:'user',content:user}]),max_tokens:1000,temperature:0.3,stream:false}),
+    headers:_headers,
+    body:_body,
     signal:_ac.signal
   })
     .then(function(r){return r.json().then(function(d){return {ok:r.ok,status:r.status,d:d||{}};},function(){return {ok:false,status:0,d:{}};});})
