@@ -4,7 +4,8 @@
  *   ① sw.js 对 HTML 导航用 network-first + cache:'reload'（绕过浏览器与 CDN 缓存回源）
  *   ② index.html 的 SW 注册 URL 带 build-version 动态变化（否则写死 ?v=11 时 CDN 缓存旧 sw.js，
  *     浏览器检测不到 SW 更新，新 SW 接不了管）
- *   ③ 运行时确实调用了 register('./sw.js?v=<build-version>')
+ *   ③ sw.js activate 内通过 clients.navigate() 强制已打开页面重新导航，由 SW 自己完成「第二次刷新」
+ *   ④ 运行时确实调用了 register('./sw.js?v=<build-version>')
  * 运行：node test_sw_cache_update.js
  */
 const fs = require('fs');
@@ -31,6 +32,9 @@ check('sw.js HTML 块已非 stale-while-revalidate',
   'HTML 块内不应再 return cached || network（静态资源块保留该模式是合理的）');
 check('sw.js 仍保留 skipWaiting + clients.claim',
   /self\.skipWaiting\(\)/.test(swSrc) && /self\.clients\.claim\(\)/.test(swSrc));
+check('sw.js activate 内通过 clients.navigate() 强制已打开页面重新导航',
+  /c\.navigate\s*\(\s*c\.url\s*\)/.test(swSrc),
+  '新 SW 接管后主动刷新，避免旧页面仍渲染旧版');
 
 console.log('\n===== ② index.html SW 注册 URL 动态化 =====');
 const bvMatch = htmlSrc.match(/<meta name="build-version" content="([^"]+)"/);

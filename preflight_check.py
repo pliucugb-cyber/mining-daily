@@ -73,7 +73,7 @@ def check_functions(text):
         'function exportPdf',
         'function renderRightsSection',
         'function bindRights',
-        'md_reload_cnt',
+        'clients.navigate',
         '_clearHtmlCache',
     ]
     missing = [f for f in required if f not in text]
