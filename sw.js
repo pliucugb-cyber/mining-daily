@@ -7,7 +7,7 @@
 // 2026-09-04 二次修复：支持子路径部署（GitHub Pages 站点位于 /mining-daily/）。
 //   原先写死 '/index.html' 这类绝对路径，在子路径下会指向站点根而 404。
 //   改为以 SW 自身所在目录为基准推导 BASE，根路径部署（本地/沙箱）与子路径部署（Pages）均可。
-const CACHE_NAME = 'mining-daily-v64';
+const CACHE_NAME = 'mining-daily-v65';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -76,17 +76,18 @@ self.addEventListener('fetch', event => {
   //   数据文件      → network-first（刷新即见最新）+ 写缓存（离线兜底），去掉 cache:'reload' 改用 HTTP 304 验证，
   //                  未变更时 304 秒回、变更时才下载新内容。
   if (isHtml) {
+    // 2026-09-09 根治：network-first + cache:'reload'。每次刷新都绕过浏览器与 CDN 缓存向源站
+    // 拉最新 HTML，保证「部署后刷新即见新功能」，无需手动清缓存。离线/网络失败时回退缓存。
     event.respondWith(
-      caches.match(req).then(cached => {
-        const network = fetch(req).then(res => {
+      fetch(req, { cache: 'reload' })
+        .then(res => {
           if (res && res.ok && res.type === 'basic') {
             const copy = res.clone();
             caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
           }
           return res;
-        }).catch(() => cached);
-        return cached || network;
-      })
+        })
+        .catch(() => caches.match(req).then(r => r || caches.match(BASE + 'index.html')))
     );
     return;
   }

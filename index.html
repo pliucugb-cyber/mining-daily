@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2492" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2493" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -3766,8 +3766,10 @@ window.addEventListener('DOMContentLoaded',function(){
   if(!IS_MOBILE_UA) showPwaInstallPrompt();
 });
 // ===== 版本戳自愈：用户停留在旧页面时，只要拿到的新页面版本与本地不一致，自动硬刷新一次 =====
-// 2026-09-05 新增：根因是"旧版 Service Worker/浏览器缓存"导致浮窗半透明。三保险：
-//   ① SW fetch HTML 带 cache:'reload'（见 sw.js）；② SW 注册带 ?v= 版本号；③ 此处版本戳自愈。
+// 2026-09-09 根治（三保险已全部做实）：① SW fetch HTML 用 network-first + cache:'reload'
+//   （见 sw.js，每次刷新都回源拿最新）；② SW 注册 URL 带 build-version 动态变化（旧版写死
+//   ?v=11 导致 CDN 缓存旧 sw.js、浏览器检测不到 SW 更新）；③ 此处版本戳自愈兜底。
+// 三者叠加确保「刷新即最新」，无需任何手动清缓存。
 (function(){
   try{
     var m=document.querySelector('meta[name="build-version"]');
@@ -3804,7 +3806,12 @@ function _clearHtmlCache(){
 // 2026-09-02：新版 SW 激活后自动 reload，保证所有人打开就是最新版，无需手动清缓存
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('./sw.js?v=11').catch(function(){});
+    // 2026-09-09 根治：SW 注册 URL 带 build-version，每次部署都变化。
+    // 否则 URL 写死 ?v=11，GitHub Pages CDN 缓存旧 sw.js 时浏览器检测不到 SW 更新，
+    // 新 SW 接不了管，用户刷新仍跑旧 SW（旧缓存策略）。动态 URL 让新脚本必被回源下载。
+    var _bvMeta=document.querySelector('meta[name="build-version"]');
+    var _bv=(_bvMeta&&_bvMeta.getAttribute('content'))||'1';
+    navigator.serviceWorker.register('./sw.js?v='+_bv).catch(function(){});
     // 收到"新版已就绪"通知 → 自动刷新（只刷一次，防死循环）
     navigator.serviceWorker.addEventListener('message',function(ev){
       if(ev.data&&ev.data.type==='SW_UPDATED'&&!window.__swReloaded){
