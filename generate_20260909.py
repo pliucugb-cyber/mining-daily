@@ -341,6 +341,27 @@ def render_cat_groups(seq, mark_new=False):
     return out
 
 
+# ============ 3.6 并购关键词重归类（方案B：让境外/行业源里的并购新闻也进「并购与投资」） ============
+CAT_MA = '💰 并购与投资'
+MA_KW = ['收购', '并购', '资产重组', '资产购买', '资产出售', '股权转让', '受让',
+         '增资', '拟收购', '拟转让', '认购', '合资', '重大资产', '定增',
+         '资产置换', '向特定对象发行']
+# 叙述性误判排除：仅当标题/摘要同时出现「标的/交易/股权/项目」等实质交易语境才归并购
+MA_REQUIRE = ['收购', '并购', '受让', '股权转让', '资产重组', '资产购买', '资产出售',
+              '增资', '认购', '合资', '定增', '资产置换', '向特定对象发行', '拟收购', '拟转让']
+
+def _reclassify_ma(cat, it):
+    """命中并购实质关键词且当前非矿权/并购类时，归到「并购与投资」。"""
+    if cat in ('💼 矿权交易', CAT_MA):
+        return cat
+    title = (re.search(r'class="news-title"[^>]*>([^<]+)</a>', it) or [None, ''])[1]
+    sum_m = re.search(r'class="news-summary">([^<]+)</div>', it)
+    summary = sum_m.group(1) if sum_m else ''
+    text = title + ' ' + summary
+    if any(k in text for k in MA_REQUIRE):
+        return CAT_MA
+    return cat
+
 unique_new = []
 new_seen_url = set()
 for cat, it in new_items:
@@ -348,7 +369,7 @@ for cat, it in new_items:
     if url in new_seen_url:
         continue
     new_seen_url.add(url)
-    unique_new.append((cat, it))
+    unique_new.append((_reclassify_ma(cat, it), it))
 new_items = unique_new
 
 merge_seq = [x for x in merge_seq if item_url(x[1]) not in new_seen_url]
