@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2236" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-1530" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -2412,8 +2412,8 @@ function initArchiveFold(){
     let prevNode=cat;
     dayKeys.forEach(key=>{
       const itemsInDay=groups[key];
-      // 用户偏好优先，未设则默认展开
-      if(!(key in dayMap))dayMap[key]=false;
+      // 用户偏好优先；未设则默认【折叠】，点日期才展开（避免「默认已展开、点一下反而收起」的反直觉）
+      if(!(key in dayMap))dayMap[key]=true;
 
       const dayHead=document.createElement('div');
       dayHead.className='day-group';
@@ -2435,24 +2435,28 @@ function initArchiveFold(){
         prevNode.parentNode.insertBefore(it, prevNode.nextSibling);
         prevNode=it;
       });
+      // 统一由 mdSetDayGroup 初始化：data-collapsed / aria / 箭头 / items 显示 全部对齐 dayMap 状态
+      // （否则初始箭头写死 ▾ 与 data-collapsed=true 不一致，且 items 显示态需与折叠态同步）
+      mdSetDayGroup(dayHead, dayMap[key]);
 
       const toggle=(e)=>{
         if(e && e.stopPropagation) e.stopPropagation();   // 避免冒泡到父分类触发整体折叠
-        const next=!dayMap[key];
-        dayMap[key]=next;
+        // 以真实显示态（data-collapsed）为状态源，而非闭包 dayMap。
+        // 否则「筛选时 mdAutoExpandDayGroups 强制展开」只改了 DOM 显示却没同步 dayMap，
+        // 之后点击 next=!dayMap 与显示态错位 → 点了不切换（「点了不显示内容」的放大版 bug）。
+        const isCollapsed = dayHead.getAttribute('data-collapsed')==='true';
+        const willCollapse = !isCollapsed;   // 当前折叠→展开(willCollapse=false)，当前展开→折叠(true)
+        dayMap[key] = willCollapse;          // 记忆用户主动点击后的偏好（折叠=true 隐藏）
         _afSaveMap(_AF_LS_DAY, dayMap);
-        dayHead.setAttribute('data-collapsed', String(next));
-        dayHead.setAttribute('aria-expanded', String(!next));
-        // 切换该日下 items
+        dayHead.setAttribute('data-collapsed', String(willCollapse));
+        dayHead.setAttribute('aria-expanded', String(!willCollapse));
+        // 切换该日下 items（保留 old-folded 语义：超过14天旧闻且未展开更早内容时保持隐藏）
         let n=dayHead.nextElementSibling;let cnt=0;
         while(n && cnt<itemsInDay.length){
           if(n.classList && n.classList.contains('news-item')){
-            // 该条目若属于「超过14天旧闻」且未展开更早内容，即便日组展开也保持隐藏
-            if(!next && n.classList.contains('old-folded') && !oldExpanded){
-              n.style.display='none';
-            }else{
-              n.style.display=next?'none':'';
-            }
+            if(willCollapse){ n.style.display='none'; }
+            else if(n.classList.contains('old-folded') && !oldExpanded){ n.style.display='none'; }
+            else { n.style.display=''; }
             cnt++;
           }
           n=n.nextElementSibling;
