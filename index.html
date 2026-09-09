@@ -7,7 +7,8 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2497" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2498" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -3762,30 +3763,28 @@ function triggerPwaInstall(){
 
 // 页面加载后再判断一次（处理 iOS 等不触发 beforeinstallprompt 的场景）
 window.addEventListener('DOMContentLoaded',function(){
+  // 刷新/重载后强制回到顶部（配合 <head> 里的 history.scrollRestoration='manual'）
+  try{ window.scrollTo(0,0); }catch(e){}
   if(IS_STANDALONE){ hidePwaInstallPrompt(); return; }
   // iOS 不触发 beforeinstallprompt，直接显示浮条
   if(IS_IOS&&IS_MOBILE_UA) showPwaInstallPrompt();
   // 电脑端若浏览器支持安装，先显示按钮；等 beforeinstallprompt 触发后再点亮实际安装能力
   if(!IS_MOBILE_UA) showPwaInstallPrompt();
 });
-// ===== 版本戳自愈：用户停留在旧页面时，只要拿到的新页面版本与本地不一致，自动硬刷新一次 =====
-// 2026-09-09 最终根治：① SW fetch HTML 用 network-first + cache:'reload'（每次刷新都回源拿最新）；
-//   ② SW 注册 URL 带 build-version 动态变化；③ 新 SW activate 后通过 clients.navigate() 主动
-//   强制所有已打开页面重新导航，由 SW 自己完成「第二次刷新」；④ 此处版本戳自愈兜底。
+// ===== 版本戳记录：仅持久化当前 build，不做硬刷新 =====
+// 2026-09-09 根治后，「刷新即最新」的职责已完全交给 Service Worker：
+//   ① SW fetch HTML 走 SWR（秒开缓存 + 后台 cache:'reload' 拉新）；
+//   ② SW 注册 URL 带 build-version 动态变化，部署后必下载新 sw.js；
+//   ③ 新 SW activate 后通过 clients.navigate() 主动强制所有已打开页面重新导航一次（唯一刷新来源）。
+// 因此此处不再自行 location.reload()——否则会与 ③ 叠加造成「刷新两次」闪屏。
+// 旧 SW + 旧页面停留场景已由 ③ 的 navigate 覆盖，无需页面再触发一次刷新。
 (function(){
   try{
     var m=document.querySelector('meta[name="build-version"]');
     if(!m)return;
     var v=m.getAttribute('content');
     var k='md_build_ver';
-    var old=localStorage.getItem(k);
-    if(old&&old!==v){            // 版本变了 → 说明这是新发布，硬刷新确保用最新 CSS/JS
-      try{lsSet(k,v);}catch(e){}
-      _clearHtmlCache();          // 清 SW HTML 缓存，确保下次从网络拿最新
-      try{location.reload();}catch(e){location.href=location.href;}
-      return;
-    }
-    try{lsSet(k,v);}catch(e){}
+    try{lsSet(k,v);}catch(e){}   // 仅记录当前版本，供其它逻辑判断，不触发刷新
   }catch(e){}
 })();
 // 清掉 SW 缓存的站点数据，强制下次导航从网络拉最新（避免 stale-while-revalidate 反复返回旧 HTML 造成刷新横跳）
