@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2504" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2505" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -4063,18 +4063,20 @@ function renderLmePrices(){
       return;
     }
     var map={};
+    var dRef=D.date||String(D.updated||'').substring(0,10);   // LME_DATA 的基准日期
     D.metals.forEach(function(m){map[m.slug]=m;});
     // 2026-09-04 修复：卡片直接复用走势图（PRICE_HISTORY）的日K收盘价，
     // 消除「卡片实时价」与「走势图日K收盘」不一致（同一金属两张价）的观感问题。
-    // 仅当 PRICE_HISTORY 内该品种有≥2 个收盘点时覆盖，否则保留 LME_DATA 原值兜底。
+    // 2026-09-09 P0 修复：新增日期守卫——走势图末点日期必须 >= LME_DATA 日期才覆盖，null 不回填；否则保留 LME_DATA 原值兜底（旧逻辑会拿昨日价覆盖今日价并反转涨跌方向）。
     (function(){
       var H=window.PRICE_HISTORY;
       if(!H||!H.series)return;
       D.metals.forEach(function(m){
         var s=H.series[m.slug];
         if(!s||!s.points||s.points.length<2)return;
-        var n=s.points.length, last=s.points[n-1][1], prev=s.points[n-2][1];
+        var n=s.points.length, last=s.points[n-1][1], prev=s.points[n-2][1], lastDate=s.points[n-1][0];
         if(typeof last!=='number'||typeof prev!=='number'||!prev)return;
+        if(dRef&&lastDate&&String(lastDate)<dRef)return;   // 走势图比 LME_DATA 旧 → 不覆盖
         var chg=last-prev, pct=chg/prev*100;
         m.price=last; m.chg=chg; m.chg_pct=pct;
       });
@@ -4086,10 +4088,10 @@ function renderLmePrices(){
       if(!m||m.price==null){v.textContent='--';c.textContent=(m&&m.err)?m.err:'暂无数据';return;}
       v.textContent=Number(m.price).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
       var chg=Number(m.chg||0),pct=Number(m.chg_pct||0);
-      var arrow=chg>=0?'▲':'▼';
-      var sign=chg>=0?'+':'';
+      var cls=chg>0?'up':(chg<0?'down':'flat'), arrow=chg>0?'▲':(chg<0?'▼':'■');
+      var sign=chg>0?'+':'';
       c.textContent=arrow+' '+sign+chg.toFixed(2)+' ('+sign+pct.toFixed(2)+'%)';
-      card.className='price-card '+(chg>=0?'up':'down');
+      card.className='price-card '+cls;
     });
     // 更新顶部 note
     var note=document.getElementById('priceStripNote');
