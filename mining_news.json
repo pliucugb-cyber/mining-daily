@@ -1,7 +1,7 @@
 {
   "meta": {
     "report_date": "2026-09-09",
-    "generated_at": "2026-09-09T09:18:47+08:00",
+    "generated_at": "2026-09-09T14:01:55+08:00",
     "total": 122,
     "new_today": 15,
     "archive": 107,
@@ -209,23 +209,6 @@
       ]
     },
     {
-      "id": "d9ccb0b1434c",
-      "title": "力拓收购嘉能可/三菱 Aurukun 铝土矿项目",
-      "url": "https://www.mining.com/rio-tinto-acquires-aurukun-bauxite-project-from-glencore-mitsubishi",
-      "source": "MINING.COM",
-      "orig_date": "09-09",
-      "orig_date_full": "2026-09-09",
-      "report_date": "2026-09-09",
-      "category": "国际矿业动态",
-      "is_new": true,
-      "summary": "力拓（ASX: RIO）同意从嘉能可（LON: GLEN）与三菱开发公司手中收购澳大利亚昆士兰州 Aurukun 铝土矿项目。嘉能可此前持有多数股权，三菱持有约30%。该项目仍处于\"矿产开发许可证\"阶段，尚未取得\"采矿租约\"。交易财务条款未披露，仍待昆士兰州政府及澳大利亚其他监管机构批准。Aurukun 项目位于力拓现有 Weipa 业务以北约200公里，Weipa 矿区年产量超过3000万吨铝土矿，可为 Aurukun 提供现有基础设施支撑。（原题：Rio Tinto acquires Aurukun bauxite project from Glencore, Mitsubishi）",
-      "embed": "ok",
-      "tags": [
-        "铝",
-        "市场"
-      ]
-    },
-    {
       "id": "926fe22db3fb",
       "title": "艾芬豪将刚果（金）西部前沿铜资源量扩大30% Makoko 概略研究计划2027年启动",
       "url": "https://news.metal.com/en/newscontent/104104009-ivanhoe-expands-drc-western-forelands-copper-resource-by-30-makoko-scoping-study-planned-for-2027",
@@ -311,6 +294,23 @@
       "tags": [
         "铜",
         "技术"
+      ]
+    },
+    {
+      "id": "d9ccb0b1434c",
+      "title": "力拓收购嘉能可/三菱 Aurukun 铝土矿项目",
+      "url": "https://www.mining.com/rio-tinto-acquires-aurukun-bauxite-project-from-glencore-mitsubishi",
+      "source": "MINING.COM",
+      "orig_date": "09-09",
+      "orig_date_full": "2026-09-09",
+      "report_date": "2026-09-09",
+      "category": "并购与投资",
+      "is_new": true,
+      "summary": "力拓（ASX: RIO）同意从嘉能可（LON: GLEN）与三菱开发公司手中收购澳大利亚昆士兰州 Aurukun 铝土矿项目。嘉能可此前持有多数股权，三菱持有约30%。该项目仍处于\"矿产开发许可证\"阶段，尚未取得\"采矿租约\"。交易财务条款未披露，仍待昆士兰州政府及澳大利亚其他监管机构批准。Aurukun 项目位于力拓现有 Weipa 业务以北约200公里，Weipa 矿区年产量超过3000万吨铝土矿，可为 Aurukun 提供现有基础设施支撑。（原题：Rio Tinto acquires Aurukun bauxite project from Glencore, Mitsubishi）",
+      "embed": "ok",
+      "tags": [
+        "铝",
+        "市场"
       ]
     },
     {
