@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2420" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2440" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -4931,6 +4931,100 @@ function qaFollowAsk(btn){
   if(inp)inp.value=(btn.textContent||'').trim();
   qaFloatAsk();
 }
+// ===== Phase B：AI 流式输出（SSE 边收边渲染，向后兼容非流式）=====
+// 统一收尾：内联引用 + 参考来源 + meta + dataset + 追问 chips + 复制/重试按钮
+function qaFinishAnswer(text,bubble,msg,q,ctx,ok,dateIntent){
+  if(bubble)bubble.innerHTML=qaInlineRefs(qaMdRender(text),ctx);
+  var src=qaDsSourcesHtml(ctx,q);
+  if(src&&bubble)bubble.insertAdjacentHTML('afterend',src);
+  if(msg){
+    var meta=ok?(dateIntent?'DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条 '+dateIntent+' 本地新闻':'DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条相关本地新闻'):'本地知识库兜底 · 全库 '+QA_ROWS.length+' 条';
+    var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=meta;
+    msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);qaAppendFollowUps(msg,qaFollowUps(q,ctx));
+    var actions='<div class="qa-msg-actions">'+
+      '<button class="qa-msg-action" type="button" title="复制回答" onclick="qaCopyAi(this)">📋 复制</button>'+
+      (ok?'<button class="qa-msg-action" type="button" title="重新生成" onclick="qaRetryAi(this)">🔄 重新生成</button>':'')+
+      '</div>';
+    if(!msg.querySelector('.qa-msg-actions')){
+      var metaEl=msg.querySelector('.qa-msg-meta');
+      if(metaEl)metaEl.insertAdjacentHTML('afterend',actions);
+      else msg.insertAdjacentHTML('beforeend',actions);
+    }
+  }
+  qaFloatScroll();qaSaveHistory();
+}
+// 代理模式下：优先尝试 SSE 流式；若边缘函数尚未启用流式（返回 JSON），自动回退 JSON 解析
+function qaTryStreamOrJson(url,headers,body,bubble,msg,q,ctx,dateIntent,ac,to,btn){
+  fetch(url,{method:'POST',headers:headers,body:body,signal:ac.signal})
+    .then(function(r){
+      var ct=(r.headers&&r.headers.get)?r.headers.get('content-type'):'';
+      if(/text\/event-stream/.test(ct) && r.body){
+        qaStreamPump(r,bubble,msg,q,ctx,dateIntent,ac,to,btn);
+        return;
+      }
+      return r.json().then(function(d){return {ok:r.ok,status:r.status,d:d||{}};},function(){return {ok:false,status:0,d:{}};})
+        .then(function(res){ qaApplyJson(res,bubble,msg,q,ctx,dateIntent); });
+    })
+    .catch(function(e){
+      var la=qaAiLocalAnswer(q,ctx);
+      var why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||e||'网络错误');
+      qaFinishAnswer(la+'\n\n[DeepSeek 调用失败（'+why+'），已切换本地知识库回答]',bubble,msg,q,ctx,false,dateIntent);
+      clearTimeout(to);QA_FLOAT_BUSY=false;if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
+    });
+}
+// 解析非流式 JSON 响应（含 401/错误文案），与流式共用 qaFinishAnswer
+function qaApplyJson(res,bubble,msg,q,ctx,dateIntent){
+  var d=res.d,text='',ok=false;
+  if(!res.ok){
+    var em=(d&&d.error&&d.error.message)||'请求失败，请稍后重试。';
+    if(res.status===401||/authentication|invalid.*key|api key/i.test(em)){
+      text='⚠️ **API Key 已失效或被吊销**，AI 暂时无法回答。\n\n请联系网页维护者更新 DeepSeek API Key 后重试；你也可以切换到「检索」面板直接查看本地新闻。';
+    }else{
+      text='DeepSeek 调用失败：'+em+'\n\n可点「🔄 重新生成」重试，或切换到「检索」面板查看本地新闻。';
+    }
+  }else{
+    var content=((((d.choices||[])[0]||{}).message||{}).content||'').trim();
+    if(!content){text='模型未返回内容';}else{text=content;ok=true;}
+  }
+  qaFinishAnswer(text,bubble,msg,q,ctx,ok,dateIntent);
+}
+// 读取 SSE 流，逐 token 渲染；结束再做一次内联引用终处理
+function qaStreamPump(r,bubble,msg,q,ctx,dateIntent,ac,to,btn){
+  var acc='';
+  var reader=r.body.getReader(),dec=new TextDecoder('utf-8'),buf='';
+  function finish(text,ok){
+    clearTimeout(to);QA_FLOAT_BUSY=false;if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
+    qaFinishAnswer(text,bubble,msg,q,ctx,ok,dateIntent);
+  }
+  function pump(){
+    return reader.read().then(function(res){
+      if(res.done)return;
+      buf+=dec.decode(res.value,{stream:true});
+      var idx;
+      while((idx=buf.indexOf('\n\n'))>=0){
+        var evt=buf.slice(0,idx);buf=buf.slice(idx+2);
+        var line=evt.split('\n').filter(function(l){return l.indexOf('data:')===0;})[0];
+        if(!line)continue;
+        var payload=line.slice(5).trim();
+        if(payload==='[DONE]')continue;
+        try{
+          var j=JSON.parse(payload);
+          var c=(j.choices&&j.choices[0]&&j.choices[0].delta&&j.choices[0].delta.content)||j.content||'';
+          if(c){acc+=c;if(bubble)bubble.innerHTML=qaMdRender(acc);}
+        }catch(e){}
+      }
+      return pump();
+    });
+  }
+  pump().then(function(){
+    if(bubble)bubble.innerHTML=qaInlineRefs(qaMdRender(acc),ctx);
+    finish(acc||'(模型未返回内容)',!!acc);
+  }).catch(function(e){
+    var why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||'网络错误');
+    if(acc){ if(bubble)bubble.innerHTML=qaInlineRefs(qaMdRender(acc),ctx); finish(acc,true); }
+    else{ var la=qaAiLocalAnswer(q,ctx); finish(la+'\n\n[DeepSeek 流式调用失败（'+why+'），已切换本地知识库回答]',false); }
+  });
+}
 function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
   // 2026-09-06：AI 上下文再次按相关性阈值过滤，确保正文和参考来源只出现强相关内容
   // 日期意图：已在 qaFloatAsk 中按日期严格过滤，不再做通用相关性过滤，避免误删当天条目
@@ -4995,13 +5089,15 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
   var _url,_headers,_body;
   if(_proxyBase){
     _url=_proxyBase+'/api/qa';
-    _headers={'Content-Type':'application/json'};
-    _body=JSON.stringify({messages:_dsMessages,max_tokens:1000,temperature:0.3});
-  }else{
-    _url='https://api.deepseek.com/chat/completions';
-    _headers={'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()};
-    _body=JSON.stringify({model:'deepseek-chat',messages:_dsMessages,max_tokens:1000,temperature:0.3,stream:false});
+    _headers={'Content-Type':'application/json','Accept':'text/event-stream'};
+    _body=JSON.stringify({messages:_dsMessages,max_tokens:1000,temperature:0.3,stream:true});
+    // Phase B：优先流式；边缘函数未更新时 qaTryStreamOrJson 自动回退 JSON
+    qaTryStreamOrJson(_url,_headers,_body,bubble,msg,q,ctx,dateIntent,_ac,_to,btn);
+    return;
   }
+  _url='https://api.deepseek.com/chat/completions';
+  _headers={'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()};
+  _body=JSON.stringify({model:'deepseek-chat',messages:_dsMessages,max_tokens:1000,temperature:0.3,stream:false});
   fetch(_url,{
     method:'POST',
     headers:_headers,
@@ -5009,68 +5105,11 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
     signal:_ac.signal
   })
     .then(function(r){return r.json().then(function(d){return {ok:r.ok,status:r.status,d:d||{}};},function(){return {ok:false,status:0,d:{}};});})
-    .then(function(res){
-      var d=res.d,text='',meta='';
-      if(!res.ok){
-        var em=(d&&d.error&&d.error.message)||'请求失败，请稍后重试。';
-        if(res.status===401||/authentication|invalid.*key|api key/i.test(em)){
-          text='⚠️ **API Key 已失效或被吊销**，AI 暂时无法回答。\n\n请联系网页维护者更新 DeepSeek API Key 后重试；你也可以切换到「检索」面板直接查看本地新闻。';
-          meta='需要更新 Key';
-        }else{
-          text='DeepSeek 调用失败：'+em+'\n\n可点「🔄 重新生成」重试，或切换到「检索」面板查看本地新闻。';
-          meta='DeepSeek 错误';
-        }
-      }else{
-        var content=((((d.choices||[])[0]||{}).message||{}).content||'').trim();
-        if(!content){text='模型未返回内容';meta='DeepSeek 错误';}
-        else{text=content;meta=dateIntent?'DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条 '+dateIntent+' 本地新闻':'DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条相关本地新闻';}
-      }
-      if(bubble){
-        bubble.innerHTML=qaInlineRefs(qaMdRender(text),ctx);
-        var src=qaDsSourcesHtml(ctx,q);
-        if(src)bubble.insertAdjacentHTML('afterend',src);
-      }
-      if(msg){
-        var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=meta;
-        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);qaAppendFollowUps(msg,qaFollowUps(q,ctx));
-        if(res.ok&&content){
-          var actions='<div class="qa-msg-actions">'+
-            '<button class="qa-msg-action" type="button" title="复制回答" onclick="qaCopyAi(this)">📋 复制</button>'+
-            '<button class="qa-msg-action" type="button" title="重新生成" onclick="qaRetryAi(this)">🔄 重新生成</button>'+
-            '</div>';
-          if(!msg.querySelector('.qa-msg-actions')){
-            var metaEl=msg.querySelector('.qa-msg-meta');
-            if(metaEl)metaEl.insertAdjacentHTML('afterend',actions);
-            else msg.insertAdjacentHTML('beforeend',actions);
-          }
-        }
-      }
-      qaFloatScroll();qaSaveHistory();
-    })
+    .then(function(res){ qaApplyJson(res,bubble,msg,q,ctx,dateIntent); })
     .catch(function(e){
       var localAns=qaAiLocalAnswer(q,ctx);
       var _why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||e||'网络错误');
-      var hint='\n\n[DeepSeek 直连失败（'+_why+'），已切换为本地知识库回答]';
-      var text=localAns+hint;
-      if(bubble){
-        bubble.innerHTML=qaInlineRefs(qaMdRender(text),ctx);
-        var src=qaDsSourcesHtml(ctx,q);
-        if(src)bubble.insertAdjacentHTML('afterend',src);
-      }
-      if(msg){
-        var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 全库 '+QA_ROWS.length+' 条';
-        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);qaAppendFollowUps(msg,qaFollowUps(q,ctx));
-        if(!msg.querySelector('.qa-msg-actions')){
-          var metaEl=msg.querySelector('.qa-msg-meta');
-          var actions='<div class="qa-msg-actions">'+
-            '<button class="qa-msg-action" type="button" title="复制回答" onclick="qaCopyAi(this)">📋 复制</button>'+
-            '<button class="qa-msg-action" type="button" title="重新生成" onclick="qaRetryAi(this)">🔄 重新生成</button>'+
-            '</div>';
-          if(metaEl)metaEl.insertAdjacentHTML('afterend',actions);
-          else msg.insertAdjacentHTML('beforeend',actions);
-        }
-      }
-      qaFloatScroll();qaSaveHistory();
+      qaFinishAnswer(localAns+'\n\n[DeepSeek 直连失败（'+_why+'），已切换为本地知识库回答]',bubble,msg,q,ctx,false,dateIntent);
     })
     .then(function(){
       clearTimeout(_to);
