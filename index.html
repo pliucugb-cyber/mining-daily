@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2470" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2480" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1961,7 +1961,7 @@ function toggleFav(url){
 }
 function applyFavStates(){
   const favUrls=getFavUrls();
-  document.querySelectorAll('.news-item:not(.arch-fav)').forEach(el=>{
+  document.querySelectorAll('.news-item').forEach(el=>{
     const isFav=favUrls.has(el.dataset.url);
     el.classList.toggle('favorited',isFav);
     const star=el.querySelector('.btn-star');
@@ -1982,22 +1982,135 @@ function updateFavCount(){
 }
 // ===== 已归档收藏渲染：收藏但新闻已不在当前页面的条目 =====
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+const ARCH_FAV_DEFAULT_TITLE='🗂️ 已归档收藏（原新闻已滚出页面，收藏记录永久保留）';
+function buildArchFavItemHtml(f){
+  const url=String(f.url).replace(/"/g,'&quot;');
+  const title=escapeHtml(f.title||f.url);
+  const meta=[escapeHtml(f.src||''),escapeHtml(f.date||'')].filter(Boolean).join(' · ')||'收藏记录';
+  const summary=escapeHtml(f.summary||'');
+  return '<div class="news-item arch-fav" data-url="'+url+'" data-embed="no">'+
+    '<div class="news-head"><span class="dot"></span>'+
+    '<a class="news-title" href="'+url+'" target="_blank">'+title+'</a></div>'+
+    '<div class="news-meta"><span class="src">'+meta+'</span></div>'+
+    (summary?'<div class="news-summary">'+summary+'</div>':'')+
+    '</div>';
+}
 function renderArchivedFavs(){
   const list=document.getElementById('archFavList');
   const sec=document.getElementById('archivedFavSection');
   if(!list||!sec)return;
   list.innerHTML='';
+  const titleEl=sec.querySelector('.section-title');
+  if(titleEl)titleEl.childNodes[0].textContent=ARCH_FAV_DEFAULT_TITLE;
   const pageUrls=new Set();
   document.querySelectorAll('.news-item').forEach(el=>pageUrls.add(el.dataset.url));
   const archived=getFavs().filter(f=>f.url&&!pageUrls.has(f.url));
   document.getElementById('archFavCount').textContent=archived.length+'条';
-  list.innerHTML=archived.map(f=>{
-    const url=String(f.url).replace(/"/g,'&quot;');
-    const title=f.title||f.url;
-    const meta=[f.src,f.date].filter(Boolean).join(' · ');
-    return '';
-  }).join('');
+  list.innerHTML=archived.map(buildArchFavItemHtml).join('');
 }
+
+// ===== 收藏 / 浏览记录聚合视图（2026-09-09）=====
+// 点击目录「我的收藏」或「浏览记录」时，不再区分今日/往期，
+// 而是把命中条目（当前页面内 + 已滚出页面的归档）聚合到 #archivedFavSection 平铺展示。
+function extractItemDate(el){
+  const meta=el.querySelector('.news-meta');
+  if(!meta)return '';
+  const parts=meta.textContent.split('·');
+  return (parts[parts.length-1]||'').trim();
+}
+function renderFavHistoryAggregate(mode){
+  const list=document.getElementById('archFavList');
+  const sec=document.getElementById('archivedFavSection');
+  if(!list||!sec)return;
+  list.innerHTML='';
+  const titleEl=sec.querySelector('.section-title');
+  const countEl=document.getElementById('archFavCount');
+  const pageUrls=new Set();
+  document.querySelectorAll('.news-item').forEach(el=>pageUrls.add(el.dataset.url));
+  const items=[];
+  if(mode==='fav'){
+    if(titleEl)titleEl.childNodes[0].textContent='⭐ 我的收藏';
+    const favs=getFavs();
+    const favMap=new Map(favs.map(f=>[f.url,f]));
+    // 当前页面内的收藏条目（克隆）
+    document.querySelectorAll('.news-item').forEach(el=>{
+      if(favMap.has(el.dataset.url)){
+        items.push({type:'page', date:extractItemDate(el), time:'', el:el, url:el.dataset.url});
+      }
+    });
+    // 已滚出页面的归档收藏
+    favs.forEach(f=>{
+      if(!pageUrls.has(f.url)){
+        items.push({type:'arch', date:f.date||'', time:'', url:f.url, data:f});
+      }
+    });
+  } else if(mode==='history'){
+    if(titleEl)titleEl.childNodes[0].textContent='📋 浏览记录';
+    const history=getHistory();
+    const histMap=new Map(history.map(h=>[h.url,h]));
+    document.querySelectorAll('.news-item').forEach(el=>{
+      if(histMap.has(el.dataset.url)){
+        const h=histMap.get(el.dataset.url);
+        items.push({type:'page', date:extractItemDate(el), time:h.time||'', el:el, url:el.dataset.url});
+      }
+    });
+    history.forEach(h=>{
+      if(!pageUrls.has(h.url)){
+        items.push({type:'arch', date:formatHistoryDate(h.time)||'', time:h.time||'', url:h.url, data:h});
+      }
+    });
+  }
+  // 排序：有精确 time 优先按 time 倒序（浏览记录），否则按 date 字符串倒序
+  items.sort(function(a,b){
+    if(a.time&&b.time) return new Date(b.time)-new Date(a.time);
+    return String(b.date||'').localeCompare(String(a.date||''));
+  });
+  const frag=document.createDocumentFragment();
+  items.forEach(function(it){
+    if(it.type==='page'){
+      const clone=it.el.cloneNode(true);
+      clone.classList.remove('hidden');
+      clone.classList.add('aggregate-clone');
+      frag.appendChild(clone);
+    } else {
+      const wrapper=document.createElement('div');
+      if(mode==='fav'){
+        wrapper.innerHTML=buildArchFavItemHtml(it.data);
+      } else {
+        wrapper.innerHTML=buildHistoryItemHtml(it.data);
+      }
+      frag.appendChild(wrapper.firstElementChild);
+    }
+  });
+  list.appendChild(frag);
+  if(countEl)countEl.textContent=items.length+'条';
+  // 为聚合列表注入星标/未读按钮并同步收藏态
+  injectStars();
+  applyFavStates();
+  const readUrls=getReadSet();
+  list.querySelectorAll('.news-item').forEach(el=>el.classList.toggle('read',readUrls.has(el.dataset.url)));
+}
+function formatHistoryDate(iso){
+  if(!iso)return '';
+  try{
+    const d=new Date(iso);
+    const mm=('0'+(d.getMonth()+1)).slice(-2);
+    const dd=('0'+d.getDate()).slice(-2);
+    return mm+'-'+dd;
+  }catch(e){return '';}
+}
+function buildHistoryItemHtml(h){
+  const url=String(h.url||'').replace(/"/g,'&quot;');
+  const title=escapeHtml(h.title||h.url||'未知条目');
+  const src=escapeHtml(h.src||'浏览记录');
+  const date=escapeHtml(formatHistoryDate(h.time)||'');
+  return '<div class="news-item arch-fav" data-url="'+url+'" data-embed="no">'+
+    '<div class="news-head"><span class="dot"></span>'+
+    '<a class="news-title" href="'+url+'" target="_blank">'+title+'</a></div>'+
+    '<div class="news-meta"><span class="src">'+src+'</span>'+(date?' · '+date:'')+'</div>'+
+    '</div>';
+}
+
 // ===== 整张卡片点击打开原文（2026-09-05 增强）=====
 // 标题与「查看原文」本就是 <a> 链接直接可点；这里补全：点击卡片其余区域（摘要/来源等）
 // 也能打开原文。点 <a>（链接本身）或 <button>（收藏/未读等）不拦截，走各自默认行为。
@@ -2248,6 +2361,20 @@ function applyFilter(){
     }
     cat.style.display=hasVis?'':'none';
   });
+  // 收藏 / 浏览记录进入聚合视图：隐藏 today/archive，统一在 archivedFavSection 平铺
+  const todaySec=document.getElementById('todaySection');
+  const archiveSec=document.getElementById('archiveSection');
+  const archFavSec=document.getElementById('archivedFavSection');
+  if(mode==='fav'||mode==='history'){
+    renderFavHistoryAggregate(mode);
+    if(todaySec)todaySec.style.display='none';
+    if(archiveSec)archiveSec.style.display='none';
+    if(archFavSec)archFavSec.style.display='';
+  } else {
+    if(archFavSec)archFavSec.style.display='none';
+    renderArchivedFavs(); // 恢复默认归档收藏列表
+    // today/archive 显示交给 refreshSectionVisibility
+  }
   refreshSectionVisibility();
 }
 
