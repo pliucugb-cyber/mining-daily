@@ -59,9 +59,7 @@ FIN_PRODUCT_KW = ["基金", "理财", "资管"]
 PLATE_MAP = {"SZZB": "szse", "SHZB": "shse", "HKB": "hkex",
              "BJB": "bse", "NQ": "nq", "": "szse"}
 
-ctx = ssl.create_default_context()
-ctx.check_hostname = False
-ctx.verify_mode = ssl.CERT_NONE
+ctx = ssl.create_default_context()   # 2026-09-09 安全整改 P0：恢复 TLS 证书校验（此前全局关闭校验可被中间人篡改数据）
 
 
 def http_post(url, params):

@@ -51,9 +51,7 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
-CTX = ssl.create_default_context()
-CTX.check_hostname = False
-CTX.verify_mode = ssl.CERT_NONE
+CTX = ssl.create_default_context()   # 2026-09-09 安全整改 P0：恢复 TLS 证书校验（此前全局关闭校验可被中间人篡改数据）
 
 TIMEOUT = 20
 # 2026-09-08 提升：原 40 会被主源打满（实测中国有色金属报当日正好 40 条触顶，

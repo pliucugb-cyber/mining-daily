@@ -1,5 +1,6 @@
-// P0-2 回归测试：热榜 / AI 深度解析区块的可见性
-// 验证修复后：有内容→显示；纯占位（加载中/空）→隐藏；「未配置 Key」→显示（那是填 Key 入口）
+// 回归测试：热榜可见性 / AI 入口（悬浮球）/ Key 存取 / 源码无内嵌 Key
+// 2026-09-09 修订：原「AI 深度解析」区块已从页面移除（AI 入口只剩左下角 #qaFab 悬浮球），
+// 旧的 aiBody/aiSection 场景已失效，改为校验「悬浮球入口存在」+「旧区块不得复活」。
 const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
@@ -9,6 +10,11 @@ const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true
 const w = dom.window;
 const d = w.document;
 
+let pass = 0, fail = 0;
+function ok(name, cond, detail) {
+  if (cond) { pass++; console.log('  PASS  ' + name + (detail ? '  → ' + detail : '')); }
+  else { fail++; console.log('  FAIL  ' + name + (detail ? '  → ' + detail : '')); }
+}
 function st(id) {
   const el = d.getElementById(id);
   if (!el) return 'MISSING';
@@ -16,52 +22,50 @@ function st(id) {
 }
 
 setTimeout(() => {
-  console.log('=== 函数是否挂到 window ===');
-  console.log('  mdRefreshSections:', typeof w.mdRefreshSections);
-  console.log('  mdSetDsKey       :', typeof w.mdSetDsKey);
-  console.log('  getDsKey         :', typeof w.getDsKey);
+  console.log('===== ① 函数挂载 =====');
+  ok('mdRefreshSections 已定义', typeof w.mdRefreshSections === 'function');
+  ok('mdSetDsKey 已定义', typeof w.mdSetDsKey === 'function');
+  ok('getDsKey 已定义', typeof w.getDsKey === 'function');
 
-  console.log('\n=== 场景1：AI 区块为「未配置 Key」占位（应有填写入口 → 必须 VISIBLE）===');
-  const aiBody = d.getElementById('aiBody');
-  aiBody.innerHTML = '<div class="ai-disabled">🤖 AI 解析未配置</div>';
-  w.mdRefreshSections();
-  console.log('  aiSection:', st('aiSection'), '(期望 VISIBLE)');
+  console.log('\n===== ② AI 入口 = 左下角悬浮球（原 AI 深度解析区块已移除）=====');
+  const fab = d.getElementById('qaFab');
+  ok('悬浮球 #qaFab 存在', !!fab);
+  ok('悬浮球可见', fab && fab.style.display !== 'none', fab ? 'display=' + (fab.style.display || '(空)') : '');
+  ok('悬浮球带「搜新闻 / 问 AI」文案', fab && /问\s*AI/.test(fab.textContent || ''), fab ? (fab.textContent || '').trim() : '');
+  ok('已移除的 aiBody 不在静态 DOM（防死代码复活）', !d.getElementById('aiBody'));
+  ok('已移除的 aiSection 不在静态 DOM', !d.getElementById('aiSection'));
+  ok('页面 JS 对 aiBody 缺失有守卫（if(!body)return）', /getElementById\('aiBody'\)[\s\S]{0,200}?if\(!body\)return/.test(html));
 
-  console.log('\n=== 场景2：AI 区块为「加载中」占位（应 HIDDEN）===');
-  aiBody.innerHTML = '<div class="ai-loading">加载中…</div>';
-  w.mdRefreshSections();
-  console.log('  aiSection:', st('aiSection'), '(期望 HIDDEN)');
-
-  console.log('\n=== 场景3：AI 区块有真实内容（应 VISIBLE）===');
-  aiBody.innerHTML = '<div class="ai-card">要点：xxxx</div>';
-  w.mdRefreshSections();
-  console.log('  aiSection:', st('aiSection'), '(期望 VISIBLE)');
-
-  console.log('\n=== 场景4：热榜无条目（应 HIDDEN）/ 有条目（应 VISIBLE）===');
+  console.log('\n===== ③ 热榜：空→隐藏 / 有内容→显示 =====');
   const hot = d.getElementById('hotListSection');
-  const hl = hot.querySelector('.hotlist-list') || hot;
-  hl.innerHTML = '';
-  w.mdRefreshSections();
-  console.log('  无 hot-item :', st('hotListSection'), '(期望 HIDDEN)');
-  hl.innerHTML = '<li class="hot-item top1"><span class="hot-rank">1</span>测试</li>';
-  w.mdRefreshSections();
-  console.log('  有 hot-item :', st('hotListSection'), '(期望 VISIBLE)');
+  const hl = hot && (hot.querySelector('.hotlist-list') || hot);
+  if (hl) {
+    hl.innerHTML = '';
+    w.mdRefreshSections();
+    ok('无 hot-item 时热榜隐藏', st('hotListSection') === 'HIDDEN', st('hotListSection'));
+    hl.innerHTML = '<li class="hot-item top1"><span class="hot-rank">1</span>测试</li>';
+    w.mdRefreshSections();
+    ok('有 hot-item 时热榜显示', st('hotListSection') === 'VISIBLE', st('hotListSection'));
+  } else {
+    ok('热榜容器存在', false, 'hotListSection 未找到');
+  }
 
-  console.log('\n=== 场景5：普通新闻区回归（不应被误伤）===');
-  const today = d.getElementById('todaySection');
-  console.log('  todaySection:', st('todaySection'), '(有今日新闻→期望 VISIBLE)');
+  console.log('\n===== ④ 今日区回归（不应被误伤）=====');
+  ok('todaySection 可见', st('todaySection') === 'VISIBLE', st('todaySection'));
 
-  console.log('\n=== 场景6：Key 存取（填错格式应拒绝）===');
-  console.log('  填 "abc"   ->', w.mdSetDsKey('abc'), '(期望 false)');
-  console.log('  填 sk- 合法 ->', w.mdSetDsKey('sk-testkey1234567890abcd'), '(期望 true)');
-  console.log('  getDsKey() ->', (w.getDsKey() || '').slice(0, 10) + '...', '(期望 sk-testkey...)');
+  console.log('\n===== ⑤ Key 存取（非法格式应拒绝）=====');
+  ok('填 "abc" 被拒绝', w.mdSetDsKey('abc') === false, 'got=' + w.mdSetDsKey('abc'));
+  ok('填合法 sk- 被接受', w.mdSetDsKey('sk-testkey1234567890abcd') === true);
+  ok('getDsKey 能取回', (w.getDsKey() || '').slice(0, 3) === 'sk-', (w.getDsKey() || '').slice(0, 10) + '...');
   w.mdClearDsKey();
-  console.log('  清除后     ->', JSON.stringify(w.getDsKey()), '(期望 "")');
+  ok('清除后为空', w.getDsKey() === '' || w.getDsKey() == null, JSON.stringify(w.getDsKey()));
 
-  console.log('\n=== 场景7：源码中不得残留内嵌 Key ===');
-  console.log('  QA_DS_KEY_B64 出现次数:', (html.match(/QA_DS_KEY_B64/g) || []).length, '(期望 0)');
-  console.log('  QA_DS_SALT    出现次数:', (html.match(/QA_DS_SALT/g) || []).length, '(期望 0)');
-  console.log('  源码含 sk- 明文:', /['"]sk-[A-Za-z0-9]{16,}/.test(html), '(期望 false)');
+  console.log('\n===== ⑥ 源码中不得残留内嵌 Key =====');
+  ok('无 QA_DS_KEY_B64 硬编码', (html.match(/QA_DS_KEY_B64/g) || []).length === 0, 'count=' + (html.match(/QA_DS_KEY_B64/g) || []).length);
+  ok('无 QA_DS_SALT 硬编码', (html.match(/QA_DS_SALT/g) || []).length === 0, 'count=' + (html.match(/QA_DS_SALT/g) || []).length);
+  ok('无 sk- 明文密钥', !/['"]sk-[A-Za-z0-9]{16,}/.test(html));
 
-  process.exit(0);
+  console.log('\n===== 汇总 =====');
+  console.log('  通过 ' + pass + ' / 失败 ' + fail);
+  process.exit(fail ? 1 : 0);
 }, 1500);
