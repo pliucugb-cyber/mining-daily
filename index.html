@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2501" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2502" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -135,8 +135,14 @@ body[data-filter-mode="fav"] #archFavList .news-item .btn-star,
 body[data-filter-mode="history"] #archFavList .news-item .btn-star{top:12px;right:16px}
 body[data-filter-mode="fav"] #archFavList .aggregate-clone .news-tags,
 body[data-filter-mode="history"] #archFavList .aggregate-clone .news-tags{display:none}
-.aggregate-empty{text-align:center;padding:var(--s6) var(--s4);color:var(--ink-500);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
-.aggregate-empty small{display:block;margin-top:var(--s2);font-size:var(--fs-body);color:var(--ink-300)}
+.aggregate-empty{text-align:center;padding:var(--s7) var(--s4);color:var(--ink-500);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
+.aggregate-empty .empty-icon{font-size:56px;line-height:1;margin-bottom:var(--s4);opacity:.55}
+.aggregate-empty .empty-title{font-size:var(--fs-h1);font-weight:600;color:var(--ink-700);margin-bottom:var(--s2)}
+.aggregate-empty .empty-tip{font-size:var(--fs-body);color:var(--ink-300)}
+/* 收藏/浏览记录视图：左侧目录与聚合标题均不显示计数 */
+#tocFavCount,#tocHistoryCount{display:none}
+body[data-filter-mode="fav"] #archFavCount,
+body[data-filter-mode="history"] #archFavCount{display:none}
 .container{max-width:1360px;margin:0 auto;padding:var(--s4)}
 /* ===== 2026-09-08 双栏布局：桌面端「左主列 + 右栏」，消除右侧大片空白 ===== */
 .news-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s5);align-items:start}
@@ -2021,10 +2027,8 @@ function updateFavCount(){
   const fb=document.getElementById('favBtn');
   if(fb)fb.classList.toggle('is-zero',n===0);
   const t=document.getElementById('tocFavCount');
-  if(t){
-    t.textContent=n;
-    if(t.parentElement)t.parentElement.style.display=n?'':'none';   // 0 条时隐藏目录项
-  }
+  if(t)t.textContent=n;
+  // 2026-09-09：左侧目录「我的收藏」不再显示数字，也始终可见（0 条不隐藏）
 }
 // ===== 已归档收藏渲染：收藏但新闻已不在当前页面的条目 =====
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -2132,8 +2136,8 @@ function renderFavHistoryAggregate(mode){
   if(countEl)countEl.textContent=items.length+'条';
   if(items.length===0){
     const emptyMsg = mode==='fav'
-      ? '<div class="aggregate-empty">⭐ 暂无收藏条目<small>打开任意条目后，点击右侧的 ★ 即可收藏到这里</small></div>'
-      : '<div class="aggregate-empty">📋 暂无浏览记录<small>打开任意条目后会自动记录到这里</small></div>';
+      ? '<div class="aggregate-empty"><div class="empty-icon">⭐</div><div class="empty-title">暂无收藏</div><div class="empty-tip">打开任意条目后，点击右侧的 ★ 即可收藏到这里</div></div>'
+      : '<div class="aggregate-empty"><div class="empty-icon">📋</div><div class="empty-title">暂无浏览记录</div><div class="empty-tip">打开任意条目后会自动记录到这里</div></div>';
     list.innerHTML=emptyMsg;
   }
   // 为聚合列表注入星标/未读按钮并同步收藏态
@@ -2184,10 +2188,8 @@ function updateHistoryCount(){
   const n=getHistory().length;
   const hc=document.getElementById('historyCount'); if(hc)hc.textContent=n;
   const t=document.getElementById('tocHistoryCount');
-  if(t){
-    t.textContent=n;
-    if(t.parentElement)t.parentElement.style.display=n?'':'none';   // 0 条时隐藏目录项
-  }
+  if(t)t.textContent=n;
+  // 2026-09-09：左侧目录「浏览记录」不再显示数字，也始终可见（0 条不隐藏）
 }
 
 // ===== 新一轮找矿突破战略行动专项：按关键词自动识别并归类 =====
