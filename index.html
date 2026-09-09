@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2480" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2490" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -92,6 +92,49 @@ body[data-view="install"] #rightsSection,
 body[data-view="install"] #archivedFavSection,
 body[data-view="install"] .col-rail{display:none!important}
 body[data-view] .toc-main-item.active{background:#e9f1f8}
+/* 收藏/历史沉浸式列表（2026-09-09 晚）：只保留左侧目录与聚合列表，其余全部隐藏，仿头条「我的收藏」 */
+body[data-filter-mode="fav"] .header,
+body[data-filter-mode="fav"] #briefStrip,
+body[data-filter-mode="fav"] #digestStrip,
+body[data-filter-mode="fav"] #priceStrip,
+body[data-filter-mode="fav"] .stats-bar,
+body[data-filter-mode="fav"] #todaySection,
+body[data-filter-mode="fav"] #archiveSection,
+body[data-filter-mode="fav"] #rightsSection,
+body[data-filter-mode="fav"] #installGuideSection,
+body[data-filter-mode="fav"] .col-rail,
+body[data-filter-mode="fav"] .footer,
+body[data-filter-mode="fav"] #mobileInstallBar,
+body[data-filter-mode="fav"] .news-filter-bar,
+body[data-filter-mode="history"] .header,
+body[data-filter-mode="history"] #briefStrip,
+body[data-filter-mode="history"] #digestStrip,
+body[data-filter-mode="history"] #priceStrip,
+body[data-filter-mode="history"] .stats-bar,
+body[data-filter-mode="history"] #todaySection,
+body[data-filter-mode="history"] #archiveSection,
+body[data-filter-mode="history"] #rightsSection,
+body[data-filter-mode="history"] #installGuideSection,
+body[data-filter-mode="history"] .col-rail,
+body[data-filter-mode="history"] .footer,
+body[data-filter-mode="history"] #mobileInstallBar,
+body[data-filter-mode="history"] .news-filter-bar{display:none!important}
+body[data-filter-mode="fav"] .news-grid,
+body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr);gap:0}
+body[data-filter-mode="fav"] #archivedFavSection,
+body[data-filter-mode="history"] #archivedFavSection{display:block!important;max-width:780px;margin:0 auto;background:transparent;border:none;box-shadow:none;padding-top:var(--s4);scroll-margin-top:0}
+body[data-filter-mode="fav"] #archivedFavSection .section-title,
+body[data-filter-mode="history"] #archivedFavSection .section-title{padding:var(--s4) 0;border:none;background:transparent;font-size:var(--fs-h1)}
+body[data-filter-mode="fav"] #archFavList .news-item,
+body[data-filter-mode="history"] #archFavList .news-item{background:var(--surface);border-radius:var(--r-lg);margin-bottom:var(--s3);border-bottom:none;padding:var(--s4) var(--s5);box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s}
+body[data-filter-mode="fav"] #archFavList .news-item:hover,
+body[data-filter-mode="history"] #archFavList .news-item:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+body[data-filter-mode="fav"] #archFavList .news-item .btn-star,
+body[data-filter-mode="history"] #archFavList .news-item .btn-star{top:12px;right:16px}
+body[data-filter-mode="fav"] #archFavList .aggregate-clone .news-tags,
+body[data-filter-mode="history"] #archFavList .aggregate-clone .news-tags{display:none}
+.aggregate-empty{text-align:center;padding:var(--s6) var(--s4);color:var(--ink-500);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
+.aggregate-empty small{display:block;margin-top:var(--s2);font-size:var(--fs-body);color:var(--ink-300)}
 .container{max-width:1360px;margin:0 auto;padding:var(--s4)}
 /* ===== 2026-09-08 双栏布局：桌面端「左主列 + 右栏」，消除右侧大片空白 ===== */
 .news-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s5);align-items:start}
@@ -2084,6 +2127,12 @@ function renderFavHistoryAggregate(mode){
   });
   list.appendChild(frag);
   if(countEl)countEl.textContent=items.length+'条';
+  if(items.length===0){
+    const emptyMsg = mode==='fav'
+      ? '<div class="aggregate-empty">⭐ 暂无收藏条目<small>打开任意条目后，点击右侧的 ★ 即可收藏到这里</small></div>'
+      : '<div class="aggregate-empty">📋 暂无浏览记录<small>打开任意条目后会自动记录到这里</small></div>';
+    list.innerHTML=emptyMsg;
+  }
   // 为聚合列表注入星标/未读按钮并同步收藏态
   injectStars();
   applyFavStates();
@@ -2184,6 +2233,8 @@ let newsSearchText='';
 let oldExpanded=false; // 往期内容中"超过14天旧闻"是否展开
 function setFilter(mode,noScroll){
   filterMode=mode;
+  if(mode==='none'){document.body.removeAttribute('data-filter-mode');}
+  else{document.body.dataset.filterMode=mode;}
   if(mode!=='tag'){tagFilter=null;setChipActive(null)}
   document.getElementById('filterBtn').classList.toggle('active',mode==='new');
   document.getElementById('filterBtn').textContent=mode==='new'?'显示全部':'只看新增';
