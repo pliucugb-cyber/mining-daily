@@ -50,7 +50,12 @@ worker/.wrangler/
 
 # ===== Cloudflare Workers 本地构建缓存 =====
 
-# ===== 本地凭据（不入 git，原硬编码 token 已泄露，请勿外传）=====
+# ===== 本地凭据（不入 git）=====
+# lme_token.txt：东财 futsseapi 行情 token。2026-09-10 实测：该接口不带 token 也返回同样数据，
+#   它不是账号凭据（无吊销概念），仅作运行参数保管；若将来接口强制校验，去东财期货行情页
+#   F12 Network 里重新抓一个 token 写进本文件即可。
+# DeepSeek key 走 Netlify 平台环境变量。曾于 09-05~09-08 内嵌在静态页泄露，
+#   09-08 止血时已轮换，旧 key 实测 401 失效（勿再用历史里的旧 key）。
 lme_token.txt
 netlify_token.txt
 netlify/.site.json

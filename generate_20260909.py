@@ -81,7 +81,9 @@ LME = [
     ('lldt', 'LME 铅', 'LME', '1,916.50', '美元/吨', UP + ' +1.50 (+0.08%)', 'up'),
     ('lznt', 'LME 锌', 'LME', '4,010.50', '美元/吨', DOWN + ' -10.50 (-0.26%)', 'down'),
     ('lnkt', 'LME 镍', 'LME', '16,765.00', '美元/吨', UP + ' +10.00 (+0.06%)', 'up'),
-    ('ltnt', 'LME 锡', 'LME', '54,950.00', '美元/吨', FLAT + ' 夜盘持平', 'flat'),
+    # 2026-09-10 数据对齐：lme_data.json 中锡 price=null，静态值必须写 --/暂无数据
+    # （与前端 renderLmePrices() 的 null 兜底口径一致），严禁手抄任何夜盘/昨日数字。
+    ('ltnt', 'LME 锡', 'LME', '--', '美元/吨', '暂无数据', 'flat'),
 ]
 lme_html = ''.join(card(*c) for c in LME)
 
