@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2499" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2500" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1210,6 +1210,13 @@ body.dark .nf-chip{background:#22303d;color:#9fc0db}
 body.dark .nf-chip.active{background:#3a6ea5;color:#fff}
 body.dark .nf-export-btn{background:#1b2733;color:var(--ink-700);border-color:#2a3a4a}
 @media print{.news-filter-bar{display:none!important}.nf-export-btn{display:none!important}}
+/* 顶栏筛选下拉（2026-09-09）：只看新增 / 战略 收进「筛选 ▾」 */
+.nf-filter-dropdown{position:relative;display:inline-flex}
+.nf-filter-toggle{margin-left:8px}
+.nf-filter-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:40;display:flex;flex-direction:column;gap:var(--s2);padding:var(--s2);background:var(--surface);border:1px solid #e2eaf2;border-radius:var(--r-lg);box-shadow:var(--shadow-sm);min-width:168px}
+.nf-filter-menu[hidden]{display:none!important}
+.nf-filter-menu .btn{margin-left:0;width:100%;text-align:left}
+body.dark .nf-filter-menu{background:#1b2733;border-color:#2a3a4a}
 </style>
 <!-- GoatCounter 访问统计 -->
 <script data-goatcounter="https://mining-daily.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -1419,12 +1426,15 @@ body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
 <div class="stats-bar" data-page-node-id="EoOLZaHOAyILUmcQ3BrjXq">
 <div class="stat-item" data-page-node-id="qdL7R3H5cQel1TGlaAOjBX"><span class="stat-num new" id="newCount" data-page-node-id="Kq8VtLiI4rbjaAAeq73UHm">0</span> 今日新增</div>
 <div class="stat-item" data-page-node-id="ejCuf2fXHfB3cyRPOf9dRR"><span class="stat-num unread" id="unreadCount" data-page-node-id="v1vidu9uGTqw3sW6iSpU8P">0</span> 条未读</div>
-<button class="btn btn-filter" id="filterBtn" onclick="toggleFilter()" data-page-node-id="1XbkppHk2kb9XOvQJvErbE">只看新增</button>
 <button class="btn btn-unread" id="unreadBtn" onclick="toggleUnreadFilter()" title="只看未读新闻，已读自动隐藏" style="margin-left:8px" data-page-node-id="1nOFKduaEohpYtuH40b9P7">📭 未读</button>
-<button class="btn btn-special" id="specialBtn" onclick="toggleSpecialFilter()" title="只看带「战略」徽章的重点条目（找矿突破战略行动等相关）" style="margin-left:8px" data-page-node-id="SwqabUoMhhdIECcKQt99zH">⭐ 战略 <span id="specialCountNum" data-page-node-id="aFDvR8jlFT5s81RK6xpcBJ">0</span></button>
+<div class="nf-filter-dropdown">
+  <button class="btn btn-filter-toggle" onclick="toggleFilterDropdown()" aria-haspopup="true" aria-expanded="false" data-page-node-id="nbxFltrDd">筛选 ▾</button>
+  <div class="nf-filter-menu" id="filterDropdownMenu" hidden>
+    <button class="btn btn-filter" id="filterBtn" onclick="toggleFilter();toggleFilterDropdown(false)" data-page-node-id="1XbkppHk2kb9XOvQJvErbE">只看新增</button>
+    <button class="btn btn-special" id="specialBtn" onclick="toggleSpecialFilter();toggleFilterDropdown(false)" title="只看带「战略」徽章的重点条目（找矿突破战略行动等相关）" data-page-node-id="SwqabUoMhhdIECcKQt99zH">⭐ 战略 <span id="specialCountNum" data-page-node-id="aFDvR8jlFT5s81RK6xpcBJ">0</span></button>
+  </div>
+</div>
 <button class="btn btn-restore" onclick="clearAllRead()" title="一键清除所有已读记录，全部恢复为未读状态" style="margin-left:8px" data-page-node-id="CPs0HBYiw0DnwCX25prPhR">↻ 全部恢复未读</button>
-<button class="btn btn-fav" id="favBtn" onclick="toggleFavFilter()" style="margin-left:8px" data-page-node-id="K0o8bP8sEDDux0RFSDCOyp">★ 收藏 <span id="favCount" data-page-node-id="cBnMAVraCTfo5KqA6fHJvY">0</span></button>
-<button class="btn btn-history" id="historyBtn" onclick="toggleHistoryFilter()" data-page-node-id="B7TsZS1oqXHnHoB2YE9nVl">📋 历史 <span id="historyCount" data-page-node-id="51fcqI1Cwae2JyLnZVG45j">0</span></button>
 <button class="btn btn-allread" onclick="markAllRead()" data-page-node-id="OIjMu9jnziI1P66Ap1NaBh">✓ 全部标为已读</button>
 </div>
 <!-- ==================== 矿业热榜（2026-09-03 新增，类似今日头条热榜） ==================== -->
@@ -2015,7 +2025,7 @@ function applyFavStates(){
 }
 function updateFavCount(){
   const n=getFavs().length;
-  document.getElementById('favCount').textContent=n;
+  const fc=document.getElementById('favCount'); if(fc)fc.textContent=n;
   // 收藏为 0 时按钮淡化置灰（2026-09-08 深夜），有收藏再点亮
   const fb=document.getElementById('favBtn');
   if(fb)fb.classList.toggle('is-zero',n===0);
@@ -2181,7 +2191,7 @@ function setupCardOpen(){
 }
 function updateHistoryCount(){
   const n=getHistory().length;
-  document.getElementById('historyCount').textContent=n;
+  const hc=document.getElementById('historyCount'); if(hc)hc.textContent=n;
   const t=document.getElementById('tocHistoryCount');
   if(t){
     t.textContent=n;
@@ -2244,8 +2254,10 @@ function setFilter(mode,noScroll){
   if(spBtn)spBtn.classList.toggle('active',mode==='special');
   const unBtn=document.getElementById('unreadBtn');
   if(unBtn)unBtn.classList.toggle('active',mode==='unread');
-  document.getElementById('favBtn').classList.toggle('active',mode==='fav');
-  document.getElementById('historyBtn').classList.toggle('active',mode==='history');
+  const favBtn=document.getElementById('favBtn'); if(favBtn)favBtn.classList.toggle('active',mode==='fav');
+  const historyBtn=document.getElementById('historyBtn'); if(historyBtn)historyBtn.classList.toggle('active',mode==='history');
+  // 下拉触发按钮在「只看新增 / 战略」任一激活时高亮
+  const ft=document.querySelector('.nf-filter-toggle'); if(ft)ft.classList.toggle('active',mode==='new'||mode==='special');
   // 2026-09-09 凌晨重写：筛选后要「落到命中项上」，而不是机械还原旧坐标。
   // 旧实现只还原 prevY，但收藏/历史的命中项往往在往期区，还原后视口里仍是一片被隐藏的今日区 →
   // 用户感觉「跳不过去」。新逻辑：原位已能看到命中就不动，否则滚到第一条命中并轻微高亮。
@@ -2484,6 +2496,21 @@ function toggleSpecialFilter(){
   // 点按仅切换筛选，不再滚动到已不存在的 specialSection。
   setFilter(filterMode==='special'?'none':'special');
 }
+// 顶栏「筛选 ▾」下拉（2026-09-09）：收起只看新增 / 战略，减少常驻按钮
+function toggleFilterDropdown(force){
+  var menu=document.getElementById('filterDropdownMenu');
+  if(!menu)return;
+  var btn=document.querySelector('.nf-filter-toggle');
+  var open=(typeof force==='boolean')?force:menu.hasAttribute('hidden');
+  if(open){menu.removeAttribute('hidden');}else{menu.setAttribute('hidden','');}
+  if(btn)btn.setAttribute('aria-expanded',open?'true':'false');
+}
+document.addEventListener('click',function(e){
+  var dd=document.querySelector('.nf-filter-dropdown');
+  if(!dd||dd.contains(e.target))return;          // 点触发按钮/菜单内不关闭
+  var menu=document.getElementById('filterDropdownMenu');
+  if(menu&&!menu.hasAttribute('hidden'))toggleFilterDropdown(false);
+});
 function toggleFavFilter(){clearView();setFilter(filterMode==='fav'?'none':'fav')}
 function toggleHistoryFilter(){clearView();setFilter(filterMode==='history'?'none':'history')}
 function showAll(){
