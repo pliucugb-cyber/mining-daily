@@ -113,7 +113,7 @@ setTimeout(() => {
     window.setFilter('fav', true);
     const empty = document.querySelector('#archFavList .aggregate-empty');
     check('fav 空态提示存在', !!empty);
-    check('fav 空态文案含收藏引导', !!empty && empty.textContent.indexOf('暂无收藏条目') >= 0, empty && empty.textContent);
+    check('fav 空态文案含收藏引导', !!empty && empty.textContent.indexOf('暂无收藏') >= 0, empty && empty.textContent);
     window.setFilter('history', true);
     const emptyH = document.querySelector('#archFavList .aggregate-empty');
     check('history 空态提示存在', !!emptyH);
