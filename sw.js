@@ -7,7 +7,7 @@
 // 2026-09-04 二次修复：支持子路径部署（GitHub Pages 站点位于 /mining-daily/）。
 //   原先写死 '/index.html' 这类绝对路径，在子路径下会指向站点根而 404。
 //   改为以 SW 自身所在目录为基准推导 BASE，根路径部署（本地/沙箱）与子路径部署（Pages）均可。
-const CACHE_NAME = 'mining-daily-v68';
+const CACHE_NAME = 'mining-daily-v69';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -51,8 +51,9 @@ self.addEventListener('activate', event => {
       .then(() => self.clients.claim())            // 立即接管所有打开的页面
       .then(() => self.clients.matchAll({ type: 'window' }))
       .then(clients => clients.forEach(c => {
-        // 2026-09-09 最终根治：新 SW 接管后，强制每个已打开的页面重新导航到当前 URL。
-        // 这样用户只需刷新一次，SW 自己完成“第二次刷新”，无需页面判断版本号/计数。
+        // 2026-09-09 晚：新 SW 接管后，强制每个已打开的页面重新导航到当前 URL。
+        // 这是「刷新即最新」的唯一刷新来源；index.html 的版本戳自愈已移除 location.reload()，
+        // 故部署后只会有这一次 navigate，不会与页面内 reload 叠加成「刷新两次」。
         try {
           if (c.navigate) { c.navigate(c.url); }
           else { c.postMessage({ type: 'SW_UPDATED' }); }
