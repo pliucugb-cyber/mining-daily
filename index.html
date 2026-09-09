@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2460" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2470" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -3074,7 +3074,14 @@ function switchView(view, el){
   var all=document.querySelector('.toc-all');
   if(el){ el.classList.add('active'); }
   else if(view==='all'&&all){ all.classList.add('active'); }
-  window.scrollTo({top:0,behavior:'smooth'});
+  // 视图切换后滚动到目标区块顶部，让用户立刻看到内容变化
+  var targetTop=0, headerOffset=100;
+  var targetId={today:'todaySection',archive:'archiveSection',rights:'rightsSection',install:'installGuideSection'}[view];
+  if(targetId){
+    var targetEl=document.getElementById(targetId);
+    if(targetEl) targetTop=Math.max(0,targetEl.offsetTop-headerOffset);
+  }
+  window.scrollTo({top:targetTop,behavior:'smooth'});
 }
 function clearView(){ document.body.removeAttribute('data-view'); }
 
