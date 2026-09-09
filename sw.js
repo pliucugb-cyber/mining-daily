@@ -7,7 +7,7 @@
 // 2026-09-04 二次修复：支持子路径部署（GitHub Pages 站点位于 /mining-daily/）。
 //   原先写死 '/index.html' 这类绝对路径，在子路径下会指向站点根而 404。
 //   改为以 SW 自身所在目录为基准推导 BASE，根路径部署（本地/沙箱）与子路径部署（Pages）均可。
-const CACHE_NAME = 'mining-daily-v76';
+const CACHE_NAME = 'mining-daily-v77';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -31,8 +31,23 @@ const urlsToCache = [
 const DATA_FILES = [
   BASE + 'news-data.js',
   BASE + 'lme-data.js',
-  BASE + 'price-history.js'
+  BASE + 'price-history.js',
+  BASE + 'morning_report.json'   // 2026-09-10 P1：晨报每日更新，此前只在 urlsToCache 里缓存一份，SWR 会一直喂昨天的
 ];
+
+// 2026-09-10 P1：离线兜底必须保持正确 MIME。
+// 旧实现对所有取不到的请求一律回退 index.html —— 于是 fetch('morning_report.json')
+// 拿到的是 HTML，.json() 直接抛错，页面表现成「简报区神秘隐藏」而看不出根因。
+// 现在按扩展名给出正确类型的最小合法响应；只有导航请求才回退 index.html。
+function offlineFallback(pathname) {
+  if (/\.json$/i.test(pathname)) {
+    return new Response('{}', { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } });
+  }
+  if (/\.js$/i.test(pathname)) {
+    return new Response('', { status: 200, headers: { 'Content-Type': 'application/javascript; charset=utf-8' } });
+  }
+  return caches.match(BASE + 'index.html');
+}
 
 self.addEventListener('install', event => {
   // 强制新 SW 立即激活，不等旧标签页关闭
@@ -118,7 +133,7 @@ self.addEventListener('fetch', event => {
           return res;
         }
         return caches.match(req).then(c => c || res);
-      }).catch(() => caches.match(req).then(r => r || caches.match(BASE + 'index.html')))
+      }).catch(() => caches.match(req).then(r => r || offlineFallback(url.pathname)))
     );
     return;
   }

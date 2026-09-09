@@ -37,6 +37,17 @@ check('sw.js activate 内通过 clients.navigate() 强制已打开页面重新�
   /c\.navigate\s*\(\s*c\.url\s*\)/.test(swSrc),
   '新 SW 接管后主动刷新，避免旧页面仍渲染旧版');
 
+// 2026-09-10 第 2 批：数据文件清单 + 离线兜底 MIME
+const dataFilesBlock = (swSrc.split('const DATA_FILES = [')[1] || '').split(']')[0];
+check('DATA_FILES 含 morning_report.json（每日更新，不能只在安装时缓存一次）',
+  dataFilesBlock.indexOf('morning_report.json') >= 0,
+  'DATA_FILES=' + dataFilesBlock.replace(/\s+/g, ' ').trim());
+check('离线兜底按扩展名返回正确 MIME，不再一律回退 index.html',
+  /function offlineFallback/.test(swSrc) &&
+  /application\/json/.test(swSrc) && /application\/javascript/.test(swSrc) &&
+  !/caches\.match\(req\)\.then\(r => r \|\| caches\.match\(BASE \+ 'index\.html'\)\)/.test(swSrc),
+  '旧实现会让 fetch(\'*.json\') 拿到 HTML，.json() 抛错');
+
 console.log('\n===== ② index.html SW 注册 URL 动态化 =====');
 const bvMatch = htmlSrc.match(/<meta name="build-version" content="([^"]+)"/);
 const bv = bvMatch ? bvMatch[1] : '';

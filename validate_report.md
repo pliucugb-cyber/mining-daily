@@ -1,16 +1,118 @@
 # URL 校验报告
 
-校验时间: 2026-09-09 09:16:30
+校验时间: 2026-09-10 06:17:19
 扫描文件: C:\Users\中铝矿业投并部\mining-daily\index.html
 
 ## 汇总
 
-- 总计: **121** 条
-- ✅ 正常: **105** 条
-- ⚠️ 警告: **3** 条
-- ❌ 失效: **13** 条
+- 总计: **154** 条
+- ✅ 正常: **119** 条
+- ⚠️ 警告: **5** 条
+- ❌ 失效: **30** 条
 
 ## ❌ 失效清单（必须修复）
+
+### 马里萨南柯罗金矿钻探见富矿
+- URL: `https://news.smm.cn/news/104106346`
+- 来源: 上海有色网 · 09-10
+- 关键词: ['马里', '里萨', '萨南', '南柯', '柯罗', '罗金', '金矿', '矿钻']
+- ❌ 标题关键词 0/8 命中（['马里', '里萨', '萨南']…）——可能错挂源或 URL 错配
+
+### 巴西稀土公司生产首批稀土精矿
+- URL: `https://news.smm.cn/news/104106345`
+- 来源: 上海有色网 · 09-10
+- 关键词: ['巴西', '西稀', '稀土', '土公', '公司', '司生', '生产', '产首']
+- ❌ 标题关键词 0/8 命中（['巴西', '西稀', '稀土']…）——可能错挂源或 URL 错配
+
+### 华锡有色箭猪坡矿区锑多金属矿资源储量核实报告通过评审备案 锑资源储量规模达大型
+- URL: `https://news.smm.cn/news/104106209`
+- 来源: 上海有色网 · 09-10
+- 关键词: ['华锡', '锡有', '有色', '色箭', '箭猪', '猪坡', '坡矿', '矿区']
+- ❌ 标题关键词 0/8 命中（['华锡', '锡有', '有色']…）——可能错挂源或 URL 错配
+
+### 海关总署：1~8月铜材进口降6.7%稀土进口降2.6%铝材出口增16.7%
+- URL: `https://news.smm.cn/news/104103410`
+- 来源: 上海有色网 · 09-09
+- 关键词: ['海关', '关总', '总署', '月铜', '铜材', '材进', '进口', '口降']
+- ❌ 标题关键词 0/8 命中（['海关', '关总', '总署']…）——可能错挂源或 URL 错配
+
+### 巴西寻平衡关键矿产管控和外资
+- URL: `https://news.smm.cn/news/104106348`
+- 来源: 上海有色网 · 09-10
+- 关键词: ['巴西', '西寻', '寻平', '平衡', '衡关', '关键', '键矿', '矿产']
+- ❌ 标题关键词 0/8 命中（['巴西', '西寻', '寻平']…）——可能错挂源或 URL 错配
+
+### 金力永磁：预计2027年底磁材产能将达6万吨/年 上半年净利同比增51.58%
+- URL: `https://news.smm.cn/news/104106247`
+- 来源: 上海有色网 · 09-10
+- 关键词: ['金力', '力永', '永磁', '预计', '2027', '年底', '底磁', '磁材']
+- ❌ 标题关键词 0/8 命中（['金力', '力永', '永磁']…）——可能错挂源或 URL 错配
+
+### 津巴布韦禁止锑、钨出口以推动本土加工
+- URL: `https://news.metal.com/en/newscontent/104103752-zimbabwe-bans-antimony-tungsten-exports-to-boost-domestic-processing`
+- 来源: SMM 国际站 · 09-09
+- 关键词: ['津巴', '巴布', '布韦', '韦禁', '禁止', '止锑', '钨出', '出口']
+- ❌ 标题关键词 0/8 命中（['津巴', '巴布', '布韦']…）——可能错挂源或 URL 错配
+
+### LME 锌库存攀升而现货升水走阔 显性累库难缓现货紧张
+- URL: `https://news.metal.com/en/newscontent/104103881-smm-analysis-lme-stocks-climb-while-backwardation-widens-whats-behind-zincs-apparent-paradox`
+- 来源: SMM 国际站 · 09-08
+- 关键词: ['LME', '锌库', '库存', '存攀', '攀升', '升而', '而现', '现货']
+- ❌ 标题关键词 0/8 命中（['LME', '锌库', '库存']…）——可能错挂源或 URL 错配
+
+### 印尼水位偏低扰动铝土矿发运 氧化铝生产或受威胁
+- URL: `https://news.metal.com/en/newscontent/104106350-indonesias-low-water-levels-disrupt-bauxite-shipments-threatening-alumina-production`
+- 来源: SMM 国际站 · 09-10
+- 关键词: ['印尼', '尼水', '水位', '位偏', '偏低', '低扰', '扰动', '动铝']
+- ❌ 标题关键词 0/8 命中（['印尼', '尼水', '水位']…）——可能错挂源或 URL 错配
+
+### 南美锂供应受扰：Sigma 停产与阿根廷极端天气拖累可交付性
+- URL: `https://news.metal.com/en/newscontent/104101447-south-american-lithium-supply-disrupted-sigma-suspension-and-argentina-weather-impact-deliverability`
+- 来源: SMM 国际站 · 09-07
+- 关键词: ['南美', '美锂', '锂供', '供应', '应受', '受扰', 'Sigma', '停产']
+- ❌ 标题关键词 0/8 命中（['南美', '美锂', '锂供']…）——可能错挂源或 URL 错配
+
+### 印度 KABIL 瞄准哥伦比亚关键矿产机会 供应链多元化再扩围
+- URL: `https://news.metal.com/en/newscontent/104106368-indias-kabil-eyes-colombian-critical-minerals-opportunities-as-supply-diversification-expands`
+- 来源: SMM 国际站 · 09-10
+- 关键词: ['印度', 'KABIL', '瞄准', '准哥', '哥伦', '伦比', '比亚', '亚关']
+- ❌ 标题关键词 0/8 命中（['印度', 'KABIL', '瞄准']…）——可能错挂源或 URL 错配
+
+### 印度与俄罗斯谋求扩展矿业与关键矿产伙伴关系
+- URL: `https://news.metal.com/en/newscontent/104106349-india-russia-eye-expanded-mining-and-critical-minerals-partnership`
+- 来源: SMM 国际站 · 09-10
+- 关键词: ['印度', '度与', '与俄', '俄罗', '罗斯', '斯谋', '谋求', '求扩']
+- ❌ 标题关键词 0/8 命中（['印度', '度与', '与俄']…）——可能错挂源或 URL 错配
+
+### 供应缺口与工业需求支撑 铂金表现料优于钯金
+- URL: `https://news.metal.com/en/newscontent/104106369-platinum-seen-outperforming-palladium-as-supply-deficits-and-industrial-demand-support-outlook`
+- 来源: SMM 国际站 · 09-10
+- 关键词: ['供应', '应缺', '缺口', '口与', '与工', '工业', '业需', '需求']
+- ❌ 标题关键词 0/8 命中（['供应', '应缺', '缺口']…）——可能错挂源或 URL 错配
+
+### 铜价于纪录高位下方暂歇 中国进口走弱、矿端供应迎2017年来首降
+- URL: `https://www.mining.com/copper-price-pauses-below-record-as-chinas-imports-slump-mine-supply-heads-for-first-drop-since-2017`
+- 来源: MINING.COM · 09-10
+- 关键词: ['铜价', '价于', '于纪', '纪录', '录高', '高位', '位下', '下方']
+- ❌ 标题关键词 0/8 命中（['铜价', '价于', '于纪']…）——可能错挂源或 URL 错配
+
+### 智利法案瞄准外资 支撑下一轮矿业繁荣
+- URL: `https://www.mining.com/chile-bill-targets-foreign-cash-for-next-mining-boom`
+- 来源: MINING.COM · 09-09
+- 关键词: ['智利', '利法', '法案', '案瞄', '瞄准', '准外', '外资', '支撑']
+- ❌ 标题关键词 0/8 命中（['智利', '利法', '法案']…）——可能错挂源或 URL 错配
+
+### 智利采出全球约四分之一铜 但冶炼量仅占约4%
+- URL: `https://www.mining.com/chile-mines-a-quarter-of-worlds-copper-but-smelts-just-4`
+- 来源: MINING.COM · 09-09
+- 关键词: ['智利', '利采', '采出', '出全', '全球', '球约', '约四', '四分']
+- ❌ 标题关键词 0/8 命中（['智利', '利采', '采出']…）——可能错挂源或 URL 错配
+
+### Core Lithium 的 Finniss 锂项目重启达成关键里程碑
+- URL: `https://news.metal.com/en/newscontent/104106287-smm-news-core-lithiums-finniss-restart-reaches-a-key-milestone`
+- 来源: SMM 国际站 · 09-10
+- 关键词: ['Core', 'Lithium', 'Finniss', '锂项', '项目', '目重', '重启', '启达']
+- ❌ 标题关键词 0/8 命中（['Core', 'Lithium', 'Finniss']…）——可能错挂源或 URL 错配
 
 ### 巴西铁山稀土矿等项目进展：澳/乌/科多国矿端见矿
 - URL: `https://news.smm.cn/news/104104007`
@@ -18,11 +120,11 @@
 - 关键词: ['巴西', '西铁', '铁山', '山稀', '稀土', '土矿', '矿等', '等项']
 - ❌ 标题关键词 0/8 命中（['巴西', '西铁', '铁山']…）——可能错挂源或 URL 错配
 
-### 海关总署：1~8月铜材进口降6.7%稀土进口降2.6%铝材出口增16.7%
-- URL: `https://news.smm.cn/news/104103410`
-- 来源: 上海有色网 · 09-09
-- 关键词: ['海关', '关总', '总署', '月铜', '铜材', '材进', '进口', '口降']
-- ❌ 标题关键词 0/8 命中（['海关', '关总', '总署']…）——可能错挂源或 URL 错配
+### 智利坎加洛铜矿两孔将矿体延伸至地下800米 高品位给矿构造获验证
+- URL: `http://geochina.cgs.gov.cn/news/950`
+- 来源: 全球矿产资源信息系统 · 09-08
+- 关键词: ['智利', '利坎', '坎加', '加洛', '洛铜', '铜矿', '矿两', '两孔']
+- ❌ 标题关键词 0/8 命中（['智利', '利坎', '坎加']…）——可能错挂源或 URL 错配
 
 ### 报道：津巴布韦暂停锑和钨出口以推动本土加工
 - URL: `https://news.smm.cn/news/104099041`
@@ -92,17 +194,27 @@
 
 ## ⚠️ 警告清单（建议核查）
 
+### Galantas 以 500 万美元交易退出爱尔兰 Omagh 金矿项目
+- URL: `https://www.mining.com/galantas-exits-omagh-gold-project-in-5m-deal`
+- 来源: MINING.COM · 09-10
+- ⚠️ 标题关键词只命中 2/8（['Galantas', '500', '万美', '美元', '元交', '交易', '易退', '退出']）——疑似错挂
+
+### Eldorado 的 Skouries 铜金项目多年波折终见产出
+- URL: `https://www.mining.com/eldorados-skouries-turns-years-of-setbacks-into-copper`
+- 来源: MINING.COM · 09-09
+- ⚠️ 标题关键词只命中 2/8（['Eldorado', 'Skouries', '铜金', '金项', '项目', '目多', '多年', '年波']）——疑似错挂
+
 ### Marimaca 智利 Pampa Medina 铜银矿见厚大矿体，铜品位近1%
 - URL: `https://www.mining.com/marimaca-hits-thick-copper-silver-zone-at-pampa-medina-in-chile`
 - 来源: MINING.COM · 09-09
 - ⚠️ 标题关键词只命中 3/8（['Marimaca', '智利', 'Pampa', 'Medina', '铜银', '银矿', '矿见', '见厚']）——疑似错挂
 
-### 力拓收购嘉能可/三菱 Aurukun 铝土矿项目
-- URL: `https://www.mining.com/rio-tinto-acquires-aurukun-bauxite-project-from-glencore-mitsubishi`
-- 来源: MINING.COM · 09-09
-- ⚠️ 标题关键词只命中 1/8（['力拓', '拓收', '收购', '购嘉', '嘉能', '能可', '三菱', 'Aurukun']）——疑似错挂
-
 ### ACG Metals 逾700万美元收购土耳其 Keşkek 金矿项目
 - URL: `https://www.mining.com/acg-metals-to-acquire-keskek-gold-project`
 - 来源: MINING.COM · 09-08
 - ⚠️ 标题关键词只命中 3/8（['ACG', 'Metals', '700', '万美', '美元', '元收', '收购', '购土']）——疑似错挂
+
+### 力拓收购嘉能可/三菱 Aurukun 铝土矿项目
+- URL: `https://www.mining.com/rio-tinto-acquires-aurukun-bauxite-project-from-glencore-mitsubishi`
+- 来源: MINING.COM · 09-09
+- ⚠️ 标题关键词只命中 1/8（['力拓', '拓收', '收购', '购嘉', '嘉能', '能可', '三菱', 'Aurukun']）——疑似错挂

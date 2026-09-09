@@ -26,6 +26,7 @@ WorkBuddy 的「发布为应用」链接绑定的是**本机目录绝对路径**
 import os
 import sys
 import time
+import shlex
 import shutil
 import subprocess
 
@@ -67,18 +68,26 @@ OPTIONAL = [
 
 
 def run(cmd, cwd=None, check=True):
-    """执行命令，返回 (returncode, stdout+stderr)"""
+    """执行命令，返回 (returncode, stdout+stderr)。
+
+    2026-09-10 P1（第 2 批）：去掉 shell=True。
+    原实现把整条命令交给 shell 解析，参数里的空格/引号/特殊字符需要二次转义，
+    一旦某天把分支名或提交信息拼进去就容易出错或被注入；改为 argv 数组直传更安全，
+    且 Windows / Linux 行为一致。cmd 既可传字符串（内部 shlex.split），也可直接传列表。
+    """
     # 定时任务里跑 git 时严禁任何交互式等待：否则一个 rebase/编辑器提示就能把整轮流程挂死
     env = os.environ.copy()
     env['GIT_TERMINAL_PROMPT'] = '0'
     env['GIT_EDITOR'] = 'true'
     env['GIT_SEQUENCE_EDITOR'] = 'true'
     env['GIT_MERGE_AUTOEDIT'] = 'no'
-    p = subprocess.run(cmd, cwd=cwd, shell=True, env=env,
+    args = list(cmd) if isinstance(cmd, (list, tuple)) else shlex.split(cmd)
+    p = subprocess.run(args, cwd=cwd, shell=False, env=env,
                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out = p.stdout.decode('utf-8', errors='replace')
     if check and p.returncode != 0:
-        raise RuntimeError('命令失败: %s\n%s' % (cmd, out))
+        shown = cmd if isinstance(cmd, str) else ' '.join(cmd)
+        raise RuntimeError('命令失败: %s\n%s' % (shown, out))
     return p.returncode, out
 
 

@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-09-09T14:37:21+08:00",
+  "updated_at": "2026-09-10T06:16:07+08:00",
   "schema_version": "1.1",
-  "total": 568,
+  "total": 830,
   "months": [
     {
       "month": "2026-08",
@@ -12,10 +12,10 @@
     },
     {
       "month": "2026-09",
-      "count": 103,
+      "count": 143,
       "date_from": "2026-09-01",
-      "date_to": "2026-09-09",
-      "days_covered": 8
+      "date_to": "2026-09-10",
+      "days_covered": 9
     },
     {
       "month": "candidates_2026-09-08",
@@ -28,6 +28,13 @@
       "month": "candidates_2026-09-09",
       "count": 209,
       "date_from": "2026-09-03",
+      "date_to": "2027-03-01",
+      "days_covered": 7
+    },
+    {
+      "month": "candidates_2026-09-10",
+      "count": 222,
+      "date_from": "2026-09-04",
       "date_to": "2027-03-01",
       "days_covered": 7
     }
