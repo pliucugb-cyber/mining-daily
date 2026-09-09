@@ -122,13 +122,14 @@ setTimeout(() => {
     try { anchor = (typeof window.qaReportDate === 'function') ? (window.qaReportDate() || '') : ''; } catch (e) {}
     if (!anchor) anchor = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
     const base = new Date(+anchor.slice(0, 4), +anchor.slice(5, 7) - 1, +anchor.slice(8, 10));
-    let staleLeft = 0, freshBadged = 0, backfillN = 0;
+    let staleLeft = 0, freshBadged = 0, backfillN = 0, staleCount = 0;
     todaySec.querySelectorAll('.news-item').forEach(el => {
       const meta = el.querySelector('.news-meta');
       const m = meta ? (meta.textContent || '').match(/(\d{2})-(\d{2})/) : null;
       if (!m) return;
       const d = new Date(base.getFullYear(), +m[1] - 1, +m[2]);
       const stale = (base - d) / 86400000 > 2;
+      if (stale) staleCount++;
       const hasNew = !!el.querySelector('.badge-new') && el.classList.contains('is-new');
       const hasBf = !!el.querySelector('.badge-backfill');
       if (hasBf) backfillN++;
@@ -137,7 +138,12 @@ setTimeout(() => {
     });
     check('③c 超期条目不再带 NEW', staleLeft === 0, '残留 ' + staleLeft + ' 条');
     check('③c 时效内条目不被误标补录', freshBadged === 0, '误标 ' + freshBadged + ' 条');
-    check('③c 补录标已生成（当前数据应为 4 条左右）', backfillN >= 1, 'backfill=' + backfillN);
+    // 数据相关：今日区若存在>2天旧闻则必须生成补录标；若数据本身无超期条目（降级逻辑正确 no-op）则 backfill=0
+    if (staleCount > 0) {
+      check('③c 补录标已生成（超期 ' + staleCount + ' 条应降级）', backfillN >= 1, 'backfill=' + backfillN);
+    } else {
+      check('③c 今日区无超期条目→降级逻辑正确 no-op', backfillN === 0, 'backfill=' + backfillN + '（数据无>2天旧闻）');
+    }
     // 2026-09-08 晚追加：补录条目不保留 is-special 底色强调
     let spLeft = 0;
     todaySec.querySelectorAll('.news-item .badge-backfill').forEach(b => {
@@ -302,6 +308,43 @@ setTimeout(() => {
     window.requestAnimationFrame = _raf;
     try { window.lsSet('mining_daily_favorites', '[]'); } catch (e) {}
   } catch (e) { check('\u246a \u6536\u85cf/\u5386\u53f2\u7b5b\u9009\u5b9a\u4f4d', false, e.message); }
+
+  console.log('\n===== ⑫ 往期日组点击 + 今日新增计数口径（2026-09-09） =====');
+  // ⑫a 往期日组点击只展开该日组、不误折叠父分类（事件冒泡修复）
+  try {
+    const arch = doc.getElementById('archiveSection');
+    const dgs = arch ? arch.querySelectorAll('.day-group') : [];
+    if (dgs.length) {
+      const dg = dgs[0];
+      const cat = dg.closest('.sub-cat') || dg.parentElement;
+      const catBefore = cat.getAttribute('data-collapsed');
+      const dgBefore = dg.getAttribute('data-collapsed');
+      dg.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+      const dgAfter = dg.getAttribute('data-collapsed');
+      const catAfter = cat.getAttribute('data-collapsed');
+      check('⑫ 日组点击切换自身折叠态', dgAfter !== dgBefore, 'before=' + dgBefore + ' after=' + dgAfter);
+      check('⑫ 日组点击不误折叠父分类', catAfter === catBefore, 'cat before=' + catBefore + ' after=' + catAfter);
+    } else {
+      check('⑫ 日组点击切换自身折叠态', true, '当前数据无日组，跳过');
+      check('⑫ 日组点击不误折叠父分类', true, '当前数据无日组，跳过');
+    }
+  } catch (e) { check('⑫ 日组点击', false, e.message); }
+  // ⑫b 矿权结果摘要不计入「今日新增」：顶部 newCount 须等于 NEWS_DATA.stats.new_count
+  try {
+    const newCountEl = doc.getElementById('newCount');
+    const newCount = newCountEl ? parseInt(newCountEl.textContent, 10) : -1;
+    const rsItems = doc.querySelectorAll('#todaySection .news-item[data-rights-summary]');
+    let rsHasNew = 0;
+    rsItems.forEach(el => { if (el.classList.contains('is-new')) rsHasNew++; });
+    check('⑫ 矿权摘要条不带 is-new 角标', rsHasNew === 0, '误带=' + rsHasNew + ' 条');
+    const statNew = (window.NEWS_DATA && window.NEWS_DATA.stats) ? window.NEWS_DATA.stats.new_count : null;
+    if (typeof statNew === 'number') {
+      check('⑫ 顶部今日新增数 = 简报收录数（new_count）', newCount === statNew, '顶部=' + newCount + ' 简报=' + statNew);
+    } else {
+      const isNew = doc.querySelectorAll('#todaySection .news-item.is-new:not([data-rights-summary])').length;
+      check('⑫ 今日新增数 = 今日区 is-new（不含矿权摘要）', newCount === isNew, '顶部=' + newCount + ' is-new=' + isNew);
+    }
+  } catch (e) { check('⑫ 今日新增计数口径', false, e.message); }
 
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));

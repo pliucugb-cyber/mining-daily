@@ -70,3 +70,23 @@
 
 ### 可复用脚本
 - generate_20260908.py / update_analysis_20260908.py / add_rights_20260908.py
+
+---
+
+## 2026-09-09（周三）✅ 全流程成功（含并发冲突修复）
+- 行情：LME 5/6（锡未更新沿用 9-8 收盘 54,862）；国内 9/9 SHFE/上金所/GFEX（09-08 收盘），价格历史 15 品种 OK。
+- 新闻：**15 条**（找矿 2 / 行业 5 / 国际 8），境外 6 条（MINING.COM ×2、SMM 国际站 ×4）保留英文原题与 data-orig-title。
+- 矿权 7 宗：新疆托里安山岩（挂牌）、辽宁岫岩金多金属（转让）、山东乳山金矿（出让结果）、四川马尔康金矿（挂牌）、内蒙阿巴嘎旗银铅锌（协议）、宁城金矿（协议）、乌拉特前旗铁矿（协议），只入 rightsSection。
+- 链接校验 124 条：14「失效」+3「告警」均为中英文标题误判（境外 / Cloudflare 反爬），实测 curl 全部 200。
+- 源白名单 127 唯一 URL 100% 通过。
+- git main → fc679d4；gh-pages → 56da55c（线上 09:16 上线）。
+
+### 关键事件与经验
+1. **并发实例踩坑**：发现更早的自动化实例（pid 17700）8:57 后停摆，但 index.html 还是半成品（title 仍 09-08）。处置链：观察 mtime 40 秒无新写入 → 确认无活动进程 → `git checkout --` 还原 index.html / data/news_2026-09.json / mining_news.json / news-data.js / validate_report.md → 写当日完整脚本接管。这个流程证明"检测到脏改动先 git checkout HEAD 是最稳妥起点"。
+2. **候选池与新建脚本对齐**：本次没有直接写脚本，而是先 import generate_20260909 触发模块顶层执行，意外发现模块级 `new_items` 已被填入 15 条候选（找矿 + 行业 + 国际），与今日 zhihu/smm 二抓的内容完美对接。这表明候选池+人工精筛→脚本化是稳妥的，不要凭空硬塞条目（如"智利坎加洛铜矿"出现 kcykf/ztjz URL 404，已替换为真实的巴西铁山稀土矿 / SMM 多条核实）。
+3. **数据层完整性**：export_news_json.py 把 124 条写进 mining_news.json + data/news_2026-09.json（87 条）/ data/news_2026-08.json（57 条）/ news-data.js（567 条）。这是前端的"问答检索条数据源"，**必须随每日 commit 一同入库**。
+4. **fetch_ma 504 仍存在**：09-09 巨潮接口 504，规范允许次日补抓，inject_ma.py 检测到重复条目即跳过。
+5. **notify_status.py 声音规范**：完成 → `notify_status.py ok "矿业日报06:00" "消息"`。脚本自动调用 PowerShell 播 Windows Notify 或 tada，按需调用，无需手动 PowerShell。
+
+### 可复用脚本
+- generate_20260909.py / update_analysis_20260909.py / add_rights_20260909.py

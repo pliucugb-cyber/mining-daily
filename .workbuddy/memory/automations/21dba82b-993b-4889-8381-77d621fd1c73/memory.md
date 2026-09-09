@@ -1,5 +1,49 @@
 # 矿业日报 · 每日复核任务 · 执行记忆
 
+## 2026-09-09 08:00（周三）
+
+### 判定：06:00 任务"误判未跑成"→ 实则已跑成
+
+开任务时看 `ls -la index.html` mtime=09:04、title=2026-09-08 标记为"页面日期非今天"。但实际上：
+- 06:00 自动化任务（mining-daily-bot）已成功并提交 `fc679d4`：feat(daily): 2026-09-09 日报 — 15 条今日新增 + 7 宗矿权 / 价格卡真实涨幅 / 4 文件分析 (build 20260909-0906)
+- fc679d4 commit 时间：Wed Sep 9 09:16:04 2026 +0800
+- `git show fc679d4:index.html` 标题已是 2026-09-09、今日新增（2026-09-09 抓取）、todayCount=15条、archiveCount=106条
+- 工作树当时是干净的（与 fc679d4 一致），我误把 `index.html.bak-0908`（09-08 备份）当成"工作树状态"判断 → 执行补跑
+
+### 补跑动作（实际生成了一版与 fc679d4 几乎相同的 index.html）
+- 复制 generate_20260908.py → generate_20260909.py，改 REPORT/GRAB='2026-09-09'、星期三、价格卡（09-08 SHFE 收盘 + 09-09 LME）、new_items 重写为 14 条（与 fc679d4 的 15 条几乎重叠）
+- `cp index.html.bak-0908 index.html` 还原 09-08 状态后跑脚本生成 09-09
+- 跑 inject_ma.py / export_news_json.py 同步数据层
+- 跑 preflight_check.py / source_whitelist.py / validate_urls.py
+
+### 修复
+1. **失效 URL（geoglobal mnr 10308875.htm = 智利坎加洛铜矿延伸至800米）**：HTTP 404 真失效，删除
+2. **低价值公告（兴业证券持续督导意见 × 2）**：归入"应删"分类（券商核查意见），从往期区删除
+3. **source_whitelist.py 补录**：新增 `szse.cn` (含 disc.szse.cn PDF) 与 `ccmn.cn`，与用户清单的国内 14 域对齐
+4. **电投能源 szse PDF 公告补回往期区**：白名单修复后，将该 PDF 公告插入到「行业动态」sub-cat 下
+5. **子分类计数 / 区块计数同步重算**（每次新增删除条目后都重算）
+
+### 校验结果
+- preflight_check ✅ 全通过（marker 1/1/1、div 收支平衡、build-version 20260909-0913）
+- source_whitelist ✅ 128 unique URLs（6 skipped functional），全部白名单内
+- validate_urls 121 条 | 13 误报（curl 拿不到 JS 渲染正文，curl 复测 HTTP 200）+ 0 真失效
+- backcheck 报告 14 条疑似漏稿（阈值 0.35，相似度 0.033~0.102，全部为行情分析/评论）→ 全部判无效，**无漏稿**
+
+### 提交与同步
+- commit 67ece11（push origin main 成功）
+- deploy_pages.py → gh-pages d7532d8
+- 线上 30 秒后复验：title 2026-09-09 / todayCount 15条 / archiveCount 107条 / 电投能源 已显示 ✅
+
+### 本轮踩坑与教训（下次注意）
+1. **"页面是昨天的"≠"06:00 没跑"**：要先看 git log 与工作树状态对比，再判断是否真要补跑。本次幸亏 06:00 任务的 fc679d4 已合并成功，且我新生成的 index.html 与 fc679d4 内容几乎相同，没有覆盖破坏。
+2. **generate_*.py 的 `ni()` 会 raise ValueError 拦截白名单外 URL**：本次 source_whitelist.py 缺 szse.cn/ccmn.cn 时，generate 09-08 的脚本里那条 disc.szse.cn 电投能源 PDF 在 09-08 页面里就没出现，导致 09-09 页面也缺失；白名单修复后需手动补录到往期区。
+3. **generate_*.py 跑前要先 `cp index.html.bak-XXXX index.html`** 还原目标日期的前一版状态，避免被上一个备份状态搞乱。本次我误把 09-08 备份当工作树状态，没意识到 fc679d4 已经成功。
+4. **validate_urls.py 的 "0/8 关键词命中" 在 JS 渲染站上是误报**：所有 smm.cn / metal.com / mining.com 都触发，但 curl 复测 HTTP 200 + _fetchsum.py 拿到完整正文即可定性为"误报"，不要轻信删除。
+5. **新版的 generate_*.py 改 new_items 时，一次性写整段比 Edit 多次替换更稳**：Edit 工具对中文双引号敏感，分段替换容易因 old_string 微小差异失败。用 _replace_new_items.py + 正则整段替换最稳。
+
+### 释放
+- `automation_lock.py release verify` RELEASED ✅
+
 ## 2026-09-06 10:10（周日）
 
 结论：**09:00 那轮未跑成功 → 本轮补跑完整生成流程**。线上已重新同步。
@@ -8,60 +52,3 @@
 最省事的三看，任一不对即判定失败：
 1. `ls -l --time-style=+%Y-%m-%d_%H:%M index.html morning_report.json mining_news.json`
    —— mtime 不是今天即为未跑成（本轮：index.html 停在 09-06 02:03 的功能提交，morning_report 停在 09-05 09:29）。
-2. `<title>` 里的日期是否 = 今天。
-3. 用 PowerShell 看有没有 python/node 生成进程在跑（`Get-Process python*,node*` 看 CommandLine），
-   **排除「任务还在跑、我不该插手」的情况**再动手补跑。本轮确认无进程后才补跑。
-⚠️ 注意干扰项：lme-data.js / price-history.js / price_history_detail.json 的 mtime 是今天 09:56，
-   一度像是「跑了一半」。实际是行情脚本单独跑过，**不能用行情文件 mtime 判断生成是否成功**。
-
-### 本轮修复/生成内容
-- 补跑：标题/badge/更新时间/build-version/priceStripNote 统一 09-06；脚本 generate_20260906.py
-- 今日新增 10 条（矿权 5 / 找矿技术 2 / 行业 2 / 国际 1），**每条都 curl 原文页核对标题·发布时间·正文数字**
-- 往期按 **7 日窗口**（08-31 起）滚动；今日 10 + 往期 39 = 49，各处计数与 mining_news.json meta 一致
-- 周日休市，价格卡沿用 09-04 收盘（与 09-05 完全相同，属正常，不要误判为没刷新）
-- 四个分析文件用 update_analysis_20260906.py 重算；alerts 仍为碳酸锂 -5.30%（与价格卡一致，非异常）
-- commit 2cf2c29 → push main 成功；deploy_pages.py 推 gh-pages（8d0adba）成功
-- 线上核对：等待 75s 后 curl，与本地 index.html **字节级一致**
-
-## 2026-09-05 10:10（首次记录）
-结论：**09:00 那轮生成成功，本轮复核零修复**，仅刷新 validate_report.md 时间戳。
-- 链接校验 47/47（0 失效 / 0 警告）
-- 计数一致：今日 11 + 往期 36 = 47；7 日窗口最早 08-31
-- 日期标记全为 2026-09-05；行情 15 品种最后 K 线 09-04
-- LME 六卡、热榜经运行时渲染验证出值
-- commit 35e373d 已 push
-
-## 复用要点（下轮直接照做）
-
-1. **「今日区」不等于当天日期**：09:00 抓取时源站当天稿未发布，今日区实际是前一自然日批次。
-   判定是否正常 = 对比上一版：上一版今日区的日期应整批转入本版往期区。若出现重复才是问题。
-2. **.news-item 计数**：用 Python `re.findall(r'class="news-item', seg)`，按 `id="todaySection"` →
-   `id="archiveSection"` → `id="installGuideSection"` 切段。git bash 的 `grep -o | wc -l` 计数不可靠，勿用。
-   全文计数会比真实条目多 1（JS 模板里的选择器字符串），属正常。
-3. **交易日判断**：周六/周日运行时，最后 K 线为周五属正常，不要误判为「数据过期」而重跑 fetch。
-4. **运行时渲染验证（无浏览器时）**：用技能 `html-runtime-render-check`。
-   ⚠️ **路径坑**：脚本路径必须写成 `C:/Users/...` 全路径；写成 `~/.workbuddy/...` 会被 bash 展开成
-   `/c/Users/...`，node 再解析成 `C:\c\Users\...` → MODULE_NOT_FOUND。
-   ```bash
-   NODE=C:/Users/中铝矿业投并部/.workbuddy/binaries/node/versions/22.22.2-2/node.exe
-   S="C:/Users/中铝矿业投并部/.workbuddy/skills/html-runtime-render-check/scripts/verify_render.js"
-   # 价格卡
-   $NODE "$S" --html index.html --data lme-data.js --data price-history.js \
-     --need renderLmePrices --init 'renderLmePrices()' \
-     --probe '__cards.slice(0,6).map(function(c){return c._value.textContent+"  "+c._chg.textContent;})'
-   # 热榜
-   $NODE "$S" --html index.html --data news-data.js --need HOT_SRC_W --need HOT_KW --need NORMAL_KW \
-     --need computeHotNewsLocal --need qaReportDate --init 'QA_ROWS = window.NEWS_DATA.news' \
-     --probe 'computeHotNewsLocal(10)'
-   ```
-   依赖函数名变更需同步改参数：`renderLmePrices`、`computeHotNewsLocal`。
-5. **线上比对**：curl 到本地路径再比对，别写 `/tmp`。curl 存 LF、本地 CRLF，需 `.replace(b'\r\n', b'\n')` 后再比。
-6. **push / deploy 需显式指定密钥**：`GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes"` 前置。
-   deploy_pages.py 也要带这个环境变量。
-7. GitHub Pages 链接固定：https://pliucugb-cyber.github.io/mining-daily/ （勿改用 workbuddy_sites_deploy）。
-8. **采集新闻的可复用手法**（本轮验证有效，严禁让模型凭记忆写标题）：
-   curl 列表页 → Python 正则抽 `href + 标题 + 日期` → 再 curl 每条原文页 → 从原文页取
-   `<title>`、`发布时间：YYYY-MM-DD`、`起始价/面积/收益率/保证金` 等数字写摘要。
-   注意 `ky.mnr.gov.cn` 列表页的日期列与原文页 `发布时间` 会差 1 天，**以原文页为准**。
-   注意 `worldmr.net` 是 GBK，需 `gb18030` 解码，否则全乱码。
-   注意全球矿产资源网会重发旧稿（如"程利伟到访中国五矿"日期标 09-04 但正文是 4 月 8 日），**必读正文再决定**。
