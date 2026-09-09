@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2345" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2355" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -538,6 +538,12 @@ body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 .qa-sug-row{margin-top:6px;font-size:var(--fs-meta);color:var(--ink-500);line-height:1.9}
 .qa-sug{display:inline-block;margin:2px 5px 2px 0;padding:2px 9px;border:1px solid #cdd8e6;border-radius:13px;background:#eef3fb;color:#3b5bdb;cursor:pointer;user-select:none}
 .qa-sug:hover{background:var(--tag-strategy);color:#fff;border-color:var(--tag-strategy)}
+.qa-inref{color:#3b5bdb;text-decoration:underline;font-weight:600;cursor:pointer}
+.qa-inref:hover{color:#1c3fb8}
+.qa-followups{margin-top:var(--s3);padding-top:var(--s2);border-top:1px dashed var(--line-1);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.qa-fu-label{font-size:var(--fs-nano);color:var(--ink-500)}
+.qa-fu-chip{border:1px solid #cdd8e6;background:#eef3fb;color:#33414f;border-radius:14px;padding:3px 10px;font-size:var(--fs-meta);cursor:pointer}
+.qa-fu-chip:hover{background:var(--tag-strategy);color:#fff;border-color:var(--tag-strategy)}
 .qa-float-foot{position:relative;z-index:3;display:flex;gap:var(--s2);padding:var(--s3);border-top:1px solid var(--line-1);background:var(--surface)}
 .qa-float-input{position:relative;z-index:4;flex:1;border:1px solid #dbe2ea;border-radius: var(--r-md);padding:var(--s2) var(--s3);font-size: var(--fs-body);outline:none}
 .qa-float-input:focus{border-color:var(--tag-strategy)}
@@ -767,6 +773,12 @@ body.dark .qa-msg-item mark{background:#5b4b16;color:#ffe9a8}
 body.dark .qa-msg-item .qt mark{background:#6b5a1e}
 body.dark .qa-sug{background:var(--surface-3);border-color:var(--line-1);color:#a5b4fc}
 body.dark .qa-sug:hover{background:#4f46e5;color:#fff}
+body.dark .qa-inref{color:#a5b4fc}
+body.dark .qa-inref:hover{color:#c7d2fe}
+body.dark .qa-followups{border-top-color:var(--line-1)}
+body.dark .qa-fu-label{color:var(--ink-500)}
+body.dark .qa-fu-chip{background:var(--surface-3);border-color:var(--line-1);color:var(--ink-700)}
+body.dark .qa-fu-chip:hover{background:#4f46e5;color:#fff}
 body.dark .section-title.ai .ai-sub{color:var(--ink-500)}
 body.dark .ai-row .ai-label{background:#232a4d;color:#a5b4fc}
 body.dark .ai-row.risk .ai-label{background:#3d1f24;color:#fca5a5}
@@ -4788,6 +4800,55 @@ function qaDsSourcesHtml(ctx,q){
   html+='</div>';
   return html;
 }
+// ===== Phase C：追问建议 + 内联引用 =====
+// 把 AI 正文里的「（媒体，日期）」解析为可点链接，跳到对应来源（基于 ctx 的 媒体+日期->url 映射）
+function qaInlineRefs(html,ctx){
+  if(!ctx||!ctx.length)return html;
+  var map={};
+  ctx.forEach(function(c){
+    var s=(c.s||'').trim(),d=(c.d||''),u=c.u||c.url||'';
+    if(!u||!d)return;
+    if(s)map[(s+'|'+d).toLowerCase()]=u;
+  });
+  if(!Object.keys(map).length)return html;
+  return html.replace(/（([^，（）]+?)，\s*(\d{4}-\d{2}-\d{2})）|\(([^，()]+?),\s*(\d{4}-\d{2}-\d{2})\)/g,function(m,zm,zd,em,ed){
+    var media=(zm||em||'').trim(),date=(zd||ed||'');
+    if(!media||!date)return m;
+    var u=map[(media+'|'+date).toLowerCase()];
+    if(!u){
+      for(var k in map){var p=k.split('|');if(p[1]===date&&(p[0].indexOf(media)>=0||media.indexOf(p[0])>=0)){u=map[k];break;}}
+    }
+    if(!u)return m;
+    var safe=qaSafeUrl(u);if(!safe)return m;
+    return '<a class="qa-inref" href="'+safe+'" target="_blank" rel="noopener" title="查看来源：'+qaEsc(media)+' '+date+'">'+m+'</a>';
+  });
+}
+// 基于问题/上下文生成 2~3 个可点追问
+function qaFollowUps(q,ctx){
+  var ups=[];
+  var _row={g:[''],t:q,m:q,s:q,c:q};
+  var m=QA_MINERALS.filter(function(x){return qaMineralHit(_row,x)||q.indexOf(x)>=0;})[0];
+  var t=QA_TOPICS.filter(function(x){return q.indexOf(x)>=0;})[0];
+  if(m){ups.push(m+'最新价格走势');ups.push(m+'近期重大并购');ups.push(m+'勘查突破进展');}
+  if(t)ups.push(t+'相关政策梳理');
+  ups.push('今日新增了哪些矿业新闻');
+  ups.push('最近一周矿业热点');
+  var seen={},out=[];
+  ups.forEach(function(u){if(!seen[u]){seen[u]=1;out.push(u);}});
+  return out.slice(0,3);
+}
+function qaAppendFollowUps(msg,ups){
+  if(!msg||!ups||!ups.length)return;
+  if(msg.querySelector('.qa-followups'))return;
+  var html='<div class="qa-followups"><span class="qa-fu-label">继续追问 ▸</span>'+
+    ups.map(function(u){return '<button class="qa-fu-chip" type="button" onclick="qaFollowAsk(this)">'+qaEsc(u)+'</button>';}).join('')+'</div>';
+  msg.insertAdjacentHTML('beforeend',html);
+}
+function qaFollowAsk(btn){
+  var inp=document.getElementById('qaFloatInput');
+  if(inp)inp.value=(btn.textContent||'').trim();
+  qaFloatAsk();
+}
 function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
   // 2026-09-06：AI 上下文再次按相关性阈值过滤，确保正文和参考来源只出现强相关内容
   // 日期意图：已在 qaFloatAsk 中按日期严格过滤，不再做通用相关性过滤，避免误删当天条目
@@ -4878,13 +4939,13 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
         else{text=content;meta=dateIntent?'DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条 '+dateIntent+' 本地新闻':'DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条相关本地新闻';}
       }
       if(bubble){
-        bubble.innerHTML=qaMdRender(text);
+        bubble.innerHTML=qaInlineRefs(qaMdRender(text),ctx);
         var src=qaDsSourcesHtml(ctx,q);
         if(src)bubble.insertAdjacentHTML('afterend',src);
       }
       if(msg){
         var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=meta;
-        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);
+        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);qaAppendFollowUps(msg,qaFollowUps(q,ctx));
         if(res.ok&&content){
           var actions='<div class="qa-msg-actions">'+
             '<button class="qa-msg-action" type="button" title="复制回答" onclick="qaCopyAi(this)">📋 复制</button>'+
@@ -4905,13 +4966,13 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
       var hint='\n\n[DeepSeek 直连失败（'+_why+'），已切换为本地知识库回答]';
       var text=localAns+hint;
       if(bubble){
-        bubble.innerHTML=qaMdRender(text);
+        bubble.innerHTML=qaInlineRefs(qaMdRender(text),ctx);
         var src=qaDsSourcesHtml(ctx,q);
         if(src)bubble.insertAdjacentHTML('afterend',src);
       }
       if(msg){
         var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent='本地知识库兜底 · 全库 '+QA_ROWS.length+' 条';
-        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);
+        msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);qaAppendFollowUps(msg,qaFollowUps(q,ctx));
         if(!msg.querySelector('.qa-msg-actions')){
           var metaEl=msg.querySelector('.qa-msg-meta');
           var actions='<div class="qa-msg-actions">'+
