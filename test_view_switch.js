@@ -78,12 +78,22 @@ setTimeout(() => {
     check('安装区可见', disp('installGuideSection') !== 'none', disp('installGuideSection'));
     check('右栏在安装视图隐藏', window.getComputedStyle(document.querySelector('.col-rail')).display === 'none');
 
-    // 5) 收藏切换前先 clearView
+        // 5) 视图切换后应滚动到目标区块（jsdom 布局计算弱，给 todaySection 强设 offsetTop 后断言）
+    let scrollArgs = null;
+    const origScrollTo = window.scrollTo;
+    window.scrollTo = function (arg) { scrollArgs = arg; };
+    const todayEl = document.getElementById('todaySection');
+    Object.defineProperty(todayEl, 'offsetTop', { value: 900, configurable: true });
+    window.switchView('today', document.querySelector('[data-target="todaySection"]'));
+    window.scrollTo = origScrollTo;
+    check('切换今日视图后滚动到目标区块（top≈800）', scrollArgs && scrollArgs.top === 800, JSON.stringify(scrollArgs));
+
+    // 6) 收藏切换前先 clearView
     window.switchView('archive', archItem); // 先进入某视图
     window.toggleFavFilter();               // 进入收藏（应清视图）
     check('toggleFavFilter 先 clearView（data-view 清除）', !document.body.dataset.view, document.body.dataset.view);
 
-    // 6) updateActiveSection 在视图模式下不抢高亮
+    // 7) updateActiveSection 在视图模式下不抢高亮
     window.switchView('today', document.querySelector('[data-target="todaySection"]'));
     const before = document.querySelector('[data-target="todaySection"]').classList.contains('active');
     window.updateActiveSection && window.updateActiveSection();
