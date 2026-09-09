@@ -82,7 +82,7 @@ setTimeout(() => {
     const header = document.querySelector('.header');
     check('fav 模式下 .header 隐藏', !header || window.getComputedStyle(header).display === 'none', header && window.getComputedStyle(header).display);
     const rail = document.querySelector('.col-rail');
-    check('fav 模式下 .col-rail 隐藏', !rail || window.getComputedStyle(rail).display === 'none', rail && window.getComputedStyle(rail).display);
+    check('fav 模式下 .col-rail 显示（保留热榜/会展）', !!rail && window.getComputedStyle(rail).display !== 'none', rail && window.getComputedStyle(rail).display);
     // 关键回归：即使收藏的条目落在 today/archive 区块内，这两个区块也不得被 refreshSectionVisibility 重新显示
     check('fav 模式下即使收藏了今日条目，todaySection 仍隐藏', disp('todaySection') === 'none', disp('todaySection'));
     check('fav 模式下即使收藏了往期条目，archiveSection 仍隐藏', disp('archiveSection') === 'none', disp('archiveSection'));
@@ -104,6 +104,8 @@ setTimeout(() => {
     check('history 模式下 body 带 data-filter-mode="history"', document.body.dataset.filterMode === 'history');
     check('history 模式下即使记录了今日条目，todaySection 仍隐藏', disp('todaySection') === 'none', disp('todaySection'));
     check('history 模式下即使记录了往期条目，archiveSection 仍隐藏', disp('archiveSection') === 'none', disp('archiveSection'));
+    const railH = document.querySelector('.col-rail');
+    check('history 模式下 .col-rail 显示（保留热榜/会展）', !!railH && window.getComputedStyle(railH).display !== 'none', railH && window.getComputedStyle(railH).display);
 
     // 4) 清空收藏/历史后进入 fav，应显示空态提示
     window.localStorage.removeItem('mining_daily_favorites');

@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2491" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2492" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -102,7 +102,6 @@ body[data-filter-mode="fav"] #todaySection,
 body[data-filter-mode="fav"] #archiveSection,
 body[data-filter-mode="fav"] #rightsSection,
 body[data-filter-mode="fav"] #installGuideSection,
-body[data-filter-mode="fav"] .col-rail,
 body[data-filter-mode="fav"] .footer,
 body[data-filter-mode="fav"] #mobileInstallBar,
 body[data-filter-mode="fav"] .news-filter-bar,
@@ -115,14 +114,16 @@ body[data-filter-mode="history"] #todaySection,
 body[data-filter-mode="history"] #archiveSection,
 body[data-filter-mode="history"] #rightsSection,
 body[data-filter-mode="history"] #installGuideSection,
-body[data-filter-mode="history"] .col-rail,
 body[data-filter-mode="history"] .footer,
 body[data-filter-mode="history"] #mobileInstallBar,
 body[data-filter-mode="history"] .news-filter-bar{display:none!important}
+/* 收藏/历史视图保留右侧矿业热榜 + 近期会展，只隐藏非相关内容；双栏布局避免中间过空 */
+@media(min-width:1101px){
 body[data-filter-mode="fav"] .news-grid,
-body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr);gap:0}
+body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr) 306px;gap:var(--s5)}
+}
 body[data-filter-mode="fav"] #archivedFavSection,
-body[data-filter-mode="history"] #archivedFavSection{display:block!important;max-width:780px;margin:0 auto;background:transparent;border:none;box-shadow:none;padding-top:var(--s4);scroll-margin-top:0}
+body[data-filter-mode="history"] #archivedFavSection{display:block!important;background:transparent;border:none;box-shadow:none;padding-top:var(--s4);scroll-margin-top:0}
 body[data-filter-mode="fav"] #archivedFavSection .section-title,
 body[data-filter-mode="history"] #archivedFavSection .section-title{padding:var(--s4) 0;border:none;background:transparent;font-size:var(--fs-h1)}
 body[data-filter-mode="fav"] #archFavList .news-item,
