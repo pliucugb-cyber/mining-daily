@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2495" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2496" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -1377,7 +1377,7 @@ body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
   <div class="header-actions" data-page-node-id="yJYZi46Jr7ZF8gVCztwhXK">
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式" data-page-node-id="2iDzxnPLAUp6us12HurPQU"><span class="theme-option light" data-page-node-id="Oaq0BbspbHbHEGiQqEAhXM">☀️</span><span class="theme-option dark" data-page-node-id="3WKWDNkc8RniCqHAgzYWdR">🌙</span></button>
     <button class="pwa-header-btn" id="pwaHeaderBtn" type="button" title="将本页安装到电脑桌面" hidden data-page-node-id="GNGgVLBi3LF8M1CcNASx0d">💻 添加到桌面</button>
-    <button class="reading-toggle" id="readingToggle" type="button" onclick="toggleReadingMode()" title="只显示今日简报、金属价格与今日新闻" data-page-node-id="PUjIdpQMuWEUqYq7W7gcgy">阅读</button>
+    <button class="reading-toggle" id="readingToggle" type="button" onclick="toggleReadingMode()" title="只显示今日简报、金属价格与今日新闻" data-page-node-id="PUjIdpQMuWEUqYq7W7gcgy" hidden>阅读</button>
   </div>
   <h1 data-page-node-id="S5DUV8BO8QSMOdwBtUTJ83">⛏️ 矿业新闻日报 <span class="date-badge" data-page-node-id="hCCkUOj51jKh8M4hgHwkAC">2026年09月09日 星期三</span></h1>
 </div>
@@ -3191,6 +3191,7 @@ function toggleReadingMode(){
   if(on){try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}}
 }
 function restoreReadingMode(){
+  return; // 2026-09-09 临时隐藏阅读入口：停用自动恢复，避免无退出按钮时卡在阅读态。后续细化时删此行即可。
   var v=null;
   try{v=localStorage.getItem('readingMode');}catch(e){}
   if(v!=='1')return;
