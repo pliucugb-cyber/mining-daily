@@ -1,1956 +1,2206 @@
 {
- "meta": {
-  "report_date": "2026-09-08",
-  "generated_at": "2026-09-08T23:46:19+08:00",
-  "total": 108,
-  "new_today": 30,
-  "archive": 78,
-  "page_total": 108,
-  "page_new_count": 30,
-  "sources": [
-   "MINING.COM",
-   "SMM 国际站",
-   "中国地质调查局",
-   "中国地质调查局西宁中心",
-   "中国有色网",
-   "中国有色金属工业协会",
-   "中国有色金属报",
-   "中国黄金协会",
-   "全球矿产资源",
-   "全球矿产资源信息系统",
-   "巨潮资讯网",
-   "巨潮资讯网·厦钨新能",
-   "巨潮资讯网·厦门钨业",
-   "自然资源部",
-   "长江有色网"
-  ],
-  "schema_version": "1.1",
-  "archive_hint": "历史全量见 data/news_YYYY-MM.json（追加式累积），检索用 query_news.py",
-  "note": "P0.5 数据底座：由 export_news_json.py 从 index.html 解析导出（URL去重），供矿业情报智能体查询"
- },
- "news": [
-  {
-   "id": "e31ba9c8df83",
-   "title": "新一轮找矿突破战略行动再获标志性成果 安徽茶亭铜金矿勘查取得重大突破",
-   "url": "https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html",
-   "source": "自然资源部",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": true,
-   "summary": "安徽省宣城市茶亭地区铜金矿勘查取得重大突破，矿床位于长江中下游成矿带南陵—宣城铜金矿集区，为火山岩覆盖区新发现的隐伏斑岩型铜金矿床，主矿体长约1.2千米、宽约1.1千米，单孔矿体最大视厚度1371米；初步估算铜潜在资源超数个大型铜矿规模、金达十余个大型金矿规模，深部尚未揭穿。西藏玉龙铜业2025年10月以86亿元竞得探矿权，4个月完成钻探近十万米，唐菊兴院士任勘查项目负责人。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "金",
-    "找矿",
-    "矿权"
-   ]
-  },
-  {
-   "id": "291663243406",
-   "title": "智利坎加洛铜矿等项目进展",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202609/t20260907_10307771.htm",
-   "source": "全球矿产资源信息系统",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": true,
-   "summary": "奥斯奎斯特（AUSQUEST）公司宣布其智利坎加洛（Cangallo）斑岩铜矿两孔将矿体自地表向下延伸800米，证实存在高品位给矿构造：北部孔自34米深处见矿355.8米，铜品位0.31%、金0.05克/吨，含10米厚铜0.71%、金0.08克/吨矿体；南部首孔自178米见矿348米，铜0.23%、金0.08克/吨。另太阳石金属在厄瓜多尔布拉马德罗斯项目梅罗纳尔、波罗蒂洛两矿床钻探与探槽均见矿。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "金",
-    "找矿",
-    "国际"
-   ]
-  },
-  {
-   "id": "8df11a27f9ac",
-   "title": "具身智能、矿山大模型、数字孪生同台亮相 2026AI+矿山安全大会召开",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473763",
-   "source": "中国有色金属报",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": true,
-   "summary": "8月29日，2026AI+矿山安全大会在山东招远举行，主题「数智驱控 安全共生」，300余位院士专家与企业代表参会，现场分享具身智能、矿山大模型、智能凿岩、数字孪生等成果。中国工程院院士王国法作《数智技术赋能安全高效采矿》主题报告，指出智慧矿山建设存在智能装备环境适应性不足、系统常态化运行率偏低、系统间数据壁垒突出等痛点，强调数智矿山首要价值在于筑牢安全防线。",
-   "embed": "ok",
-   "tags": [
-    "技术",
-    "安全"
-   ]
-  },
-  {
-   "id": "d2588933b0f4",
-   "title": "金钛股份在北交所上市",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473762",
-   "source": "中国有色金属报",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "9月3日，朝阳金达钛业股份有限公司（证券简称：金钛股份，证券代码：920071）在北京证券交易所挂牌上市，成为我国首家主营业务为高品质海绵钛产品的上市企业。",
-   "embed": "ok",
-   "tags": [
-    "金",
-    "钛",
-    "矿权"
-   ]
-  },
-  {
-   "id": "7e138d6b1e7c",
-   "title": "易控智驾携手紫金矿业斩获\"数据要素×\"大赛双赛区一等奖",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473785",
-   "source": "中国有色金属报",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "2026年\"数据要素×\"大赛西藏分赛与福建分赛结果揭晓，易控智驾科技股份有限公司携手紫金矿业集团，凭借在巨龙铜矿、紫金山金铜矿的无人矿卡应用成果连续荣获一等奖。巨龙铜矿地处西藏5400米高寒地区，已规模化投运60台纯电动无人矿卡，通过多源感知融合、分布式制动与自适应控制、动态轨迹预测与协同调度，解决冻融湿滑路面与多车型混行难题。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "金"
-   ]
-  },
-  {
-   "id": "035b2501dea0",
-   "title": "双桅杆擎起高原新地标——中国十五冶卢安夏新矿永久井架吊装纪实",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473767",
-   "source": "中国有色金属报",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "当地时间8月14日，赞比亚卢安夏新矿穆南混合井永久井架一对直径4米、净重26吨天轮精准吊装就位，下天轮标高46米、上天轮52米。自7月30日304吨斜架双桅杆整体吊装、8月1日立架分节对接至本次双天轮就位，中国十五冶半个月内完成3场关键节点施工，首次在海外应用双桅杆旋转吊装工艺。卢安夏铜矿2009年被中国有色集团收购后重启，新矿由穆南浅部与玛希巴联合开采、28#井深部硫化矿3座矿山组成。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "国际"
-   ]
-  },
-  {
-   "id": "f0b9dce128f1",
-   "title": "五矿铍业核心产品入选央企机器人十大高价值应用场景",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473775",
-   "source": "中国有色金属报",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "8月19日至23日2026世界机器人大会在北京举办，五矿铍业有限责任公司携核心产品高性能铍铜合金参展，该产品成功入选中央企业机器人十大高价值应用场景展示序列，落地特种涉爆高危作业场景与人形机器人核心零部件两大赛道。高性能铍铜合金是人形机器人、高端工业机械臂所需的核心精密材料。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "金",
-    "技术"
-   ]
-  },
-  {
-   "id": "28f75194fe55",
-   "title": "西矿信息荣获第十五届中国创新创业大赛青海赛区企业组一等奖",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473765",
-   "source": "中国有色金属报",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "2026年第十五届中国创新创业大赛落幕，西部矿业集团西矿信息参赛项目「未来信息领域—矿山生产运营一体化数智管控平台」斩获青海赛区企业组一等奖。该项目紧扣矿山数字化转型需求，针对高海拔复杂作业环境开展技术攻坚，在平台架构设计、多源数据融合、现场场景适配等方面实现创新突破。",
-   "embed": "ok",
-   "tags": [
-    "找矿",
-    "技术"
-   ]
-  },
-  {
-   "id": "0d1bba051bbc",
-   "title": "云铝股份召开深化\"一本部多基地\"集中管控改革推进会",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473771",
-   "source": "中国有色金属报",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "8月17日，云铝股份召开深化「一本部多基地」集中管控改革推进会，紧扣「强本部、强管控」核心思路，从制度、流程、数据三方面明确改革要求，提出实现「重构定位、重塑体系、重理边界」，强化「五个量化管理」，建立职责清单与风险清单，推动业务工作从「事务统计型」向「统筹管控型」转型。",
-   "embed": "ok",
-   "tags": [
-    "铝"
-   ]
-  },
-  {
-   "id": "72c9f5566dae",
-   "title": "陕西黄金集团西安秦金打出市场开拓\"组合拳\"",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473774",
-   "source": "中国有色金属报",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "今年以来，陕西黄金集团西安秦金围绕渠道拓展、客户深耕、人才筑基三条主线发力：线上运营官方微信公众号、筹建抖音官方账号，线下参加行业展会与区域博览会对接潜在客户；依托高端化、差异化产品优势为客户量身定制合作方案，已与行业头部企业达成初步合作意向；拟启动营销人才专项培养计划，覆盖一线销售与中层骨干。",
-   "embed": "ok",
-   "tags": [
-    "金",
-    "政策"
-   ]
-  },
-  {
-   "id": "afef4b775e31",
-   "title": "西北有色地矿集团712总队公司实现\"时间过半、任务过半\"目标",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473737",
-   "source": "中国有色金属报",
-   "orig_date": "09-03",
-   "orig_date_full": "2026-09-03",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "截至6月底，西北有色地矿集团七一二总队公司经营收入完成年度目标的50.22%、利润总额完成52.12%。上半年地质勘查、民生地质、工程施工、装备制造四大板块累计落地实体项目93项，新签合同总额完成年度目标80%，在新疆、内蒙古等省外市场实现「零的突破」，塞拉利昂海外项目成功落地，非金属地质勘查短板同步补齐。",
-   "embed": "ok",
-   "tags": [
-    "找矿",
-    "市场",
-    "技术",
-    "国际"
-   ]
-  },
-  {
-   "id": "f89a2c807a18",
-   "title": "2026中国国际矿业大会将于9月10日开幕",
-   "url": "https://www.mnr.gov.cn/dt/ywbb/202609/t20260904_2937656.html",
-   "source": "自然资源部",
-   "orig_date": "09-04",
-   "orig_date_full": "2026-09-04",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "以「合作共赢，绿色智能」为主题的2026（第二十八届）中国国际矿业大会将于9月10日至12日在天津梅江会展中心举办，在往届论坛、展览两大板块基础上新增矿业权交易板块。论坛设28场（主题1场、高层6场、专题21场），展览面积6.5万平方米创历届新高，并设置矿业权转让大市场、专场推介、项目签约等功能；已吸引全球25个国家658家企业参展。",
-   "embed": "ok",
-   "tags": [
-    "矿权",
-    "技术",
-    "国际"
-   ]
-  },
-  {
-   "id": "002ca4b73b0a",
-   "title": "2026年矿区生态修复典型案例评选结果公示",
-   "url": "http://gi.mnr.gov.cn/202609/t20260904_2937623.html",
-   "source": "自然资源部",
-   "orig_date": "09-04",
-   "orig_date_full": "2026-09-04",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "自然资源部国土空间生态修复司公示2026年矿区生态修复典型案例评选结果，分废弃矿山生态修复、生产矿山、矿业遗迹三类共21个案例入选，覆盖北京、浙江、安徽、江西、湖北、湖南、重庆、河北、内蒙古、陕西等省份，涉及铁矿、金矿、钼矿、铝土矿、磷矿、石灰岩、煤矿等矿种，公示期由省级推荐并接受社会监督。",
-   "embed": "ok",
-   "tags": [
-    "铝",
-    "金",
-    "钼",
-    "铁",
-    "政策"
-   ]
-  },
-  {
-   "id": "53c29bae3c2d",
-   "title": "盛达资源：关于子公司德运矿业完成探矿权延续登记的公告",
-   "url": "http://static.cninfo.com.cn/finalpage/2026-09-07/1225549272.PDF",
-   "source": "巨潮资讯网",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "盛达资源公告其子公司德运矿业已完成探矿权延续登记，相关矿权有效期得以延续，为公司后续地质勘查与资源增储工作奠定权属基础。盛达资源主营白银等贵金属矿产资源开发。",
-   "embed": "pdf",
-   "tags": [
-    "银",
-    "政策",
-    "找矿",
-    "矿权"
-   ]
-  },
-  {
-   "id": "cb14b31b9403",
-   "title": "中色股份：关于控股子公司中色印尼达瑞矿业有限公司收到法院通知的公告",
-   "url": "http://static.cninfo.com.cn/finalpage/2026-09-07/1225550300.PDF",
-   "source": "巨潮资讯网",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "中国有色金属建设股份有限公司公告，其控股子公司中色印尼达瑞矿业有限公司收到法院通知。达瑞矿业为公司在印度尼西亚的铅锌矿项目平台，相关诉讼进展可能对公司海外项目推进产生影响。",
-   "embed": "pdf",
-   "tags": [
-    "铅",
-    "锌",
-    "政策",
-    "国际"
-   ]
-  },
-  {
-   "id": "c966bfb76cbe",
-   "title": "蓝晓科技：关于签订盐湖提锂日常经营合同的公告",
-   "url": "http://static.cninfo.com.cn/finalpage/2026-09-07/1225552242.PDF",
-   "source": "巨潮资讯网",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "西安蓝晓科技新材料股份有限公司公告签订盐湖提锂日常经营合同。公司主营吸附分离树脂与盐湖提锂成套装置，合同签署反映盐湖提锂产能建设与锂资源开发需求延续。",
-   "embed": "pdf",
-   "tags": [
-    "锂",
-    "政策",
-    "技术"
-   ]
-  },
-  {
-   "id": "97254a183d0e",
-   "title": "再生铅占精铅近50%！废电瓶高成本卡住冶炼利润，铅酸电池旺季备货能否接力",
-   "url": "https://www.ccmn.cn/news/ZX018/202609/be746e71851d49e1baca731d7084d796.html",
-   "source": "长江有色网",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": true,
-   "summary": "国内再生铅占精铅供应比重已升至近50%，废电瓶作为核心原料采购价格持续高企，将冶炼厂利润卡在狭窄区间，成本刚性成为铅价难以深跌的底层逻辑。沪铅2610合约报16235元/吨、涨120元，长江现货1#铅均价16300元/吨、涨75元。再生铅冶炼厂在成本线附近维持开工，部分边际产能逼近停减产临界点；需求端铅酸电池旺季尾声排产边际走弱。",
-   "embed": "ok",
-   "tags": [
-    "铅",
-    "市场"
-   ]
-  },
-  {
-   "id": "ac7246f14e9b",
-   "title": "南非希望重回超级矿业大国行列",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260908_10308871.htm",
-   "source": "全球矿产资源信息系统",
-   "orig_date": "09-08",
-   "orig_date_full": "2026-09-08",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "据Miningnews.net报道，南非正寻求重回全球矿业大国行列，政府与行业组织目标是在2028年2月前使新投资回升到500亿兰特（约44亿澳元）。南非矿产委员会代表查巴纳在珀斯非澳会议（Africa Down Under）上表示，下一步重点是吸引外部投资。1980年矿业曾占南非GDP的21%，2025年该比例仅5.8%，矿山老化、勘探投资不足与审批缓慢是主因。",
-   "embed": "ok",
-   "tags": [
-    "找矿",
-    "国际"
-   ]
-  },
-  {
-   "id": "edabfcf192a5",
-   "title": "哥伦比亚取消10项限制矿业政策",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260908_10308872.htm",
-   "source": "全球矿产资源信息系统",
-   "orig_date": "09-08",
-   "orig_date_full": "2026-09-08",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "据Mining.com报道，为落实阿韦拉多·德拉埃斯普列亚总统重振矿业投资、挖掘铜矿资源潜力的指示，哥伦比亚新政府废除10项限制自然资源勘查开采的政策。矿业部部长阿尔博莱达在卡塔赫纳矿业会议上宣布，前左翼政府时期以环境与土地利用名义出台的措施「设计得很差」，实际阻碍了投资与勘探。该国铜、金、煤、镍潜力大，但冗长许可、监管混乱与安全风险长期限制投资。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "镍",
-    "金",
-    "政策",
-    "找矿",
-    "安全"
-   ]
-  },
-  {
-   "id": "679426faddf0",
-   "title": "7月份美国铜进口量创历史新高",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202609/t20260907_10307769.htm",
-   "source": "全球矿产资源信息系统",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "据矿业周刊援引路透社报道，美国7月精炼铜和铜合金进口量达225094吨，为1990年以来最高月度水平，环比增长78%、同比增长8%，贸易商在美方可能加征关税前大量进口。美国商务部原定6月30日前宣布铜市场最新政策但迟迟未出，不确定性推动美国商品交易所铜库存升至创纪录的764597短吨（693630公吨），连续53天上升。美国铜进口46%来自智利，其次刚果（金）占1/4。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "金",
-    "政策",
-    "市场",
-    "国际"
-   ]
-  },
-  {
-   "id": "8c6c356a61bc",
-   "title": "淡水河谷搁置贱金属业务分拆上市",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260907_10307772.htm",
-   "source": "全球矿产资源信息系统",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "据Mining.com报道，因巴西国内担心失去对战略矿业资产的控制，淡水河谷（Vale）已搁置其关键矿产业务单独IPO计划。总部位于伦敦的淡水河谷贱金属有限公司（VBM）2023年从母公司拆分成立并筹备上市，承接淡水河谷在加拿大、巴西、日本、英国、印尼的铜、镍、钴资产。2月VBM曾同意出售其加拿大合资企业多数股份，以支撑淡水河谷未来10年铜产量翻番目标——过去一年铜价上涨45%，涨幅近镍的4倍。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "镍",
-    "钴",
-    "市场",
-    "国际"
-   ]
-  },
-  {
-   "id": "bdfba05469c9",
-   "title": "国际锌价逼近4年来新高",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260907_10307773.htm",
-   "source": "全球矿产资源信息系统",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "上周五（9月4日）国际矿产品价格多数下跌，锌价逼近四年来新高：LME锌收于3940.00美元/吨、上涨1.09%；铝3294.50美元/吨、跌0.69%；铅1905.00美元/吨、跌0.08%；镍16810.00美元/吨、跌0.50%；锡54850.00美元/吨、涨0.18%。62%品位铁矿粉收于99.65美元/吨、涨0.30%；铀（U3O8）89.50美元/磅持平。COMEX黄金收于4432.6美元/盎司（约142.5美元/克，按1金衡盎司≈31.1035克换算）、跌0.92%；白银65.99美元/盎司、跌1.45%。",
-   "embed": "ok",
-   "tags": [
-    "镍",
-    "铅",
-    "锌",
-    "铝",
-    "金",
-    "银",
-    "锡",
-    "铀",
-    "铁",
-    "市场",
-    "国际"
-   ]
-  },
-  {
-   "id": "afe249ba2ddc",
-   "title": "再度延期！澳洲 Aurukun 铝土矿审批推迟至明年2月，1500万吨项目命运未定",
-   "url": "https://www.ccmn.cn/news/ZX018/202609/f1e611359ea74c178587444cfd8b6b24.html",
-   "source": "长江有色网",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "国家环境保护机构发布通知，将嘉能可与三菱商事联合开发的澳大利亚约克角半岛Aurukun铝土矿项目审批决议时间延长至明年2月12日，延期时长超过100个工作日。这是该项目继6月之后第二次审批延期，这座规划年产1500万吨的铝土矿项目落地节奏再度延后。",
-   "embed": "ok",
-   "tags": [
-    "铝",
-    "政策"
-   ]
-  },
-  {
-   "id": "f79dc3db6048",
-   "title": "从90%跌至67%！MHP钴计价大幅回落，电池企业压价，印尼HPAL厂商利润承压",
-   "url": "https://www.ccmn.cn/news/ZX018/202609/d8fa9b0e0d9940a99228c8415209a260.html",
-   "source": "长江有色网",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "据三位知情人士透露，国内电动汽车电池制造企业正对MHP（氢氧化镍钴）原料中的钴提出更大幅度降价诉求，钴计价系数从此前约90%回落至67%。印尼HPAL高压酸浸企业本身已面临镍矿、硫磺原料成本上行压力，钴计价下调将进一步挤压其利润空间。",
-   "embed": "ok",
-   "tags": [
-    "镍",
-    "钴",
-    "市场",
-    "国际"
-   ]
-  },
-  {
-   "id": "48cfd277d520",
-   "title": "亚行新融资机制旨在重塑亚太关键矿产供应链格局",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473780",
-   "source": "中国有色金属报",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "亚洲开发银行在乌兹别克斯坦举行的第五十九届年会上推出「关键矿产到制造端」融资伙伴关系机制，推动亚太经济体从单纯矿产开采向本土加工、制造、回收等高附加值环节延伸。文章指出亚太普遍存在「富资源、穷链条」格局：印尼镍储量占全球约四成，菲律宾镍矿出口占矿业总产值60%以上但高度依赖原矿出口，蒙古国依赖奥尤陶勒盖铜精矿，哈萨克斯坦铬、铀资源富集但深加工链条薄弱，澳大利亚锂辉石精矿多需境外冶炼。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "镍",
-    "银",
-    "锂",
-    "铀",
-    "铬",
-    "国际"
-   ]
-  },
-  {
-   "id": "91bfbfa00e1e",
-   "title": "ITA发布更新版锡行业生命周期评价基准",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473779",
-   "source": "中国有色金属报",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "国际锡业协会（ITA）发布第二项全行业生命周期评价（LCA）结果，量化精锡生产的环境影响。该研究以2024年为基准年，更新2018/2019年基准，ITA成员企业100%参与、合计产量约占全球精锡产量51%，由Sphera Solutions依ISO 14040/14044标准开展，覆盖采矿、再生物料利用、选矿、冶炼和精炼环节，指标含全球变暖潜势、一次能源需求、蓝水消耗、富营养化、酸化与光化学臭氧生成潜势。",
-   "embed": "ok",
-   "tags": [
-    "锡",
-    "市场",
-    "国际"
-   ]
-  },
-  {
-   "id": "1418bde04c10",
-   "title": "关键矿产安全撞上数十年矿山周期：北美自主化目标与现实脱节",
-   "url": "https://www.mining.com/critical-minerals-security-collides-with-decades-long-mine-timelines",
-   "source": "MINING.COM",
-   "orig_date": "09-08",
-   "orig_date_full": "2026-09-08",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "北美降低对华关键矿产依赖的努力正遭遇许可改革无法解决的瓶颈——判断项目技术与经济可行性仍需多年。在美国，一个矿床从发现到商业化生产往往超过30年，而国家安全与采购目标的时间尺度只有数年。修订后的《国防联邦采购条例补充规定》（DFARS）将于2027年1月生效，要求特定国防用途材料来自非对手国家，并自2026年1月1日起禁用中国原产稀土磁体及相关材料；受访企业界人士认为以当前产能无法按期达标。（原题：Critical minerals security collides with decades-long mine timelines）",
-   "embed": "ok",
-   "tags": [
-    "稀土",
-    "政策",
-    "找矿",
-    "技术",
-    "安全"
-   ]
-  },
-  {
-   "id": "fd39c4d4d81c",
-   "title": "ACG Metals 逾700万美元收购土耳其 Keşkek 金矿项目",
-   "url": "https://www.mining.com/acg-metals-to-acquire-keskek-gold-project",
-   "source": "MINING.COM",
-   "orig_date": "09-08",
-   "orig_date_full": "2026-09-08",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "ACG Metals（LON: ACG）与 Meta Nikel Kobalt Madencilik 签署约束性协议，以逾700万美元收购含土耳其 Keşkek 金矿项目的采矿许可证100%权益：先期支付400万美元，2027年中实现首次黄金生产后再付385万美元。项目距公司 Gediktepe 矿约70公里（43英里），许可证面积666公顷，所产氧化矿将供现有堆浸设施处理，回收率已提升至约85%；公司称新增黄金产能有望使铜当量年产量从2万吨翻倍至4万吨，并延长 Gediktepe 金矿服务年限数年。（原题：ACG Metals to acquire Keşkek gold project）",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "金",
-    "市场"
-   ]
-  },
-  {
-   "id": "c71f07f9bf58",
-   "title": "五矿资源 Dugald River 签署2027—2028年锌精矿销售协议",
-   "url": "https://news.metal.com/en/newscontent/104101668-mmg-dugald-river-signs-2027",
-   "source": "SMM 国际站",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "五矿资源（MMG）9月7日公告，其子公司 Dugald River 与五矿北欧（Minmetals North-Europe）签署锌精矿销售协议，2027年和2028年每年销售约2万干吨，年度交易上限5000万美元。定价以LME特高级锌与LBMA白银价格扣减加工费（TC）确定，以CIF条件交付。Dugald River 位于澳大利亚昆士兰州，是MMG主力锌矿之一。（原题：MMG Dugald River Signs 2027–2028 Zinc Concentrate Sales Agreement）",
-   "embed": "ok",
-   "tags": [
-    "锌",
-    "银",
-    "政策",
-    "市场"
-   ]
-  },
-  {
-   "id": "88b58fbbd27c",
-   "title": "欧盟拟全面禁止向非OECD国家出口废弃物，铝废料在列",
-   "url": "https://news.metal.com/en/newscontent/104101639-eu-industry-chief-proposes-ban-on-waste-exports-to-non-oecd-nations",
-   "source": "SMM 国际站",
-   "orig_date": "09-07",
-   "orig_date_full": "2026-09-07",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": true,
-   "summary": "路透布鲁塞尔9月4日电，欧盟产业主管斯特凡纳·塞茹尔内（Stephane Sejourne）提议全面禁止向非OECD国家出口废弃物，铝废料亦在禁止之列，其内阁于周五作出上述表示。塞茹尔内原定于9月23日提出仅限制废料出口的贸易措施，但内部磋商显示该工具覆盖范围有限，最终改为提出全面禁令。若落地将显著影响全球再生铝原料流向。（原题：EU Industry Chief Proposes Ban on Waste Exports to Non-OECD Nations）",
-   "embed": "ok",
-   "tags": [
-    "铝",
-    "国际"
-   ]
-  },
-  {
-   "id": "8e57b6845d0b",
-   "title": "以案为鉴筑牢安全防线 精细钻探夯实开发根基——柳园铭扬铜镍矿第三孔支撑性勘探顺利开钻",
-   "url": "http://www.xgsnrc.cgs.gov.cn/gzdt/aqsc/202609/t20260905_867989.html",
-   "source": "中国地质调查局西宁中心",
-   "orig_date": "09-05",
-   "orig_date_full": "2026-09-05",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": false,
-   "summary": "柳园铭扬铜镍矿5号机台MZK002号勘探孔正式开孔，为本轮专项勘探第三孔，在前两孔基础上加密勘探剖面、完善地质数据，为资源储量核实与灾害隐患排查提供依据；施工结合西藏吉隆泥石流教训，全程强化安全管控与地质灾害防控。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "镍",
-    "找矿",
-    "安全"
-   ]
-  },
-  {
-   "id": "dc62e8080173",
-   "title": "中国地质调查局实施吉隆泥石流次生地质灾害监测",
-   "url": "https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867978.html",
-   "source": "",
-   "orig_date": "09-04",
-   "orig_date_full": "2026-09-04",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": []
-  },
-  {
-   "id": "26911e9c3e46",
-   "title": "跑出深部找矿“中国速度”——安徽茶亭超大型铜多金属矿勘探与勘查增储纪实",
-   "url": "https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867977.html",
-   "source": "",
-   "orig_date": "09-04",
-   "orig_date_full": "2026-09-04",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "找矿"
-   ]
-  },
-  {
-   "id": "f530ff9c5141",
-   "title": "埃塞俄比亚SEDEX型矿床潜力分析",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kydt/kykj/202609/t20260904_10306813.htm",
-   "source": "",
-   "orig_date": "09-04",
-   "orig_date_full": "2026-09-04",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "找矿"
-   ]
-  },
-  {
-   "id": "a632d9c402c1",
-   "title": "澳大利亚延达尔金矿勘探取得新发现",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm",
-   "source": "",
-   "orig_date": "09-03",
-   "orig_date_full": "2026-09-03",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "金",
-    "找矿"
-   ]
-  },
-  {
-   "id": "51fdf33c34d5",
-   "title": "绿色矿业｜六大场景解锁我国绿色勘查新路径",
-   "url": "https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260902_867767.html",
-   "source": "",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": [
-    "找矿"
-   ]
-  },
-  {
-   "id": "2cc13cf89ebe",
-   "title": "星-空-地-井协同勘查技术助力冈底斯找矿取得新突破",
-   "url": "https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260901_867682.html",
-   "source": "",
-   "orig_date": "09-01",
-   "orig_date_full": "2026-09-01",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": [
-    "找矿",
-    "技术"
-   ]
-  },
-  {
-   "id": "b388a94dba2c",
-   "title": "中国恩菲设计的太平矿业金矿石建设项目TBM始发",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61850.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-28",
-   "orig_date_full": "2026-08-28",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": false,
-   "summary": "8月22日，中国恩菲设计的内蒙古太平矿业浩尧尔忽洞金矿年开采825万吨金矿石建设项目（二标段）TBM始发，标志着项目建设进入关键攻坚阶段。",
-   "embed": "block",
-   "tags": [
-    "金"
-   ]
-  },
-  {
-   "id": "340eca36ef06",
-   "title": "希尔威金属矿业公布吉尔吉斯金矿重大勘探成果",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473401",
-   "source": "中国有色网",
-   "orig_date": "08-26",
-   "orig_date_full": "2026-08-26",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": false,
-   "summary": "希尔威金属矿业公布吉尔吉斯斯坦金矿项目重大勘探成果，海外金矿资源勘查取得关键进展。",
-   "embed": "ok",
-   "tags": [
-    "金",
-    "找矿",
-    "国际"
-   ]
-  },
-  {
-   "id": "18b610f34432",
-   "title": "探矿工程所\"一种超短半径水平井造斜段轨迹控制系统\"获国家发明专利授权",
-   "url": "https://www.cgs.gov.cn/ywdt/dwdt/202608/t20260821_867102.html",
-   "source": "中国地质调查局",
-   "orig_date": "08-24",
-   "orig_date_full": "2026-08-24",
-   "report_date": "2026-09-08",
-   "category": "找矿成果与勘查技术",
-   "is_new": false,
-   "summary": "中国地质调查局探矿工程所研发的超短半径水平井造斜段轨迹控制系统获国家发明专利授权，为深部找矿与关键矿产勘查提供装备支撑。",
-   "embed": "ok",
-   "tags": [
-    "找矿",
-    "技术"
-   ]
-  },
-  {
-   "id": "8270ca3b9ce7",
-   "title": "兴业证券股份有限公司关于厦门钨业股份有限公司收购报告书之2026年半年度持续督导意见暨持续督导总结报告",
-   "url": "https://static.cninfo.com.cn/finalpage/2026-09-05/1225548634.PDF",
-   "source": "巨潮资讯网·厦门钨业",
-   "orig_date": "09-05",
-   "orig_date_full": "2026-09-05",
-   "report_date": "2026-09-08",
-   "category": "并购与投资",
-   "is_new": false,
-   "summary": "厦门钨业（600549）披露《兴业证券股份有限公司关于厦门钨业股份有限公司收购报告书之2026年半年度持续督导意见暨持续督导总结报告》，涉及股权/资产收购。",
-   "embed": "ok",
-   "tags": [
-    "钨"
-   ]
-  },
-  {
-   "id": "dddfe889f225",
-   "title": "兴业证券股份有限公司关于厦门厦钨新能源材料股份有限公司收购报告书之2026年半年度持续督导意见暨持续督导总结报告",
-   "url": "https://static.cninfo.com.cn/finalpage/2026-09-05/1225547876.PDF",
-   "source": "巨潮资讯网·厦钨新能",
-   "orig_date": "09-05",
-   "orig_date_full": "2026-09-05",
-   "report_date": "2026-09-08",
-   "category": "并购与投资",
-   "is_new": false,
-   "summary": "厦钨新能（688778）披露《兴业证券股份有限公司关于厦门厦钨新能源材料股份有限公司收购报告书之2026年半年度持续督导意见暨持续督导总结报告》，涉及股权/资产收购。",
-   "embed": "ok",
-   "tags": [
-    "钨",
-    "技术"
-   ]
-  },
-  {
-   "id": "bf924d85c5d1",
-   "title": "2026年（第二届）有色金属行业“双碳”大会在杭州召开",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473759",
-   "source": "",
-   "orig_date": "09-04",
-   "orig_date_full": "2026-09-04",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": []
-  },
-  {
-   "id": "2dc18c5aee05",
-   "title": "2026年（第十三届）中国锑业年会在云南昆明召开",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473758",
-   "source": "",
-   "orig_date": "09-04",
-   "orig_date_full": "2026-09-04",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "锑"
-   ]
-  },
-  {
-   "id": "61051506f51d",
-   "title": "2026中国国际矿业大会将于9月10日开幕",
-   "url": "https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867980.html",
-   "source": "",
-   "orig_date": "09-04",
-   "orig_date_full": "2026-09-04",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "国际"
-   ]
-  },
-  {
-   "id": "d2e7978c7413",
-   "title": "薪火代代传——驰宏锌锗以“0.3克锗精神”续写科研攻坚答卷",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html",
-   "source": "",
-   "orig_date": "09-03",
-   "orig_date_full": "2026-09-03",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "锌",
-    "锗"
-   ]
-  },
-  {
-   "id": "efe58d2c72a1",
-   "title": "2026矿冶科技集团有限公司科技创新大会在京召开",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html",
-   "source": "",
-   "orig_date": "09-03",
-   "orig_date_full": "2026-09-03",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "技术"
-   ]
-  },
-  {
-   "id": "764746327b17",
-   "title": "有色企业紧急捐款驰援西藏吉隆灾区",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html",
-   "source": "",
-   "orig_date": "09-03",
-   "orig_date_full": "2026-09-03",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": []
-  },
-  {
-   "id": "1453a9ec817c",
-   "title": "周洲出席中吉商务与投资论坛 中国黄金集团深耕中亚矿业合作",
-   "url": "https://www.cngold.org.cn/news/show-9524.html",
-   "source": "",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": [
-    "金"
-   ]
-  },
-  {
-   "id": "4ebd506d48f3",
-   "title": "云铝股份交出历史最好半年成绩单 营收增长20.3%利润增长175%",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html",
-   "source": "",
-   "orig_date": "09-01",
-   "orig_date_full": "2026-09-01",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": [
-    "铝",
-    "市场"
-   ]
-  },
-  {
-   "id": "d770a51cf280",
-   "title": "洛阳铜加工产出首根镁合金铸锭 镁板全流程工艺贯通",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html",
-   "source": "",
-   "orig_date": "09-01",
-   "orig_date_full": "2026-09-01",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": [
-    "铜",
-    "金",
-    "镁"
-   ]
-  },
-  {
-   "id": "e0a118becd37",
-   "title": "株冶集团奋力推进\"三化两型\"建设 铅锌冶炼绿色智能升级",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html",
-   "source": "",
-   "orig_date": "09-01",
-   "orig_date_full": "2026-09-01",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": [
-    "铅",
-    "锌",
-    "技术"
-   ]
-  },
-  {
-   "id": "c947e2b04759",
-   "title": "西安矿产中心科技成果获陕西省科学技术进步奖三等奖",
-   "url": "https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html",
-   "source": "",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": [
-    "技术"
-   ]
-  },
-  {
-   "id": "5df9d34794d5",
-   "title": "中国恩菲实施的非洲首例井下无人驾驶电机车项目通过验收并进入常态化运行",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html",
-   "source": "",
-   "orig_date": "09-01",
-   "orig_date_full": "2026-09-01",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": []
-  },
-  {
-   "id": "b8bde1f3632c",
-   "title": "上半年铜陵有色净利润同比翻倍",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61881.html",
-   "source": "",
-   "orig_date": "09-01",
-   "orig_date_full": "2026-09-01",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": [
-    "铜",
-    "市场"
-   ]
-  },
-  {
-   "id": "3b1dda996def",
-   "title": "陕西黄金集团西安秦金项目获陕西省科技厅立项",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61891.html",
-   "source": "",
-   "orig_date": "09-01",
-   "orig_date_full": "2026-09-01",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": [
-    "金"
-   ]
-  },
-  {
-   "id": "a3a0d6d11c2d",
-   "title": "一座钼矿何以在林海深处绘就“共生图景”",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473665",
-   "source": "",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "钼"
-   ]
-  },
-  {
-   "id": "1486603f94b8",
-   "title": "英国加码投资关键矿产本土供应链建设",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473653",
-   "source": "",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": []
-  },
-  {
-   "id": "d869214e041d",
-   "title": "7月份锂行业运行情况",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473599",
-   "source": "",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "锂",
-    "市场"
-   ]
-  },
-  {
-   "id": "bebcb8e50c49",
-   "title": "2026年上半年我国黄金产量152.908吨，同比下降14.62%，黄金消费量511.412吨，同比增长1.23%",
-   "url": "https://www.cngold.org.cn/news/show-9500.html",
-   "source": "",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "block",
-   "tags": [
-    "金",
-    "市场"
-   ]
-  },
-  {
-   "id": "19b1acbf01b3",
-   "title": "持续增厚股东回报 紫金矿业公布111亿元中期分红方案",
-   "url": "https://www.cngold.org.cn/news/show-9505.html",
-   "source": "中国黄金协会",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "紫金矿业公布111亿元中期分红方案，在铜金价格高位背景下持续提升股东回报。",
-   "embed": "block",
-   "tags": [
-    "铜",
-    "金",
-    "政策",
-    "市场"
-   ]
-  },
-  {
-   "id": "11d0dc45cb87",
-   "title": "中国黄金集团与中国地质大学（武汉）举行工作会商",
-   "url": "https://www.cngold.org.cn/news/show-9503.html",
-   "source": "中国黄金协会",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "校企双方围绕科技创新、人才培养与地质勘查成果转化开展会商，推动产学研深度融合。",
-   "embed": "block",
-   "tags": [
-    "金",
-    "找矿",
-    "技术"
-   ]
-  },
-  {
-   "id": "98d035e4e9b4",
-   "title": "中国稀土集团2026年安全环保绿色低碳专题研修班开班",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0831/61861.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-31",
-   "orig_date_full": "2026-08-31",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "中国稀土集团举办2026年安全环保绿色低碳专题研修班，推动稀土产业绿色低碳转型与可持续发展。",
-   "embed": "block",
-   "tags": [
-    "稀土",
-    "安全"
-   ]
-  },
-  {
-   "id": "8cbd99251b05",
-   "title": "金川镍钴承压奋进攀高逐新",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0831/61862.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-31",
-   "orig_date_full": "2026-08-31",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "金川集团镍钴产业在压力中持续奋进，围绕镍、钴等关键矿产提升资源保障与产业竞争力，奋力攀登高质量发展新高度。",
-   "embed": "block",
-   "tags": [
-    "镍",
-    "钴"
-   ]
-  },
-  {
-   "id": "7aa3dccb558c",
-   "title": "加拿大矿业公司Auro Metals再获496米厚大矿段 高品位矿段金品位达1.12克/吨",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473461",
-   "source": "中国有色网",
-   "orig_date": "08-31",
-   "orig_date_full": "2026-08-31",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "加拿大Auro Metals公司勘探取得重大突破，新发现496米厚大矿段，其中高品位矿段金品位达1.12克/吨，海外金矿勘查成果亮眼。",
-   "embed": "ok",
-   "tags": [
-    "金",
-    "找矿",
-    "国际"
-   ]
-  },
-  {
-   "id": "61812bcdf1e5",
-   "title": "【谱写\"十五五\"有色新篇章】利润总额同比大增98% 中国铝业中期增速再创历史新高",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0831/61856.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-31",
-   "orig_date_full": "2026-08-31",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "中国铝业发布中期业绩，利润总额同比大增98%，增速再创历史新高，铝产业高质量发展动能强劲。",
-   "embed": "block",
-   "tags": [
-    "铝",
-    "市场"
-   ]
-  },
-  {
-   "id": "22a10a676e02",
-   "title": "智阿秘玻四国成立关键矿产联盟",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202608/t20260831_10302802.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-31",
-   "orig_date_full": "2026-08-31",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "智利、阿根廷、秘鲁、玻利维亚四国宣布成立关键矿产联盟，加强锂、铜等战略性矿产供应链合作与资源安全协调。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "锂",
-    "安全",
-    "国际"
-   ]
-  },
-  {
-   "id": "0ad8576fe16d",
-   "title": "西北有色地矿集团七一一总队深耕地勘主业聚力实现新突破",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473589",
-   "source": "中国有色网",
-   "orig_date": "08-31",
-   "orig_date_full": "2026-08-31",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "西北有色地矿集团七一一总队持续深耕地质勘查主业，在矿产勘查与资源发现领域实现新突破，聚焦有色金属找矿。",
-   "embed": "ok",
-   "tags": [
-    "找矿"
-   ]
-  },
-  {
-   "id": "e7c1c801e336",
-   "title": "自然资源部举办矿产资源法实施条例贯彻实施培训班",
-   "url": "https://www.mnr.gov.cn/dt/ywbb/202608/t20260828_2937200.html",
-   "source": "自然资源部",
-   "orig_date": "08-28",
-   "orig_date_full": "2026-08-28",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "8月25日至26日，自然资源部在武汉举办矿产资源法实施条例贯彻实施培训班，部相关司局围绕地质勘查、矿业权管理、矿产资源勘查开采、矿区生态修复等作系统讲解，160人参加培训。",
-   "embed": "block",
-   "tags": [
-    "政策",
-    "找矿"
-   ]
-  },
-  {
-   "id": "c97886093392",
-   "title": "新疆有色集团持续推进关键金属增储上产（续）",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61849.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-28",
-   "orig_date_full": "2026-08-28",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "新疆有色集团聚焦铜、镍、锂等关键金属，持续推进增储上产国家级研发项目后续成果转化，攻关硬岩矿产与共伴生资源综合利用。",
-   "embed": "block",
-   "tags": [
-    "铜",
-    "镍",
-    "锂",
-    "找矿",
-    "技术"
-   ]
-  },
-  {
-   "id": "9b5f795f2c11",
-   "title": "中国黄金协会发布严正声明 谴责非法黄金交易行为",
-   "url": "https://www.cngold.org.cn/news/show-9510.html",
-   "source": "中国黄金协会",
-   "orig_date": "08-28",
-   "orig_date_full": "2026-08-28",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "中国黄金协会发布严正声明，强烈谴责非法黄金交易、违规黄金衍生品炒作等行为，提示行业及消费者注意风险。",
-   "embed": "block",
-   "tags": [
-    "金"
-   ]
-  },
-  {
-   "id": "7ad4564fdfd3",
-   "title": "东方测控与中铁资源签署战略合作协议 携手推进矿山智能化高质量发展",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61851.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-28",
-   "orig_date_full": "2026-08-28",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "东方测控与中铁资源签署战略合作协议，双方将围绕矿山智能化建设开展深度合作，携手推进矿山智能化高质量发展。",
-   "embed": "block",
-   "tags": [
-    "铁",
-    "技术"
-   ]
-  },
-  {
-   "id": "fcb7b3d4dc16",
-   "title": "\"破\"\"立\"之间见成效——华中铜业的扭亏密码",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61841.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-27",
-   "orig_date_full": "2026-08-27",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "面对铜价高位震荡、加工费空间收窄压力，华中铜业1—7月实现盈利131万元，加工费总收入同比增长21.63%，冷轧成品月产量连续两个月突破8000吨。",
-   "embed": "block",
-   "tags": [
-    "铜",
-    "找矿",
-    "市场"
-   ]
-  },
-  {
-   "id": "cf9d1370221b",
-   "title": "2026年有色金属行业经济运行报告会暨有色企业统计信息发布会在济南召开",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473538",
-   "source": "中国有色网",
-   "orig_date": "08-27",
-   "orig_date_full": "2026-08-27",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "8月26日，中国有色金属工业协会主办的2026年有色金属行业经济运行报告会在济南召开，研判行业形势与高质量发展路径。",
-   "embed": "ok",
-   "tags": []
-  },
-  {
-   "id": "acae7e817f22",
-   "title": "中国五矿推进南部非洲片区工作",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473507",
-   "source": "中国有色网",
-   "orig_date": "08-27",
-   "orig_date_full": "2026-08-27",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "中国五矿集团积极推进南部非洲片区业务，包括铜、钴、铬、铂族等关键矿产资源开发与社区协作。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "钴",
-    "铬",
-    "铂"
-   ]
-  },
-  {
-   "id": "94fcf38b0c86",
-   "title": "改革\"必答题\"的标杆解法——西南铝获评国务院国资委\"双百行动\"标杆企业",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61842.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-27",
-   "orig_date_full": "2026-08-27",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "西南铝坚持\"两端发力\"加快产业迭代，布局高性能宽幅铝合金板带、大规格挤压等重点项目，2025年服务国家战略产品产量较2022年增长32%，获评国务院国资委\"双百行动\"标杆企业。",
-   "embed": "block",
-   "tags": [
-    "铝",
-    "金",
-    "市场"
-   ]
-  },
-  {
-   "id": "9032a1c13ecd",
-   "title": "聚集硬核力量 历时五年攻关 新疆有色国家级研发项目通过验收的背后",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61843.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-27",
-   "orig_date_full": "2026-08-27",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "新疆有色集团历时五年攻关的国家级研发项目通过验收，聚焦硬岩矿产、有色金属资源综合利用。",
-   "embed": "block",
-   "tags": [
-    "技术"
-   ]
-  },
-  {
-   "id": "53d536296ea7",
-   "title": "数字孪生贯通采选全链路 中铁资源鹿鸣矿业两项成果入选国家级新质生产力优秀创新成果名录",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61845.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-27",
-   "orig_date_full": "2026-08-27",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "中铁资源鹿鸣矿业的数字孪生贯通采选全链路两项创新成果入选国家级新质生产力名录，标志矿山数字化、智能化升级。",
-   "embed": "block",
-   "tags": [
-    "铁",
-    "技术"
-   ]
-  },
-  {
-   "id": "518c989ed83b",
-   "title": "中铝集团攻克高寒矿区生态修复难题",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61839.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-27",
-   "orig_date_full": "2026-08-27",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "中铝集团在高寒矿区生态修复领域取得技术突破，为高海拔有色金属矿山绿色开发提供可推广方案。",
-   "embed": "block",
-   "tags": [
-    "铝",
-    "政策",
-    "找矿",
-    "技术"
-   ]
-  },
-  {
-   "id": "3fe9ff9ed871",
-   "title": "数智赋能护航矿业高质量发展新征程 2026智能矿山高质量发展大会暨数智赋能本质安全论坛召开",
-   "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473443",
-   "source": "中国有色网",
-   "orig_date": "08-25",
-   "orig_date_full": "2026-08-25",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "8月20日，2026智能矿山高质量发展大会在辽宁丹东召开，聚焦数智赋能与矿山本质安全，铜铝锂等金属需求持续增长。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "铝",
-    "锂",
-    "技术",
-    "安全"
-   ]
-  },
-  {
-   "id": "3de679e9ccea",
-   "title": "紫金矿业主营金属产量稳中有进 价值创造能力持续提升",
-   "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0825/61822.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-25",
-   "orig_date_full": "2026-08-25",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "紫金矿业发布2026年半年报：矿产金47吨（同比+13%）、矿产铜53.4万吨、当量碳酸锂4.4万吨（同比+496%）；巨龙铜矿改扩建建成投产，马诺诺锂矿提前投产，\"第三增长极\"形成规模贡献。",
-   "embed": "block",
-   "tags": [
-    "铜",
-    "金",
-    "锂",
-    "市场"
-   ]
-  },
-  {
-   "id": "2b82e0d4164f",
-   "title": "利好集聚 锡价有望小幅上涨",
-   "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/0825/61828.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-25",
-   "orig_date_full": "2026-08-25",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "锡价受供给收紧与电子需求回升支撑，短期有望小幅上涨。",
-   "embed": "block",
-   "tags": [
-    "锡",
-    "市场"
-   ]
-  },
-  {
-   "id": "2100548c0cef",
-   "title": "下半年财政部将及时谋划出台务实管用的增量政策",
-   "url": "https://www.chinania.org.cn/html/zcfg/zhengcefagui/2026/0825/61821.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-25",
-   "orig_date_full": "2026-08-25",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "财政部表示下半年将及时谋划出台务实管用的增量政策，支撑有色金属产业绿色低碳、智能制造、关键矿产供给。",
-   "embed": "block",
-   "tags": [
-    "政策",
-    "技术"
-   ]
-  },
-  {
-   "id": "d5a41ad01af1",
-   "title": "关于2026年度有色金属企业管理现代化创新成果审定结果的公示",
-   "url": "https://www.chinania.org.cn/html/xiehuidongtai/xiehuitongzhi/2026/0824/61815.html",
-   "source": "中国有色金属工业协会",
-   "orig_date": "08-24",
-   "orig_date_full": "2026-08-24",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "中国有色金属工业协会对2026年度有色金属企业管理现代化创新成果审定结果进行公示，覆盖有色行业管理创新成果。",
-   "embed": "block",
-   "tags": [
-    "政策",
-    "技术"
-   ]
-  },
-  {
-   "id": "950836c35308",
-   "title": "深化产融协同 共促黄金市场高质量发展——中国黄金协会赴上海黄金交易所拜访交流",
-   "url": "https://www.cngold.org.cn/news/show-9515.html",
-   "source": "中国黄金协会",
-   "orig_date": "08-24",
-   "orig_date_full": "2026-08-24",
-   "report_date": "2026-09-08",
-   "category": "行业动态",
-   "is_new": false,
-   "summary": "8月21日，中国黄金协会党委书记、副会长严弟勇带队赴上海黄金交易所拜访，与上金所总裁孔燕座谈。双方明确将健全长效合作机制，在产业调研、风险防控、政策研究、行业交流等领域协同发力，以深度产融融合助力行业提质升级、共促黄金市场稳健高质量发展。",
-   "embed": "block",
-   "tags": [
-    "金",
-    "政策"
-   ]
-  },
-  {
-   "id": "b85fcba28125",
-   "title": "BMI：未来5年铁矿石产量增速加快",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260901_10303964.htm",
-   "source": "",
-   "orig_date": "09-01",
-   "orig_date_full": "2026-09-01",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "铁",
-    "市场"
-   ]
-  },
-  {
-   "id": "07e7949b96b0",
-   "title": "国际钯价大幅上涨",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm",
-   "source": "",
-   "orig_date": "09-04",
-   "orig_date_full": "2026-09-04",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "",
-   "embed": "ok",
-   "tags": [
-    "钯",
-    "市场",
-    "国际"
-   ]
-  },
-  {
-   "id": "efeff6e47549",
-   "title": "政府干预关键矿产“前所未有”",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm",
-   "source": "全球矿产资源",
-   "orig_date": "09-03",
-   "orig_date_full": "2026-09-03",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "据Mining.com报道，各国政府不再是传统贷款方，而是直接参与采矿和关键矿产交易，以保障战略供应链安全并改变项目融资方式。2月美国总统特朗普宣布启动“金库计划”，出资120亿美元支持关键矿产战略储备。Fastmarkets统计显示，自2025年1月以来与矿产相关的协议约160个、总额近400亿美元。政府更多采用股权、保底价和长期承购协议等商业投资模式，公共资本与私人资本联手形成混合资本。",
-   "embed": "ok",
-   "tags": [
-    "金",
-    "安全"
-   ]
-  },
-  {
-   "id": "efd6317581c5",
-   "title": "国际贵金属价格回升",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm",
-   "source": "全球矿产资源",
-   "orig_date": "09-03",
-   "orig_date_full": "2026-09-03",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "周三国际矿产品价格多数下跌、贵金属普遍上涨：纽约金收于4387.8美元/盎司涨1.36%，银65.32美元/盎司涨1.95%，钯涨2.25%；LME铜14236美元/吨涨0.35%，铝3292.5美元/吨涨0.61%，镍16890美元/吨涨1.35%，铅、锌、锡小幅走低；铀（U3O8）收89.50美元/磅。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "镍",
-    "铅",
-    "锌",
-    "铝",
-    "金",
-    "银",
-    "锡",
-    "铀",
-    "钯",
-    "市场",
-    "国际"
-   ]
-  },
-  {
-   "id": "bac79ad4c1be",
-   "title": "格陵兰资源公司获最高1.2亿美元融资意向 推进马尔姆杰格钼镁项目",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm",
-   "source": "全球矿产资源",
-   "orig_date": "09-03",
-   "orig_date_full": "2026-09-03",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "加拿大初级矿业公司格陵兰资源收到北欧投资银行（NIB）最高1.2亿美元融资意向书，为加拿大EDC牵头2.75亿美元支持的补充；马尔姆杰格钼镁项目已完成最终可行性研究，钼金属储量5.71亿磅，前10年年均产钼精矿3280万磅，约为欧盟年消费量的25%。",
-   "embed": "ok",
-   "tags": [
-    "银",
-    "钼",
-    "镁",
-    "国际"
-   ]
-  },
-  {
-   "id": "c60981763659",
-   "title": "西澳穆尔金山钨矿成为世界级矿床",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm",
-   "source": "全球矿产资源",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "西澳穆尔金山钨矿资源量更新后跻身世界级矿床行列，全球钨资源供应格局或将生变。",
-   "embed": "ok",
-   "tags": [
-    "金",
-    "钨",
-    "找矿",
-    "国际"
-   ]
-  },
-  {
-   "id": "b9bd0e726b95",
-   "title": "印度同赞比亚恢复矿产投资谈判",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm",
-   "source": "全球矿产资源",
-   "orig_date": "09-02",
-   "orig_date_full": "2026-09-02",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "印度与赞比亚重启矿产投资谈判，聚焦铜及关键矿产的联合勘查开发与供应链合作。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "找矿"
-   ]
-  },
-  {
-   "id": "1dd509bf73e9",
-   "title": "德国有意开发巴西关键矿产",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260901_10303965.htm",
-   "source": "全球矿产资源",
-   "orig_date": "09-01",
-   "orig_date_full": "2026-09-01",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "德国寻求与巴西在关键矿产领域开展合作开发，以分散供应链集中度、保障工业原料安全。",
-   "embed": "ok",
-   "tags": [
-    "安全"
-   ]
-  },
-  {
-   "id": "0f80d214f029",
-   "title": "智利和阿根廷推进跨边界铜矿开发",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260831_10302801.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-31",
-   "orig_date_full": "2026-08-31",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "智利与阿根廷两国就跨边界铜矿开发达成共识，推进安第斯山脉铜矿带资源整合与基础设施互联互通。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "国际"
-   ]
-  },
-  {
-   "id": "0e7ab72fe1b1",
-   "title": "西澳州纳纳迪铜金矿钻探见厚富矿体",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260831_10302803.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-31",
-   "orig_date_full": "2026-08-31",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "西澳大利亚州纳纳迪铜金矿项目最新钻探见厚富矿体，铜金勘查取得重要进展，为海外铜金资源开发提供新靶区。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "金",
-    "找矿",
-    "国际"
-   ]
-  },
-  {
-   "id": "d7d21f8dc96c",
-   "title": "美能源部资助关键矿产研发项目",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260828_10301646.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-28",
-   "orig_date_full": "2026-08-28",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "美国能源部宣布资助7个关键矿产研发项目，涉及重稀土、镓、铜等关键材料，依托CMIH专业技术力量攻关重大技术难题，强化关键矿产产业链。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "稀土",
-    "镓",
-    "技术"
-   ]
-  },
-  {
-   "id": "a2eb62f7b95c",
-   "title": "第二季度澳大利亚勘查投资创新高",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202608/t20260828_10301645.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-28",
-   "orig_date_full": "2026-08-28",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "澳大利亚第二季度矿产勘查投资创近年新高，关键矿产（金、铜、镍、锂、稀土）项目增速明显，全球勘查市场延续回暖。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "镍",
-    "金",
-    "稀土",
-    "锂",
-    "找矿",
-    "技术",
-    "国际"
-   ]
-  },
-  {
-   "id": "725677e01bf0",
-   "title": "博利登并购尼克萨资源公司股份",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsbg/202608/t20260828_10301648.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-28",
-   "orig_date_full": "2026-08-28",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "博利登（Boliden）并购尼克萨资源公司股份，交易完成后将发起自愿现金要约收购剩余全部股份，国际矿业并购重组提速。",
-   "embed": "ok",
-   "tags": [
-    "金",
-    "国际"
-   ]
-  },
-  {
-   "id": "2e76a598dd61",
-   "title": "巴西罗查稀土矿发现更多高品位矿段",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260828_10301647.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-28",
-   "orig_date_full": "2026-08-28",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "巴西罗查稀土矿阿尔托山矿床在北、南、东侧证实高品位延伸带，共伴生铌钪钽铀品位高，计划钻探5000米进一步圈定矿床范围，新结果尚未纳入资源量估算。",
-   "embed": "ok",
-   "tags": [
-    "稀土",
-    "铀",
-    "铌",
-    "钽",
-    "找矿"
-   ]
-  },
-  {
-   "id": "2db558541236",
-   "title": "周四国际矿产品价格多数上涨",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202608/t20260828_10301649.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-28",
-   "orig_date_full": "2026-08-28",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "周四国际矿产品价格多数上涨：纽约商品交易所黄金收于4600.5美元/盎司（+0.15%），白银69.26美元/盎司（+1.71%），铂、钯亦有上涨。",
-   "embed": "ok",
-   "tags": [
-    "金",
-    "银",
-    "铂",
-    "钯",
-    "市场",
-    "国际"
-   ]
-  },
-  {
-   "id": "72f062300507",
-   "title": "国际铀价突破90美元/磅关口",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202608/t20260827_10300644.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-27",
-   "orig_date_full": "2026-08-27",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "周三国际矿产品价格多数上涨，铀价收于90.60美元/磅突破90美元关口；LME铜价持平，镍价下跌，黄金收于4593.7美元/盎司。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "镍",
-    "金",
-    "铀",
-    "找矿",
-    "市场",
-    "国际"
-   ]
-  },
-  {
-   "id": "4d174c573243",
-   "title": "智利谢拉戈达铜矿更新资源量",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202608/t20260827_10300640.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-27",
-   "orig_date_full": "2026-08-27",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "智利谢拉戈达铜矿公布最新资源量更新成果，铜资源量较此前估算有所提升，反映南美关键铜矿勘查持续推进。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "找矿",
-    "国际"
-   ]
-  },
-  {
-   "id": "44b5cac9b437",
-   "title": "安大略省威胁切断对美关键矿产供应",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260827_10300641.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-27",
-   "orig_date_full": "2026-08-27",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "加拿大安大略省威胁切断对美关键矿产供应，凸显北美关键矿产供应链地缘风险，相关矿产含镍、锂、铜、钴、稀土等。",
-   "embed": "ok",
-   "tags": [
-    "铜",
-    "镍",
-    "稀土",
-    "锂",
-    "钴"
-   ]
-  },
-  {
-   "id": "508d96f94fa9",
-   "title": "美国防部第三次军需关键矿产招标",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260825_10298748.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-25",
-   "orig_date_full": "2026-08-25",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "美国国防部启动第三次军需关键矿产招标，目标保障军工供应链对稀土、锂、钴、镓、锗等关键矿产的稳定获取。",
-   "embed": "ok",
-   "tags": [
-    "稀土",
-    "锂",
-    "钴",
-    "镓",
-    "锗"
-   ]
-  },
-  {
-   "id": "1a5fed3814b0",
-   "title": "维里迪斯融资开发科罗苏斯稀土矿",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202608/t20260825_10298753.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-25",
-   "orig_date_full": "2026-08-25",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "澳大利亚维里迪斯公司完成新一轮融资，推进科罗苏斯稀土矿项目开发，海外稀土资源端整合加速。",
-   "embed": "ok",
-   "tags": [
-    "稀土",
-    "国际"
-   ]
-  },
-  {
-   "id": "e6da6ffe8ebc",
-   "title": "铟泰公司签署布鲁克稀土矿承购协议",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202608/t20260824_10297599.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-24",
-   "orig_date_full": "2026-08-24",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "铟泰公司签署加拿大布鲁克稀土矿承购协议，海外稀土供应链布局推进。",
-   "embed": "ok",
-   "tags": [
-    "稀土",
-    "铟",
-    "国际"
-   ]
-  },
-  {
-   "id": "e1f6b4458890",
-   "title": "美国用量子技术赋能关键矿产填图",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kydt/kykj/202608/t20260824_10297596.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-24",
-   "orig_date_full": "2026-08-24",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "美国采用量子技术开展关键矿产地质填图工作，提升识别精度。",
-   "embed": "ok",
-   "tags": [
-    "技术"
-   ]
-  },
-  {
-   "id": "512c544f2a09",
-   "title": "格陵兰萨法托克铌稀土矿获勘查许可",
-   "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260824_10297598.htm",
-   "source": "全球矿产资源",
-   "orig_date": "08-24",
-   "orig_date_full": "2026-08-24",
-   "report_date": "2026-09-08",
-   "category": "国际矿业动态",
-   "is_new": false,
-   "summary": "格陵兰萨法托克铌稀土矿获颁勘查许可，该项目为大型稀土-铌多金属矿，是新一轮关键矿产勘查的重点项目之一。",
-   "embed": "ok",
-   "tags": [
-    "稀土",
-    "铌",
-    "找矿",
-    "国际"
-   ]
-  }
- ]
+  "meta": {
+    "report_date": "2026-09-09",
+    "generated_at": "2026-09-09T09:15:22+08:00",
+    "total": 121,
+    "new_today": 15,
+    "archive": 106,
+    "page_total": 121,
+    "page_new_count": 15,
+    "sources": [
+      "MINING.COM",
+      "SMM 国际站",
+      "上海有色网",
+      "中国地质调查局",
+      "中国地质调查局西宁中心",
+      "中国有色网",
+      "中国有色金属工业协会",
+      "中国有色金属报",
+      "中国黄金协会",
+      "全球矿产资源",
+      "全球矿产资源信息系统",
+      "巨潮资讯网",
+      "自然资源部",
+      "长江有色网"
+    ],
+    "schema_version": "1.1",
+    "archive_hint": "历史全量见 data/news_YYYY-MM.json（追加式累积），检索用 query_news.py",
+    "note": "P0.5 数据底座：由 export_news_json.py 从 index.html 解析导出（URL去重），供矿业情报智能体查询"
+  },
+  "news": [
+    {
+      "id": "27d21d09fc13",
+      "title": "箭猪坡锑多金属矿储量核实报告通过自然资源部评审备案",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473846",
+      "source": "中国有色金属报",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": true,
+      "summary": "华锡有色托管企业河池五吉箭猪坡矿业有限公司提交的矿产资源储量评审备案申请近日通过自然资源部评审备案。截至2024年12月31日，核实区（+500米至-300米标高）保有矿石资源量797.2万吨、增幅268.02%，其中锑保有金属量超13万吨、增幅169.90%，锡、铟、铅、锌、银、金、镓等多种金属共生伴生。本次储量大幅增长得益于深部找矿和\"探边摸底\"，锑资源储量规模达到大型，为后续项目建设与延长矿山服务年限提供资源保障。",
+      "embed": "ok",
+      "tags": [
+        "铅",
+        "锌",
+        "金",
+        "银",
+        "锡",
+        "锑",
+        "镓",
+        "铟",
+        "找矿"
+      ]
+    },
+    {
+      "id": "73bfcfa64765",
+      "title": "巴西铁山稀土矿等项目进展：澳/乌/科多国矿端见矿",
+      "url": "https://news.smm.cn/news/104104007",
+      "source": "上海有色网",
+      "orig_date": "09-09",
+      "orig_date_full": "2026-09-09",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": true,
+      "summary": "动力矿产公司（Power Minerals）巴西铁山（Morro do Ferro）稀土项目钻孔从地表起88米、总稀土氧化物（TREO）品位6.33%，其中磁体稀土氧化物（MREO）品位1.2%；另见50米厚TREO品位9%、MREO 1.56%矿体；该孔验证矿床中心北东方向新区。布莱兹矿产公司达成购买乌干达巴哈蒂、布亚加两个钨矿项目协议，巴哈蒂矿床生产钨270吨。奥伦资源公司在科特迪瓦邦迪亚利金矿32米深处见矿5.63米、金品位31.79克/吨，包括2.63米厚、品位67.6克/吨的富矿。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "稀土",
+        "钨",
+        "铁",
+        "找矿"
+      ]
+    },
+    {
+      "id": "373cf2a92f89",
+      "title": "海关总署：1~8月铜材进口降6.7%稀土进口降2.6%铝材出口增16.7%",
+      "url": "https://news.smm.cn/news/104103410",
+      "source": "上海有色网",
+      "orig_date": "09-09",
+      "orig_date_full": "2026-09-09",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "海关总署9月8日数据显示，前8个月我国货物贸易进出口总值34.78万亿元、同比增长17.6%；8月份进出口4.65万亿元、增长19.8%。金属品种方面：8月未锻轧铜及铜材进口38.2万吨、累计329.7万吨同比降6.7%；8月铜矿砂及精矿进口250.8万吨、累计1949.2万吨同比降2.8%；8月未锻轧铝及铝材出口62.6万吨、累计466.5万吨同比增长16.7%；8月稀土进口6861.7吨同比增长36.7%、累计7.02万吨同比降2.6%。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "铝",
+        "稀土"
+      ]
+    },
+    {
+      "id": "b0e74409c6c9",
+      "title": "报道：津巴布韦暂停锑和钨出口以推动本土加工",
+      "url": "https://news.smm.cn/news/104099041",
+      "source": "上海有色网",
+      "orig_date": "09-09",
+      "orig_date_full": "2026-09-09",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "据彭博获得的津巴布韦矿业部7月21日信函，该国即时禁止锑和钨出口、进一步收紧对关键矿产资源出口管控，以强制矿业公司在本国境内开展更多精炼加工业务。信函要求所有锑精矿、锑金属及钨精矿、钨铁等暂停出口，已签发但未执行的出口许可证一律暂停。津巴布韦是非洲主要锂、铂、铬矿生产国，本次禁令是继锂出口管控之后再度扩面至锑钨，被视为非洲\"锁矿潮\"向传统小金属延伸的最新例证。",
+      "embed": "ok",
+      "tags": [
+        "钨",
+        "锑",
+        "锂",
+        "铬",
+        "铂",
+        "铁"
+      ]
+    },
+    {
+      "id": "1c9b6cef2186",
+      "title": "SMM：预计全球锡市场将维持紧平衡状态 新矿产能将在2028年集中释放",
+      "url": "https://news.smm.cn/news/104070712",
+      "source": "上海有色网",
+      "orig_date": "09-09",
+      "orig_date_full": "2026-09-09",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "SMM亚洲电池材料合作论坛评论：随缅甸佤邦复产推进，中国锡矿供应逐步从过度依赖单一来源转向多元化，2025年缅甸进口占比降至24%~30%、刚果金升至28%、尼日利亚升至11%、澳洲同比增长101%。但缅甸佤邦高品位矿坑淹水、4月7日爆炸事故后爆炸物管控、5-10月季风期排水难度加大等多重因素，使该地区产量恢复速度不及预期。SMM预计全球锡市场紧平衡格局延续，新矿产能将在2028年集中释放。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "锡",
+        "市场",
+        "技术",
+        "安全",
+        "国际"
+      ]
+    },
+    {
+      "id": "3c29865b0338",
+      "title": "江苏连云港破获涉案稀土达220吨、价值超46亿的重大走私案？官方辟谣",
+      "url": "https://news.smm.cn/news/103825840",
+      "source": "上海有色网",
+      "orig_date": "09-09",
+      "orig_date_full": "2026-09-09",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "针对网传\"江苏连云港破获涉案稀土达220吨、价值超46亿元的稀土走私案\"传言，连云港公安等部门核查后发布通报予以辟谣：该案系2024年侦办的\"9.18\"特大走私案涉案企业、人员诉讼及执行进展报道，并非新近案件；涉案稀土数量、案值与网传数据存在差异，公安机关将依法追究恶意造谣、传谣者责任。",
+      "embed": "ok",
+      "tags": [
+        "稀土"
+      ]
+    },
+    {
+      "id": "c92ee5165774",
+      "title": "多引擎协同发力 金川镍钴粉体材料厂聚力打造全国一流球镍产业高地",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473816",
+      "source": "中国有色金属报",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "金川镍钴粉体材料厂2026年上半年聚焦球形氢氧化镍高端化、系列化主线，统筹产线数字化改造、关键工艺迭代攻关、产品矩阵多元扩展，产品从单一镍氢专用产品延伸至覆盖镍铁、镍锌三大技术路线8个规格系列产品，跻身国内头部新能源厂商核心供应链。今年以来球镍系列产品产量同比增长48.14%、营业收入同比增长47.72%，后续2000吨扩能项目稳步推进；覆钴球镍综合性能跻身行业一流水平。",
+      "embed": "ok",
+      "tags": [
+        "镍",
+        "锌",
+        "钴",
+        "铁",
+        "市场",
+        "技术"
+      ]
+    },
+    {
+      "id": "75846905fc03",
+      "title": "智利和阿根廷推进跨边界铜矿开发",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473831",
+      "source": "中国有色金属报",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "近日，阿根廷与智利官员重新履行1997年《矿业融合互补条约》，推进维库尼亚、尼索安迪诺与费洛南矿业项目，批准矿床位于两国交界安第斯山区，可共享基础设施与资源。智利矿业部表示该框架有望释放207亿美元矿业项目投资、年增铜产量54万吨。三大潜在受益项目包括麦克尤恩铜业的洛斯阿苏莱斯、嘉能可的埃尔帕琼、伦丁矿业与必和必拓合资的维库尼亚；分析师预计阿根廷2030年将跻身全球前十大产铜国。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "找矿",
+        "市场",
+        "国际"
+      ]
+    },
+    {
+      "id": "ea955847133e",
+      "title": "Marimaca 智利 Pampa Medina 铜银矿见厚大矿体，铜品位近1%",
+      "url": "https://www.mining.com/marimaca-hits-thick-copper-silver-zone-at-pampa-medina-in-chile",
+      "source": "MINING.COM",
+      "orig_date": "09-09",
+      "orig_date_full": "2026-09-09",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Marimaca Copper（TSX: MARI; ASX: MC2）宣布智利安托法加斯塔大区 Pampa Medina 项目钻探见厚大铜银矿体：SPRD-15 孔自466米起216米段铜品位0.96%、银7.2克/吨，其中602米起62米段铜2.2%、银21.5克/吨；SPD-13 孔自194米起222米段铜0.5%；SPRD-12 孔自748米起56米段铜0.95%、银4.2克/吨。公司今年计划在 Pampa Medina 完成3万米钻探，PampaMedina 距 Marimaca 主氧化矿床28千米，依赖已有基础设施；公司股价当日涨13%。（原题：Marimaca hits thick copper-silver zone at Pampa Medina in Chile）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "银",
+        "找矿",
+        "国际"
+      ]
+    },
+    {
+      "id": "d9ccb0b1434c",
+      "title": "力拓收购嘉能可/三菱 Aurukun 铝土矿项目",
+      "url": "https://www.mining.com/rio-tinto-acquires-aurukun-bauxite-project-from-glencore-mitsubishi",
+      "source": "MINING.COM",
+      "orig_date": "09-09",
+      "orig_date_full": "2026-09-09",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "力拓（ASX: RIO）同意从嘉能可（LON: GLEN）与三菱开发公司手中收购澳大利亚昆士兰州 Aurukun 铝土矿项目。嘉能可此前持有多数股权，三菱持有约30%。该项目仍处于\"矿产开发许可证\"阶段，尚未取得\"采矿租约\"。交易财务条款未披露，仍待昆士兰州政府及澳大利亚其他监管机构批准。Aurukun 项目位于力拓现有 Weipa 业务以北约200公里，Weipa 矿区年产量超过3000万吨铝土矿，可为 Aurukun 提供现有基础设施支撑。（原题：Rio Tinto acquires Aurukun bauxite project from Glencore, Mitsubishi）",
+      "embed": "ok",
+      "tags": [
+        "铝",
+        "市场"
+      ]
+    },
+    {
+      "id": "926fe22db3fb",
+      "title": "艾芬豪将刚果（金）西部前沿铜资源量扩大30% Makoko 概略研究计划2027年启动",
+      "url": "https://news.metal.com/en/newscontent/104104009-ivanhoe-expands-drc-western-forelands-copper-resource-by-30-makoko-scoping-study-planned-for-2027",
+      "source": "SMM 国际站",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "艾芬豪矿业将其在刚果民主共和国\"西部前沿\"勘探项目的铜资源量增加约30%，进一步扩大 Makoko 区铜矿规模。更新后的2026年矿产资源量包括指示资源量4200万吨（铜品位2.66%）、推断资源量6.12亿吨（铜品位1.80%）；2025年5月以来约6.4万米岩芯钻探使含铜量增至约1200万吨。Makoko 概略研究计划2027年一季度启动；公司称这是过去十年全球规模最大、品位最高的铜矿发现之一。（原题：Ivanhoe Expands DRC Western Forelands Copper Resource by 30%, Makoko Scoping Study Planned for 2027）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "找矿",
+        "国际"
+      ]
+    },
+    {
+      "id": "2cea10994c04",
+      "title": "海关总署：1~8月中国铜矿砂及精矿进口累计1949万吨，同比降2.8%",
+      "url": "https://news.metal.com/en/newscontent/104103985-gacc-chinas-january-august-copper-ore-and-concentrate-imports-totaled-1949-million-mt-down-28-yoy",
+      "source": "SMM 国际站",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "海关总署9月8日数据显示，8月中国铜矿砂及精矿进口250.8万吨，前8月累计进口1949.15万吨、同比降2.8%；8月未锻轧铜及铜材进口38.19万吨，前8月累计329.71万吨、同比降6.7%。出口侧，8月未锻轧铝及铝材出口62.56万吨，前8月累计466.5万吨、同比增长16.7%。1~8月我国货物贸易进出口总值34.78万亿元、同比增长17.6%；8月进出口4.65万亿元、增长19.8%。（原题：GACC: China's January-August copper ore and concentrate imports totaled 19.49 million mt, down 2.8% YoY）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "铝"
+      ]
+    },
+    {
+      "id": "88497e43536f",
+      "title": "智利铜业委员会：全球铜精矿市场结构性趋紧 冶炼产能加速扩张",
+      "url": "https://news.metal.com/en/newscontent/104103970-global-copper-concentrate-market-tightens-as-smelting-capacity-expands-cochilco",
+      "source": "SMM 国际站",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "智利铜业委员会 Cochilco 最新报告指出，全球铜精矿市场面临结构性趋紧：矿端品位下降、项目延期与运营扰动限制精矿供应，而新增冶炼产能持续扩张（中国与印尼尤为明显），现货 TC/RC 在2025-2026年间已接近零或为负。Cochilco 预计已识别项目到2041年将新增约820万吨/年精炼当量冶炼产能，主要集中在亚洲，智利精矿处理产能544万吨/年仍居拉美第一，但当前开工率仅约70%。（原题：Global Copper Concentrate Market Tightens as Smelting Capacity Expands — Cochilco）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "国际"
+      ]
+    },
+    {
+      "id": "dc3dff4d6ea6",
+      "title": "海关总署：1~8月铜材进口降6.7% 稀土进口降2.6% 铝材出口增16.7%",
+      "url": "https://news.metal.com/en/newscontent/104103575-general-administration-of-customs-copper-semis-imports-down-67-rare-earth-imports-down-26-aluminum-semis-exports-up-167-january-august",
+      "source": "SMM 国际站",
+      "orig_date": "09-09",
+      "orig_date_full": "2026-09-09",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "海关总署9月8日发布数据，前8月中国货物贸易进出口34.78万亿元、同比增长17.6%；8月进出口4.65万亿元、增长19.8%。金属品种方面：8月未锻轧铜及铜材进口38.2万吨、前8月累计329.7万吨同比降6.7%；8月铜矿砂及精矿进口250.8万吨同比降9.1%、累计1949.2万吨同比降2.8%；8月未锻轧铝及铝材出口62.6万吨同比增17.2%、累计466.5万吨同比增16.7%；8月稀土进口6861.7吨同比增36.7%、累计7.02万吨同比降2.6%。（原题：General Administration of Customs: Copper Semis Imports Down 6.7%, Rare Earth Imports Down 2.6%, Aluminum Semis Exports Up 16.7% January-August）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "铝",
+        "稀土"
+      ]
+    },
+    {
+      "id": "ed479015df31",
+      "title": "印度拟推约14亿美元电池组件激励计划",
+      "url": "https://news.metal.com/en/newscontent/104103965-approximately-14-billion-india-plans-130-billion-rupee-battery-component-incentive-program",
+      "source": "SMM 国际站",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "据印度《商业标准报》报道，印度政府正制定总额约1300亿卢比（约14亿美元）的高级电池组件激励计划，覆盖正负极活性材料、电解液、隔膜与铜箔等关键电池单元组件。消息人士称该计划已完成跨部委磋商，即将提交财政部支出财务委员会审批。（原题：Approximately $1.4 billion! India plans 130 billion rupee battery component incentive program）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "技术"
+      ]
+    },
+    {
+      "id": "e31ba9c8df83",
+      "title": "新一轮找矿突破战略行动再获标志性成果 安徽茶亭铜金矿勘查取得重大突破",
+      "url": "https://www.mnr.gov.cn/dt/ywbb/202609/t20260902_2937434.html",
+      "source": "自然资源部",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "安徽省宣城市茶亭地区铜金矿勘查取得重大突破，矿床位于长江中下游成矿带南陵—宣城铜金矿集区，为火山岩覆盖区新发现的隐伏斑岩型铜金矿床，主矿体长约1.2千米、宽约1.1千米，单孔矿体最大视厚度1371米；初步估算铜潜在资源超数个大型铜矿规模、金达十余个大型金矿规模，深部尚未揭穿。西藏玉龙铜业2025年10月以86亿元竞得探矿权，4个月完成钻探近十万米，唐菊兴院士任勘查项目负责人。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "找矿",
+        "矿权"
+      ]
+    },
+    {
+      "id": "291663243406",
+      "title": "智利坎加洛铜矿等项目进展",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202609/t20260907_10307771.htm",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "奥斯奎斯特（AUSQUEST）公司宣布其智利坎加洛（Cangallo）斑岩铜矿两孔将矿体自地表向下延伸800米，证实存在高品位给矿构造：北部孔自34米深处见矿355.8米，铜品位0.31%、金0.05克/吨，含10米厚铜0.71%、金0.08克/吨矿体；南部首孔自178米见矿348米，铜0.23%、金0.08克/吨。另太阳石金属在厄瓜多尔布拉马德罗斯项目梅罗纳尔、波罗蒂洛两矿床钻探与探槽均见矿。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "找矿",
+        "国际"
+      ]
+    },
+    {
+      "id": "8df11a27f9ac",
+      "title": "具身智能、矿山大模型、数字孪生同台亮相 2026AI+矿山安全大会召开",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473763",
+      "source": "中国有色金属报",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "8月29日，2026AI+矿山安全大会在山东招远举行，主题「数智驱控 安全共生」，300余位院士专家与企业代表参会，现场分享具身智能、矿山大模型、智能凿岩、数字孪生等成果。中国工程院院士王国法作《数智技术赋能安全高效采矿》主题报告，指出智慧矿山建设存在智能装备环境适应性不足、系统常态化运行率偏低、系统间数据壁垒突出等痛点，强调数智矿山首要价值在于筑牢安全防线。",
+      "embed": "ok",
+      "tags": [
+        "技术",
+        "安全"
+      ]
+    },
+    {
+      "id": "8e57b6845d0b",
+      "title": "以案为鉴筑牢安全防线 精细钻探夯实开发根基——柳园铭扬铜镍矿第三孔支撑性勘探顺利开钻",
+      "url": "http://www.xgsnrc.cgs.gov.cn/gzdt/aqsc/202609/t20260905_867989.html",
+      "source": "中国地质调查局西宁中心",
+      "orig_date": "09-05",
+      "orig_date_full": "2026-09-05",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "柳园铭扬铜镍矿5号机台MZK002号勘探孔正式开孔，为本轮专项勘探第三孔，在前两孔基础上加密勘探剖面、完善地质数据，为资源储量核实与灾害隐患排查提供依据；施工结合西藏吉隆泥石流教训，全程强化安全管控与地质灾害防控。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "镍",
+        "找矿",
+        "安全"
+      ]
+    },
+    {
+      "id": "dc62e8080173",
+      "title": "中国地质调查局实施吉隆泥石流次生地质灾害监测",
+      "url": "https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867978.html",
+      "source": "",
+      "orig_date": "09-04",
+      "orig_date_full": "2026-09-04",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": []
+    },
+    {
+      "id": "26911e9c3e46",
+      "title": "跑出深部找矿“中国速度”——安徽茶亭超大型铜多金属矿勘探与勘查增储纪实",
+      "url": "https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867977.html",
+      "source": "",
+      "orig_date": "09-04",
+      "orig_date_full": "2026-09-04",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "找矿"
+      ]
+    },
+    {
+      "id": "f530ff9c5141",
+      "title": "埃塞俄比亚SEDEX型矿床潜力分析",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/kykj/202609/t20260904_10306813.htm",
+      "source": "",
+      "orig_date": "09-04",
+      "orig_date_full": "2026-09-04",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "找矿"
+      ]
+    },
+    {
+      "id": "a632d9c402c1",
+      "title": "澳大利亚延达尔金矿勘探取得新发现",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202609/t20260903_10305932.htm",
+      "source": "",
+      "orig_date": "09-03",
+      "orig_date_full": "2026-09-03",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "找矿"
+      ]
+    },
+    {
+      "id": "51fdf33c34d5",
+      "title": "绿色矿业｜六大场景解锁我国绿色勘查新路径",
+      "url": "https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260902_867767.html",
+      "source": "",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": [
+        "找矿"
+      ]
+    },
+    {
+      "id": "2cc13cf89ebe",
+      "title": "星-空-地-井协同勘查技术助力冈底斯找矿取得新突破",
+      "url": "https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260901_867682.html",
+      "source": "",
+      "orig_date": "09-01",
+      "orig_date_full": "2026-09-01",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": [
+        "找矿",
+        "技术"
+      ]
+    },
+    {
+      "id": "b388a94dba2c",
+      "title": "中国恩菲设计的太平矿业金矿石建设项目TBM始发",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61850.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-28",
+      "orig_date_full": "2026-08-28",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "8月22日，中国恩菲设计的内蒙古太平矿业浩尧尔忽洞金矿年开采825万吨金矿石建设项目（二标段）TBM始发，标志着项目建设进入关键攻坚阶段。",
+      "embed": "block",
+      "tags": [
+        "金"
+      ]
+    },
+    {
+      "id": "340eca36ef06",
+      "title": "希尔威金属矿业公布吉尔吉斯金矿重大勘探成果",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473401",
+      "source": "中国有色网",
+      "orig_date": "08-26",
+      "orig_date_full": "2026-08-26",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "希尔威金属矿业公布吉尔吉斯斯坦金矿项目重大勘探成果，海外金矿资源勘查取得关键进展。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "找矿",
+        "国际"
+      ]
+    },
+    {
+      "id": "18b610f34432",
+      "title": "探矿工程所\"一种超短半径水平井造斜段轨迹控制系统\"获国家发明专利授权",
+      "url": "https://www.cgs.gov.cn/ywdt/dwdt/202608/t20260821_867102.html",
+      "source": "中国地质调查局",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-09",
+      "category": "找矿成果与勘查技术",
+      "is_new": false,
+      "summary": "中国地质调查局探矿工程所研发的超短半径水平井造斜段轨迹控制系统获国家发明专利授权，为深部找矿与关键矿产勘查提供装备支撑。",
+      "embed": "ok",
+      "tags": [
+        "找矿",
+        "技术"
+      ]
+    },
+    {
+      "id": "d2588933b0f4",
+      "title": "金钛股份在北交所上市",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473762",
+      "source": "中国有色金属报",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "9月3日，朝阳金达钛业股份有限公司（证券简称：金钛股份，证券代码：920071）在北京证券交易所挂牌上市，成为我国首家主营业务为高品质海绵钛产品的上市企业。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "钛",
+        "矿权"
+      ]
+    },
+    {
+      "id": "7e138d6b1e7c",
+      "title": "易控智驾携手紫金矿业斩获\"数据要素×\"大赛双赛区一等奖",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473785",
+      "source": "中国有色金属报",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "2026年\"数据要素×\"大赛西藏分赛与福建分赛结果揭晓，易控智驾科技股份有限公司携手紫金矿业集团，凭借在巨龙铜矿、紫金山金铜矿的无人矿卡应用成果连续荣获一等奖。巨龙铜矿地处西藏5400米高寒地区，已规模化投运60台纯电动无人矿卡，通过多源感知融合、分布式制动与自适应控制、动态轨迹预测与协同调度，解决冻融湿滑路面与多车型混行难题。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金"
+      ]
+    },
+    {
+      "id": "035b2501dea0",
+      "title": "双桅杆擎起高原新地标——中国十五冶卢安夏新矿永久井架吊装纪实",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473767",
+      "source": "中国有色金属报",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "当地时间8月14日，赞比亚卢安夏新矿穆南混合井永久井架一对直径4米、净重26吨天轮精准吊装就位，下天轮标高46米、上天轮52米。自7月30日304吨斜架双桅杆整体吊装、8月1日立架分节对接至本次双天轮就位，中国十五冶半个月内完成3场关键节点施工，首次在海外应用双桅杆旋转吊装工艺。卢安夏铜矿2009年被中国有色集团收购后重启，新矿由穆南浅部与玛希巴联合开采、28#井深部硫化矿3座矿山组成。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "国际"
+      ]
+    },
+    {
+      "id": "f0b9dce128f1",
+      "title": "五矿铍业核心产品入选央企机器人十大高价值应用场景",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473775",
+      "source": "中国有色金属报",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "8月19日至23日2026世界机器人大会在北京举办，五矿铍业有限责任公司携核心产品高性能铍铜合金参展，该产品成功入选中央企业机器人十大高价值应用场景展示序列，落地特种涉爆高危作业场景与人形机器人核心零部件两大赛道。高性能铍铜合金是人形机器人、高端工业机械臂所需的核心精密材料。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "技术"
+      ]
+    },
+    {
+      "id": "28f75194fe55",
+      "title": "西矿信息荣获第十五届中国创新创业大赛青海赛区企业组一等奖",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473765",
+      "source": "中国有色金属报",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "2026年第十五届中国创新创业大赛落幕，西部矿业集团西矿信息参赛项目「未来信息领域—矿山生产运营一体化数智管控平台」斩获青海赛区企业组一等奖。该项目紧扣矿山数字化转型需求，针对高海拔复杂作业环境开展技术攻坚，在平台架构设计、多源数据融合、现场场景适配等方面实现创新突破。",
+      "embed": "ok",
+      "tags": [
+        "找矿",
+        "技术"
+      ]
+    },
+    {
+      "id": "0d1bba051bbc",
+      "title": "云铝股份召开深化\"一本部多基地\"集中管控改革推进会",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473771",
+      "source": "中国有色金属报",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "8月17日，云铝股份召开深化「一本部多基地」集中管控改革推进会，紧扣「强本部、强管控」核心思路，从制度、流程、数据三方面明确改革要求，提出实现「重构定位、重塑体系、重理边界」，强化「五个量化管理」，建立职责清单与风险清单，推动业务工作从「事务统计型」向「统筹管控型」转型。",
+      "embed": "ok",
+      "tags": [
+        "铝"
+      ]
+    },
+    {
+      "id": "72c9f5566dae",
+      "title": "陕西黄金集团西安秦金打出市场开拓\"组合拳\"",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473774",
+      "source": "中国有色金属报",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "今年以来，陕西黄金集团西安秦金围绕渠道拓展、客户深耕、人才筑基三条主线发力：线上运营官方微信公众号、筹建抖音官方账号，线下参加行业展会与区域博览会对接潜在客户；依托高端化、差异化产品优势为客户量身定制合作方案，已与行业头部企业达成初步合作意向；拟启动营销人才专项培养计划，覆盖一线销售与中层骨干。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "政策"
+      ]
+    },
+    {
+      "id": "afef4b775e31",
+      "title": "西北有色地矿集团712总队公司实现\"时间过半、任务过半\"目标",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473737",
+      "source": "中国有色金属报",
+      "orig_date": "09-03",
+      "orig_date_full": "2026-09-03",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "截至6月底，西北有色地矿集团七一二总队公司经营收入完成年度目标的50.22%、利润总额完成52.12%。上半年地质勘查、民生地质、工程施工、装备制造四大板块累计落地实体项目93项，新签合同总额完成年度目标80%，在新疆、内蒙古等省外市场实现「零的突破」，塞拉利昂海外项目成功落地，非金属地质勘查短板同步补齐。",
+      "embed": "ok",
+      "tags": [
+        "找矿",
+        "市场",
+        "技术",
+        "国际"
+      ]
+    },
+    {
+      "id": "f89a2c807a18",
+      "title": "2026中国国际矿业大会将于9月10日开幕",
+      "url": "https://www.mnr.gov.cn/dt/ywbb/202609/t20260904_2937656.html",
+      "source": "自然资源部",
+      "orig_date": "09-04",
+      "orig_date_full": "2026-09-04",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "以「合作共赢，绿色智能」为主题的2026（第二十八届）中国国际矿业大会将于9月10日至12日在天津梅江会展中心举办，在往届论坛、展览两大板块基础上新增矿业权交易板块。论坛设28场（主题1场、高层6场、专题21场），展览面积6.5万平方米创历届新高，并设置矿业权转让大市场、专场推介、项目签约等功能；已吸引全球25个国家658家企业参展。",
+      "embed": "ok",
+      "tags": [
+        "矿权",
+        "技术",
+        "国际"
+      ]
+    },
+    {
+      "id": "002ca4b73b0a",
+      "title": "2026年矿区生态修复典型案例评选结果公示",
+      "url": "http://gi.mnr.gov.cn/202609/t20260904_2937623.html",
+      "source": "自然资源部",
+      "orig_date": "09-04",
+      "orig_date_full": "2026-09-04",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "自然资源部国土空间生态修复司公示2026年矿区生态修复典型案例评选结果，分废弃矿山生态修复、生产矿山、矿业遗迹三类共21个案例入选，覆盖北京、浙江、安徽、江西、湖北、湖南、重庆、河北、内蒙古、陕西等省份，涉及铁矿、金矿、钼矿、铝土矿、磷矿、石灰岩、煤矿等矿种，公示期由省级推荐并接受社会监督。",
+      "embed": "ok",
+      "tags": [
+        "铝",
+        "金",
+        "钼",
+        "铁",
+        "政策"
+      ]
+    },
+    {
+      "id": "53c29bae3c2d",
+      "title": "盛达资源：关于子公司德运矿业完成探矿权延续登记的公告",
+      "url": "http://static.cninfo.com.cn/finalpage/2026-09-07/1225549272.PDF",
+      "source": "巨潮资讯网",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "盛达资源公告其子公司德运矿业已完成探矿权延续登记，相关矿权有效期得以延续，为公司后续地质勘查与资源增储工作奠定权属基础。盛达资源主营白银等贵金属矿产资源开发。",
+      "embed": "pdf",
+      "tags": [
+        "银",
+        "政策",
+        "找矿",
+        "矿权"
+      ]
+    },
+    {
+      "id": "cb14b31b9403",
+      "title": "中色股份：关于控股子公司中色印尼达瑞矿业有限公司收到法院通知的公告",
+      "url": "http://static.cninfo.com.cn/finalpage/2026-09-07/1225550300.PDF",
+      "source": "巨潮资讯网",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "中国有色金属建设股份有限公司公告，其控股子公司中色印尼达瑞矿业有限公司收到法院通知。达瑞矿业为公司在印度尼西亚的铅锌矿项目平台，相关诉讼进展可能对公司海外项目推进产生影响。",
+      "embed": "pdf",
+      "tags": [
+        "铅",
+        "锌",
+        "政策",
+        "国际"
+      ]
+    },
+    {
+      "id": "c966bfb76cbe",
+      "title": "蓝晓科技：关于签订盐湖提锂日常经营合同的公告",
+      "url": "http://static.cninfo.com.cn/finalpage/2026-09-07/1225552242.PDF",
+      "source": "巨潮资讯网",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "西安蓝晓科技新材料股份有限公司公告签订盐湖提锂日常经营合同。公司主营吸附分离树脂与盐湖提锂成套装置，合同签署反映盐湖提锂产能建设与锂资源开发需求延续。",
+      "embed": "pdf",
+      "tags": [
+        "锂",
+        "政策",
+        "技术"
+      ]
+    },
+    {
+      "id": "97254a183d0e",
+      "title": "再生铅占精铅近50%！废电瓶高成本卡住冶炼利润，铅酸电池旺季备货能否接力",
+      "url": "https://www.ccmn.cn/news/ZX018/202609/be746e71851d49e1baca731d7084d796.html",
+      "source": "长江有色网",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "国内再生铅占精铅供应比重已升至近50%，废电瓶作为核心原料采购价格持续高企，将冶炼厂利润卡在狭窄区间，成本刚性成为铅价难以深跌的底层逻辑。沪铅2610合约报16235元/吨、涨120元，长江现货1#铅均价16300元/吨、涨75元。再生铅冶炼厂在成本线附近维持开工，部分边际产能逼近停减产临界点；需求端铅酸电池旺季尾声排产边际走弱。",
+      "embed": "ok",
+      "tags": [
+        "铅",
+        "市场"
+      ]
+    },
+    {
+      "id": "bf924d85c5d1",
+      "title": "2026年（第二届）有色金属行业“双碳”大会在杭州召开",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473759",
+      "source": "",
+      "orig_date": "09-04",
+      "orig_date_full": "2026-09-04",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": []
+    },
+    {
+      "id": "2dc18c5aee05",
+      "title": "2026年（第十三届）中国锑业年会在云南昆明召开",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473758",
+      "source": "",
+      "orig_date": "09-04",
+      "orig_date_full": "2026-09-04",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "锑"
+      ]
+    },
+    {
+      "id": "61051506f51d",
+      "title": "2026中国国际矿业大会将于9月10日开幕",
+      "url": "https://www.cgs.gov.cn/ywdt/ddyw/202609/t20260904_867980.html",
+      "source": "",
+      "orig_date": "09-04",
+      "orig_date_full": "2026-09-04",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "国际"
+      ]
+    },
+    {
+      "id": "d2e7978c7413",
+      "title": "薪火代代传——驰宏锌锗以“0.3克锗精神”续写科研攻坚答卷",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61913.html",
+      "source": "",
+      "orig_date": "09-03",
+      "orig_date_full": "2026-09-03",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "锌",
+        "锗"
+      ]
+    },
+    {
+      "id": "efe58d2c72a1",
+      "title": "2026矿冶科技集团有限公司科技创新大会在京召开",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61904.html",
+      "source": "",
+      "orig_date": "09-03",
+      "orig_date_full": "2026-09-03",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "技术"
+      ]
+    },
+    {
+      "id": "764746327b17",
+      "title": "有色企业紧急捐款驰援西藏吉隆灾区",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0903/61902.html",
+      "source": "",
+      "orig_date": "09-03",
+      "orig_date_full": "2026-09-03",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": []
+    },
+    {
+      "id": "1453a9ec817c",
+      "title": "周洲出席中吉商务与投资论坛 中国黄金集团深耕中亚矿业合作",
+      "url": "https://www.cngold.org.cn/news/show-9524.html",
+      "source": "",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": [
+        "金"
+      ]
+    },
+    {
+      "id": "4ebd506d48f3",
+      "title": "云铝股份交出历史最好半年成绩单 营收增长20.3%利润增长175%",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61889.html",
+      "source": "",
+      "orig_date": "09-01",
+      "orig_date_full": "2026-09-01",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": [
+        "铝",
+        "市场"
+      ]
+    },
+    {
+      "id": "d770a51cf280",
+      "title": "洛阳铜加工产出首根镁合金铸锭 镁板全流程工艺贯通",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61895.html",
+      "source": "",
+      "orig_date": "09-01",
+      "orig_date_full": "2026-09-01",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": [
+        "铜",
+        "金",
+        "镁"
+      ]
+    },
+    {
+      "id": "e0a118becd37",
+      "title": "株冶集团奋力推进\"三化两型\"建设 铅锌冶炼绿色智能升级",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61894.html",
+      "source": "",
+      "orig_date": "09-01",
+      "orig_date_full": "2026-09-01",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": [
+        "铅",
+        "锌",
+        "技术"
+      ]
+    },
+    {
+      "id": "c947e2b04759",
+      "title": "西安矿产中心科技成果获陕西省科学技术进步奖三等奖",
+      "url": "https://www.cgs.gov.cn/ywdt/dwdt/202609/t20260902_867821.html",
+      "source": "",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": [
+        "技术"
+      ]
+    },
+    {
+      "id": "5df9d34794d5",
+      "title": "中国恩菲实施的非洲首例井下无人驾驶电机车项目通过验收并进入常态化运行",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61887.html",
+      "source": "",
+      "orig_date": "09-01",
+      "orig_date_full": "2026-09-01",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": []
+    },
+    {
+      "id": "b8bde1f3632c",
+      "title": "上半年铜陵有色净利润同比翻倍",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61881.html",
+      "source": "",
+      "orig_date": "09-01",
+      "orig_date_full": "2026-09-01",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": [
+        "铜",
+        "市场"
+      ]
+    },
+    {
+      "id": "3b1dda996def",
+      "title": "陕西黄金集团西安秦金项目获陕西省科技厅立项",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0901/61891.html",
+      "source": "",
+      "orig_date": "09-01",
+      "orig_date_full": "2026-09-01",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": [
+        "金"
+      ]
+    },
+    {
+      "id": "a3a0d6d11c2d",
+      "title": "一座钼矿何以在林海深处绘就“共生图景”",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473665",
+      "source": "",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "钼"
+      ]
+    },
+    {
+      "id": "1486603f94b8",
+      "title": "英国加码投资关键矿产本土供应链建设",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473653",
+      "source": "",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": []
+    },
+    {
+      "id": "d869214e041d",
+      "title": "7月份锂行业运行情况",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473599",
+      "source": "",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "锂",
+        "市场"
+      ]
+    },
+    {
+      "id": "bebcb8e50c49",
+      "title": "2026年上半年我国黄金产量152.908吨，同比下降14.62%，黄金消费量511.412吨，同比增长1.23%",
+      "url": "https://www.cngold.org.cn/news/show-9500.html",
+      "source": "",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "block",
+      "tags": [
+        "金",
+        "市场"
+      ]
+    },
+    {
+      "id": "19b1acbf01b3",
+      "title": "持续增厚股东回报 紫金矿业公布111亿元中期分红方案",
+      "url": "https://www.cngold.org.cn/news/show-9505.html",
+      "source": "中国黄金协会",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "紫金矿业公布111亿元中期分红方案，在铜金价格高位背景下持续提升股东回报。",
+      "embed": "block",
+      "tags": [
+        "铜",
+        "金",
+        "政策",
+        "市场"
+      ]
+    },
+    {
+      "id": "11d0dc45cb87",
+      "title": "中国黄金集团与中国地质大学（武汉）举行工作会商",
+      "url": "https://www.cngold.org.cn/news/show-9503.html",
+      "source": "中国黄金协会",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "校企双方围绕科技创新、人才培养与地质勘查成果转化开展会商，推动产学研深度融合。",
+      "embed": "block",
+      "tags": [
+        "金",
+        "找矿",
+        "技术"
+      ]
+    },
+    {
+      "id": "98d035e4e9b4",
+      "title": "中国稀土集团2026年安全环保绿色低碳专题研修班开班",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0831/61861.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-31",
+      "orig_date_full": "2026-08-31",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "中国稀土集团举办2026年安全环保绿色低碳专题研修班，推动稀土产业绿色低碳转型与可持续发展。",
+      "embed": "block",
+      "tags": [
+        "稀土",
+        "安全"
+      ]
+    },
+    {
+      "id": "8cbd99251b05",
+      "title": "金川镍钴承压奋进攀高逐新",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0831/61862.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-31",
+      "orig_date_full": "2026-08-31",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "金川集团镍钴产业在压力中持续奋进，围绕镍、钴等关键矿产提升资源保障与产业竞争力，奋力攀登高质量发展新高度。",
+      "embed": "block",
+      "tags": [
+        "镍",
+        "钴"
+      ]
+    },
+    {
+      "id": "7aa3dccb558c",
+      "title": "加拿大矿业公司Auro Metals再获496米厚大矿段 高品位矿段金品位达1.12克/吨",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473461",
+      "source": "中国有色网",
+      "orig_date": "08-31",
+      "orig_date_full": "2026-08-31",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "加拿大Auro Metals公司勘探取得重大突破，新发现496米厚大矿段，其中高品位矿段金品位达1.12克/吨，海外金矿勘查成果亮眼。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "找矿",
+        "国际"
+      ]
+    },
+    {
+      "id": "61812bcdf1e5",
+      "title": "【谱写\"十五五\"有色新篇章】利润总额同比大增98% 中国铝业中期增速再创历史新高",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0831/61856.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-31",
+      "orig_date_full": "2026-08-31",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "中国铝业发布中期业绩，利润总额同比大增98%，增速再创历史新高，铝产业高质量发展动能强劲。",
+      "embed": "block",
+      "tags": [
+        "铝",
+        "市场"
+      ]
+    },
+    {
+      "id": "22a10a676e02",
+      "title": "智阿秘玻四国成立关键矿产联盟",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202608/t20260831_10302802.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-31",
+      "orig_date_full": "2026-08-31",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "智利、阿根廷、秘鲁、玻利维亚四国宣布成立关键矿产联盟，加强锂、铜等战略性矿产供应链合作与资源安全协调。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "锂",
+        "安全",
+        "国际"
+      ]
+    },
+    {
+      "id": "0ad8576fe16d",
+      "title": "西北有色地矿集团七一一总队深耕地勘主业聚力实现新突破",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473589",
+      "source": "中国有色网",
+      "orig_date": "08-31",
+      "orig_date_full": "2026-08-31",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "西北有色地矿集团七一一总队持续深耕地质勘查主业，在矿产勘查与资源发现领域实现新突破，聚焦有色金属找矿。",
+      "embed": "ok",
+      "tags": [
+        "找矿"
+      ]
+    },
+    {
+      "id": "e7c1c801e336",
+      "title": "自然资源部举办矿产资源法实施条例贯彻实施培训班",
+      "url": "https://www.mnr.gov.cn/dt/ywbb/202608/t20260828_2937200.html",
+      "source": "自然资源部",
+      "orig_date": "08-28",
+      "orig_date_full": "2026-08-28",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "8月25日至26日，自然资源部在武汉举办矿产资源法实施条例贯彻实施培训班，部相关司局围绕地质勘查、矿业权管理、矿产资源勘查开采、矿区生态修复等作系统讲解，160人参加培训。",
+      "embed": "block",
+      "tags": [
+        "政策",
+        "找矿"
+      ]
+    },
+    {
+      "id": "c97886093392",
+      "title": "新疆有色集团持续推进关键金属增储上产（续）",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61849.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-28",
+      "orig_date_full": "2026-08-28",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "新疆有色集团聚焦铜、镍、锂等关键金属，持续推进增储上产国家级研发项目后续成果转化，攻关硬岩矿产与共伴生资源综合利用。",
+      "embed": "block",
+      "tags": [
+        "铜",
+        "镍",
+        "锂",
+        "找矿",
+        "技术"
+      ]
+    },
+    {
+      "id": "9b5f795f2c11",
+      "title": "中国黄金协会发布严正声明 谴责非法黄金交易行为",
+      "url": "https://www.cngold.org.cn/news/show-9510.html",
+      "source": "中国黄金协会",
+      "orig_date": "08-28",
+      "orig_date_full": "2026-08-28",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "中国黄金协会发布严正声明，强烈谴责非法黄金交易、违规黄金衍生品炒作等行为，提示行业及消费者注意风险。",
+      "embed": "block",
+      "tags": [
+        "金"
+      ]
+    },
+    {
+      "id": "7ad4564fdfd3",
+      "title": "东方测控与中铁资源签署战略合作协议 携手推进矿山智能化高质量发展",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61851.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-28",
+      "orig_date_full": "2026-08-28",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "东方测控与中铁资源签署战略合作协议，双方将围绕矿山智能化建设开展深度合作，携手推进矿山智能化高质量发展。",
+      "embed": "block",
+      "tags": [
+        "铁",
+        "技术"
+      ]
+    },
+    {
+      "id": "fcb7b3d4dc16",
+      "title": "\"破\"\"立\"之间见成效——华中铜业的扭亏密码",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61841.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-27",
+      "orig_date_full": "2026-08-27",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "面对铜价高位震荡、加工费空间收窄压力，华中铜业1—7月实现盈利131万元，加工费总收入同比增长21.63%，冷轧成品月产量连续两个月突破8000吨。",
+      "embed": "block",
+      "tags": [
+        "铜",
+        "找矿",
+        "市场"
+      ]
+    },
+    {
+      "id": "cf9d1370221b",
+      "title": "2026年有色金属行业经济运行报告会暨有色企业统计信息发布会在济南召开",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473538",
+      "source": "中国有色网",
+      "orig_date": "08-27",
+      "orig_date_full": "2026-08-27",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "8月26日，中国有色金属工业协会主办的2026年有色金属行业经济运行报告会在济南召开，研判行业形势与高质量发展路径。",
+      "embed": "ok",
+      "tags": []
+    },
+    {
+      "id": "acae7e817f22",
+      "title": "中国五矿推进南部非洲片区工作",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473507",
+      "source": "中国有色网",
+      "orig_date": "08-27",
+      "orig_date_full": "2026-08-27",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "中国五矿集团积极推进南部非洲片区业务，包括铜、钴、铬、铂族等关键矿产资源开发与社区协作。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "钴",
+        "铬",
+        "铂"
+      ]
+    },
+    {
+      "id": "94fcf38b0c86",
+      "title": "改革\"必答题\"的标杆解法——西南铝获评国务院国资委\"双百行动\"标杆企业",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61842.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-27",
+      "orig_date_full": "2026-08-27",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "西南铝坚持\"两端发力\"加快产业迭代，布局高性能宽幅铝合金板带、大规格挤压等重点项目，2025年服务国家战略产品产量较2022年增长32%，获评国务院国资委\"双百行动\"标杆企业。",
+      "embed": "block",
+      "tags": [
+        "铝",
+        "金",
+        "市场"
+      ]
+    },
+    {
+      "id": "9032a1c13ecd",
+      "title": "聚集硬核力量 历时五年攻关 新疆有色国家级研发项目通过验收的背后",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61843.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-27",
+      "orig_date_full": "2026-08-27",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "新疆有色集团历时五年攻关的国家级研发项目通过验收，聚焦硬岩矿产、有色金属资源综合利用。",
+      "embed": "block",
+      "tags": [
+        "技术"
+      ]
+    },
+    {
+      "id": "53d536296ea7",
+      "title": "数字孪生贯通采选全链路 中铁资源鹿鸣矿业两项成果入选国家级新质生产力优秀创新成果名录",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61845.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-27",
+      "orig_date_full": "2026-08-27",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "中铁资源鹿鸣矿业的数字孪生贯通采选全链路两项创新成果入选国家级新质生产力名录，标志矿山数字化、智能化升级。",
+      "embed": "block",
+      "tags": [
+        "铁",
+        "技术"
+      ]
+    },
+    {
+      "id": "518c989ed83b",
+      "title": "中铝集团攻克高寒矿区生态修复难题",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61839.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-27",
+      "orig_date_full": "2026-08-27",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "中铝集团在高寒矿区生态修复领域取得技术突破，为高海拔有色金属矿山绿色开发提供可推广方案。",
+      "embed": "block",
+      "tags": [
+        "铝",
+        "政策",
+        "找矿",
+        "技术"
+      ]
+    },
+    {
+      "id": "3fe9ff9ed871",
+      "title": "数智赋能护航矿业高质量发展新征程 2026智能矿山高质量发展大会暨数智赋能本质安全论坛召开",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473443",
+      "source": "中国有色网",
+      "orig_date": "08-25",
+      "orig_date_full": "2026-08-25",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "8月20日，2026智能矿山高质量发展大会在辽宁丹东召开，聚焦数智赋能与矿山本质安全，铜铝锂等金属需求持续增长。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "铝",
+        "锂",
+        "技术",
+        "安全"
+      ]
+    },
+    {
+      "id": "3de679e9ccea",
+      "title": "紫金矿业主营金属产量稳中有进 价值创造能力持续提升",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0825/61822.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-25",
+      "orig_date_full": "2026-08-25",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "紫金矿业发布2026年半年报：矿产金47吨（同比+13%）、矿产铜53.4万吨、当量碳酸锂4.4万吨（同比+496%）；巨龙铜矿改扩建建成投产，马诺诺锂矿提前投产，\"第三增长极\"形成规模贡献。",
+      "embed": "block",
+      "tags": [
+        "铜",
+        "金",
+        "锂",
+        "市场"
+      ]
+    },
+    {
+      "id": "2b82e0d4164f",
+      "title": "利好集聚 锡价有望小幅上涨",
+      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/0825/61828.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-25",
+      "orig_date_full": "2026-08-25",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "锡价受供给收紧与电子需求回升支撑，短期有望小幅上涨。",
+      "embed": "block",
+      "tags": [
+        "锡",
+        "市场"
+      ]
+    },
+    {
+      "id": "2100548c0cef",
+      "title": "下半年财政部将及时谋划出台务实管用的增量政策",
+      "url": "https://www.chinania.org.cn/html/zcfg/zhengcefagui/2026/0825/61821.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-25",
+      "orig_date_full": "2026-08-25",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "财政部表示下半年将及时谋划出台务实管用的增量政策，支撑有色金属产业绿色低碳、智能制造、关键矿产供给。",
+      "embed": "block",
+      "tags": [
+        "政策",
+        "技术"
+      ]
+    },
+    {
+      "id": "d5a41ad01af1",
+      "title": "关于2026年度有色金属企业管理现代化创新成果审定结果的公示",
+      "url": "https://www.chinania.org.cn/html/xiehuidongtai/xiehuitongzhi/2026/0824/61815.html",
+      "source": "中国有色金属工业协会",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "中国有色金属工业协会对2026年度有色金属企业管理现代化创新成果审定结果进行公示，覆盖有色行业管理创新成果。",
+      "embed": "block",
+      "tags": [
+        "政策",
+        "技术"
+      ]
+    },
+    {
+      "id": "950836c35308",
+      "title": "深化产融协同 共促黄金市场高质量发展——中国黄金协会赴上海黄金交易所拜访交流",
+      "url": "https://www.cngold.org.cn/news/show-9515.html",
+      "source": "中国黄金协会",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "8月21日，中国黄金协会党委书记、副会长严弟勇带队赴上海黄金交易所拜访，与上金所总裁孔燕座谈。双方明确将健全长效合作机制，在产业调研、风险防控、政策研究、行业交流等领域协同发力，以深度产融融合助力行业提质升级、共促黄金市场稳健高质量发展。",
+      "embed": "block",
+      "tags": [
+        "金",
+        "政策"
+      ]
+    },
+    {
+      "id": "ac7246f14e9b",
+      "title": "南非希望重回超级矿业大国行列",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260908_10308871.htm",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "据Miningnews.net报道，南非正寻求重回全球矿业大国行列，政府与行业组织目标是在2028年2月前使新投资回升到500亿兰特（约44亿澳元）。南非矿产委员会代表查巴纳在珀斯非澳会议（Africa Down Under）上表示，下一步重点是吸引外部投资。1980年矿业曾占南非GDP的21%，2025年该比例仅5.8%，矿山老化、勘探投资不足与审批缓慢是主因。",
+      "embed": "ok",
+      "tags": [
+        "找矿",
+        "国际"
+      ]
+    },
+    {
+      "id": "edabfcf192a5",
+      "title": "哥伦比亚取消10项限制矿业政策",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260908_10308872.htm",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "据Mining.com报道，为落实阿韦拉多·德拉埃斯普列亚总统重振矿业投资、挖掘铜矿资源潜力的指示，哥伦比亚新政府废除10项限制自然资源勘查开采的政策。矿业部部长阿尔博莱达在卡塔赫纳矿业会议上宣布，前左翼政府时期以环境与土地利用名义出台的措施「设计得很差」，实际阻碍了投资与勘探。该国铜、金、煤、镍潜力大，但冗长许可、监管混乱与安全风险长期限制投资。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "镍",
+        "金",
+        "政策",
+        "找矿",
+        "安全"
+      ]
+    },
+    {
+      "id": "679426faddf0",
+      "title": "7月份美国铜进口量创历史新高",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202609/t20260907_10307769.htm",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "据矿业周刊援引路透社报道，美国7月精炼铜和铜合金进口量达225094吨，为1990年以来最高月度水平，环比增长78%、同比增长8%，贸易商在美方可能加征关税前大量进口。美国商务部原定6月30日前宣布铜市场最新政策但迟迟未出，不确定性推动美国商品交易所铜库存升至创纪录的764597短吨（693630公吨），连续53天上升。美国铜进口46%来自智利，其次刚果（金）占1/4。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "政策",
+        "市场",
+        "国际"
+      ]
+    },
+    {
+      "id": "8c6c356a61bc",
+      "title": "淡水河谷搁置贱金属业务分拆上市",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260907_10307772.htm",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "据Mining.com报道，因巴西国内担心失去对战略矿业资产的控制，淡水河谷（Vale）已搁置其关键矿产业务单独IPO计划。总部位于伦敦的淡水河谷贱金属有限公司（VBM）2023年从母公司拆分成立并筹备上市，承接淡水河谷在加拿大、巴西、日本、英国、印尼的铜、镍、钴资产。2月VBM曾同意出售其加拿大合资企业多数股份，以支撑淡水河谷未来10年铜产量翻番目标——过去一年铜价上涨45%，涨幅近镍的4倍。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "镍",
+        "钴",
+        "市场",
+        "国际"
+      ]
+    },
+    {
+      "id": "bdfba05469c9",
+      "title": "国际锌价逼近4年来新高",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260907_10307773.htm",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "上周五（9月4日）国际矿产品价格多数下跌，锌价逼近四年来新高：LME锌收于3940.00美元/吨、上涨1.09%；铝3294.50美元/吨、跌0.69%；铅1905.00美元/吨、跌0.08%；镍16810.00美元/吨、跌0.50%；锡54850.00美元/吨、涨0.18%。62%品位铁矿粉收于99.65美元/吨、涨0.30%；铀（U3O8）89.50美元/磅持平。COMEX黄金收于4432.6美元/盎司（约142.5美元/克，按1金衡盎司≈31.1035克换算）、跌0.92%；白银65.99美元/盎司、跌1.45%。",
+      "embed": "ok",
+      "tags": [
+        "镍",
+        "铅",
+        "锌",
+        "铝",
+        "金",
+        "银",
+        "锡",
+        "铀",
+        "铁",
+        "市场",
+        "国际"
+      ]
+    },
+    {
+      "id": "afe249ba2ddc",
+      "title": "再度延期！澳洲 Aurukun 铝土矿审批推迟至明年2月，1500万吨项目命运未定",
+      "url": "https://www.ccmn.cn/news/ZX018/202609/f1e611359ea74c178587444cfd8b6b24.html",
+      "source": "长江有色网",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "国家环境保护机构发布通知，将嘉能可与三菱商事联合开发的澳大利亚约克角半岛Aurukun铝土矿项目审批决议时间延长至明年2月12日，延期时长超过100个工作日。这是该项目继6月之后第二次审批延期，这座规划年产1500万吨的铝土矿项目落地节奏再度延后。",
+      "embed": "ok",
+      "tags": [
+        "铝",
+        "政策"
+      ]
+    },
+    {
+      "id": "f79dc3db6048",
+      "title": "从90%跌至67%！MHP钴计价大幅回落，电池企业压价，印尼HPAL厂商利润承压",
+      "url": "https://www.ccmn.cn/news/ZX018/202609/d8fa9b0e0d9940a99228c8415209a260.html",
+      "source": "长江有色网",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "据三位知情人士透露，国内电动汽车电池制造企业正对MHP（氢氧化镍钴）原料中的钴提出更大幅度降价诉求，钴计价系数从此前约90%回落至67%。印尼HPAL高压酸浸企业本身已面临镍矿、硫磺原料成本上行压力，钴计价下调将进一步挤压其利润空间。",
+      "embed": "ok",
+      "tags": [
+        "镍",
+        "钴",
+        "市场",
+        "国际"
+      ]
+    },
+    {
+      "id": "48cfd277d520",
+      "title": "亚行新融资机制旨在重塑亚太关键矿产供应链格局",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473780",
+      "source": "中国有色金属报",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "亚洲开发银行在乌兹别克斯坦举行的第五十九届年会上推出「关键矿产到制造端」融资伙伴关系机制，推动亚太经济体从单纯矿产开采向本土加工、制造、回收等高附加值环节延伸。文章指出亚太普遍存在「富资源、穷链条」格局：印尼镍储量占全球约四成，菲律宾镍矿出口占矿业总产值60%以上但高度依赖原矿出口，蒙古国依赖奥尤陶勒盖铜精矿，哈萨克斯坦铬、铀资源富集但深加工链条薄弱，澳大利亚锂辉石精矿多需境外冶炼。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "镍",
+        "银",
+        "锂",
+        "铀",
+        "铬",
+        "国际"
+      ]
+    },
+    {
+      "id": "91bfbfa00e1e",
+      "title": "ITA发布更新版锡行业生命周期评价基准",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473779",
+      "source": "中国有色金属报",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "国际锡业协会（ITA）发布第二项全行业生命周期评价（LCA）结果，量化精锡生产的环境影响。该研究以2024年为基准年，更新2018/2019年基准，ITA成员企业100%参与、合计产量约占全球精锡产量51%，由Sphera Solutions依ISO 14040/14044标准开展，覆盖采矿、再生物料利用、选矿、冶炼和精炼环节，指标含全球变暖潜势、一次能源需求、蓝水消耗、富营养化、酸化与光化学臭氧生成潜势。",
+      "embed": "ok",
+      "tags": [
+        "锡",
+        "市场",
+        "国际"
+      ]
+    },
+    {
+      "id": "1418bde04c10",
+      "title": "关键矿产安全撞上数十年矿山周期：北美自主化目标与现实脱节",
+      "url": "https://www.mining.com/critical-minerals-security-collides-with-decades-long-mine-timelines",
+      "source": "MINING.COM",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "北美降低对华关键矿产依赖的努力正遭遇许可改革无法解决的瓶颈——判断项目技术与经济可行性仍需多年。在美国，一个矿床从发现到商业化生产往往超过30年，而国家安全与采购目标的时间尺度只有数年。修订后的《国防联邦采购条例补充规定》（DFARS）将于2027年1月生效，要求特定国防用途材料来自非对手国家，并自2026年1月1日起禁用中国原产稀土磁体及相关材料；受访企业界人士认为以当前产能无法按期达标。（原题：Critical minerals security collides with decades-long mine timelines）",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "政策",
+        "找矿",
+        "技术",
+        "安全"
+      ]
+    },
+    {
+      "id": "fd39c4d4d81c",
+      "title": "ACG Metals 逾700万美元收购土耳其 Keşkek 金矿项目",
+      "url": "https://www.mining.com/acg-metals-to-acquire-keskek-gold-project",
+      "source": "MINING.COM",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "ACG Metals（LON: ACG）与 Meta Nikel Kobalt Madencilik 签署约束性协议，以逾700万美元收购含土耳其 Keşkek 金矿项目的采矿许可证100%权益：先期支付400万美元，2027年中实现首次黄金生产后再付385万美元。项目距公司 Gediktepe 矿约70公里（43英里），许可证面积666公顷，所产氧化矿将供现有堆浸设施处理，回收率已提升至约85%；公司称新增黄金产能有望使铜当量年产量从2万吨翻倍至4万吨，并延长 Gediktepe 金矿服务年限数年。（原题：ACG Metals to acquire Keşkek gold project）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "市场"
+      ]
+    },
+    {
+      "id": "c71f07f9bf58",
+      "title": "五矿资源 Dugald River 签署2027—2028年锌精矿销售协议",
+      "url": "https://news.metal.com/en/newscontent/104101668-mmg-dugald-river-signs-2027",
+      "source": "SMM 国际站",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "五矿资源（MMG）9月7日公告，其子公司 Dugald River 与五矿北欧（Minmetals North-Europe）签署锌精矿销售协议，2027年和2028年每年销售约2万干吨，年度交易上限5000万美元。定价以LME特高级锌与LBMA白银价格扣减加工费（TC）确定，以CIF条件交付。Dugald River 位于澳大利亚昆士兰州，是MMG主力锌矿之一。（原题：MMG Dugald River Signs 2027–2028 Zinc Concentrate Sales Agreement）",
+      "embed": "ok",
+      "tags": [
+        "锌",
+        "银",
+        "政策",
+        "市场"
+      ]
+    },
+    {
+      "id": "88b58fbbd27c",
+      "title": "欧盟拟全面禁止向非OECD国家出口废弃物，铝废料在列",
+      "url": "https://news.metal.com/en/newscontent/104101639-eu-industry-chief-proposes-ban-on-waste-exports-to-non-oecd-nations",
+      "source": "SMM 国际站",
+      "orig_date": "09-07",
+      "orig_date_full": "2026-09-07",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "路透布鲁塞尔9月4日电，欧盟产业主管斯特凡纳·塞茹尔内（Stephane Sejourne）提议全面禁止向非OECD国家出口废弃物，铝废料亦在禁止之列，其内阁于周五作出上述表示。塞茹尔内原定于9月23日提出仅限制废料出口的贸易措施，但内部磋商显示该工具覆盖范围有限，最终改为提出全面禁令。若落地将显著影响全球再生铝原料流向。（原题：EU Industry Chief Proposes Ban on Waste Exports to Non-OECD Nations）",
+      "embed": "ok",
+      "tags": [
+        "铝",
+        "国际"
+      ]
+    },
+    {
+      "id": "b85fcba28125",
+      "title": "BMI：未来5年铁矿石产量增速加快",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260901_10303964.htm",
+      "source": "",
+      "orig_date": "09-01",
+      "orig_date_full": "2026-09-01",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "铁",
+        "市场"
+      ]
+    },
+    {
+      "id": "07e7949b96b0",
+      "title": "国际钯价大幅上涨",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260904_10306817.htm",
+      "source": "",
+      "orig_date": "09-04",
+      "orig_date_full": "2026-09-04",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "",
+      "embed": "ok",
+      "tags": [
+        "钯",
+        "市场",
+        "国际"
+      ]
+    },
+    {
+      "id": "efeff6e47549",
+      "title": "政府干预关键矿产“前所未有”",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260903_10305931.htm",
+      "source": "全球矿产资源",
+      "orig_date": "09-03",
+      "orig_date_full": "2026-09-03",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "据Mining.com报道，各国政府不再是传统贷款方，而是直接参与采矿和关键矿产交易，以保障战略供应链安全并改变项目融资方式。2月美国总统特朗普宣布启动“金库计划”，出资120亿美元支持关键矿产战略储备。Fastmarkets统计显示，自2025年1月以来与矿产相关的协议约160个、总额近400亿美元。政府更多采用股权、保底价和长期承购协议等商业投资模式，公共资本与私人资本联手形成混合资本。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "安全"
+      ]
+    },
+    {
+      "id": "efd6317581c5",
+      "title": "国际贵金属价格回升",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202609/t20260903_10305934.htm",
+      "source": "全球矿产资源",
+      "orig_date": "09-03",
+      "orig_date_full": "2026-09-03",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "周三国际矿产品价格多数下跌、贵金属普遍上涨：纽约金收于4387.8美元/盎司涨1.36%，银65.32美元/盎司涨1.95%，钯涨2.25%；LME铜14236美元/吨涨0.35%，铝3292.5美元/吨涨0.61%，镍16890美元/吨涨1.35%，铅、锌、锡小幅走低；铀（U3O8）收89.50美元/磅。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "镍",
+        "铅",
+        "锌",
+        "铝",
+        "金",
+        "银",
+        "锡",
+        "铀",
+        "钯",
+        "市场",
+        "国际"
+      ]
+    },
+    {
+      "id": "bac79ad4c1be",
+      "title": "格陵兰资源公司获最高1.2亿美元融资意向 推进马尔姆杰格钼镁项目",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202609/t20260903_10305933.htm",
+      "source": "全球矿产资源",
+      "orig_date": "09-03",
+      "orig_date_full": "2026-09-03",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "加拿大初级矿业公司格陵兰资源收到北欧投资银行（NIB）最高1.2亿美元融资意向书，为加拿大EDC牵头2.75亿美元支持的补充；马尔姆杰格钼镁项目已完成最终可行性研究，钼金属储量5.71亿磅，前10年年均产钼精矿3280万磅，约为欧盟年消费量的25%。",
+      "embed": "ok",
+      "tags": [
+        "银",
+        "钼",
+        "镁",
+        "国际"
+      ]
+    },
+    {
+      "id": "c60981763659",
+      "title": "西澳穆尔金山钨矿成为世界级矿床",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260902_10305001.htm",
+      "source": "全球矿产资源",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "西澳穆尔金山钨矿资源量更新后跻身世界级矿床行列，全球钨资源供应格局或将生变。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "钨",
+        "找矿",
+        "国际"
+      ]
+    },
+    {
+      "id": "b9bd0e726b95",
+      "title": "印度同赞比亚恢复矿产投资谈判",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202609/t20260902_10304999.htm",
+      "source": "全球矿产资源",
+      "orig_date": "09-02",
+      "orig_date_full": "2026-09-02",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "印度与赞比亚重启矿产投资谈判，聚焦铜及关键矿产的联合勘查开发与供应链合作。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "找矿"
+      ]
+    },
+    {
+      "id": "1dd509bf73e9",
+      "title": "德国有意开发巴西关键矿产",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202609/t20260901_10303965.htm",
+      "source": "全球矿产资源",
+      "orig_date": "09-01",
+      "orig_date_full": "2026-09-01",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "德国寻求与巴西在关键矿产领域开展合作开发，以分散供应链集中度、保障工业原料安全。",
+      "embed": "ok",
+      "tags": [
+        "安全"
+      ]
+    },
+    {
+      "id": "0f80d214f029",
+      "title": "智利和阿根廷推进跨边界铜矿开发",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260831_10302801.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-31",
+      "orig_date_full": "2026-08-31",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "智利与阿根廷两国就跨边界铜矿开发达成共识，推进安第斯山脉铜矿带资源整合与基础设施互联互通。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "国际"
+      ]
+    },
+    {
+      "id": "0e7ab72fe1b1",
+      "title": "西澳州纳纳迪铜金矿钻探见厚富矿体",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260831_10302803.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-31",
+      "orig_date_full": "2026-08-31",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "西澳大利亚州纳纳迪铜金矿项目最新钻探见厚富矿体，铜金勘查取得重要进展，为海外铜金资源开发提供新靶区。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "找矿",
+        "国际"
+      ]
+    },
+    {
+      "id": "d7d21f8dc96c",
+      "title": "美能源部资助关键矿产研发项目",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260828_10301646.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-28",
+      "orig_date_full": "2026-08-28",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "美国能源部宣布资助7个关键矿产研发项目，涉及重稀土、镓、铜等关键材料，依托CMIH专业技术力量攻关重大技术难题，强化关键矿产产业链。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "稀土",
+        "镓",
+        "技术"
+      ]
+    },
+    {
+      "id": "a2eb62f7b95c",
+      "title": "第二季度澳大利亚勘查投资创新高",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202608/t20260828_10301645.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-28",
+      "orig_date_full": "2026-08-28",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "澳大利亚第二季度矿产勘查投资创近年新高，关键矿产（金、铜、镍、锂、稀土）项目增速明显，全球勘查市场延续回暖。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "镍",
+        "金",
+        "稀土",
+        "锂",
+        "找矿",
+        "技术",
+        "国际"
+      ]
+    },
+    {
+      "id": "725677e01bf0",
+      "title": "博利登并购尼克萨资源公司股份",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsbg/202608/t20260828_10301648.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-28",
+      "orig_date_full": "2026-08-28",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "博利登（Boliden）并购尼克萨资源公司股份，交易完成后将发起自愿现金要约收购剩余全部股份，国际矿业并购重组提速。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "国际"
+      ]
+    },
+    {
+      "id": "2e76a598dd61",
+      "title": "巴西罗查稀土矿发现更多高品位矿段",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260828_10301647.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-28",
+      "orig_date_full": "2026-08-28",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "巴西罗查稀土矿阿尔托山矿床在北、南、东侧证实高品位延伸带，共伴生铌钪钽铀品位高，计划钻探5000米进一步圈定矿床范围，新结果尚未纳入资源量估算。",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "铀",
+        "铌",
+        "钽",
+        "找矿"
+      ]
+    },
+    {
+      "id": "2db558541236",
+      "title": "周四国际矿产品价格多数上涨",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202608/t20260828_10301649.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-28",
+      "orig_date_full": "2026-08-28",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "周四国际矿产品价格多数上涨：纽约商品交易所黄金收于4600.5美元/盎司（+0.15%），白银69.26美元/盎司（+1.71%），铂、钯亦有上涨。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "银",
+        "铂",
+        "钯",
+        "市场",
+        "国际"
+      ]
+    },
+    {
+      "id": "72f062300507",
+      "title": "国际铀价突破90美元/磅关口",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kysc/kcpjg/202608/t20260827_10300644.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-27",
+      "orig_date_full": "2026-08-27",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "周三国际矿产品价格多数上涨，铀价收于90.60美元/磅突破90美元关口；LME铜价持平，镍价下跌，黄金收于4593.7美元/盎司。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "镍",
+        "金",
+        "铀",
+        "找矿",
+        "市场",
+        "国际"
+      ]
+    },
+    {
+      "id": "4d174c573243",
+      "title": "智利谢拉戈达铜矿更新资源量",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202608/t20260827_10300640.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-27",
+      "orig_date_full": "2026-08-27",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "智利谢拉戈达铜矿公布最新资源量更新成果，铜资源量较此前估算有所提升，反映南美关键铜矿勘查持续推进。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "找矿",
+        "国际"
+      ]
+    },
+    {
+      "id": "44b5cac9b437",
+      "title": "安大略省威胁切断对美关键矿产供应",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260827_10300641.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-27",
+      "orig_date_full": "2026-08-27",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "加拿大安大略省威胁切断对美关键矿产供应，凸显北美关键矿产供应链地缘风险，相关矿产含镍、锂、铜、钴、稀土等。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "镍",
+        "稀土",
+        "锂",
+        "钴"
+      ]
+    },
+    {
+      "id": "508d96f94fa9",
+      "title": "美国防部第三次军需关键矿产招标",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202608/t20260825_10298748.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-25",
+      "orig_date_full": "2026-08-25",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "美国国防部启动第三次军需关键矿产招标，目标保障军工供应链对稀土、锂、钴、镓、锗等关键矿产的稳定获取。",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "锂",
+        "钴",
+        "镓",
+        "锗"
+      ]
+    },
+    {
+      "id": "1a5fed3814b0",
+      "title": "维里迪斯融资开发科罗苏斯稀土矿",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202608/t20260825_10298753.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-25",
+      "orig_date_full": "2026-08-25",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "澳大利亚维里迪斯公司完成新一轮融资，推进科罗苏斯稀土矿项目开发，海外稀土资源端整合加速。",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "国际"
+      ]
+    },
+    {
+      "id": "e6da6ffe8ebc",
+      "title": "铟泰公司签署布鲁克稀土矿承购协议",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202608/t20260824_10297599.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "铟泰公司签署加拿大布鲁克稀土矿承购协议，海外稀土供应链布局推进。",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "铟",
+        "国际"
+      ]
+    },
+    {
+      "id": "e1f6b4458890",
+      "title": "美国用量子技术赋能关键矿产填图",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/kykj/202608/t20260824_10297596.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "美国采用量子技术开展关键矿产地质填图工作，提升识别精度。",
+      "embed": "ok",
+      "tags": [
+        "技术"
+      ]
+    },
+    {
+      "id": "512c544f2a09",
+      "title": "格陵兰萨法托克铌稀土矿获勘查许可",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260824_10297598.htm",
+      "source": "全球矿产资源",
+      "orig_date": "08-24",
+      "orig_date_full": "2026-08-24",
+      "report_date": "2026-09-09",
+      "category": "国际矿业动态",
+      "is_new": false,
+      "summary": "格陵兰萨法托克铌稀土矿获颁勘查许可，该项目为大型稀土-铌多金属矿，是新一轮关键矿产勘查的重点项目之一。",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "铌",
+        "找矿",
+        "国际"
+      ]
+    }
+  ]
 }

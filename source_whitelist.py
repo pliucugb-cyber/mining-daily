@@ -99,6 +99,7 @@ SKIP_PATTERNS = [
     re.compile(r"mining-daily\.goatcounter\.com", re.I),
     re.compile(r"pliucugb-cyber\.github\.io", re.I),
     re.compile(r"api\.deepseek\.com", re.I),
+    re.compile(r"mining-daily-qa\.netlify\.app", re.I),
 ]
 
 
