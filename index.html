@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2450" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2460" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -69,6 +69,29 @@ body.dark .toc-count-fresh.is-empty{color:var(--ink-500);background:var(--surfac
 .toc-back-top{font-size: var(--fs-meta);color:var(--brand);padding:var(--s2) var(--s3);cursor:pointer;border-radius: var(--r-md);text-align:center;margin-top:var(--s2);border-top:1px solid #f4f6f8;padding-top:var(--s3)}
 .toc-back-top:hover{background:var(--brand-soft)}
 .toc-all{color:#34495e!important}
+/* 视图切换（2026-09-09）：点击目录只渲染目标主区块，消除长页面滚动等待 */
+body[data-view="today"] #archiveSection,
+body[data-view="today"] #rightsSection,
+body[data-view="today"] #installGuideSection,
+body[data-view="today"] #archivedFavSection,
+body[data-view="archive"] #todaySection,
+body[data-view="archive"] #rightsSection,
+body[data-view="archive"] #installGuideSection,
+body[data-view="archive"] #archivedFavSection,
+body[data-view="rights"] #todaySection,
+body[data-view="rights"] #archiveSection,
+body[data-view="rights"] #installGuideSection,
+body[data-view="rights"] #archivedFavSection,
+body[data-view="install"] #briefStrip,
+body[data-view="install"] #digestStrip,
+body[data-view="install"] #priceStrip,
+body[data-view="install"] .stats-bar,
+body[data-view="install"] #todaySection,
+body[data-view="install"] #archiveSection,
+body[data-view="install"] #rightsSection,
+body[data-view="install"] #archivedFavSection,
+body[data-view="install"] .col-rail{display:none!important}
+body[data-view] .toc-main-item.active{background:#e9f1f8}
 .container{max-width:1360px;margin:0 auto;padding:var(--s4)}
 /* ===== 2026-09-08 双栏布局：桌面端「左主列 + 右栏」，消除右侧大片空白 ===== */
 .news-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s5);align-items:start}
@@ -1292,12 +1315,12 @@ body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
 <nav class="toc-sidebar" id="tocSidebar" data-page-node-id="h7lkEHpfaxuwNBZUMU0kSo">
 <div class="toc-title" data-page-node-id="8LRX6eNrJaUyp2fpou5rph">📑 目录导航</div>
 <div class="toc-main-item toc-all active" onclick="showAll();window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="mcjfrkVHVCvuozlWyll2ET">📋 全部内容</div>
-<div class="toc-main-item" data-target="todaySection" onclick="scrollToSection('todaySection',this)" data-page-node-id="EFrXr8SMUaesjIaDEYAhDR">🔥 今日新增 <span class="toc-count toc-count-fresh" id="tocTodayCount">15</span></div>
-<div class="toc-main-item" data-target="archiveSection" onclick="scrollToSection('archiveSection',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容</div>
-<div class="toc-main-item" data-target="rightsSection" onclick="scrollToSection('rightsSection',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易</div>
+<div class="toc-main-item" data-target="todaySection" onclick="switchView('today',this)" data-page-node-id="EFrXr8SMUaesjIaDEYAhDR">🔥 今日新增 <span class="toc-count toc-count-fresh" id="tocTodayCount">15</span></div>
+<div class="toc-main-item" data-target="archiveSection" onclick="switchView('archive',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容</div>
+<div class="toc-main-item" data-target="rightsSection" onclick="switchView('rights',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易</div>
 <div class="toc-main-item" id="tocFavItem" onclick="toggleFavFilter()" style="color:#f39c12" title="只看收藏的条目，并自动定位到第一条" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
 <div class="toc-main-item" id="tocHistoryItem" onclick="toggleHistoryFilter()" style="color:#8e44ad" title="只看浏览过的条目，并自动定位到第一条" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
-<div class="toc-main-item" data-target="installGuideSection" onclick="scrollToSection('installGuideSection',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
+<div class="toc-main-item" data-target="installGuideSection" onclick="switchView('install',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
 
 <div class="toc-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="8iwVYYySScb07F8bSYmelj">↑ 返回顶部</div>
 </nav>
@@ -2277,12 +2300,14 @@ function toggleSpecialFilter(){
   // 点按仅切换筛选，不再滚动到已不存在的 specialSection。
   setFilter(filterMode==='special'?'none':'special');
 }
-function toggleFavFilter(){setFilter(filterMode==='fav'?'none':'fav')}
-function toggleHistoryFilter(){setFilter(filterMode==='history'?'none':'history')}
+function toggleFavFilter(){clearView();setFilter(filterMode==='fav'?'none':'fav')}
+function toggleHistoryFilter(){clearView();setFilter(filterMode==='history'?'none':'history')}
 function showAll(){
   // noScroll=true：本函数自己要回顶部，不能让 setFilter 的 rAF 还原把页面拖回原处
   setFilter('none',true);
+  document.body.removeAttribute('data-view');
   document.querySelectorAll('.toc-main-item').forEach(i=>i.classList.remove('active'));
+  var all=document.querySelector('.toc-all'); if(all)all.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -3039,9 +3064,24 @@ function scrollToSection(id,el){
   if(el)el.classList.add('active');
 }
 
+// ===== 目录视图切换（2026-09-09）：点击只渲染目标区块，避免长页面滚动等待 =====
+function switchView(view, el){
+  if(document.body.dataset.view===view){ showAll(); return; } // 再次点击同一项 → 返回全部
+  if(filterMode!=='none'){ setFilter('none', true); }           // 视图切换前先清跨区块筛选，避免叠加混乱
+  if(view==='all'){ document.body.removeAttribute('data-view'); }
+  else { document.body.dataset.view=view; }
+  document.querySelectorAll('.toc-main-item').forEach(function(i){i.classList.remove('active');});
+  var all=document.querySelector('.toc-all');
+  if(el){ el.classList.add('active'); }
+  else if(view==='all'&&all){ all.classList.add('active'); }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function clearView(){ document.body.removeAttribute('data-view'); }
+
 // ===== 滚动监听：当前区块高亮 =====
 let lastActiveId=null;
 function updateActiveSection(){
+  if(document.body.dataset.view)return; // 视图模式下高亮由 switchView 控制，滚动监听不干扰
   const sections=['hotListSection','todaySection','archiveSection','rightsSection','installGuideSection'];
   const offset=120;
   let current=sections[0];
