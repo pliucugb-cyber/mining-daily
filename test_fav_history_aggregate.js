@@ -70,6 +70,12 @@ setTimeout(() => {
     check('fav 聚合列表条目数 = fav 总数（含归档2条）', favListCount === 2, 'count=' + favListCount);
     const favTitle = document.querySelector('#archivedFavSection .section-title').childNodes[0].textContent;
     check('fav 聚合区标题为「我的收藏」', favTitle.indexOf('我的收藏') >= 0, favTitle);
+    check('fav 模式下 body 带 data-filter-mode="fav"', document.body.dataset.filterMode === 'fav');
+    check('fav 模式下 header 隐藏', disp('todaySection') === 'none'); // header 已被隐藏，用通用区块断言占位
+    const header = document.querySelector('.header');
+    check('fav 模式下 .header 隐藏', !header || window.getComputedStyle(header).display === 'none', header && window.getComputedStyle(header).display);
+    const rail = document.querySelector('.col-rail');
+    check('fav 模式下 .col-rail 隐藏', !rail || window.getComputedStyle(rail).display === 'none', rail && window.getComputedStyle(rail).display);
 
     // 2) 退出 fav → 恢复默认
     window.setFilter('none', true);
@@ -85,6 +91,23 @@ setTimeout(() => {
     check('history 聚合列表条目数 = history 总数（含归档2条）', histListCount === 2, 'count=' + histListCount);
     const histTitle = document.querySelector('#archivedFavSection .section-title').childNodes[0].textContent;
     check('history 聚合区标题为「浏览记录」', histTitle.indexOf('浏览记录') >= 0, histTitle);
+    check('history 模式下 body 带 data-filter-mode="history"', document.body.dataset.filterMode === 'history');
+
+    // 4) 清空收藏/历史后进入 fav，应显示空态提示
+    window.localStorage.removeItem('mining_daily_favorites');
+    window.localStorage.removeItem('mining_daily_history');
+    window.setFilter('fav', true);
+    const empty = document.querySelector('#archFavList .aggregate-empty');
+    check('fav 空态提示存在', !!empty);
+    check('fav 空态文案含收藏引导', !!empty && empty.textContent.indexOf('暂无收藏条目') >= 0, empty && empty.textContent);
+    window.setFilter('history', true);
+    const emptyH = document.querySelector('#archFavList .aggregate-empty');
+    check('history 空态提示存在', !!emptyH);
+    check('history 空态文案含浏览引导', !!emptyH && emptyH.textContent.indexOf('暂无浏览记录') >= 0, emptyH && emptyH.textContent);
+
+    // 5) 退出筛选后 data-filter-mode 清除
+    window.setFilter('none', true);
+    check('退出筛选后 body 无 data-filter-mode', !document.body.dataset.filterMode);
 
     check('无阻塞性 JS 错误', errors.length === 0, errors.join(' | '));
   } catch (e) {

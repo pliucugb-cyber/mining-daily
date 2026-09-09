@@ -291,7 +291,9 @@ setTimeout(() => {
     _scrolls.length = 0;
     window.toggleFavFilter();
     const got = _scrolls.length ? (_scrolls[0].top != null ? _scrolls[0].top : _scrolls[0][1]) : null;
-    check('\u246a \u6536\u85cf\u7b5b\u9009\u6eda\u5230\u9996\u6761\u547d\u4e2d\u9879', got === farIdx * 100 - 16, 'got=' + got + ' \u671f\u671b=' + (farIdx * 100 - 16));
+    // 2026-09-09 晚：收藏改为沉浸式聚合视图，命中条目集中在 #archivedFavSection 顶部，
+    // 因此滚动目标不再是原归档区深处的条目，而是顶部列表区域（<=100）。
+    check('\u246a \u6536\u85cf\u7b5b\u9009\u6eda\u5230\u5217\u8868\u9876\u90e8', got != null && got <= 100, 'got=' + got);
 
     _scrolls.length = 0;
     window.toggleFavFilter();
