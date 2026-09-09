@@ -60,3 +60,6 @@ netlify/.site.json
 .automation.lock
 .last_run_status.json
 .preflight_status.json
+
+# ===== 本地 node_modules（仅测试用 junction，指向托管 node workspace，不入库）=====
+node_modules/

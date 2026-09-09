@@ -103,6 +103,27 @@ async function callDeepSeek(apiKey, payload) {
   return data;
 }
 
+// 流式版本：返回 DeepSeek 的 SSE 原始流（不 json 转换），由前端边收边渲染
+async function callDeepSeekStream(apiKey, payload) {
+  const body = Object.assign({
+    model: 'deepseek-chat',
+    max_tokens: 1000,
+    temperature: 0.3,
+    stream: true,
+  }, payload || {});
+
+  const resp = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + apiKey,
+      'Accept': 'text/event-stream',
+    },
+    body: JSON.stringify(body),
+  });
+  return resp;
+}
+
 export default async (request, context) => {
   const url = new URL(request.url);
   const origin = request.headers.get('Origin');
@@ -159,6 +180,27 @@ export default async (request, context) => {
       let data;
       if (msgs.length) {
         // ① 透传模式：前端已构造完整对话
+        if (body.stream) {
+          // Phase B：流式转发 DeepSeek SSE，前端边收边渲染
+          const dsResp = await callDeepSeekStream(apiKey, {
+            messages: msgs,
+            max_tokens: body.max_tokens || 1000,
+            temperature: body.temperature == null ? 0.3 : body.temperature,
+          });
+          if (!dsResp.ok) {
+            const d = await dsResp.json().catch(() => ({}));
+            const msg = (d && d.error && d.error.message) || ('HTTP ' + dsResp.status);
+            return new Response(JSON.stringify(fallbackResponse(keywordFallback(question), msg)),
+              { status: 200, headers: corsHeaders(origin) });
+          }
+          const sseHeaders = Object.assign({}, corsHeaders(origin), {
+            'Content-Type': 'text/event-stream; charset=utf-8',
+            'Cache-Control': 'no-store',
+            'Connection': 'keep-alive',
+            'X-Accel-Buffering': 'no',
+          });
+          return new Response(dsResp.body, { status: 200, headers: sseHeaders });
+        }
         data = await callDeepSeek(apiKey, {
           messages: msgs,
           max_tokens: body.max_tokens || 1000,
