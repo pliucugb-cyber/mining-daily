@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-1530" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-1548" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -4527,12 +4527,13 @@ function qaFloatSearch(){
     if(from)cond.push(from+' 起');
     html='<div>找到 <b>'+hits.length+'</b> 条相关新闻'+(cond.length?' · '+cond.join(' · '):'')+'：</div>';
     if(QA_TREND)html+='<div class="qa-trend">'+qaEsc(qaTrendText(hits))+'</div>';
-    var lim=Math.min(hits.length,8);
+    // 渲染全部命中结果（qa-float-body 可滚动）；设 100 条安全上限防止极端关键词
+    var lim=Math.min(hits.length,100);
     for(var i=0;i<lim;i++){
       var r=hits[i];
       html+='<a class="qa-msg-item" href="'+qaEsc(r.u)+'" target="_blank" rel="noopener"><span class="qd">'+qaEsc(r.d||'????-??-??')+'</span>'+qaEsc(r.t)+'<span class="qs">'+qaEsc(r.s||'')+'</span></a>';
     }
-    if(hits.length>lim)html+='<div style="margin-top:4px;color:#6b7a89">共 '+hits.length+' 条，可缩小矿种 / 主题 / 时间范围查看全部。</div>';
+    if(hits.length>lim)html+='<div style="margin-top:4px;color:#6b7a89">为防列表过长，仅显示前 '+lim+' 条；共 '+hits.length+' 条命中，请缩小关键词 / 矿种 / 时间范围查看其余。</div>';
   }
   qaFloatAdd('ai',html,'全库 '+QA_ROWS.length+' 条 · 检索于本地，不经任何服务',{html:true});
   qaSaveHistory();
