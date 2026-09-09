@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2490" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2491" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -2435,6 +2435,10 @@ function applyFilter(){
 // 等数据渲染完再没有任何代码恢复显示。
 // 修复：① 按各区块真实子元素判断 ② 抽成函数，异步渲染后由 mdRefreshSections() 重新评估。
 function refreshSectionVisibility(){
+  // 聚合视图（收藏/浏览记录）由 applyFilter 显式控制各区块显隐，避免这里按子元素数量把
+  // today/archive 重新显示出来，导致用户仍看到旧的折叠日组而非干净的聚合列表。
+  const fm=document.body.dataset.filterMode;
+  if(fm==='fav'||fm==='history')return;
   document.querySelectorAll('.section').forEach(sec=>{
     // 静态说明区：跳过新闻数判断常显
     if(sec.id==='installGuideSection'||sec.id==='archivedFavSection'||sec.id==='rightsSection')return;
