@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2494" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2495" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -2552,11 +2552,13 @@ function _afToggleItems(collapsed, startNode, stopPredicate){
       }
     }else if(sib.classList && sib.classList.contains('news-item')){
       // 分类折叠时藏起所有条目；展开时，超过14天的旧闻且未点「展开更早内容」保持隐藏，
-      // 其余条目交由所属日组控制（避免展开分类时把已折叠的日组条目也露出来）。
+      // 其余条目恢复显示（无日组的分类如「国际矿业动态」全靠这里展开）。
       if(collapsed){
         sib.style.display='none';
       }else if(sib.classList.contains('old-folded') && !oldExpanded){
         sib.style.display='none';
+      }else{
+        sib.style.display='';
       }
     }
     sib=sib.nextElementSibling;
