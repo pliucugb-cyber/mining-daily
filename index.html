@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-1548" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2345" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -531,6 +531,13 @@ body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 .qa-msg-item:hover{color:var(--tag-strategy)}
 .qa-msg-item .qd{color:var(--ink-500);font-size: var(--fs-meta);margin-right:5px}
 .qa-msg-item .qs{color:var(--ink-500);font-size: var(--fs-meta);margin-left:5px}
+.qa-msg-item .qt{display:block;font-weight:600;color:var(--ink-900);font-size:var(--fs-body);line-height:1.5;margin:2px 0}
+.qa-msg-item .qm{display:block;color:var(--ink-500);font-size:var(--fs-meta);line-height:1.55;margin:1px 0 3px}
+.qa-msg-item mark{background:#fff3bf;color:inherit;border-radius:2px;padding:0 1px;font-weight:600}
+.qa-msg-item .qt mark{background:#ffe27a}
+.qa-sug-row{margin-top:6px;font-size:var(--fs-meta);color:var(--ink-500);line-height:1.9}
+.qa-sug{display:inline-block;margin:2px 5px 2px 0;padding:2px 9px;border:1px solid #cdd8e6;border-radius:13px;background:#eef3fb;color:#3b5bdb;cursor:pointer;user-select:none}
+.qa-sug:hover{background:var(--tag-strategy);color:#fff;border-color:var(--tag-strategy)}
 .qa-float-foot{position:relative;z-index:3;display:flex;gap:var(--s2);padding:var(--s3);border-top:1px solid var(--line-1);background:var(--surface)}
 .qa-float-input{position:relative;z-index:4;flex:1;border:1px solid #dbe2ea;border-radius: var(--r-md);padding:var(--s2) var(--s3);font-size: var(--fs-body);outline:none}
 .qa-float-input:focus{border-color:var(--tag-strategy)}
@@ -755,6 +762,11 @@ body.dark .pchart-down{color:#5fd39a}
 /* ---- 问答浮球 / AI 解析 ---- */
 body.dark .qa-msg-meta{color:var(--ink-500)}
 body.dark .qa-msg-item .qd,body.dark .qa-msg-item .qs{color:var(--ink-500)}
+body.dark .qa-msg-item .qt{color:var(--brand-ink)}
+body.dark .qa-msg-item mark{background:#5b4b16;color:#ffe9a8}
+body.dark .qa-msg-item .qt mark{background:#6b5a1e}
+body.dark .qa-sug{background:var(--surface-3);border-color:var(--line-1);color:#a5b4fc}
+body.dark .qa-sug:hover{background:#4f46e5;color:#fff}
 body.dark .section-title.ai .ai-sub{color:var(--ink-500)}
 body.dark .ai-row .ai-label{background:#232a4d;color:#a5b4fc}
 body.dark .ai-row.risk .ai-label{background:#3d1f24;color:#fca5a5}
@@ -3739,6 +3751,29 @@ function qaTrendText(rows){
   }).join('\n');
 }
 function qaEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+// 关键词高亮：先转义再对（含同义词）的词包裹 <mark>，避免 XSS
+function qaHi(text,words){
+  var esc=qaEsc(text);
+  if(!words||!words.length)return esc;
+  var terms={};
+  words.forEach(function(w){qaExpand(w).forEach(function(a){if(a)terms[a]=1;});});
+  var arr=Object.keys(terms).filter(Boolean).sort(function(a,b){return b.length-a.length;});
+  if(!arr.length)return esc;
+  var re=new RegExp('('+arr.map(function(t){return qaEsc(t).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}).join('|')+')','g');
+  return esc.replace(re,'<mark>$1</mark>');
+}
+// 摘要片段：截取正文前若干字，尽量在句末/空格处断开，过长加省略号
+function qaSnippet(m){
+  var s=(m||'').trim();
+  if(!s)return '';
+  var max=56;
+  if(s.length>max){
+    var cut=s.slice(0,max);
+    var idx=Math.max(cut.lastIndexOf('。'),cut.lastIndexOf('，'),cut.lastIndexOf(' '));
+    s=(idx>20?cut.slice(0,idx+1):cut)+'…';
+  }
+  return s;
+}
 // qaRender 已迁移至悬浮球（qaFloatSearch），不再渲染到主内容区 qaResult
 
 // qaReset 已迁移至悬浮球（qaFloatReset)
@@ -4518,27 +4553,54 @@ function qaFloatSearch(){
   if(!hits.length&&words.length>1){hits=qaFilter(QA_ROWS,words,mineral,topic,from,'or');relaxed=true;}
   var html='';
   if(!hits.length){
-    html='<div>全库未检索到匹配内容。<b>这不等于「没有发生」</b>——本库由日报每日追加，存在抓取缺口。建议减少关键词或换更通用的说法。</div>';
+    var sugg=qaSuggestChips(words);
+    html='<div>全库未检索到匹配内容。<b>这不等于「没有发生」</b>——本库由日报每日追加，存在抓取缺口。</div>';
+    if(sugg)html+='<div class="qa-sug-row">建议减少关键词，或试试：'+sugg+'</div>';
   }else{
     var cond=[];
     if(words.length)cond.push('关键词「'+qaEsc(q)+'」'+(relaxed?'（已放宽为任一词）':'（同时含）'));
     if(mineral)cond.push('矿种='+qaEsc(mineral));
     if(topic)cond.push('主题='+qaEsc(topic));
     if(from)cond.push(from+' 起');
-    html='<div>找到 <b>'+hits.length+'</b> 条相关新闻'+(cond.length?' · '+cond.join(' · '):'')+'：</div>';
+    // 按相关度重排（仅当用户输入了关键词；仅有筛选条件时保持原顺序）
+    if(q)hits=qaRankByRelevance(q,hits);
+    html='<div>找到 <b>'+hits.length+'</b> 条相关新闻'+(cond.length?' · '+cond.join(' · '):'')+(q?'（按相关度排序）':'')+'：</div>';
     if(QA_TREND)html+='<div class="qa-trend">'+qaEsc(qaTrendText(hits))+'</div>';
     // 渲染全部命中结果（qa-float-body 可滚动）；设 100 条安全上限防止极端关键词
     var lim=Math.min(hits.length,100);
     for(var i=0;i<lim;i++){
       var r=hits[i];
-      html+='<a class="qa-msg-item" href="'+qaEsc(r.u)+'" target="_blank" rel="noopener"><span class="qd">'+qaEsc(r.d||'????-??-??')+'</span>'+qaEsc(r.t)+'<span class="qs">'+qaEsc(r.s||'')+'</span></a>';
+      var snip=qaSnippet(r.m);
+      html+='<a class="qa-msg-item" href="'+qaEsc(r.u)+'" target="_blank" rel="noopener">'+
+        '<span class="qd">'+qaEsc(r.d||'????-??-??')+'</span>'+
+        '<span class="qt">'+qaHi(r.t,words)+'</span>'+
+        (snip?'<span class="qm">'+qaHi(snip,words)+'</span>':'')+
+        '<span class="qs">'+qaEsc(r.s||'')+'</span></a>';
     }
     if(hits.length>lim)html+='<div style="margin-top:4px;color:#6b7a89">为防列表过长，仅显示前 '+lim+' 条；共 '+hits.length+' 条命中，请缩小关键词 / 矿种 / 时间范围查看其余。</div>';
   }
   qaFloatAdd('ai',html,'全库 '+QA_ROWS.length+' 条 · 检索于本地，不经任何服务',{html:true});
   qaSaveHistory();
 }
-// 本地关键词兜底库：后端不可达时，仍能给出基于通用矿业知识的回答
+// 0 结果时的兜底建议：推荐与 query 字符相近的矿种/主题，点击直接套用筛选重搜
+function qaSuggestChips(words){
+  var pool=QA_MINERALS.concat(QA_TOPICS);
+  var near=[];
+  (words||[]).forEach(function(w){
+    pool.forEach(function(p){
+      if(p!==w&&(p.indexOf(w)>=0||w.indexOf(p)>=0)&&near.indexOf(p)<0)near.push(p);
+    });
+  });
+  var list=near.length?near.slice(0,8):QA_MINERALS.slice(0,8);
+  return list.map(function(p){
+    return '<span class="qa-sug" role="button" tabindex="0" onclick="qaSugPick(\''+qaEsc(p)+'\')">'+qaEsc(p)+'</span>';
+  }).join('');
+}
+function qaSugPick(m){
+  var sel=document.getElementById('qaFloatMineral');
+  if(sel)sel.value=m;
+  qaFloatSearch();
+}
 var QA_AI_FALLBACK=[
   [['铜','Cu'],'铜（Cu）是有色金属中的重要品种，广泛应用于电力、建筑、交通等领域。'],
   [['铝','Al','铝土矿'],'铝（Al）具有轻质、耐腐蚀等特性，广泛应用于航空航天、汽车制造、包装容器等领域。中国铝土矿资源对外依存度较高，广西、河南、贵州、山西是主要产区。'],
