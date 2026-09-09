@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2355" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2410" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -550,6 +550,9 @@ body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 .qa-float-btn{position:relative;z-index:4;border:none;border-radius: var(--r-md);padding:var(--s2) var(--s3);font-size: var(--fs-meta);font-weight:700;cursor:pointer;background:var(--surface-3);color:var(--ink-900)}
 .qa-float-btn.primary{background:var(--tag-strategy);color:#fff}
 .qa-float-btn:disabled{opacity:.5;cursor:not-allowed}
+.qa-mic{padding:var(--s2) var(--s3)}
+.qa-mic.on{background:#e03131;color:#fff;animation:qa-mic-pulse 1s infinite}
+@keyframes qa-mic-pulse{0%{box-shadow:0 0 0 0 rgba(224,49,49,.5)}70%{box-shadow:0 0 0 7px rgba(224,49,49,0)}100%{box-shadow:0 0 0 0 rgba(224,49,49,0)}}
 .qa-float-tip{font-size: var(--fs-nano);color:#8a98a6;padding:var(--s2) var(--s3) var(--s3);background:var(--surface);border-top:1px solid #f1f4f7;line-height:1.4;user-select:none}
 body.dark .qa-float{background:var(--surface);border-color:var(--line-1)}
 body.dark .qa-float-body{background:var(--bg)}
@@ -4545,6 +4548,37 @@ function qaExportHistory(btn){
     });
   }catch(e){}
 }
+// ===== Phase D：语音输入（Web Speech API，不支持的浏览器自动隐藏按钮）=====
+var QA_REC=null;
+function qaGetRec(){return (typeof window!=='undefined')?(window.SpeechRecognition||window.webkitSpeechRecognition||null):null;}
+function qaInitMic(){
+  var btn=document.getElementById('qaFloatMic');
+  if(!btn)return;
+  if(!qaGetRec()){btn.style.display='none';return;}
+  btn.addEventListener('click',qaToggleMic);
+}
+function qaToggleMic(){
+  var btn=document.getElementById('qaFloatMic'),inp=document.getElementById('qaFloatInput');
+  var SR=qaGetRec();
+  if(!SR){if(btn)btn.style.display='none';return;}
+  if(QA_REC&&QA_REC.active){try{QA_REC.stop();}catch(e){}return;}
+  var rec;
+  try{rec=new SR();}catch(e){return;}
+  QA_REC=rec;rec.lang='zh-CN';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
+  rec.onresult=function(ev){
+    var txt='';
+    for(var i=0;i<ev.results.length;i++){txt+=ev.results[i][0].transcript;}
+    if(inp)inp.value=txt;
+  };
+  rec.onerror=function(e){
+    if(btn){btn.classList.remove('on');btn.textContent='🎤';}
+    QA_REC=null;
+    var msg=(e&&e.error==='not-allowed')?'麦克风权限被拒绝':((e&&e.error)||'未知错误');
+    qaFloatAdd('ai','🎤 语音识别失败（'+msg+'）。请检查浏览器麦克风权限，或直接在输入框键入。','',{md:false});
+  };
+  rec.onend=function(){if(btn){btn.classList.remove('on');btn.textContent='🎤';}QA_REC=null;};
+  try{rec.start();if(btn){btn.classList.add('on');btn.textContent='⏹';}}catch(e){QA_REC=null;}
+}
 function qaFloatSearch(){
   var inp=document.getElementById('qaFloatInput');if(!inp)return;
   var q=(inp.value||'').trim();
@@ -5481,6 +5515,7 @@ function toggleTheme(){
   <div class="qa-float-body" id="qaFloatBody" data-page-node-id="nd0EyI5kVl0DOVnIlIBaWb"></div>
   <div class="qa-float-foot" data-page-node-id="ClSV4Aqm5KW0LZGGVEAZMx">
     <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="" aria-label="输入问题" autocomplete="off" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX">
+    <button class="qa-float-btn qa-mic" id="qaFloatMic" type="button" title="语音输入" aria-label="语音输入">🎤</button>
     <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词" onclick="qaFloatSearch()" data-page-node-id="DcqZEFlU8VgjnfLfZc4l82">检索</button>
     <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答" onclick="qaFloatAsk()" data-page-node-id="qJ4h2ouUiWwBV8nMhyMoNF">AI</button>
   </div>
@@ -5565,6 +5600,7 @@ function toggleTheme(){
   // 2026-09-08 晚修复：qaAiProbe 此前只在脚本解析期调用（那时 #qaFloatAi 还没渲染，b 恒为 null，
   // 探针从未生效过）；面板 DOM 就绪后这里补一次，按钮文案/提示才能按「代理可用/需自填 Key」正确显示。
   try{ qaAiProbe(); }catch(e){}
+  try{ qaInitMic(); }catch(e){}
   document.addEventListener('keydown',function(e){
     if(e.key!=='Escape')return;
     pcChartClose();
