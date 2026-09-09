@@ -47,15 +47,22 @@ function disp(id) {
 
 setTimeout(() => {
   try {
+    // 取页面内真实 URL，模拟「收藏了今日区和往期区各一条」的场景，用来暴露
+    // refreshSectionVisibility 按子元素数量重新显示 today/archive 的 bug。
+    const firstTodayItem = document.querySelector('#todaySection .news-item');
+    const firstArchiveItem = document.querySelector('#archiveSection .news-item');
+    const todayUrl = firstTodayItem ? firstTodayItem.dataset.url : 'https://example.com/fav1';
+    const archiveUrl = firstArchiveItem ? firstArchiveItem.dataset.url : 'https://example.com/fav2';
+
     // 预设 localStorage 收藏
     const sampleFavs = [
-      { url: 'https://example.com/fav1', title: '收藏测试1', src: '测试源', date: '09-09' },
-      { url: 'https://example.com/fav2', title: '收藏测试2', src: '测试源', date: '09-08' }
+      { url: todayUrl, title: '收藏测试1', src: '测试源', date: '09-09' },
+      { url: archiveUrl, title: '收藏测试2', src: '测试源', date: '09-08' }
     ];
     window.localStorage.setItem('mining_daily_favorites', JSON.stringify(sampleFavs));
     const sampleHistory = [
-      { url: 'https://example.com/hist1', title: '历史测试1', src: '测试源', time: new Date('2026-09-09T10:00:00').toISOString() },
-      { url: 'https://example.com/hist2', title: '历史测试2', src: '测试源', time: new Date('2026-09-08T10:00:00').toISOString() }
+      { url: todayUrl, title: '历史测试1', src: '测试源', time: new Date('2026-09-09T10:00:00').toISOString() },
+      { url: archiveUrl, title: '历史测试2', src: '测试源', time: new Date('2026-09-08T10:00:00').toISOString() }
     ];
     window.localStorage.setItem('mining_daily_history', JSON.stringify(sampleHistory));
 
@@ -67,7 +74,7 @@ setTimeout(() => {
     check('fav 模式下 archiveSection 隐藏', disp('archiveSection') === 'none', disp('archiveSection'));
     check('fav 模式下 archivedFavSection 显示', disp('archivedFavSection') !== 'none', disp('archivedFavSection'));
     const favListCount = document.getElementById('archFavList').querySelectorAll('.news-item').length;
-    check('fav 聚合列表条目数 = fav 总数（含归档2条）', favListCount === 2, 'count=' + favListCount);
+    check('fav 聚合列表条目数 = fav 总数（2条页面内收藏）', favListCount === 2, 'count=' + favListCount);
     const favTitle = document.querySelector('#archivedFavSection .section-title').childNodes[0].textContent;
     check('fav 聚合区标题为「我的收藏」', favTitle.indexOf('我的收藏') >= 0, favTitle);
     check('fav 模式下 body 带 data-filter-mode="fav"', document.body.dataset.filterMode === 'fav');
@@ -76,6 +83,9 @@ setTimeout(() => {
     check('fav 模式下 .header 隐藏', !header || window.getComputedStyle(header).display === 'none', header && window.getComputedStyle(header).display);
     const rail = document.querySelector('.col-rail');
     check('fav 模式下 .col-rail 隐藏', !rail || window.getComputedStyle(rail).display === 'none', rail && window.getComputedStyle(rail).display);
+    // 关键回归：即使收藏的条目落在 today/archive 区块内，这两个区块也不得被 refreshSectionVisibility 重新显示
+    check('fav 模式下即使收藏了今日条目，todaySection 仍隐藏', disp('todaySection') === 'none', disp('todaySection'));
+    check('fav 模式下即使收藏了往期条目，archiveSection 仍隐藏', disp('archiveSection') === 'none', disp('archiveSection'));
 
     // 2) 退出 fav → 恢复默认
     window.setFilter('none', true);
@@ -88,10 +98,12 @@ setTimeout(() => {
     check('history 模式下 archiveSection 隐藏', disp('archiveSection') === 'none', disp('archiveSection'));
     check('history 模式下 archivedFavSection 显示', disp('archivedFavSection') !== 'none', disp('archivedFavSection'));
     const histListCount = document.getElementById('archFavList').querySelectorAll('.news-item').length;
-    check('history 聚合列表条目数 = history 总数（含归档2条）', histListCount === 2, 'count=' + histListCount);
+    check('history 聚合列表条目数 = history 总数（2条页面内历史）', histListCount === 2, 'count=' + histListCount);
     const histTitle = document.querySelector('#archivedFavSection .section-title').childNodes[0].textContent;
     check('history 聚合区标题为「浏览记录」', histTitle.indexOf('浏览记录') >= 0, histTitle);
     check('history 模式下 body 带 data-filter-mode="history"', document.body.dataset.filterMode === 'history');
+    check('history 模式下即使记录了今日条目，todaySection 仍隐藏', disp('todaySection') === 'none', disp('todaySection'));
+    check('history 模式下即使记录了往期条目，archiveSection 仍隐藏', disp('archiveSection') === 'none', disp('archiveSection'));
 
     // 4) 清空收藏/历史后进入 fav，应显示空态提示
     window.localStorage.removeItem('mining_daily_favorites');
