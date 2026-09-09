@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2500" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2501" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -176,6 +176,8 @@ body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
 .stat-item{font-size: var(--fs-h3);display:flex;align-items:center;gap:var(--s2)}
 .stat-num{font-weight:700;font-size: var(--fs-h1)}
 .stat-num.new{color:var(--up)}
+.stats-left{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap}
+.stats-actions{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;margin-left:auto}
 .stat-num.unread{color:var(--brand)}
 .btn{border:none;border-radius: var(--r-md);padding:var(--s2) var(--s4);font-size: var(--fs-body);cursor:pointer;font-weight:500;transition:.2s}
 .btn-allread{background:var(--success);color:#fff;margin-left:auto}
@@ -991,7 +993,7 @@ body.dark .guide-toggle:hover{background:#1d4558}
    改为：标题 flex:1 1 100% 独占一整行，圆点/NEW/战略退为上方眉标行 */
 .news-head{flex-wrap:wrap;row-gap:var(--s2)}
 .news-title{flex:1 1 100%;line-height:1.5;word-break:break-word}
-.stats-bar{gap:var(--s2)}.btn-allread{margin-left:0}
+.stats-bar{gap:var(--s2)}.stats-actions{margin-left:0;width:100%;justify-content:flex-end;margin-top:var(--s2)}.btn-allread{margin-left:0}
 .sub-cat{font-size: var(--fs-h3);padding:var(--s3) var(--s4) var(--s3) var(--s5)}
 .section-title{font-size: var(--fs-h2);padding:var(--s3) var(--s4)}
 .price-card{min-width:92px;padding:var(--s2) var(--s3) var(--s2)}
@@ -1210,13 +1212,6 @@ body.dark .nf-chip{background:#22303d;color:#9fc0db}
 body.dark .nf-chip.active{background:#3a6ea5;color:#fff}
 body.dark .nf-export-btn{background:#1b2733;color:var(--ink-700);border-color:#2a3a4a}
 @media print{.news-filter-bar{display:none!important}.nf-export-btn{display:none!important}}
-/* 顶栏筛选下拉（2026-09-09）：只看新增 / 战略 收进「筛选 ▾」 */
-.nf-filter-dropdown{position:relative;display:inline-flex}
-.nf-filter-toggle{margin-left:8px}
-.nf-filter-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:40;display:flex;flex-direction:column;gap:var(--s2);padding:var(--s2);background:var(--surface);border:1px solid #e2eaf2;border-radius:var(--r-lg);box-shadow:var(--shadow-sm);min-width:168px}
-.nf-filter-menu[hidden]{display:none!important}
-.nf-filter-menu .btn{margin-left:0;width:100%;text-align:left}
-body.dark .nf-filter-menu{background:#1b2733;border-color:#2a3a4a}
 </style>
 <!-- GoatCounter 访问统计 -->
 <script data-goatcounter="https://mining-daily.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -1424,18 +1419,14 @@ body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
 </div>
 <!-- 新闻问答检索条已迁移至左下角悬浮球（2026-09-04）：矿种/主题/时间筛选与趋势图均在悬浮面板内 -->
 <div class="stats-bar" data-page-node-id="EoOLZaHOAyILUmcQ3BrjXq">
-<div class="stat-item" data-page-node-id="qdL7R3H5cQel1TGlaAOjBX"><span class="stat-num new" id="newCount" data-page-node-id="Kq8VtLiI4rbjaAAeq73UHm">0</span> 今日新增</div>
-<div class="stat-item" data-page-node-id="ejCuf2fXHfB3cyRPOf9dRR"><span class="stat-num unread" id="unreadCount" data-page-node-id="v1vidu9uGTqw3sW6iSpU8P">0</span> 条未读</div>
-<button class="btn btn-unread" id="unreadBtn" onclick="toggleUnreadFilter()" title="只看未读新闻，已读自动隐藏" style="margin-left:8px" data-page-node-id="1nOFKduaEohpYtuH40b9P7">📭 未读</button>
-<div class="nf-filter-dropdown">
-  <button class="btn btn-filter-toggle" onclick="toggleFilterDropdown()" aria-haspopup="true" aria-expanded="false" data-page-node-id="nbxFltrDd">筛选 ▾</button>
-  <div class="nf-filter-menu" id="filterDropdownMenu" hidden>
-    <button class="btn btn-filter" id="filterBtn" onclick="toggleFilter();toggleFilterDropdown(false)" data-page-node-id="1XbkppHk2kb9XOvQJvErbE">只看新增</button>
-    <button class="btn btn-special" id="specialBtn" onclick="toggleSpecialFilter();toggleFilterDropdown(false)" title="只看带「战略」徽章的重点条目（找矿突破战略行动等相关）" data-page-node-id="SwqabUoMhhdIECcKQt99zH">⭐ 战略 <span id="specialCountNum" data-page-node-id="aFDvR8jlFT5s81RK6xpcBJ">0</span></button>
-  </div>
+<div class="stats-left" data-page-node-id="qdL7R3H5cQel1TGlaAOjBX">
+<div class="stat-item" data-page-node-id="Kq8VtLiI4rbjaAAeq73UHm"><span class="stat-num new" id="newCount">0</span> 今日新增</div>
+<div class="stat-item" data-page-node-id="v1vidu9uGTqw3sW6iSpU8P"><span class="stat-num unread" id="unreadCount">0</span> 条未读</div>
 </div>
-<button class="btn btn-restore" onclick="clearAllRead()" title="一键清除所有已读记录，全部恢复为未读状态" style="margin-left:8px" data-page-node-id="CPs0HBYiw0DnwCX25prPhR">↻ 全部恢复未读</button>
+<div class="stats-actions" data-page-node-id="CPs0HBYiw0DnwCX25prPhR">
+<button class="btn btn-restore" onclick="clearAllRead()" title="一键清除所有已读记录，全部恢复为未读状态" data-page-node-id="G1R8w0s9restore">↻ 全部恢复未读</button>
 <button class="btn btn-allread" onclick="markAllRead()" data-page-node-id="OIjMu9jnziI1P66Ap1NaBh">✓ 全部标为已读</button>
+</div>
 </div>
 <!-- ==================== 矿业热榜（2026-09-03 新增，类似今日头条热榜） ==================== -->
 
@@ -2248,15 +2239,16 @@ function setFilter(mode,noScroll){
   if(mode==='none'){document.body.removeAttribute('data-filter-mode');}
   else{document.body.dataset.filterMode=mode;}
   if(mode!=='tag'){tagFilter=null;setChipActive(null)}
-  document.getElementById('filterBtn').classList.toggle('active',mode==='new');
-  document.getElementById('filterBtn').textContent=mode==='new'?'显示全部':'只看新增';
+  // 2026-09-09：顶栏「未读」「筛选」按钮已移除，以下控件可能不存在，统一做空值保护。
+  const filterBtn=document.getElementById('filterBtn');
+  if(filterBtn){filterBtn.classList.toggle('active',mode==='new');filterBtn.textContent=mode==='new'?'显示全部':'只看新增';}
   const spBtn=document.getElementById('specialBtn');
   if(spBtn)spBtn.classList.toggle('active',mode==='special');
   const unBtn=document.getElementById('unreadBtn');
   if(unBtn)unBtn.classList.toggle('active',mode==='unread');
   const favBtn=document.getElementById('favBtn'); if(favBtn)favBtn.classList.toggle('active',mode==='fav');
   const historyBtn=document.getElementById('historyBtn'); if(historyBtn)historyBtn.classList.toggle('active',mode==='history');
-  // 下拉触发按钮在「只看新增 / 战略」任一激活时高亮
+  // 下拉触发按钮在「只看新增 / 战略」任一激活时高亮（按钮已移除，保留兼容）
   const ft=document.querySelector('.nf-filter-toggle'); if(ft)ft.classList.toggle('active',mode==='new'||mode==='special');
   // 2026-09-09 凌晨重写：筛选后要「落到命中项上」，而不是机械还原旧坐标。
   // 旧实现只还原 prevY，但收藏/历史的命中项往往在往期区，还原后视口里仍是一片被隐藏的今日区 →
