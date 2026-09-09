@@ -7,7 +7,7 @@
 // 2026-09-04 二次修复：支持子路径部署（GitHub Pages 站点位于 /mining-daily/）。
 //   原先写死 '/index.html' 这类绝对路径，在子路径下会指向站点根而 404。
 //   改为以 SW 自身所在目录为基准推导 BASE，根路径部署（本地/沙箱）与子路径部署（Pages）均可。
-const CACHE_NAME = 'mining-daily-v67';
+const CACHE_NAME = 'mining-daily-v68';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -83,18 +83,22 @@ self.addEventListener('fetch', event => {
   //   数据文件      → network-first（刷新即见最新）+ 写缓存（离线兜底），去掉 cache:'reload' 改用 HTTP 304 验证，
   //                  未变更时 304 秒回、变更时才下载新内容。
   if (isHtml) {
-    // 2026-09-09 根治：network-first + cache:'reload'。每次刷新都绕过浏览器与 CDN 缓存向源站
-    // 拉最新 HTML，保证「部署后刷新即见新功能」，无需手动清缓存。离线/网络失败时回退缓存。
+    // 2026-09-09 晚优化：SWR（stale-while-revalidate）——先秒开本地缓存，后台静默拉新。
+    // 根治「每次刷新都回源 GitHub Pages 太慢」：平时刷新直接返回缓存（毫秒级），后台用
+    // cache:'reload' 更新缓存；部署新版本时，注册 URL 带新 build-version 触发浏览器下载新 SW，
+    // 新 SW install 阶段 cache.addAll 已预缓存最新 index.html，activate 后 clients.navigate()
+    // 强制重新导航即可命中新缓存秒开最新——故「部署后首次刷新见新功能 + 之后全秒开」兼得。
     event.respondWith(
-      fetch(req, { cache: 'reload' })
-        .then(res => {
+      caches.match(req).then(cached => {
+        const network = fetch(req, { cache: 'reload' }).then(res => {
           if (res && res.ok && res.type === 'basic') {
             const copy = res.clone();
             caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
           }
           return res;
-        })
-        .catch(() => caches.match(req).then(r => r || caches.match(BASE + 'index.html')))
+        }).catch(() => cached);
+        return cached || network;
+      })
     );
     return;
   }

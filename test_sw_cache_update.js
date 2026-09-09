@@ -23,13 +23,14 @@ const htmlPath = path.join(__dirname, 'index.html');
 const swSrc = fs.readFileSync(swPath, 'utf-8');
 const htmlSrc = fs.readFileSync(htmlPath, 'utf-8');
 
-console.log('===== ① sw.js HTML 策略：network-first + 绕过缓存 =====');
-check('sw.js 导航请求用 cache:\'reload\' 回源',
-  /fetch\(req,\s*\{\s*cache:\s*['"]reload['"]\s*\}\)/.test(swSrc),
-  '期望 network-first 强制回源');
-check('sw.js HTML 块已非 stale-while-revalidate',
-  (swSrc.match(/if \(isHtml\) \{[\s\S]*?return;\n  \}/) || [''])[0].indexOf('return cached || network') < 0,
-  'HTML 块内不应再 return cached || network（静态资源块保留该模式是合理的）');
+console.log('===== ① sw.js HTML 策略：SWR（秒开缓存 + 后台 cache:\'reload\' 拉新）=====');
+const isHtmlBlock = (swSrc.split('if (isHtml)')[1] || '').split('if (DATA_FILES)')[0];
+check('sw.js HTML 块采用 SWR（先返回缓存秒开）',
+  isHtmlBlock.indexOf('caches.match(req)') >= 0 && isHtmlBlock.indexOf('return cached || network') >= 0,
+  'HTML 块应 caches.match + return cached || network 实现秒开');
+check('sw.js HTML 后台更新用 cache:\'reload\'（绕过 HTTP 缓存拿最新）',
+  isHtmlBlock.indexOf("cache: 'reload'") >= 0,
+  '后台静默拉新仍强制回源，保证最终最新');
 check('sw.js 仍保留 skipWaiting + clients.claim',
   /self\.skipWaiting\(\)/.test(swSrc) && /self\.clients\.claim\(\)/.test(swSrc));
 check('sw.js activate 内通过 clients.navigate() 强制已打开页面重新导航',
