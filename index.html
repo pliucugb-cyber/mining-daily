@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2410" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2420" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
@@ -4579,6 +4579,54 @@ function qaToggleMic(){
   rec.onend=function(){if(btn){btn.classList.remove('on');btn.textContent='🎤';}QA_REC=null;};
   try{rec.start();if(btn){btn.classList.add('on');btn.textContent='⏹';}}catch(e){QA_REC=null;}
 }
+// ===== Phase E：本地价格快照注入 RAG（AI 可答「铜价 / LME铝」等，无需外部 Key）=====
+var QA_METAL_SLUGS={
+  '铜':['cum','lcpt'],'铝':['alm','lalt'],'锌':['znm','lznt'],'铅':['pbm','lldt'],
+  '镍':['nim','lnkt'],'锡':['snm','ltnt'],'金':['au9999'],'黄金':['au9999'],
+  '银':['agtd'],'白银':['agtd'],'锂':['lcm'],'碳酸锂':['lcm']
+};
+function qaSlugUnit(slug){
+  if(/^l(cpt|alt|znt|ldt|nkt|tnt)/.test(slug))return '美元/吨';
+  if(slug==='au9999')return '元/克';
+  if(slug==='agtd')return '元/千克';
+  return '元/吨';
+}
+function qaPriceBrief(q){
+  if(!q)return '';
+  var q2=q.replace(/\s/g,'');
+  if(!/价|报价|涨跌|行情|LME|期货|美元|吨|走势|多少钱|收报|现价|价格/.test(q2))return '';
+  var hits=[];
+  for(var name in QA_METAL_SLUGS){ if(q2.indexOf(name)>=0)hits.push(name); }
+  if(!hits.length)return '';
+  var H=(typeof window!=='undefined'&&window.PRICE_HISTORY)?window.PRICE_HISTORY:null;
+  var D=(typeof window!=='undefined'&&window.LME_DATA)?window.LME_DATA:null;
+  var Dmap={};
+  if(D&&D.metals)D.metals.forEach(function(m){Dmap[m.slug]=m;});
+  var lines=[],seen={};
+  hits.forEach(function(name){
+    QA_METAL_SLUGS[name].forEach(function(slug){
+      if(seen[slug])return;seen[slug]=1;
+      var info=null;
+      if(Dmap[slug]){var m=Dmap[slug];
+        info={label:m.name,val:m.price,chg:m.chg,chg_pct:m.chg_pct,unit:m.unit||qaSlugUnit(slug)};
+      }else if(H&&H.series&&H.series[slug]&&H.series[slug].points&&H.series[slug].points.length){
+        var pts=H.series[slug].points,n=pts.length,last=pts[n-1],prev=pts[n-2];
+        var val=last[1],date=last[0],chg=(n>1&&typeof prev[1]==='number')?(val-prev[1]):null;
+        info={label:H.series[slug].name,val:val,chg:chg,chg_pct:(chg!=null&&prev[1])?chg/prev[1]*100:null,unit:qaSlugUnit(slug),date:date};
+      }
+      if(info){
+        var s=info.label+'：'+(typeof info.val==='number'?info.val.toLocaleString('en-US'):info.val)+' '+info.unit;
+        if(info.date)s+='（'+info.date+'）';
+        if(info.chg!=null&&typeof info.chg==='number'){
+          var sign=info.chg>=0?'+':'';
+          s+='，日涨跌 '+sign+info.chg.toFixed(2)+(info.chg_pct!=null?('（'+sign+info.chg_pct.toFixed(2)+'%）'):'');
+        }
+        lines.push(s);
+      }
+    });
+  });
+  return lines.join('\n');
+}
 function qaFloatSearch(){
   var inp=document.getElementById('qaFloatInput');if(!inp)return;
   var q=(inp.value||'').trim();
@@ -4903,6 +4951,8 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
   if(dateIntent){
     system+='\n\n用户问题明确指向「'+dateIntent+' 当日新增新闻」。请只基于提供的当日条目作答：先一句话总述今日新增条数与主要板块分布，再按板块/主题分组总结要点；不要引入前序对话中的任何实体（如紫金矿业），不要回答与今日条目无关的内容。若当日无新增条目，请明确说明"本地新闻库显示 '+dateIntent+' 暂无新增报道"。';
   }
+  // 2026-09-09 Phase E：价格快照注入提示
+  system+='\n若问题涉及具体金属价格，且用户消息中提供了「本地价格快照」，请基于快照作答并标注数据日期与单位，说明这是日报本地快照（非实时行情）；不要编造快照之外的价格。';
   // 2026-09-06 晚（B）：多轮追问——把历史轮次作为前置对话，使追问能理解"它""这家"等指代
   var dsMessages=[{role:'system',content:system}];
   if(conv&&conv.length){
@@ -4927,6 +4977,9 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
       user+='（本地新闻库暂未找到直接相关的报道，请基于通用知识简要回答，并建议用户换关键词或查证官方信息。）\n\n';
     }
   }
+  // 2026-09-09 Phase E：价格快照注入 RAG 上下文
+  var priceBrief=qaPriceBrief(q);
+  if(priceBrief){user+='\n\n以下为本地价格快照（单位见各条，仅供参考、非实时行情）：\n'+priceBrief+'\n';}
   user+='请直接给出回答，无需寒暄。'
   if(bubble)bubble.innerHTML='<div class="qa-thinking"><span class="qa-dot"></span>DeepSeek 正在组织答案（约 10~30 秒，可先浏览上方参考来源）…</div>';
   // 2026-09-06 晚：35s 超时兜底，避免 DeepSeek 卡住时面板长期转圈
