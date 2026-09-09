@@ -1,11 +1,11 @@
 {
   "meta": {
     "report_date": "2026-09-09",
-    "generated_at": "2026-09-09T09:15:22+08:00",
-    "total": 121,
+    "generated_at": "2026-09-09T09:18:47+08:00",
+    "total": 122,
     "new_today": 15,
-    "archive": 106,
-    "page_total": 121,
+    "archive": 107,
+    "page_total": 122,
     "page_new_count": 15,
     "sources": [
       "MINING.COM",
@@ -20,6 +20,7 @@
       "全球矿产资源",
       "全球矿产资源信息系统",
       "巨潮资讯网",
+      "深圳证券交易所",
       "自然资源部",
       "长江有色网"
     ],
@@ -532,6 +533,23 @@
       "tags": [
         "找矿",
         "技术"
+      ]
+    },
+    {
+      "id": "6be4e5b962fe",
+      "title": "电投能源：关于铝业期货套期保值年度计划方案调整暨关联交易公告",
+      "url": "http://disc.szse.cn/download/disc/disk03/finalpage/2026-09-08/ba888bf4-8062-4f9b-b17c-d430d4ca975a.PDF",
+      "source": "深圳证券交易所",
+      "orig_date": "09-08",
+      "orig_date_full": "2026-09-08",
+      "report_date": "2026-09-09",
+      "category": "行业动态",
+      "is_new": false,
+      "summary": "内蒙古电投能源股份有限公司公告调整铝业期货套期保值年度计划方案，涉及关联交易事项，中信证券同步出具核查意见。电投能源主营煤炭与电解铝，套保方案调整反映铝价波动加剧背景下的风险管理需求。",
+      "embed": "pdf",
+      "tags": [
+        "铝",
+        "政策"
       ]
     },
     {
