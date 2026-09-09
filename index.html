@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260909-2498" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260909-2499" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1383,7 +1383,7 @@ body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
   <h1 data-page-node-id="S5DUV8BO8QSMOdwBtUTJ83">⛏️ 矿业新闻日报 <span class="date-badge" data-page-node-id="hCCkUOj51jKh8M4hgHwkAC">2026年09月09日 星期三</span></h1>
 </div>
 <!-- ==================== 今日情报简报（9-06 新增：数据取自 morning_report.json，随每日日报一同生成）==================== -->
-<div class="brief-strip" id="briefStrip" hidden data-page-node-id="uiXcXoG33rQd2Ofr4IRinO">
+<div class="brief-strip" id="briefStrip" data-page-node-id="uiXcXoG33rQd2Ofr4IRinO">
   <div class="brief-head" data-page-node-id="ZqosfvLY56eCNljBURo9cU">
     <span class="brief-badge" data-page-node-id="Sujifs7ChkDDi6nYimkrhV">情报</span>
     <span class="brief-title" data-page-node-id="iHgpDJRQJWfdGY7BClClAG">今日简报</span>
@@ -3178,10 +3178,17 @@ function setupBriefClamp(){
   };
 }
 function loadBrief(){
-  fetch('morning_report.json?v='+Date.now(),{cache:'no-store'})
+  var strip=document.getElementById('briefStrip');
+  // 2026-09-09：简报区改为默认显示「加载中」占位，避免空白跳变；
+  // 去掉 Date.now() 缓存击穿，让 SW 的 SWR 能命中预缓存。{cache:'reload'} 只用于
+  // 后台网络请求绕过浏览器 HTTP 缓存，不影响 SW 先返回缓存秒开。
+  fetch('morning_report.json',{cache:'reload'})
     .then(function(r){return r.ok?r.json():null;})
     .then(function(d){if(d)renderBrief(d);})
-    .catch(function(){console.warn('[brief] morning_report.json 不可用，简报区保持隐藏');});
+    .catch(function(){
+      console.warn('[brief] morning_report.json 不可用，简报区保持隐藏');
+      if(strip)strip.hidden=true;
+    });
 }
 // ==================== 阅读模式（9-06 新增：只留判断 / 5件事 / 价格 / 今日新闻）====================
 function toggleReadingMode(){
