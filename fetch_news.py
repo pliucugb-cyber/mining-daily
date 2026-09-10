@@ -46,8 +46,13 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from logutil import get_logger  # noqa: E402
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
+
+log = get_logger("fetch_news")
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
@@ -91,6 +96,12 @@ ANNOUNCE_NOISE = [
     "董事会决议", "监事会决议", "董事会会议", "会议决议", "董事离任", "补选董事",
     "募集说明书", "保荐书", "上市公告书", "发行公告", "发行结果", "配股",
     "可转债赎回", "债券赎回", "跟踪评级", "评级报告", "审计报告",
+    # 2026-09-10 增：券商对上市公司持续督导类文件（持续督导意见/总结报告/现场核查/年度报告），
+    # 属于"券商核查意见"类合规材料，每日巨潮都会拉出一批且无行业信息价值；用"持续督导意见"等
+    # 精确短语而非单字"持续督导"，避免误伤含该词的行业动态（如"持续督导培训会"——治理类，
+    # 但同名而已、极少；可接受）。
+    "持续督导意见", "持续督导总结报告", "持续督导现场核查", "持续督导年度报告",
+    "券商核查意见", "保荐机构核查",
 ]
 
 # ============================================================================
@@ -998,9 +1009,9 @@ def main():
     args = ap.parse_args()
 
     if args.list_sources:
-        print("%-12s %-22s %-8s %-8s %s" % ("KEY", "名称", "类型", "启用", "境外"))
+        log.info("%-12s %-22s %-8s %-8s %s" % ("KEY", "名称", "类型", "启用", "境外"))
         for c in SOURCES:
-            print("%-12s %-22s %-8s %-8s %s" % (
+            log.info("%-12s %-22s %-8s %-8s %s" % (
                 c["key"], c["name"], c["kind"],
                 "✔" if c.get("enabled") else "✘",
                 "是" if c.get("foreign") else "否"))
@@ -1009,10 +1020,10 @@ def main():
     keys = {k.strip() for k in args.source.split(",") if k.strip()}
     targets = [c for c in SOURCES if not keys or c["key"] in keys]
 
-    print("=" * 72)
-    print("fetch_news.py | 报告日期 %s | 回看 %d 天 | 源 %d 个"
+    log.info("=" * 72)
+    log.info("fetch_news.py | 报告日期 %s | 回看 %d 天 | 源 %d 个"
           % (args.report_date, args.days, len(targets)))
-    print("=" * 72)
+    log.info("=" * 72)
 
     all_items, report = [], []
     for cfg in targets:
@@ -1020,20 +1031,20 @@ def main():
         report.append((cfg["key"], cfg["name"], len(items), status))
         all_items.extend(items)
 
-    print()
-    print("%-12s %-22s %-5s %s" % ("KEY", "名称", "条数", "状态"))
+    log.info('')
+    log.info("%-12s %-22s %-5s %s" % ("KEY", "名称", "条数", "状态"))
     for k, n, c, s in report:
-        print("%-12s %-22s %-5d %s" % (k, n, c, s))
-    print("-" * 72)
-    print("候选合计：%d 条（境外 %d 条）"
+        log.info("%-12s %-22s %-5d %s" % (k, n, c, s))
+    log.info("-" * 72)
+    log.info("候选合计：%d 条（境外 %d 条）"
           % (len(all_items), sum(1 for i in all_items if i.get("foreign"))))
 
     if args.dry_run or not all_items:
         for i in all_items[:25]:
-            print("  [%s|%s] %s" % (i["fetch_src"], i["orig_date"], i["title"][:52]))
-            print("      %s" % i["url"][:96])
+            log.info("  [%s|%s] %s" % (i["fetch_src"], i["orig_date"], i["title"][:52]))
+            log.info("      %s" % i["url"][:96])
         if not all_items:
-            print("  （无候选：可能是当天确实无新内容，或源结构变化需调整 link_re）")
+            log.info("  （无候选：可能是当天确实无新内容，或源结构变化需调整 link_re）")
         return
 
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -1041,20 +1052,20 @@ def main():
     with open(cand_path, "w", encoding="utf-8") as f:
         json.dump({"report_date": args.report_date, "count": len(all_items),
                    "news": all_items}, f, ensure_ascii=False, indent=2)
-    print()
-    print("候选池已写入：%s" % cand_path)
-    print("提示：AI 采编时读取该候选池挑选，境外条目（foreign=true）须走英文翻译规范。")
+    log.info('')
+    log.info("候选池已写入：%s" % cand_path)
+    log.info("提示：AI 采编时读取该候选池挑选，境外条目（foreign=true）须走英文翻译规范。")
 
     if args.merge:
         path, added, total = merge_into_month(all_items, args.report_date)
-        print("已并入月度库：%s（新增 %d，总计 %d）" % (path, added, total))
+        log.info("已并入月度库：%s（新增 %d，总计 %d）" % (path, added, total))
 
-    print()
-    print("候选条目预览（前 25 条）：")
+    log.info('')
+    log.info("候选条目预览（前 25 条）：")
     for i in all_items[:25]:
         flag = "🌍" if i.get("foreign") else "  "
-        print("  %s[%s] %s | %s" % (flag, i["orig_date"], i["title"][:50], i["source"]))
-        print("        %s" % i["url"][:92])
+        log.info("  %s[%s] %s | %s" % (flag, i["orig_date"], i["title"][:50], i["source"]))
+        log.info("        %s" % i["url"][:92])
 
 
 if __name__ == "__main__":

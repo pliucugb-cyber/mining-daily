@@ -28,6 +28,32 @@ import datetime
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 INDEX_PATH = os.path.join(BASE_DIR, 'index.html')
 JSON_PATH = os.path.join(BASE_DIR, 'mining_news.json')
+
+sys.path.insert(0, BASE_DIR)
+from logutil import get_logger  # noqa: E402
+
+# 2026-09-10 增：低价值公告兜底词表（EXPORT_LOW_VALUE_NOTICE）。
+# 设计依据：仅纳入用户在 1e 步骤明确列出的"公司治理/信披类公告"类型 + 持续督导。
+# 与 fetch_news.py 的 ANNOUNCE_NOISE 区分开：ANNOUNCE_NOISE 是抓取阶段可激进过滤的
+# 广词表（含"分红""诉讼进展"等会与实质新闻撞车的词），本表只用于 export 阶段兜底，
+# 必须更保守，避免误杀"XX亿元中期分红""矿业子公司涉诉"这类实质产业事件。
+EXPORT_LOW_VALUE_NOTICE = [
+    # 持续督导类（连续 3 天反复爬回，必须堵住）
+    "持续督导意见", "持续督导总结报告", "持续督导现场核查", "持续督导年度报告",
+    # 用户 1e 步骤明确禁用
+    "独立董事", "独立非执行董事", "候选人声明", "股东大会", "临时股东会", "会议通知",
+    "法律意见书", "公司章程", "章程修订", "业绩说明会", "投资者关系活动记录",
+    "接待日", "内幕信息", "知情人登记", "监事会决议", "董事会决议",
+    "股票交易异常", "停牌公告", "复牌公告", "权益分派实施", "回购注销",
+    "股权激励", "问询函回复", "关注函回复", "监管函回复", "更正公告", "补充公告",
+    "延期回复", "关于召开", "董事离任", "补选董事", "保荐书", "跟踪评级",
+    "审计报告", "券商核查意见",
+]
+
+# [snapshot]/[archive]/[frontend] 等段落标签保持原样，只是统一加上时间戳与级别。
+# 告警仍走 stderr，与改造前一致（调用方按流过滤时不错位）。
+log = get_logger('export_news_json')
+log_err = get_logger('export_news_json', stream=sys.stderr)
 DATA_DIR = os.path.join(BASE_DIR, 'data')          # 月度分片累积库
 NEWS_DATA_JS = os.path.join(BASE_DIR, 'news-data.js')  # 前端问答检索条数据源
 
@@ -71,6 +97,28 @@ SP_CAT_MAP = {
 def make_id(url):
     """由 URL 生成稳定 id（12 位十六进制），跨天合并时作为主键"""
     return hashlib.md5((url or '').encode('utf-8')).hexdigest()[:12]
+
+def _is_low_value_notice(title, summary=''):
+    """2026-09-10 增：低价值公告兜底过滤（仅命中用户 1e 步骤明确禁用的治理/信披类 + 持续督导）。
+
+    用于 export 阶段：即使 index.html 被人工编辑误收录了治理类公告（如券商持续督导意见），
+    或旧月份 news_*.json 残留了同类条目，导出前一律剔除；防止"删了 data 又被 export 复活"。
+
+    故意不用 fetch_news.ANNOUNCE_NOISE 那张广词表——它含"分红""诉讼进展"等会与实质新闻
+    撞车的词，会误杀"XX亿元中期分红""矿业子公司涉诉"这类产业事件。
+
+    返回 (bool, matched_kw|'') 便于日志输出被剔除的原因。
+    """
+    t = title or ''
+    s = summary or ''
+    for kw in EXPORT_LOW_VALUE_NOTICE:
+        if kw in t:
+            return True, kw
+    # 摘要命中也认（兜底场景：标题是"XX公司关于...的公告"，摘要补充持续督导）
+    for kw in EXPORT_LOW_VALUE_NOTICE:
+        if kw in s:
+            return True, kw + '(in summary)'
+    return False, ''
 
 def full_date(orig_mmdd, report_date):
     """
@@ -271,14 +319,35 @@ def write_news_data_js(data_dir, out_path):
     """
     rows = []
     for fn in sorted(os.listdir(data_dir)):
+        # 2026-09-10 修：原本 fn.startswith('news_') 会把候选池 news_candidates_*.json
+        # 也读进来——而候选池是中间产物（不 commit 不 deploy），里面残留的低价值条目
+        # 会"复活"到 news-data.js。必须严格匹配月库命名 news_YYYY-MM.json。
         if not (fn.startswith('news_') and fn.endswith('.json')):
+            continue
+        if fn.startswith('news_candidates_'):        # 候选池：中间产物，不读
+            continue
+        if not re.match(r'^news_\d{4}-\d{2}\.json$', fn):  # 非月库格式：忽略
             continue
         try:
             with open(os.path.join(data_dir, fn), 'r', encoding='utf-8') as f:
                 rows.extend(json.load(f).get('news', []))
         except Exception as e:
-            print('[warn] 读取失败 %s: %s' % (fn, e), file=sys.stderr)
+            log_err.warning('[warn] 读取失败 %s: %s', fn, e)
             continue
+    # 2026-09-10 增：news-data.js 合成前再兜一道低价值过滤。
+    # 兜底场景：旧月份 news_*.json 里残留的治理类公告（如"持续督导意见"）
+    # 若未在月度库中手动删除，会被原样写进检索条；这里再清一遍。
+    _rows_lv = []
+    _dropped_lv = 0
+    for _r in rows:
+        _is_lv, _ = _is_low_value_notice(_r.get('title', ''), _r.get('summary', ''))
+        if _is_lv:
+            _dropped_lv += 1
+        else:
+            _rows_lv.append(_r)
+    if _dropped_lv:
+        log.info('[news-data low-value] 兜底剔除 %d 条（来自月度库残留）', _dropped_lv)
+    rows = _rows_lv
     # 同一公告可能因抓取器 URL 形态不同（如 PDF 直链 vs cninfo 详情页）产生重复记录；
     # 按 title 归并去重：优先保留 static.cninfo.com.cn/finalpage PDF 直链（更稳定），
     # 剔除 cninfo.com.cn/new/disclosure/detail 详情页形态，避免「今日要闻/问答」出现重复。
@@ -313,8 +382,8 @@ def write_news_data_js(data_dir, out_path):
     _before = len(rows)
     rows = [r for r in rows if (_odt(r.get('orig_date_full', '')) or _cut) >= _cut]
     if _before != len(rows):
-        print('[news-data] 保留 %d 天内 %d/%d 条（剔除 %d 条更早）'
-              % (RETAIN_DAYS, len(rows), _before, _before - len(rows)))
+        log.info('[news-data] 保留 %d 天内 %d/%d 条（剔除 %d 条更早）',
+              RETAIN_DAYS, len(rows), _before, _before - len(rows))
     slim = [{
         'd': r.get('orig_date_full', ''),
         't': r.get('title', ''),
@@ -354,6 +423,25 @@ def main():
         dedup.append(e)
     news = dedup
 
+    # 2026-09-10 增：低价值公告兜底过滤（与 fetch_news.ANNOUNCE_NOISE 同词表）。
+    # 在去重后、merge_into_months 前过滤——保证"删了 index.html 中误收的治理类"后，
+    # 月度库 news_*.json 也不会被复活。这是 export 阶段的安全网。
+    _filtered, _lv_drop = [], []
+    for _e in news:
+        _is_lv, _kw = _is_low_value_notice(_e.get('title', ''), _e.get('summary', ''))
+        if _is_lv:
+            _lv_drop.append((_e, _kw))
+        else:
+            _filtered.append(_e)
+    if _lv_drop:
+        for _e, _kw in _lv_drop:
+            log.info('[low-value-filter] 剔除 %s | %s | kw=%s | %s',
+                     _e.get('source', ''), _e.get('title', '')[:60], _kw,
+                     _e.get('url', '')[:80])
+        log.info('[low-value-filter] 共剔除 %d 条（页面解析后），剩余 %d',
+                 len(_lv_drop), len(_filtered))
+    news = _filtered
+
     # 追加式写入月度分片累积库（历史永不丢失）
     stats = merge_into_months([dict(e) for e in news], DATA_DIR, report_date)
 
@@ -371,7 +459,7 @@ def main():
         page_new = len(re.findall(r'<div class="news-item[^"]*is-new', _seg))
     else:
         # 边界定位失败时退回全页统计，但必须显式告警，杜绝「静默口径偏差」
-        print('  [warn] 未定位到 todaySection/rightsSection 边界，'
+        log_err.warning('[warn] 未定位到 todaySection/rightsSection 边界，'
               'page_total 退回全页统计（可能高于 meta.total）')
         page_total = len(re.findall(r'<div class="news-item', html))
         page_new = len(re.findall(r'<div class="news-item[^"]*is-new', html))
@@ -394,23 +482,22 @@ def main():
     with open(JSON_PATH, 'w', encoding='utf-8') as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
-    print('[snapshot]', JSON_PATH)
-    print('  report_date: %s | total: %d | new: %d | archive: %d | sources: %d'
-          % (report_date, len(news), result['meta']['new_today'],
-             result['meta']['archive'], len(sources)))
-    print('[archive] %s' % DATA_DIR)
-    print('  added: %d | updated: %d | total: %d'
-          % (stats['added'], stats['updated'], sum(m['total'] for m in stats['months'].values())))
+    log.info('[snapshot] %s', JSON_PATH)
+    log.info('  report_date: %s | total: %d | new: %d | archive: %d | sources: %d',
+          report_date, len(news), result['meta']['new_today'],
+             result['meta']['archive'], len(sources))
+    log.info('[archive] %s', DATA_DIR)
+    log.info('  added: %d | updated: %d | total: %d',
+          stats['added'], stats['updated'], sum(m['total'] for m in stats['months'].values()))
     for month, s in sorted(stats['months'].items()):
-        print('    %s  +%d  ~%d  =%d' % (month, s['added'], s['updated'], s['total']))
+        log.info('    %s  +%d  ~%d  =%d', month, s['added'], s['updated'], s['total'])
     # 前端问答检索条数据源（页面加载不到时自动降级为 DOM 提取，失败不阻塞）
     try:
         n, size = write_news_data_js(DATA_DIR, NEWS_DATA_JS)
-        print('[frontend] %s' % NEWS_DATA_JS)
-        print('  %d 条 | %.1f KB（网页问答检索条数据源）' % (n, size / 1024.0))
+        log.info('[frontend] %s', NEWS_DATA_JS)
+        log.info('  %d 条 | %.1f KB（网页问答检索条数据源）', n, size / 1024.0)
     except Exception as e:
-        print('[warn] news-data.js 生成失败，网页问答将降级为页面内检索：%s' % e,
-              file=sys.stderr)
+        log_err.warning('[warn] news-data.js 生成失败，网页问答将降级为页面内检索：%s', e)
     return result
 
 if __name__ == '__main__':
