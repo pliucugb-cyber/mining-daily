@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1520" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1525" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -715,15 +715,18 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
 #mobileTabBar{display:none}
 #mineSheet{display:none}
 @media(max-width:768px){
-  .toc-sidebar{display:none}
+  .toc-sidebar{display:none!important}
   body{padding-top:0}
   body{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))}
   body.has-install-bar{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
-  #mobileTabBar{display:flex;position:fixed;left:0;right:0;bottom:0;height:calc(56px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line-2);box-shadow:0 -2px 12px rgba(15,23,42,.10);z-index:210;padding-bottom:env(safe-area-inset-bottom,0px)}
-  .mtab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none;color:var(--ink-500);cursor:pointer;padding:4px 0;line-height:1.2}
-  .mtab .mi{font-size:20px;line-height:1}
+  #mobileTabBar{display:flex;position:fixed;left:0;right:0;bottom:0;height:calc(56px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line-2);box-shadow:0 -1px 3px rgba(15,23,42,.06);z-index:210;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .mtab{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none;color:var(--ink-300);cursor:pointer;padding:4px 0;line-height:1.2;transition:color .15s}
+  .mtab .mi{font-size:20px;line-height:1;opacity:.75;transition:opacity .15s}
   .mtab span{font-size:11px}
+  .mtab::before{content:'';position:absolute;top:0;left:28%;right:28%;height:2.5px;background:var(--brand);border-radius:0 0 2px 2px;opacity:0;transition:opacity .15s}
   .mtab.active{color:var(--brand)}
+  .mtab.active .mi{opacity:1}
+  .mtab.active::before{opacity:1}
   .mobile-install-bar{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
   /* Phase 3：卡片视觉打磨（列表行 → 信息流卡片） */
   .news-item{border-bottom:none;border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--shadow-sm);margin-bottom:var(--s3);padding:var(--s4);transition:transform .12s var(--ease),box-shadow .12s var(--ease)}
