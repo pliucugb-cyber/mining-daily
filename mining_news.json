@@ -1,11 +1,11 @@
 {
   "meta": {
     "report_date": "2026-09-10",
-    "generated_at": "2026-09-10T06:16:07+08:00",
-    "total": 153,
+    "generated_at": "2026-09-10T09:11:10+08:00",
+    "total": 152,
     "new_today": 35,
-    "archive": 118,
-    "page_total": 154,
+    "archive": 117,
+    "page_total": 153,
     "page_new_count": 35,
     "sources": [
       "MINING.COM",
@@ -1274,22 +1274,6 @@
       "summary": "",
       "embed": "ok",
       "tags": []
-    },
-    {
-      "id": "2dc18c5aee05",
-      "title": "2026年（第十三届）中国锑业年会在云南昆明召开",
-      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473758",
-      "source": "",
-      "orig_date": "09-04",
-      "orig_date_full": "2026-09-04",
-      "report_date": "2026-09-10",
-      "category": "行业动态",
-      "is_new": false,
-      "summary": "",
-      "embed": "ok",
-      "tags": [
-        "锑"
-      ]
     },
     {
       "id": "61051506f51d",
