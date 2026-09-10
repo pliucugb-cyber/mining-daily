@@ -1,11 +1,12 @@
 /**
- * 2026-09-09 Service Worker 缓存更新根治测试（jsdom）
- * 守护「部署后普通刷新即见最新版，无需手动清缓存」：
- *   ① sw.js 对 HTML 导航用 network-first + cache:'reload'（绕过浏览器与 CDN 缓存回源）
- *   ② index.html 的 SW 注册 URL 带 build-version 动态变化（否则写死 ?v=11 时 CDN 缓存旧 sw.js，
- *     浏览器检测不到 SW 更新，新 SW 接不了管）
- *   ③ sw.js activate 内通过 clients.navigate() 强制已打开页面重新导航，由 SW 自己完成「第二次刷新」
- *   ④ 运行时确实调用了 register('./sw.js?v=<build-version>')
+ * 2026-09-10 Service Worker 缓存更新测试（jsdom）
+ * 守护「部署后普通刷新即见最新版，且无循环/双重刷新」：
+ *   ① sw.js 对 HTML 导航用 SWR（秒开缓存 + 后台 cache:'reload' 拉新）
+ *   ② index.html 的 SW 注册 URL 固定为 './sw.js'（不再拼 build-version 查询串）——避免缓存 HTML
+ *      的版本戳与当前 SW 不一致时被浏览器当成「不同注册」而反复 install→activate 形成 ~10s 刷新死循环
+ *   ③ sw.js activate 内只 postMessage('SW_UPDATED') 通知页面，由页面用一次性标志决定是否刷新
+ *      （不再 clients.navigate() 强制整页重新导航，否则会叠加成循环/双重刷新）
+ *   ④ 运行时确实调用了 register('./sw.js')（固定 URL）
  * 运行：node test_sw_cache_update.js
  */
 const fs = require('fs');
@@ -33,9 +34,14 @@ check('sw.js HTML 后台更新用 cache:\'reload\'（绕过 HTTP 缓存拿最新
   '后台静默拉新仍强制回源，保证最终最新');
 check('sw.js 仍保留 skipWaiting + clients.claim',
   /self\.skipWaiting\(\)/.test(swSrc) && /self\.clients\.claim\(\)/.test(swSrc));
-check('sw.js activate 内通过 clients.navigate() 强制已打开页面重新导航',
-  /c\.navigate\s*\(\s*c\.url\s*\)/.test(swSrc),
-  '新 SW 接管后主动刷新，避免旧页面仍渲染旧版');
+
+console.log('\n===== ③ sw.js activate 不再强制 navigate（根治循环/双重刷新）=====');
+check('sw.js activate 内已移除 clients.navigate()（整页强制重导航）',
+  !/c\.navigate\s*\(\s*c\.url\s*\)/.test(swSrc),
+  'c.navigate(c.url) 若不存在才算修好');
+check('sw.js activate 改为 postMessage(\'SW_UPDATED\') 通知页面',
+  /postMessage\(\s*\{\s*type:\s*'SW_UPDATED'\s*\}\s*\)/.test(swSrc),
+  '由页面用一次性标志决定是否刷新');
 
 // 2026-09-10 第 2 批：数据文件清单 + 离线兜底 MIME
 const dataFilesBlock = (swSrc.split('const DATA_FILES = [')[1] || '').split(']')[0];
@@ -48,21 +54,25 @@ check('离线兜底按扩展名返回正确 MIME，不再一律回退 index.html
   !/caches\.match\(req\)\.then\(r => r \|\| caches\.match\(BASE \+ 'index\.html'\)\)/.test(swSrc),
   '旧实现会让 fetch(\'*.json\') 拿到 HTML，.json() 抛错');
 
-console.log('\n===== ② index.html SW 注册 URL 动态化 =====');
+console.log('\n===== ② index.html SW 注册 URL 固定化（不再拼 build-version 查询串）=====');
 const bvMatch = htmlSrc.match(/<meta name="build-version" content="([^"]+)"/);
 const bv = bvMatch ? bvMatch[1] : '';
 check('build-version meta 存在', !!bv, 'build-version=' + bv);
 check('注册 URL 不再写死 ?v=11',
   !/register\(\s*'\.\/sw\.js\?v=11'\s*\)/.test(htmlSrc),
   '旧写死形式应已移除');
-check('注册 URL 改为 ?v=<build-version> 动态拼接',
-  /register\(\s*'\.\/sw\.js\?v='\s*\+\s*_bv\s*\)/.test(htmlSrc),
-  "期望 register('./sw.js?v='+_bv)");
-check('动态 URL 引用的 _bv 来自 build-version meta',
-  /var _bv=\([^;]*getAttribute\('content'\)\)\|\|'1'/.test(htmlSrc));
+check('注册 URL 不再拼 build-version 动态查询串（根治死循环刷新）',
+  !/register\(\s*'\.\/sw\.js\?v='\s*\+\s*_bv\s*\)/.test(htmlSrc) &&
+  !/register\(\s*'\.\/sw\.js\?v='\s*\+/.test(htmlSrc),
+  "应改为固定 register('./sw.js')");
+check('注册 URL 为固定 ./sw.js（SW 脚本自身由浏览器 no-cache 校验更新）',
+  /register\(\s*'\.\/sw\.js'\s*\)/.test(htmlSrc),
+  "期望 register('./sw.js')");
+check('无残留 _bv 动态 URL 引用',
+  !/var _bv=/.test(htmlSrc),
+  '_bv 取 build-version 的逻辑应已删除');
 
-console.log('\n===== ③ 运行时实际调用 register(动态 URL) =====');
-// 复用 smoke 的加载骨架：内联数据文件，桩 matchMedia/fetch
+console.log('\n===== ④ 运行时实际调用 register(固定 URL) =====');
 let html = htmlSrc;
 ['news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
   const p = path.join(__dirname, f);
@@ -109,10 +119,9 @@ setTimeout(() => {
   setTimeout(() => {
     check('register 被实际调用', !!captured, 'captured=' + captured);
     if (captured) {
-      check('注册 URL 含 ./sw.js?v= 前缀', captured.indexOf('./sw.js?v=') === 0, captured);
-      check('注册 URL 包含当前 build-version',
-        captured === './sw.js?v=' + bv,
-        '期望 ./sw.js?v=' + bv + ' 实际 ' + captured);
+      check('注册 URL 为固定 ./sw.js（不含 ?v= 查询串）',
+        captured === './sw.js',
+        '期望 ./sw.js 实际 ' + captured);
     }
     check('无阻塞性 JS 错误', errors.length === 0, errors.slice(0, 3).join(' | '));
     console.log('\n===== 结果：' + pass + ' PASS / ' + fail + ' FAIL =====');
