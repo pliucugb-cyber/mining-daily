@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-0140" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-0230" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1637,8 +1637,11 @@ body.dark .mtab{color:var(--ink-300)}
   function showBootWarn(name){
     var el=document.getElementById('mdBootWarn');
     if(!el)return;
-    var s=el.querySelector('.md-boot-which');
-    if(s&&name)s.textContent='（'+name+'）';
+    var n=String(name||'');
+    // 形如「步骤 → 错误信息」时，前半放 which、后半放 detail，便于一眼看出根因
+    var s=el.querySelector('.md-boot-which'), d=el.querySelector('.md-boot-detail');
+    if(s&&n)s.textContent='（'+n.split(' → ')[0]+'）';
+    if(d)d.textContent=(n.indexOf(' → ')>=0)?n.split(' → ').slice(1).join(' → '):'';
     el.style.display='flex';
   }
   window.mdShowBootWarn=showBootWarn;
@@ -1661,8 +1664,38 @@ body.dark .mtab{color:var(--ink-300)}
     if(bv){ try{ localStorage.setItem('md_build_ver',bv); }catch(e){} }
   }catch(e){}
 
-  // ① 看门狗：12s 内 app.js 未开始执行 → 明确提示 + 一键重置（不再静默卡死）
-  setTimeout(function(){ if(!window.__mdBooted) showBootWarn('app.js'); },12000);
+  // ⓪ 错误捕获（2026-09-11）：把运行时错误记下来并可显示，不再让故障「静默」。
+  window.__mdErrors=window.__mdErrors||[];
+  window.addEventListener('error',function(e){
+    try{
+      var m=(e&&(e.message||e))?String(e.message||e):'未知错误';
+      if(/Script error/.test(m))return;
+      window.__mdErrors.push(m);
+    }catch(e2){}
+  },true);
+  window.addEventListener('unhandledrejection',function(e){
+    try{ var r=e&&e.reason; window.__mdErrors.push((r&&(r.message||r))?String(r.message||r):'Promise 被拒绝'); }catch(e2){}
+  });
+
+  // ① 看门狗 + 兜底补渲染（2026-09-11 事故核心修复）
+  //    现象：静态内容正常，热榜/简报/要闻却永久停在「加载中…」，页面无任何报错。
+  //    原因：app.js 顶层是平铺调用链，任何一步抛错都会让后面的渲染调用全不执行；
+  //          而 app.js 若压根没跑，连注册看门狗的机会都没有。
+  //    对策：本段是内联脚本必然执行——2.5s 后若 app.js 仍未宣告初始化完成，直接补跑关键渲染。
+  //    （renderDigest/loadBrief/fetchHotNews 等是函数声明，已提升到全局，可直接调用。）
+  setTimeout(function(){
+    if(window.__mdInitDone)return;
+    ['qaInitData','fetchHotNews','loadBrief','renderDigest','renderLmePrices'].forEach(function(n){
+      try{ if(typeof window[n]==='function')window[n](); }
+      catch(e){ try{ window.__mdErrors.push(n+' → '+(e&&e.message||e)); }catch(e2){} }
+    });
+    window.__mdInitDone=true;   // 已补跑，避免重复
+  },2500);
+  // 12s 仍未正常完成（或 app.js 完全没跑）→ 弹横幅，并把捕获到的错误显示出来
+  setTimeout(function(){
+    if(window.__mdBooted&&window.__mdInitDone&&!(window.__mdErrors||[]).length)return;
+    showBootWarn((window.__mdErrors&&window.__mdErrors.length)?window.__mdErrors[0]:'app.js 未执行');
+  },12000);
 
   // ③ SW 注册与更新（内联版）：app.js 不可用时也要能更新 SW
   if('serviceWorker' in navigator){
@@ -1700,7 +1733,8 @@ body.dark .mtab{color:var(--ink-300)}
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
 <!-- 2026-09-11：脚本未加载/缓存陈旧时的可见逃生条（默认隐藏，由内联引信或 app.js 控制） -->
 <div id="mdBootWarn" role="alert" style="display:none;position:sticky;top:0;z-index:99999;background:#7f1d1d;color:#fff;font:14px/1.6 system-ui,-apple-system,'Microsoft YaHei',sans-serif;padding:10px 14px;gap:10px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.25)">
-  <span>⚠️ 页面脚本<span class="md-boot-which"></span>未能加载，热榜／简报／要闻可能停在「加载中」。通常是网络不通，或浏览器 Service Worker 缓存陈旧（普通刷新清不掉）。</span>
+  <span>⚠️ 页面脚本<span class="md-boot-which"></span>未能加载或初始化中断，热榜／简报／要闻可能停在「加载中」。</span>
+  <span class="md-boot-detail" style="font-family:ui-monospace,Consolas,monospace;font-size:12px;opacity:.92"></span>
   <button type="button" onclick="window.mdHardReset&&window.mdHardReset()" style="background:#fff;color:#7f1d1d;border:0;border-radius:6px;padding:6px 12px;font-weight:600;cursor:pointer">强制重新加载（清缓存）</button>
   <span style="opacity:.85;font-size:12px">仍不行：开发者工具 → Application → Service Workers → Unregister；手机则清除该站点数据。</span>
   <button type="button" onclick="this.parentNode.style.display='none'" style="margin-left:auto;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:6px;padding:4px 10px;cursor:pointer">关闭</button>

@@ -2245,22 +2245,23 @@ function fetchAiAnalyze(){
     });
 }
 
-initSpecial();   // 战略徽章标记（专项区已于 2026-09-08 取消，此处不再搬移 DOM）
-fetchHotNews();   // 9-03 矿业热榜 Top 10
-// fetchAiAnalyze 已停用（2026-09-08）：AI 深度解析区块整体移除——静态托管下 api/ai-analyze
-// 必然 404，只会落到 localAiSummary 的全量新闻罗列，读者反馈"太杂太乱"。
-// AI 能力保留在左下角悬浮球问答（qaFab → /api/qa Netlify 代理）。下方函数保留作历史参考，勿再调用。
-// dedupSpecialInToday() 已停用（2026-09-08）：专项区取消后不再搬移 DOM，无重复可去。
-injectTags();
-injectStars();
-renderArchivedFavs();
-foldOldArchive();
-initArchiveFold();   // 往期区 4 个子分类可折叠抽屉 + 行业动态按日折叠（2026-09-07）
+// 2026-09-11 事故修复：初始化单点故障隔离。
+// 此前这是一串平铺调用，任何一步抛异常都会中断整个 app.js 顶层流程 →
+// 后面的 fetchHotNews / loadBrief / renderDigest / 价格补丁全部不执行，
+// 页面表现为「静态内容正常，热榜/简报/要闻永久停在加载中」，且无任何报错提示。
+// 改为逐步隔离：单步失败只记录并继续，其余功能不受影响（错误会显示在页面横幅上）。
+mdSafeStep('initSpecial',initSpecial);   // 战略徽章标记（专项区已于 2026-09-08 取消，此处不再搬移 DOM）
+mdSafeStep('fetchHotNews',fetchHotNews);   // 9-03 矿业热榜 Top 10
+mdSafeStep('injectTags',injectTags);
+mdSafeStep('injectStars',injectStars);
+mdSafeStep('renderArchivedFavs',renderArchivedFavs);
+mdSafeStep('foldOldArchive',foldOldArchive);
+mdSafeStep('initArchiveFold',initArchiveFold);   // 往期区 4 个子分类可折叠抽屉 + 行业动态按日折叠（2026-09-07）
 // injectOrigDateBadges();   // 2026-09-06 停用（与 meta 日期重复）
-loadBrief();
-restoreReadingMode();
-applyFilter();
-refresh();
+mdSafeStep('loadBrief',loadBrief);
+mdSafeStep('restoreReadingMode',restoreReadingMode);
+mdSafeStep('applyFilter',applyFilter);
+mdSafeStep('refresh',refresh);
 // ===== PWA 安装引导（克制入口：PC顶部按钮 + 移动端底部浮条）=====
 // 平台判断
 const IS_STANDALONE=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
@@ -2986,16 +2987,30 @@ function mdSetDsKey(k){
 function mdClearDsKey(){ try{ localStorage.removeItem(MD_AI_KEY_STORE); }catch(e){} }
 window.mdSetDsKey=mdSetDsKey; window.mdClearDsKey=mdClearDsKey; window.getDsKey=getDsKey;
 
+// 初始化步骤隔离器（2026-09-11）：任一步异常都不再中断后续初始化。
+// 错误同时：① 写入 window.__mdErrors 供 index.html 横幅展示；② console.error 便于排查。
+function mdSafeStep(label,fn){
+  try{ fn(); }
+  catch(e){
+    var msg=(e&&(e.message||e))?String(e.message||e):'未知错误';
+    try{ (window.__mdErrors=window.__mdErrors||[]).push(label+' → '+msg); }catch(e2){}
+    try{ console.error('[mdInit] 步骤失败但已跳过：'+label+' — '+msg,e); }catch(e2){}
+    try{ if(window.mdShowBootWarn)window.mdShowBootWarn(label+' 初始化失败：'+msg); }catch(e2){}
+  }
+}
+
 (function(){
-  qaInitData();
-  injectNewsBadges();   // 依赖 QA_ROWS（由 qaInitData 赋值），必须在其之后调用
-  renderDigest();
-  setupCardOpen();   // 整张卡片点击打开原文（标题/按钮仍各自处理）
-  qaAiProbe();
-  renderLmePrices();
+  mdSafeStep('qaInitData',qaInitData);
+  mdSafeStep('injectNewsBadges',injectNewsBadges);   // 依赖 QA_ROWS（由 qaInitData 赋值），必须在其之后调用
+  mdSafeStep('renderDigest',renderDigest);
+  mdSafeStep('setupCardOpen',setupCardOpen);   // 整张卡片点击打开原文（标题/按钮仍各自处理）
+  mdSafeStep('qaAiProbe',qaAiProbe);
+  mdSafeStep('renderLmePrices',renderLmePrices);
   // P0-2：热榜/AI 的数据由异步 fetch 渲染，applyFilter 跑在它们之前。
   // 这里在多个时点重新评估区块可见性，确保渲染完成后能真正显示出来。
-  [0,300,1200,3000].forEach(function(d){ setTimeout(mdRefreshSections,d); });
+  [0,300,1200,3000].forEach(function(d){ setTimeout(function(){ mdSafeStep('mdRefreshSections',mdRefreshSections); },d); });
+  // 2026-09-11：顶层初始化完成信标——index.html 的内联兜底据此判断是否需要补渲染
+  window.__mdInitDone=true;
 })();
 // ===== LME 6 大基本金属价格（2026-09-02 新增，数据源 lme-data.js，由 fetch_lme.py 每日更新）=====
 // 2026-09-06 晚改版：价格区为上下两行（首行 priceCardsShfe=国内+金银锂钴，次行 priceCardsLme=LME，
