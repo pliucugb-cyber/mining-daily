@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1540" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1600" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1440,6 +1440,78 @@ body.dark .filter-state{background:#123040;border-color:#1d3d4d;color:var(--ink-
 .md-skip-link:focus,.md-skip-link:focus-visible{left:0;outline:2px solid #fff;outline-offset:-4px}
 body.dark .md-skip-link{color:#0b1220}
 </style>
+<style id="mdP1">
+/* ===== 2026-09-10 P1 增强：价格横滚 / 矿权卡 / 上次看到 / 简报折叠 / 骨架屏 / 无网空态 ===== */
+/* P1-1：价格卡横向滚动卡片化（移动端 snap + 边缘渐隐提示） */
+.price-cards{scroll-snap-type:x proximity;scroll-padding-left:var(--s2)}
+.price-card{scroll-snap-align:start}
+.price-strip{position:relative}
+.price-strip::after{content:'';position:absolute;top:0;right:0;width:30px;height:100%;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,255,255,0),var(--surface));display:none}
+body.dark .price-strip::after{background:linear-gradient(90deg,rgba(27,36,48,0),var(--bg))}
+@media(max-width:768px){
+  .price-strip::after{display:block}
+  .price-cards{scroll-snap-type:x mandatory}
+  .price-card{min-width:142px}
+}
+/* P1-3：搜索面板重做（输入框清除按钮 + 紧凑包裹） */
+.nf-search-wrap{position:relative;display:flex;align-items:center;flex:1 1 100%}
+.nf-search-wrap .nf-search{width:100%;padding-right:40px}
+.nf-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:none;background:var(--surface-3);
+  color:var(--ink-500);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center}
+.nf-clear:active{background:var(--line-2)}
+/* P1-2：矿权交易卡模板（移动端卡片化；桌面保留紧凑列表） */
+.rr-head{display:flex;align-items:baseline;gap:var(--s2);min-width:0}
+.rr-type{flex:0 0 auto;font-size:var(--fs-nano);font-weight:600;padding:2px 8px;border-radius:999px;
+  background:var(--brand-soft);color:var(--brand);border:1px solid rgba(14,116,144,.12);white-space:nowrap}
+.rights-row .rr-grid{display:none}   /* 桌面：保持紧凑行，不展开字段网格 */
+.rights-row .rr-line{display:none}
+@media(min-width:769px){
+  .rights-row .rr-type{margin-right:var(--s2)}
+}
+@media(max-width:768px){
+  .rights-row{display:block!important;padding:var(--s3)!important}
+  .rights-row .rr-head{display:block;margin-bottom:var(--s2)}
+  .rights-row .rr-type{display:inline-block;margin-bottom:6px}
+  .rights-row .rr-title{display:block;white-space:normal;color:var(--ink-900);text-decoration:none;font-size:var(--fs-body);font-weight:600;line-height:1.45}
+  .rights-row .rr-region{display:inline-block;margin-top:4px;color:var(--ink-500);font-size:var(--fs-meta)}
+  .rights-row .rr-grid{display:grid!important;grid-template-columns:1fr 1fr;gap:6px var(--s4);margin-top:2px}
+  .rr-field{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .rr-field>span{font-size:var(--fs-nano);color:var(--ink-500)}
+  .rr-field>b{font-size:var(--fs-meta);font-weight:600;color:var(--ink-900);font-variant-numeric:tabular-nums;word-break:break-word}
+  .rr-field>b.na{color:var(--ink-500);font-weight:500}
+  .rights-row .rr-line{display:flex;align-items:center;gap:6px;margin-top:var(--s2);flex-wrap:wrap}
+  .rc-deadline{font-size:var(--fs-meta);font-weight:600;padding:2px 8px;border-radius:999px}
+  .rc-deadline.rc-urgent{background:#fff1ec;color:#c2410c}
+  .rc-deadline.rc-soon{background:#fff7e6;color:#b45309}
+  .rc-deadline.rc-expired{background:var(--surface-3);color:var(--ink-500)}
+  .rc-deadline.rc-normal{background:var(--surface-2);color:var(--ink-700)}
+  .rc-extra{font-size:var(--fs-meta);color:var(--ink-700);word-break:break-word}
+  body.dark .rc-deadline.rc-urgent{background:#3a1f15;color:#fdba74}
+  body.dark .rc-deadline.rc-soon{background:#332512;color:#fcd34d}
+}
+/* P1-4：上次看到分隔线 */
+.md-lastseen{display:flex;align-items:center;gap:var(--s2);margin:var(--s4) 0;color:var(--ink-500);font-size:var(--fs-meta);font-weight:600}
+.md-lastseen::before,.md-lastseen::after{content:'';flex:1;height:1px;background:var(--line-2)}
+/* P1-5：简报卡可折叠 */
+#briefToggle{flex:0 0 auto;margin-left:auto;border:none;background:var(--surface-2);color:var(--ink-500);
+  width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;transition:transform .2s}
+#briefToggle:active{background:var(--surface-3)}
+.briefStrip.brief-collapsed .brief-card{display:none}
+.briefStrip.brief-collapsed #briefToggle{transform:rotate(-90deg)}
+/* P1-6：骨架屏 + 无网络空态 */
+.skeleton{position:relative;overflow:hidden;background:var(--surface-2);border-radius:var(--r-md)}
+.skeleton::after{content:'';position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.55),rgba(255,255,255,0));
+  animation:mdSkel 1.2s infinite}
+@keyframes mdSkel{100%{transform:translateX(100%)}}
+body.dark .skeleton{background:var(--surface-3)}
+body.dark .skeleton::after{background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.08),rgba(255,255,255,0))}
+#mdOffline{position:sticky;top:0;z-index:240;display:none;align-items:center;gap:8px;
+  padding:8px var(--s3);background:#fff7ed;color:#9a3412;font-size:var(--fs-meta);font-weight:600;border-bottom:1px solid #fed7aa}
+#mdOffline.show{display:flex}
+body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e18}
+</style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
 <script>
@@ -1487,6 +1559,7 @@ body.dark .md-skip-link{color:#0b1220}
     <span class="brief-title" data-page-node-id="iHgpDJRQJWfdGY7BClClAG">今日简报</span>
     <span class="brief-sub" id="briefSub" data-page-node-id="dSAFjxok9U4JQ8fA9coGxX"></span>
     <span class="brief-date" id="briefDate" data-page-node-id="7Te0Yh0KB8bp3DsyQTk9T1"></span>
+    <button id="briefToggle" type="button" aria-label="折叠或展开简报" title="折叠/展开">▾</button>
   </div>
   <div class="brief-card" data-page-node-id="DL9ezeqD58z9kGQxMZhKPR">
     <div class="brief-md" id="briefMain" data-page-node-id="nCJ5rYv7iler54tWucV3L3"><div class="brief-empty" data-page-node-id="wFtAqhN3k1iuKN65phPOhP">简报加载中…</div></div>
@@ -1814,6 +1887,12 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
     });
     return out;
   }
+  function rightsTypeLabel(r){
+    if(r.rightsType==="result") return "结果公示";
+    if(r.rightsType==="transfer") return "转让公示";
+    if(r.rightsType==="auction") return "拍卖出让";
+    return r.method||"出让";
+  }
   function renderRightsSection(){
     var data=getRightsData();
     var cardsEl=document.getElementById("rightsCards");
@@ -1896,20 +1975,20 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
       // 按业务类型决定展示字段
       var grid4='';
       if(r.rightsType==="result"){
-        grid4='<div><span>成交价</span><b class="'+(r.dealPrice==null?'na':'')+'">'+fmtMoney(r.dealPrice)+'</b></div>'
-             +'<div><span>起始价</span><b class="'+(r.startPrice==null?'na':'')+'">'+fmtMoney(r.startPrice)+'</b></div>'
-             +'<div><span>面积</span><b class="'+(r.area==null?'na':'')+'">'+fmtArea(r.area)+'</b></div>'
-             +'<div><span>公示期</span><b class="'+(r.deadline?'':'na')+'">'+fmtDeadline(r.deadline)+'</b></div>';
+        grid4='<div class="rr-field"><span>成交价</span><b class="'+(r.dealPrice==null?'na':'')+'">'+fmtMoney(r.dealPrice)+'</b></div>'
+             +'<div class="rr-field"><span>起始价</span><b class="'+(r.startPrice==null?'na':'')+'">'+fmtMoney(r.startPrice)+'</b></div>'
+             +'<div class="rr-field"><span>面积</span><b class="'+(r.area==null?'na':'')+'">'+fmtArea(r.area)+'</b></div>'
+             +'<div class="rr-field"><span>公示期</span><b class="'+(r.deadline?'':'na')+'">'+fmtDeadline(r.deadline)+'</b></div>';
       }else if(r.rightsType==="transfer"){
-        grid4='<div><span>转让人</span><b class="'+(r.transferor?'':'na')+'">'+(r.transferor||'—')+'</b></div>'
-             +'<div><span>受让人</span><b class="'+(r.transferee?'':'na')+'">'+(r.transferee||'—')+'</b></div>'
-             +'<div><span>面积</span><b class="'+(r.area==null?'na':'')+'">'+fmtArea(r.area)+'</b></div>'
-             +'<div><span>公示期</span><b class="'+(r.deadline?'':'na')+'">'+fmtDeadline(r.deadline)+'</b></div>';
+        grid4='<div class="rr-field"><span>转让人</span><b class="'+(r.transferor?'':'na')+'">'+(r.transferor||'—')+'</b></div>'
+             +'<div class="rr-field"><span>受让人</span><b class="'+(r.transferee?'':'na')+'">'+(r.transferee||'—')+'</b></div>'
+             +'<div class="rr-field"><span>面积</span><b class="'+(r.area==null?'na':'')+'">'+fmtArea(r.area)+'</b></div>'
+             +'<div class="rr-field"><span>公示期</span><b class="'+(r.deadline?'':'na')+'">'+fmtDeadline(r.deadline)+'</b></div>';
       }else{
-        grid4='<div><span>起始价</span><b class="'+(r.price==null?'na':'')+'">'+fmtMoney(r.price)+'</b></div>'
-             +'<div><span>保证金</span><b class="'+(r.deposit==null?'na':'')+'">'+fmtMoney(r.deposit)+'</b></div>'
-             +'<div><span>面积</span><b class="'+(r.area==null?'na':'')+'">'+fmtArea(r.area)+'</b></div>'
-             +'<div><span>'+(r.rightsType==="auction"?'拍卖日':'截标日')+'</span><b class="'+(r.deadline?'':'na')+'">'+fmtDeadline(r.deadline)+'</b></div>';
+        grid4='<div class="rr-field"><span>起始价</span><b class="'+(r.price==null?'na':'')+'">'+fmtMoney(r.price)+'</b></div>'
+             +'<div class="rr-field"><span>保证金</span><b class="'+(r.deposit==null?'na':'')+'">'+fmtMoney(r.deposit)+'</b></div>'
+             +'<div class="rr-field"><span>面积</span><b class="'+(r.area==null?'na':'')+'">'+fmtArea(r.area)+'</b></div>'
+             +'<div class="rr-field"><span>'+(r.rightsType==="auction"?'拍卖日':'截标日')+'</span><b class="'+(r.deadline?'':'na')+'">'+fmtDeadline(r.deadline)+'</b></div>';
       }
       var extra='';
       if(r.rightsType==="result" && r.bidder) extra='<div class="rc-extra">竞得人：'+esc(r.bidder)+'</div>';
@@ -1920,13 +1999,14 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
       else if(r.rightsType==="transfer") numTxt=(r.area==null?"—":fmtArea(r.area));
       else numTxt=(r.price==null?"—":r.price.toLocaleString("zh-CN")+" 万元");
       return '<div class="rights-row" data-method="'+r.method+'" data-mineral="'+r.mineral+'">'
-        +'<span class="rr-mineral">'+(r.mineral||"—")+'</span>'
+        +'<div class="rr-head">'
+        +'<span class="rr-type">'+rightsTypeLabel(r)+'</span>'
         +'<a class="rr-title" href="'+safeHref(r.it.u)+'" target="_blank" rel="noopener" title="'+esc(r.it.t)+'">'+esc(r.it.t)+'</a>'
         +(r.region?'<span class="rr-region">📍 '+esc(r.region)+'</span>':'')
-        +'<span class="rr-method">'+r.method+'</span>'
-        +'<span class="rr-num">'+numTxt+'</span>'
-        +badge
-        +'<span class="rr-date">'+r.it.d.slice(5)+'</span>'
+        +'</div>'
+        +'<div class="rr-grid">'+grid4+'</div>'
+        +(badge?'<div class="rr-line">'+badge+'</div>':'')
+        +(extra?'<div class="rr-line">'+extra+'</div>':'')
         +'</div>';
     }).join("")+'<div class="rights-more">'+rightsMoreBtn(list.length, shownList.length)+'</div>';
     mdApplySearchToRights();   // 2026-09-10 P1：重渲染后补跑搜索过滤
@@ -3420,13 +3500,19 @@ function setupBriefClamp(){
 }
 function loadBrief(){
   var strip=document.getElementById('briefStrip');
+  // 2026-09-10 P1-6：加载时先显示骨架屏微光占位，渲染完成后由 renderBrief 整体替换
+  var m0=document.getElementById('briefMain');
+  if(m0){ m0.innerHTML='<div class="skeleton" style="height:14px;width:92%;margin:7px 0"></div>'
+    +'<div class="skeleton" style="height:14px;width:78%;margin:7px 0"></div>'
+    +'<div class="skeleton" style="height:14px;width:85%;margin:7px 0"></div>'
+    +'<div class="skeleton" style="height:14px;width:62%;margin:7px 0"></div>'; }
   // 2026-09-09：简报区改为默认显示「加载中」占位，避免空白跳变；
   // 去掉 Date.now() 缓存击穿，让 SW 的 SWR 能命中预缓存。{cache:'reload'} 只用于
   // 后台网络请求绕过浏览器 HTTP 缓存，不影响 SW 先返回缓存秒开。
   // 2026-09-10 P2：加 8 秒超时兜底，避免网络/SW 异常时永远停在「加载中…」
   var _briefTimer=setTimeout(function(){
     var m=document.getElementById('briefMain');
-    if(m&&/加载中/.test(m.textContent||'')){
+    if(m&&(m.querySelector('.skeleton')||/加载中/.test(m.textContent||''))){
       m.innerHTML='<div class="brief-empty">简报加载较慢，可稍后刷新；不影响下方新闻与价格。</div>';
     }
   },8000);
@@ -4135,6 +4221,41 @@ function mdMobileTabBar(){
     sheet.hidden=true; setActive(null);
   });
 }
+
+// 2026-09-10 P1-4 / P1-5 / P1-6：上次看到分隔线、简报折叠、无网络空态
+function mdInsertLastSeen(){
+  try{
+    var url=null; try{ url=localStorage.getItem('md_last_seen_url'); }catch(e){}
+    if(!url) return;
+    if(document.getElementById('mdLastSeen')) return;
+    var items=document.querySelectorAll('#todaySection .news-item');
+    var target=null;
+    for(var i=0;i<items.length;i++){
+      var a=items[i].querySelector('.news-title');
+      if(a && (a.getAttribute('href')||'')===url){ target=items[i]; break; }
+    }
+    if(!target) return;
+    if(target.previousElementSibling && target.previousElementSibling.id==='mdLastSeen') return;
+    var div=document.createElement('div'); div.className='md-lastseen'; div.id='mdLastSeen';
+    div.innerHTML='<span>上次看到</span>';
+    target.parentNode.insertBefore(div, target);
+  }catch(e){}
+}
+function mdRecordLastSeen(){
+  document.addEventListener('click',function(e){
+    var a=e.target.closest && e.target.closest('.news-title'); if(!a) return;
+    try{ localStorage.setItem('md_last_seen_url', a.getAttribute('href')||''); }catch(er){}
+  },true);
+}
+function mdInitOfflineBanner(){
+  try{
+    var ob=document.createElement('div'); ob.id='mdOffline';
+    ob.innerHTML='📡 网络已断开，正在显示已缓存的日报内容';
+    document.body.appendChild(ob);
+    function upd(){ ob.classList.toggle('show', !navigator.onLine); }
+    window.addEventListener('online', upd); window.addEventListener('offline', upd); upd();
+  }catch(e){}
+}
 // 页面加载后再判断一次（处理 iOS 等不触发 beforeinstallprompt 的场景）
 window.addEventListener('DOMContentLoaded',function(){
   // 刷新/重载后强制回到顶部（配合 <head> 里的 history.scrollRestoration='manual'）
@@ -4142,6 +4263,12 @@ window.addEventListener('DOMContentLoaded',function(){
   // 移动端：顶部 App Bar + 分类 Tab + 底部 4 全局动作 Tab（仅 ≤768px 通过 CSS 显示；桌面隐藏）
   mdMobileTopTabs();
   mdMobileTabBar();
+  // P1-4 / P1-5 / P1-6：上次看到分隔线、简报折叠、无网络空态
+  mdRecordLastSeen();
+  mdInitOfflineBanner();
+  var bt=document.getElementById('briefToggle');
+  if(bt)bt.addEventListener('click',function(){ var s=document.getElementById('briefStrip'); if(s)s.classList.toggle('brief-collapsed'); });
+  mdInsertLastSeen(); setTimeout(mdInsertLastSeen, 400);
   if(IS_STANDALONE){ hidePwaInstallPrompt(); mdHideInstallIfStandalone(); return; }
   // iOS / 桌面未触发 beforeinstallprompt 时，延迟到用户首次交互（滚动/点击/按键）或停留 ≥8s 再提示，降低首屏打扰
   mdArmInstallPromptDeferred();
@@ -5827,7 +5954,8 @@ function setupNewsFilterBar(){
   if(document.getElementById('newsFilterBar'))return;
   var today=document.getElementById('todaySection'); if(!today)return;
   var bar=document.createElement('div'); bar.id='newsFilterBar'; bar.className='news-filter-bar';
-  bar.innerHTML='<input class="nf-search" id="nfSearch" type="search" placeholder="搜索标题 / 摘要 / 来源…" aria-label="搜索新闻">'
+  bar.innerHTML='<div class="nf-search-wrap"><input class="nf-search" id="nfSearch" type="search" placeholder="搜索标题 / 摘要 / 来源…" aria-label="搜索新闻">'
+    +'<button class="nf-clear" id="nfClear" type="button" aria-label="清除搜索" hidden>✕</button></div>'
     +'<div class="nf-chips" id="nfChips">'
     +'<span class="nf-chip active" data-kw="">全部</span>'
     +'<span class="nf-chip" data-kw="金">金</span>'
@@ -5846,8 +5974,15 @@ function setupNewsFilterBar(){
     +'</div><span class="nf-count" id="nfCount"></span>';
   today.parentNode.insertBefore(bar, today);
   var input=document.getElementById('nfSearch');
+  var cl=document.getElementById('nfClear');
   input.addEventListener('input',function(){
     newsSearchText=(input.value||'').trim().toLowerCase();
+    if(cl)cl.hidden=!input.value;
+    document.querySelectorAll('.nf-chip').forEach(function(x){x.classList.toggle('active', x.getAttribute('data-kw')==='');});
+    applyFilter(); updateNfCount();
+  });
+  if(cl)cl.addEventListener('click',function(){
+    input.value=''; newsSearchText=''; cl.hidden=true;
     document.querySelectorAll('.nf-chip').forEach(function(x){x.classList.toggle('active', x.getAttribute('data-kw')==='');});
     applyFilter(); updateNfCount();
   });
@@ -5856,7 +5991,7 @@ function setupNewsFilterBar(){
     var kw=c.getAttribute('data-kw')||'';
     var cur=document.querySelector('.nf-chip.active');
     var activeKw=cur?cur.getAttribute('data-kw'):'';
-    if(kw===''||kw===activeKw){ newsSearchText=''; input.value=''; }
+    if(kw===''||kw===activeKw){ newsSearchText=''; input.value=''; if(cl)cl.hidden=true; }
     else { newsSearchText=kw.toLowerCase(); input.value=''; }
     document.querySelectorAll('.nf-chip').forEach(function(x){x.classList.toggle('active', x.getAttribute('data-kw')===newsSearchText);});
     applyFilter(); updateNfCount();
