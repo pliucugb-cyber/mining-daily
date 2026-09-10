@@ -4,6 +4,33 @@
 // （09-10 事故正是 app.js 没跑起来却毫无提示，用户只能看到永久「加载中…」。）
 window.__mdBooted=true;
 try{var _bw=document.getElementById('mdBootWarn');if(_bw)_bw.style.display='none';}catch(e){}
+// 2026-09-11 加固：QA_ROWS 在本文件中段（约 2838 行）才 `var` 初始化。
+// 若顶层代码在其中途抛错（09-10/09-11 两轮事故的形态），QA_ROWS 会停留在 undefined，
+// 而 computeHotNewsLocal() 等在它之前的函数读 QA_ROWS.length 就会 TypeError →
+// 热榜直接显示「加载失败」，掩盖了真正的根因。此处先占位成空数组，让降级路径可控。
+window.QA_ROWS=window.QA_ROWS||[];
+// 问答筛选下拉的「干净快照」：qaInitData() 会往两个 select 里 append 带计数的新选项，
+// 并非幂等（重复调用会出现「铜 (12)」成倍重复）。自愈重跑前先还原到快照。
+window.__mdQaSelSnap=(function(){
+  try{
+    var out={};
+    ['qaFloatMineral','qaFloatTopic'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el)out[id]=el.innerHTML;
+    });
+    return out;
+  }catch(e){ return {}; }
+})();
+function qaReinit(){
+  try{
+    for(var id in window.__mdQaSelSnap){
+      var el=document.getElementById(id);
+      if(el)el.innerHTML=window.__mdQaSelSnap[id];
+    }
+  }catch(e){}
+  if(typeof qaInitData==='function')qaInitData();
+}
+window.qaReinit=qaReinit;
 // ===== 权威转义函数（第 3 批收敛：原 4 份局部 esc + 1 份 escapeHtml 合并为此一个）=====
 // 语义取原先最严格的一份：null/undefined 安全，转义 & < > " '。
 // 各局部作用域不再重复定义，统一用这个；escapeHtml 保留为兼容别名。
@@ -1986,6 +2013,11 @@ var HOT_KW=['突破','重大','战略','世界第一','首次','关键矿产','�
 var NORMAL_KW=['找矿','勘查','探矿','重要','规划','增量','分红','成果','进展','签约','投产','扩建','增资','中标','出让','成交','创','新高','领先'];
 function computeHotNewsLocal(n){
   n=n||10;
+  // 2026-09-11 加固：数据源不再只认 QA_ROWS。QA_ROWS 由中段的 qaInitData() 填充，
+  // 若顶层代码在中途抛错导致它没跑，此前这里会 `QA_ROWS.length` TypeError →
+  // 热榜显示「加载失败」，把真正的根因（初始化中断）伪造成「热榜坏了」。
+  // 现在退化为直接读 window.NEWS_DATA.news（同一份全库数据，口径一致）。
+  var rows=(window.QA_ROWS&&window.QA_ROWS.length)?window.QA_ROWS:((window.NEWS_DATA&&window.NEWS_DATA.news)||[]);
   var anchor=qaReportDate()||'';
   var today=anchor;
   if(!today){
@@ -1995,8 +2027,8 @@ function computeHotNewsLocal(n){
   var td=new Date(today+'T00:00:00');
   if(isNaN(td.getTime()))td=new Date();
   var scored=[];
-  for(var i=0;i<QA_ROWS.length;i++){
-    var r=QA_ROWS[i];
+  for(var i=0;i<rows.length;i++){
+    var r=rows[i];
     var t=String(r.t||'').trim(),s=String(r.s||'').trim(),u=String(r.u||'').trim(),d=String(r.d||'').trim();
     if(!t||!u||!d)continue;
     if(d.length===5&&d.charAt(2)==='-')d=today.slice(0,4)+'-'+d;
