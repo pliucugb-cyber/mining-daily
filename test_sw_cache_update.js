@@ -64,9 +64,20 @@ check('DATA_FILES 含 morning_report.json（每日更新，不能只在安装时
   'DATA_FILES=' + dataFilesBlock.replace(/\s+/g, ' ').trim());
 check('离线兜底按扩展名返回正确 MIME，不再一律回退 index.html',
   /function offlineFallback/.test(swSrc) &&
-  /application\/json/.test(swSrc) && /application\/javascript/.test(swSrc) &&
+  /application\/json/.test(swSrc) && /text\/javascript/.test(swSrc) &&
   !/caches\.match\(req\)\.then\(r => r \|\| caches\.match\(BASE \+ 'index\.html'\)\)/.test(swSrc),
   '旧实现会让 fetch(\'*.json\') 拿到 HTML，.json() 抛错');
+// 2026-09-11 第三轮加固：离线兜底不得对 .js 回「空的 200」
+check('离线兜底不再对 .js/.json 回空的 200，改 503',
+  /status:\s*503/.test(swSrc) && swSrc.indexOf("new Response('', { status: 200") < 0,
+  '空 200 会让 <script>「加载成功但没有数据」：连 onerror 都不触发，'
+  + 'NEWS_DATA 静默变 undefined → 动态区块整片空白却查不到任何错误');
+check('缓存读取统一走 safeMatch（respondWith 不会连拒绝）',
+  /function safeMatch/.test(swSrc) && swSrc.indexOf('safeMatch(req)') >= 0
+  && (swSrc.match(/caches\.match\(req\)/g) || []).length === 1,
+  '直接读缓存只允许出现在 safeMatch 内部这一处；其余一律走兜底版，'
+  + '否则 Cache Storage 抛错会让 respondWith 一并拒绝，浏览器只给出一个没有 message 的 '
+  + 'error 事件（[object Event]），定位不到是哪一层坏了');
 
 console.log('\n===== ② index.html SW 注册 URL 固定化（不再拼 build-version 查询串）=====');
 const bvMatch = htmlSrc.match(/<meta name="build-version" content="([^"]+)"/);

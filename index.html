@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-0230" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-0120" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1639,9 +1639,11 @@ body.dark .mtab{color:var(--ink-300)}
     if(!el)return;
     var n=String(name||'');
     // 形如「步骤 → 错误信息」时，前半放 which、后半放 detail，便于一眼看出根因
-    var s=el.querySelector('.md-boot-which'), d=el.querySelector('.md-boot-detail');
-    if(s&&n)s.textContent='（'+n.split(' → ')[0]+'）';
+    var s=el.querySelector('.md-boot-which'), d=el.querySelector('.md-boot-detail'), g=el.querySelector('.md-boot-diag');
+    var head=(n.indexOf(' → ')>=0)?n.split(' → ')[0]:n;
+    if(s)s.textContent=head?('（'+head+'）'):'';
     if(d)d.textContent=(n.indexOf(' → ')>=0)?n.split(' → ').slice(1).join(' → '):'';
+    if(g){ try{ g.textContent=mdDiagLine(); }catch(e){ g.textContent=''; } }
     el.style.display='flex';
   }
   window.mdShowBootWarn=showBootWarn;
@@ -1664,37 +1666,185 @@ body.dark .mtab{color:var(--ink-300)}
     if(bv){ try{ localStorage.setItem('md_build_ver',bv); }catch(e){} }
   }catch(e){}
 
-  // ⓪ 错误捕获（2026-09-11）：把运行时错误记下来并可显示，不再让故障「静默」。
+  // ⓪ 错误捕获（2026-09-11）：记录运行时错误与「资源加载失败」，不再让故障静默。
+  //    关键改进：资源加载失败时记下**确切的 URL**。此前只记到一个没有 message 的
+  //    Event（显示为 [object Event]），等于什么都没告诉我们，无法定位是哪个文件坏了。
   window.__mdErrors=window.__mdErrors||[];
+  function mdNote(what,detail){
+    try{ window.__mdErrors.push(detail?('['+what+'] '+detail):String(what)); }catch(e){}
+  }
+  window.mdNote=mdNote;
+  // 第三方统计（GoatCounter 等）取不到属正常，不能拿它报警，否则横幅天天误报。
+  function mdIgnoreUrl(u){
+    return !u || /goatcounter|gc\.zgo\.at|google-analytics|doubleclick|hm\.baidu|cnzz/.test(String(u));
+  }
   window.addEventListener('error',function(e){
     try{
-      var m=(e&&(e.message||e))?String(e.message||e):'未知错误';
+      var t=e&&e.target;
+      if(t&&(t.src||t.href)){
+        var u=String(t.src||t.href);
+        if(!mdIgnoreUrl(u))mdNote('资源加载失败',u.split('?')[0]);
+        return;
+      }
+      var m=(e&&(e.message||e))?String(e.message||e):'未知脚本错误';
       if(/Script error/.test(m))return;
-      window.__mdErrors.push(m);
+      mdNote('脚本错误',m);
     }catch(e2){}
   },true);
   window.addEventListener('unhandledrejection',function(e){
-    try{ var r=e&&e.reason; window.__mdErrors.push((r&&(r.message||r))?String(r.message||r):'Promise 被拒绝'); }catch(e2){}
+    try{ var r=e&&e.reason; mdNote('Promise 未处理',(r&&(r.message||r))?String(r.message||r):''); }catch(e2){}
   });
 
-  // ① 看门狗 + 兜底补渲染（2026-09-11 事故核心修复）
-  //    现象：静态内容正常，热榜/简报/要闻却永久停在「加载中…」，页面无任何报错。
-  //    原因：app.js 顶层是平铺调用链，任何一步抛错都会让后面的渲染调用全不执行；
-  //          而 app.js 若压根没跑，连注册看门狗的机会都没有。
-  //    对策：本段是内联脚本必然执行——2.5s 后若 app.js 仍未宣告初始化完成，直接补跑关键渲染。
-  //    （renderDigest/loadBrief/fetchHotNews 等是函数声明，已提升到全局，可直接调用。）
-  setTimeout(function(){
-    if(window.__mdInitDone)return;
-    ['qaInitData','fetchHotNews','loadBrief','renderDigest','renderLmePrices'].forEach(function(n){
-      try{ if(typeof window[n]==='function')window[n](); }
-      catch(e){ try{ window.__mdErrors.push(n+' → '+(e&&e.message||e)); }catch(e2){} }
+  // ① 数据自愈（2026-09-11 第三次加固）——「静态内容全在、动态内容全不出来」的根因修复。
+  //    机制：news-data.js / lme-data.js / price-history.js 是三个 <script>，分别提供
+  //          window.NEWS_DATA / LME_DATA / PRICE_HISTORY。热榜、今日要闻、AI 检索、
+  //          价格卡增强全都读它们；而这些渲染函数开头都是 `if(!window.NEWS_DATA) return`
+  //          ——**静默返回**。所以只要其中一个脚本没落地，对应区块就永久停在初始占位，
+  //          页面却像「只是慢」。而 <script> 只要被 SW 回了一个「空的 200」，
+  //          连 onerror 都不触发，故障彻底隐形（已同步修掉 sw.js 的这条路径）。
+  //    对策：缺哪个就 fetch(cache:'reload') 取文本、以 <script> 内联注入，
+  //          完全绕开脚本加载与 SW 缓存；注入后立刻补跑对应渲染。
+  var MD_ASSETS=[
+    {f:'news-data.js',     k:/NEWS_DATA/,      g:function(){ return !!(window.NEWS_DATA&&window.NEWS_DATA.news&&window.NEWS_DATA.news.length); }},
+    {f:'lme-data.js',      k:/LME_DATA/,       g:function(){ return !!window.LME_DATA; }},
+    {f:'price-history.js', k:/PRICE_HISTORY/,  g:function(){ return !!window.PRICE_HISTORY; }}
+  ];
+  function mdMissingAssets(){
+    return MD_ASSETS.filter(function(a){ try{ return !a.g(); }catch(e){ return true; } });
+  }
+  function mdInjectJs(js){
+    var s=document.createElement('script');
+    s.textContent=js;
+    document.head.appendChild(s);
+  }
+  function mdRepairData(round){
+    var miss=mdMissingAssets();
+    if(!miss.length||round>3)return Promise.resolve(false);
+    return Promise.all(miss.map(function(a){
+      return fetch(a.f+'?_r='+Date.now()+'_'+round,{cache:'reload'})
+        .then(function(r){ if(!r.ok)throw new Error('HTTP '+r.status); return r.text(); })
+        .then(function(t){ if(!t||!a.k.test(t))throw new Error('返回内容异常'); mdInjectJs(t); })
+        .catch(function(e){ mdNote('数据自愈失败',a.f+' → '+(e&&e.message||e)); });
+    }));
+  }
+
+  // ② 渲染自愈：**按页面实际状态判断**，而不是信任某个标志位。
+  //    只要区块还停在初始占位（热榜加载中／要闻提取中／简报加载中），就补跑对应函数。
+  //    这样无论 app.js 是旧版、跑到一半挂了、还是压根没跑，都有机会恢复。
+  function mdOk(id){
+    var el=document.getElementById(id);
+    if(!el)return true;                       // 页面没有该区块（如阅读模式隐藏）→ 不算失败
+    return !/加载中|提取中|获取中/.test(el.textContent||'');
+  }
+  window.mdRegionOk=mdOk;
+  var MD_STEPS=[
+    {n:'qaInitData',      ready:function(){ return !!(window.QA_ROWS&&window.QA_ROWS.length); }},
+    {n:'fetchHotNews',    ready:function(){ return mdOk('hotListBody'); }},
+    {n:'loadBrief',       ready:function(){ return mdOk('briefMain'); }},
+    {n:'renderDigest',    ready:function(){ return mdOk('digestStrip'); }}
+  ];
+  function mdPending(){
+    return MD_STEPS.filter(function(s){ try{ return !s.ready(); }catch(e){ return true; } });
+  }
+  function mdRenderRound(round){
+    var pend=mdPending();
+    pend.forEach(function(s){
+      // qaInitData 会往下拉框追加选项，不是幂等的 —— 有 qaReinit（app.js 提供，先还原再重建）就优先用它，
+      // 并且最多补跑两次，避免选项重复。
+      var name=s.n;
+      if(name==='qaInitData'){
+        var tries=window.__mdQaTries||0;
+        if(tries>=2)return;
+        window.__mdQaTries=tries+1;
+        name=(typeof window.qaReinit==='function')?'qaReinit':'qaInitData';
+      }
+      try{ if(typeof window[name]==='function')window[name](); }
+      catch(e){ mdNote('补渲染失败',name+' → '+(e&&e.message||e)); }
     });
-    window.__mdInitDone=true;   // 已补跑，避免重复
-  },2500);
-  // 12s 仍未正常完成（或 app.js 完全没跑）→ 弹横幅，并把捕获到的错误显示出来
+    return pend.length;
+  }
+  window.mdRepairNow=function(round){
+    return mdRepairData(round||0).then(function(){ return mdRenderRound(round||0); });
+  };
+
+  // ③ 诊断：把「关键状态」写进横幅，并支持一键复制。
+  //    目的：以后这类问题截图/粘贴一次就能定位，不再靠猜。
+  function mdDiagText(){
+    return JSON.stringify({
+      build:(document.querySelector('meta[name="build-version"]')||{}).content||'',
+      href:location.href,
+      online:navigator.onLine,
+      appjs:!!window.__mdBooted,
+      data:{news:(window.NEWS_DATA&&window.NEWS_DATA.news)?window.NEWS_DATA.news.length:'缺失',
+            updated:(window.NEWS_DATA&&window.NEWS_DATA.updated)||'',
+            lme:!!window.LME_DATA,
+            priceHistory:!!window.PRICE_HISTORY,
+            qaRows:(window.QA_ROWS&&window.QA_ROWS.length)||0},
+      regions:{hot:mdOk('hotListBody'),brief:mdOk('briefMain'),digest:mdOk('digestStrip')},
+      sw:(navigator.serviceWorker&&navigator.serviceWorker.controller)?'受控':'未受控',
+      errors:(window.__mdErrors||[]).slice(0,8)
+    });
+  }
+  function mdDiagLine(){
+    var d=null; try{ d=JSON.parse(mdDiagText()); }catch(e){}
+    if(!d)return '';
+    return 'build='+d.build
+      +' · app.js='+(d.appjs?'已执行':'未执行')
+      +' · 数据 news='+(d.data.news==='缺失'?'缺失':d.data.news+'条')
+      +' lme='+(d.data.lme?'有':'无')+' 历史='+(d.data.priceHistory?'有':'无')
+      +' · 区块 热榜'+(d.regions.hot?'OK':'空')+' 简报'+(d.regions.brief?'OK':'空')+' 要闻'+(d.regions.digest?'OK':'空')
+      +' · 错误'+(d.errors.length)+'条';
+  }
+  function mdFallbackCopy(txt,btn){
+    try{
+      var ta=document.createElement('textarea');
+      ta.value=txt; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.left='-9999px';
+      document.body.appendChild(ta); ta.select();
+      var ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+      document.body.removeChild(ta);
+      if(btn)btn.textContent=ok?'已复制 ✓':'复制失败，请截图';
+      if(!ok){ var el=document.querySelector('.md-boot-detail'); if(el)el.textContent=txt.slice(0,160); }
+    }catch(e){}
+  }
+  window.mdCopyDiag=function(btn){
+    var txt=mdDiagText();
+    var done=function(extra){ mdFallbackCopy(extra?txt+'\n'+extra:txt,btn); };
+    try{
+      if(window.caches&&caches.keys){
+        caches.keys().then(function(ks){ done('caches='+ks.join(',')); },function(){ done(''); });
+        return;
+      }
+    }catch(e){}
+    done('');
+  };
+
+  // ④ 自愈调度：首屏后分批检查（数据缺失就重取，区块空着就补渲染）。
+  //    注意顺序：先补齐数据，再补渲染——否则渲染函数会因数据缺失而静默返回。
+  function mdPass(round){
+    try{ mdRenderRound(round); }catch(e){ mdNote('自愈轮次异常',(e&&e.message||e)); }
+    if(mdMissingAssets().length){
+      mdRepairData(round).then(function(){
+        try{ mdRenderRound(round+10); }catch(e){}
+        if(window.__mdBooted===undefined){} // app.js 未执行 → 由 12s 看门狗负责提示
+      });
+    }
+    var pend=mdPending();
+    if(!pend.length&&!(window.__mdErrors||[]).length){
+      try{ var el=document.getElementById('mdBootWarn'); if(el&&el.style.display!=='none')el.style.display='none'; }catch(e){}
+    }
+  }
+  [1200,3000,7000,14000].forEach(function(ms,i){
+    setTimeout(function(){ mdPass(i); },ms);
+  });
+
+  // ⑤ 看门狗：12s 后仍有区块空着（或捕获到影响页面的错误）→ 显示横幅 + 诊断行。
   setTimeout(function(){
-    if(window.__mdBooted&&window.__mdInitDone&&!(window.__mdErrors||[]).length)return;
-    showBootWarn((window.__mdErrors&&window.__mdErrors.length)?window.__mdErrors[0]:'app.js 未执行');
+    var pend=mdPending();
+    if(!pend.length&&!(window.__mdErrors||[]).length)return;
+    var name=pend.length
+      ? ('区块未渲染（'+pend.map(function(s){return s.n;}).join(',')+'）')
+      : ((window.__mdErrors||[])[0]||'页面脚本未完成初始化');
+    showBootWarn(name);
   },12000);
 
   // ③ SW 注册与更新（内联版）：app.js 不可用时也要能更新 SW
@@ -1732,10 +1882,13 @@ body.dark .mtab{color:var(--ink-300)}
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
 <!-- 2026-09-11：脚本未加载/缓存陈旧时的可见逃生条（默认隐藏，由内联引信或 app.js 控制） -->
-<div id="mdBootWarn" role="alert" style="display:none;position:sticky;top:0;z-index:99999;background:#7f1d1d;color:#fff;font:14px/1.6 system-ui,-apple-system,'Microsoft YaHei',sans-serif;padding:10px 14px;gap:10px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.25)">
-  <span>⚠️ 页面脚本<span class="md-boot-which"></span>未能加载或初始化中断，热榜／简报／要闻可能停在「加载中」。</span>
+<div id="mdBootWarn" role="alert" style="display:none;position:sticky;top:0;z-index:99999;background:#7f1d1d;color:#fff;font:14px/1.6 system-ui,-apple-system,'Microsoft YaHei',sans-serif;padding:10px 14px;gap:6px 10px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.25)">
+  <span>⚠️ 有区块没加载出来<span class="md-boot-which"></span>，页面正在自动重试。</span>
   <span class="md-boot-detail" style="font-family:ui-monospace,Consolas,monospace;font-size:12px;opacity:.92"></span>
+  <span class="md-boot-diag" style="flex-basis:100%;font-family:ui-monospace,Consolas,monospace;font-size:12px;opacity:.88"></span>
+  <button type="button" onclick="window.mdRepairNow&&window.mdRepairNow(99)" style="background:#fff;color:#7f1d1d;border:0;border-radius:6px;padding:6px 12px;font-weight:600;cursor:pointer">立即重试加载</button>
   <button type="button" onclick="window.mdHardReset&&window.mdHardReset()" style="background:#fff;color:#7f1d1d;border:0;border-radius:6px;padding:6px 12px;font-weight:600;cursor:pointer">强制重新加载（清缓存）</button>
+  <button type="button" onclick="window.mdCopyDiag&&window.mdCopyDiag(this)" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:6px;padding:5px 10px;cursor:pointer">复制诊断信息</button>
   <span style="opacity:.85;font-size:12px">仍不行：开发者工具 → Application → Service Workers → Unregister；手机则清除该站点数据。</span>
   <button type="button" onclick="this.parentNode.style.display='none'" style="margin-left:auto;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:6px;padding:4px 10px;cursor:pointer">关闭</button>
 </div>

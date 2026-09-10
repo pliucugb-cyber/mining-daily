@@ -11,12 +11,14 @@
 //   而 Ctrl+Shift+R 并不会清 Service Worker 缓存，用户无论如何刷新都出不来。
 //   故本轮把 HTML 与 app.js 一并改成 **network-first + no-cache 再验证**（304 秒回，不变也快），
 //   缓存只作离线兜底。牺牲一点点「秒开」，换「在线用户永不卡旧版」。
+//   同日第三次加固：离线兜底不再对 .js 返回「空 200」（会让脚本静默失去数据、故障隐形），
+//   改 503 触发 <script onerror>；缓存读取全部走 safeMatch 兜底，杜绝 respondWith 连拒绝。
 // ⚠️ CACHE_NAME 由 deploy_pages.py::sync_sw_cache_name() 依据 index.html 的 build-version
 //    自动派生（mining-daily-<build-version>）。请勿手改本行的字面量：
 //    2026-09-10 事故——本行被改写成 `const P260910-1900';`（语法错误），
 //    导致 sw.js 无法解析 → SW 永远无法更新 → 用户卡在旧的/不完整缓存里，页面区块一直停在「加载中…」。
 //    现 deploy_pages.py 与 preflight_check.py 都会对 sw.js 做语法校验，写坏即拒绝部署。
-const CACHE_NAME = 'mining-daily-20260911-0230';
+const CACHE_NAME = 'mining-daily-20260911-0120';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -51,17 +53,55 @@ const DATA_FILES = [
 // 旧实现对所有取不到的请求一律回退 index.html —— 于是 fetch('morning_report.json')
 // 拿到的是 HTML，.json() 直接抛错，页面表现成「简报区神秘隐藏」而看不出根因。
 // 现在按扩展名给出正确类型的最小合法响应；只有导航请求才回退 index.html。
+//
+// 2026-09-11 第三次加固：**禁止再返回「空的 200」**（本次事故的隐形放大器）。
+// 旧实现对 .js 回「200 + 空正文」：浏览器认为脚本加载成功，连 <script onerror> 都不触发，
+// 于是 window.NEWS_DATA / LME_DATA / PRICE_HISTORY 静默变成 undefined ——
+// 依赖它们的热榜/要闻/价格卡/AI 检索全部空白，页面却像「只是慢」，无任何报错可查。
+// 现在改为 503：脚本标签必然触发 onerror，页面内联引信据此启动「重取数据」自愈。
 function offlineFallback(pathname) {
   if (/\.json$/i.test(pathname)) {
-    return new Response('{}', { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } });
+    return new Response('{"__offline":true}', {
+      status: 503,
+      headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    });
   }
   if (/\.js$/i.test(pathname)) {
-    return new Response('', { status: 200, headers: { 'Content-Type': 'application/javascript; charset=utf-8' } });
+    return new Response('/* offline: 资源不可用（503，勿改为空 200） */', {
+      status: 503,
+      headers: { 'Content-Type': 'text/javascript; charset=utf-8' }
+    });
   }
-  return caches.match(BASE + 'index.html').then(function (c) {
+  return safeMatch(BASE + 'index.html').then(function (c) {
     return c || new Response('<!DOCTYPE html><meta charset="utf-8"><p>离线且无可用缓存，请联网后重试。</p>', {
       status: 503,
       headers: { 'Content-Type': 'text/html; charset=utf-8' }
+    });
+  });
+}
+
+// Cache Storage 在磁盘满 / 存储被禁用 / 索引损坏时会整体抛错。
+// 一旦缓存读取抛错，旧实现的 respondWith 会「连拒绝」，浏览器把这次请求当网络错误，
+// 页面侧只看到一个没有 message 的 error 事件（控制台显示为 [object Event]），
+// 排查时完全看不出是哪一层坏了。此处统一兜住：读缓存失败就当作「没有缓存」，继续走网络。
+function safeMatch(req) {
+  try {
+    if (!(self.caches && self.caches.match)) return Promise.resolve(null);
+    return self.caches.match(req).catch(function () { return null; });
+  } catch (e) { return Promise.resolve(null); }
+}
+
+// 取网络并顺手写缓存；任何失败都不向外抛（返回缓存副本或 503），保证 respondWith 永不拒绝。
+function fetchCached(req, fallback) {
+  return fetch(req).then(function (res) {
+    if (res && res.ok && res.type === 'basic') {
+      var copy = res.clone();
+      caches.open(CACHE_NAME).then(function (c) { return c.put(req, copy); }).catch(function () {});
+    }
+    return res;
+  }).catch(function () {
+    return fallback || new Response('', {
+      status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' }
     });
   });
 }
@@ -78,7 +118,7 @@ function networkFirst(req, pathname) {
     }
     return res;
   }).catch(function () {
-    return caches.match(req).then(function (c) {
+    return safeMatch(req).then(function (c) {
       return c || offlineFallback(pathname);
     });
   });
@@ -151,15 +191,11 @@ self.addEventListener('fetch', event => {
 
   // 其余静态资源（图标、manifest 等）：stale-while-revalidate（先用缓存秒开，后台静默更新）
   event.respondWith(
-    caches.match(req).then(cached => {
-      const network = fetch(req).then(res => {
-        if (res && res.ok && res.type === 'basic') {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
-        }
-        return res;
-      }).catch(() => cached);
+    safeMatch(req).then(function (cached) {
+      var network = fetchCached(req, cached);
       return cached || network;
+    }).catch(function () {
+      return fetchCached(req, null);
     })
   );
 });

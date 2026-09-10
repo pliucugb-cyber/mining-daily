@@ -30,6 +30,7 @@ import sys
 import time
 import shlex
 import shutil
+import hashlib
 import subprocess
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -102,6 +103,60 @@ def run(cmd, cwd=None, check=True):
         shown = cmd if isinstance(cmd, str) else ' '.join(cmd)
         raise RuntimeError('命令失败: %s\n%s' % (shown, out))
     return p.returncode, out
+
+
+# 2026-09-11 新增：部署期给 4 个脚本标签打「内容指纹」。
+#
+# 背景（09-11 事故第三轮复盘的结论）：
+#   GitHub Pages 对静态资源返回 Cache-Control: max-age=600，而 <script src="app.js">
+#   这种固定 URL 会命中**浏览器 HTTP 缓存**；再叠加 SW 缓存，用户完全可能长期在跑
+#   旧的 app.js，却已经拿到新的 index.html —— 「新页 + 旧逻辑」混装正是「区块停在
+#   加载中」的经典成因（旧 app.js 没有本轮的自愈逻辑，页面自己救不回来）。
+#
+# 做法：对每个脚本按文件内容取 md5 前 8 位，改写成 app.js?v=<hash>。
+#   内容不变 → URL 不变（不影响缓存收益）；内容一变 → URL 就变，浏览器与 SW
+#   都只能去网络取新版，混装状态在机制上不可能出现。
+#
+# 注意：只改工作副本 tmp/ghpages 里的 index.html，**不动源文件**——
+#   本地开发与 jsdom 测试仍用无后缀 URL（各测试用 `src="app.js"[^>]*` 匹配，两者都兼容）。
+#   sw.js 的注册 URL 仍必须是 './sw.js'，绝不可加指纹（加了会导致 SW 反复重装）。
+BUST_FILES = ['app.js', 'news-data.js', 'lme-data.js', 'price-history.js']
+
+
+def bust_asset_versions():
+    """把工作副本 index.html 里的脚本引用改写为带内容指纹的 URL。"""
+    idx = os.path.join(WORK, 'index.html')
+    if not os.path.isfile(idx):
+        raise RuntimeError('工作副本缺少 index.html，无法打脚本指纹')
+    with io.open(idx, encoding='utf-8', newline='') as f:
+        src = f.read()
+    out = src
+    marks = []
+    for name in BUST_FILES:
+        p = os.path.join(ROOT, name)
+        if not os.path.isfile(p):
+            raise RuntimeError('缺少 %s，无法打脚本指纹（拒绝部署）' % name)
+        with open(p, 'rb') as f:
+            h = hashlib.md5(f.read()).hexdigest()[:8]
+        # 先吞掉可能残留的旧指纹，避免出现 app.js?v=aaa?v=bbb
+        pat = re.compile(r'src="%s(\?v=[^"]*)?"' % re.escape(name))
+        out, n = pat.subn(lambda _m, _n=name, _h=h: 'src="%s?v=%s"' % (_n, _h), out)
+        if n == 0:
+            raise RuntimeError('index.html 中找不到 src="%s"，指纹改写失败（拒绝部署）' % name)
+        marks.append('%s?v=%s' % (name, h))
+    if out != src:
+        tmp = idx + '.tmp'
+        with open(tmp, 'w', encoding='utf-8', newline='') as f:
+            f.write(out)
+        # 兜底：改写只应动 4 处 src，字节数变化很小；出入过大说明正则写坏了
+        if abs(len(out) - len(src)) > 400 or len(out) < 1000:
+            raise RuntimeError('index.html 指纹改写结果异常（%d → %d 字节），拒绝写入'
+                               % (len(src), len(out)))
+        os.replace(tmp, idx)
+        log('[deploy_pages] 已打脚本指纹：%s' % '、'.join(marks))
+    else:
+        log('[deploy_pages] 脚本指纹已是最新：%s' % '、'.join(marks))
+    return marks
 
 
 def _node_exe():
@@ -258,6 +313,9 @@ def main():
         shutil.copy2(src, dst)
         copied.append(f)
     log('[deploy_pages] 已复制 %d 个文件：%s' % (len(copied), ', '.join(copied)))
+
+    # 4.2) 脚本指纹（内容寻址）：消除「新 HTML + 旧 app.js」混装
+    bust_asset_versions()
 
     # 4.5) .nojekyll —— 跳过 GitHub Pages 的 Jekyll 构建
     #   Pages 默认对站点跑 Jekyll：会忽略下划线开头的文件/目录，还可能把 {{ }} 当 Liquid 模板处理。
