@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1435" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1500" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -3871,8 +3871,8 @@ function hidePwaInstallPrompt(){
 
 function showPwaInstallPrompt(){
   if(IS_STANDALONE){ hidePwaInstallPrompt(); return; }
-  // 用户本次会话点过关闭，不再打扰
-  try{ if(sessionStorage.getItem('pwa-install-bar-dismissed')==='1') return; }catch(e){}
+  // 用户曾关闭过（localStorage 长期记忆），不再打扰
+  try{ if(localStorage.getItem('pwa-install-bar-dismissed')==='1') return; }catch(e){}
 
   if(IS_MOBILE_UA){
     // 移动端：底部浮条
@@ -3892,7 +3892,7 @@ function showPwaInstallPrompt(){
     bar.hidden=false;
     document.body.classList.add('has-install-bar');
     var close=document.getElementById('mobileInstallClose');
-    if(close)close.onclick=function(){ bar.hidden=true; document.body.classList.remove('has-install-bar'); try{sessionStorage.setItem('pwa-install-bar-dismissed','1');}catch(e){} };
+    if(close)close.onclick=function(){ bar.hidden=true; document.body.classList.remove('has-install-bar'); try{localStorage.setItem('pwa-install-bar-dismissed','1');}catch(e){} };
   }else{
     // 电脑端：顶部按钮
     var pcBtn=document.getElementById('pwaHeaderBtn');
@@ -3901,6 +3901,34 @@ function showPwaInstallPrompt(){
       pcBtn.onclick=function(){ triggerPwaInstall(); };
     }
   }
+}
+
+// 2026-09-10：安装引导「延迟触发」——首次进入不立即弹，降低首屏打扰
+// 触发条件（满足任一即一次性弹出）：滚动超过 80% 视口 / 发生一次点击或按键 / 停留 ≥ 8 秒
+// 已安装（IS_STANDALONE）或用户曾关闭（localStorage 记忆）则跳过；beforeinstallprompt 仍即时弹出（浏览器安装就绪事件）
+function mdArmInstallPromptDeferred(){
+  if(IS_STANDALONE) return;
+  try{ if(localStorage.getItem('pwa-install-bar-dismissed')==='1') return; }catch(e){}
+  var fired=false;
+  var timer=setTimeout(fire, 8000);
+  function fire(){
+    if(fired) return;
+    fired=true;
+    cleanup();
+    showPwaInstallPrompt();
+  }
+  function onScroll(){
+    if(window.scrollY > window.innerHeight*0.8) fire();
+  }
+  function cleanup(){
+    window.removeEventListener('scroll', onScroll, {passive:true});
+    window.removeEventListener('click', fire);
+    window.removeEventListener('keydown', fire);
+    clearTimeout(timer);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('click', fire);
+  window.addEventListener('keydown', fire);
 }
 
 function toggleInstallGuide(){
@@ -3939,10 +3967,8 @@ window.addEventListener('DOMContentLoaded',function(){
   // 刷新/重载后强制回到顶部（配合 <head> 里的 history.scrollRestoration='manual'）
   try{ window.scrollTo(0,0); }catch(e){}
   if(IS_STANDALONE){ hidePwaInstallPrompt(); mdHideInstallIfStandalone(); return; }
-  // iOS 不触发 beforeinstallprompt，直接显示浮条
-  if(IS_IOS&&IS_MOBILE_UA) showPwaInstallPrompt();
-  // 电脑端若浏览器支持安装，先显示按钮；等 beforeinstallprompt 触发后再点亮实际安装能力
-  if(!IS_MOBILE_UA) showPwaInstallPrompt();
+  // iOS / 桌面未触发 beforeinstallprompt 时，延迟到用户首次交互（滚动/点击/按键）或停留 ≥8s 再提示，降低首屏打扰
+  mdArmInstallPromptDeferred();
 });
 // ===== 版本戳记录：仅持久化当前 build，不做硬刷新 =====
 // 2026-09-10 优化后，「刷新即最新」的职责已重新分配，杜绝循环刷新：
