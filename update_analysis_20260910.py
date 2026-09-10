@@ -11,7 +11,6 @@ NOW = datetime.datetime.now().astimezone(datetime.timezone(datetime.timedelta(ho
 
 news = json.load(open('mining_news.json', encoding='utf-8'))['news']
 ph = json.load(open('price_history_detail.json', encoding='utf-8'))['series']
-lme = {m['slug']: m for m in json.load(open('lme_data.json', encoding='utf-8'))['metals']}
 
 COMM = {
     '铜': ['铜'], '铝': ['铝'], '铅': ['铅'], '锌': ['锌'], '镍': ['镍'],
@@ -239,33 +238,6 @@ tech_text = '\n'.join(fmt_bullet(n) for n in recent_items('找矿成果与勘查
 ma_text = '\n'.join(fmt_bullet(n) for n in recent_items('并购与投资')) or '今日暂无新增并购/投资类公告。'
 
 
-def _ph_q(key):
-    p = ph[key]['points']
-    last, prev = p[-1][1], p[-2][1]
-    pct = (last - prev) / prev * 100 if prev else 0.0
-    return last, pct
-
-
-def _fmt_pct(x):
-    return ('+%.2f%%' if x >= 0 else '%.2f%%') % x
-
-
-# 国内行情（09-09 收盘）
-_shfe = {n: _ph_q(k) for k, n in [('cum', '沪铜'), ('alm', '沪铝'), ('pbm', '沪铅'),
-                                   ('znm', '沪锌'), ('nim', '沪镍'), ('snm', '沪锡'),
-                                   ('au9999', '上海金'), ('agtd', '白银'), ('lcm', '碳酸锂')]}
-_shfe_up = ['%s %s（%s）' % (n, format(v[0], ',.0f'), _fmt_pct(v[1])) for n, v in _shfe.items() if v[1] > 0.001]
-_shfe_down = ['%s %s（%s）' % (n, format(v[0], ',.0f'), _fmt_pct(v[1])) for n, v in _shfe.items() if v[1] < -0.001]
-_shfe_flat = ['%s %s（%s）' % (n, format(v[0], ',.0f'), _fmt_pct(v[1])) for n, v in _shfe.items() if -0.001 <= v[1] <= 0.001]
-
-# LME 行情（09-10 电子盘，直接读 lme_data.json）
-_lme = {}
-for k, name in [('lcpt', '铜'), ('lalt', '铝'), ('lznt', '锌'), ('lldt', '铅'), ('lnkt', '镍'), ('ltnt', '锡')]:
-    m = lme[k]
-    _lme[name] = (m['price'], m['chg_pct'])
-_lme_up = ['%s %s（%s）' % (n, format(v[0], ',.1f'), _fmt_pct(v[1])) for n, v in _lme.items() if v[1] > 0.001]
-_lme_down = ['%s %s（%s）' % (n, format(v[0], ',.1f'), _fmt_pct(v[1])) for n, v in _lme.items() if v[1] < -0.001]
-
 # 矿权市场（数据层 rights，单独从月度库读取，不进 index.html 正文）
 rights_lib = json.load(open('data/news_2026-09.json', encoding='utf-8'))['news']
 rights = [n for n in rights_lib if n.get('category') == '矿权交易']
@@ -275,10 +247,7 @@ rights_highlights = '；'.join('%s（%s）' % (r['title'].split('探矿权')[0].
 rights_text = ('矿权交易专区窗口内累计 %d 宗（挂牌/协议/转让/结果）；近两日新增：%s。' %
                (len(rights), rights_highlights))
 
-report = """**行情：**
-国内 %s 收盘——%s领涨，%s走弱；上海金 Au99.99 报 %s 元/克、白银 Ag(T+D) %s 元/千克（%s）。LME %s 电子盘（美元/吨）：%s偏强，%s走弱，锡强势上行至 55,680。各品种完整报价见上方「金属价格」卡片。
-
-**政策与产业：**
+report = """**政策与产业：**
 %s
 
 **勘查与技术：**
@@ -289,16 +258,7 @@ report = """**行情：**
 
 **矿权市场：**
 - %s
-""" % (ASOF,
-       '、'.join(_shfe_up) or '盘面偏弱',
-       '、'.join(_shfe_down) or '—',
-       format(_shfe['上海金'][0], ',.2f'),
-       format(_shfe['白银'][0], ',.0f'),
-       _fmt_pct(_shfe['上海金'][1]),
-       ASOF,
-       '、'.join(_lme_up) or '—',
-       '、'.join(_lme_down) or '—',
-       policy_text, tech_text, ma_text, rights_text)
+""" % (policy_text, tech_text, ma_text, rights_text)
 
 _cat = collections.Counter(n.get('category', '') for n in new_items)
 
