@@ -2585,6 +2585,29 @@ function mdRenderMeetingSection(){
 function mdQaMobileBackArrow(){
   try{ if(window.innerWidth<=768){ var cb=document.querySelector('#qaFloat .pchart-close'); if(cb){ cb.textContent='‹'; cb.setAttribute('aria-label','返回'); } } }catch(e){}
 }
+// 2026-09-10 修复：数据看门狗。
+// 事故复盘——SW/sw.js 异常时 news-data.js 取不到 → window.NEWS_DATA 为 undefined，
+// 各渲染函数在 `if(!window.NEWS_DATA) return` 处静默返回，页面就永久停在「热榜加载中…／
+// 简报加载中…／要闻提取中…」占位，用户完全看不出是失败还是慢。此处 9 秒后兜底：
+// 仍未拿到数据则改写占位为明确提示 + 「重试」按钮（若数据已就绪则直接跳过，不影响正常渲染）。
+function mdDataWatchdog(){
+  if(window.__mdDataWatchdog)return; window.__mdDataWatchdog=true;
+  setTimeout(function(){
+    try{
+      if(window.NEWS_DATA&&window.NEWS_DATA.news&&window.NEWS_DATA.news.length)return;
+      var msg='数据加载失败，请检查网络后重试';
+      var btn=' <button type="button" class="md-data-retry" style="margin-left:8px;border:1px solid var(--line-2,#d8dee6);background:transparent;color:inherit;border-radius:4px;padding:2px 10px;font-size:12px;cursor:pointer">重试</button>';
+      var hot=document.getElementById('hotListBody');
+      if(hot&&hot.querySelector('.hotlist-loading')){ hot.innerHTML='<li class="hotlist-loading">'+msg+btn+'</li>'; }
+      var dg=document.getElementById('digestStrip');
+      if(dg&&dg.querySelector('.digest-empty')){ dg.innerHTML='<li class="digest-empty">'+msg+btn+'</li>'; }
+      var bm=document.getElementById('briefMain');
+      if(bm&&/加载中/.test(bm.textContent||'')){ bm.innerHTML='<div class="brief-empty">'+msg+btn+'</div>'; }
+      var rs=document.querySelectorAll('.md-data-retry');
+      for(var i=0;i<rs.length;i++){ rs[i].addEventListener('click',function(){ try{location.reload();}catch(e){} }); }
+    }catch(e){}
+  },9000);
+}
 
 // 2026-09-10 P1-4 / P1-5 / P1-6：上次看到分隔线、简报折叠、无网络空态
 function mdInsertLastSeen(){
@@ -2630,6 +2653,8 @@ window.addEventListener('DOMContentLoaded',function(){
   // ⑨ 会议会展区块注入；⑥ 移动端问答头部返回箭头
   mdInitMeetingSection();
   mdQaMobileBackArrow();
+  // 数据看门狗：9s 内仍未拿到 NEWS_DATA 时把「加载中…」占位改成明确提示 + 重试
+  mdDataWatchdog();
   // P1-4 / P1-5 / P1-6：上次看到分隔线、简报折叠、无网络空态
   mdRecordLastSeen();
   mdInitOfflineBanner();
@@ -2658,12 +2683,18 @@ window.addEventListener('DOMContentLoaded',function(){
   }catch(e){}
 })();
 // 清掉 SW 缓存的站点数据，强制下次导航从网络拉最新（避免 stale-while-revalidate 反复返回旧 HTML 造成刷新横跳）
+// 2026-09-10 修复：原实现删除所有 /mining-daily/ 缓存——包括「当前版本」刚预缓存好的那一份。
+// install 的预缓存每个 SW 版本只跑一次，reload 并不会把它补回来，于是出现一段「缓存被清空」的窗口；
+// 若此刻网络不稳/离线，news-data.js 取不到 → window.NEWS_DATA 为 undefined → 各区块永久停在「加载中…」。
+// 改为只删「非当前版本」的旧缓存：保留 mining-daily-<当前 build-version>（与 sw.js 的 CACHE_NAME 口径一致）。
 function _clearHtmlCache(){
   try{
     if('caches' in window&&window.caches&&window.caches.keys){
+      var keep='mining-daily-';
+      try{var m=document.querySelector('meta[name="build-version"]');if(m)keep+=m.getAttribute('content');}catch(e){}
       window.caches.keys().then(function(ks){
         ks.forEach(function(name){
-          if(/mining-daily/.test(name)){ window.caches.delete(name).catch(function(){}); }
+          if(/mining-daily/.test(name)&&name!==keep){ window.caches.delete(name).catch(function(){}); }
         });
       }).catch(function(){});
     }
@@ -2676,7 +2707,32 @@ if('serviceWorker' in navigator){
     // 2026-09-10 优化：注册 URL 固定，不再拼 build-version 查询串。
     // 浏览器对 SW 脚本自身的更新检查本来就会按 no-cache 重新校验，故 CDN 缓存旧 sw.js
     // 不会阻碍检测；而带 ?v= 反而会让「缓存 HTML 的版本戳 ≠ 当前 SW」时产生多个注册导致死循环刷新。
-    navigator.serviceWorker.register('./sw.js').catch(function(){});
+    navigator.serviceWorker.register('./sw.js').catch(function(){
+      // 2026-09-10 修复：注册失败通常意味着 sw.js 本身不可解析/不可用（例如被写坏成语法错误）。
+      // 此时浏览器会继续沿用旧的 SW，而旧 SW 喂的是旧的/不完整的缓存 → 页面区块停在「加载中…」。
+      // 兜底自愈：清掉失效注册与本站缓存，再重载一次去拿全新资源（每会话最多一次 + 仅在线时，防循环与误清）。
+      try{
+        if(navigator.onLine===false)return;
+        if(sessionStorage.getItem('md_sw_selfheal')==='1')return;
+        sessionStorage.setItem('md_sw_selfheal','1');
+        var _jobs=[];
+        if(navigator.serviceWorker.getRegistrations){
+          _jobs.push(navigator.serviceWorker.getRegistrations().then(function(rs){
+            return Promise.all(rs.map(function(r){return r.unregister();}));
+          }));
+        }
+        if('caches' in window&&window.caches&&window.caches.keys){
+          _jobs.push(window.caches.keys().then(function(ks){
+            return Promise.all(ks.filter(function(n){return /mining-daily/.test(n);})
+              .map(function(n){return window.caches.delete(n);}));
+          }));
+        }
+        Promise.all(_jobs).then(function(){
+          console.warn('[sw] 注册失败，已清理失效 SW/缓存并重载一次');
+          try{location.reload();}catch(e){}
+        });
+      }catch(e){}
+    });
     // 收到"新版已就绪"通知 → 自动刷新一次（一次性标志防重复/死循环）。
     // activate 已不再强制 navigate，这里就是唯一刷新来源；仅在确实换了新的 sw.js 时触发。
     navigator.serviceWorker.addEventListener('message',function(ev){

@@ -7,7 +7,12 @@
 // 2026-09-04 二次修复：支持子路径部署（GitHub Pages 站点位于 /mining-daily/）。
 //   原先写死 '/index.html' 这类绝对路径，在子路径下会指向站点根而 404。
 //   改为以 SW 自身所在目录为基准推导 BASE，根路径部署（本地/沙箱）与子路径部署（Pages）均可。
-const P260910-1900';
+// ⚠️ CACHE_NAME 由 deploy_pages.py::sync_sw_cache_name() 依据 index.html 的 build-version
+//    自动派生（mining-daily-<build-version>）。请勿手改本行的字面量：
+//    2026-09-10 事故——本行被改写成 `const P260910-1900';`（语法错误），
+//    导致 sw.js 无法解析 → SW 永远无法更新 → 用户卡在旧的/不完整缓存里，页面区块一直停在「加载中…」。
+//    现 deploy_pages.py 与 preflight_check.py 都会对 sw.js 做语法校验，写坏即拒绝部署。
+const CACHE_NAME = 'mining-daily-20260910-2355';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -53,8 +58,18 @@ function offlineFallback(pathname) {
 self.addEventListener('install', event => {
   // 强制新 SW 立即激活，不等旧标签页关闭
   self.skipWaiting();
+  // 2026-09-10 修复：原先用 cache.addAll（一次性批量写入清单），只要清单里有一个 URL 不可用
+  // （例如可选的 morning_report.json 在 Pages 上 404），addAll 会「整体原子失败」→
+  // 一条都不预缓存 → 首屏秒开与离线兜底全部静默失效（.catch(()=>{}) 把原因也吞了）。
+  // 改为逐条 add：单条失败只记录并跳过，其余照常预缓存。
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)).catch(() => {})
+    caches.open(CACHE_NAME).then(cache =>
+      Promise.all(urlsToCache.map(u =>
+        cache.add(new Request(u, { cache: 'reload' })).catch(() => {
+          console.warn('[sw] 预缓存跳过（该资源不可用）：' + u);
+        })
+      ))
+    ).catch(() => {})
   );
 });
 
