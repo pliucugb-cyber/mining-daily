@@ -55,6 +55,7 @@ BRANCH = 'gh-pages'
 # 站点必需文件（缺一不可；缺失会直接报错终止，避免推一个坏站点上去）
 REQUIRED = [
     'index.html',
+    'app.js',
     'news-data.js',
     'lme-data.js',
     'price-history.js',

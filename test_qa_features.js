@@ -13,11 +13,11 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 
 let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
-['news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
+['app.js', 'news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
   const p = path.join(__dirname, f);
   if (!fs.existsSync(p)) return;
-  const tag = new RegExp('<script src="' + f + '"></script>');
-  html = html.replace(tag, '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
+  const tag = new RegExp('<script src="' + f + '[^>]*></script>');
+  html = html.replace(tag, () => '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
 });
 
 const errors = [];
@@ -51,7 +51,8 @@ setTimeout(() => {
   check('qaFinishAnswer 已定义', typeof window.qaFinishAnswer === 'function');
   check('qaStreamPump 已定义', typeof window.qaStreamPump === 'function');
   check('qaApplyJson 已定义', typeof window.qaApplyJson === 'function');
-  const src = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
+  // 2026-09-10 性能优化：应用逻辑已外置为 app.js(defer)，qaDeepseekCall/qaTryStreamOrJson 现位于 app.js
+  const src = fs.readFileSync(path.join(__dirname, 'app.js'), 'utf-8');
   check('qaDeepseekCall 已切换为流式入口', /qaDeepseekCall[\s\S]{0,400}qaTryStreamOrJson/.test(src) || src.indexOf('qaTryStreamOrJson') >= 0);
 
   console.log('\n===== Phase A 检索体验 =====');

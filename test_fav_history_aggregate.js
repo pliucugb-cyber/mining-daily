@@ -9,11 +9,11 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 
 let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
-['news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
+['app.js', 'news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
   const p = path.join(__dirname, f);
   if (!fs.existsSync(p)) return;
-  const tag = new RegExp('<script src="' + f + '"></script>');
-  html = html.replace(tag, '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
+  const tag = new RegExp('<script src="' + f + '[^>]*></script>');
+  html = html.replace(tag, () => '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
 });
 const errors = [];
 const dom = new JSDOM(html, {

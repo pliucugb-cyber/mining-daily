@@ -21,8 +21,11 @@ function check(name, cond, detail) {
 
 const swPath = path.join(__dirname, 'sw.js');
 const htmlPath = path.join(__dirname, 'index.html');
+const appPath = path.join(__dirname, 'app.js');
 const swSrc = fs.readFileSync(swPath, 'utf-8');
+// 2026-09-10 性能优化：SW 注册调用已随应用逻辑外置到 app.js(defer)，注册 URL 断言改读 app.js
 const htmlSrc = fs.readFileSync(htmlPath, 'utf-8');
+const appSrc = fs.readFileSync(appPath, 'utf-8');
 
 console.log('===== ① sw.js HTML 策略：SWR（秒开缓存 + 后台 cache:\'reload\' 拉新）=====');
 const isHtmlBlock = (swSrc.split('if (isHtml)')[1] || '').split('if (DATA_FILES)')[0];
@@ -58,27 +61,28 @@ console.log('\n===== ② index.html SW 注册 URL 固定化（不再拼 build-ve
 const bvMatch = htmlSrc.match(/<meta name="build-version" content="([^"]+)"/);
 const bv = bvMatch ? bvMatch[1] : '';
 check('build-version meta 存在', !!bv, 'build-version=' + bv);
+// 注册调用体已迁至 app.js：以下断言改读 appSrc
 check('注册 URL 不再写死 ?v=11',
-  !/register\(\s*'\.\/sw\.js\?v=11'\s*\)/.test(htmlSrc),
+  !/register\(\s*'\.\/sw\.js\?v=11'\s*\)/.test(appSrc),
   '旧写死形式应已移除');
 check('注册 URL 不再拼 build-version 动态查询串（根治死循环刷新）',
-  !/register\(\s*'\.\/sw\.js\?v='\s*\+\s*_bv\s*\)/.test(htmlSrc) &&
-  !/register\(\s*'\.\/sw\.js\?v='\s*\+/.test(htmlSrc),
+  !/register\(\s*'\.\/sw\.js\?v='\s*\+\s*_bv\s*\)/.test(appSrc) &&
+  !/register\(\s*'\.\/sw\.js\?v='\s*\+/.test(appSrc),
   "应改为固定 register('./sw.js')");
 check('注册 URL 为固定 ./sw.js（SW 脚本自身由浏览器 no-cache 校验更新）',
-  /register\(\s*'\.\/sw\.js'\s*\)/.test(htmlSrc),
+  /register\(\s*'\.\/sw\.js'\s*\)/.test(appSrc),
   "期望 register('./sw.js')");
 check('无残留 _bv 动态 URL 引用',
   !/var _bv=/.test(htmlSrc),
-  '_bv 取 build-version 的逻辑应已删除');
+  '_bv 取 build-version 的逻辑应已删除（index.html）');
 
 console.log('\n===== ④ 运行时实际调用 register(固定 URL) =====');
 let html = htmlSrc;
-['news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
+['app.js', 'news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
   const p = path.join(__dirname, f);
   if (!fs.existsSync(p)) return;
-  const tag = new RegExp('<script src="' + f + '"></script>');
-  html = html.replace(tag, '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
+  const tag = new RegExp('<script src="' + f + '[^>]*></script>');
+  html = html.replace(tag, () => '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
 });
 const errors = [];
 let captured = null;

@@ -14,11 +14,11 @@ const { JSDOM } = require('jsdom');
 
 // jsdom 默认不取外部 <script src>；不内联数据文件的话初始化会中断，测的是假象。
 let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
-['news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
+['app.js', 'news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
   const p = path.join(__dirname, f);
   if (!fs.existsSync(p)) return;
-  html = html.replace(new RegExp('<script src="' + f + '"></script>'),
-    '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
+  html = html.replace(new RegExp('<script src="' + f + '[^>]*></script>'),
+    () => '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
 });
 const dom = new JSDOM(html, {
   runScripts: 'dangerously', pretendToBeVisual: true,

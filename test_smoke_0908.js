@@ -10,12 +10,23 @@ const { JSDOM } = require('jsdom');
 
 // jsdom 默认不取外部脚本，把本地数据文件内联进去，避免全库为空导致误判
 let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
+// 数据脚本：内联到原位即可（仅定义全局变量，不依赖 DOM 就绪）
 ['news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
   const p = path.join(__dirname, f);
   if (!fs.existsSync(p)) return;
-  const tag = new RegExp('<script src="' + f + '"></script>');
-  html = html.replace(tag, '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
+  const tag = new RegExp('<script src="' + f + '[^>]*></script>');
+  html = html.replace(tag, () => '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
 });
+// 2026-09-10 性能优化：app.js 生产用 defer（全文档解析完成后才执行），其初始化 IIFE 依赖 #qaFloatBody
+// 已存在。jsdom 内联到标签原位会丢失 defer 语义、在 #qaFloat 之前执行 → 欢迎语不渲染。
+// 故把 app.js 移到 </body> 前，等价模拟 defer 的「DOM 解析完成后执行」。
+{
+  const p = path.join(__dirname, 'app.js');
+  if (fs.existsSync(p)) {
+    html = html.replace(new RegExp('<script src="app.js"[^>]*></script>'), '');
+    html = html.replace('</body>', '<script>' + fs.readFileSync(p, 'utf-8') + '</script>\n</body>');
+  }
+}
 const errors = [];
 
 const dom = new JSDOM(html, {

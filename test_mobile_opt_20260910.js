@@ -12,11 +12,11 @@ const path = require('path');
 const { JSDOM, VirtualConsole } = require('jsdom');
 
 let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
-['news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
+['app.js', 'news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
   const p = path.join(__dirname, f);
   if (!fs.existsSync(p)) return;
-  html = html.replace(new RegExp('<script src="' + f + '"></script>'),
-    '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
+  html = html.replace(new RegExp('<script src="' + f + '[^>]*></script>'),
+    () => '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
 });
 
 const fatal = [];

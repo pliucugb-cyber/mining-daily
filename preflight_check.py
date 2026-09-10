@@ -157,6 +157,12 @@ def main():
         log.error('找不到 %s', HTML)
         sys.exit(1)
     text = HTML.read_text(encoding='utf-8')
+    # 2026-09-10 性能优化：应用逻辑已外置为 app.js(defer)，关键功能函数（setupNewsFilterBar /
+    # exportPriceCsv / renderRightsSection / bindRights / _clearHtmlCache 等）现位于 app.js。
+    # 一并纳入静态扫描，避免误报「关键功能缺失」导致自动化闸门误杀合法部署。
+    app_js = ROOT / 'app.js'
+    if app_js.exists():
+        text = text + '\n' + app_js.read_text(encoding='utf-8')
 
     sections = [
         ('生成 marker', check_markers(text)),

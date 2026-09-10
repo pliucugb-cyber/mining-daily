@@ -5,7 +5,15 @@ const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
 
-const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
+let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
+// 2026-09-10 性能优化：应用逻辑已外置为 app.js(defer)，jsdom 不会自动拉取外部脚本，
+// 故在此内联 app.js + 数据脚本（顺序 news->lme->price->app），等价于 defer 执行后状态。
+['app.js', 'news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
+  const p = path.join(__dirname, f);
+  if (!fs.existsSync(p)) return;
+  html = html.replace(new RegExp('<script src="' + f + '"[^>]*></script>'),
+    () => '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
+});
 const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'https://example.com/' });
 const w = dom.window;
 const d = w.document;
