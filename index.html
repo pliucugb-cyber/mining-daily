@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1600" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1635" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -723,7 +723,7 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   body.has-install-bar{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
   .header{padding-top:var(--s4);padding-bottom:var(--s4);margin-bottom:var(--s3)}
   #mobileTabBar{display:flex;position:fixed;left:0;right:0;bottom:0;height:calc(56px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line-2);box-shadow:0 -1px 3px rgba(15,23,42,.06);z-index:210;padding-bottom:env(safe-area-inset-bottom,0px)}
-  .mtab{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none;color:var(--ink-300);cursor:pointer;padding:4px 0;line-height:1.2;transition:color .15s}
+  .mtab{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none;color:var(--ink-700);cursor:pointer;padding:4px 0;line-height:1.2;transition:color .15s}
   .mtab .mi{font-size:20px;line-height:1;opacity:.75;transition:opacity .15s}
   .mtab span{font-size:11px}
   .mtab::before{content:'';position:absolute;top:0;left:28%;right:28%;height:2.5px;background:var(--brand);border-radius:0 0 2px 2px;opacity:0;transition:opacity .15s}
@@ -757,7 +757,7 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .mctab{flex:0 0 auto;border:none;background:none;color:var(--ink-500);font-size:15px;padding:7px 6px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s}
   .mctab.active{color:var(--brand);font-weight:600}
   .mctab.active::after{content:'';position:absolute;left:6px;right:6px;bottom:0;height:3px;background:var(--brand);border-radius:2px}
-  #qaFab{display:none!important}
+  #qaFab{display:flex!important;left:auto;right:14px;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:215;top:auto}
   /* 分类内容过滤：选中分类后仅显示对应区块；收藏/浏览记录视图(data-filter-mode)下不干预，避免与 fav/history 规则冲突 */
   body[data-md-cat]:not([data-filter-mode]) #briefStrip,
   body[data-md-cat]:not([data-filter-mode]) #digestStrip,
@@ -767,10 +767,11 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   body[data-md-cat]:not([data-filter-mode]) #archiveSection,
   body[data-md-cat]:not([data-filter-mode]) #rightsSection,
   body[data-md-cat]:not([data-filter-mode]) #col-rail{display:none!important}
+  body[data-md-cat]:not([data-md-cat="tuijian"]):not([data-filter-mode]) #newsFilterBar{display:none!important}
+  body[data-md-cat="tuijian"]:not([data-filter-mode]) #briefStrip,
+  body[data-md-cat="tuijian"]:not([data-filter-mode]) #digestStrip,
+  body[data-md-cat="tuijian"]:not([data-filter-mode]) #priceStrip,
   body[data-md-cat="tuijian"]:not([data-filter-mode]) #todaySection{display:block!important}
-  body[data-md-cat="today"]:not([data-filter-mode]) #briefStrip,
-  body[data-md-cat="today"]:not([data-filter-mode]) #digestStrip,
-  body[data-md-cat="today"]:not([data-filter-mode]) #todaySection{display:block!important}
   body[data-md-cat="price"]:not([data-filter-mode]) #priceStrip{display:block!important}
   body[data-md-cat="hot"]:not([data-filter-mode]) #col-rail{display:block!important}
   body[data-md-cat="rights"]:not([data-filter-mode]) #rightsSection{display:block!important}
@@ -1511,6 +1512,33 @@ body.dark .skeleton::after{background:linear-gradient(90deg,rgba(255,255,255,0),
   padding:8px var(--s3);background:#fff7ed;color:#9a3412;font-size:var(--fs-meta);font-weight:600;border-bottom:1px solid #fed7aa}
 #mdOffline.show{display:flex}
 body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e18}
+</style>
+<style id="mdMobileOpt">
+/* 2026-09-10 移动端「从各维度优化」：chip 折叠 / 底部 SVG 导航 / 顶部搜索 / AI 浮动 */
+/* P0-1：移动端 chip 强制单行横滑（覆盖 L1250 flex-wrap:wrap，本块源码顺序更靠后） */
+@media(max-width:768px){
+  /* P0-2：14 个 chip 折叠进「筛选 ▾」，默认隐藏，展开后单行横滑 */
+  .nf-toggle{display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink-700);font-size:var(--fs-meta);font-weight:600;padding:0 12px;min-height:44px;border-radius:999px;cursor:pointer}
+  .nf-toggle .nf-toggle-ico{display:inline-block;transition:transform .2s}
+  .nf-toggle[aria-expanded="true"] .nf-toggle-ico{transform:rotate(180deg)}
+  .news-filter-bar{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2)}
+  .nf-search-wrap{flex:1 1 auto;min-width:0}
+  .nf-chips{order:3;flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;display:none}
+  .nf-chips.show{display:flex}
+  /* P0-3：底部导航内联 SVG 图标尺寸 */
+  .mtab .mi svg{width:22px;height:22px;display:block}
+  /* 顶部搜索按钮 */
+  .md-search-btn{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:none;background:var(--surface-2);color:var(--ink-700);border-radius:50%;cursor:pointer}
+  .md-search-btn:active{background:var(--surface-3)}
+  /* AI 悬浮球：移动端圆形化、上移避让底部导航 */
+  .qa-fab .qa-fab-txt{display:none}
+  .qa-fab{width:52px;height:52px;padding:0;justify-content:center;border-radius:50%}
+}
+/* 桌面：隐藏「筛选 ▾」与顶部搜索按钮（移动端专属控件） */
+.nf-toggle{display:none}
+.md-search-btn{display:none}
+/* 深色模式：底部导航非激活态用浅灰（浅色模式用 --ink-700，过 AA） */
+body.dark .mtab{color:var(--ink-300)}
 </style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
@@ -4151,6 +4179,25 @@ function mdSelectCat(cat){
     b.classList.toggle('active',on);
     try{ b.setAttribute('aria-selected',on?'true':'false'); }catch(e){}
   });
+  mdSyncNav(cat);
+}
+// 同步底部主导航高亮（首页/价格/矿权 ↔ 顶部分类；热榜/往期无对应底部项）
+function mdSyncNav(cat){
+  var bar=document.getElementById('mobileTabBar'); if(!bar) return;
+  var goMap={'tuijian':'home','price':'price','rights':'rights'};
+  var go=goMap[cat]||null;
+  [].forEach.call(bar.querySelectorAll('.mtab'),function(b){
+    b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go);
+  });
+}
+// 顶部搜索图标：定位到推荐页资讯检索条并展开筛选 chip
+function mdOpenSearch(){
+  if(document.body.getAttribute('data-md-cat')!=='tuijian'){ mdSelectCat('tuijian'); }
+  var bar=document.getElementById('newsFilterBar');
+  if(bar){ try{ bar.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} }
+  var chips=document.getElementById('nfChips'); if(chips) chips.classList.add('show');
+  var tog=document.getElementById('nfToggle'); if(tog) tog.setAttribute('aria-expanded','true');
+  var s=document.getElementById('nfSearch'); if(s){ try{ s.focus(); }catch(e){} }
 }
 
 // 顶部 App Bar + 分类 Tab（注入到 body 最前，sticky 吸顶；skip-link 之后以保证其为 body 首个元素）
@@ -4159,33 +4206,41 @@ function mdMobileTopTabs(){
   var top=document.createElement('div'); top.id='mdTop';
   var dateTxt='';
   try{ var d=document.querySelector('.date-badge'); if(d) dateTxt=d.textContent.trim(); }catch(e){}
-  var cats=[['tuijian','推荐'],['today','今日'],['price','价格'],['hot','热榜'],['rights','矿权'],['archive','往期']];
-  var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业新闻日报</span><span class="md-date">'+dateTxt+'</span></div><div class="md-cat-bar" role="tablist" aria-label="内容分类">';
+  var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期']];
+  var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业新闻日报</span><span class="md-date">'+dateTxt+'</span>'
+    +'<button class="md-search-btn" id="mdSearchBtn" type="button" aria-label="搜索新闻">'
+    +'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
+    +'</button></div><div class="md-cat-bar" role="tablist" aria-label="内容分类">';
   for(var i=0;i<cats.length;i++){ html+='<button class="mctab" role="tab" data-cat="'+cats[i][0]+'">'+cats[i][1]+'</button>'; }
   html+='</div>';
   top.innerHTML=html;
   var skip=document.getElementById('mdSkipLink');
   if(skip && skip.parentNode){ skip.parentNode.insertBefore(top, skip.nextSibling); }
   else { document.body.insertBefore(top, document.body.firstChild); }
-  // 测量高度，供检索条吸顶避让分类栏
   try{ document.documentElement.style.setProperty('--md-top-h', top.offsetHeight+'px'); }catch(e){}
   top.querySelector('.md-cat-bar').addEventListener('click',function(e){
     var b=e.target.closest('.mctab'); if(!b) return;
     mdSelectCat(b.getAttribute('data-cat'));
     try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); }
   });
+  var sb=document.getElementById('mdSearchBtn');
+  if(sb) sb.addEventListener('click', mdOpenSearch);
   mdSelectCat('tuijian');
 }
 
-// 底部 4 全局动作 Tab（首页/搜索/AI/我的）
+// 底部 4 主导航 Tab（首页/价格/矿权/我的，内联 SVG 图标；AI 改回右下悬浮球，搜索提到顶栏）
 function mdMobileTabBar(){
   if(document.getElementById('mobileTabBar')) return;
+  var SVG_HOME='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h4v-5h4v5h4v-9"/></svg>';
+  var SVG_PRICE='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9M9 20V4M14 20v-6M19 20V7"/></svg>';
+  var SVG_RIGHTS='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4"/><path d="M10 12h6M10 16h6"/></svg>';
+  var SVG_USER='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
   var bar=document.createElement('nav');
   bar.id='mobileTabBar'; bar.setAttribute('aria-label','移动端主导航');
-  bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">🏠</span><span>首页</span></button>'+
-    '<button class="mtab" data-go="search"><span class="mi">🔍</span><span>搜索</span></button>'+
-    '<button class="mtab" data-go="ai"><span class="mi">🤖</span><span>AI</span></button>'+
-    '<button class="mtab" data-go="mine"><span class="mi">👤</span><span>我的</span></button>';
+  bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">'+SVG_HOME+'</span><span>首页</span></button>'
+    +'<button class="mtab" data-go="price"><span class="mi">'+SVG_PRICE+'</span><span>价格</span></button>'
+    +'<button class="mtab" data-go="rights"><span class="mi">'+SVG_RIGHTS+'</span><span>矿权</span></button>'
+    +'<button class="mtab" data-go="mine"><span class="mi">'+SVG_USER+'</span><span>我的</span></button>';
   var sheet=document.createElement('div'); sheet.id='mineSheet'; sheet.hidden=true;
   sheet.innerHTML='<button data-act="fav">★ 我的收藏</button>'+
     '<button data-act="history">🕘 浏览记录</button>'+
@@ -4199,14 +4254,15 @@ function mdMobileTabBar(){
     var b=e.target.closest('.mtab'); if(!b) return;
     var go=b.getAttribute('data-go');
     if(go==='mine'){ sheet.hidden=!sheet.hidden; setActive(sheet.hidden?null:'mine'); return; }
-    sheet.hidden=true; setActive(null);
-    if(go==='home'){ mdSelectCat('tuijian'); try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); } }
-    else if(go==='search'){ try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){} var s=document.getElementById('nfSearch'); if(s){ try{ s.focus(); }catch(e){} } }
-    else if(go==='ai'){ if(typeof qaFloatToggle==='function') qaFloatToggle(); }
+    sheet.hidden=true;
+    if(go==='home'){ mdSelectCat('tuijian'); }
+    else if(go==='price'){ mdSelectCat('price'); }
+    else if(go==='rights'){ mdSelectCat('rights'); }
+    try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); }
   });
   sheet.addEventListener('click',function(e){
     var b=e.target.closest('button[data-act]'); if(!b) return;
-    sheet.hidden=true; setActive(null);
+    sheet.hidden=true;
     var act=b.getAttribute('data-act');
     if(act==='fav'){ if(typeof toggleFavFilter==='function') toggleFavFilter(); }
     else if(act==='history'){ if(typeof toggleHistoryFilter==='function') toggleHistoryFilter(); }
@@ -4220,6 +4276,7 @@ function mdMobileTabBar(){
     if(e.target.closest('#mineSheet')||(e.target.closest('.mtab')&&e.target.closest('.mtab').getAttribute('data-go')==='mine')) return;
     sheet.hidden=true; setActive(null);
   });
+  setActive('home');
 }
 
 // 2026-09-10 P1-4 / P1-5 / P1-6：上次看到分隔线、简报折叠、无网络空态
@@ -5956,6 +6013,7 @@ function setupNewsFilterBar(){
   var bar=document.createElement('div'); bar.id='newsFilterBar'; bar.className='news-filter-bar';
   bar.innerHTML='<div class="nf-search-wrap"><input class="nf-search" id="nfSearch" type="search" placeholder="搜索标题 / 摘要 / 来源…" aria-label="搜索新闻">'
     +'<button class="nf-clear" id="nfClear" type="button" aria-label="清除搜索" hidden>✕</button></div>'
+    +'<button class="nf-toggle" id="nfToggle" type="button" aria-label="展开或收起筛选" aria-expanded="false">筛选 <span class="nf-toggle-ico">▾</span></button>'
     +'<div class="nf-chips" id="nfChips">'
     +'<span class="nf-chip active" data-kw="">全部</span>'
     +'<span class="nf-chip" data-kw="金">金</span>'
@@ -5995,6 +6053,12 @@ function setupNewsFilterBar(){
     else { newsSearchText=kw.toLowerCase(); input.value=''; }
     document.querySelectorAll('.nf-chip').forEach(function(x){x.classList.toggle('active', x.getAttribute('data-kw')===newsSearchText);});
     applyFilter(); updateNfCount();
+  });
+  var tog=document.getElementById('nfToggle');
+  if(tog) tog.addEventListener('click',function(){
+    var c=document.getElementById('nfChips'); if(!c) return;
+    var open=c.classList.toggle('show');
+    tog.setAttribute('aria-expanded', open?'true':'false');
   });
 }
 function updateNfCount(){
