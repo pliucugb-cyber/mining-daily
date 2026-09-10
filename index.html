@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1900" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-2030" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -732,9 +732,14 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .mtab.active .mi{opacity:1}
   .mtab.active::before{opacity:1}
   .mobile-install-bar{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+  /* 移动端隐藏「安装到桌面」整段引导（安装入口改到「我的」面板内联分步卡，见 app.js） */
+  #installGuideSection{display:none!important}
   /* Phase 3：卡片视觉打磨（列表行 → 信息流卡片） */
-  .news-item{border-bottom:none;border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--shadow-sm);margin-bottom:var(--s3);padding:var(--s4);transition:transform .12s var(--ease),box-shadow .12s var(--ease)}
+  .news-item{border-bottom:none;border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--shadow-sm);margin-bottom:var(--s2);padding:var(--s3);transition:transform .12s var(--ease),box-shadow .12s var(--ease)}
   .news-item:active{transform:translateY(1px)}
+  /* ② 往期/今日整体字号加大，页面不那么空 */
+  .news-title{font-size:16px;line-height:1.45}
+  .news-summary{font-size:14px;line-height:1.55;margin-top:var(--s1)}
   .price-card{border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--shadow-sm);padding:var(--s4)}
   .rights-row{border:1px solid var(--line-2);border-radius:var(--r-md);background:var(--surface);margin-bottom:var(--s2);padding:var(--s3) var(--s4)}
   body.dark .news-item,body.dark .price-card,body.dark .rights-row{background:var(--bg);border-color:var(--line-1)}
@@ -767,18 +772,29 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   body[data-md-cat]:not([data-filter-mode]) #todaySection,
   body[data-md-cat]:not([data-filter-mode]) #archiveSection,
   body[data-md-cat]:not([data-filter-mode]) #rightsSection,
+  body[data-md-cat]:not([data-filter-mode]) #meetingSection,
   body[data-md-cat]:not([data-filter-mode]) #col-rail{display:none!important}
   body[data-md-cat]:not([data-md-cat="tuijian"]):not([data-filter-mode]) #newsFilterBar{display:none!important}
   body[data-md-cat="tuijian"]:not([data-filter-mode]) #briefStrip,
   body[data-md-cat="tuijian"]:not([data-filter-mode]) #digestStrip,
-  body[data-md-cat="tuijian"]:not([data-filter-mode]) #priceStrip,
   body[data-md-cat="tuijian"]:not([data-filter-mode]) #todaySection{display:block!important}
   body[data-md-cat="price"]:not([data-filter-mode]) #priceStrip{display:block!important}
   body[data-md-cat="hot"]:not([data-filter-mode]) #col-rail{display:block!important}
   body[data-md-cat="rights"]:not([data-filter-mode]) #rightsSection{display:block!important}
   body[data-md-cat="archive"]:not([data-filter-mode]) #archiveSection{display:block!important}
+  body[data-md-cat="meeting"]:not([data-filter-mode]) #meetingSection{display:block!important}
   /* 检索条吸顶位置让位于分类栏（高度由 JS 写入 --md-top-h） */
   .news-filter-bar{top:calc(var(--md-top-h,96px) + env(safe-area-inset-top,0px))}
+  /* ⑤ 底部「问」做成发光球（区别于其它 tab），轻微脉冲 */
+  .mtab[data-go="qa"] .mi{width:46px;height:46px;border-radius:50%;margin-top:-16px;background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 55%,#22d3ee 100%);color:#fff;box-shadow:0 6px 18px rgba(99,102,241,.45),0 0 0 4px rgba(99,102,241,.12);animation:qaOrbPulse 2.6s ease-in-out infinite}
+  .mtab[data-go="qa"].active .mi{background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 55%,#06b6d4 100%)}
+  .mtab[data-go="qa"] span{font-size:10px}
+  @keyframes qaOrbPulse{0%,100%{box-shadow:0 6px 18px rgba(99,102,241,.45),0 0 0 4px rgba(99,102,241,.12)}50%{box-shadow:0 8px 24px rgba(139,92,246,.6),0 0 0 9px rgba(139,92,246,.16)}}
+  /* ⑥ 问答面板移动端沉浸式全屏 + 进入动画 + 返回箭头（头部不再可拖动） */
+  #qaFloat.open{animation:qaFloatIn .22s ease}
+  .qa-float-head{cursor:default}
+  .qa-float-head .pchart-close{font-size:22px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18)}
+  @keyframes qaFloatIn{from{transform:translateY(14px);opacity:.55}to{transform:translateY(0);opacity:1}}
 }
 body.dark #mobileTabBar{background:var(--bg);border-top-color:var(--line-1)}
 body.dark #mineSheet{background:var(--bg);border-top-color:var(--line-1)}
@@ -1516,6 +1532,8 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
 </style>
 <style id="mdMobileOpt">
 /* 2026-09-10 移动端「从各维度优化」：chip 折叠 / 底部 SVG 导航 / 顶部搜索 / AI 浮动 */
+/* 会议会展区块：仅手机顶部分类「会议」tab 显示，桌面始终隐藏（数据由 app.js 运行时注入，避开生成区） */
+#meetingSection{display:none}
 /* P0-1：移动端 chip 强制单行横滑（覆盖 L1250 flex-wrap:wrap，本块源码顺序更靠后） */
 @media(max-width:768px){
   /* P0-2：14 个 chip 折叠进「筛选 ▾」，默认隐藏，展开后单行横滑 */
@@ -1560,6 +1578,11 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   #qaFloat{top:0;left:0;right:auto;bottom:auto;width:100vw;height:100dvh;max-height:none;border-radius:0;border:none;box-shadow:none}
   .qa-float-head{padding-top:calc(var(--s3) + env(safe-area-inset-top,0px))}
   .qa-float-foot{padding-bottom:calc(var(--s3) + env(safe-area-inset-bottom,0px))}
+  /* ⑧「我的」面板内联安装分步卡（替代原无反应的「安装到桌面」按钮） */
+  #mineInstallCard{border:1px solid var(--line-2);border-radius:var(--r-md);padding:var(--s3);background:var(--surface-2);margin:var(--s1) 0}
+  #mineInstallCard .mine-install-title{font-weight:600;color:var(--ink-900);font-size:var(--fs-body);margin-bottom:4px}
+  #mineInstallCard .mine-install-note{font-size:var(--fs-meta);color:var(--ink-500);line-height:1.5}
+  #mineInstallCard .mine-install-btn{margin-top:var(--s2);border:none;background:var(--brand);color:#fff;border-radius:var(--r-md);padding:var(--s2) var(--s4);font-size:var(--fs-meta);font-weight:600;cursor:pointer}
 }
 /* 桌面：隐藏「筛选 ▾」与顶部搜索按钮（移动端专属控件） */
 .nf-toggle{display:none}

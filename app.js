@@ -1920,9 +1920,9 @@ function renderHotPage(){
     if(b0)b0.style.display='none';
     return;
   }
-  var pages=Math.ceil(__hotPool.length/HOT_N);
+  var pages=Math.ceil(__hotPool.length/mdHotCount());
   if(__hotPage>=pages)__hotPage=0;
-  var show=__hotPool.slice(__hotPage*HOT_N,__hotPage*HOT_N+HOT_N);
+  var show=__hotPool.slice(__hotPage*mdHotCount(),__hotPage*mdHotCount()+mdHotCount());
   // 徽章口径（2026-09-08 晚定案）：
   //   热 = 标题命中 HOT_KW 热词表（突破/重大/战略/首次/关键矿产…），打分 +20 → computeHotNewsLocal 的 n.hot
   //   新 = 发布日期 === 报告日（qaReportDate，兼容 MM-DD 短格式归一化），即当日发布
@@ -1956,7 +1956,7 @@ function renderHotPage(){
   if(btn)btn.style.display=(pages>1)?'':'none';
 }
 function hotShuffle(){
-  var pages=Math.ceil(__hotPool.length/HOT_N);
+  var pages=Math.ceil(__hotPool.length/mdHotCount());
   if(pages<=1)return;
   __hotPage=(__hotPage+1)%pages;
   renderHotPage();
@@ -2021,12 +2021,12 @@ function fetchHotNews(){
     .then(function(r){return r.ok?r.json():null;})
     .then(function(d){
       if(d&&Array.isArray(d.hot)&&d.hot.length){renderHotNews(d);return;}
-      renderHotNews({hot:computeHotNewsLocal(HOT_N*4),local:true});
+      renderHotNews({hot:computeHotNewsLocal(mdHotCount()*4),local:true});
     })
     .catch(function(){
       // 纯静态部署（GitHub Pages）没有后端接口 → 退回全库本地计算，热榜功能不缺失
       try{
-        var arr=computeHotNewsLocal(HOT_N*4);
+        var arr=computeHotNewsLocal(mdHotCount()*4);
         if(arr.length){renderHotNews({hot:arr,local:true});return;}
       }catch(e){console.warn('computeHotNewsLocal:',e);}
       var body=document.getElementById('hotListBody');
@@ -2038,7 +2038,13 @@ function fetchHotNews(){
 //   ① 跨源同事件去重——同一新闻被多家网站报道（URL 不同、标题几乎一样）时只留分数最高的一条；
 //   ② 优先"当日发布"，不足再用"今日收录"补，并对非当日条目标注日期，
 //      避免读者看到旧新闻却以为发生在今天（原逻辑是"今日收录"优先，旧稿也会进要闻）。
-var HOT_N=5;      // 矿业热榜条数（用户要求 4~5 条）
+var HOT_N=5;      // 矿业热榜条数（桌面默认 4~5 条）
+// ① 移动端热榜显示 10 条、桌面保持 5 条（用户要求手机端内容更充实）
+function mdHotCount(){ return (window.innerWidth<=768)?10:5; }
+// 视口跨越 768px 时重算热榜条数（手机 10 / 桌面 5）
+(function(){
+  var _t; window.addEventListener('resize',function(){ clearTimeout(_t); _t=setTimeout(function(){ if(__hotPool&&__hotPool.length){ renderHotPage(); } },200); });
+})();
 var DIGEST_N=4;   // 今日要闻条数
 window.__digestPicks=null;   // 缓存要闻选中项，供热榜排除（两栏互斥不重复）
 
@@ -2430,7 +2436,7 @@ function mdMobileTopTabs(){
   var top=document.createElement('div'); top.id='mdTop';
   var dateTxt='';
   try{ var d=document.querySelector('.date-badge'); if(d) dateTxt=d.textContent.trim(); }catch(e){}
-  var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期']];
+  var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期'],['meeting','会议']];
   var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业新闻日报</span><span class="md-date">'+dateTxt+'</span>'
     +'<button class="md-fav-btn" id="mdFavBtn" type="button" aria-label="我的收藏">'
     +'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>'
@@ -2486,10 +2492,10 @@ function mdMobileTabBar(){
   sheet.innerHTML='<button data-act="fav">★ 我的收藏</button>'+
     '<button data-act="history">🕘 浏览记录</button>'+
     '<button data-act="theme">🌓 深色 / 浅色</button>'+
-    '<button data-act="reading">📖 阅读模式</button>'+
-    '<button data-act="install">📲 安装到桌面</button>'+
+    '<div class="mine-install" id="mineInstallCard"></div>'+
     '<button data-act="top">⬆️ 返回顶部</button>';
   document.body.appendChild(bar); document.body.appendChild(sheet);
+  mdRenderInstallCard();
   function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go); }); }
   bar.addEventListener('click',function(e){
     var b=e.target.closest('.mtab'); if(!b) return;
@@ -2515,8 +2521,6 @@ function mdMobileTabBar(){
     if(act==='fav'){ if(typeof toggleFavFilter==='function') toggleFavFilter(); }
     else if(act==='history'){ if(typeof toggleHistoryFilter==='function') toggleHistoryFilter(); }
     else if(act==='theme'){ if(typeof toggleTheme==='function') toggleTheme(); }
-    else if(act==='reading'){ if(typeof toggleReadingMode==='function') toggleReadingMode(); }
-    else if(act==='install'){ if(typeof showPwaInstallPrompt==='function') showPwaInstallPrompt(); }
     else if(act==='top'){ window.scrollTo(0,0); }
   });
   document.addEventListener('click',function(e){
@@ -2525,6 +2529,61 @@ function mdMobileTabBar(){
     sheet.hidden=true; setActive(null);
   });
   setActive('home');
+}
+// ⑧ 我的面板：内联安装分步卡（按 iOS/Android 自动识别；已安装置灰）
+function mdRenderInstallCard(){
+  var el=document.getElementById('mineInstallCard'); if(!el) return;
+  if(IS_STANDALONE){
+    el.innerHTML='<div class="mine-install-title">✅ 已安装到主屏幕</div><div class="mine-install-note">日报已作为独立应用运行，可随时从主屏图标进入。</div>';
+    return;
+  }
+  if(IS_IOS){
+    el.innerHTML='<div class="mine-install-title">📱 安装到主屏幕</div><div class="mine-install-note">① 点 Safari 底部「分享 □↑」<br>② 上滑找到「添加到主屏幕」<br>③ 点「添加」即可</div>';
+    return;
+  }
+  el.innerHTML='<div class="mine-install-title">📲 安装到主屏幕</div><div class="mine-install-note">浏览器菜单（⋮）→「安装应用 / 添加到主屏幕」→ 确认添加。</div>';
+  try{
+    if(window.__deferredPrompt){
+      var b=document.createElement('button'); b.type='button'; b.className='mine-install-btn'; b.textContent='立即安装';
+      b.onclick=function(){ try{ triggerPwaInstall(); }catch(e){} };
+      el.appendChild(b);
+    }
+  }catch(e){}
+}
+// ⑨ 会议会展：运行时注入 #meetingSection（置于 #rightsSection 之后，避开生成区），从全库抽取会展类新闻
+function mdInitMeetingSection(){
+  try{
+    if(document.getElementById('meetingSection')) return;
+    var rs=document.getElementById('rightsSection'); if(!rs) return;
+    var sec=document.createElement('div'); sec.className='section'; sec.id='meetingSection'; sec.style.display='none';
+    sec.innerHTML='<div class="section-title"><span class="icon">📅</span> 会议会展<span class="news-count" id="meetingCount"></span></div><div class="meeting-body"></div>';
+    if(rs.nextSibling) rs.parentNode.insertBefore(sec, rs.nextSibling); else rs.parentNode.appendChild(sec);
+    mdRenderMeetingSection();
+  }catch(e){}
+}
+function mdRenderMeetingSection(){
+  var sec=document.getElementById('meetingSection'); if(!sec) return;
+  var body=sec.querySelector('.meeting-body'); if(!body) return;
+  if(!window.QA_ROWS||!QA_ROWS.length){ body.innerHTML='<div class="meeting-empty">会议会展内容加载中…</div>'; return; }
+  var seen={}, items=[];
+  for(var i=0;i<QA_ROWS.length;i++){
+    var r=QA_ROWS[i]; var t=String(r.t||'').trim();
+    if(!t||!r.u) continue;
+    var expo=false; try{ expo=(typeof isExpo==='function')?isExpo(t):(window.__expoIsExpo&&window.__expoIsExpo(t)); }catch(e){}
+    if(!expo) continue;
+    if(seen[r.u]) continue; seen[r.u]=1;
+    items.push(r);
+  }
+  var cnt=document.getElementById('meetingCount'); if(cnt) cnt.textContent=items.length+'条';
+  if(!items.length){ body.innerHTML='<div class="meeting-empty">暂无会议会展相关新闻</div>'; return; }
+  body.innerHTML=items.map(function(r){
+    var t=esc(String(r.t||'')); var u=safeHref(String(r.u||'#')); var s=esc(String(r.s||'')); var d=String(r.d||'');
+    return '<div class="news-item" data-url="'+u+'"><div class="news-head"><span class="dot"></span><a class="news-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a></div><div class="news-meta"><span class="src">'+s+'</span> · '+(d?d.slice(5):'')+'</div></div>';
+  }).join('');
+}
+// ⑥ 移动端问答面板头部「✕」改为返回箭头（沉浸式全屏）
+function mdQaMobileBackArrow(){
+  try{ if(window.innerWidth<=768){ var cb=document.querySelector('#qaFloat .pchart-close'); if(cb){ cb.textContent='‹'; cb.setAttribute('aria-label','返回'); } } }catch(e){}
 }
 
 // 2026-09-10 P1-4 / P1-5 / P1-6：上次看到分隔线、简报折叠、无网络空态
@@ -2568,6 +2627,9 @@ window.addEventListener('DOMContentLoaded',function(){
   // 移动端：顶部 App Bar + 分类 Tab + 底部 4 全局动作 Tab（仅 ≤768px 通过 CSS 显示；桌面隐藏）
   mdMobileTopTabs();
   mdMobileTabBar();
+  // ⑨ 会议会展区块注入；⑥ 移动端问答头部返回箭头
+  mdInitMeetingSection();
+  mdQaMobileBackArrow();
   // P1-4 / P1-5 / P1-6：上次看到分隔线、简报折叠、无网络空态
   mdRecordLastSeen();
   mdInitOfflineBanner();
