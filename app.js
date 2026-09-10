@@ -1,4 +1,9 @@
 
+// 2026-09-11：启动信标 + 收起内联引信可能已弹出的「脚本未加载」横幅。
+// 置于 app.js 最顶端——只要本文件开始执行即视为「脚本已加载」，index.html 里的看门狗随即失效。
+// （09-10 事故正是 app.js 没跑起来却毫无提示，用户只能看到永久「加载中…」。）
+window.__mdBooted=true;
+try{var _bw=document.getElementById('mdBootWarn');if(_bw)_bw.style.display='none';}catch(e){}
 // ===== 权威转义函数（第 3 批收敛：原 4 份局部 esc + 1 份 escapeHtml 合并为此一个）=====
 // 语义取原先最严格的一份：null/undefined 安全，转义 & < > " '。
 // 各局部作用域不再重复定义，统一用这个；escapeHtml 保留为兼容别名。
