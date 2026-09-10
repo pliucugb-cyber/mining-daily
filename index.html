@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-2355" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-0140" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1590,8 +1590,121 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
 /* 深色模式：底部导航非激活态用浅灰（浅色模式用 --ink-700，过 AA） */
 body.dark .mtab{color:var(--ink-300)}
 </style>
+<!-- ========================================================================
+     2026-09-11 事故二次加固：SW/缓存自愈引信（内联，独立于 app.js）
+     背景：09-10 事故中 app.js 一旦没跑起来，页面所有区块永久停在「加载中…」，
+           且既没有提示、也没有自救入口；更关键的是 Ctrl+Shift+R 并不会清
+           Service Worker 缓存，用户无论如何刷新都出不来。
+     本段刻意做成内联脚本（随 HTML 一起到达，不依赖任何外部 JS），负责三件事：
+       ① 看门狗：若 app.js 迟迟未执行 → 显示明确横幅 + 「强制重新加载」按钮；
+       ② 版本自愈：本页 build-version 与本机记录不一致（资源可能新旧混装）→ 清本站缓存后重载一次；
+       ③ SW 注册/更新：即使 app.js 挂了，也能完成 SW 更新并接管，避免旧 SW 长期喂旧缓存。
+     ⚠️ 修改本段后请同步 bump <meta name="build-version">，否则客户端不会更新。
+     ======================================================================== -->
+<script>
+(function(){
+  var RESET_FLAG='md_sw_hardreset';
+  function clearCaches(){
+    try{
+      if(!(window.caches&&caches.keys))return Promise.resolve();
+      return caches.keys().then(function(ks){
+        return Promise.all(ks.map(function(n){ return caches.delete(n); }));
+      }).catch(function(){});
+    }catch(e){ return Promise.resolve(); }
+  }
+  function unregisterAll(){
+    try{
+      if(!(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations))return Promise.resolve();
+      return navigator.serviceWorker.getRegistrations().then(function(rs){
+        return Promise.all(rs.map(function(r){ return r.unregister(); }));
+      }).catch(function(){});
+    }catch(e){ return Promise.resolve(); }
+  }
+  // 唯一可靠逃生通道：清 SW 注册 + 清 Cache Storage，再带 cache-bust 参数重载。
+  // （普通刷新 / Ctrl+Shift+R 都不会清 SW 缓存，所以必须显式清。）
+  function hardReset(){
+    try{ sessionStorage.setItem(RESET_FLAG,'1'); }catch(e){}
+    Promise.all([clearCaches(),unregisterAll()]).then(function(){
+      try{
+        var u=new URL(location.href);
+        u.searchParams.set('_mdreset',String(Date.now()));
+        location.replace(u.toString());
+      }catch(e){ try{ location.reload(); }catch(e2){} }
+    });
+  }
+  window.mdHardReset=hardReset;
+
+  function showBootWarn(name){
+    var el=document.getElementById('mdBootWarn');
+    if(!el)return;
+    var s=el.querySelector('.md-boot-which');
+    if(s&&name)s.textContent='（'+name+'）';
+    el.style.display='flex';
+  }
+  window.mdShowBootWarn=showBootWarn;
+  // 外部脚本取不到/执行失败时立即提示，不必等看门狗超时
+  window.mdScriptFail=function(name){ showBootWarn(name); };
+
+  // ② 版本自愈：本次 HTML 的 build-version 与本机上次记录不同 → 清缓存重载一次。
+  //    每个版本最多触发一次（写入 localStorage 后再重载）+ sessionStorage 兜底防循环。
+  try{
+    var meta=document.querySelector('meta[name="build-version"]');
+    var bv=meta?meta.getAttribute('content'):'';
+    var last=localStorage.getItem('md_build_ver')||'';
+    var already=false;
+    try{ already=sessionStorage.getItem(RESET_FLAG)==='1'; }catch(e){}
+    if(bv&&last&&last!==bv&&navigator.onLine!==false&&!already){
+      try{ localStorage.setItem('md_build_ver',bv); }catch(e){}
+      clearCaches().then(function(){ try{ location.reload(); }catch(e){} });
+      return;
+    }
+    if(bv){ try{ localStorage.setItem('md_build_ver',bv); }catch(e){} }
+  }catch(e){}
+
+  // ① 看门狗：12s 内 app.js 未开始执行 → 明确提示 + 一键重置（不再静默卡死）
+  setTimeout(function(){ if(!window.__mdBooted) showBootWarn('app.js'); },12000);
+
+  // ③ SW 注册与更新（内联版）：app.js 不可用时也要能更新 SW
+  if('serviceWorker' in navigator){
+    // 新 SW 接管后重载一次，确保拿到与 SW 版本一致的资源（每会话一次，防循环）
+    try{
+      navigator.serviceWorker.addEventListener('controllerchange',function(){
+        if(window.__mdBooted&&window.__swReloaded)return;
+        try{
+          if(sessionStorage.getItem('md_sw_reloaded')==='1')return;
+          sessionStorage.setItem('md_sw_reloaded','1');
+        }catch(e){}
+        window.__swReloaded=true;
+        try{ location.reload(); }catch(e){}
+      });
+    }catch(e){}
+    var reg=function(){
+      try{
+        navigator.serviceWorker.register('./sw.js').then(function(r){
+          try{ r.update(); }catch(e){}
+        }).catch(function(){
+          // 注册失败：多半 sw.js 被写坏或取不到，旧 SW 会继续喂旧缓存 → 清一次并提示
+          try{
+            if(navigator.onLine===false)return;
+            clearCaches().then(function(){ showBootWarn('sw.js'); });
+          }catch(e){}
+        });
+      }catch(e){}
+    };
+    if(document.readyState==='complete') reg();
+    else window.addEventListener('load',reg);
+  }
+})();
+</script>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
+<!-- 2026-09-11：脚本未加载/缓存陈旧时的可见逃生条（默认隐藏，由内联引信或 app.js 控制） -->
+<div id="mdBootWarn" role="alert" style="display:none;position:sticky;top:0;z-index:99999;background:#7f1d1d;color:#fff;font:14px/1.6 system-ui,-apple-system,'Microsoft YaHei',sans-serif;padding:10px 14px;gap:10px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.25)">
+  <span>⚠️ 页面脚本<span class="md-boot-which"></span>未能加载，热榜／简报／要闻可能停在「加载中」。通常是网络不通，或浏览器 Service Worker 缓存陈旧（普通刷新清不掉）。</span>
+  <button type="button" onclick="window.mdHardReset&&window.mdHardReset()" style="background:#fff;color:#7f1d1d;border:0;border-radius:6px;padding:6px 12px;font-weight:600;cursor:pointer">强制重新加载（清缓存）</button>
+  <span style="opacity:.85;font-size:12px">仍不行：开发者工具 → Application → Service Workers → Unregister；手机则清除该站点数据。</span>
+  <button type="button" onclick="this.parentNode.style.display='none'" style="margin-left:auto;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:6px;padding:4px 10px;cursor:pointer">关闭</button>
+</div>
 <script>
 /* 主题初始化（2026-09-05 新增）：同步执行，尽量在首次绘制前定好明暗，避免刷新闪白。
    优先读用户手动选择（localStorage md_theme），未选择过则跟随系统 prefers-color-scheme。 */
@@ -1832,7 +1945,7 @@ body.dark .mtab{color:var(--ink-300)}
 <script src="news-data.js" defer></script>
 <script src="lme-data.js" defer></script>
 <script src="price-history.js" defer></script>
-<script src="app.js" defer></script>
+<script src="app.js" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->

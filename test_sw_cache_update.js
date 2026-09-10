@@ -1,7 +1,7 @@
 /**
  * 2026-09-10 Service Worker 缓存更新测试（jsdom）
  * 守护「部署后普通刷新即见最新版，且无循环/双重刷新」：
- *   ① sw.js 对 HTML 导航用 SWR（秒开缓存 + 后台 cache:'reload' 拉新）
+ *   ① sw.js 对 HTML/app.js 用 network-first（在线必拿新版，缓存仅离线兜底）
  *   ② index.html 的 SW 注册 URL 固定为 './sw.js'（不再拼 build-version 查询串）——避免缓存 HTML
  *      的版本戳与当前 SW 不一致时被浏览器当成「不同注册」而反复 install→activate 形成 ~10s 刷新死循环
  *   ③ sw.js activate 内只 postMessage('SW_UPDATED') 通知页面，由页面用一次性标志决定是否刷新
@@ -27,14 +27,25 @@ const swSrc = fs.readFileSync(swPath, 'utf-8');
 const htmlSrc = fs.readFileSync(htmlPath, 'utf-8');
 const appSrc = fs.readFileSync(appPath, 'utf-8');
 
-console.log('===== ① sw.js HTML 策略：SWR（秒开缓存 + 后台 cache:\'reload\' 拉新）=====');
-const isHtmlBlock = (swSrc.split('if (isHtml)')[1] || '').split('if (DATA_FILES)')[0];
-check('sw.js HTML 块采用 SWR（先返回缓存秒开）',
-  isHtmlBlock.indexOf('caches.match(req)') >= 0 && isHtmlBlock.indexOf('return cached || network') >= 0,
-  'HTML 块应 caches.match + return cached || network 实现秒开');
-check('sw.js HTML 后台更新用 cache:\'reload\'（绕过 HTTP 缓存拿最新）',
-  isHtmlBlock.indexOf("cache: 'reload'") >= 0,
-  '后台静默拉新仍强制回源，保证最终最新');
+console.log('===== ① sw.js HTML/app.js 策略：network-first（在线必拿新版，缓存仅离线兜底）=====');
+const isHtmlBlock = (swSrc.split('if (isHtml)')[1] || '').split('if (DATA_FILES')[0];
+const dataListBlock = (swSrc.split('const DATA_FILES')[1] || '').split(']')[0];
+// 2026-09-11 事故二次加固：HTML 由 SWR（cache-first）改为 network-first。
+// 旧实现的 `return cached || network` 本质是 cache-first：缓存里只要躺着一份旧 index.html，
+// 在线用户就会被一直喂旧页；而 Ctrl+Shift+R 并不会清 Service Worker 缓存，用户无论如何刷新
+// 都出不来，只能永久停在「加载中…」。故改为向网络再验证（未变更 304 秒回）。
+check('sw.js HTML 块不再是 cache-first（不再 return cached || network）',
+  isHtmlBlock.indexOf('return cached || network') < 0,
+  'cache-first 会让在线用户长期停留旧页，是 09-10/09-11 两次卡死的放大器');
+check('sw.js HTML 走 network-first（先向网络再验证）',
+  isHtmlBlock.indexOf('networkFirst(req') >= 0,
+  '在线必须拿到线上最新 HTML；缓存只作离线兜底');
+check('network-first 使用 no-cache 再验证（304 秒回，不全量重下）',
+  swSrc.indexOf("cache: 'no-cache'") >= 0,
+  'no-cache 触发条件请求：未变更 304 秒回、变更才下载，兼顾新鲜度与速度');
+check('app.js 纳入 network-first 清单（防止旧逻辑常驻）',
+  dataListBlock.indexOf("BASE + 'app.js'") >= 0,
+  'app.js 每次发版都变；被 cache 持有会让用户永远拿不到修复');
 check('sw.js 仍保留 skipWaiting + clients.claim',
   /self\.skipWaiting\(\)/.test(swSrc) && /self\.clients\.claim\(\)/.test(swSrc));
 
