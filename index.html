@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1403" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1430" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -3935,12 +3935,13 @@ window.addEventListener('DOMContentLoaded',function(){
   if(!IS_MOBILE_UA) showPwaInstallPrompt();
 });
 // ===== 版本戳记录：仅持久化当前 build，不做硬刷新 =====
-// 2026-09-09 根治后，「刷新即最新」的职责已完全交给 Service Worker：
-//   ① SW fetch HTML 走 SWR（秒开缓存 + 后台 cache:'reload' 拉新）；
-//   ② SW 注册 URL 带 build-version 动态变化，部署后必下载新 sw.js；
-//   ③ 新 SW activate 后通过 clients.navigate() 主动强制所有已打开页面重新导航一次（唯一刷新来源）。
-// 因此此处不再自行 location.reload()——否则会与 ③ 叠加造成「刷新两次」闪屏。
-// 旧 SW + 旧页面停留场景已由 ③ 的 navigate 覆盖，无需页面再触发一次刷新。
+// 2026-09-10 优化后，「刷新即最新」的职责已重新分配，杜绝循环刷新：
+//   ① SW fetch HTML 走 SWR（秒开缓存 + 后台 cache:'reload' 拉新），内容每次加载即最新；
+//   ② SW 注册 URL 固定为 './sw.js'（不带 build-version 查询串），避免缓存 HTML 的版本戳与
+//     当前 SW 不一致时被浏览器当成「不同注册」而反复 install→activate 形成 ~10s 刷新死循环；
+//   ③ 新 SW activate 后只 postMessage('SW_UPDATED') 通知页面，页面用一次性标志决定是否刷新
+//      （只有真出现新 SW 版本时刷一次，平时浏览零刷新；不再强制 clients.navigate）。
+// 含 build-version 的旧方案会在多版本并存时无限循环刷新，已废弃。
 (function(){
   try{
     var m=document.querySelector('meta[name="build-version"]');
@@ -3966,14 +3967,12 @@ function _clearHtmlCache(){
 // 2026-09-02：新版 SW 激活后自动 reload，保证所有人打开就是最新版，无需手动清缓存
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
-    // 2026-09-09 根治：SW 注册 URL 带 build-version，每次部署都变化。
-    // 否则 URL 写死 ?v=11，GitHub Pages CDN 缓存旧 sw.js 时浏览器检测不到 SW 更新，
-    // 新 SW 接不了管，用户刷新仍跑旧 SW（旧缓存策略）。动态 URL 让新脚本必被回源下载。
-    var _bvMeta=document.querySelector('meta[name="build-version"]');
-    var _bv=(_bvMeta&&_bvMeta.getAttribute('content'))||'1';
-    navigator.serviceWorker.register('./sw.js?v='+_bv).catch(function(){});
-    // 收到"新版已就绪"通知 → 自动刷新（一次性标志防死循环）
-    // 注：新 SW 现在会在 activate 里主动 clients.navigate() 强制页面重新导航，这里仅作兜底。
+    // 2026-09-10 优化：注册 URL 固定，不再拼 build-version 查询串。
+    // 浏览器对 SW 脚本自身的更新检查本来就会按 no-cache 重新校验，故 CDN 缓存旧 sw.js
+    // 不会阻碍检测；而带 ?v= 反而会让「缓存 HTML 的版本戳 ≠ 当前 SW」时产生多个注册导致死循环刷新。
+    navigator.serviceWorker.register('./sw.js').catch(function(){});
+    // 收到"新版已就绪"通知 → 自动刷新一次（一次性标志防重复/死循环）。
+    // activate 已不再强制 navigate，这里就是唯一刷新来源；仅在确实换了新的 sw.js 时触发。
     navigator.serviceWorker.addEventListener('message',function(ev){
       if(ev.data&&ev.data.type==='SW_UPDATED'&&!window.__swReloaded){
         window.__swReloaded=true;

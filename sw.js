@@ -7,7 +7,7 @@
 // 2026-09-04 二次修复：支持子路径部署（GitHub Pages 站点位于 /mining-daily/）。
 //   原先写死 '/index.html' 这类绝对路径，在子路径下会指向站点根而 404。
 //   改为以 SW 自身所在目录为基准推导 BASE，根路径部署（本地/沙箱）与子路径部署（Pages）均可。
-const CACHE_NAME = 'mining-daily-20260910-1403';
+const CACHE_NAME = 'mining-daily-20260910-1430';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -67,15 +67,12 @@ self.addEventListener('activate', event => {
       .then(() => self.clients.claim())            // 立即接管所有打开的页面
       .then(() => self.clients.matchAll({ type: 'window' }))
       .then(clients => clients.forEach(c => {
-        // 2026-09-09 晚：新 SW 接管后，强制每个已打开的页面重新导航到当前 URL。
-        // 这是「刷新即最新」的唯一刷新来源；index.html 的版本戳自愈已移除 location.reload()，
-        // 故部署后只会有这一次 navigate，不会与页面内 reload 叠加成「刷新两次」。
-        try {
-          if (c.navigate) { c.navigate(c.url); }
-          else { c.postMessage({ type: 'SW_UPDATED' }); }
-        } catch (e) {
-          try { c.postMessage({ type: 'SW_UPDATED' }); } catch (e2) {}
-        }
+        // 2026-09-10 优化：不再强制 clients.navigate()（会造成部署后重复/循环刷新——
+        // 注册 URL 带 build-version 时，缓存 HTML 的版本戳与当前 SW 不一致会被当成新注册，
+        // 触发 install→activate→navigate 的死循环，每次约 10s）。
+        // 改为只通知页面「有新 SW」，由页面用一次性标志决定是否刷新（SW_UPDATED 处理），
+        // 平时浏览零刷新；HTML/数据内容的新鲜度由 fetch 的 SWR 在每次加载时后台保证。
+        try { c.postMessage({ type: 'SW_UPDATED' }); } catch (e) {}
       }))
   );
 });
@@ -103,8 +100,8 @@ self.addEventListener('fetch', event => {
     // 2026-09-09 晚优化：SWR（stale-while-revalidate）——先秒开本地缓存，后台静默拉新。
     // 根治「每次刷新都回源 GitHub Pages 太慢」：平时刷新直接返回缓存（毫秒级），后台用
     // cache:'reload' 更新缓存；部署新版本时，注册 URL 带新 build-version 触发浏览器下载新 SW，
-    // 新 SW install 阶段 cache.addAll 已预缓存最新 index.html，activate 后 clients.navigate()
-    // 强制重新导航即可命中新缓存秒开最新——故「部署后首次刷新见新功能 + 之后全秒开」兼得。
+// 新 SW install 阶段 cache.addAll 已预缓存最新 index.html，activate 后仅 postMessage 通知页面
+// （由页面决定刷新时机），命中新缓存秒开最新——故「部署后无循环刷新 + 平时全秒开」兼得。
     event.respondWith(
       caches.match(req).then(cached => {
         const network = fetch(req, { cache: 'reload' }).then(res => {
