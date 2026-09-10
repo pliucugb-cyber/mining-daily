@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1530" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1535" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -4021,27 +4021,26 @@ function triggerPwaInstall(){
 }
 
 // 2026-09-10 Phase 2：移动端底部 Tab 栏（运行时注入，避开生成区）
-// 5 个主跳转：今日/价格/矿权/热榜 + 我的（动作表：收藏/浏览记录/往期/安装/返回顶部）
+// 5 个主跳转：今日/往期/价格/矿权/我的（动作表：收藏/浏览记录/安装/搜索/返回顶部）
 // 仅 ≤768px 通过 CSS 显示；桌面隐藏，不影响现有顶部目录条
 function mdMobileTabBar(){
   if(document.getElementById('mobileTabBar')) return;
   var bar=document.createElement('nav');
   bar.id='mobileTabBar'; bar.setAttribute('aria-label','移动端主导航');
   bar.innerHTML='<button class="mtab" data-go="today"><span class="mi">🏠</span><span>今日</span></button>'+
+    '<button class="mtab" data-go="archive"><span class="mi">📚</span><span>往期</span></button>'+
     '<button class="mtab" data-go="price"><span class="mi">💹</span><span>价格</span></button>'+
     '<button class="mtab" data-go="rights"><span class="mi">⛏️</span><span>矿权</span></button>'+
-    '<button class="mtab" data-go="hot"><span class="mi">🔥</span><span>热榜</span></button>'+
     '<button class="mtab" data-go="mine"><span class="mi">👤</span><span>我的</span></button>';
   var sheet=document.createElement('div'); sheet.id='mineSheet'; sheet.hidden=true;
   sheet.innerHTML='<button data-act="fav">★ 我的收藏</button>'+
     '<button data-act="history">🕘 浏览记录</button>'+
-    '<button data-act="archive">📚 往期内容</button>'+
     '<button data-act="install">📲 安装到桌面</button>'+
     '<button data-act="search">🔍 搜索</button>'+
     '<button data-act="top">⬆️ 返回顶部</button>';
   document.body.appendChild(bar); document.body.appendChild(sheet);
   function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', b.getAttribute('data-go')===go); }); }
-  var map={today:'todaySection',price:'priceStrip',rights:'rightsSection',hot:'hotListSection'};
+  var map={today:'todaySection',archive:'archiveSection',price:'priceStrip',rights:'rightsSection'};
   bar.addEventListener('click',function(e){
     var b=e.target.closest('.mtab'); if(!b) return;
     var go=b.getAttribute('data-go');
