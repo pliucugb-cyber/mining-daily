@@ -32,6 +32,7 @@ LLM 方案小样本实测 95%，故采用本脚本。
   python classify_llm.py --batch 20 --limit 60
 """
 import argparse
+import glob
 import io
 import json
 import os
@@ -191,18 +192,39 @@ def classify_file(path, batch_size, limit, force, dry_run):
     return done
 
 
+def month_files():
+    """自动发现月库 data/news_YYYY-MM.json。
+
+    候选池 news_candidates_*.json 必须排除：它是未采用的中间产物，
+    且历史教训是里面残留的低价值条目会「复活」进检索库。
+    """
+    out = []
+    for p in sorted(glob.glob(os.path.join('data', 'news_*.json'))):
+        base = os.path.basename(p)
+        if base.startswith('news_candidates_'):
+            continue
+        if not re.match(r'^news_\d{4}-\d{2}\.json$', base):
+            continue
+        out.append(p)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--files', nargs='*',
-                    default=['data/news_2026-08.json', 'data/news_2026-09.json'])
+    ap.add_argument('--files', nargs='*', default=None,
+                    help='默认自动发现 data/news_YYYY-MM.json（排除候选池）')
     ap.add_argument('--batch', type=int, default=30)
     ap.add_argument('--limit', type=int, default=0)
     ap.add_argument('--force', action='store_true')
     ap.add_argument('--dry-run', action='store_true')
     args = ap.parse_args()
 
+    files = args.files or month_files()
+    if not files:
+        log.error('未找到任何月库文件 data/news_YYYY-MM.json')
+        return
     total = 0
-    for p in args.files:
+    for p in files:
         if not os.path.exists(p):
             log.error('文件不存在：%s', p)
             continue
