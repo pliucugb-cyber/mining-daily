@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1515" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1520" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -725,6 +725,17 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .mtab span{font-size:11px}
   .mtab.active{color:var(--brand)}
   .mobile-install-bar{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+  /* Phase 3：卡片视觉打磨（列表行 → 信息流卡片） */
+  .news-item{border-bottom:none;border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--shadow-sm);margin-bottom:var(--s3);padding:var(--s4);transition:transform .12s var(--ease),box-shadow .12s var(--ease)}
+  .news-item:active{transform:translateY(1px)}
+  .price-card{border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--shadow-sm);padding:var(--s4)}
+  .rights-row{border:1px solid var(--line-2);border-radius:var(--r-md);background:var(--surface);margin-bottom:var(--s2);padding:var(--s3) var(--s4)}
+  body.dark .news-item,body.dark .price-card,body.dark .rights-row{background:var(--bg);border-color:var(--line-1)}
+  /* Phase 3：搜索/筛选吸顶常驻 + 44px 触控 */
+  .news-filter-bar{position:sticky;top:0;z-index:120;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:var(--s2) var(--s3);margin:var(--s2) 0}
+  .nf-search{min-height:44px;font-size:16px}
+  .nf-chip{min-height:44px;display:inline-flex;align-items:center;padding:0 var(--s3)}
+  .nf-chips{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
   #mineSheet{display:flex;flex-direction:column;position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line-2);box-shadow:0 -4px 20px rgba(15,23,42,.18);z-index:220;padding:var(--s2) var(--s3) calc(var(--s3) + env(safe-area-inset-bottom,0px));gap:var(--s1)}
   #mineSheet[hidden]{display:none}
   #mineSheet button{text-align:left;border:none;background:none;color:var(--ink-900);font-size:var(--fs-body);padding:var(--s3) var(--s2);border-radius:var(--r-md);cursor:pointer}
@@ -734,6 +745,18 @@ body.dark #mobileTabBar{background:var(--bg);border-top-color:var(--line-1)}
 body.dark #mineSheet{background:var(--bg);border-top-color:var(--line-1)}
 body.dark #mineSheet button{color:var(--ink-700)}
 body.dark #mineSheet button:active{background:var(--surface-3)}
+/* Phase 3 极小屏 ≤360px 适配（此前最小断点为 600px，缺此档 → iPhone SE/小屏安卓会挤） */
+@media(max-width:360px){
+  body{font-size:14px;line-height:1.55}
+  .news-item{padding:var(--s3) var(--s4)}
+  .news-title{font-size:15px;line-height:1.4}
+  .mtab .mi{font-size:18px}
+  .mtab span{font-size:10px}
+  .price-card{padding:var(--s3)}
+  .news-filter-bar{padding:var(--s1) var(--s2)}
+  .nf-chip{padding:0 var(--s2);min-height:40px}
+  .section-title{padding:var(--s2) var(--s3)}
+}
 body.dark{background:#0f151c;color:var(--ink-900)}
 body.dark{
 --ink-900:#e8eef3;--ink-700:#b6c2ce;--ink-500:#8b9bad;--ink-300:#5f6f80;
@@ -4008,6 +4031,7 @@ function mdMobileTabBar(){
     '<button data-act="history">🕘 浏览记录</button>'+
     '<button data-act="archive">📚 往期内容</button>'+
     '<button data-act="install">📲 安装到桌面</button>'+
+    '<button data-act="search">🔍 搜索</button>'+
     '<button data-act="top">⬆️ 返回顶部</button>';
   document.body.appendChild(bar); document.body.appendChild(sheet);
   function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', b.getAttribute('data-go')===go); }); }
@@ -4029,6 +4053,7 @@ function mdMobileTabBar(){
     else if(act==='history'){ if(typeof toggleHistoryFilter==='function') toggleHistoryFilter(); }
     else if(act==='archive'){ if(typeof clearView==='function') clearView(); var a=document.getElementById('archiveSection'); if(a) a.scrollIntoView({behavior:'smooth',block:'start'}); }
     else if(act==='install'){ showPwaInstallPrompt(); }
+    else if(act==='search'){ try{window.scrollTo(0,0);}catch(e){} var s=document.getElementById('nfSearch'); if(s){ try{s.focus();}catch(e){} } }
     else if(act==='top'){ window.scrollTo(0,0); }
   });
   document.addEventListener('click',function(e){
