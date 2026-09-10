@@ -26,6 +26,21 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 CAT_MA = "💰 并购与投资"
 ARCHIVE_DAYS = 14
 
+# 2026-09-11 增：低价值信披类兜底过滤（用户 09-08 深夜裁定「公司治理/信披类不收」）。
+# 巨潮按关键词抓并购类公告时，会把定增的问询函回复、法律意见书、保荐书、持续督导意见
+# 一并捞进来 —— 这些没有产业信息量，属于「采编阶段就不该收」，故在此拦截。
+# 注意：只按**标题**命中即丢弃；「收购报告书」「重大资产重组获批」等实质公告不受影响。
+MA_LOW_VALUE_NOTICE = [
+    '问询函', '关注函', '监管函', '法律意见书', '保荐书', '上市保荐书', '发行保荐书',
+    '持续督导', '督导意见', '核查意见', '自查报告', '反馈意见', '书面审核意见',
+    '补充协议二', '更正公告', '股东大会', '董事会决议', '监事会决议',
+]
+
+
+def is_low_value(title):
+    t = title or ''
+    return any(kw in t for kw in MA_LOW_VALUE_NOTICE)
+
 
 def load_ma(report_date, days):
     end = datetime.date.fromisoformat(report_date)
@@ -48,14 +63,20 @@ def load_ma(report_date, days):
                 continue
             if start <= d <= end:
                 items.append(e)
-    # 去重（同 url 只保留一条）
+    # 去重（同 url 只保留一条）+ 低价值信披类过滤
     seen, uniq = set(), []
+    dropped = 0
     for e in items:
         if e["url"] in seen:
             continue
         seen.add(e["url"])
+        if is_low_value(e.get("title", "")):
+            dropped += 1
+            continue
         uniq.append(e)
     uniq.sort(key=lambda x: (x["orig_date_full"], x["title"]), reverse=True)
+    if dropped:
+        print("[inject_ma] 低价值信披类公告已过滤 %d 条" % dropped)
     return uniq
 
 
