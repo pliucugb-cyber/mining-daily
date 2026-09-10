@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1535" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1540" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -33,7 +33,7 @@
 --fs-display:24px;--fs-h1:20px;--fs-h2:16px;--fs-h3:14px;--fs-body:13px;--fs-meta:12px;--fs-nano:10px;--fs-caption:12px;
 --fw-regular:400;--fw-medium:500;--fw-semibold:600;
 --r-sm:4px;--r-md:8px;--r-lg:12px;
---s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:40px;
+--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:40px;--md-top-h:96px;
 --shadow-xs:0 1px 2px rgba(16,32,43,.04);
 --shadow-sm:0 1px 3px rgba(0,55,112,.06);
 --shadow-md:0 4px 12px rgba(0,55,112,.08);
@@ -746,6 +746,37 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   #mineSheet[hidden]{display:none}
   #mineSheet button{text-align:left;border:none;background:none;color:var(--ink-900);font-size:var(--fs-body);padding:var(--s3) var(--s2);border-radius:var(--r-md);cursor:pointer}
   #mineSheet button:active{background:var(--surface-2)}
+  /* ===== P0 移动端结构重构（2026-09-10）：轻量 App Bar + 6 分类 Tab + 底部 4 全局动作 Tab ===== */
+  .header{display:none!important}
+  #mdTop{position:sticky;top:env(safe-area-inset-top,0px);z-index:230;background:var(--surface);border-bottom:1px solid var(--line-2);box-shadow:0 1px 3px rgba(15,23,42,.06);padding:calc(env(safe-area-inset-top,0px) + 4px) var(--s3) 6px;display:block}
+  .md-top-brand{display:flex;align-items:baseline;gap:8px;white-space:nowrap;overflow:hidden}
+  .md-brand{font-size:var(--fs-h3);font-weight:600;color:var(--ink-900);letter-spacing:.3px}
+  .md-date{font-size:12px;color:var(--ink-500);overflow:hidden;text-overflow:ellipsis}
+  .md-cat-bar{display:flex;gap:2px;overflow-x:auto;margin-top:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .md-cat-bar::-webkit-scrollbar{display:none}
+  .mctab{flex:0 0 auto;border:none;background:none;color:var(--ink-500);font-size:15px;padding:7px 6px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s}
+  .mctab.active{color:var(--brand);font-weight:600}
+  .mctab.active::after{content:'';position:absolute;left:6px;right:6px;bottom:0;height:3px;background:var(--brand);border-radius:2px}
+  #qaFab{display:none!important}
+  /* 分类内容过滤：选中分类后仅显示对应区块；收藏/浏览记录视图(data-filter-mode)下不干预，避免与 fav/history 规则冲突 */
+  body[data-md-cat]:not([data-filter-mode]) #briefStrip,
+  body[data-md-cat]:not([data-filter-mode]) #digestStrip,
+  body[data-md-cat]:not([data-filter-mode]) #priceStrip,
+  body[data-md-cat]:not([data-filter-mode]) .stats-bar,
+  body[data-md-cat]:not([data-filter-mode]) #todaySection,
+  body[data-md-cat]:not([data-filter-mode]) #archiveSection,
+  body[data-md-cat]:not([data-filter-mode]) #rightsSection,
+  body[data-md-cat]:not([data-filter-mode]) #col-rail{display:none!important}
+  body[data-md-cat="tuijian"]:not([data-filter-mode]) #todaySection{display:block!important}
+  body[data-md-cat="today"]:not([data-filter-mode]) #briefStrip,
+  body[data-md-cat="today"]:not([data-filter-mode]) #digestStrip,
+  body[data-md-cat="today"]:not([data-filter-mode]) #todaySection{display:block!important}
+  body[data-md-cat="price"]:not([data-filter-mode]) #priceStrip{display:block!important}
+  body[data-md-cat="hot"]:not([data-filter-mode]) #col-rail{display:block!important}
+  body[data-md-cat="rights"]:not([data-filter-mode]) #rightsSection{display:block!important}
+  body[data-md-cat="archive"]:not([data-filter-mode]) #archiveSection{display:block!important}
+  /* 检索条吸顶位置让位于分类栏（高度由 JS 写入 --md-top-h） */
+  .news-filter-bar{top:calc(var(--md-top-h,96px) + env(safe-area-inset-top,0px))}
 }
 body.dark #mobileTabBar{background:var(--bg);border-top-color:var(--line-1)}
 body.dark #mineSheet{background:var(--bg);border-top-color:var(--line-1)}
@@ -4020,58 +4051,96 @@ function triggerPwaInstall(){
   }
 }
 
-// 2026-09-10 Phase 2：移动端底部 Tab 栏（运行时注入，避开生成区）
-// 5 个主跳转：今日/往期/价格/矿权/我的（动作表：收藏/浏览记录/安装/搜索/返回顶部）
-// 仅 ≤768px 通过 CSS 显示；桌面隐藏，不影响现有顶部目录条
+// 2026-09-10 P0：移动端结构重构（运行时注入，避开生成区）
+// 顶部：轻量 App Bar（品牌+日期）+ 6 分类 Tab（推荐/今日/价格/热榜/矿权/往期），分类控制内容过滤
+// 底部：4 全局动作 Tab（首页/搜索/AI/我的）；搜索/AI 移出顶部，避免与底部导航重合
+// 仅 ≤768px 通过 CSS 显示；桌面隐藏，不影响现有顶部目录条与双栏布局
+
+// 分类选择：写入 body[data-md-cat]，CSS 据此显隐对应区块；收藏/浏览记录视图(data-filter-mode)下不干预
+function mdSelectCat(cat){
+  var top=document.getElementById('mdTop'); if(!top) return;
+  document.body.setAttribute('data-md-cat',cat);
+  [].forEach.call(top.querySelectorAll('.mctab'),function(b){
+    var on=b.getAttribute('data-cat')===cat;
+    b.classList.toggle('active',on);
+    try{ b.setAttribute('aria-selected',on?'true':'false'); }catch(e){}
+  });
+}
+
+// 顶部 App Bar + 分类 Tab（注入到 body 最前，sticky 吸顶；skip-link 之后以保证其为 body 首个元素）
+function mdMobileTopTabs(){
+  if(document.getElementById('mdTop')) return;
+  var top=document.createElement('div'); top.id='mdTop';
+  var dateTxt='';
+  try{ var d=document.querySelector('.date-badge'); if(d) dateTxt=d.textContent.trim(); }catch(e){}
+  var cats=[['tuijian','推荐'],['today','今日'],['price','价格'],['hot','热榜'],['rights','矿权'],['archive','往期']];
+  var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业新闻日报</span><span class="md-date">'+dateTxt+'</span></div><div class="md-cat-bar" role="tablist" aria-label="内容分类">';
+  for(var i=0;i<cats.length;i++){ html+='<button class="mctab" role="tab" data-cat="'+cats[i][0]+'">'+cats[i][1]+'</button>'; }
+  html+='</div>';
+  top.innerHTML=html;
+  var skip=document.getElementById('mdSkipLink');
+  if(skip && skip.parentNode){ skip.parentNode.insertBefore(top, skip.nextSibling); }
+  else { document.body.insertBefore(top, document.body.firstChild); }
+  // 测量高度，供检索条吸顶避让分类栏
+  try{ document.documentElement.style.setProperty('--md-top-h', top.offsetHeight+'px'); }catch(e){}
+  top.querySelector('.md-cat-bar').addEventListener('click',function(e){
+    var b=e.target.closest('.mctab'); if(!b) return;
+    mdSelectCat(b.getAttribute('data-cat'));
+    try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); }
+  });
+  mdSelectCat('tuijian');
+}
+
+// 底部 4 全局动作 Tab（首页/搜索/AI/我的）
 function mdMobileTabBar(){
   if(document.getElementById('mobileTabBar')) return;
   var bar=document.createElement('nav');
   bar.id='mobileTabBar'; bar.setAttribute('aria-label','移动端主导航');
-  bar.innerHTML='<button class="mtab" data-go="today"><span class="mi">🏠</span><span>今日</span></button>'+
-    '<button class="mtab" data-go="archive"><span class="mi">📚</span><span>往期</span></button>'+
-    '<button class="mtab" data-go="price"><span class="mi">💹</span><span>价格</span></button>'+
-    '<button class="mtab" data-go="rights"><span class="mi">⛏️</span><span>矿权</span></button>'+
+  bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">🏠</span><span>首页</span></button>'+
+    '<button class="mtab" data-go="search"><span class="mi">🔍</span><span>搜索</span></button>'+
+    '<button class="mtab" data-go="ai"><span class="mi">🤖</span><span>AI</span></button>'+
     '<button class="mtab" data-go="mine"><span class="mi">👤</span><span>我的</span></button>';
   var sheet=document.createElement('div'); sheet.id='mineSheet'; sheet.hidden=true;
   sheet.innerHTML='<button data-act="fav">★ 我的收藏</button>'+
     '<button data-act="history">🕘 浏览记录</button>'+
+    '<button data-act="theme">🌓 深色 / 浅色</button>'+
+    '<button data-act="reading">📖 阅读模式</button>'+
     '<button data-act="install">📲 安装到桌面</button>'+
-    '<button data-act="search">🔍 搜索</button>'+
     '<button data-act="top">⬆️ 返回顶部</button>';
   document.body.appendChild(bar); document.body.appendChild(sheet);
-  function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', b.getAttribute('data-go')===go); }); }
-  var map={today:'todaySection',archive:'archiveSection',price:'priceStrip',rights:'rightsSection'};
+  function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go); }); }
   bar.addEventListener('click',function(e){
     var b=e.target.closest('.mtab'); if(!b) return;
     var go=b.getAttribute('data-go');
-    if(go==='mine'){ sheet.hidden=!sheet.hidden; setActive('mine'); return; }
-    sheet.hidden=true;
-    if(typeof clearView==='function') clearView();
-    setActive(go);
-    var el=document.getElementById(map[go]); if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    if(go==='mine'){ sheet.hidden=!sheet.hidden; setActive(sheet.hidden?null:'mine'); return; }
+    sheet.hidden=true; setActive(null);
+    if(go==='home'){ mdSelectCat('tuijian'); try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); } }
+    else if(go==='search'){ try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){} var s=document.getElementById('nfSearch'); if(s){ try{ s.focus(); }catch(e){} } }
+    else if(go==='ai'){ if(typeof qaFloatToggle==='function') qaFloatToggle(); }
   });
   sheet.addEventListener('click',function(e){
     var b=e.target.closest('button[data-act]'); if(!b) return;
-    sheet.hidden=true;
+    sheet.hidden=true; setActive(null);
     var act=b.getAttribute('data-act');
     if(act==='fav'){ if(typeof toggleFavFilter==='function') toggleFavFilter(); }
     else if(act==='history'){ if(typeof toggleHistoryFilter==='function') toggleHistoryFilter(); }
-    else if(act==='archive'){ if(typeof clearView==='function') clearView(); var a=document.getElementById('archiveSection'); if(a) a.scrollIntoView({behavior:'smooth',block:'start'}); }
-    else if(act==='install'){ showPwaInstallPrompt(); }
-    else if(act==='search'){ try{window.scrollTo(0,0);}catch(e){} var s=document.getElementById('nfSearch'); if(s){ try{s.focus();}catch(e){} } }
+    else if(act==='theme'){ if(typeof toggleTheme==='function') toggleTheme(); }
+    else if(act==='reading'){ if(typeof toggleReadingMode==='function') toggleReadingMode(); }
+    else if(act==='install'){ if(typeof showPwaInstallPrompt==='function') showPwaInstallPrompt(); }
     else if(act==='top'){ window.scrollTo(0,0); }
   });
   document.addEventListener('click',function(e){
     if(sheet.hidden) return;
     if(e.target.closest('#mineSheet')||(e.target.closest('.mtab')&&e.target.closest('.mtab').getAttribute('data-go')==='mine')) return;
-    sheet.hidden=true;
+    sheet.hidden=true; setActive(null);
   });
 }
 // 页面加载后再判断一次（处理 iOS 等不触发 beforeinstallprompt 的场景）
 window.addEventListener('DOMContentLoaded',function(){
   // 刷新/重载后强制回到顶部（配合 <head> 里的 history.scrollRestoration='manual'）
   try{ window.scrollTo(0,0); }catch(e){}
-  // 移动端底部 Tab 栏（仅 ≤768px 通过 CSS 显示；桌面隐藏）
+  // 移动端：顶部 App Bar + 分类 Tab + 底部 4 全局动作 Tab（仅 ≤768px 通过 CSS 显示；桌面隐藏）
+  mdMobileTopTabs();
   mdMobileTabBar();
   if(IS_STANDALONE){ hidePwaInstallPrompt(); mdHideInstallIfStandalone(); return; }
   // iOS / 桌面未触发 beforeinstallprompt 时，延迟到用户首次交互（滚动/点击/按键）或停留 ≥8s 再提示，降低首屏打扰
