@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1430" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1435" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1374,7 +1374,7 @@ body.dark .md-skip-link{color:#0b1220}
 <div class="toc-main-item" data-target="rightsSection" onclick="switchView('rights',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易</div>
 <div class="toc-main-item" id="tocFavItem" onclick="toggleFavFilter()" style="color:#f39c12" title="只看收藏的条目，并自动定位到第一条" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
 <div class="toc-main-item" id="tocHistoryItem" onclick="toggleHistoryFilter()" style="color:#8e44ad" title="只看浏览过的条目，并自动定位到第一条" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
-<div class="toc-main-item" data-target="installGuideSection" onclick="switchView('install',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
+<div class="toc-main-item" id="tocInstallItem" data-target="installGuideSection" onclick="switchView('install',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
 
 <div class="toc-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="8iwVYYySScb07F8bSYmelj">↑ 返回顶部</div>
 </nav>
@@ -3849,7 +3849,17 @@ window.addEventListener('beforeinstallprompt',function(e){
 window.addEventListener('appinstalled',function(){
   window.__deferredPrompt=null;
   hidePwaInstallPrompt();
+  mdHideInstallIfStandalone();
 });
+
+function mdHideInstallIfStandalone(){
+  // 已作为独立应用安装（桌面 PWA / iOS 主屏幕）时，隐藏所有安装引导入口
+  if(!IS_STANDALONE)return;
+  var toc=document.getElementById('tocInstallItem');
+  if(toc)toc.style.display='none';
+  var guide=document.getElementById('installGuideSection');
+  if(guide)guide.style.display='none';
+}
 
 function hidePwaInstallPrompt(){
   var pcBtn=document.getElementById('pwaHeaderBtn');
@@ -3928,7 +3938,7 @@ function triggerPwaInstall(){
 window.addEventListener('DOMContentLoaded',function(){
   // 刷新/重载后强制回到顶部（配合 <head> 里的 history.scrollRestoration='manual'）
   try{ window.scrollTo(0,0); }catch(e){}
-  if(IS_STANDALONE){ hidePwaInstallPrompt(); return; }
+  if(IS_STANDALONE){ hidePwaInstallPrompt(); mdHideInstallIfStandalone(); return; }
   // iOS 不触发 beforeinstallprompt，直接显示浮条
   if(IS_IOS&&IS_MOBILE_UA) showPwaInstallPrompt();
   // 电脑端若浏览器支持安装，先显示按钮；等 beforeinstallprompt 触发后再点亮实际安装能力
