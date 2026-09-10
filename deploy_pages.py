@@ -104,6 +104,55 @@ def run(cmd, cwd=None, check=True):
     return p.returncode, out
 
 
+def _node_exe():
+    """定位 node 可执行文件（供 sw.js 语法校验用）。找不到返回 None。"""
+    cand = shutil.which('node')
+    if cand:
+        return cand
+    import glob as _glob
+    for pat in (
+        os.path.join(os.path.expanduser('~'), '.workbuddy', 'binaries', 'node',
+                     'versions', '*', 'node.exe'),
+        os.path.join(os.path.expanduser('~'), '.workbuddy', 'binaries', 'node',
+                     'versions', '*', 'bin', 'node'),
+    ):
+        hits = sorted(_glob.glob(pat))
+        if hits:
+            return hits[-1]
+    return None
+
+
+def validate_sw_js(required_version=None):
+    """对 sw.js 做「CACHE_NAME 形状 + 语法」双重校验；不合格抛 RuntimeError（拒绝部署）。
+
+    2026-09-10 事故根治点：sw.js 曾被写坏成 `const P260910-1900';`（语法错误）后
+    被原样推上线 → SW 永远无法更新 → 用户卡在旧的/不完整的缓存里，页面区块一直
+    停在「加载中…」。此前 pipeline 里没有任何一步会真正解析 sw.js，故加此闸门。
+    """
+    sw_path = os.path.join(ROOT, 'sw.js')
+    with io.open(sw_path, encoding='utf-8') as f:
+        src = f.read()
+    m = re.search(r"const\s+CACHE_NAME\s*=\s*'([^']*)'", src)
+    if not m:
+        raise RuntimeError(
+            "sw.js 缺少合法的 CACHE_NAME 声明（形如 const CACHE_NAME = 'mining-daily-<build-version>';）。"
+            "这会让 SW 无法解析 → 用户卡在旧缓存、页面停在「加载中…」。请先修复 sw.js 再部署。")
+    if required_version and m.group(1) != required_version:
+        raise RuntimeError('sw.js CACHE_NAME=%r 与 build-version 派生值 %r 不一致，拒绝部署。'
+                           % (m.group(1), required_version))
+    node = _node_exe()
+    if node:
+        p = subprocess.run([node, '--check', sw_path],
+                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if p.returncode != 0:
+            raise RuntimeError('sw.js 语法校验失败（node --check）：\n'
+                               + p.stdout.decode('utf-8', errors='replace'))
+    else:
+        log('[deploy_pages] ⚠️ 未找到 node，跳过 sw.js 语法校验（仅校验 CACHE_NAME 形状）')
+    log('[deploy_pages] sw.js 校验通过（CACHE_NAME=%s）' % m.group(1))
+    return m.group(1)
+
+
 def sync_sw_cache_name():
     """2026-09-10 P1：SW 的 CACHE_NAME 由 index.html 的 build-version 自动派生。
 
@@ -111,6 +160,12 @@ def sync_sw_cache_name():
     build-version 已是事实上的版本源（改 index.html 必须 bump），直接拿它派生缓存名：
     版本变 → sw.js 字节变 → 浏览器重新安装 SW → activate 里清掉旧缓存。
     同一版本重复部署结果一致（幂等），不会造成无谓的全量重下。
+
+    2026-09-10 事故修复：旧实现用 `const CACHE_NAME = '[^']*'` 精确匹配，一旦该行被写坏
+    （变成 `const P260910-1900';`）就再也匹配不上 → `new == src` → 打印「已是最新」后
+    **静默 return**，把语法错误的 sw.js 原样推上线。现在两道保险：
+      ① 匹配不到 CACHE_NAME 声明 → 直接抛错终止部署（fail-fast，不再静默）；
+      ② 改写前后一律走 validate_sw_js()（形状 + node --check 语法 + 版本一致）。
     """
     html_path = os.path.join(ROOT, 'index.html')
     sw_path = os.path.join(ROOT, 'sw.js')
@@ -119,25 +174,36 @@ def sync_sw_cache_name():
     with io.open(html_path, encoding='utf-8') as f:
         m = re.search(r'<meta name="build-version" content="([^"]+)"', f.read())
     if not m:
-        log('[deploy_pages] 未找到 build-version，跳过 SW 缓存名同步')
-        return
+        raise RuntimeError('index.html 未找到 build-version，无法派生 SW 缓存名（拒绝部署）')
     bv = re.sub(r'[^0-9A-Za-z._-]', '-', m.group(1).strip())
     name = 'mining-daily-' + bv
     with io.open(sw_path, encoding='utf-8', newline='') as f:
         src = f.read()
-    new = re.sub(r"const CACHE_NAME = '[^']*'", "const CACHE_NAME = '%s'" % name, src, count=1)
-    if new == src:
+    pat = re.compile(r"const\s+CACHE_NAME\s*=\s*'[^']*'")
+    if not pat.search(src):
+        raise RuntimeError(
+            "sw.js 中找不到可改写的 `const CACHE_NAME = '...'` 声明。"
+            "若该行已被写坏，请手工恢复为 const CACHE_NAME = '%s'; 后重试"
+            "（拒绝部署语法错误的 sw.js）。" % name)
+    # 用函数式替换，避免替换串里的反斜杠/组引用被 re 解释
+    new = pat.sub(lambda _m: "const CACHE_NAME = '%s'" % name, src, count=1)
+    if new != src:
+        buf = new.encode('utf-8')
+        orig = src.encode('utf-8')
+        # 兜底：本次改写只替换一个版本号 token，字节数理应几乎不变。
+        # 若出入很大，说明正则/替换写坏了（可能截断整个文件）→ 拒绝写入。
+        if abs(len(buf) - len(orig)) > 200 or len(buf) < 20:
+            raise RuntimeError('sw.js 改写结果异常（原 %d 字节 → 新 %d 字节），拒绝写入'
+                               % (len(orig), len(buf)))
+        tmp = sw_path + '.tmp'
+        with open(tmp, 'wb') as f:
+            f.write(buf)
+        os.replace(tmp, sw_path)
+        log('[deploy_pages] SW 缓存名同步为 %s（由 build-version 自动派生）' % name)
+    else:
         log('[deploy_pages] SW 缓存名已是最新：%s' % name)
-        return
-    buf = new.encode('utf-8')
-    if len(buf) < 500:   # 兜底：正则写坏了也别把 sw.js 写成空壳
-        log('[deploy_pages] SW 改写结果异常（%d 字节），已放弃' % len(buf))
-        return
-    tmp = sw_path + '.tmp'
-    with open(tmp, 'wb') as f:
-        f.write(buf)
-    os.replace(tmp, sw_path)
-    log('[deploy_pages] SW 缓存名同步为 %s（由 build-version 自动派生）' % name)
+    # 无论是否改写过，都必须通过校验（这是本次事故的根治点）
+    validate_sw_js(name)
 
 
 def main():

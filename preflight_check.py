@@ -12,6 +12,9 @@ preflight_check.py — 矿业日报自动化前置/回归健康检查。
   4. 价格区两行容器、矿权专区容器存在
   5. 排除 <script>/<style> 后的 <div> 收支平衡
   6. build-version meta 存在
+  7. sw.js 可解析（node --check）且 CACHE_NAME 与 build-version 一致
+     ——2026-09-10 事故新增。此前没有任何门禁真正解析过 sw.js，一行语法错误
+     （`const P260910-1900';`）直接上线，导致 SW 无法更新、页面区块永久停在「加载中…」。
 
 退出码（2026-09 改）：
   **默认** 任一检查失败 → exit 1。旧行为是「默认只报告、exit 0」，
@@ -26,6 +29,8 @@ preflight_check.py — 矿业日报自动化前置/回归健康检查。
 """
 import json
 import re
+import shutil
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -148,9 +153,65 @@ def check_div_balance(text):
     return ok, findings
 
 
+def _find_node():
+    """定位 node 可执行文件（供 sw.js 语法校验）。找不到返回 None。"""
+    cand = shutil.which('node')
+    if cand:
+        return cand
+    base = Path.home() / '.workbuddy' / 'binaries' / 'node' / 'versions'
+    if base.exists():
+        hits = sorted(list(base.glob('*/node.exe')) + list(base.glob('*/bin/node')))
+        if hits:
+            return str(hits[-1])
+    return None
+
+
+def check_sw_js(text):
+    """sw.js 语法校验 + CACHE_NAME 与 build-version 一致性（2026-09-10 事故新增）。
+
+    事故复盘：sw.js 第 10 行被写坏成 `const P260910-1900';`（语法错误）后原样上线
+    → SW 永远无法更新 → 用户卡在旧的/不完整的缓存 → 页面区块一直停在「加载中…」。
+    此前没有任何门禁真正解析过 sw.js（唯一相关测试只把 sw.js 当字符串做正则）。
+    """
+    findings = []
+    sw = ROOT / 'sw.js'
+    if not sw.exists():
+        return False, ['❌ 找不到 sw.js']
+    src = sw.read_text(encoding='utf-8')
+    m = re.search(r"const\s+CACHE_NAME\s*=\s*'([^']*)'", src)
+    if not m:
+        findings.append("❌ sw.js 缺少合法的 CACHE_NAME 声明"
+                        "（应形如 const CACHE_NAME = 'mining-daily-<build-version>';）")
+    else:
+        cname = m.group(1)
+        bv = None
+        if HTML.exists():
+            mb = re.search(r'<meta name="build-version" content="([^"]+)"',
+                           HTML.read_text(encoding='utf-8'))
+            if mb:
+                bv = re.sub(r'[^0-9A-Za-z._-]', '-', mb.group(1).strip())
+        if bv and cname != 'mining-daily-' + bv:
+            findings.append('❌ sw.js CACHE_NAME=%r 与 build-version 派生值 %r 不一致'
+                            % (cname, 'mining-daily-' + bv))
+        else:
+            findings.append('✅ sw.js CACHE_NAME 与 build-version 一致：%s' % cname)
+    node = _find_node()
+    if node:
+        p = subprocess.run([node, '--check', str(sw)],
+                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if p.returncode != 0:
+            err = p.stdout.decode('utf-8', errors='replace').strip().splitlines()[:3]
+            findings.append('❌ sw.js 语法错误（node --check）：' + ' | '.join(err))
+        else:
+            findings.append('✅ sw.js 语法校验通过（node --check）')
+    else:
+        findings.append('⚠️ 未找到 node，跳过 sw.js 语法校验（仅校验 CACHE_NAME 形状）')
+    ok = not any(f.startswith('❌') for f in findings)
+    return ok, findings
+
+
 def main():
-    argv = set(sys.argv[1:])
-    # --fail-on-error 是 06:00 自动化在用的历史参数，现为默认行为（no-op，仅兼容保留）
+    argv = set(sys.argv[1:])    # --fail-on-error 是 06:00 自动化在用的历史参数，现为默认行为（no-op，仅兼容保留）
     fail = '--no-fail' not in argv
 
     if not HTML.exists():
@@ -170,6 +231,7 @@ def main():
         ('关键功能', check_functions(text)),
         ('关键容器', check_containers(text)),
         ('build-version', check_build_version(text)),
+        ('sw.js 语法', check_sw_js(text)),
         ('div 收支', check_div_balance(text)),
     ]
 
