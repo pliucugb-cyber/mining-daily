@@ -90,7 +90,12 @@ setTimeout(() => {
   ok('矿权行换行规则统一到 768px', /@media\(max-width:768px\)\{\s*\.rights-row\{flex-wrap:wrap\}/.test(html));
 
   console.log('\n===== ⑤ 移动端右栏 =====');
-  ok('会展不再被移动端强制隐藏', !/\.expo-mini\{display:none!important\}/.test(html));
+  // ⑤ 移动端会展卡：默认显示；仅「热榜」tab（body[data-md-cat="hot"]）隐藏会展卡，突出矿业热榜。
+  //   故允许热榜-tab 作用域内的 .expo-mini{display:none!important}，但禁止任何全局/无作用域的强制隐藏。
+  const expoNone = (html.match(/\.expo-mini\{display:none!important\}/g) || []);
+  const hotScoped = /body\[data-md-cat="hot"\] #col-rail \.expo-mini\{display:none!important\}/.test(html);
+  ok('会展仅热榜 tab 隐藏（移动端默认显示，无全局强制隐藏）', expoNone.length === (hotScoped ? 1 : 0) && hotScoped,
+    'display:none 规则数=' + expoNone.length + '，热榜作用域=' + hotScoped);
   ok('mdMobileRailOrder 已定义', typeof w.mdMobileRailOrder === 'function');
   const grid = d.querySelector('.news-grid');
   const guide = d.getElementById('installGuideSection');
