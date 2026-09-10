@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1720" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1740" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -755,7 +755,7 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .md-date{font-size:12px;color:var(--ink-500);overflow:hidden;text-overflow:ellipsis}
   .md-cat-bar{display:flex;gap:2px;overflow-x:auto;margin-top:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .md-cat-bar::-webkit-scrollbar{display:none}
-  .mctab{flex:0 0 auto;border:none;background:none;color:var(--ink-500);font-size:15px;padding:7px 6px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s}
+  .mctab{flex:0 0 auto;border:none;background:none;color:var(--ink-700);font-size:15px;padding:7px 6px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s}
   .mctab.active{color:var(--brand);font-weight:600}
   .mctab.active::after{content:'';position:absolute;left:6px;right:6px;bottom:0;height:3px;background:var(--brand);border-radius:2px}
   #qaFab{display:flex!important;left:auto;right:14px;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:215;top:auto}
@@ -1155,7 +1155,7 @@ body.dark .rr-num{color:var(--ink-700)}
 }
 /* 移动端阅读优化（2026-09-10 重设计）：正文抬到 15px、行高 1.65，新闻条目内距横向收紧、标题行高舒适 */
 @media(max-width:768px){
-  body{font-size:15px;line-height:1.65}
+  body{line-height:1.65}
   .news-item{padding:var(--s4) var(--s4)}
   .news-title{line-height:1.45}
 }
@@ -1526,11 +1526,31 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   .nf-search-wrap{flex:1 1 auto;min-width:0}
   .nf-chips{order:3;flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;display:none}
   .nf-chips.show{display:flex}
+  /* P1：金属 chip 移动端隐藏（桌面筛选条保留全部 chip，DOM 不变） */
+  .nf-chip-metal{display:none}
+  /* P1：新闻摘要移动端 3 行截断 */
+  .news-summary{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+  /* P1：标签 chip 圆角 12→4、NEW 角标去脉冲（仅移动端，桌面保留原样） */
+  .tag-chip{border-radius:var(--r-sm)}
+  .badge-new{animation:none}
+  /* P1：已读圆点阴影用设计令牌替代硬编码灰（桌面保持 #c8d0d8 不动） */
+  .news-item.read .dot{box-shadow:inset 0 0 0 2px var(--line-2)}
+  /* P2：热榜 tab 只留矿业热榜，隐藏近期会展卡（data-md-cat 仅手机设置，桌面不触发） */
+  body[data-md-cat="hot"] #col-rail .expo-mini{display:none!important}
+  /* P2：顶栏统一吸顶层（分类栏 z230 在搜索 z225 之上，避免 z-index 重叠；不做 DOM 嵌套以免 destabilize 搜索条） */
+  .news-filter-bar{z-index:225}
   /* P0-3：底部导航内联 SVG 图标尺寸 */
   .mtab .mi svg{width:22px;height:22px;display:block}
   /* 顶部搜索按钮 */
   .md-search-btn{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:none;background:var(--surface-2);color:var(--ink-700);border-radius:50%;cursor:pointer}
   .md-search-btn:active{background:var(--surface-3)}
+  /* P1：顶栏收藏/历史常驻图标 + 未读红点 */
+  .md-fav-btn{position:relative;margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:none;background:var(--surface-2);color:var(--ink-700);border-radius:50%;cursor:pointer}
+  .md-fav-btn:active{background:var(--surface-3)}
+  .md-fav-btn svg{width:20px;height:20px;display:block}
+  .md-search-btn{margin-left:6px}
+  .md-badge{position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:var(--up);box-shadow:0 0 0 2px var(--surface);display:none}
+  .md-badge.show{display:block}
   /* AI 悬浮球：移动端圆形化、上移避让底部导航 */
   .qa-fab .qa-fab-txt{display:none}
   .qa-fab{width:52px;height:52px;padding:0;justify-content:center;border-radius:50%}
@@ -4201,6 +4221,13 @@ function mdOpenSearch(){
   var s=document.getElementById('nfSearch'); if(s){ try{ s.focus(); }catch(e){} }
 }
 
+// 顶栏收藏/历史红点：集合非空即显示（移动端常驻图标上的待查看提示）
+function mdUpdateFavBadges(){
+  try{
+    var fb=document.getElementById('mdFavBadge'); if(fb) fb.classList.toggle('show', !!(window.getFavs&&getFavs().length>0));
+    var hb=document.getElementById('mdHistBadge'); if(hb) hb.classList.toggle('show', !!(window.getHistory&&getHistory().length>0));
+  }catch(e){}
+}
 // 顶部 App Bar + 分类 Tab（注入到 body 最前，sticky 吸顶；skip-link 之后以保证其为 body 首个元素）
 function mdMobileTopTabs(){
   if(document.getElementById('mdTop')) return;
@@ -4209,6 +4236,14 @@ function mdMobileTopTabs(){
   try{ var d=document.querySelector('.date-badge'); if(d) dateTxt=d.textContent.trim(); }catch(e){}
   var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期']];
   var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业新闻日报</span><span class="md-date">'+dateTxt+'</span>'
+    +'<button class="md-fav-btn" id="mdFavBtn" type="button" aria-label="我的收藏">'
+    +'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>'
+    +'<span class="md-badge" id="mdFavBadge"></span>'
+    +'</button>'
+    +'<button class="md-fav-btn" id="mdHistBtn" type="button" aria-label="浏览记录">'
+    +'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
+    +'<span class="md-badge" id="mdHistBadge"></span>'
+    +'</button>'
     +'<button class="md-search-btn" id="mdSearchBtn" type="button" aria-label="搜索新闻">'
     +'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
     +'</button></div><div class="md-cat-bar" role="tablist" aria-label="内容分类">';
@@ -4226,6 +4261,13 @@ function mdMobileTopTabs(){
   });
   var sb=document.getElementById('mdSearchBtn');
   if(sb) sb.addEventListener('click', mdOpenSearch);
+  var fb=document.getElementById('mdFavBtn');
+  if(fb) fb.addEventListener('click', function(){ var s=document.getElementById('mineSheet'); if(s) s.hidden=true; if(typeof toggleFavFilter==='function') toggleFavFilter(); });
+  var hb=document.getElementById('mdHistBtn');
+  if(hb) hb.addEventListener('click', function(){ var s=document.getElementById('mineSheet'); if(s) s.hidden=true; if(typeof toggleHistoryFilter==='function') toggleHistoryFilter(); });
+  mdUpdateFavBadges();
+  document.addEventListener('click',function(e){ if(e.target.closest && (e.target.closest('.btn-star')||e.target.closest('.news-title'))){ setTimeout(mdUpdateFavBadges,0); } });
+  if(window.addEventListener) window.addEventListener('storage', mdUpdateFavBadges);
   mdSelectCat('tuijian');
 }
 
@@ -6017,14 +6059,14 @@ function setupNewsFilterBar(){
     +'<button class="nf-toggle" id="nfToggle" type="button" aria-label="展开或收起筛选" aria-expanded="false">筛选 <span class="nf-toggle-ico">▾</span></button>'
     +'<div class="nf-chips" id="nfChips">'
     +'<span class="nf-chip active" data-kw="">全部</span>'
-    +'<span class="nf-chip" data-kw="金">金</span>'
-    +'<span class="nf-chip" data-kw="铜">铜</span>'
-    +'<span class="nf-chip" data-kw="铝">铝</span>'
-    +'<span class="nf-chip" data-kw="铅锌">铅锌</span>'
-    +'<span class="nf-chip" data-kw="镍">镍</span>'
-    +'<span class="nf-chip" data-kw="锡">锡</span>'
-    +'<span class="nf-chip" data-kw="锂">锂</span>'
-    +'<span class="nf-chip" data-kw="钴">钴</span>'
+    +'<span class="nf-chip nf-chip-metal" data-kw="金">金</span>'
+    +'<span class="nf-chip nf-chip-metal" data-kw="铜">铜</span>'
+    +'<span class="nf-chip nf-chip-metal" data-kw="铝">铝</span>'
+    +'<span class="nf-chip nf-chip-metal" data-kw="铅锌">铅锌</span>'
+    +'<span class="nf-chip nf-chip-metal" data-kw="镍">镍</span>'
+    +'<span class="nf-chip nf-chip-metal" data-kw="锡">锡</span>'
+    +'<span class="nf-chip nf-chip-metal" data-kw="锂">锂</span>'
+    +'<span class="nf-chip nf-chip-metal" data-kw="钴">钴</span>'
     +'<span class="nf-chip" data-kw="矿权">矿权</span>'
     +'<span class="nf-chip" data-kw="政策">政策</span>'
     +'<span class="nf-chip" data-kw="勘查">勘查</span>'
