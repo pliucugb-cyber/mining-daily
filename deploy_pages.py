@@ -31,11 +31,21 @@ import shutil
 import subprocess
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, ROOT)
+
+from logutil import get_logger  # noqa: E402
+
+_log = get_logger('deploy')
 
 
 def log(msg):
-    """立即输出（flush=True）——自动化场景下输出常被管道缓冲，卡住时看不到进度。"""
-    print(msg, flush=True)
+    """立即输出——自动化场景下输出常被管道缓冲，卡住时看不到进度。
+
+    改走 logutil 统一格式（时间戳 + 级别 + 模块名），排查时能直接看出卡在哪一步。
+    StreamHandler 每次 emit 都会 flush，与原来的 print(flush=True) 等效。
+    msg 里若含 % 也不会被误格式化：logging 只在传 args 时才做 % 替换。
+    """
+    _log.info(msg)
 WORK = os.path.join(ROOT, 'tmp', 'ghpages')
 REMOTE = 'git@github.com:pliucugb-cyber/mining-daily.git'
 BRANCH = 'gh-pages'

@@ -13,9 +13,13 @@ preflight_check.py — 矿业日报自动化前置/回归健康检查。
   5. 排除 <script>/<style> 后的 <div> 收支平衡
   6. build-version meta 存在
 
-退出码：
-  默认只报告，exit 0；
-  加 --fail-on-error 且任一检查失败 → exit 1（供自动化中断流程）。
+退出码（2026-09 改）：
+  **默认** 任一检查失败 → exit 1。旧行为是「默认只报告、exit 0」，
+  失败也返回 0 会让自动化「看起来通过」，属于静默失败，已修正。
+  --no-fail     只报告不中断（人工排查时用）
+  --fail-on-error  保留为 no-op 兼容参数：06:00 自动化 prompt 里写死了这个
+                 参数，删掉会让它拿到非预期退出码。它现在是默认行为，
+                 传不传都一样，请勿移除该参数名。
 
 写入 .preflight_status.json（供自动化读取；注意：该文件不应被 git 提交，
 加进 deploy_pages 的 git-add 排除名单）。
@@ -25,6 +29,10 @@ import re
 import sys
 import time
 from pathlib import Path
+
+from logutil import get_logger
+
+log = get_logger('preflight')
 
 ROOT = Path(__file__).parent
 HTML = ROOT / 'index.html'
@@ -141,8 +149,12 @@ def check_div_balance(text):
 
 
 def main():
+    argv = set(sys.argv[1:])
+    # --fail-on-error 是 06:00 自动化在用的历史参数，现为默认行为（no-op，仅兼容保留）
+    fail = '--no-fail' not in argv
+
     if not HTML.exists():
-        print(f'❌ 找不到 {HTML}')
+        log.error('找不到 %s', HTML)
         sys.exit(1)
     text = HTML.read_text(encoding='utf-8')
 
@@ -156,19 +168,23 @@ def main():
     ]
 
     all_ok = True
-    print('=' * 60)
-    print(f'preflight_check — {HTML}')
-    print('=' * 60)
+    rule = '=' * 60
+    log.info(rule)
+    log.info('preflight_check — %s', HTML)
+    log.info(rule)
     for name, (ok, findings) in sections:
-        print(f'\n[{name}]')
+        log.info('[%s]', name)
         for f in findings:
-            print('  ' + f)
+            log.info('  %s', f)
         if not ok:
             all_ok = False
 
-    print('\n' + '=' * 60)
-    print('✅ 全部通过' if all_ok else '❌ 存在异常，自动化应中止并告警')
-    print('=' * 60)
+    log.info(rule)
+    if all_ok:
+        log.info('✅ 全部通过')
+    else:
+        log.error('❌ 存在异常，自动化应中止并告警')
+    log.info(rule)
 
     STATUS.write_text(json.dumps({
         'ok': all_ok,
@@ -176,8 +192,10 @@ def main():
         'ts': time.strftime('%Y-%m-%d %H:%M:%S'),
     }, ensure_ascii=False, indent=2), encoding='utf-8')
 
-    if '--fail-on-error' in sys.argv and not all_ok:
-        sys.exit(1)
+    if not all_ok:
+        if fail:
+            sys.exit(1)
+        log.warning('已指定 --no-fail，仅报告不中断（exit 0）')
 
 
 if __name__ == '__main__':

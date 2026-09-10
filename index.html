@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-0607" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-0608" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1540,9 +1540,17 @@ body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
 <script src="lme-data.js"></script>
 <script src="price-history.js"></script>
 <script>
+// ===== 权威转义函数（第 3 批收敛：原 4 份局部 esc + 1 份 escapeHtml 合并为此一个）=====
+// 语义取原先最严格的一份：null/undefined 安全，转义 & < > " '。
+// 各局部作用域不再重复定义，统一用这个；escapeHtml 保留为兼容别名。
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+// 统一外链校验：黑名单制，只拦危险协议（javascript:/data:/vbscript:/file:）。
+// 不用白名单——页面存在 #rightsSection 锚点与相对路径，白名单会把它们拦空、打断跳转。
+// 顺带把 " 转成 %22，因此可直接放进 href="..." 属性。返回 '' 表示不可用（调用方应降级为纯文本）。
+// 注：qaSafeUrl 是给 LLM 生成内容用的**白名单**版本，刻意更严，与本函数并存，勿合并。
+function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return '';if(/[\x00-\x1F\x7F]/.test(s))return '';var t=s.replace(/[\s\u0000-\u0020]+/g,'').toLowerCase();if(/^(javascript|data|vbscript|file):/.test(t))return '';return s.replace(/"/g,'%22');}
 /* ===================== 矿权交易独立专区渲染（9-06 新增）===================== */
 (function(){
-  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function parseRights(it){
     var m=it.m||"", t=it.t||"", g=it.g||[];
     var full=t+" "+m;
@@ -1771,7 +1779,7 @@ body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
       else numTxt=(r.price==null?"—":r.price.toLocaleString("zh-CN")+" 万元");
       return '<div class="rights-row" data-method="'+r.method+'" data-mineral="'+r.mineral+'">'
         +'<span class="rr-mineral">'+(r.mineral||"—")+'</span>'
-        +'<a class="rr-title" href="'+r.it.u+'" target="_blank" rel="noopener" title="'+esc(r.it.t)+'">'+esc(r.it.t)+'</a>'
+        +'<a class="rr-title" href="'+safeHref(r.it.u)+'" target="_blank" rel="noopener" title="'+esc(r.it.t)+'">'+esc(r.it.t)+'</a>'
         +(r.region?'<span class="rr-region">📍 '+esc(r.region)+'</span>':'')
         +'<span class="rr-method">'+r.method+'</span>'
         +'<span class="rr-num">'+numTxt+'</span>'
@@ -1838,7 +1846,7 @@ body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
       var links=results.map(function(r){
         var u=escA(r.u||r.url||'#rightsSection');
         var t=escT((r.t||r.title||'').trim());
-        return '<a class="rr-link" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>';
+        return '<a class="rr-link" href="'+safeHref(u)+'" target="_blank" rel="noopener">'+t+'</a>';
       }).join('');
       html='<div class="news-item rights-summary-item" data-url="#rightsSection" data-rights-summary="1" data-embed="ok">'
          + '<div class="news-head"><span class="dot"></span><span class="badge-rights">矿权</span>'
@@ -1984,10 +1992,12 @@ function updateFavCount(){
   // 2026-09-09：左侧目录「我的收藏」不再显示数字，也始终可见（0 条不隐藏）
 }
 // ===== 已归档收藏渲染：收藏但新闻已不在当前页面的条目 =====
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+// 兼容别名：历史调用点较多，统一转发到权威 esc（行为更严：null 安全 + 转义 '）
+function escapeHtml(s){return esc(s);}
 const ARCH_FAV_DEFAULT_TITLE='🗂️ 已归档收藏（原新闻已滚出页面，收藏记录永久保留）';
 function buildArchFavItemHtml(f){
-  const url=String(f.url).replace(/"/g,'&quot;');
+  if(!f)return '';   // 脏数据兜底：整条缺失时不抛错、不渲染
+  const url=safeHref(f.url);   // null 安全 + 危险协议过滤 + " 转义
   const title=escapeHtml(f.title||f.url);
   const meta=[escapeHtml(f.src||''),escapeHtml(f.date||'')].filter(Boolean).join(' · ')||'收藏记录';
   const summary=escapeHtml(f.summary||'');
@@ -2109,7 +2119,7 @@ function formatHistoryDate(iso){
   }catch(e){return '';}
 }
 function buildHistoryItemHtml(h){
-  const url=String(h.url||'').replace(/"/g,'&quot;');
+  const url=safeHref(h.url);   // null 安全 + 危险协议过滤 + " 转义
   const title=escapeHtml(h.title||h.url||'未知条目');
   const src=escapeHtml(h.src||'浏览记录');
   const date=escapeHtml(formatHistoryDate(h.time)||'');
@@ -2159,13 +2169,6 @@ function isSpecialNews(el){
   return t.includes('找矿') || t.includes('新一轮找矿突破战略行动');
 }
 // 专项子类归类：政策/成果/技术/资源安全（未命中前者的默认归技术）
-function specialCategoryOf(el){
-  const t=((el.querySelector('.news-title')||{}).textContent||'')+((el.querySelector('.news-summary')||{}).textContent||'');
-  if(/(通知|意见|规划|方案|部署|政策|条例|办法|战略行动)/.test(t))return 'policy';
-  if(/(新发现|矿产地|找矿空间|找矿成果|勘查成果|资源量|重大进展|找矿突破)/.test(t))return 'result';
-  if(/(关键矿产|供应链|地缘|资源安全|储备)/.test(t))return 'security';
-  return 'tech';
-}
 function initSpecial(){
   // 2026-09-08 改造：找矿专项区已取消。原实现会把命中"找矿"的条目 DOM 搬移到专项区，
   // 造成同一话题被拆到两处看（读者反馈"专项里的内容基本都是前面的"）。
@@ -2307,7 +2310,6 @@ function keepViewportAfterFilter(prevY,mode){
     }catch(e){}
   });});
 }
-function toggleUnreadFilter(){setFilter(filterMode==='unread'?'none':'unread')}
 // ===== 往期区日组自动展开（2026-09-09 凌晨）=====
 // 往期区按「日组」折叠，条目被折叠时带内联 display:none。筛选/搜索时若放着不管，
 // 命中项即使没被加 .hidden 也依然看不见 → 点「收藏/浏览记录」像是什么都没发生。
@@ -2437,12 +2439,6 @@ function mdBindAiKeyBox(){
   inp.onkeydown=function(e){ if(e.key==='Enter'){ save(); } };
 }
 window.mdBindAiKeyBox=mdBindAiKeyBox;
-function toggleFilter(){setFilter(filterMode==='new'?'none':'new')}
-function toggleSpecialFilter(){
-  // 2026-09-08：找矿专项区已取消，is-special 条目现在原位显示（带「战略」徽章），
-  // 点按仅切换筛选，不再滚动到已不存在的 specialSection。
-  setFilter(filterMode==='special'?'none':'special');
-}
 // 顶栏「筛选 ▾」下拉（2026-09-09）：收起只看新增 / 战略，减少常驻按钮
 function toggleFilterDropdown(force){
   var menu=document.getElementById('filterDropdownMenu');
@@ -2948,28 +2944,6 @@ function extractTagsFor(item){
 // 挤成窄条（手机端尤其明显）；日期本质是元信息，放 meta 行更合理
 // 2026-09-06 简化：原文发布日期徽章已停用——meta 行里的「· MM-DD」本身就是原文发布日期，
 // 再补一个「原文发布 MM-DD」是同一信息的重复展示。函数保留以便日后需要时改回一行调用。
-function injectOrigDateBadgesDisabled(){
-  const today=new Date();
-  const mm=String(today.getMonth()+1).padStart(2,'0');
-  const dd=String(today.getDate()).padStart(2,'0');
-  const todayStr=mm+'-'+dd;
-  const todayFull=today.getFullYear()+'-'+todayStr;
-  document.querySelectorAll('.news-item.is-new').forEach(el=>{
-    if(el.querySelector('.badge-orig-date'))return;
-    const meta=el.querySelector('.news-meta');
-    if(!meta)return;
-    const txt=meta.textContent||'';
-    const m=txt.match(/(\d{2})-(\d{2})/);
-    if(!m)return;
-    const itemDate=m[1]+'-'+m[2];
-    if(itemDate===todayStr)return;
-    const badge=document.createElement('span');
-    badge.className='badge-orig-date';
-    badge.textContent='原文发布 '+itemDate;
-    badge.title='原文发布于 '+todayFull+'，非今日抓取';
-    meta.appendChild(badge);
-  });
-}
 // ==================== 新闻徽章：重要性分级 + 信源权威（9-06 新增）====================
 // 分级复用热榜打分（来源权威 × 时效 × 关键词），不引入任何虚构指标。
 // 2026-09-06 简化：只保留「重大」一档并全部置于末尾——「重要/关注」属主观噪音，
@@ -2980,16 +2954,6 @@ var AU_LABEL={'au-official':'官方','au-assoc':'协会','au-media':'媒体'};
 function newsLevelOf(score){
   for(var i=0;i<LV_TABLE.length;i++){if(score>=LV_TABLE[i][0])return {cls:LV_TABLE[i][1],label:LV_TABLE[i][2]};}
   return null;   // 低于「关注」线不显示徽章，避免满屏噪音
-}
-function authorClassOf(srcName,url){
-  if(AU_MAP[srcName])return AU_MAP[srcName];
-  if(!url)return '';
-  try{
-    var host=(new URL(url,location.href)).hostname.toLowerCase();
-    if(host.indexOf('.gov.cn')>=0)return 'au-official';
-    if(host.indexOf('chinania.org.cn')>=0||host.indexOf('cnmn.com.cn')>=0)return 'au-assoc';
-    return 'au-media';
-  }catch(e){return '';}
 }
 // 打分表：优先复用热榜算法（口径与热榜一致）；QA_ROWS 尚未就绪时退回 news-data.js 原始行自算同一公式
 function newsScoreMap(){
@@ -3078,17 +3042,6 @@ function briefMd(md){
   }
   flushP();closeUl();
   return out.join('');
-}
-function briefMoveClass(mv){
-  var s=String(mv||'');
-  if(s.indexOf('-')>=0)return 'ba-down';
-  if(s.indexOf('+')>=0)return 'ba-up';
-  return 'ba-flat';
-}
-function briefSignalClass(sig){
-  if(sig==='偏强')return 'bs-up';
-  if(sig==='偏弱')return 'bs-down';
-  return 'bs-flat';
 }
 function renderBrief(d){
   var strip=document.getElementById('briefStrip');
@@ -3342,7 +3295,7 @@ function renderHotPage(){
     return '<li class="hot-item" data-url="'+u+'">'
       +'<div class="hot-body">'
       +'<div class="hot-line">'
-      +'<a class="hot-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'
+      +'<a class="hot-title" href="'+safeHref(u)+'" target="_blank" rel="noopener">'+t+'</a>'
       +fire+fresh
       +'</div>'
       +'<div class="hot-meta"><span>'+s+'</span><span>'+dStr+'</span></div>'
@@ -3517,7 +3470,7 @@ function renderDigest(){
   list.innerHTML=picks.map(function(r){
     // 非当日发布的条目标注日期，避免读者误以为是今天的新闻
     var dtag=(r.d&&r.d!==anchor)?'<span class="digest-dtag">'+digestEsc(String(r.d).slice(5))+'</span>':'';
-    return '<li data-url="'+digestEsc(r.u)+'"><a class="digest-link" href="'+digestEsc(r.u)+'" target="_blank" rel="noopener" title="'+digestEsc(r.t)+'">'+digestEsc(r.t)+'</a>'+dtag+'</li>';
+    return '<li data-url="'+digestEsc(r.u)+'"><a class="digest-link" href="'+safeHref(r.u)+'" target="_blank" rel="noopener" title="'+digestEsc(r.t)+'">'+digestEsc(r.t)+'</a>'+dtag+'</li>';
   }).join('');
 }
 
@@ -3666,8 +3619,6 @@ window.addEventListener('appinstalled',function(){
   window.__deferredPrompt=null;
   hidePwaInstallPrompt();
 });
-
-function dismissInstallTip(){ hidePwaInstallPrompt(); }
 
 function hidePwaInstallPrompt(){
   var pcBtn=document.getElementById('pwaHeaderBtn');
@@ -4116,10 +4067,6 @@ function qaAiProbe(){
     if(b){b.disabled=false;b.textContent='✨ AI 本地';
       b.title='未配置 AI 服务，点击将使用本地知识库兜底回答';}
   }
-}
-function qaAiQuota(){
-  // 轻后端为无状态，不追踪配额；此处仅占位，保持旧调用点可用
-  QA_LEFT=0;
 }
 // 从自由文本问题中提取已知的矿种/主题词（取自检索下拉词表），用于 RAG 上下文检索。
 // 中文无空格，整句做关键词几乎命中为空；提取词表词后语义更准。
@@ -4667,7 +4614,6 @@ function qaFloatScroll(){
 // 轻量 Markdown → HTML（仅支持回答常见格式：加粗、列表、标题、代码、引用、链接）
 function qaMdRender(md){
   if(!md)return '';
-  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   var text=esc(md).replace(/\r\n/g,'\n');
   var codes=[], placeholders=[];
   text=text.replace(/```([\s\S]*?)```/g,function(m,code){
@@ -5573,7 +5519,6 @@ else { setupNewsFilterBar(); setupExportButtons(); }
   var EXPO_SKIP=['收购','投产','勘探','发现','涨价','签约','中标','获批','事故','停产',
                  '复产','产量','利润','业绩预告','资源量','储量','矿权','出让','挂牌',
                  '拍卖','减产','罢工','禁令','关税','出口管制','复产','投产','增产'];
-  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function isDesktop(){ try{ return !(window.matchMedia&&window.matchMedia('(max-width:1100px)').matches); }catch(e){ return true; } }
   function titleOf(el){var a=el.querySelector('.news-title');return a?(a.textContent||''):'';}
   function urlOf(el){var a=el.querySelector('.news-title');return a?(a.getAttribute('href')||'#'):'#';}
@@ -5631,7 +5576,7 @@ else { setupNewsFilterBar(); setupExportButtons(); }
       // 有多少展多少，放不下用户自己滚，条目链接全部可点。
       picked.forEach(function(el){
         var t=titleOf(el).trim(),u=urlOf(el),d=dateOf(el);
-        html+='<li><a href="'+esc(u)+'" target="_blank" rel="noopener" title="'+esc(t)+'">'+esc(t)+'</a>'
+        html+='<li><a href="'+safeHref(u)+'" target="_blank" rel="noopener" title="'+esc(t)+'">'+esc(t)+'</a>'
             +(d?'<span class="expo-mini-date">'+esc(d)+'</span>':'')+'</li>';
       });
       ul.innerHTML=html;
@@ -5870,8 +5815,6 @@ function toggleTheme(){
       origOrder[id]=cards(id);
     });
   }
-  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-
   /* ② 昨角标 */
   function staleMark(){
     IDS.forEach(function(id){

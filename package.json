@@ -1,0 +1,16 @@
+{
+  "name": "mining-daily",
+  "version": "1.0.0",
+  "private": true,
+  "description": "矿业日报单文件静态站（index.html + sw.js）。站点本身零前端依赖，node_modules 仅用于本地跑 jsdom 回归测试。",
+  "scripts": {
+    "test": "node test_data_integrity.js && node test_fav_history_aggregate.js && node test_p02_visibility.js && node test_price_enhance.js && node test_qa_features.js && node test_smoke_0908.js && node test_sw_cache_update.js && node test_view_switch.js"
+  },
+  "devDependencies": {
+    "jsdom": "^30.0.1"
+  },
+  "comments": {
+    "note": "测试脚本用 CommonJS 的 require('jsdom')，因此本 package.json 不设 type:module。请勿改成 ESM，否则 8 套 test_*.js 全部报 require is not defined。",
+    "baseline": "192 项断言全绿（smoke 62 / fav 29 / p02 19 / price 22 / view 22 / qa 15 / sw 14 / data_integrity 9）"
+  }
+}

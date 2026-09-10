@@ -1,0 +1,37 @@
+# mining-daily 依赖清单
+#
+# 结论（2026-09 实测，用 ast 遍历全部 47 个 .py 的 import 得到）：
+#   核心流程【零第三方依赖】，全部只用 Python 标准库。这是刻意设计——
+#   每天 06:00 的自动化在裸 Python 环境里跑，装包会引入失败点。
+#   请勿为了「看起来规范」往这里加包。
+#
+# 唯一例外：
+#   requests —— 只有 batch_check_embed.py 用到（批量探测外链是否可嵌入）。
+#   它是人工运维脚本，不在 06:00 自动化链路上，装不装都不影响日报产出。
+#
+# 安装（只在需要跑 batch_check_embed.py 时才执行）：
+#   pip install -r requirements.txt
+#
+# 说明：本地模块 source_whitelist / fetch_news / server / logutil 是同仓库脚本，
+# 不是 PyPI 包，不要写进这里。
+
+# ---------------------------------------------------------------------------
+# 日志约定（2026-09 第 3 批）
+# ---------------------------------------------------------------------------
+# 新增公共模块 logutil.py，统一输出格式：[HH:MM:SS] LEVEL 模块名: 消息
+#
+# 已接入（长跑 / 易出错 / 被 06:00 自动化直接依赖的核心脚本）：
+#   preflight_check.py    deploy_pages.py      fetch_lme.py
+#   export_news_json.py   fetch_news.py        automation_lock.py（仅 stderr 诊断行）
+#
+# 例外，不要套用：
+#   automation_lock.py 的 stdout 是**机器协议**（ACQUIRED:/LOCKED:/RELEASED/FREE/STALE），
+#   06:00 与 08:00 自动化直接解析，必须保持裸 print，不得加日志前缀。
+#
+# 其余历史脚本仍用 print()，未做全量改造——47 个文件全改的风险远大于收益。
+# 约定：**增量脚本一律用 logutil**，历史脚本随改随迁。
+#
+# 应急回退：设环境变量 MINING_LOG_PLAIN=1 可去掉时间戳/级别前缀，
+# 输出与改造前逐字节一致（万一自动化里有行首锚定的 grep）。
+
+requests>=2.31.0

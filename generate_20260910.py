@@ -12,20 +12,15 @@
 """
 import re, datetime, json, glob
 from source_whitelist import is_allowed
-
-
-def ni(url, src, date, title, summary, embed='ok', orig_title=''):
-    """构造今日新增条目，并强制校验 URL 在白名单内。境外条目保留英文原题。"""
-    if not is_allowed(url):
-        raise ValueError("URL 不在允许信源白名单内: %s" % url)
-    ot = ' data-orig-title="%s"' % orig_title if orig_title else ''
-    if orig_title:
-        summary = '%s（原题：%s）' % (summary, orig_title)
-    return ('<div class="news-item is-new"%s data-url="%s" data-embed="%s"><div class="news-head"><span class="dot"></span>'
-            '<span class="badge-new">NEW</span><a class="news-title" href="%s" target="_blank">%s</a></div>'
-            '<div class="news-meta"><span class="src">%s</span> · %s</div><div class="news-summary">%s</div>'
-            '</div>'
-            % (ot, url, embed, url, title, src, date, summary))
+from generate_common import (
+    ni, card, _replace_block, split_items, item_url, strip_new, _esc, render_cat_groups,
+    UP, DOWN, FLAT, TAG_TODAY, TAG_ARCH, TAG_RIGHTS,
+    CAT_KQ, CAT_ZK, CAT_HY, CAT_GJ, CAT_MA, MA_REQUIRE, window,
+    item_after_cutoff as _item_after_cutoff,
+    _lib_item as _lib_item_raw,
+    _reclassify_ma as _reclassify_ma_raw,
+)
+from functools import partial
 
 
 SRC = 'index.html'
@@ -35,8 +30,8 @@ with open(SRC, encoding='utf-8') as f:
 REPORT = '2026-09-10'
 GRAB = '2026-09-10'
 ARCHIVE_DAYS = 30
-REPORT_DT = datetime.date.fromisoformat(REPORT)
-CUTOFF_DT = REPORT_DT - datetime.timedelta(days=ARCHIVE_DAYS - 1)   # 2026-08-12
+REPORT_DT, CUTOFF_DT = window(REPORT, ARCHIVE_DAYS)
+item_after_cutoff = partial(_item_after_cutoff, report_dt=REPORT_DT, cutoff_dt=CUTOFF_DT)
 DATA_ASOF = '09-09'
 
 # ============ 1. 标题 / 日期 / 更新时间 / build-version ============
@@ -50,13 +45,6 @@ html = re.sub(r'name="build-version" content="\d{8}-\d{4}"',
               'name="build-version" content="%s-%s"' % (REPORT.replace('-', ''), now.replace(':', '')), html)
 
 # ============ 2. 价格卡刷新（国内 SHFE/上金所 09-09 收盘 + LME 09-10 电子盘） ============
-UP, DOWN, FLAT = '&#9650;', '&#9660;', '■'
-
-
-def card(slug, name, tag, value, unit, chg_text, cls):
-    return ('<div data-slug="%s" class="price-card %s"><div class="pc-name">%s <span class="pc-tag">%s</span></div>'
-            '<div class="pc-value">%s</div><div class="pc-unit">%s</div><div class="pc-chg">%s</div></div>'
-            % (slug, cls, name, tag, value, unit, chg_text))
 
 
 # 国内 10 卡：值来自 fetch_price_history / price_history_detail.json（09-09 收盘，涨跌与 09-08 比）
@@ -102,33 +90,10 @@ for slug, name, tag, key, arrow in LME_DEFS:
 lme_html = ''.join(card(*c) for c in lme_list)
 
 
-def _replace_block(h, tag, inner_html):
-    """按 div 深度匹配替换整个块，避免非贪婪正则在第一张卡片处提前截断。"""
-    i = h.find(tag)
-    assert i != -1, 'block not found: %s' % tag
-    j = h.find('>', i) + 1
-    depth = 1
-    n = len(h)
-    while j < n and depth > 0:
-        if h.startswith('<div', j):
-            depth += 1
-            k = h.find('>', j)
-            j = (k + 1) if k != -1 else n
-        elif h.startswith('</div>', j):
-            depth -= 1
-            j += 6
-        else:
-            j += 1
-    return h[:i] + tag + inner_html + '</div>' + h[j:]
-
-
 html = _replace_block(html, '<div class="price-cards" id="priceCardsShfe">', shfe_html)
 html = _replace_block(html, '<div class="price-cards price-cards-lme" id="priceCardsLme">', lme_html)
 
 # ============ 3. 解析今日/往期两个区 ============
-TAG_TODAY = '<div class="section" id="todaySection"'
-TAG_ARCH = '<div class="section" id="archiveSection"'
-TAG_RIGHTS = '<div class="section" id="rightsSection"'
 i_t = html.find(TAG_TODAY)
 i_a = html.find(TAG_ARCH)
 i_r = html.find(TAG_RIGHTS)
@@ -141,45 +106,9 @@ today_raw = html[i_t:i_a]
 arch_raw = html[i_a:i_r]
 
 
-def split_items(block):
-    out = []
-    cat = None
-    for mm in re.finditer(r'<div class="sub-cat"[^>]*>([^<]*)<span class="sub-count"[^>]*>([^<]*)</span></div>'
-                          r'|<div class="news-item[^>]*>.*?</div>\s*</div>', block, re.S):
-        if mm.group(1) is not None:
-            cat = mm.group(1).strip()
-        elif mm.group(0).startswith('<div class="news-item'):
-            if cat:
-                out.append((cat, mm.group(0)))
-    return out
-
-
 today_items = split_items(today_raw)
 arch_items = split_items(arch_raw)
 
-
-def item_after_cutoff(it):
-    m = re.search(r'</span>\s*·\s*([0-9]{2})-([0-9]{2})', it)
-    if not m:
-        return True
-    im, id_ = int(m.group(1)), int(m.group(2))
-    iy = REPORT_DT.year if im <= REPORT_DT.month else REPORT_DT.year - 1
-    return (iy, im, id_) >= (CUTOFF_DT.year, CUTOFF_DT.month, CUTOFF_DT.day)
-
-
-def item_url(it):
-    m = re.search(r'data-url="([^"]+)"', it)
-    return m.group(1) if m else it
-
-
-def strip_new(it):
-    it = it.replace(' is-new', '')
-    it = re.sub(r'<span class="badge-new"[^>]*>NEW</span>', '', it)
-    it = re.sub(r'<a class="btn-read"[^>]*>查看原文 →</a>', '', it)
-    return it
-
-
-CAT_KQ = '💼 矿权交易'
 
 prev_today = [(cat, strip_new(it)) for cat, it in today_items if '<div class="news-item' in it and cat != CAT_KQ]
 arch_keep = [(cat, strip_new(it)) for cat, it in arch_items
@@ -195,10 +124,6 @@ for cat, it in prev_today + arch_keep:
     merge_seq.append((cat, it))
 
 # ============ 4. 今日新增条目（09-10 抓取，均逐源核实） ============
-CAT_ZK = '🔍 找矿成果与勘查技术'
-CAT_HY = '🏭 行业动态'
-CAT_GJ = '🌐 国际矿业动态'
-CAT_MA = '💰 并购与投资'
 
 # ============ 3.5 从累计库回补 30 天窗口 ============
 CAT_MAP = {
@@ -213,29 +138,7 @@ CAT_MAP = {
     '上市公司经营动态': CAT_HY,
 }
 LIB_SKIP = {'矿权交易', '并购与投资'}
-
-
-def _esc(s):
-    return (s or '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-
-
-def _lib_item(e):
-    url = e.get('url', '')
-    if not url:
-        return None
-    cat = CAT_MAP.get(e.get('category', ''))
-    if not cat:
-        return None
-    title = _esc(e.get('title', ''))
-    src = _esc(e.get('source', ''))
-    od = e.get('orig_date', '') or (e.get('orig_date_full', '') or '')[5:]
-    summary = _esc(e.get('summary', ''))
-    embed = e.get('embed', 'ok') or 'ok'
-    return (cat,
-            '<div class="news-item" data-url="%s" data-embed="%s"><div class="news-head"><span class="dot"></span>'
-            '<a class="news-title" href="%s" target="_blank">%s</a></div>'
-            '<div class="news-meta"><span class="src">%s</span> · %s</div><div class="news-summary">%s</div></div>'
-            % (url, embed, url, title, src, od, summary))
+_lib_item = partial(_lib_item_raw, cat_map=CAT_MAP)
 
 
 _lib_pool = []
@@ -392,39 +295,9 @@ new_items = [
 ]
 
 
-def render_cat_groups(seq, mark_new=False):
-    suffix = '条新增' if mark_new else '条'
-    order, groups = [], {}
-    for cat, it in seq:
-        if cat not in groups:
-            groups[cat] = []
-            order.append(cat)
-        groups[cat].append(it)
-    out = []
-    for cat in order:
-        items = groups[cat]
-        n = len(items)
-        out.append('<div class="sub-cat" data-page-node-id="">%s<span class="sub-count" data-page-node-id="">%d%s</span></div>\n' % (cat, n, suffix))
-        out.extend(items)
-    return out
-
-
 # ============ 并购关键词重归类 ============
 CAT_MA2 = CAT_MA
-MA_REQUIRE = ['收购', '并购', '受让', '股权转让', '资产重组', '资产购买', '资产出售',
-              '增资', '认购', '合资', '定增', '资产置换', '向特定对象发行', '拟收购', '拟转让', '要约收购']
-
-
-def _reclassify_ma(cat, it):
-    if cat in ('💼 矿权交易', CAT_MA2):
-        return cat
-    title = (re.search(r'class="news-title"[^>]*>([^<]+)</a>', it) or [None, ''])[1]
-    sum_m = re.search(r'class="news-summary">([^<]+)</div>', it)
-    summary = sum_m.group(1) if sum_m else ''
-    text = title + ' ' + summary
-    if any(k in text for k in MA_REQUIRE):
-        return CAT_MA2
-    return cat
+_reclassify_ma = partial(_reclassify_ma_raw, cat_ma=CAT_MA2, ma_require=MA_REQUIRE)
 
 
 unique_new = []

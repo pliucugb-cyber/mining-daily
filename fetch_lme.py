@@ -10,6 +10,14 @@ import json, re, sys, urllib.request, urllib.error, math
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from logutil import get_logger  # noqa: E402
+
+# 汇总行（OK / 各金属价格）走 stdout；错误与告警走 stderr——保持改造前的分流，
+# 免得调用方按流过滤时错位。
+log = get_logger('fetch_lme')
+log_err = get_logger('fetch_lme', stream=sys.stderr)
+
 API_URL = "https://futsseapi.eastmoney.com/list/COMEX,NYMEX,COBOT,SGX,NYBOT,LME,MDEX,TOCOM,IPE"
 PAGE_SIZE = 50
 
@@ -78,7 +86,7 @@ def fetch_all():
             data = fetch_page(p)
             all_rows.extend(data.get("list") or [])
         except Exception as e:
-            print(f"  第 {p} 页失败: {e}", file=sys.stderr)
+            log_err.warning("第 %d 页失败: %s", p, e)
     return all_rows
 
 
@@ -150,9 +158,9 @@ def main():
     try:
         rows = fetch_all()
     except urllib.error.URLError as e:
-        print(f"ERR fetch: {e}", file=sys.stderr)
+        log_err.error("ERR fetch: %s", e)
         if OUT.exists():
-            print("网络失败，保留旧数据", file=sys.stderr)
+            log_err.warning("网络失败，保留旧数据")
             return 0
         OUT.write_text(json.dumps({
             "date": "", "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -168,15 +176,17 @@ def main():
     (Path(__file__).parent / "lme-data.js").write_text(js, encoding="utf-8")
 
     hit = sum(1 for m in data["metals"] if m.get("price") is not None)
-    print(f"OK  {data['date']}  抓到 {hit}/6")
+    log.info(f"OK  {data['date']}  抓到 {hit}/6")
     for m in data["metals"]:
         if m.get("price") is not None:
             chg = m.get("chg") or 0
             pct = m.get("chg_pct") or 0
             sign = "+" if chg >= 0 else ""
-            print(f"  {m['zh']:8s}  {m['price']:>12,.2f}  {sign}{chg:,.2f} ({sign}{pct:.2f}%)")
+            # 先用 f-string 排好版再交给 logger：这里只有一行输出，惰性 %s 格式化
+            # 没有收益，硬转成 %-style 反而容易把宽度/千分位写错。
+            log.info(f"  {m['zh']:8s}  {m['price']:>12,.2f}  {sign}{chg:,.2f} ({sign}{pct:.2f}%)")
         else:
-            print(f"  {m['zh']:8s}  {m.get('err','?')}")
+            log.info(f"  {m['zh']:8s}  {m.get('err','?')}")
     return 0
 
 

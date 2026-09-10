@@ -31,9 +31,17 @@ import sys
 import time
 from pathlib import Path
 
+from logutil import get_logger
+
 ROOT = Path(__file__).parent
 LOCK = ROOT / '.automation.lock'
 DEFAULT_TTL = 120  # 分钟：覆盖两次任务间隔（60 分）+ 容错
+
+# 注意：本脚本的 stdout 是**机器协议**（ACQUIRED:/LOCKED:/RELEASED/FREE/STALE），
+# 06:00 与 08:00 自动化直接解析它。这些行**必须**保持裸 print，不得加日志前缀，
+# 否则调用方的 startswith / split(':') 会失效。
+# 只有下面这条人类诊断 logger 走统一格式（且保持在 stderr，不污染协议输出）。
+log = get_logger('automation_lock', stream=sys.stderr)
 
 
 def _read():
@@ -127,8 +135,7 @@ def acquire(name, ttl):
             print(f'LOCKED:held_by={held_by}:started={data.get("started")}')
             return 2
         age = (time.time() - data.get('started', 0)) / 60.0
-        print('[automation_lock] 抢占失效锁：原持有者=%s, 进程存活=%s, 已过 %.1f 分钟'
-              % (held_by, alive, age), file=sys.stderr)
+        log.warning('抢占失效锁：原持有者=%s, 进程存活=%s, 已过 %.1f 分钟', held_by, alive, age)
         try:
             LOCK.unlink()
         except OSError:
@@ -148,8 +155,7 @@ def release(name):
         print('RELEASED')
         return 0
     if data.get('name') != name:
-        print('[automation_lock] 锁由 %s 持有，%s 无权释放，已跳过' % (data.get('name'), name),
-              file=sys.stderr)
+        log.warning('锁由 %s 持有，%s 无权释放，已跳过', data.get('name'), name)
         print('RELEASED')
         return 0
     try:
