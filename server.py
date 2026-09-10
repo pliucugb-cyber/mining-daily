@@ -27,6 +27,25 @@ from urllib.parse import urlparse, parse_qs
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(ROOT, 'data')
+
+# ============================================================
+# 请求体限长 + 可选鉴权（2026-09-10 P1，第 2 批安全加固）
+# 两者都默认不改变现有行为：限长阈值宽松（256KB，正常请求远小于此）；
+# 鉴权仅在显式设置 MD_SERVER_TOKEN 时生效，未设置则全放行（本地开发不受影响）。
+# ============================================================
+MAX_BODY_BYTES = int(os.environ.get('MD_MAX_BODY_KB', '256')) * 1024   # POST 体上限
+MAX_QUESTION_LEN = int(os.environ.get('MD_MAX_QUESTION', '2000'))       # 单次提问字符上限
+SERVER_TOKEN = (os.environ.get('MD_SERVER_TOKEN') or '').strip()        # 为空 = 不鉴权
+
+
+def _const_time_eq(a, b):
+    """定长时间比较，避免通过响应耗时逐字节爆破 token。"""
+    if len(a) != len(b):
+        return False
+    diff = 0
+    for x, y in zip(a, b):
+        diff |= ord(x) ^ ord(y)
+    return diff == 0
 # 注意：不要硬编码月份文件名（原 news_2026-09.json 会在 10 月起读空导致热榜/AI 全挂），
 # 改为运行时取 data/ 下月份最大的那份
 NEWS_FILE = None
@@ -477,6 +496,49 @@ class Handler(BaseHTTPRequestHandler):
         # 简化访问日志格式
         print('[%s] %s' % (datetime.now().strftime('%H:%M:%S'), fmt % args))
 
+    # ---- 2026-09-10 P1：可选鉴权 + 请求体限长 ----
+    def _auth_ok(self, path):
+        """可选鉴权：仅当设置环境变量 MD_SERVER_TOKEN 时生效，未设置则完全放行。
+        支持 Authorization: Bearer <token> 或 ?token=<token> 两种传法。
+        只保护 /api/*（静态页面本就是公开站点内容，鉴权会误伤本地预览）。"""
+        if not SERVER_TOKEN or not path.startswith('/api/'):
+            return True
+        token = (parse_qs(urlparse(self.path).query).get('token') or [''])[0]
+        if token and _const_time_eq(token, SERVER_TOKEN):
+            return True
+        auth = (self.headers.get('Authorization') or '').strip()
+        if auth.lower().startswith('bearer '):
+            return _const_time_eq(auth[7:].strip(), SERVER_TOKEN)
+        return False
+
+    def _read_json_body(self):
+        """安全读取 JSON 请求体，返回 (data, err)；err 为 None 表示正常。
+        - Content-Length 非法 → bad_length（400）
+        - 超过 MAX_BODY_BYTES → too_large（413），且直接丢弃不读入内存
+        - JSON 解析失败 → 退化为 {}（保持旧行为，不因脏输入中断服务）"""
+        try:
+            length = int(self.headers.get('Content-Length', '0') or 0)
+        except (TypeError, ValueError):
+            return None, 'bad_length'
+        if length < 0:
+            return None, 'bad_length'
+        if length > MAX_BODY_BYTES:
+            return None, 'too_large'
+        raw = self.rfile.read(length) if length > 0 else b''
+        try:
+            return (json.loads(raw.decode('utf-8')) if raw else {}), None
+        except Exception:
+            return {}, 'bad_json'
+
+    def _discard_body(self, length, cap=4 * 1024 * 1024):
+        """分块丢弃请求体（不驻留内存），最多丢 cap 字节，超出直接放弃。"""
+        left = min(int(length or 0), cap)
+        while left > 0:
+            chunk = self.rfile.read(min(65536, left))
+            if not chunk:
+                break
+            left -= len(chunk)
+
     def _json(self, obj, code=200):
         body = json.dumps(obj, ensure_ascii=False).encode('utf-8')
         self.send_response(code)
@@ -539,6 +601,9 @@ class Handler(BaseHTTPRequestHandler):
         u = urlparse(self.path)
         path = u.path
         q = parse_qs(u.query)
+        # 2026-09-10 P1：可选鉴权（未设 MD_SERVER_TOKEN 时恒放行）
+        if not self._auth_ok(path):
+            return self._json({'error': 'unauthorized'}, 401)
         # ---- 旧链迁移模式（2026-09-04）：根路径返回紫色跳转页，4 秒自动跳新链接 ----
         if LEGACY_REDIRECT and path in ('/', '', '/index.html'):
             from urllib.parse import urlparse as _up
@@ -685,14 +750,23 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         u = urlparse(self.path)
+        # 2026-09-10 P1：可选鉴权（未设 MD_SERVER_TOKEN 时恒放行）
+        if not self._auth_ok(u.path):
+            return self._json({'error': 'unauthorized'}, 401)
         if u.path == '/api/qa':
-            length = int(self.headers.get('Content-Length', '0') or 0)
-            raw = self.rfile.read(length) if length > 0 else b'{}'
-            try:
-                data = json.loads(raw.decode('utf-8')) if raw else {}
-            except Exception:
-                data = {}
-            question = data.get('question', '')
+            data, err = self._read_json_body()
+            if err == 'too_large':
+                # 超限：分块丢弃（不驻留内存），再回 413 并关闭连接。
+                # 必须先排空再响应——否则对端还在写就被断连，客户端收不到 413 只看到连接重置。
+                self._discard_body(int(self.headers.get('Content-Length', '0') or 0))
+                self.close_connection = True
+                return self._json({'error': 'payload_too_large',
+                                   'max_bytes': MAX_BODY_BYTES}, 413)
+            if err == 'bad_length':
+                return self._json({'error': 'bad_content_length'}, 400)
+            data = data or {}
+            # 限长：超长提问截断，避免超长文本拖垮关键词匹配
+            question = str(data.get('question', ''))[:MAX_QUESTION_LEN]
             return self._json({
                 'answer': qa_answer(question),
                 'question': question,
@@ -719,6 +793,9 @@ def main():
     print('  新闻条目  %d 条' % n)
     print('  热榜算法  来源权威×10 + 时效衰减 + 关键词加分')
     print('  AI 问答   已就绪（关键词匹配版，不依赖 API key）')
+    print('  安全加固  /api/* 鉴权=%s，POST 限长=%dKB，提问限长=%d字'
+          % ('开（MD_SERVER_TOKEN）' if SERVER_TOKEN else '关（未设 token，本地模式）',
+             MAX_BODY_BYTES // 1024, MAX_QUESTION_LEN))
     print('========================================================')
     srv = ThreadingHTTPServer((host, port), Handler)
     try:
