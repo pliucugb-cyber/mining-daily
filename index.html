@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1525" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1530" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -445,12 +445,14 @@ body.dark .au-official{background:#1b3145;color:var(--brand-ink)}
 body.dark .au-assoc{background:#2e1f3d;color:#c9a3e0}
 body.dark .au-media{background:var(--surface-3);color:var(--ink-500)}
 /* ==================== 阅读模式（9-06 新增：只留判断/要闻/价格/今日新闻）==================== */
-.reading-toggle{background:var(--surface-3);border:1px solid #dde5ee;color:var(--ink-700);font-size: var(--fs-meta);padding:var(--s1) var(--s3);border-radius: var(--r-md);cursor:pointer;font-weight:600;transition:all .15s;white-space:nowrap}
-.reading-toggle:hover{background:#e2eaf3;color:var(--ink-900)}
-.reading-toggle.active{background:var(--ink-900);border-color:var(--ink-900);color:#fff}
-body.dark .reading-toggle{background:var(--surface);border-color:var(--line-1);color:var(--ink-700)}
-body.dark .reading-toggle:hover{background:var(--surface-3);color:var(--ink-900)}
-body.dark .reading-toggle.active{background:#2c5f8d;border-color:#2c5f8d;color:#fff}
+.reading-toggle{height:34px;border:none;border-radius:17px;padding:0 var(--s4);background:rgba(255,255,255,.16);color:#fff;font-size:var(--fs-h3);line-height:1;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-weight:600;transition:.2s;white-space:nowrap}
+.reading-toggle::before{content:'📖'}
+.reading-toggle:hover{background:rgba(255,255,255,.28)}
+.reading-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.reading-toggle.active{background:rgba(255,255,255,.9);color:var(--ink-900)}
+body.dark .reading-toggle{background:rgba(0,0,0,.28);color:#fff}
+body.dark .reading-toggle:hover{background:rgba(0,0,0,.45)}
+body.dark .reading-toggle.active{background:#2c5f8a;color:#fff}
 body.reading-mode .toc-sidebar,
 body.reading-mode #digestStrip,
 body.reading-mode #archiveSection,
@@ -716,9 +718,10 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
 #mineSheet{display:none}
 @media(max-width:768px){
   .toc-sidebar{display:none!important}
-  body{padding-top:0}
+  body{padding-top:env(safe-area-inset-top,0px)!important}
   body{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))}
   body.has-install-bar{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
+  .header{padding-top:var(--s4);padding-bottom:var(--s4);margin-bottom:var(--s3)}
   #mobileTabBar{display:flex;position:fixed;left:0;right:0;bottom:0;height:calc(56px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line-2);box-shadow:0 -1px 3px rgba(15,23,42,.06);z-index:210;padding-bottom:env(safe-area-inset-bottom,0px)}
   .mtab{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none;color:var(--ink-300);cursor:pointer;padding:4px 0;line-height:1.2;transition:color .15s}
   .mtab .mi{font-size:20px;line-height:1;opacity:.75;transition:opacity .15s}
