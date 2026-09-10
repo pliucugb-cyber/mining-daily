@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1500" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1510" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1000,11 +1000,11 @@ body{padding-left:0;padding-top:56px}
 }
 .toc-sidebar::-webkit-scrollbar{display:none}
 .toc-title{display:none}
-.toc-main-item{flex-shrink:0;white-space:nowrap;padding:var(--s2) var(--s4);margin-bottom:0;font-size: var(--fs-body);border:1px solid var(--line-1);
+  .toc-main-item{flex-shrink:0;white-space:nowrap;padding:var(--s2) var(--s4);margin-bottom:0;font-size: var(--fs-body);border:1px solid var(--line-1);min-height:44px;display:flex;align-items:center;justify-content:center;
 }
 .toc-main-item.active{border-color:var(--ink-900)}
 .toc-main-item .toc-count{display:none}
-.toc-back-top{flex-shrink:0;margin-top:0;padding:var(--s2) var(--s4);border-top:none;border:1px solid var(--line-1);
+.toc-back-top{flex-shrink:0;margin-top:0;padding:var(--s2) var(--s4);border-top:none;border:1px solid var(--line-1);min-height:44px;display:flex;align-items:center;justify-content:center;
 }
 }
 /* ===== 悬浮球内筛选条（2026-09-04 由页顶新闻问答迁移而来）===== */
@@ -1067,6 +1067,12 @@ body.dark .rr-num{color:var(--ink-700)}
   .rights-row{flex-wrap:wrap}
   .rr-region,.rr-date{display:none}
   .rr-title{flex:1 1 100%;order:-1;white-space:normal}
+}
+/* 移动端阅读优化（2026-09-10 重设计）：正文抬到 15px、行高 1.65，新闻条目内距横向收紧、标题行高舒适 */
+@media(max-width:768px){
+  body{font-size:15px;line-height:1.65}
+  .news-item{padding:var(--s4) var(--s4)}
+  .news-title{line-height:1.45}
 }
 .rights-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--s4)}
 .rights-card{background:var(--surface);border:1px solid #dfe6ee;border-radius: var(--r-lg);padding:var(--s5) var(--s5);display:flex;flex-direction:column;gap:var(--s3);transition:box-shadow .18s,transform .18s,border-color .18s;box-shadow: var(--shadow-md)}
@@ -1337,7 +1343,7 @@ body.dark .filter-state{background:#123040;border-color:#1d3d4d;color:var(--ink-
 .sub-count,.rr-date,.day-group,.news-meta{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 /* 只在移动端放大，桌面鼠标操作维持原尺寸，避免视觉回归 */
 @media(max-width:1100px){
-  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread{min-height:44px}
+  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.toc-main-item,.toc-back-top,.reading-toggle{min-height:44px}
   .theme-toggle,.pwa-header-btn{min-width:44px}
 }
 @media(min-width:1440px){
