@@ -126,6 +126,53 @@ setTimeout(() => {
   ok('--success 与 --down 同值（改一处同时修好两处）', down === success, 'down=' + down + ' success=' + success);
   ok('.btn-restore 白字对比度 ≥ 4.5', ratio(restore, white) >= 4.5, restore + ' → ' + ratio(restore, white).toFixed(2) + ':1');
 
+  console.log('\n===== ⑤ P1 表单可访问性（程序化标签）=====');
+  const ctrls = [...d.querySelectorAll('input,select')];
+  const noLabel = ctrls.filter(el => !el.getAttribute('aria-label') && !el.getAttribute('aria-labelledby') &&
+    !(el.id && d.querySelector('label[for="' + el.id + '"]')) && !el.closest('label'));
+  ok('所有表单控件都有程序化标签', noLabel.length === 0,
+    noLabel.length ? '缺标签: ' + noLabel.map(e => e.id || e.type).join(', ') : ctrls.length + ' 个控件全部有标签');
+  ['rightsFilterMethod', 'rightsFilterMineral', 'rightsFilterWindow'].forEach(id => {
+    ok('矿权筛选 #' + id + ' 有 label[for] 关联', !!d.querySelector('label[for="' + id + '"]'));
+  });
+  ok('AI Key 输入框带 aria-label（动态生成，源码级校验）', /id="aiKeyInput"[^>]*aria-label=/.test(html));
+
+  console.log('\n===== ⑥ P1 搜索纳入矿权区 =====');
+  ok('mdApplySearchToRights 已定义', typeof w.mdApplySearchToRights === 'function');
+  ok('源码中 1 处定义 + 2 处调用（applyFilter / 重渲染后）',
+    (html.match(/mdApplySearchToRights/g) || []).length >= 3,
+    '出现 ' + (html.match(/mdApplySearchToRights/g) || []).length + ' 次');
+  ok('空态计数已纳入 .rights-row', /\.rights-row:not\(\.hidden\)/.test(html));
+  const rc = d.getElementById('rightsCards');
+  if (rc) {
+    rc.innerHTML = '<div class="rights-row" id="rrA">铜矿权测试XYZ</div><div class="rights-row" id="rrB">锌矿权测试ABC</div>';
+    const inp2 = d.getElementById('nfSearch');
+    inp2.value = '铜矿权测试xyz';
+    inp2.dispatchEvent(new w.Event('input', { bubbles: true }));
+    ok('搜索命中矿权行 → 该行保留', !d.getElementById('rrA').classList.contains('hidden'));
+    ok('搜索未命中矿权行 → 该行隐藏', d.getElementById('rrB').classList.contains('hidden'));
+    const eb = d.getElementById('mdSearchEmpty');
+    ok('仅矿权命中时不误报「0 结果」空态', !eb || eb.style.display === 'none');
+    inp2.value = '';
+    inp2.dispatchEvent(new w.Event('input', { bubbles: true }));
+    ok('清空搜索后矿权行全部恢复', !d.getElementById('rrB').classList.contains('hidden'));
+    rc.innerHTML = '';
+  } else {
+    ok('#rightsCards 存在（无法做矿权搜索运行时校验）', false);
+  }
+
+  console.log('\n===== ⑦ P1 PDF 入口上移 =====');
+  ok('PDF 按钮已移到统计条操作区', !!d.querySelector('.stats-actions .btn-pdf'));
+  ok('问答浮窗内不再有 PDF 按钮（两层弹窗后）', !d.querySelector('#qaFloat [onclick="exportPdf()"]'));
+  ok('exportPdf 仍可用', typeof w.exportPdf === 'function');
+  ok('.btn-pdf 深色模式文字转深色（避免浅蓝底白字）', /body\.dark \.btn-pdf\{color:#0b1220\}/.test(html));
+
+  console.log('\n===== ⑧ P1 SW 缓存名按 build-version 自动生成 =====');
+  const dp = fs.readFileSync(path.join(__dirname, 'deploy_pages.py'), 'utf-8');
+  ok('deploy_pages 定义了 sync_sw_cache_name', /def sync_sw_cache_name\(\)/.test(dp));
+  ok('部署前已调用（保证推上去的就是新缓存名）', /sync_sw_cache_name\(\)/.test(dp.split('def main()')[1] || ''));
+  ok('缓存名由 build-version 派生（不再手输 v78/v79）', /mining-daily-/.test(dp) && /build-version/.test(dp));
+
   console.log('\n===== 结果：' + pass + ' PASS / ' + fail + ' FAIL =====');
   process.exit(fail ? 1 : 0);
 }, 1200);

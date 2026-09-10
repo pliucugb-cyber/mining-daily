@@ -68,3 +68,9 @@ netlify/.site.json
 
 # ===== 本地 node_modules（仅测试用 junction，指向托管 node workspace，不入库）=====
 node_modules/
+
+# ===== WorkBuddy 会话记忆（2026-09-10 补）=====
+# 本仓库是公开的，而 .workbuddy/memory/ 里是智能体的会话备忘录（含排查过程、
+# 历史事故、凭据处置记录等内部信息），与站点无关。此前未被忽略，其中
+# .workbuddy/memory/automations/**/memory.md 已被跟踪，随时可能被某次 git add 带上公开提交。
+.workbuddy/

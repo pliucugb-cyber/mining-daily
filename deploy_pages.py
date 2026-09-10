@@ -24,6 +24,8 @@ WorkBuddy 的「发布为应用」链接绑定的是**本机目录绝对路径**
 - 遵循「未编造、可溯源」：只搬运已有文件，不生成任何内容。
 """
 import os
+import re
+import io
 import sys
 import time
 import shlex
@@ -101,8 +103,46 @@ def run(cmd, cwd=None, check=True):
     return p.returncode, out
 
 
+def sync_sw_cache_name():
+    """2026-09-10 P1：SW 的 CACHE_NAME 由 index.html 的 build-version 自动派生。
+
+    此前靠人手把 v78→v79 递增，漏改就会出现「页面更新了、SW 还拿着旧缓存」。
+    build-version 已是事实上的版本源（改 index.html 必须 bump），直接拿它派生缓存名：
+    版本变 → sw.js 字节变 → 浏览器重新安装 SW → activate 里清掉旧缓存。
+    同一版本重复部署结果一致（幂等），不会造成无谓的全量重下。
+    """
+    html_path = os.path.join(ROOT, 'index.html')
+    sw_path = os.path.join(ROOT, 'sw.js')
+    if not (os.path.isfile(html_path) and os.path.isfile(sw_path)):
+        return
+    with io.open(html_path, encoding='utf-8') as f:
+        m = re.search(r'<meta name="build-version" content="([^"]+)"', f.read())
+    if not m:
+        log('[deploy_pages] 未找到 build-version，跳过 SW 缓存名同步')
+        return
+    bv = re.sub(r'[^0-9A-Za-z._-]', '-', m.group(1).strip())
+    name = 'mining-daily-' + bv
+    with io.open(sw_path, encoding='utf-8', newline='') as f:
+        src = f.read()
+    new = re.sub(r"const CACHE_NAME = '[^']*'", "const CACHE_NAME = '%s'" % name, src, count=1)
+    if new == src:
+        log('[deploy_pages] SW 缓存名已是最新：%s' % name)
+        return
+    buf = new.encode('utf-8')
+    if len(buf) < 500:   # 兜底：正则写坏了也别把 sw.js 写成空壳
+        log('[deploy_pages] SW 改写结果异常（%d 字节），已放弃' % len(buf))
+        return
+    tmp = sw_path + '.tmp'
+    with open(tmp, 'wb') as f:
+        f.write(buf)
+    os.replace(tmp, sw_path)
+    log('[deploy_pages] SW 缓存名同步为 %s（由 build-version 自动派生）' % name)
+
+
 def main():
     force = '--force' in sys.argv
+    # 4.0) 先按 build-version 同步 SW 缓存名，再复制文件（保证推上去的就是新名字）
+    sync_sw_cache_name()
 
     # 1) 校验必需文件齐全
     missing = [f for f in REQUIRED if not os.path.isfile(os.path.join(ROOT, f))]

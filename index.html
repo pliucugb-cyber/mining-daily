@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1042" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1115" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -190,6 +190,7 @@ body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
 .btn-allread:hover{background:#0f7a52}
 .btn-restore{background:#5f6d7a;color:#fff}
 .btn-restore:hover{background:#4a5765}
+.btn-pdf{background:var(--brand);color:#fff}
 /* 区块 */
 .section{background:var(--surface);border-radius: var(--r-lg);margin-bottom:var(--s4);box-shadow: var(--shadow-sm);overflow:hidden;scroll-margin-top:80px}
 .section-title{padding:var(--s4) var(--s5);font-size: var(--fs-h1);font-weight:600;color:var(--ink-900);border-bottom:2px solid var(--line-1);display:flex;align-items:center;gap:var(--s2);scroll-margin-top:80px}
@@ -764,6 +765,7 @@ body.dark .stat-num.new{color:#ff8a8a}
 body.dark .stat-num.unread{color:#6ab4e0}
 body.dark .btn-restore{background:#4a5765;color:#fff}
 body.dark .btn-restore:hover{background:#5a6875}
+body.dark .btn-pdf{color:#0b1220}
 body.dark .news-count{color:var(--ink-500)}
 body.dark .news-item.read .news-title{color:var(--ink-300);font-weight:var(--fw-regular)}
 body.dark .news-item.read .dot{background:transparent;box-shadow:inset 0 0 0 2px #4a5765}
@@ -1396,6 +1398,7 @@ body.dark .search-empty .se-btn{background:#38bdf8;color:#0b1220}
 <div class="stats-actions" data-page-node-id="CPs0HBYiw0DnwCX25prPhR">
 <button class="btn btn-restore" onclick="clearAllRead()" title="一键清除所有已读记录，全部恢复为未读状态" data-page-node-id="G1R8w0s9restore">↻ 全部恢复未读</button>
 <button class="btn btn-allread" onclick="markAllRead()" data-page-node-id="OIjMu9jnziI1P66Ap1NaBh">✓ 全部标为已读</button>
+<button class="btn btn-pdf" type="button" onclick="exportPdf()" title="导出当日日报为 PDF（调用浏览器打印）" data-page-node-id="mdPdfBtn">📄 PDF</button>
 </div>
 </div>
 <!-- ==================== 矿业热榜（2026-09-03 新增，类似今日头条热榜） ==================== -->
@@ -1423,7 +1426,7 @@ body.dark .search-empty .se-btn{background:#38bdf8;color:#0b1220}
 <div class="rights-note" data-page-node-id="rGJZSHy4RJt4h8Y1cR2Y9G">矿业权市场结构化摘要：挂牌/拍卖公告展示起始价、保证金、截标日；转让/结果公示展示公示期与交易对手。按紧迫度排序：近 7 日内到期（含公示期到期）的卡片置顶并显示倒计时，7~14 天标橙提示，其余按截止日先后，已过期置灰沉底。</div>
 <div class="rights-toolbar" data-page-node-id="rGKZSHy4RJt4h8Y1cR2Y9H">
   <div class="rights-filters" data-page-node-id="rGLZSHy4RJt4h8Y1cR2Y9I">
-    <label data-page-node-id="rGMZSHy4RJt4h8Y1cR2Y9J">出让方式
+    <label for="rightsFilterMethod" data-page-node-id="rGMZSHy4RJt4h8Y1cR2Y9J">出让方式
       <select id="rightsFilterMethod" data-page-node-id="rGNZSHy4RJt4h8Y1cR2Y9K">
         <option value="" data-page-node-id="rGOZSHy4RJt4h8Y1cR2Y9L">全部</option>
         <option value="挂牌" data-page-node-id="rGPZSHy4RJt4h8Y1cR2Y9M">挂牌出让</option>
@@ -1433,7 +1436,7 @@ body.dark .search-empty .se-btn{background:#38bdf8;color:#0b1220}
         <option value="结果" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9Q">结果公示</option>
       </select>
     </label>
-    <label data-page-node-id="rGUZSHy4RJt4h8Y1cR2Y9R">矿种
+    <label for="rightsFilterMineral" data-page-node-id="rGUZSHy4RJt4h8Y1cR2Y9R">矿种
       <select id="rightsFilterMineral" data-page-node-id="rGVZSHy4RJt4h8Y1cR2Y9S">
         <option value="" data-page-node-id="rGWZSHy4RJt4h8Y1cR2Y9T">全部</option>
         <option value="金" data-page-node-id="rGXZSHy4RJt4h8Y1cR2Y9U">金</option>
@@ -1456,7 +1459,7 @@ body.dark .search-empty .se-btn{background:#38bdf8;color:#0b1220}
         <option value="多金属" data-page-node-id="rGI2SHy4RJt4h8Y1cR2Y9f">多金属</option>
       </select>
     </label>
-    <label data-page-node-id="rGJ2SHy4RJt4h8Y1cR2Y9g">时间窗口
+    <label for="rightsFilterWindow" data-page-node-id="rGJ2SHy4RJt4h8Y1cR2Y9g">时间窗口
       <select id="rightsFilterWindow" data-page-node-id="rGK2SHy4RJt4h8Y1cR2Y9h">
         <option value="7" data-page-node-id="rGL2SHy4RJt4h8Y1cR2Y9i">近 7 日</option>
         <option value="14" selected data-page-node-id="rGM2SHy4RJt4h8Y1cR2Y9j">近 14 日</option>
@@ -1797,6 +1800,7 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
         +'<span class="rr-date">'+r.it.d.slice(5)+'</span>'
         +'</div>';
     }).join("")+'<div class="rights-more">'+rightsMoreBtn(list.length, shownList.length)+'</div>';
+    mdApplySearchToRights();   // 2026-09-10 P1：重渲染后补跑搜索过滤
     if(emptyEl) emptyEl.hidden=list.length>0;
     if(countEl) countEl.textContent=data.length+" 条"+(list.length!==data.length?"（筛后 "+list.length+"）":"");
     if(tocEl) tocEl.textContent=String(list.length);
@@ -2376,6 +2380,7 @@ function applyFilter(){
     if(show&&mode==='none'&&el.classList.contains('old-folded')&&!oldExpanded&&!newsSearchText)show=false;
     el.classList.toggle('hidden',!show);
   });
+  mdApplySearchToRights();   // 2026-09-10 P1：矿权行同步参与搜索
   // 隐藏空子分类
   document.querySelectorAll('.sub-cat').forEach(cat=>{
     let hasVis=false,sib=cat.nextElementSibling;
@@ -2409,12 +2414,21 @@ function applyFilter(){
 // 等数据渲染完再没有任何代码恢复显示。
 // 修复：① 按各区块真实子元素判断 ② 抽成函数，异步渲染后由 mdRefreshSections() 重新评估。
 // 2026-09-10 P0：搜索 0 命中 → 可操作空态（带清除入口），替代原先"整块消失"的观感
+// 2026-09-10 P1：矿权行此前完全不参与全局搜索，搜"铜"只过滤新闻、矿权区纹丝不动。
+// 抽成函数：① applyFilter 里随搜索一起跑 ② renderRightsSection 重渲染后再跑一次（否则 innerHTML 一刷就丢）。
+function mdApplySearchToRights(){
+  document.querySelectorAll(".rights-row").forEach(function(el){
+    if(!newsSearchText){ el.classList.remove("hidden"); return; }
+    var _t=(el.textContent||"").toLowerCase();
+    el.classList.toggle("hidden", _t.indexOf(newsSearchText)<0);
+  });
+}
 function mdSyncSearchEmpty(){
   var box=document.getElementById("mdSearchEmpty");
   var anchor=document.getElementById("todaySection");
   if(!anchor)return;
   if(!newsSearchText){ if(box)box.style.display="none"; return; }
-  var n=document.querySelectorAll(".news-item:not(.hidden)").length;
+  var n=document.querySelectorAll(".news-item:not(.hidden),.rights-row:not(.hidden)").length;
   if(n>0){ if(box)box.style.display="none"; return; }
   if(!box){
     box=document.createElement("div"); box.id="mdSearchEmpty"; box.className="search-empty";
@@ -3522,7 +3536,7 @@ function renderAiAnalyze(d){
     // 未配置 key
     body.innerHTML='<div class="ai-disabled">🤖 AI 解析未配置 API Key'
       +'<div class="ai-keybox">'
-      +'<input type="password" id="aiKeyInput" placeholder="粘贴你的 DeepSeek Key（sk- 开头）" autocomplete="off" spellcheck="false">'
+      +'<input type="password" id="aiKeyInput" aria-label="DeepSeek API Key" placeholder="粘贴你的 DeepSeek Key（sk- 开头）" autocomplete="off" spellcheck="false">'
       +'<button type="button" id="aiKeySave">启用</button>'
       +'</div>'
       +'<div class="ai-keytip">Key 仅保存在你本机浏览器（localStorage），不上传、不进代码库；每台设备填一次即可。'
@@ -5691,7 +5705,6 @@ function toggleTheme(){
     <div class="qa-head-actions" data-page-node-id="2y3yxkX3DRFzDSVPUu4zyV">
       <button class="qa-head-action" type="button" onclick="qaExportHistory(this)" title="复制全部对话" data-page-node-id="BU3b3Sqjc5kTD8xBKPUEbV">📤 导出</button>
       <button class="qa-head-action" type="button" onclick="qaClearHistory()" title="清空本次会话历史" data-page-node-id="gnWnL64EvaBimbZWUnCRdF">🗑 清空</button>
-      <button class="qa-head-action" type="button" onclick="exportPdf()" title="导出当日日报为 PDF">📄</button>
       <button class="pchart-close" onclick="qaFloatToggle()" data-page-node-id="WfjUj3JXSYYQt0B1SgcFgh">✕</button>
     </div>
   </div>
