@@ -34,12 +34,63 @@ TAG_TODAY = '<div class="section" id="todaySection"'
 TAG_ARCH = '<div class="section" id="archiveSection"'
 TAG_RIGHTS = '<div class="section" id="rightsSection"'
 
-# ---- 类目常量 ----
+# ---- 类目常量（展示层 7 个桶；emoji 是桶名的一部分，不可随意改） ----
 CAT_KQ = '💼 矿权交易'
 CAT_ZK = '🔍 找矿成果与勘查技术'
+CAT_ZC = '📜 政策与监管'
+CAT_SC = '📊 市场与价格'
 CAT_HY = '🏭 行业动态'
 CAT_GJ = '🌐 国际矿业动态'
 CAT_MA = '💰 并购与投资'
+
+# ---- 内容类（数据层 8 类，由 LLM 分类写入 category 字段）+ 地域 → 展示桶 ----
+# 为什么分两层：数据层只记「这条讲什么 + 发生在哪」，展示层决定「页面上归到哪一栏」。
+# 这样以后要调整页面分栏，不用再动存量数据。
+THEME_BUCKET = {
+    ('矿权出让', '国内'): CAT_KQ, ('矿权出让', '国际'): CAT_KQ,
+    ('并购与投资', '国内'): CAT_MA, ('并购与投资', '国际'): CAT_MA,
+    ('政策与监管', '国内'): CAT_ZC, ('政策与监管', '国际'): CAT_ZC,
+    ('市场与价格', '国内'): CAT_SC, ('市场与价格', '国际'): CAT_SC,
+    ('技术与勘查', '国内'): CAT_ZK, ('技术与勘查', '国际'): CAT_ZK,
+    ('会议会展', '国内'): CAT_HY, ('会议会展', '国际'): CAT_GJ,
+    ('项目与产能', '国内'): CAT_HY, ('项目与产能', '国际'): CAT_GJ,
+    ('企业经营', '国内'): CAT_HY, ('企业经营', '国际'): CAT_GJ,
+    ('行业动态', '国内'): CAT_HY, ('行业动态', '国际'): CAT_GJ,
+}
+
+# 旧分类名（按信源硬编码，2026-09-10 前的存量）→ 展示桶。
+# 没有 region 字段的旧数据走这张表，保证新老数据混跑时都不丢条目。
+LEGACY_BUCKET = {
+    '行业动态': CAT_HY,
+    '国际矿业动态': CAT_GJ,
+    '找矿成果与勘查技术': CAT_ZK,
+    '并购与投资': CAT_MA,
+    '矿权交易': CAT_KQ,
+    '矿权市场': CAT_KQ,
+    '培训与学术': CAT_HY,
+    '政策法规': CAT_ZC,
+    '市场行情与价格异动': CAT_SC,
+    '贸易进出口与库存': CAT_SC,
+    '环保安全': CAT_HY,
+    '上市公司经营动态': CAT_HY,
+    '上市公司公告': CAT_HY,
+    '政策与监管': CAT_ZC,
+}
+
+
+def bucket(theme, region=''):
+    """(内容类, 地域) → 展示桶。查不到就回落旧分类表，再查不到给 CAT_HY，绝不返回 None。
+
+    历史教训：早期 _lib_item 用 cat_map.get(...)，未知分类直接 return None，
+    结果整批条目在生成时静默消失。这里保证永远有出路。
+    """
+    if (theme, region) in THEME_BUCKET:
+        return THEME_BUCKET[(theme, region)]
+    if theme in LEGACY_BUCKET:
+        return LEGACY_BUCKET[theme]
+    if (theme, '国内') in THEME_BUCKET:
+        return THEME_BUCKET[(theme, '国内')]
+    return CAT_HY
 
 # ---- 并购重归类关键词（inject_ma.py 注入后再次归类用） ----
 MA_REQUIRE = ['收购', '并购', '受让', '股权转让', '资产重组', '资产购买', '资产出售',
@@ -160,7 +211,11 @@ def _lib_item(e, cat_map):
     url = e.get('url', '')
     if not url:
         return None
-    cat = cat_map.get(e.get('category', ''))
+    # 先按 (内容类, 地域) 查；旧数据没有 region，退回按分类名查；都没有则 bucket() 给兜底桶。
+    # 不要在这里 return None —— 未知分类会让整批条目在生成时静默消失（踩过）。
+    theme = e.get('category', '') or ''
+    region = e.get('region', '') or ''
+    cat = cat_map.get((theme, region)) or cat_map.get(theme) or bucket(theme, region)
     if not cat:
         return None
     title = _esc(e.get('title', ''))

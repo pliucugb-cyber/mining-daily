@@ -1,6 +1,6 @@
 {
   "month": "2026-08",
-  "updated_at": "2026-09-10T09:48:00+08:00",
+  "updated_at": "2026-09-10T12:55:06+08:00",
   "count": 57,
   "news": [
     {
@@ -11,7 +11,7 @@
       "orig_date": "08-31",
       "orig_date_full": "2026-08-31",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "会议会展",
       "is_new": false,
       "summary": "中国稀土集团举办2026年安全环保绿色低碳专题研修班，推动稀土产业绿色低碳转型与可持续发展。",
       "embed": "block",
@@ -20,7 +20,9 @@
         "安全"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "97defcfbc7ae",
@@ -60,7 +62,9 @@
         "钴"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "7aa3dccb558c",
@@ -70,7 +74,7 @@
       "orig_date": "08-31",
       "orig_date_full": "2026-08-31",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "加拿大Auro Metals公司勘探取得重大突破，新发现496米厚大矿段，其中高品位矿段金品位达1.12克/吨，海外金矿勘查成果亮眼。",
       "embed": "ok",
@@ -80,7 +84,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "行业动态"
     },
     {
       "id": "61812bcdf1e5",
@@ -90,7 +96,7 @@
       "orig_date": "08-31",
       "orig_date_full": "2026-08-31",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": false,
       "summary": "中国铝业发布中期业绩，利润总额同比大增98%，增速再创历史新高，铝产业高质量发展动能强劲。",
       "embed": "block",
@@ -99,7 +105,9 @@
         "市场"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "22a10a676e02",
@@ -109,7 +117,7 @@
       "orig_date": "08-31",
       "orig_date_full": "2026-08-31",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "政策与监管",
       "is_new": false,
       "summary": "智利、阿根廷、秘鲁、玻利维亚四国宣布成立关键矿产联盟，加强锂、铜等战略性矿产供应链合作与资源安全协调。",
       "embed": "ok",
@@ -120,7 +128,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "行业动态"
     },
     {
       "id": "0f80d214f029",
@@ -130,7 +140,7 @@
       "orig_date": "08-31",
       "orig_date_full": "2026-08-31",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "项目与产能",
       "is_new": false,
       "summary": "智利与阿根廷两国就跨边界铜矿开发达成共识，推进安第斯山脉铜矿带资源整合与基础设施互联互通。",
       "embed": "ok",
@@ -139,7 +149,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "0e7ab72fe1b1",
@@ -149,7 +161,7 @@
       "orig_date": "08-31",
       "orig_date_full": "2026-08-31",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "西澳大利亚州纳纳迪铜金矿项目最新钻探见厚富矿体，铜金勘查取得重要进展，为海外铜金资源开发提供新靶区。",
       "embed": "ok",
@@ -160,7 +172,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "0ad8576fe16d",
@@ -170,7 +184,7 @@
       "orig_date": "08-31",
       "orig_date_full": "2026-08-31",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "西北有色地矿集团七一一总队持续深耕地质勘查主业，在矿产勘查与资源发现领域实现新突破，聚焦有色金属找矿。",
       "embed": "ok",
@@ -178,7 +192,9 @@
         "找矿"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "0470495a6a7b",
@@ -211,7 +227,7 @@
       "orig_date": "08-28",
       "orig_date_full": "2026-08-28",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "政策与监管",
       "is_new": false,
       "summary": "8月25日至26日，自然资源部在武汉举办矿产资源法实施条例贯彻实施培训班，部相关司局围绕地质勘查、矿业权管理、矿产资源勘查开采、矿区生态修复等作系统讲解，160人参加培训。",
       "embed": "block",
@@ -220,7 +236,9 @@
         "找矿"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "d7d21f8dc96c",
@@ -230,7 +248,7 @@
       "orig_date": "08-28",
       "orig_date_full": "2026-08-28",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "政策与监管",
       "is_new": false,
       "summary": "美国能源部宣布资助7个关键矿产研发项目，涉及重稀土、镓、铜等关键材料，依托CMIH专业技术力量攻关重大技术难题，强化关键矿产产业链。",
       "embed": "ok",
@@ -241,7 +259,9 @@
         "技术"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "c97886093392",
@@ -251,7 +271,7 @@
       "orig_date": "08-28",
       "orig_date_full": "2026-08-28",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "新疆有色集团聚焦铜、镍、锂等关键金属，持续推进增储上产国家级研发项目后续成果转化，攻关硬岩矿产与共伴生资源综合利用。",
       "embed": "block",
@@ -263,7 +283,9 @@
         "技术"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "b388a94dba2c",
@@ -273,7 +295,7 @@
       "orig_date": "08-28",
       "orig_date_full": "2026-08-28",
       "report_date": "2026-09-10",
-      "category": "找矿成果与勘查技术",
+      "category": "项目与产能",
       "is_new": false,
       "summary": "8月22日，中国恩菲设计的内蒙古太平矿业浩尧尔忽洞金矿年开采825万吨金矿石建设项目（二标段）TBM始发，标志着项目建设进入关键攻坚阶段。",
       "embed": "block",
@@ -281,7 +303,9 @@
         "金"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "a2eb62f7b95c",
@@ -291,7 +315,7 @@
       "orig_date": "08-28",
       "orig_date_full": "2026-08-28",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "市场与价格",
       "is_new": false,
       "summary": "澳大利亚第二季度矿产勘查投资创近年新高，关键矿产（金、铜、镍、锂、稀土）项目增速明显，全球勘查市场延续回暖。",
       "embed": "ok",
@@ -306,7 +330,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "9b5f795f2c11",
@@ -316,7 +342,7 @@
       "orig_date": "08-28",
       "orig_date_full": "2026-08-28",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "政策与监管",
       "is_new": false,
       "summary": "中国黄金协会发布严正声明，强烈谴责非法黄金交易、违规黄金衍生品炒作等行为，提示行业及消费者注意风险。",
       "embed": "block",
@@ -324,7 +350,9 @@
         "金"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "8f28b6f4b569",
@@ -355,7 +383,7 @@
       "orig_date": "08-28",
       "orig_date_full": "2026-08-28",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": false,
       "summary": "东方测控与中铁资源签署战略合作协议，双方将围绕矿山智能化建设开展深度合作，携手推进矿山智能化高质量发展。",
       "embed": "block",
@@ -364,7 +392,9 @@
         "技术"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "725677e01bf0",
@@ -374,7 +404,7 @@
       "orig_date": "08-28",
       "orig_date_full": "2026-08-28",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "并购与投资",
       "is_new": false,
       "summary": "博利登（Boliden）并购尼克萨资源公司股份，交易完成后将发起自愿现金要约收购剩余全部股份，国际矿业并购重组提速。",
       "embed": "ok",
@@ -383,7 +413,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "2e76a598dd61",
@@ -393,7 +425,7 @@
       "orig_date": "08-28",
       "orig_date_full": "2026-08-28",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "巴西罗查稀土矿阿尔托山矿床在北、南、东侧证实高品位延伸带，共伴生铌钪钽铀品位高，计划钻探5000米进一步圈定矿床范围，新结果尚未纳入资源量估算。",
       "embed": "ok",
@@ -405,7 +437,9 @@
         "找矿"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "2db558541236",
@@ -415,7 +449,7 @@
       "orig_date": "08-28",
       "orig_date_full": "2026-08-28",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "市场与价格",
       "is_new": false,
       "summary": "周四国际矿产品价格多数上涨：纽约商品交易所黄金收于4600.5美元/盎司（+0.15%），白银69.26美元/盎司（+1.71%），铂、钯亦有上涨。",
       "embed": "ok",
@@ -428,7 +462,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "fcb7b3d4dc16",
@@ -438,7 +474,7 @@
       "orig_date": "08-27",
       "orig_date_full": "2026-08-27",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": false,
       "summary": "面对铜价高位震荡、加工费空间收窄压力，华中铜业1—7月实现盈利131万元，加工费总收入同比增长21.63%，冷轧成品月产量连续两个月突破8000吨。",
       "embed": "block",
@@ -448,7 +484,9 @@
         "市场"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "cf9d1370221b",
@@ -458,13 +496,15 @@
       "orig_date": "08-27",
       "orig_date_full": "2026-08-27",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "会议会展",
       "is_new": false,
       "summary": "8月26日，中国有色金属工业协会主办的2026年有色金属行业经济运行报告会在济南召开，研判行业形势与高质量发展路径。",
       "embed": "ok",
       "tags": [],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "acae7e817f22",
@@ -474,7 +514,7 @@
       "orig_date": "08-27",
       "orig_date_full": "2026-08-27",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": false,
       "summary": "中国五矿集团积极推进南部非洲片区业务，包括铜、钴、铬、铂族等关键矿产资源开发与社区协作。",
       "embed": "ok",
@@ -485,7 +525,9 @@
         "铂"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "94fcf38b0c86",
@@ -495,7 +537,7 @@
       "orig_date": "08-27",
       "orig_date_full": "2026-08-27",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": false,
       "summary": "西南铝坚持\"两端发力\"加快产业迭代，布局高性能宽幅铝合金板带、大规格挤压等重点项目，2025年服务国家战略产品产量较2022年增长32%，获评国务院国资委\"双百行动\"标杆企业。",
       "embed": "block",
@@ -505,7 +547,9 @@
         "市场"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "9032a1c13ecd",
@@ -515,7 +559,7 @@
       "orig_date": "08-27",
       "orig_date_full": "2026-08-27",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "新疆有色集团历时五年攻关的国家级研发项目通过验收，聚焦硬岩矿产、有色金属资源综合利用。",
       "embed": "block",
@@ -523,7 +567,9 @@
         "技术"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "72f062300507",
@@ -533,7 +579,7 @@
       "orig_date": "08-27",
       "orig_date_full": "2026-08-27",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "市场与价格",
       "is_new": false,
       "summary": "周三国际矿产品价格多数上涨，铀价收于90.60美元/磅突破90美元关口；LME铜价持平，镍价下跌，黄金收于4593.7美元/盎司。",
       "embed": "ok",
@@ -547,7 +593,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "56c0a82acdd3",
@@ -577,7 +625,7 @@
       "orig_date": "08-27",
       "orig_date_full": "2026-08-27",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "中铁资源鹿鸣矿业的数字孪生贯通采选全链路两项创新成果入选国家级新质生产力名录，标志矿山数字化、智能化升级。",
       "embed": "block",
@@ -586,7 +634,9 @@
         "技术"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "518c989ed83b",
@@ -596,7 +646,7 @@
       "orig_date": "08-27",
       "orig_date_full": "2026-08-27",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "中铝集团在高寒矿区生态修复领域取得技术突破，为高海拔有色金属矿山绿色开发提供可推广方案。",
       "embed": "block",
@@ -607,7 +657,9 @@
         "技术"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "4d174c573243",
@@ -617,7 +669,7 @@
       "orig_date": "08-27",
       "orig_date_full": "2026-08-27",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "智利谢拉戈达铜矿公布最新资源量更新成果，铜资源量较此前估算有所提升，反映南美关键铜矿勘查持续推进。",
       "embed": "ok",
@@ -627,7 +679,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "44b5cac9b437",
@@ -637,7 +691,7 @@
       "orig_date": "08-27",
       "orig_date_full": "2026-08-27",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "政策与监管",
       "is_new": false,
       "summary": "加拿大安大略省威胁切断对美关键矿产供应，凸显北美关键矿产供应链地缘风险，相关矿产含镍、锂、铜、钴、稀土等。",
       "embed": "ok",
@@ -649,7 +703,9 @@
         "钴"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "207f494cfa08",
@@ -803,7 +859,7 @@
       "orig_date": "08-26",
       "orig_date_full": "2026-08-26",
       "report_date": "2026-09-10",
-      "category": "找矿成果与勘查技术",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "希尔威金属矿业公布吉尔吉斯斯坦金矿项目重大勘探成果，海外金矿资源勘查取得关键进展。",
       "embed": "ok",
@@ -813,7 +869,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "d2fed1f41578",
@@ -866,7 +924,7 @@
       "orig_date": "08-25",
       "orig_date_full": "2026-08-25",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "政策与监管",
       "is_new": false,
       "summary": "美国国防部启动第三次军需关键矿产招标，目标保障军工供应链对稀土、锂、钴、镓、锗等关键矿产的稳定获取。",
       "embed": "ok",
@@ -878,7 +936,9 @@
         "锗"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "3fe9ff9ed871",
@@ -888,7 +948,7 @@
       "orig_date": "08-25",
       "orig_date_full": "2026-08-25",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "会议会展",
       "is_new": false,
       "summary": "8月20日，2026智能矿山高质量发展大会在辽宁丹东召开，聚焦数智赋能与矿山本质安全，铜铝锂等金属需求持续增长。",
       "embed": "ok",
@@ -900,7 +960,9 @@
         "安全"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "3de679e9ccea",
@@ -910,7 +972,7 @@
       "orig_date": "08-25",
       "orig_date_full": "2026-08-25",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": false,
       "summary": "紫金矿业发布2026年半年报：矿产金47吨（同比+13%）、矿产铜53.4万吨、当量碳酸锂4.4万吨（同比+496%）；巨龙铜矿改扩建建成投产，马诺诺锂矿提前投产，\"第三增长极\"形成规模贡献。",
       "embed": "block",
@@ -921,7 +983,9 @@
         "市场"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "2b82e0d4164f",
@@ -931,7 +995,7 @@
       "orig_date": "08-25",
       "orig_date_full": "2026-08-25",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "市场与价格",
       "is_new": false,
       "summary": "锡价受供给收紧与电子需求回升支撑，短期有望小幅上涨。",
       "embed": "block",
@@ -940,7 +1004,9 @@
         "市场"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "2100548c0cef",
@@ -950,7 +1016,7 @@
       "orig_date": "08-25",
       "orig_date_full": "2026-08-25",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "政策与监管",
       "is_new": false,
       "summary": "财政部表示下半年将及时谋划出台务实管用的增量政策，支撑有色金属产业绿色低碳、智能制造、关键矿产供给。",
       "embed": "block",
@@ -959,7 +1025,9 @@
         "技术"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "1a5fed3814b0",
@@ -969,7 +1037,7 @@
       "orig_date": "08-25",
       "orig_date_full": "2026-08-25",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "并购与投资",
       "is_new": false,
       "summary": "澳大利亚维里迪斯公司完成新一轮融资，推进科罗苏斯稀土矿项目开发，海外稀土资源端整合加速。",
       "embed": "ok",
@@ -978,7 +1046,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "e6da6ffe8ebc",
@@ -988,7 +1058,7 @@
       "orig_date": "08-24",
       "orig_date_full": "2026-08-24",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "并购与投资",
       "is_new": false,
       "summary": "铟泰公司签署加拿大布鲁克稀土矿承购协议，海外稀土供应链布局推进。",
       "embed": "ok",
@@ -998,7 +1068,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "e62383abd4bd",
@@ -1027,7 +1099,7 @@
       "orig_date": "08-24",
       "orig_date_full": "2026-08-24",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "美国采用量子技术开展关键矿产地质填图工作，提升识别精度。",
       "embed": "ok",
@@ -1035,7 +1107,9 @@
         "技术"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "d5a41ad01af1",
@@ -1045,7 +1119,7 @@
       "orig_date": "08-24",
       "orig_date_full": "2026-08-24",
       "report_date": "2026-09-10",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": false,
       "summary": "中国有色金属工业协会对2026年度有色金属企业管理现代化创新成果审定结果进行公示，覆盖有色行业管理创新成果。",
       "embed": "block",
@@ -1054,7 +1128,9 @@
         "技术"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "950836c35308",
@@ -1073,7 +1149,9 @@
         "政策"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "59246a27be03",
@@ -1103,7 +1181,7 @@
       "orig_date": "08-24",
       "orig_date_full": "2026-08-24",
       "report_date": "2026-09-10",
-      "category": "国际矿业动态",
+      "category": "矿权出让",
       "is_new": false,
       "summary": "格陵兰萨法托克铌稀土矿获颁勘查许可，该项目为大型稀土-铌多金属矿，是新一轮关键矿产勘查的重点项目之一。",
       "embed": "ok",
@@ -1114,7 +1192,9 @@
         "国际"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "33d92523dec7",
@@ -1144,7 +1224,7 @@
       "orig_date": "08-24",
       "orig_date_full": "2026-08-24",
       "report_date": "2026-09-10",
-      "category": "找矿成果与勘查技术",
+      "category": "技术与勘查",
       "is_new": false,
       "summary": "中国地质调查局探矿工程所研发的超短半径水平井造斜段轨迹控制系统获国家发明专利授权，为深部找矿与关键矿产勘查提供装备支撑。",
       "embed": "ok",
@@ -1153,7 +1233,9 @@
         "技术"
       ],
       "first_seen": "2026-09-01",
-      "last_seen": "2026-09-10"
+      "last_seen": "2026-09-10",
+      "region": "国内",
+      "orig_category": "找矿成果与勘查技术"
     }
   ]
 }

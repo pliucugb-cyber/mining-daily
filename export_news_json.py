@@ -266,6 +266,13 @@ def merge_into_months(news, data_dir, report_date):
                 # embed 保留已知值，避免unknown覆盖真实检测结果
                 if e.get('embed') == 'unknown' and old.get('embed') in ('ok', 'block'):
                     e['embed'] = old['embed']
+                # 数据层不许被展示层反向覆盖：category/region 由 fetch_news.py +
+                # classify_llm.py 维护，index.html 里的只是「分栏名」。
+                # 2026-09-10 踩坑：这里没挡住，export 把 LLM 分类冲成了分栏名、
+                # region 直接清空，155 条分类全部作废。
+                for _k in ('category', 'region', 'orig_category'):
+                    if old.get(_k):
+                        e[_k] = old[_k]
                 updated += 1
             else:
                 e['first_seen'] = report_date

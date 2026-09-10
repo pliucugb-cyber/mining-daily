@@ -15,7 +15,8 @@ from source_whitelist import is_allowed
 from generate_common import (
     ni, card, _replace_block, split_items, item_url, strip_new, _esc, render_cat_groups,
     UP, DOWN, FLAT, TAG_TODAY, TAG_ARCH, TAG_RIGHTS,
-    CAT_KQ, CAT_ZK, CAT_HY, CAT_GJ, CAT_MA, MA_REQUIRE, window,
+    CAT_KQ, CAT_ZK, CAT_HY, CAT_GJ, CAT_MA, CAT_ZC, CAT_SC, MA_REQUIRE, window,
+    THEME_BUCKET, LEGACY_BUCKET, bucket,
     item_after_cutoff as _item_after_cutoff,
     _lib_item as _lib_item_raw,
     _reclassify_ma as _reclassify_ma_raw,
@@ -114,6 +115,30 @@ prev_today = [(cat, strip_new(it)) for cat, it in today_items if '<div class="ne
 arch_keep = [(cat, strip_new(it)) for cat, it in arch_items
              if '<div class="news-item' in it and cat != CAT_KQ and item_after_cutoff(it)]
 
+# ── URL → (内容类, 地域) 索引：让存量条目也能按新分类体系重新分桶 ──
+# 往期条目是从昨天的 HTML 原样滚入的，带的是 2026-09-10 之前「按信源硬编码」的旧桶名
+# （如 SMM 国际站 15 条全是「国际矿业动态」）。这里用条目自己的 URL 去月库查
+# LLM 分类结果，重新算展示桶，使往期与今日口径一致。
+# 查不到就保留原桶名 —— 绝不因为查不到而丢条目（_lib_item 早年返回 None
+# 曾让整批条目在生成时静默消失，不要重蹈覆辙）。
+_url_theme = {}
+for _fn in sorted(glob.glob('data/news_2026-*.json')):
+    try:
+        _lib = json.load(open(_fn, encoding='utf-8'))['news']
+    except Exception:
+        continue
+    for _e in _lib:
+        _u = _e.get('url', '')
+        if _u and _e.get('region'):
+            _url_theme[_u] = (_e.get('category', ''), _e.get('region', ''))
+
+
+def _reclassify_by_url(cat, it):
+    """用月库里的 LLM 分类结果覆盖旧桶名。查不到则原样返回。"""
+    th_rg = _url_theme.get(item_url(it))
+    return bucket(th_rg[0], th_rg[1]) if th_rg else cat
+
+
 merge_seq = []
 seen_url = set()
 for cat, it in prev_today + arch_keep:
@@ -121,22 +146,15 @@ for cat, it in prev_today + arch_keep:
     if url in seen_url:
         continue
     seen_url.add(url)
-    merge_seq.append((cat, it))
+    merge_seq.append((_reclassify_by_url(cat, it), it))
 
 # ============ 4. 今日新增条目（09-10 抓取，均逐源核实） ============
 
 # ============ 3.5 从累计库回补 30 天窗口 ============
-CAT_MAP = {
-    '行业动态': CAT_HY,
-    '国际矿业动态': CAT_GJ,
-    '找矿成果与勘查技术': CAT_ZK,
-    '培训与学术': CAT_HY,
-    '政策法规': CAT_HY,
-    '市场行情与价格异动': CAT_HY,
-    '贸易进出口与库存': CAT_HY,
-    '环保安全': CAT_HY,
-    '上市公司经营动态': CAT_HY,
-}
+# 新数据（LLM 分类：category=8 类内容 + region=国内/国际）查 THEME_BUCKET；
+# 旧数据（按信源硬编码、无 region）查 LEGACY_BUCKET。两张表合并，新老混跑都不丢条目。
+CAT_MAP = dict(LEGACY_BUCKET)
+CAT_MAP.update(THEME_BUCKET)
 LIB_SKIP = {'矿权交易', '并购与投资'}
 _lib_item = partial(_lib_item_raw, cat_map=CAT_MAP)
 
@@ -307,7 +325,8 @@ for cat, it in new_items:
     if url in new_seen_url:
         continue
     new_seen_url.add(url)
-    unique_new.append((_reclassify_ma(cat, it), it))
+    # 先按 LLM 分类重定桶，再让并购关键词兜底复核（并购优先，避免政策类吞掉带「收购」的公告）
+    unique_new.append((_reclassify_ma(_reclassify_by_url(cat, it), it), it))
 new_items = unique_new
 
 merge_seq = [x for x in merge_seq if item_url(x[1]) not in new_seen_url]
