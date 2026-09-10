@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1115" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1140" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -230,10 +230,10 @@ body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
 .tag-chip:hover{filter:brightness(.92)}
 .tag-chip.chip-active{box-shadow:0 0 0 2px currentColor;font-weight:600}
 /* 收藏星标 */
-.btn-star{position:absolute;top:8px;right:12px;background:none;border:none;font-size: var(--fs-h1);cursor:pointer;color:var(--ink-300);transition:.2s;padding:2px var(--s1);line-height:1;z-index:5}
-.btn-star:hover{color:#f39c12;transform:scale(1.15)}
+.btn-star{position:absolute;top:8px;right:12px;background:none;border:none;font-size: var(--fs-h1);cursor:pointer;color:#6b7a89;transition:.2s;padding:2px var(--s1);line-height:1;z-index:5}
+.btn-star:hover{color:#c2740a;transform:scale(1.15)}
 .news-item.favorited{box-shadow:inset 3px 0 0 #f39c12}
-.news-item.favorited .btn-star{color:#f39c12}
+.news-item.favorited .btn-star{color:#d97706}
 /* 单条恢复未读按钮（按条操作）*/
 .btn-unread{display:inline-block;font-size: var(--fs-meta);color:var(--brand);text-decoration:none;border:1px solid var(--brand);border-radius: var(--r-md);padding:2px var(--s3);margin-left:8px;cursor:pointer;background:rgba(255,255,255,.7);transition:.2s;vertical-align:middle;font-family:inherit}
 .btn-unread:hover{background:var(--brand);color:#fff;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
@@ -1063,7 +1063,7 @@ body.dark .rr-title{color:var(--ink-700)}
 body.dark .rr-mineral{background:#123240;color:#7fd3e8}
 body.dark .rr-method{background:#243040;color:#9fb0c0}
 body.dark .rr-num{color:var(--ink-700)}
-@media(max-width:760px){
+@media(max-width:768px){
   .rights-row{flex-wrap:wrap}
   .rr-region,.rr-date{display:none}
   .rr-title{flex:1 1 100%;order:-1;white-space:normal}
@@ -1144,7 +1144,6 @@ body.dark .expo-mini{border-top-color:var(--line-1)}
 body.dark .expo-mini-head{color:#8fa3b5}
 body.dark .expo-mini-list a{color:var(--ink-700)}
 body.dark .expo-mini-list li:hover{background:#1c2734}
-@media(max-width:1100px){.expo-mini{display:none!important}}
 /* ==================== 2026-09-06 晚：日报 PDF 导出打印样式 ==================== */
 @media print{
   html,body{background:var(--surface)!important}
@@ -1315,6 +1314,17 @@ body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
 .search-empty .se-btn{margin-top:var(--s3);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:#0e7490;border:0;border-radius:8px;cursor:pointer}
 body.dark .search-empty{background:var(--bg);border-color:var(--line-1)}
 body.dark .search-empty .se-btn{background:#38bdf8;color:#0b1220}
+</style>
+<style>
+/* 2026-09-10 P2：筛选态全局指示条 / 操作撤销 toast / 键盘焦点可见 */
+.filter-state{display:none;align-items:center;gap:var(--s2);flex-wrap:wrap;margin:var(--s3) 0 2px;padding:var(--s2) var(--s3);background:#eef6fb;border:1px solid #cfe3ee;border-radius:var(--r-lg);font-size:var(--fs-body);color:var(--ink-700)}
+.filter-state .fs-label{font-weight:600;color:var(--ink-900)}
+.filter-state .fs-clear{margin-left:auto;font-family:inherit;background:var(--surface);color:var(--ink-900);border:1px solid var(--line-1);border-radius:var(--r-md);padding:var(--s1) var(--s3);font-size:var(--fs-meta);cursor:pointer}
+.filter-state .fs-clear:hover{border-color:var(--brand);color:var(--brand)}
+.md-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:120;display:flex;align-items:center;gap:var(--s3);padding:var(--s2) var(--s4);background:#16202b;color:#fff;border-radius:var(--r-lg);box-shadow:0 6px 24px rgba(15,23,42,.28);font-size:var(--fs-body)}
+.md-toast .md-undo{font-family:inherit;background:none;border:1px solid rgba(255,255,255,.6);color:#fff;border-radius:var(--r-md);padding:var(--s1) var(--s3);font-size:var(--fs-meta);cursor:pointer}
+[role="button"]:focus-visible,[tabindex="0"]:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+body.dark .filter-state{background:#123040;border-color:#1d3d4d;color:var(--ink-500)}
 </style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
@@ -1938,9 +1948,11 @@ function recordHistory(url){
   updateHistoryCount();
 }
 function markAllRead(){
+  const prev=[...getReadSet()];
   const s=getReadSet();
   document.querySelectorAll('.news-item').forEach(el=>s.add(el.dataset.url));
-  saveReadSet(s);refresh()
+  saveReadSet(s);refresh();
+  if(typeof mdUndoToast==='function')mdUndoToast('已全部标为已读',function(){saveReadSet(new Set(prev));refresh();});
 }
 function clearAllRead(){
   if(!confirm('确定要清除所有已读记录吗？\n\n所有新闻将恢复为「未读」状态。'))return;
@@ -2406,6 +2418,7 @@ function applyFilter(){
   }
   refreshSectionVisibility();
   mdSyncSearchEmpty();
+  mdSyncFilterState();
 }
 
 // 【2026-09-08 P0-2 修复】热榜 / AI 深度解析两个区块从上线起从未显示过。
@@ -2447,6 +2460,113 @@ function mdSyncSearchEmpty(){
   });
   box.style.display="";
 }
+// ==================== 2026-09-10 P2 ====================
+// P2-2：目录 8 个条目 / 返回顶部 / 展开更早 都是 div+onclick，键盘完全不可达。
+// 用 JS 统一补（而不是改 HTML）：fold-toggle 位于每日生成区，改 HTML 会被生成器冲掉，运行时补就没这问题。
+function mdEnhanceKeyboard(){
+  document.querySelectorAll('.toc-main-item,.toc-back-top,.fold-toggle').forEach(function(el){
+    if(el.getAttribute('data-md-kb'))return;
+    if(!el.hasAttribute('role'))el.setAttribute('role','button');
+    if(!el.hasAttribute('tabindex'))el.setAttribute('tabindex','0');
+    el.setAttribute('data-md-kb','1');
+    el.addEventListener('keydown',function(e){
+      if(e.key!=='Enter'&&e.key!==' '&&e.key!=='Spacebar')return;
+      e.preventDefault(); el.click();
+    });
+  });
+}
+// P2-3：页面没有 main/header 地标，也没有标题层级（157 条新闻无法跳转导航）。
+// 不改 DOM 结构（风险大且会碰生成区），改为运行时挂 role=heading + aria-level + section 的 aria-label。
+function mdA11yLandmarks(){
+  document.querySelectorAll('.section').forEach(function(sec){
+    var t=sec.querySelector('.section-title');
+    var label=t?(t.textContent||'').trim().replace(/\s+/g,' '):'';
+    if(label&&!sec.getAttribute('aria-label'))sec.setAttribute('aria-label',label.slice(0,40));
+    if(t&&!t.hasAttribute('role')){t.setAttribute('role','heading');t.setAttribute('aria-level','2');}
+  });
+  document.querySelectorAll('.sub-cat').forEach(function(c){
+    if(!c.hasAttribute('role')){c.setAttribute('role','heading');c.setAttribute('aria-level','3');}
+  });
+}
+// P2-7a：筛选态没有全局指示和出口——切到「只看未读」后页面只剩一片，很容易忘了自己在筛选中。
+function mdSyncFilterState(){
+  var bar=document.getElementById('mdFilterState');
+  var anchor=document.getElementById('todaySection');
+  if(!anchor)return;
+  var parts=[];
+  if(filterMode==='new')parts.push('只看新增');
+  else if(filterMode==='special')parts.push('只看专题');
+  else if(filterMode==='unread')parts.push('只看未读');
+  else if(filterMode==='fav')parts.push('只看收藏');
+  else if(filterMode==='history')parts.push('浏览记录');
+  else if(filterMode==='tag'&&tagFilter)parts.push('标签：'+tagFilter);
+  if(newsSearchText)parts.push('搜索：'+newsSearchText);
+  if(!parts.length){ if(bar)bar.style.display='none'; return; }
+  if(!bar){
+    bar=document.createElement('div'); bar.id='mdFilterState'; bar.className='filter-state';
+    anchor.parentNode.insertBefore(bar, anchor);
+  }
+  bar.innerHTML='<span class="fs-label">筛选中</span><span class="fs-tags">'+esc(parts.join(' · '))+'</span>'
+    +'<button type="button" class="fs-clear" id="mdFilterClear">清除筛选</button>';
+  var b=document.getElementById('mdFilterClear');
+  if(b)b.addEventListener('click',function(){ mdClearAllFilters(); });
+  bar.style.display='';
+}
+function mdClearAllFilters(){
+  var i=document.getElementById('nfSearch'); if(i)i.value='';
+  newsSearchText='';
+  if(typeof setFilter==='function')setFilter('none'); else { filterMode='none'; tagFilter=null; }
+  if(typeof updateNfCount==='function')updateNfCount();
+  applyFilter();
+}
+// P2-7b：可撤销的轻提示（「全部标为已读」此前无确认也无撤销，点错只能手动一条条恢复）
+var _mdToastTimer=null;
+function mdUndoToast(msg, undo){
+  var old=document.getElementById('mdToast'); if(old)old.remove();
+  var t=document.createElement('div'); t.id='mdToast'; t.className='md-toast';
+  t.innerHTML='<span>'+esc(msg)+'</span><button type="button" class="md-undo">撤销</button>';
+  t.querySelector('.md-undo').addEventListener('click',function(){
+    try{undo();}catch(e){} t.remove();
+  });
+  document.body.appendChild(t);
+  clearTimeout(_mdToastTimer);
+  _mdToastTimer=setTimeout(function(){ if(t.parentNode)t.remove(); }, 8000);
+}
+// P2-6：单列（≤1100px）时右栏沉底，热榜排在安装指引之后、会展还被隐藏。
+// 跨栏重排不能靠 order（父节点不同），改为移动端把安装指引移到栅格末尾：
+// 今日 → 往期 → 矿权 → 热榜 → 会展 → 安装指引。回到桌面宽度再还原。
+var _mdGuideOrigin=null;
+function mdMobileRailOrder(){
+  var grid=document.querySelector('.news-grid');
+  var guide=document.getElementById('installGuideSection');
+  if(!grid||!guide)return;
+  var narrow=false;
+  try{ narrow=!!(window.matchMedia&&window.matchMedia('(max-width:1100px)').matches); }catch(e){}
+  if(narrow){
+    if(guide.parentNode!==grid){
+      if(!_mdGuideOrigin)_mdGuideOrigin={parent:guide.parentNode,next:guide.nextSibling};
+      grid.appendChild(guide);
+    }
+  }else if(_mdGuideOrigin){
+    if(_mdGuideOrigin.next&&_mdGuideOrigin.next.parentNode===_mdGuideOrigin.parent){
+      _mdGuideOrigin.parent.insertBefore(guide,_mdGuideOrigin.next);
+    }else{
+      _mdGuideOrigin.parent.appendChild(guide);
+    }
+    _mdGuideOrigin=null;
+  }
+}
+function mdP2Init(){ mdEnhanceKeyboard(); mdA11yLandmarks(); mdMobileRailOrder(); }
+if(document.readyState!=='loading'){
+  setTimeout(mdP2Init,300);
+}else{
+  document.addEventListener('DOMContentLoaded',function(){ setTimeout(mdP2Init,300); });
+}
+var _mdResizeTimer=null;
+window.addEventListener('resize',function(){
+  clearTimeout(_mdResizeTimer);
+  _mdResizeTimer=setTimeout(function(){ mdMobileRailOrder(); mdA11yLandmarks(); mdEnhanceKeyboard(); },200);
+});
 function refreshSectionVisibility(){
   // 聚合视图（收藏/浏览记录）由 applyFilter 显式控制各区块显隐，避免这里按子元素数量把
   // today/archive 重新显示出来，导致用户仍看到旧的折叠日组而非干净的聚合列表。
@@ -3159,9 +3279,16 @@ function loadBrief(){
   // 2026-09-09：简报区改为默认显示「加载中」占位，避免空白跳变；
   // 去掉 Date.now() 缓存击穿，让 SW 的 SWR 能命中预缓存。{cache:'reload'} 只用于
   // 后台网络请求绕过浏览器 HTTP 缓存，不影响 SW 先返回缓存秒开。
+  // 2026-09-10 P2：加 8 秒超时兜底，避免网络/SW 异常时永远停在「加载中…」
+  var _briefTimer=setTimeout(function(){
+    var m=document.getElementById('briefMain');
+    if(m&&/加载中/.test(m.textContent||'')){
+      m.innerHTML='<div class="brief-empty">简报加载较慢，可稍后刷新；不影响下方新闻与价格。</div>';
+    }
+  },8000);
   fetch('morning_report.json',{cache:'reload'})
     .then(function(r){return r.ok?r.json():null;})
-    .then(function(d){if(d)renderBrief(d);})
+    .then(function(d){clearTimeout(_briefTimer);if(d)renderBrief(d);})
     .catch(function(){
       console.warn('[brief] morning_report.json 不可用，简报区保持隐藏');
       if(strip)strip.hidden=true;
