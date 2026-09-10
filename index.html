@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1255" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1403" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -24,12 +24,12 @@
 --ink-900:#16202b;--ink-700:#3d4b5a;--ink-500:#5f6d7a;--ink-300:#94a3b8;
 --line-1:#e5eaf0;--line-2:#d5dde5;
 --bg:#f5f7fa;--surface:#ffffff;--surface-2:#f5f7fa;--surface-3:#eef2f6;
---brand:#0e7490;--brand-ink:#0b5a70;--brand-soft:#e6f4f7;--accent-hover:#128fa8;
+--brand:#0e7490;--brand-ink:#0b5a70;--brand-soft:#e6f4f7;--accent-hover:#0f788d;
 --tag-strategy:#4f46e5;--tag-strategy-bg:#eeedfe;--tag-major:#c0392b;--tag-major-bg:#fceaea;
 --up:#d93a2b;--down:#0e7a52;--flat:#6b7a89;
---success:#0e7a52;--warning:#b7791f;--danger:#c0392b;--info:#0e7490;
+--success:#0e7a52;--warning:#966319;--danger:#c0392b;--info:#0e7490;
 --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
---font-num:"Segoe UI",-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+--font-num:"SF Mono","JetBrains Mono",ui-monospace,Consolas,monospace;
 --fs-display:24px;--fs-h1:20px;--fs-h2:16px;--fs-h3:14px;--fs-body:13px;--fs-meta:12px;--fs-nano:10px;--fs-caption:12px;
 --fw-regular:400;--fw-medium:500;--fw-semibold:600;
 --r-sm:4px;--r-md:8px;--r-lg:12px;
@@ -44,13 +44,13 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;color:var(--ink-700);line-height:1.6;padding-left:200px}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--ink-700);line-height:1.6;padding-left:200px}
 body.has-install-bar{padding-bottom:64px}
 /* 目录导航 - 桌面端：左侧悬浮侧栏；移动端：顶部水平滚动条 */
 .toc-sidebar{position:fixed;left:18px;top:88px;width:168px;background:var(--surface);border-radius: var(--r-lg);padding:var(--s4) var(--s3);box-shadow: var(--shadow-md);z-index:99;max-height:calc(100vh - 120px);overflow-y:auto}
 .toc-title{font-size: var(--fs-meta);font-weight:600;color:var(--ink-500);margin-bottom:var(--s3);padding-bottom:var(--s2);border-bottom:1px solid var(--line-1);letter-spacing:1px}
 .toc-main-item{font-size: var(--fs-body);font-weight:600;color:var(--ink-900);padding:var(--s3) var(--s3);border-radius: var(--r-md);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:.2s;margin-bottom:var(--s1)}
-.toc-main-item:hover{background:#f4f6f9}
+.toc-main-item:hover{background:var(--surface-2)}
 .toc-main-item.active{background:#e9f1f8;color:var(--ink-900);box-shadow:none}
 .toc-main-item.active .toc-count{color:#fff;background:var(--ink-900)}
 .toc-count{font-size: var(--fs-meta);color:var(--ink-500);background:var(--surface-3);padding:2px var(--s2);border-radius: var(--r-lg);font-weight:600;min-width:22px;text-align:center}
@@ -121,7 +121,7 @@ body[data-filter-mode="history"] .news-filter-bar{display:none!important}
 /* 收藏/历史视图保留右侧矿业热榜 + 近期会展，只隐藏非相关内容；双栏布局避免中间过空 */
 @media(min-width:1101px){
 body[data-filter-mode="fav"] .news-grid,
-body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr) 306px;gap:var(--s5)}
+body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr) 300px;gap:var(--s5)}
 }
 body[data-filter-mode="fav"] #archivedFavSection,
 body[data-filter-mode="history"] #archivedFavSection{display:block!important;background:transparent;border:none;box-shadow:none;padding-top:var(--s4);scroll-margin-top:0}
@@ -165,7 +165,7 @@ body[data-filter-mode="history"] #archFavCount{display:none}
 .col-rail .hotlist-list li.hot-item{padding:var(--s3) var(--s4)}
 .col-rail .hot-title{font-size: var(--fs-h3)}
 @media(min-width:1101px){
-  .news-grid{grid-template-columns:minmax(0,1fr) 306px}
+  .news-grid{grid-template-columns:minmax(0,1fr) 300px}
   .col-rail{position:sticky;top:16px;max-height:calc(100vh - 30px);overflow-y:auto}
   .col-rail::-webkit-scrollbar{width:5px}
   .col-rail::-webkit-scrollbar-thumb{background:#c8d6e5;border-radius: var(--r-sm)}
@@ -365,7 +365,7 @@ body.dark .digest-list a:hover{color:#ff7a7a}
 .brief-head{display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s4);flex-wrap:wrap}
 .brief-badge{background:var(--ink-900);color:#fff;font-size: var(--fs-body);font-weight:600;padding:var(--s1) var(--s3);border-radius: var(--r-md);letter-spacing:1px;flex-shrink:0}
 .brief-title{font-size: var(--fs-h1);font-weight:600;color:var(--ink-900);letter-spacing:1px}
-.brief-sub{font-size: var(--fs-body);color:#8899a8}
+.brief-sub{font-size: var(--fs-body);color:var(--ink-500)}
 .brief-date{font-size: var(--fs-body);color:var(--ink-500);margin-left:auto;white-space:nowrap}
 .brief-card{background:var(--surface-2);border:1px solid var(--line-1);border-radius: var(--r-lg);padding:var(--s4) var(--s4);min-width:0}
 .brief-card-h{font-size: var(--fs-body);font-weight:600;color:var(--ink-900);margin-bottom:var(--s3);display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
@@ -391,7 +391,7 @@ body.dark .digest-list a:hover{color:#ff7a7a}
 .ba-up{color:var(--danger)}
 .ba-down{color:#1e8449}
 .ba-flat{color:var(--ink-500)}
-.ba-mkt{font-size: var(--fs-meta);color:#8899a8}
+.ba-mkt{font-size: var(--fs-meta);color:var(--ink-500)}
 .ba-detail{font-size: var(--fs-meta);color:var(--ink-500);line-height:1.55;margin-top:2px}
 .brief-signals{display:flex;flex-wrap:wrap;gap:var(--s2)}
 .bs-chip{display:inline-flex;align-items:center;gap:var(--s1);font-size: var(--fs-meta);padding:2px var(--s2);border-radius: 20px;background:var(--surface);border:1px solid var(--line-2);color:var(--ink-700);white-space:nowrap}
@@ -1055,7 +1055,7 @@ body.dark .qa-trend{background:var(--bg);border-color:var(--line-1);color:var(--
 .rr-method{flex:0 0 auto;font-size: var(--fs-meta);padding:1px var(--s2);border-radius: var(--r-sm);background:var(--surface-3);color:#5b6b7c}
 .rr-num{flex:0 0 auto;color:#33475b;font-size: var(--fs-meta);font-variant-numeric:tabular-nums}
 .rights-row .rc-deadline{flex:0 0 auto;font-size: var(--fs-meta)}
-.rr-date{flex:0 0 auto;color:#a3b1bf;font-size: var(--fs-meta);font-variant-numeric:tabular-nums}
+.rr-date{flex:0 0 auto;color:var(--ink-500);font-size: var(--fs-meta);font-variant-numeric:tabular-nums}
 body.dark .rights-list{border-color:var(--line-1)}
 body.dark .rights-row{border-bottom-color:#232e3a}
 body.dark .rights-row:hover{background:#1b2531}
@@ -1325,6 +1325,31 @@ body.dark .search-empty .se-btn{background:#38bdf8;color:#0b1220}
 .md-toast .md-undo{font-family:inherit;background:none;border:1px solid rgba(255,255,255,.6);color:#fff;border-radius:var(--r-md);padding:var(--s1) var(--s3);font-size:var(--fs-meta);cursor:pointer}
 [role="button"]:focus-visible,[tabindex="0"]:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 body.dark .filter-state{background:#123040;border-color:#1d3d4d;color:var(--ink-500)}
+</style>
+<style>
+/* ===== 2026-09-10 P3 遗留补修 =====
+   ① 数字等宽：DESIGN 3.1 要求「数字与价格用等宽字体族并开启 tabular-nums」，
+      此前全页仅 6 处、--font-num 还是 sans 栈，导致价格/计数/日期对不齐。
+   ② 移动端触控 >=44px：DESIGN 第 8 章要求，此前剩 6 处 26~38px。
+   ③ >=1440px 右栏加宽 320px：DESIGN 5.2 断点表有、页面缺（此前只到 1360 容器）。
+   ================================================== */
+.pc-value,.pc-chg,.pc-unit,.pc-src,.stat-num,.toc-count,.toc-count-fresh,
+.sub-count,.rr-date,.day-group,.news-meta{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+/* 只在移动端放大，桌面鼠标操作维持原尺寸，避免视觉回归 */
+@media(max-width:1100px){
+  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread{min-height:44px}
+  .theme-toggle,.pwa-header-btn{min-width:44px}
+}
+@media(min-width:1440px){
+  .news-grid{grid-template-columns:minmax(0,1fr) 320px}
+  body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr) 320px}
+}
+/* 「跳到主内容」：默认移出视口，键盘聚焦时才出现（不占版面、不干扰鼠标用户） */
+.md-skip-link{position:absolute;left:-9999px;top:0;z-index:9999;padding:10px 16px;
+  background:var(--brand-ink);color:#fff;border-radius:0 0 8px 0;
+  font-size:14px;font-weight:600;text-decoration:none}
+.md-skip-link:focus,.md-skip-link:focus-visible{left:0;outline:2px solid #fff;outline-offset:-4px}
+body.dark .md-skip-link{color:#0b1220}
 </style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
@@ -2492,6 +2517,31 @@ function mdA11yLandmarks(){
   document.querySelectorAll('.sub-cat').forEach(function(c){
     if(!c.hasAttribute('role')){c.setAttribute('role','heading');c.setAttribute('aria-level','3');}
   });
+  // 2026-09-10 补：真地标 + 「跳到主内容」。
+  // 页面骨架全是 div，屏幕阅读器与键盘用户无法按地标跳转（157 条新闻只有 5 个标题）。
+  // 生成器每天重建今日区/往期区，所以这里沿用 P0/P1/P2 的做法——JS 运行时补 role，
+  // 不把结构写进生成区（否则明天就被冲掉）。
+  try{
+    var toc=document.getElementById('tocSidebar');
+    if(toc&&!toc.getAttribute('aria-label'))toc.setAttribute('aria-label','目录导航');
+    var rail=document.querySelector('.col-rail');
+    if(rail&&!rail.getAttribute('aria-label'))rail.setAttribute('aria-label','侧栏：矿业热榜与近期会展');
+    var hd=document.querySelector('.header');
+    if(hd&&!hd.getAttribute('role'))hd.setAttribute('role','banner');
+    var ft=document.querySelector('.footer');
+    if(ft&&!ft.getAttribute('role'))ft.setAttribute('role','contentinfo');
+    var main=document.querySelector('.container');
+    if(main&&!main.getAttribute('role')){
+      main.setAttribute('role','main');
+      if(!main.id)main.id='mdMain';
+      if(!document.getElementById('mdSkipLink')){
+        var a=document.createElement('a');
+        a.id='mdSkipLink'; a.className='md-skip-link'; a.href='#'+main.id;
+        a.textContent='跳到主内容';
+        document.body.insertBefore(a, document.body.firstChild);
+      }
+    }
+  }catch(e){ console.warn('mdA11yLandmarks:', e); }
 }
 // P2-7a：筛选态没有全局指示和出口——切到「只看未读」后页面只剩一片，很容易忘了自己在筛选中。
 function mdSyncFilterState(){
