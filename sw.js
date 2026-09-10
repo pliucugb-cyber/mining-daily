@@ -7,7 +7,7 @@
 // 2026-09-04 二次修复：支持子路径部署（GitHub Pages 站点位于 /mining-daily/）。
 //   原先写死 '/index.html' 这类绝对路径，在子路径下会指向站点根而 404。
 //   改为以 SW 自身所在目录为基准推导 BASE，根路径部署（本地/沙箱）与子路径部署（Pages）均可。
-const CACHE_NAME = 'mining-daily-20260910-1835';
+const P260910-1900';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -24,6 +24,7 @@ const urlsToCache = [
   BASE + 'news-data.js',
   BASE + 'lme-data.js',
   BASE + 'price-history.js',
+  BASE + 'app.js',
   BASE + 'morning_report.json'
 ];
 // 每日更新内容的数据文件：必须 network-first。
