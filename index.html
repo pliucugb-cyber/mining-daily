@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260910-1740" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260910-1835" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1554,6 +1554,12 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   /* AI 悬浮球：移动端圆形化、上移避让底部导航 */
   .qa-fab .qa-fab-txt{display:none}
   .qa-fab{width:52px;height:52px;padding:0;justify-content:center;border-radius:50%}
+  /* 问答入口已移入底部导航栏（问 tab）：移动端隐藏右下角悬浮球，避免双入口重叠 */
+  #qaFab{display:none!important}
+  /* 移动端：问答面板扩为近全屏整页（点「问」即全屏问答界面） */
+  #qaFloat{top:0;left:0;right:auto;bottom:auto;width:100vw;height:100dvh;max-height:none;border-radius:0;border:none;box-shadow:none}
+  .qa-float-head{padding-top:calc(var(--s3) + env(safe-area-inset-top,0px))}
+  .qa-float-foot{padding-bottom:calc(var(--s3) + env(safe-area-inset-bottom,0px))}
 }
 /* 桌面：隐藏「筛选 ▾」与顶部搜索按钮（移动端专属控件） */
 .nf-toggle{display:none}
@@ -4278,10 +4284,12 @@ function mdMobileTabBar(){
   var SVG_PRICE='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9M9 20V4M14 20v-6M19 20V7"/></svg>';
   var SVG_RIGHTS='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4"/><path d="M10 12h6M10 16h6"/></svg>';
   var SVG_USER='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
+  var SVG_QA='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5z"/></svg>';
   var bar=document.createElement('nav');
   bar.id='mobileTabBar'; bar.setAttribute('aria-label','移动端主导航');
   bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">'+SVG_HOME+'</span><span>首页</span></button>'
     +'<button class="mtab" data-go="price"><span class="mi">'+SVG_PRICE+'</span><span>价格</span></button>'
+    +'<button class="mtab" data-go="qa"><span class="mi">'+SVG_QA+'</span><span>问</span></button>'
     +'<button class="mtab" data-go="rights"><span class="mi">'+SVG_RIGHTS+'</span><span>矿权</span></button>'
     +'<button class="mtab" data-go="mine"><span class="mi">'+SVG_USER+'</span><span>我的</span></button>';
   var sheet=document.createElement('div'); sheet.id='mineSheet'; sheet.hidden=true;
@@ -4298,9 +4306,16 @@ function mdMobileTabBar(){
     var go=b.getAttribute('data-go');
     if(go==='mine'){ sheet.hidden=!sheet.hidden; setActive(sheet.hidden?null:'mine'); return; }
     sheet.hidden=true;
+    if(go!=='qa' && typeof qaFloatClose==='function'){ qaFloatClose(); }
     if(go==='home'){ mdSelectCat('tuijian'); }
     else if(go==='price'){ mdSelectCat('price'); }
     else if(go==='rights'){ mdSelectCat('rights'); }
+    else if(go==='qa'){
+      if(typeof qaFloatToggle==='function') qaFloatToggle();
+      var _qp=document.getElementById('qaFloat');
+      setActive(_qp && _qp.classList.contains('open') ? 'qa' : null);
+      return;
+    }
     try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); }
   });
   sheet.addEventListener('click',function(e){
@@ -5145,6 +5160,7 @@ function qaStopBreathe(){
 var QA_DRAGGING=null;
 var QA_DRAG_EXCLUDE='input,select,button,a,textarea,[contenteditable],.qa-fsel,.qa-fchip,.pchart-close,.qa-trend,.qa-src,.qa-msg-bubble,.qa-float-body,.qa-float-foot,.qa-float-btn,.qa-resize-handle';
 function qaFloatStartDrag(ev){
+  if(window.innerWidth && window.innerWidth<=768) return;
   var p=document.getElementById('qaFloat'); if(!p||!p.classList.contains('open'))return;
   // 交互元素不触发拖拽，保证内部可选择/点击/输入
   if(ev.target.closest && ev.target.closest(QA_DRAG_EXCLUDE))return;
