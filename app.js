@@ -9,6 +9,36 @@ try{var _bw=document.getElementById('mdBootWarn');if(_bw)_bw.style.display='none
 // 而 computeHotNewsLocal() 等在它之前的函数读 QA_ROWS.length 就会 TypeError →
 // 热榜直接显示「加载失败」，掩盖了真正的根因。此处先占位成空数组，让降级路径可控。
 window.QA_ROWS=window.QA_ROWS||[];
+// 2026-09-11 P0（第三轮事故的真正根因，见下方长注释）：先把「列表型全局」占位成空数组。
+// 它们的真实赋值都在文件后段；一旦顶层提前中断，后面所有 var 都停在 undefined，
+// 渲染函数连 `X.forEach` 都过不去（线上原样报错：qaInitData / renderDigest →
+// "Cannot read properties of undefined (reading 'forEach')"）。
+window.QA_MINERALS=window.QA_MINERALS||[];
+window.QA_TOPICS=window.QA_TOPICS||[];
+window.DIGEST_SRC=window.DIGEST_SRC||[];
+window.DIGEST_KW=window.DIGEST_KW||[];
+window.DIGEST_N=window.DIGEST_N||4;
+
+// 2026-09-11 P0 —— 「Cannot access 'newsSearchText' before initialization」根因修复
+// ---------------------------------------------------------------------------
+// index.html 里 4 个脚本都是 defer：**真实浏览器执行 defer 脚本时 document.readyState
+// 已经是 'interactive'**（不是 'loading'）。于是下面第 44 行的矿权 IIFE：
+//     if(readyState==="loading") addEventListener(DOMContentLoaded, ...);
+//     else { renderRightsSection(); injectRightsResultSummary(); bindRights(); }
+// 走 else 分支，**在 app.js 求值期间当场调用** renderRightsSection()
+//   → mdApplySearchToRights() → 读 newsSearchText → 命中 TDZ ReferenceError。
+// 这 4 个模块状态原先声明在第 ~695 行，还没有执行到。
+// 后果不是「少一个筛选功能」，而是 app.js 在此处**整体中断**：
+// 其后所有顶层语句都不执行 —— 包括 2285 行的初始化链（fetchHotNews/loadBrief/refresh）
+// 以及 2139/2793 行的 DIGEST_SRC / QA_MINERALS 等 var 赋值。
+// 表现就是用户看到的：静态内容（生成器写死的价格卡/新闻条目）都在，
+// 而要靠 JS 现算的今日要闻 / 热榜 / AI 检索全空、下拉框没有选项。
+// 修法：① 声明提到文件最前，任何时点读到的都是合法初值（消除 TDZ）；
+//       ② 那个 IIFE 的即时分支改为 setTimeout 0（见该处注释），不再在求值期跑业务逻辑。
+let filterMode='none';
+let tagFilter=null;
+let newsSearchText='';
+let oldExpanded=false;   // 往期内容中"超过14天旧闻"是否展开
 // 问答筛选下拉的「干净快照」：qaInitData() 会往两个 select 里 append 带计数的新选项，
 // 并非幂等（重复调用会出现「铜 (12)」成倍重复）。自愈重跑前先还原到快照。
 window.__mdQaSelSnap=(function(){
@@ -367,8 +397,14 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
       var el=document.getElementById(id); if(el) el.addEventListener("change", renderRightsSection);
     });
   }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", function(){ renderRightsSection(); injectRightsResultSummary(); bindRights(); });
-  else { renderRightsSection(); injectRightsResultSummary(); bindRights(); }
+  // 2026-09-11 P0：app.js 以 defer 加载 → 执行时 readyState 已是 'interactive'。
+  // 原实现在 else 分支**当场**调用这三个函数，而它们依赖的模块状态与常量
+  // （newsSearchText、STORE_KEY / FAV_KEY / ARCH_FAV_DEFAULT_TITLE 等）都在文件后段才初始化，
+  // 于是抛 TDZ ReferenceError，把整个 app.js 打断在半路 —— 这就是 09-11 事故的机制。
+  // 改为「本次求值结束后再初始化」：setTimeout 0，届时所有顶层声明都已就绪。
+  function mdInitRights(){ renderRightsSection(); injectRightsResultSummary(); bindRights(); }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", mdInitRights);
+  else setTimeout(mdInitRights, 0);
 })();
 
 ;
@@ -690,10 +726,8 @@ function initSpecial(){
 }
 
 // ===== 筛选模式：none | new | fav | history | tag | special =====
-let filterMode='none';
-let tagFilter=null;
-let newsSearchText='';
-let oldExpanded=false; // 往期内容中"超过14天旧闻"是否展开
+// filterMode / tagFilter / newsSearchText / oldExpanded 的声明已于 2026-09-11
+// 提到文件最前端（见文件头注释）：留在原位置会被矿权 IIFE 的即时调用命中 TDZ。
 function setFilter(mode,noScroll){
   filterMode=mode;
   if(mode==='none'){document.body.removeAttribute('data-filter-mode');}
@@ -4943,3 +4977,8 @@ function toggleTheme(){
   setTimeout(run,1200);
   setTimeout(run,3000);
 })();
+
+// 2026-09-11：app.js「求值完成」信标 —— 必须留在本文件最后一行。
+// 诊断价值：线上若看到 __mdBooted=true 而 __mdAppEvaluated 缺失，即说明脚本在求值中途抛错中断
+// （09-10 / 09-11 三轮事故都是这个形态）。过去没有任何可观测手段，只能靠猜。
+window.__mdAppEvaluated=true;
