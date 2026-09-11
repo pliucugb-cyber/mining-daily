@@ -253,3 +253,37 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 - **并发会话**：本轮进行中，另一会话于 00:25 / 00:28 提交并推送了 `19f6480` / `680c24c`（只动 `REFERENCE.md`），远端与本地一度同时前进。结论：**同一 `mining-daily` 目录别开两个会话同时改**，至少不要同时提交；提交前先 `git log --oneline -3 origin/main` 看远端是否被别人推过。
 - **既有失败（非本轮引入）**：`test_price_enhance.js`（① 组 3 条，今日异动全为下跌、只有锌一条进条）、`test_ready_state_tdz.js`（「app.js 末行是求值完成信标」——实际信标在第 5 行倒数位置，末行是 `mdSyncBanner` 调用）。两者在 HEAD 上同样 exit=1。要不要修属新决策，本轮未动。
 
+---
+
+## §11 移动端 UI 优化（2026-09-12 01:0x，build `20260912-0102`）
+
+> 用户三点诉求：①顶部分类栏排版 ②底栏「问」图标要体现搜索＋AI（要看参考案例后定夺）③其余待优化项。
+> 本轮只做 ①②（③ 已实测定位、待拍板）。main `0405dd0`、gh-pages `55d4a44`，线上字节已核对通过。
+
+### 11.1 顶部分类栏改四等分铺满（①）
+
+- 根因：`.mctab` 原为 `flex:0 0 auto`（宽度＝文字宽），4 个 tab 只占屏幕左侧约 1/3，右侧大片留白、视觉重心偏左。
+- 改动（`index.html` 移动端块）：`.mctab` → `flex:1 1 0` 四等分铺满；字号 14px → `var(--fs-h2)` 16px（回到字号体系，非野值）；`.mctab.active::after` 下划线改居中定宽 24px（避免整格通栏看起来像分隔线）。
+- 实测（真实 Chrome headless 探针，390/360/320）：`fill=100%`，每格 87.8 / 80.3 / 70.3，`h=41`，无横向溢出。
+
+### 11.2 底栏「问」→「AI 搜」双语义图标（②，用户定夺「方案 A」）
+
+- `app.js::mdMobileTabBar()` 的 `SVG_QA`：空心对话气泡（`M4 5h16v11H9l-5 4V5z`）→ **放大镜**（`circle cx=9.5 cy=12 r=5.5` ＋手柄 `M13.4 15.9 18.3 20.8`）＋**四角星芒**（`M17.6 3.2 18.66 6.14 21.6 7.2 18.66 8.26 17.6 11.2 16.54 8.26 13.6 7.2 16.54 6.14Z`）。
+- 星芒 `stroke-width="1.7"`（主图形 2）：22px 实际渲染下细一号才不糊成一团。
+- 文字标签 `问` → `AI 搜`；`MD_BRAND_NAMES.qa` 同步为 `AI 搜`；补 `aria-label="AI 搜：新闻检索与问答"`。
+- **改标签必须同步改断言**：`test_qa_navtab_20260910.js:54` 原断言 `qaBtn.textContent.trim() === '问'`，不改必红（本轮已随之更新）。
+- **约束（不可回退）**：`test_mobile_ux_batch.js:77-78` 要求 `.mtab[data-go="qa"]{color:var(--brand)}` 存在、且禁止 `qaOrbPulse` 渐变发光球 → 新图标必须**单色描边**（`currentColor`），不得用渐变/发光/脉冲。
+- 该图标最初采用顺序：用户否掉「空心气泡＋问」（无搜索/AI 语义）；历史上还否掉过「渐变发光球」。
+
+### 11.3 实测定位、尚未处理的三项（③，待用户拍板）
+
+1. **移动端顶部搜索按钮是死代码 → 首页检索条无入口**：`index.html:1484` 顶层 `.md-search-btn{display:none}`（本意"桌面隐藏"）在**源码顺序**上晚于 `:1458`（`@media(max-width:768px)` 内的 `display:inline-flex`），同特异性 → 前者永远赢。实测三档视口均 `searchBtn display=none w=0`。而 `mdOpenSearch()` 只挂在 `#mdSearchBtn`（`app.js:2557`）→ **移动端首页的抽屉式检索条 `#newsFilterBar` 没有任何入口能打开**。修法二选一：①把 `:1484` 改写成 `@media(min-width:769px){…}` 恢复图标；②删死代码，检索能力统一收进 `#qaFloat`（面板内已有「检索」＋「AI」双按钮）。**这正说明「AI 搜」tab 是移动端唯一检索入口，图标必须同时承载两种语义。**
+2. **≤360px 品牌行日期被截断**：`.md-date` 需要 127px，实测可用仅 99.5px(360) / 59.5px(320) → 320px 上「2026年09月11日 星期五」只能看到「2026年09」。建议窄屏换短格式（如「09-11 周五」）。
+3. **「问」常驻品牌色，稀释"当前位置"指示**：`body` 级 `.mtab[data-go="qa"]{color:var(--brand)}` 与 `.mtab.active` 同色，首页激活时两个 tab 同时是品牌色。若改需同步改 `test_mobile_ux_batch.js:77` 的断言。
+
+### 11.4 本轮新增的工具经验
+
+- **不开浏览器量移动端几何**：`%TEMP%\md_probe_mobile.py` —— 本地 `http.server` 托管项目根，探针用 iframe 按给定 CSS 宽度加载 `index.html`，等 `#mdTop`/`#mobileTabBar` 注入后逐档量 `getBoundingClientRect`/`getComputedStyle`，结果写入 `<pre id="out">`，再用 `chrome --headless=new --dump-dom` 读回。用法：`python md_probe_mobile.py "390,360,320"`。**比截图更精确**（且当前模型不能读图，截图路线走不通）。
+- **断言要排除注释**：验收"旧图标已消失"时，`OLD_PATH not in js` 会被自己写的注释（"替代了原气泡 M4 5h…"）判为假 → 先按行剔除 `//` 开头行再断言。
+- **沙箱下推送必须由用户批准**：`~/.ssh` 属受保护路径，`git push` 在沙箱内一律 `Can't open user config file …/.ssh/config: Permission denied`。脚本 `%TEMP%\md_push_deploy.py` 按技能 `ssh-push-under-sandbox` 写（`GIT_SSH_COMMAND` 内路径**全用正斜杠**，否则 git 走 `sh -c` 会把反斜杠吃掉）。**首次申请被用户拒绝时不要自行重试**，先问用户；用户批准后同会话内不再询问。
+
