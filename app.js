@@ -893,10 +893,9 @@ function applyFilter(){
     else if(mode==='tag')show=!!tagFilter&&!!el.dataset.tags&&el.dataset.tags.split('|').includes(tagFilter);
     // 已归档收藏仅在"收藏/历史"筛选中可见
     if(el.classList.contains('arch-fav')&&mode!=='fav'&&mode!=='history')show=false;
-    // 全局搜索：标题/摘要/来源全文匹配（AND 条件，与上方 mode 筛选叠加）
+    // 2026-09-11 IA评审 A2：矿种单字走语境消歧（表外词仍子串），避免点「金」把资金/基金/金融全捞进来
     if(show&&newsSearchText){
-      const _t=(el.textContent||'').toLowerCase();
-      if(_t.indexOf(newsSearchText)<0)show=false;
+      if(!mdMineralHit(el.textContent||'',newsSearchText))show=false;
     }
     // 无筛选模式下，超过14天的旧闻默认折叠（搜索激活时穿透折叠，露出往期匹配项）
     if(show&&mode==='none'&&el.classList.contains('old-folded')&&!oldExpanded&&!newsSearchText)show=false;
@@ -942,8 +941,8 @@ function applyFilter(){
 function mdApplySearchToRights(){
   document.querySelectorAll(".rights-row").forEach(function(el){
     if(!newsSearchText){ el.classList.remove("hidden"); return; }
-    var _t=(el.textContent||"").toLowerCase();
-    el.classList.toggle("hidden", _t.indexOf(newsSearchText)<0);
+    // 2026-09-11 IA评审 A2：矿权行与新闻条目共用同一套矿种语义，避免点「金」误中金融类矿权行
+    el.classList.toggle("hidden", !mdMineralHit(el.textContent||"",newsSearchText));
   });
 }
 function mdSyncSearchEmpty(){
@@ -974,7 +973,8 @@ function mdSyncSearchEmpty(){
 // P2-2：目录 8 个条目 / 返回顶部 / 展开更早 都是 div+onclick，键盘完全不可达。
 // 用 JS 统一补（而不是改 HTML）：fold-toggle 位于每日生成区，改 HTML 会被生成器冲掉，运行时补就没这问题。
 function mdEnhanceKeyboard(){
-  document.querySelectorAll('.toc-main-item,.toc-back-top,.fold-toggle').forEach(function(el){
+  // 2026-09-11 IA评审 A5：筛选 chip 是 <span>，与目录项同理运行时补 role/tabindex/Enter，键盘可达（不改 <button>，避免 CSS 回归）
+  document.querySelectorAll('.toc-main-item,.toc-back-top,.fold-toggle,.nf-chip').forEach(function(el){
     if(el.getAttribute('data-md-kb'))return;
     if(!el.hasAttribute('role'))el.setAttribute('role','button');
     if(!el.hasAttribute('tabindex'))el.setAttribute('tabindex','0');
@@ -1039,6 +1039,8 @@ function mdSyncFilterState(){
   if(!parts.length){ if(bar)bar.style.display='none'; return; }
   if(!bar){
     bar=document.createElement('div'); bar.id='mdFilterState'; bar.className='filter-state';
+    // 2026-09-11 IA评审 A6：筛选态变化需对读屏用户播报
+    bar.setAttribute('role','status'); bar.setAttribute('aria-live','polite');
     anchor.parentNode.insertBefore(bar, anchor);
   }
   bar.innerHTML='<span class="fs-label">筛选中</span><span class="fs-tags">'+esc(parts.join(' · '))+'</span>'
@@ -1059,6 +1061,8 @@ var _mdToastTimer=null;
 function mdUndoToast(msg, undo){
   var old=document.getElementById('mdToast'); if(old)old.remove();
   var t=document.createElement('div'); t.id='mdToast'; t.className='md-toast';
+  // 2026-09-11 IA评审 A6：撤销提示是操作结果，需对读屏用户播报
+  t.setAttribute('role','status'); t.setAttribute('aria-live','polite');
   t.innerHTML='<span>'+esc(msg)+'</span><button type="button" class="md-undo">撤销</button>';
   t.querySelector('.md-undo').addEventListener('click',function(){
     try{undo();}catch(e){} t.remove();
@@ -1765,8 +1769,9 @@ function renderBrief(d){
     // 有 stats 就报今日收录量，说明简报覆盖的是当日全部内容（不只是行情）
     var st=d.stats||{};
     var n=st.new_count;
+    // 2026-09-11 IA评审 A7：底部「首页」与顶部「推荐」同目的地，文案对齐为「推荐」（data-go 仍为 home，导航逻辑不变）
     sEl.textContent=(typeof n==='number'&&n>0)
-      ? ('今日收录 '+n+' 条 · 按行情/政策/勘查/并购/矿权分类摘要')
+      ? ('今日收录 '+n+' 条 · 按分类摘要')
       : '每日 9:30 随日报生成';
   }
   var main=document.getElementById('briefMain');
@@ -1813,10 +1818,11 @@ function loadBrief(){
   var strip=document.getElementById('briefStrip');
   // 2026-09-10 P1-6：加载时先显示骨架屏微光占位，渲染完成后由 renderBrief 整体替换
   var m0=document.getElementById('briefMain');
-  if(m0){ m0.innerHTML='<div class="skeleton" style="height:14px;width:92%;margin:7px 0"></div>'
-    +'<div class="skeleton" style="height:14px;width:78%;margin:7px 0"></div>'
-    +'<div class="skeleton" style="height:14px;width:85%;margin:7px 0"></div>'
-    +'<div class="skeleton" style="height:14px;width:62%;margin:7px 0"></div>'; }
+  // 2026-09-11 视觉 C6：骨架屏内联 margin:7px → var(--s2)（8px，4 的倍数）
+  if(m0){ m0.innerHTML='<div class="skeleton" style="height:14px;width:92%;margin:var(--s2) 0"></div>'
+    +'<div class="skeleton" style="height:14px;width:78%;margin:var(--s2) 0"></div>'
+    +'<div class="skeleton" style="height:14px;width:85%;margin:var(--s2) 0"></div>'
+    +'<div class="skeleton" style="height:14px;width:62%;margin:var(--s2) 0"></div>'; }
   // 2026-09-09：简报区改为默认显示「加载中」占位，避免空白跳变；
   // 去掉 Date.now() 缓存击穿，让 SW 的 SWR 能命中预缓存。{cache:'reload'} 只用于
   // 后台网络请求绕过浏览器 HTTP 缓存，不影响 SW 先返回缓存秒开。
@@ -2290,11 +2296,12 @@ function localAiSummary(){
       return '<div style="margin:2px 0"><a class="ai-item-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'+(s?' <span class="ai-item-src">'+s+'</span>':'')+'</div>';
     }).join('');
     return '<div class="ai-item">'
-      +'<div class="ai-item-head"><span class="ai-item-src">'+aiEsc(c)+'</span><span style="margin-left:auto;color:#888;font-size: var(--fs-meta)">'+groups[c].length+'条</span></div>'
+      +'<div class="ai-item-head"><span class="ai-item-src">'+aiEsc(c)+'</span><span style="margin-left:auto;color:var(--ink-500);font-size: var(--fs-meta)">'+groups[c].length+'条</span></div>'
       +'<div class="ai-item-rows"><div class="ai-row"><span class="ai-text">'+items+'</span></div></div>'
       +'</div>';
   }).join('');
-  body.innerHTML='<div style="padding:6px 10px;color:#b45309;background:#fffbeb;border-radius:6px;margin-bottom:8px;font-size: var(--fs-body)">以下为本地检索生成的今日新闻汇总（纯静态托管，AI 深度解读需服务端 DEEPSEEK_API_KEY）：</div>'+html;
+  // 2026-09-11 视觉 C5：内联 #888 → var(--ink-500)（沿用页面颜色变量，随深色模式联动）；6px → var(--r-md)
+  body.innerHTML='<div style="padding:6px 10px;color:#b45309;background:#fffbeb;border-radius:var(--r-md);margin-bottom:8px;font-size: var(--fs-body)">以下为本地检索生成的今日新闻汇总（纯静态托管，AI 深度解读需服务端 DEEPSEEK_API_KEY）：</div>'+html;
   if(cnt)cnt.textContent='本地 '+todays.length+'条';
 }
 
@@ -2555,7 +2562,7 @@ function mdMobileTabBar(){
   var SVG_QA='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5z"/></svg>';
   var bar=document.createElement('nav');
   bar.id='mobileTabBar'; bar.setAttribute('aria-label','移动端主导航');
-  bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">'+SVG_HOME+'</span><span>首页</span></button>'
+  bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">'+SVG_HOME+'</span><span>推荐</span></button>'
     +'<button class="mtab" data-go="price"><span class="mi">'+SVG_PRICE+'</span><span>价格</span></button>'
     +'<button class="mtab" data-go="qa"><span class="mi">'+SVG_QA+'</span><span>问</span></button>'
     +'<button class="mtab" data-go="rights"><span class="mi">'+SVG_RIGHTS+'</span><span>矿权</span></button>'
@@ -2637,6 +2644,14 @@ function mdRenderMeetingSection(){
   var sec=document.getElementById('meetingSection'); if(!sec) return;
   var body=sec.querySelector('.meeting-body'); if(!body) return;
   if(!window.QA_ROWS||!QA_ROWS.length){ body.innerHTML='<div class="meeting-empty">会议会展内容加载中…</div>'; return; }
+  // 2026-09-11 IA评审 A4：暂缓实施，见下方注释（已回退）。
+  // 起因：≤1100px 时侧栏会展迷你卡的 vault 迁移不执行（侧栏 IIFE 早退），会展条目留在今日主列表，
+  //       会议 tab 又从这里独立取数 → 同一场会两处出现。
+  // 但"按主列表 URL 过滤会议 tab"在移动端会把会议 tab 清空（因为移动端所有会展条目都在主列表里），
+  // 属比"重复"更差的净回归；桌面端 vault 迁移已把会展条目移出主列表，过滤又是空操作。
+  // → 结论：本方案恒为空操作或净负，已回退。若要消除移动端重复，正解是让 vault 迁移在移动端也执行
+  //   （与 2026-09-08 用户明确要求「移动端侧栏退化为横条时条目留在原位」冲突，需产品决策），
+  //   而不是在会议 tab 侧做过滤。详见 reviews/ux-ia-product-2026-09-11.md 的 A4 条目。
   var seen={}, items=[];
   for(var i=0;i<QA_ROWS.length;i++){
     var r=QA_ROWS[i]; var t=String(r.t||'').trim();
@@ -2671,7 +2686,10 @@ function mdDataWatchdog(){
       var btn=' <button type="button" class="md-data-retry" style="margin-left:8px;border:1px solid var(--line-2,#d8dee6);background:transparent;color:inherit;border-radius:4px;padding:2px 10px;font-size:12px;cursor:pointer">重试</button>';
       var hot=document.getElementById('hotListBody');
       if(hot&&hot.querySelector('.hotlist-loading')){ hot.innerHTML='<li class="hotlist-loading">'+msg+btn+'</li>'; }
-      var dg=document.getElementById('digestStrip');
+      // 2026-09-11 IA评审 A3：只替换 #digestList 列表内容，保留 .digest-head（今日/要闻/日期），
+      // 且不再把 li 直接塞进 div（非法结构）。注意：注释里别写带尖括号的标签字面量，
+      // preflight_check.py 的 div 收支检查历史上会把 app.js 拼进去扫，见该文件 2026-09-11 说明。
+      var dg=document.getElementById('digestList');
       if(dg&&dg.querySelector('.digest-empty')){ dg.innerHTML='<li class="digest-empty">'+msg+btn+'</li>'; }
       var bm=document.getElementById('briefMain');
       if(bm&&/加载中/.test(bm.textContent||'')){ bm.innerHTML='<div class="brief-empty">'+msg+btn+'</div>'; }
@@ -2954,13 +2972,21 @@ function qaInitData(){
 function qaHay(r){return [r.t||'',r.m||'',r.s||'',r.c||'',(r.g||[]).join(' ')].join(' ');}
 // 矿种命中：标签含 X 直接命中；否则看正文——单字矿种须落在矿产语境词中（QA_BODY_TERMS），
 // 多字矿种用朴素子串，避免「金」误中「有色金属/资金」之类无关词。
-function qaMineralHit(r,key){
-  if((r.g||[]).indexOf(key)>=0)return true;
-  var hay=qaHay(r);
-  if(hay.indexOf(key)<0)return false;
+// 2026-09-11 IA评审 A2：从 qaMineralHit 抽出纯文本版，供 DOM 侧 chip/矿权行复用同一套矿种语义
+// （落在 QA_BODY_TERMS 的词须命中矿产语境词；表外词仍走朴素子串）。
+function mdMineralHit(text,key){
+  key=String(key==null?'':key).toLowerCase();
+  if(!key)return true;
+  var t=String(text==null?'':text).toLowerCase();
+  if(t.indexOf(key)<0)return false;
   var terms=QA_BODY_TERMS[key];
   if(!terms)return true;
-  return terms.some(function(t){return hay.indexOf(t)>=0;});
+  for(var i=0;i<terms.length;i++){ if(t.indexOf(terms[i])>=0)return true; }
+  return false;
+}
+function qaMineralHit(r,key){
+  if((r.g||[]).indexOf(key)>=0)return true;
+  return mdMineralHit(qaHay(r),key);
 }
 function qaFilter(rows,words,mineral,topic,from,mode){
   return rows.filter(function(r){
@@ -4459,6 +4485,7 @@ function setupNewsFilterBar(){
   if(document.getElementById('newsFilterBar'))return;
   var today=document.getElementById('todaySection'); if(!today)return;
   var bar=document.createElement('div'); bar.id='newsFilterBar'; bar.className='news-filter-bar';
+  // 2026-09-11 IA评审 A6：#nfCount 匹配条数是操作结果，加 role=status/aria-live 供读屏播报
   bar.innerHTML='<div class="nf-search-wrap"><input class="nf-search" id="nfSearch" type="search" placeholder="搜索标题 / 摘要 / 来源…" aria-label="搜索新闻">'
     +'<button class="nf-clear" id="nfClear" type="button" aria-label="清除搜索" hidden>✕</button></div>'
     +'<button class="nf-toggle" id="nfToggle" type="button" aria-label="展开或收起筛选" aria-expanded="false">筛选 <span class="nf-toggle-ico">▾</span></button>'
@@ -4477,7 +4504,7 @@ function setupNewsFilterBar(){
     +'<span class="nf-chip" data-kw="勘查">勘查</span>'
     +'<span class="nf-chip" data-kw="技术">技术</span>'
     +'<span class="nf-chip" data-kw="风险">风险</span>'
-    +'</div><span class="nf-count" id="nfCount"></span>';
+    +'</div><span class="nf-count" id="nfCount" role="status" aria-live="polite"></span>';
   today.parentNode.insertBefore(bar, today);
   var input=document.getElementById('nfSearch');
   var cl=document.getElementById('nfClear');
@@ -4511,7 +4538,8 @@ function setupNewsFilterBar(){
 }
 function updateNfCount(){
   var el=document.getElementById('nfCount'); if(!el)return;
-  el.textContent= newsSearchText? ('匹配 '+document.querySelectorAll('.news-item:not(.hidden)').length+' 条') : '';
+  // 2026-09-11 IA评审 A2：计数口径与空态 mdSyncSearchEmpty 一致（含矿权行），避免「匹配 0 条」与矿权命中同屏
+  el.textContent= newsSearchText? ('匹配 '+document.querySelectorAll('.news-item:not(.hidden),.rights-row:not(.hidden)').length+' 条') : '';
 }
 // CSV 导出（价格 / 矿权），纯前端生成，不依赖后端
 function downloadCsv(filename, rows){

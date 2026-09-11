@@ -93,7 +93,8 @@ setTimeout(() => {
   // ⑤ 移动端会展卡：默认显示；仅「热榜」tab（body[data-md-cat="hot"]）隐藏会展卡，突出矿业热榜。
   //   故允许热榜-tab 作用域内的 .expo-mini{display:none!important}，但禁止任何全局/无作用域的强制隐藏。
   const expoNone = (html.match(/\.expo-mini\{display:none!important\}/g) || []);
-  const hotScoped = /body\[data-md-cat="hot"\] #col-rail \.expo-mini\{display:none!important\}/.test(html);
+  // 2026-09-11 视觉规范评审修复 A1：锚点由 #col-rail 更正为 .col-rail（页面元素是 class 无 id）
+  const hotScoped = /body\[data-md-cat="hot"\] \.col-rail \.expo-mini\{display:none!important\}/.test(html);
   ok('会展仅热榜 tab 隐藏（移动端默认显示，无全局强制隐藏）', expoNone.length === (hotScoped ? 1 : 0) && hotScoped,
     'display:none 规则数=' + expoNone.length + '，热榜作用域=' + hotScoped);
   ok('mdMobileRailOrder 已定义', typeof w.mdMobileRailOrder === 'function');

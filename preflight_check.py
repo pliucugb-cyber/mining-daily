@@ -218,9 +218,18 @@ def main():
         log.error('找不到 %s', HTML)
         sys.exit(1)
     text = HTML.read_text(encoding='utf-8')
+    html_text = text          # ⚠️ div 收支只对 index.html 有意义，见下方 2026-09-11 说明
     # 2026-09-10 性能优化：应用逻辑已外置为 app.js(defer)，关键功能函数（setupNewsFilterBar /
     # exportPriceCsv / renderRightsSection / bindRights / _clearHtmlCache 等）现位于 app.js。
     # 一并纳入静态扫描，避免误报「关键功能缺失」导致自动化闸门误杀合法部署。
+    #
+    # ⚠️ 2026-09-11 修复：拼接出的 text 只可喂给「按名字找函数/容器/marker」这类检查，
+    # **绝不能喂给 check_div_balance**。app.js 是 JS 不是 HTML：它的模板字符串可以只写半个
+    # 标签（另一半在别处拼），注释/字符串里也随时可能出现字面 `<div>`——而 check_div_balance
+    # 只剔除 index.html 内的 <script>/<style> 块，对「拼进来的 app.js」毫无防护，
+    # 于是 app.js 里任何一处不成对的 `<div>` 都会让闸门误红。
+    # 事故：2026-09-11 一处 JS 注释写了字面 `<div>` → div 收支误报「有 1 个 <div> 未闭合」
+    # → preflight exit 1 → 06:00 自动化会据此判定 index.html 脏状态并 `checkout -- index.html` 后中止。
     app_js = ROOT / 'app.js'
     if app_js.exists():
         text = text + '\n' + app_js.read_text(encoding='utf-8')
@@ -232,7 +241,7 @@ def main():
         ('关键容器', check_containers(text)),
         ('build-version', check_build_version(text)),
         ('sw.js 语法', check_sw_js(text)),
-        ('div 收支', check_div_balance(text)),
+        ('div 收支', check_div_balance(html_text)),
     ]
 
     all_ok = True

@@ -96,7 +96,7 @@ setTimeout(() => {
   ok('tag-chip 圆角改 --r-sm(4)', /\.tag-chip\{border-radius:var\(--r-sm\)\}/.test(html));
   ok('badge-new 去 pulse', /\.badge-new\{animation:none\}/.test(html));
   ok('已读圆点阴影用 --line-2 令牌', /\.news-item\.read \.dot\{box-shadow:inset 0 0 0 2px var\(--line-2\)\}/.test(html));
-  ok('热榜 tab 隐藏会展卡', /body\[data-md-cat="hot"\] #col-rail \.expo-mini\{display:none!important\}/.test(html));
+  ok('热榜 tab 隐藏会展卡', /body\[data-md-cat="hot"\] \.col-rail \.expo-mini\{display:none!important\}/.test(html));
   ok('顶栏 z-index 合并（搜索 225 在分类栏 230 下）', /\.news-filter-bar\{z-index:225\}/.test(html) && /#mdTop\{[^}]*z-index:230/.test(html));
   ok('移动块移除 body{font-size:15px}', /@media\(max-width:768px\)\{[\s\S]*?body\{line-height:1\.65\}/.test(html) && !/body\{font-size:15px;line-height:1\.65\}/.test(html));
 
