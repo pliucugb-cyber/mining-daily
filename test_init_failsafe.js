@@ -90,8 +90,8 @@ check('判定依据是「区块是否仍停在占位」而非标志位',
   /加载中\|提取中\|获取中/.test(html) && /function mdPending\s*\(/.test(html) && /function mdOk\s*\(/.test(html),
   '信任标志位会漏掉「脚本跑了一半就中断」「HTML 新但 app.js 是旧版」等情形');
 check('横幅由真实降级驱动（mdDegraded），而非「曾记录过任何错误」',
-  /function mdDegraded/.test(html) && /var why=mdDegraded\(\)/.test(html) && /if\(!why\)return/.test(html),
-  '良性报错（如 app.js 执行前点了悬浮球）不再单独挂红条；只有 app.js 未执行 / 核心数据缺失 / 区块未渲染才报降级');
+  /function mdDegraded/.test(html) && /var why=mdDegraded\(\)/.test(html) && /showBootWarn\(why\)/.test(html),
+  '良性报错（如 app.js 执行前点了悬浮球）不再单独挂红条；整页红条只由 app.js 未执行 / 核心数据缺失驱动；单个区块未渲染只做组件级 amber 标注（建议④）');
 check('FAB 悬浮球内联处理器已加保护（window.qaFabClick&&…）',
   /onclick="window\.qaFabClick&&window\.qaFabClick\(event\)"/.test(html),
   'app.js 执行前点击悬浮球不再抛 ReferenceError 被记进 __mdErrors，从而误挂红条');

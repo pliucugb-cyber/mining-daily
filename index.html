@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-1707" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-1804" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1565,32 +1565,42 @@ body.dark .mtab{color:var(--ink-300)}
     var acts=el.querySelectorAll('.md-boot-act');
     for(var i=0;i<acts.length;i++){ try{ acts[i].style.display=(mode==='info')?'none':''; }catch(e){} }
   }
-  function mdShowInfo(n){
+  function mdShowInfo(n, leadText){
     var el=document.getElementById('mdBootWarn'); if(!el)return;
     el.setAttribute('data-md-level','info'); el.setAttribute('role','status'); el.setAttribute('aria-live','polite');
     el.style.background='#b45309'; el.style.color='#fff';     // 琥珀黄，非阻塞
     mdSetBannerMode(el,'info');
     var lead=el.querySelector('.md-boot-lead'), tail=el.querySelector('.md-boot-tail');
     var d=el.querySelector('.md-boot-detail'), g=el.querySelector('.md-boot-diag');
-    if(lead)lead.textContent='ℹ️ 已记录 '+n+' 条非致命报错';
+    if(lead)lead.textContent=leadText||('ℹ️ 已记录 '+n+' 条非致命报错');
     if(tail)tail.textContent='（不影响当前浏览，可忽略）';
     if(d)d.textContent=''; if(g){ try{ g.textContent=mdDiagLine(); }catch(e){ g.textContent=''; } }
     el.style.display='flex';
     clearTimeout(window.__mdInfoTimer);
     window.__mdInfoTimer=setTimeout(function(){            // 建议①：良性报错自动消失
       try{ var e2=document.getElementById('mdBootWarn');
-        if(e2&&e2.getAttribute('data-md-level')==='info'&&!mdDegraded()) e2.style.display='none';
+        if(e2&&e2.getAttribute('data-md-level')==='info'&&!mdDegraded()&&!mdStuckRegions().length) e2.style.display='none';
       }catch(e){}
     },9000);
   }
   function mdSyncBanner(){
     try{
       var why=mdDegraded();
-      if(why){ showBootWarn(why); return; }                 // 真实降级 → 红条
+      if(why){ showBootWarn(why); return; }                 // 整页级（app.js 未执行/核心数据缺失）→ 红条
       var el=document.getElementById('mdBootWarn');
       if(el&&el.getAttribute('data-md-level')==='error') el.style.display='none'; // 建议③：恢复即隐藏
+      // 建议④：仅单个组件未渲染 → 只标注该组件（amber 非阻塞），绝不挂全屏红条
+      var pend=mdStuckRegions();
+      if(pend.length){
+        mdAnnotateRegions(pend);
+        var names=pend.map(function(s){ return (MD_REGION_LABEL[s.n]||s.n); }).join('、');
+        mdShowInfo(0,'⚠️ 部分区块未加载（'+names+'），其余正常');
+        return;
+      }
+      mdClearRegionAnnotations();                            // 组件已恢复 → 清标注
       var n=(window.__mdErrors||[]).length;
       if(n>(window.__mdInfoShownCount||0)){ mdShowInfo(n); window.__mdInfoShownCount=n; } // 良性→黄条
+      else if(n===0){ var e3=document.getElementById('mdBootWarn'); if(e3&&e3.getAttribute('data-md-level')==='info') e3.style.display='none'; }
     }catch(e){}
   }
   window.mdSyncBanner=mdSyncBanner;
@@ -1619,7 +1629,14 @@ body.dark .mtab{color:var(--ink-300)}
   //    Event（显示为 [object Event]），等于什么都没告诉我们，无法定位是哪个文件坏了。
   window.__mdErrors=window.__mdErrors||[];
   function mdNote(what,detail){
-    try{ window.__mdErrors.push(detail?('['+what+'] '+detail):String(what)); }catch(e){}
+    try{
+      var arr=window.__mdErrors; if(!arr)arr=window.__mdErrors=[];
+      var entry=detail?('['+what+'] '+detail):String(what);
+      if(arr.indexOf(entry)<0){                  // 建议⑤：去重，同一条不重复记
+        arr.push(entry);
+        if(arr.length>40)arr.splice(0,arr.length-40); // 限长：保留最近 40 条，防 __mdErrors 无限增长
+      }
+    }catch(e){}
     // 良性报错（app.js 已执行 = 页面健康）立即浮现黄色 info 条；红色只留给真实降级
     try{ if(window.__mdAppEvaluated){ setTimeout(mdSyncBanner,0); } }catch(e){}
   }
@@ -1700,6 +1717,39 @@ body.dark .mtab{color:var(--ink-300)}
   function mdPending(){
     return MD_STEPS.filter(function(s){ try{ return !s.ready(); }catch(e){ return true; } });
   }
+  // UX 建议④：单组件降级 vs 整页降级分离。整页级（app.js 未执行 / 核心数据缺失）才报红；
+  // 仅单个区块未渲染属「组件级」，标注该组件即可，不挂全屏红条。
+  var MD_REGION_EL={fetchHotNews:'hotListBody', loadBrief:'briefMain', renderDigest:'digestStrip'};
+  var MD_REGION_LABEL={qaInitData:'AI 检索', fetchHotNews:'热榜', loadBrief:'简报', renderDigest:'今日要闻'};
+  function mdStuckRegions(){
+    try{
+      if(!window.__mdAppEvaluated) return [];
+      if(mdMissingAssets().length) return [];   // 核心数据缺失归整页级，不在这里
+      return mdPending();
+    }catch(e){ return []; }
+  }
+  window.mdStuckRegions=mdStuckRegions;
+  // 在卡住的区块容器上标注「该区块未加载」，把问题定位到具体组件（不污染健康区块）
+  function mdAnnotateRegions(pend){
+    pend.forEach(function(s){
+      var id=MD_REGION_EL[s.n]; if(!id)return;
+      var el=document.getElementById(id); if(!el)return;
+      el.setAttribute('data-md-stuck','1');
+      if(el.querySelector('.md-region-stuck'))return;        // 已标注则不再重复注入
+      var b=document.createElement('div');
+      b.className='md-region-stuck';
+      b.textContent='⚠️ 该区块未加载，可刷新页面重试';
+      b.setAttribute('style','margin-top:8px;padding:6px 10px;border:1px dashed #b45309;color:#b45309;background:#fffbeb;border-radius:6px;font-size:13px');
+      el.appendChild(b);
+    });
+  }
+  function mdClearRegionAnnotations(){
+    Object.keys(MD_REGION_EL).forEach(function(k){
+      var el=document.getElementById(MD_REGION_EL[k]); if(!el)return;
+      el.removeAttribute('data-md-stuck');
+      var b=el.querySelector('.md-region-stuck'); if(b&&b.parentNode)b.parentNode.removeChild(b);
+    });
+  }
   function mdRenderRound(round){
     var pend=mdPending();
     pend.forEach(function(s){
@@ -1775,18 +1825,18 @@ body.dark .mtab{color:var(--ink-300)}
 
   // ④ 自愈调度：首屏后分批检查（数据缺失就重取，区块空着就补渲染）。
   //    注意顺序：先补齐数据，再补渲染——否则渲染函数会因数据缺失而静默返回。
-  // 横幅判据（2026-09-11 修复「良性报错被挂红条」）：
+  // 横幅判据（2026-09-11 修复「良性报错被挂红条」；2026-09-11 ④ 再分整页/单组件）：
   //    旧逻辑：只要 window.__mdErrors 非空就挂红条——但「app.js 执行前点了悬浮球」这类
   //    瞬时 ReferenceError 也会被记进去，而页面本身完好，于是健康页永远顶着红条。
-  //    新逻辑：横幅只由「真实降级」驱动——app.js 未执行 / 核心数据缺失 / 区块仍停在占位。
-  //    良性错误仍被记录、仍在诊断里可见，只是不再单独挂红条。
+  //    新逻辑：整页红条只由「整页降级」驱动——app.js 未执行 / 核心数据缺失。
+  //    单个区块未渲染（mdPending）不再挂全屏红条，改由 mdSyncBanner 在**该区块上**做 amber 标注（建议④）。
+  //    良性错误仍被记录、仍在诊断里可见，只是不单独挂红条。
   function mdDegraded(){
     try{
       if(!window.__mdAppEvaluated) return 'app.js 未执行';
       var miss=mdMissingAssets();
       if(miss.length) return '核心数据缺失（'+miss.map(function(a){return a.f;}).join(',')+'）';
-      var pend=mdPending();
-      if(pend.length) return '区块未渲染（'+pend.map(function(s){return s.n;}).join(',')+'）';
+      // 注：单个区块未渲染（mdPending）不再走整页红条——改由 mdSyncBanner 的组件级 amber 标注（建议④）
     }catch(e){}
     return '';
   }

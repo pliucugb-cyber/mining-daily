@@ -124,21 +124,21 @@ function regionText(doc, sel) {
       brief.trim().length > 0 && brief.indexOf('加载中') < 0,
       '简报文本=' + brief.replace(/\s+/g, ' ').trim().slice(0, 40));
 
-    check('自愈后看门狗不再误报（横幅不显示）',
-      (() => { const b = doc.getElementById('mdBootWarn'); return !b || b.style.display === 'none'; })(),
-      '全部区块就绪时不应再挂红条');
+    check('自愈后看门狗不再误报（不挂整页红条）',
+      (() => { const b = doc.getElementById('mdBootWarn'); return !b || b.getAttribute('data-md-level') !== 'error'; })(),
+      '全部区块就绪时不应挂整页红条（良性报错仅走 amber info 级）');
 
     // 2026-09-11 回归：复现线上「良性报错却被挂红条」事故。
     // 健康页（版块全部渲染、app.js 已执行）若曾记录过一条良性错误（如用户在 app.js 执行前
-    // 点了悬浮球 → ReferenceError: qaFabClick is not defined），横幅必须仍然隐藏，
-    // 且 mdDegraded() 返回空串——错误只在诊断里可见，不再单独挂红条。
+    // 点了悬浮球 → ReferenceError: qaFabClick is not defined），横幅**绝不挂红条**；
+    // 按建议①良性报错只走 amber info 级（可自动消失），错误只在诊断里可见。
     window.__mdErrors.push('[脚本错误] Uncaught ReferenceError: qaFabClick is not defined');
     // 等 12s 看门狗触发后（此刻已过 ≈8s，再等 5s）
     await new Promise(r => setTimeout(r, 5000));
     const benignBanner = doc.getElementById('mdBootWarn');
-    check('健康页 + 良性报错(__mdErrors 有条目) → 横幅仍隐藏',
-      !!benignBanner && benignBanner.style.display === 'none',
-      '__mdErrors=' + (window.__mdErrors || []).length + ' 条，但版块均已渲染');
+    check('健康页 + 良性报错(__mdErrors 有条目) → 不挂红条（仅 info 级或隐藏）',
+      !!benignBanner && benignBanner.getAttribute('data-md-level') !== 'error',
+      '__mdErrors=' + (window.__mdErrors || []).length + ' 条，版块均已渲染，横幅级别=' + benignBanner.getAttribute('data-md-level'));
     check('健康页 mdDegraded() 返回空串（不报降级）',
       typeof window.mdDegraded === 'function' && window.mdDegraded() === '',
       '返回=' + JSON.stringify(window.mdDegraded ? window.mdDegraded() : 'N/A'));
