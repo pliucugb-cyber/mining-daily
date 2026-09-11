@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """更新四个分析文件：morning_report.json / sentiment.json / signals.json / alerts.json
-数据源：mining_news.json（178 条，今日新增 23 条）+ price_history_detail.json + lme_data.json
-报告日期 2026-09-11（国内 SHFE/上金所最新收盘 09-10；LME 09-10 收盘）
+数据源：mining_news.json + price_history_detail.json + lme_data.json
+报告日期 2026-09-11（国内 SHFE/上金所最新收盘 09-11；LME 09-10 收盘）
 morning_report 固定五节：行情 / 政策与产业 / 勘查与技术 / 并购与投资 / 矿权市场
 """
 import json, datetime, collections
@@ -284,8 +284,9 @@ quote_lines = [
         _down[0], format(_down[1], ',.%df' % _down[4]), _down[3], _down[2]),
 ]
 _price_comment = ('- %s' % trunc80(
-    '铜价在连续四日创纪录后大幅回吐，白宫铜关税计划停滞与美联储加息预期升温成为主导变量；'
-    '伦锌自四年高位重挫，国内锡、银走强，内外盘分化加大，短期波动或继续放大。'))
+    '美国 8 月 PPI 超预期叠加欧央行加息，美元走强引发基本金属与贵金属同步重挫：'
+    '沪银跌逾 5%、碳酸锂跌近 4.6%、沪锡跌逾 3.6%，伦锌单日重挫 5.14%、伦铜回吐 4.25%，'
+    '内外盘共振下行，唯沪铅相对抗跌，短期波动或继续放大。'))
 quote_text = '\n'.join(quote_lines + [_price_comment])
 
 policy_text = '\n'.join(fmt_bullet(n) for n in recent_items('行业动态', drop_notice=True)) or '今日暂无新的政策与产业动态。'

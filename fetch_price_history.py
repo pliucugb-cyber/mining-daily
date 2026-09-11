@@ -154,6 +154,69 @@ def drop_unclosed_lme_bar(pts, ref):
     return pts
 
 
+def reconcile_lme_data(series):
+    """把 lme_data.json 的价格口径对齐到「最近一个已收盘交易日」。
+
+    2026-09-11（PM 复核轮）新增。背景：
+      fetch_lme.py 的 snapshot 接口在伦敦盘中返回的是【当日未收盘】的实时价，
+      而本脚本按不变式丢弃了这根 bar，于是出现「走势图末点 = 09-10 收盘、
+      价格卡 = 09-11 实时」的口径分裂 —— test_price_history_unclosed.py 的
+      第 ② 组断言（★ 走势图末点价 == lme_data.json 的 price）必然失败。
+
+    06:00 轮不存在该问题（伦敦闭市，snapshot 的 p 本来就是最近收盘价），
+    所以这是「同日盘中复核」才会触发的场景，不需要改 fetch_lme.py 的抓取逻辑。
+
+    判据：若 chart 末点日期 < lme_data.date，说明该日 bar 已被丢弃（=未收盘），
+    此时 lme_data 若仍持有与末点不同的价，即判定为盘中价，回落到末点收盘价，
+    涨跌改为「末点 vs 前一根」——与走势图完全同源。
+    返回被对齐的 slug 列表。
+    """
+    p = os.path.join(BASE, "lme_data.json")
+    if not os.path.exists(p):
+        return []
+    try:
+        with open(p, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return []
+    ref = str(data.get("date") or "").strip()
+    fixed = []
+    for m in data.get("metals", []):
+        s = series.get(m.get("slug"))
+        pts = (s or {}).get("points") or []
+        if m.get("price") is None or len(pts) < 2:
+            continue
+        last_date, last_px = pts[-1][0], float(pts[-1][1])
+        # 末点已进入基准日 → 不是「未收盘被丢弃」的场景，不动
+        if not ref or last_date >= ref:
+            continue
+        if abs(float(m["price"]) - last_px) <= 0.01:
+            continue
+        prev_px = float(pts[-2][1])
+        m["price"] = last_px
+        m["prev"] = prev_px
+        m["chg"] = round(last_px - prev_px, 2)
+        m["chg_pct"] = round((last_px - prev_px) / prev_px * 100, 2) if prev_px else None
+        m["asof"] = last_date
+        fixed.append(m.get("slug"))
+    if not fixed:
+        return []
+    data["note"] = "LME 当日尚未收盘，价格卡沿用最近已收盘交易日（%s）收盘价" % fixed_asof(data)
+    with open(p, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    js = ("// LME 收盘价（fetch_lme.py 生成，单位：USD/吨）\n"
+          "var LME_DATA = " + json.dumps(data, ensure_ascii=False) + ";\n")
+    with open(os.path.join(BASE, "lme-data.js"), "w", encoding="utf-8") as f:
+        f.write(js)
+    return fixed
+
+
+def fixed_asof(data):
+    """取被对齐后各金属标注的 asof 日期（用于 note 文案）。"""
+    ds = sorted({m.get("asof") for m in data.get("metals", []) if m.get("asof")})
+    return ds[-1] if ds else ""
+
+
 def main():
     # 合并模式：本次抓取失败的品种保留旧数据（接口限流时部分品种会失败，不清空）
     detail_path = os.path.join(BASE, "price_history_detail.json")
@@ -208,6 +271,12 @@ def main():
     with open(detail_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=1)
     print("OK: %d/%d 个品种 → price-history.js / price_history_detail.json" % (len(series), len(INSTRUMENTS)))
+    # 口径对齐：LME 盘中价 → 最近已收盘价（见 reconcile_lme_data 注释）。
+    # 必须放在写完 detail 之后（它读的就是刚写下的 series 内存对象）。
+    _fixed = reconcile_lme_data(series)
+    if _fixed:
+        print("LME 口径对齐（当日未收盘）：%s → 沿用 %s 收盘价"
+              % ("/".join(_fixed), json.load(open(os.path.join(BASE, "lme_data.json"), encoding="utf-8")).get("metals", [{}])[0].get("asof", "")))
     if failed:
         print("失败品种:", " | ".join(failed), file=sys.stderr)
         sys.exit(2 if len(failed) >= len(INSTRUMENTS) else 0)

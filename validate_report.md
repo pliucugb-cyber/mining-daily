@@ -1,16 +1,22 @@
 # URL 校验报告
 
-校验时间: 2026-09-11 08:16:35
+校验时间: 2026-09-11 17:10:13
 扫描文件: C:\Users\中铝矿业投并部\mining-daily\index.html
 
 ## 汇总
 
-- 总计: **167** 条
-- ✅ 正常: **124** 条
-- ⚠️ 警告: **6** 条
-- ❌ 失效: **37** 条
+- 总计: **178** 条
+- ✅ 正常: **132** 条
+- ⚠️ 警告: **8** 条
+- ❌ 失效: **38** 条
 
 ## ❌ 失效清单（必须修复）
+
+### Amigo Resources 坦桑尼亚项目选冶试验报出最高 7.07 ppm 铂族金属
+- URL: `https://news.metal.com/en/newscontent/104111131-amigo-resources-reports-pgm-values-of-up-to-707-ppm-in-tanzania-processing-testwork`
+- 来源: SMM 国际站 · 09-11
+- 关键词: ['Amigo', 'Resources', '坦桑', '桑尼', '尼亚', '亚项', '项目', '目选']
+- ❌ 标题关键词 0/8 命中（['Amigo', 'Resources', '坦桑']…）——可能错挂源或 URL 错配
 
 ### SMM 日评：美元四连跌 沪锡领涨 1.87% 伦锌、氧化铝、多晶硅跌超 1%
 - URL: `https://news.smm.cn/news/104108291`
@@ -41,6 +47,30 @@
 - 来源: MINING.COM · 09-10
 - 关键词: ['金属', '属价', '价格', '格跳', '跳水', '全球', '球矿', '矿业']
 - ❌ 标题关键词 0/8 命中（['金属', '属价', '价格']…）——可能错挂源或 URL 错配
+
+### SMM 日评：内盘金属普遍下挫 沪锌锡铂钯跌超 3% 沪银跌逾 5%
+- URL: `https://news.smm.cn/news/104110888`
+- 来源: 上海有色网 · 09-11
+- 关键词: ['SMM', '日评', '内盘', '盘金', '金属', '属普', '普遍', '遍下']
+- ❌ 标题关键词 0/8 命中（['SMM', '日评', '内盘']…）——可能错挂源或 URL 错配
+
+### 沪银主力重挫逾 6% 铂钯大跌 贵金属板块全线走低
+- URL: `https://news.smm.cn/news/104108889`
+- 来源: 上海有色网 · 09-11
+- 关键词: ['沪银', '银主', '主力', '力重', '重挫', '挫逾', '铂钯', '钯大']
+- ❌ 标题关键词 0/8 命中（['沪银', '银主', '主力']…）——可能错挂源或 URL 错配
+
+### 龙佰集团自 9 月 11 日起上调钛白粉价格 国内每吨 700 元、国际每吨 100 美元
+- URL: `https://news.metal.com/en/newscontent/104111178-longbai-group-raises-titanium-dioxide-prices-by-rmb-700ton-in-china-usd-100ton-globally-from-sept-11`
+- 来源: SMM 国际站 · 09-11
+- 关键词: ['龙佰', '佰集', '集团', '团自', '日起', '起上', '上调', '调钛']
+- ❌ 标题关键词 0/8 命中（['龙佰', '佰集', '集团']…）——可能错挂源或 URL 错配
+
+### SMM 分析：美国 PPI 超预期推升加息押注 镍价本周明显承压
+- URL: `https://news.metal.com/en/newscontent/104111096-smm-analysis-us-ppi-beat-expectations-fueling-rate-hike-bets-nickel-prices-under-heavy-pressure-this-week`
+- 来源: SMM 国际站 · 09-11
+- 关键词: ['SMM', '分析', '美国', 'PPI', '超预', '预期', '期推', '推升']
+- ❌ 标题关键词 0/8 命中（['SMM', '分析', '美国']…）——可能错挂源或 URL 错配
 
 ### AIC Mines 的 Eloise 选厂扩建进入干式调试 2029 财年铜产量目标 2.5~2.7 万吨
 - URL: `https://news.metal.com/en/newscontent/104108596-aic-mines-starts-dry-commissioning-of-eloise-plant-expansion-copper-output-targeted-at-25000`
@@ -198,24 +228,6 @@
 - 关键词: ['江苏', '苏连', '连云', '云港', '港破', '破获', '获涉', '涉案']
 - ❌ 标题关键词 0/8 命中（['江苏', '苏连', '连云']…）——可能错挂源或 URL 错配
 
-### 数智赋能护航矿业高质量发展新征程 2026智能矿山高质量发展大会暨数智赋能本质安全论坛召开
-- URL: `https://www.cnmn.com.cn/ShowNews1.aspx?id=473443`
-- 来源: 中国有色网 · 08-25
-- 关键词: ['数智', '智赋', '赋能', '能护', '护航', '航矿', '矿业', '业高']
-- ❌ 网络错误/超时（无法访问）
-
-### 紫金矿业主营金属产量稳中有进 价值创造能力持续提升
-- URL: `https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0825/61822.html`
-- 来源: 中国有色金属工业协会 · 08-25
-- 关键词: ['紫金', '金矿', '矿业', '业主', '主营', '营金', '金属', '属产']
-- ❌ 网络错误/超时（无法访问）
-
-### Galantas 以 500 万美元交易退出爱尔兰 Omagh 金矿项目
-- URL: `https://www.mining.com/galantas-exits-omagh-gold-project-in-5m-deal`
-- 来源: MINING.COM · 09-10
-- 关键词: ['Galantas', '500', '万美', '美元', '元交', '交易', '易退', '退出']
-- ❌ 网络错误/超时（无法访问）
-
 ### 印度 KABIL 瞄准哥伦比亚关键矿产机会 供应链多元化再扩围
 - URL: `https://news.metal.com/en/newscontent/104106368-indias-kabil-eyes-colombian-critical-minerals-opportunities-as-supply-diversification-expands`
 - 来源: SMM 国际站 · 09-10
@@ -226,13 +238,7 @@
 - URL: `https://news.metal.com/en/newscontent/104101668-mmg-dugald-river-signs-2027`
 - 来源: SMM 国际站 · 09-07
 - 关键词: ['五矿', '矿资', '资源', 'Dugald', 'River', '签署', '2027', '2028']
-- ❌ 网络错误/超时（无法访问）
-
-### 格陵兰萨法托克铌稀土矿获勘查许可
-- URL: `https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260824_10297598.htm`
-- 来源: 全球矿产资源 · 08-24
-- 关键词: ['格陵', '陵兰', '兰萨', '萨法', '法托', '托克', '克铌', '铌稀']
-- ❌ 网络错误/超时（无法访问）
+- ❌ 标题关键词 0/8 命中（['五矿', '矿资', '资源']…）——可能错挂源或 URL 错配
 
 ## ⚠️ 警告清单（建议核查）
 
@@ -240,6 +246,11 @@
 - URL: `https://www.mining.com/osisko-hits-4-7-copper-beneath-gaspe-workings`
 - 来源: MINING.COM · 09-10
 - ⚠️ 标题关键词只命中 1/8（['Osisko', '加斯', '斯佩', '佩铜', '铜矿', '矿钻', '钻探', '探见']）——疑似错挂
+
+### BMI 下调铂钯价格预测：汽车销售萎缩 南非供应回升
+- URL: `https://www.mining.com/platinum-palladium-price-forecasts-cut-by-bmi-as-car-sales-shrink-and-south-african-supply-recovers`
+- 来源: MINING.COM · 09-11
+- ⚠️ 标题关键词只命中 1/8（['BMI', '下调', '调铂', '铂钯', '钯价', '价格', '格预', '预测']）——疑似错挂
 
 ### 力拓取得西澳 Winu 铜金矿原住民同意 目标 2030 年首次产铜
 - URL: `https://www.mining.com/rio-tinto-wins-aboriginal-consent-for-winu-copper-mine`
@@ -255,6 +266,11 @@
 - URL: `https://www.mining.com/eldorados-skouries-turns-years-of-setbacks-into-copper`
 - 来源: MINING.COM · 09-09
 - ⚠️ 标题关键词只命中 2/8（['Eldorado', 'Skouries', '铜金', '金项', '项目', '目多', '多年', '年波']）——疑似错挂
+
+### Galantas 以 500 万美元交易退出爱尔兰 Omagh 金矿项目
+- URL: `https://www.mining.com/galantas-exits-omagh-gold-project-in-5m-deal`
+- 来源: MINING.COM · 09-10
+- ⚠️ 标题关键词只命中 2/8（['Galantas', '500', '万美', '美元', '元交', '交易', '易退', '退出']）——疑似错挂
 
 ### ACG Metals 逾700万美元收购土耳其 Keşkek 金矿项目
 - URL: `https://www.mining.com/acg-metals-to-acquire-keskek-gold-project`
