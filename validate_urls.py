@@ -15,6 +15,7 @@ validate_urls.py — 扫描 output/mining-daily/index.html 中所有新闻 URL�
 用法：
   python validate_urls.py                    # 校验并报告
   python validate_urls.py --fail-on-broken   # 若有失效则 exit 1（CI/自动化友好）
+  python validate_urls.py --quiet            # 安静模式：仅输出结构自检/汇总/失效与警告明细
 """
 import re
 import sys
@@ -220,6 +221,8 @@ def main():
         print(f'❌ 找不到 {OUTPUT_HTML}')
         sys.exit(1)
 
+    quiet = '--quiet' in sys.argv
+
     # 结构自检（2026-09-06 新增）：先查 DOM 骨架，再逐条校验 URL
     dom_problems = check_dom_structure(OUTPUT_HTML.read_text(encoding='utf-8'))
     if dom_problems:
@@ -239,12 +242,14 @@ def main():
         ok, findings = check_one(p, last_domain_ts)
         flag = '✅' if ok else '❌'
         kw = keywords_of(p['title'])
-        print(f'{flag} [{i}/{len(items)}] {p["src"]} · {p["date"]} · {p["title"][:45]}')
-        print(f'   URL: {p["url"]}')
-        print(f'   关键词: {kw}')
-        for f in findings:
-            print(f'   {f}')
-        print()
+        # 安静模式：健康条目（无 findings）不打印；失效/警告条目始终打印（属须修复内容）
+        if (not quiet) or findings:
+            print(f'{flag} [{i}/{len(items)}] {p["src"]} · {p["date"]} · {p["title"][:45]}')
+            print(f'   URL: {p["url"]}')
+            print(f'   关键词: {kw}')
+            for f in findings:
+                print(f'   {f}')
+            print()
         results.append({**p, 'ok': ok, 'findings': findings, 'keywords': kw})
 
     # 汇总

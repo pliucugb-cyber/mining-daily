@@ -1,7 +1,7 @@
 # PROGRESS.md — 矿业日报自动化 Token 优化
 
 最后更新：2026-09-11（第二轮优化）
-状态：本轮优化脚本已落地并**已推送远端**；三套自动化 prompt 已重写并生效（**A「禁读 >50KB 文件」+ C「token 结构化落入 .last_run_status.json」已完成 2026-09-11**，B / D 待办）。
+状态：本轮优化脚本已落地并**已推送远端**；三套自动化 prompt 已重写并生效（**A「禁读 >50KB 文件」+ B「脚本 --quiet」+ C「token 结构化落入 .last_run_status.json」+ 三套 prompt 瘦身（REFERENCE.md 外置）均已完成 2026-09-11**，仅 D 待 C 遥测两周后定）。
 
 ---
 
@@ -43,6 +43,18 @@
 
 **所有内容红线在压缩后原样保留**：7 桶分类、23 域白名单、矿权单视图（无 #rightsTable）、LME 口径（价格唯一来源=lme_data.json、走势图末点=昨天正确）、前端自愈引信（`#mdBootWarn`/`window.mdHardReset()`/`app.js` 末行 `__mdAppEvaluated=true`/顶层 `setTimeout(fn,0)` 防 TDZ）、独占性互斥锁协议、低价值公告剔除。
 
+### 5. B：核心脚本加 `--quiet`（2026-09-11 完成）
+- `fetch_news.py`：argparse 加 `--quiet`。安静模式只输出「候选合计 N 条（境外 M 条）」一行 + 抓取失败源告警，去掉逐源表格与候选预览。实测 `--dry-run --quiet` 输出收敛为 1 行（238 条候选）。候选池 JSON 仍落盘，内容零影响。
+- `validate_urls.py`：沿用 `sys.argv` 解析加 `--quiet`（不动 `--fail-on-broken`）。安静模式只打印 DOM 自检 + 总计/失效/警告汇总 + 失效/警告条目明细，去掉健康条目的逐条 5 行打印。validate_report.md 仍落盘。
+- 三套自动化调用改为 `PY runq.py fetch_news.py ... --quiet`（runq 已截断，--quiet 从源头再降噪声）。
+
+### 6. 三套自动化 prompt 瘦身 + REFERENCE.md 外置（2026-09-11 完成）
+- 新建 `REFERENCE.md`：外置纯查阅类规则——§1 23 域白名单 / §2 七桶分类定义与易错边界 / §3 低价值公告剔除清单 / §4 境外信源硬门槛。
+- 三套 prompt 各自「节流规则」新增**第 8 条**：涉及白名单/七桶/低价值/境外时先 `Grep REFERENCE.md` 对应节，不靠记忆。
+- 删除 prompt 内联重复的域枚举、七桶示例、低价值清单、境外细节，改为指向 REFERENCE.md。
+- **红线不进 REFERENCE.md**，仍逐字保留在 prompt 内：互斥锁协议、LME 口径、矿权单视图（无 #rightsTable）、前端自愈引信、低价值公告剔除规则、声音提醒。
+- 收益：prompt 注入为一次性缓存前缀，瘦身降低基线上下文、减少 agent 误记风险；每轮真实增量由 runq/--quiet/A/12 轮压缩压住。
+
 ---
 
 ## 二、关键发现（决定怎么省才有效）
@@ -57,7 +69,7 @@
 ## 三、下一步（用户已提出，本轮按下「停止」未执行）
 
 - **A（零风险，建议做）**：在三套自动化节流规则里再加一条——「禁止用 Read 读 >50KB 文件（index.html 341KB / app.js 281KB），局部一律 Grep、运行信息一律 runq 落盘」。这是单文件最大回灌隐患。
-- **B（治本但略动脚本）**：给 `fetch_news.py` / `validate_urls.py` 等脚本本身加 `--quiet`，只 print 一行摘要，比 runq 包装更彻底；需逐个改，风险稍高。
+- **B（治本但略动脚本）**：给 `fetch_news.py` / `validate_urls.py` 等脚本本身加 `--quiet`，只 print 一行摘要，比 runq 包装更彻底——**已完成（2026-09-11，见 §一.5）**。
 - **C（可观测性）**：把 token 数也写进 `.last_run_status.json`，便于跨日画趋势对比（目前只在通知里出现）。
 - **D（待定模型）**：长流程换更便宜模型是否划算——见下方「待讨论」。
 
@@ -74,6 +86,7 @@
 ## 五、待补办事项清单
 - [x] push 本地 `87cd0b1` / `e066584` 两个 commit —— 已完成（2026-09-11 22:37 核对，`HEAD = origin/main = 5434a7e`）
 - [x] 执行 A：三套自动化加「禁读 >50KB 文件」规则（2026-09-11 完成）
-- [ ] 执行 B：核心脚本加 `--quiet`
+- [x] 执行 B：核心脚本加 `--quiet`（fetch_news.py / validate_urls.py，2026-09-11 完成，见 §一.5）
 - [x] 执行 C：token 数写入 .last_run_status.json（notify_status.py 新增 _token_dict，收尾状态文件写入结构化 token 字段；2026-09-11 完成）
-- [ ] 讨论 D：确认平台模型可选性与单价后再决策
+- [x] 执行 prompt 瘦身：新建 REFERENCE.md 外置白名单/七桶/低价值/境外规则，三套 prompt 加第 8 条「先 Grep REFERENCE.md」，删内联重复（2026-09-11 完成，见 §一.6）
+- [ ] 讨论 D：确认平台模型可选性与单价后再决策（等 C 遥测跑满两周）

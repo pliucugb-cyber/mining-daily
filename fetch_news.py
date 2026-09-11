@@ -31,6 +31,7 @@ fetch_news.py — 有色金属行业新闻自动爬虫（P3 产能瓶颈根本�
     python fetch_news.py --source smm             # 只跑指定源
     python fetch_news.py --fetch-detail           # 逐条抓正文补摘要（慢）
     python fetch_news.py --dry-run                # 只打印不落盘
+    python fetch_news.py --quiet                  # 安静模式：仅输出候选合计与抓取失败源
 """
 import argparse
 import datetime
@@ -1005,6 +1006,8 @@ def main():
     ap.add_argument("--fetch-detail", action="store_true",
                     help="逐条抓正文补摘要（慢，默认关）")
     ap.add_argument("--dry-run", action="store_true", help="只打印不落盘")
+    ap.add_argument("--quiet", action="store_true",
+                    help="安静模式：只输出候选合计与抓取失败源，不打印逐源表格与候选预览（自动化用）")
     ap.add_argument("--list-sources", action="store_true", help="列出源配置")
     args = ap.parse_args()
 
@@ -1020,10 +1023,11 @@ def main():
     keys = {k.strip() for k in args.source.split(",") if k.strip()}
     targets = [c for c in SOURCES if not keys or c["key"] in keys]
 
-    log.info("=" * 72)
-    log.info("fetch_news.py | 报告日期 %s | 回看 %d 天 | 源 %d 个"
-          % (args.report_date, args.days, len(targets)))
-    log.info("=" * 72)
+    if not args.quiet:
+        log.info("=" * 72)
+        log.info("fetch_news.py | 报告日期 %s | 回看 %d 天 | 源 %d 个"
+              % (args.report_date, args.days, len(targets)))
+        log.info("=" * 72)
 
     all_items, report = [], []
     for cfg in targets:
@@ -1031,18 +1035,27 @@ def main():
         report.append((cfg["key"], cfg["name"], len(items), status))
         all_items.extend(items)
 
-    log.info('')
-    log.info("%-12s %-22s %-5s %s" % ("KEY", "名称", "条数", "状态"))
-    for k, n, c, s in report:
-        log.info("%-12s %-22s %-5d %s" % (k, n, c, s))
-    log.info("-" * 72)
-    log.info("候选合计：%d 条（境外 %d 条）"
-          % (len(all_items), sum(1 for i in all_items if i.get("foreign"))))
+    total_cand = len(all_items)
+    foreign_cand = sum(1 for i in all_items if i.get("foreign"))
+
+    if not args.quiet:
+        log.info('')
+        log.info("%-12s %-22s %-5s %s" % ("KEY", "名称", "条数", "状态"))
+        for k, n, c, s in report:
+            log.info("%-12s %-22s %-5d %s" % (k, n, c, s))
+        log.info("-" * 72)
+    else:
+        # 安静模式：仅暴露抓取失败的源（属异常，须让 agent 知悉以便修复）
+        for k, n, c, s in report:
+            if str(s).startswith("fetch-fail"):
+                log.info("⚠️ 源 %s 抓取失败：%s" % (k, s))
+    log.info("候选合计：%d 条（境外 %d 条）" % (total_cand, foreign_cand))
 
     if args.dry_run or not all_items:
-        for i in all_items[:25]:
-            log.info("  [%s|%s] %s" % (i["fetch_src"], i["orig_date"], i["title"][:52]))
-            log.info("      %s" % i["url"][:96])
+        if not args.quiet:
+            for i in all_items[:25]:
+                log.info("  [%s|%s] %s" % (i["fetch_src"], i["orig_date"], i["title"][:52]))
+                log.info("      %s" % i["url"][:96])
         if not all_items:
             log.info("  （无候选：可能是当天确实无新内容，或源结构变化需调整 link_re）")
         return
@@ -1054,18 +1067,20 @@ def main():
                    "news": all_items}, f, ensure_ascii=False, indent=2)
     log.info('')
     log.info("候选池已写入：%s" % cand_path)
-    log.info("提示：AI 采编时读取该候选池挑选，境外条目（foreign=true）须走英文翻译规范。")
+    if not args.quiet:
+        log.info("提示：AI 采编时读取该候选池挑选，境外条目（foreign=true）须走英文翻译规范。")
 
     if args.merge:
         path, added, total = merge_into_month(all_items, args.report_date)
         log.info("已并入月度库：%s（新增 %d，总计 %d）" % (path, added, total))
 
-    log.info('')
-    log.info("候选条目预览（前 25 条）：")
-    for i in all_items[:25]:
-        flag = "🌍" if i.get("foreign") else "  "
-        log.info("  %s[%s] %s | %s" % (flag, i["orig_date"], i["title"][:50], i["source"]))
-        log.info("        %s" % i["url"][:92])
+    if not args.quiet:
+        log.info('')
+        log.info("候选条目预览（前 25 条）：")
+        for i in all_items[:25]:
+            flag = "🌍" if i.get("foreign") else "  "
+            log.info("  %s[%s] %s | %s" % (flag, i["orig_date"], i["title"][:50], i["source"]))
+            log.info("        %s" % i["url"][:92])
 
 
 if __name__ == "__main__":
