@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-2150" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-2209" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -731,6 +731,8 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .md-date{font-size:12px;color:var(--ink-500);overflow:hidden;text-overflow:ellipsis}
   .md-cat-bar{display:flex;gap:2px;overflow-x:auto;margin-top:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .md-cat-bar::-webkit-scrollbar{display:none}
+  /* 2026-09-11 优化：底部非首页 tab（价格/问/矿权/我的）隐藏顶部分类栏，避免与首页子导航重复 */
+  body.md-hide-catbar .md-cat-bar{display:none}
   /* 2026-09-11 视觉规范评审修复 A3：越档字号 15px → var(--fs-h3) 14px */
   .mctab{flex:0 0 auto;border:none;background:none;color:var(--ink-700);font-size:var(--fs-h3);padding:7px 6px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s}
   .mctab.active{color:var(--brand);font-weight:600}
@@ -2213,7 +2215,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=ca5d7248" defer></script>
 <script src="lme-data.js?v=5c44c071" defer></script>
 <script src="price-history.js?v=eb6d896f" defer></script>
-<script src="app.js?v=ad0d01c6" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=2961b464" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
