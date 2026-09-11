@@ -191,6 +191,23 @@ setTimeout(() => {
   try { window.__mdAppEvaluated = _ev; window.__mdBootGrace = _gr; } catch (e) {}
   check('app 已求值 → mdDegraded 返回空串（健康）', window.mdDegraded() === '');
 
+  console.log('\n===== ⑭ 区块宽限：加载窗口内不误报「部分区块未加载」（2026-09-11 二次体验修复）=====');
+  check('区块宽限标志 __mdRegionGrace 已声明', 'undefined' !== typeof window.__mdRegionGrace);
+  var _hotBody = doc.getElementById('hotListBody');
+  var _hotHtml = _hotBody ? _hotBody.innerHTML : null;
+  // 模拟「热榜异步渲染尚未完成」：容器仍是占位符（fetchHotNews 先 fetch 再退回本地，本就会晚于自愈轮次）
+  try { if (_hotBody) _hotBody.textContent = '加载中…'; } catch (e) {}
+  var _rg = window.__mdRegionGrace;
+  try { window.__mdRegionGrace = false; } catch (e) {}
+  check('宽限期内：区块未渲染也不判「卡住」（mdStuckRegions 为空）', window.mdStuckRegions().length === 0, 'len=' + window.mdStuckRegions().length);
+  try { window.mdSyncBanner(); } catch (e) {}
+  var _w2 = doc.getElementById('mdBootWarn');
+  check('宽限期内 mdSyncBanner 不挂「部分区块未加载」info 条', !(_w2 && _w2.getAttribute('data-md-level') === 'info' && /部分区块未加载/.test(_w2.textContent)));
+  try { window.__mdRegionGrace = true; } catch (e) {}
+  check('宽限期后：仍未渲染 → 判为卡住（热榜）', window.mdStuckRegions().length >= 1, 'len=' + window.mdStuckRegions().length);
+  // 还原
+  try { window.__mdRegionGrace = _rg; if (_hotBody && _hotHtml !== null) _hotBody.innerHTML = _hotHtml; } catch (e) {}
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));
