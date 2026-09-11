@@ -51,6 +51,15 @@ check('mdSafeStep 内部有 try/catch 且记录错误',
 check('app.js 在初始化结束时置 __mdInitDone 完成信标',
   /window\.__mdInitDone\s*=\s*true/.test(appSrc),
   '内联兜底据此判断是否需要补渲染');
+// 2026-09-11 第四轮（真根因）：app.js 必须能求值到底，并在最后一行为此留下信标。
+// 若顶层中途抛错（如 defer 语义下的 TDZ），信标会缺失 —— 这是线上唯一能一眼判定
+// 「脚本跑了一半」的观测点。见 test_ready_state_tdz.js。
+check('app.js 末行为「求值完成」信标 __mdAppEvaluated',
+  /window\.__mdAppEvaluated\s*=\s*true;/.test(appSrc),
+  '缺失即表示脚本中断在半路，后续所有顶层语句（含初始化链）都没执行');
+check('模块状态 newsSearchText 声明在文件前 60 行（防 TDZ 时序依赖）',
+  appSrc.split(/\r?\n/).slice(0, 60).some(l => l.indexOf("let newsSearchText=''") >= 0),
+  '原声明在第 ~695 行，会被更早的顶层调用读到 → ReferenceError: Cannot access …');
 // 2026-09-11 第三轮加固：不再让「初始化顺序问题」伪装成「某个功能坏了」
 check('热榜本地计算不再硬依赖 QA_ROWS',
   /var rows=\(window\.QA_ROWS&&window\.QA_ROWS\.length\)\?window\.QA_ROWS:\(\(window\.NEWS_DATA&&window\.NEWS_DATA\.news\)\|\|\[\]\)/.test(appSrc),

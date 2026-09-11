@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-0815" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-0833" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1641,6 +1641,12 @@ body.dark .mtab{color:var(--ink-300)}
     // 形如「步骤 → 错误信息」时，前半放 which、后半放 detail，便于一眼看出根因
     var s=el.querySelector('.md-boot-which'), d=el.querySelector('.md-boot-detail'), g=el.querySelector('.md-boot-diag');
     var head=(n.indexOf(' → ')>=0)?n.split(' → ')[0]:n;
+    // 2026-09-11：区分「区块没渲染出来」与「脚本报错但已降级」——前者要说清正在重试，
+    // 后者要说清内容可能不准并给出反馈入口，不要一律写成「有区块没加载出来」（会误导排查）。
+    var isRegion=/^区块未渲染/.test(n);
+    var lead=el.querySelector('.md-boot-lead'), tail=el.querySelector('.md-boot-tail');
+    if(lead)lead.textContent=isRegion?'⚠️ 有区块没加载出来':'⚠️ 页面脚本报错，已自动降级';
+    if(tail)tail.textContent=isRegion?'，页面正在自动重试。':'（部分内容可能不准，可点下方复制诊断信息）';
     if(s)s.textContent=head?('（'+head+'）'):'';
     if(d)d.textContent=(n.indexOf(' → ')>=0)?n.split(' → ').slice(1).join(' → '):'';
     if(g){ try{ g.textContent=mdDiagLine(); }catch(e){ g.textContent=''; } }
@@ -1775,6 +1781,7 @@ body.dark .mtab{color:var(--ink-300)}
       href:location.href,
       online:navigator.onLine,
       appjs:!!window.__mdBooted,
+      evaluated:!!window.__mdAppEvaluated,
       data:{news:(window.NEWS_DATA&&window.NEWS_DATA.news)?window.NEWS_DATA.news.length:'缺失',
             updated:(window.NEWS_DATA&&window.NEWS_DATA.updated)||'',
             lme:!!window.LME_DATA,
@@ -1789,7 +1796,7 @@ body.dark .mtab{color:var(--ink-300)}
     var d=null; try{ d=JSON.parse(mdDiagText()); }catch(e){}
     if(!d)return '';
     return 'build='+d.build
-      +' · app.js='+(d.appjs?'已执行':'未执行')
+      +' · app.js='+(d.appjs?(d.evaluated?'已执行':'执行中断'):'未执行')
       +' · 数据 news='+(d.data.news==='缺失'?'缺失':d.data.news+'条')
       +' lme='+(d.data.lme?'有':'无')+' 历史='+(d.data.priceHistory?'有':'无')
       +' · 区块 热榜'+(d.regions.hot?'OK':'空')+' 简报'+(d.regions.brief?'OK':'空')+' 要闻'+(d.regions.digest?'OK':'空')
@@ -1883,7 +1890,7 @@ body.dark .mtab{color:var(--ink-300)}
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
 <!-- 2026-09-11：脚本未加载/缓存陈旧时的可见逃生条（默认隐藏，由内联引信或 app.js 控制） -->
 <div id="mdBootWarn" role="alert" style="display:none;position:sticky;top:0;z-index:99999;background:#7f1d1d;color:#fff;font:14px/1.6 system-ui,-apple-system,'Microsoft YaHei',sans-serif;padding:10px 14px;gap:6px 10px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.25)">
-  <span>⚠️ 有区块没加载出来<span class="md-boot-which"></span>，页面正在自动重试。</span>
+  <span><span class="md-boot-lead">⚠️ 有区块没加载出来</span><span class="md-boot-which"></span><span class="md-boot-tail">，页面正在自动重试。</span></span>
   <span class="md-boot-detail" style="font-family:ui-monospace,Consolas,monospace;font-size:12px;opacity:.92"></span>
   <span class="md-boot-diag" style="flex-basis:100%;font-family:ui-monospace,Consolas,monospace;font-size:12px;opacity:.88"></span>
   <button type="button" onclick="window.mdRepairNow&&window.mdRepairNow(99)" style="background:#fff;color:#7f1d1d;border:0;border-radius:6px;padding:6px 12px;font-weight:600;cursor:pointer">立即重试加载</button>
