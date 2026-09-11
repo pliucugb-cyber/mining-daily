@@ -128,6 +128,21 @@ function regionText(doc, sel) {
       (() => { const b = doc.getElementById('mdBootWarn'); return !b || b.style.display === 'none'; })(),
       '全部区块就绪时不应再挂红条');
 
+    // 2026-09-11 回归：复现线上「良性报错却被挂红条」事故。
+    // 健康页（版块全部渲染、app.js 已执行）若曾记录过一条良性错误（如用户在 app.js 执行前
+    // 点了悬浮球 → ReferenceError: qaFabClick is not defined），横幅必须仍然隐藏，
+    // 且 mdDegraded() 返回空串——错误只在诊断里可见，不再单独挂红条。
+    window.__mdErrors.push('[脚本错误] Uncaught ReferenceError: qaFabClick is not defined');
+    // 等 12s 看门狗触发后（此刻已过 ≈8s，再等 5s）
+    await new Promise(r => setTimeout(r, 5000));
+    const benignBanner = doc.getElementById('mdBootWarn');
+    check('健康页 + 良性报错(__mdErrors 有条目) → 横幅仍隐藏',
+      !!benignBanner && benignBanner.style.display === 'none',
+      '__mdErrors=' + (window.__mdErrors || []).length + ' 条，但版块均已渲染');
+    check('健康页 mdDegraded() 返回空串（不报降级）',
+      typeof window.mdDegraded === 'function' && window.mdDegraded() === '',
+      '返回=' + JSON.stringify(window.mdDegraded ? window.mdDegraded() : 'N/A'));
+
     dom.window.close();
     server.close();
   }
