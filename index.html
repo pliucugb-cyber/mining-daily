@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-1512" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-2258" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1671,6 +1671,13 @@ body.dark .mtab{color:var(--ink-300)}
   // 真正的「app.js 永远没跑」由 12s 看门狗负责——宽限期(10s)短于看门狗，二者不冲突。
   window.__mdBootGrace=false;
   setTimeout(function(){ window.__mdBootGrace=true; }, 10000);
+  // ⑥ 区块宽限：热榜/简报等区块**本身是异步渲染**的（fetchHotNews 先 fetch 接口、
+  // 失败再退回本地计算，必然晚于 1.2s/3s 自愈轮次才吐出 DOM）。若不用宽限，自愈轮次会把
+  // 「此刻还没渲染出来」误判成「区块卡住」，于是加载时闪一条琥珀「部分区块未加载（热榜）」条
+  // 再自行消失（用户第二次反馈）。区块判定一律推迟到宽限期(10s)之后，由 12s+ 看门狗负责，
+  // 真正卡住的区块仍会被标出。
+  window.__mdRegionGrace=false;
+  setTimeout(function(){ window.__mdRegionGrace=true; }, 10000);
   // 第三方统计（GoatCounter 等）取不到属正常，不能拿它报警，否则横幅天天误报。
   function mdIgnoreUrl(u){
     return !u || /goatcounter|gc\.zgo\.at|google-analytics|doubleclick|hm\.baidu|cnzz/.test(String(u));
@@ -1750,6 +1757,7 @@ body.dark .mtab{color:var(--ink-300)}
   function mdStuckRegions(){
     try{
       if(!window.__mdAppEvaluated) return [];
+      if(!window.__mdRegionGrace) return [];      // 启动窗口内不判单组件卡住（异步区块还没渲染完属正常）
       if(mdMissingAssets().length) return [];   // 核心数据缺失归整页级，不在这里
       return mdPending();
     }catch(e){ return []; }
