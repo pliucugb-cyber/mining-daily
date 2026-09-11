@@ -210,6 +210,43 @@ setTimeout(() => {
     tc3.indexOf('<td>4</td>') >= 0 && tc3.indexOf('锂价持平') >= 0 && (tc3.match(/<td/g) || []).length === 2,
     'td=' + (tc3.match(/<td/g) || []).length + ' → ' + tc3.slice(0, 200));
 
+  console.log('\n===== Phase G P1：历史指代化 / meta 通路耗时 / 答案缓存 =====');
+  // G1 历史只用于指代消解（不延续样式）：消除「上轮写表格→本轮回表格」的跨机格式差异
+  check('P1 系统提示含【多轮上下文说明】且声明历史格式不作样式参考',
+    src.indexOf('【多轮上下文说明】') >= 0 && /不作[^。]*样式参考/.test(src));
+  // G2 答案缓存函数齐备
+  check('P1 答案缓存函数 qaCacheKey/qaCacheGet/qaCachePut 存在',
+    typeof window.qaCacheKey === 'function' && typeof window.qaCacheGet === 'function' && typeof window.qaCachePut === 'function');
+  // G3 直连路径也改为流式（与代理一致），并透传 temperature:0 / max_tokens:1500
+  const _sc = src.split('qaTryStreamOrJson(_url').length - 1;
+  check('P1 直连路径改为流式（qaTryStreamOrJson 调度 ≥2 处）', _sc >= 2, 'calls=' + _sc);
+  check('P1 直连 body stream:true',
+    src.indexOf("JSON.stringify({model:'deepseek-chat',messages:_dsMessages,max_tokens:1500,temperature:0,stream:true})") >= 0);
+  // G4 meta 行展示通路 / 模型 / 用时
+  check('P1 meta 元信息变量已声明且模板含 通路=/模型=/用时',
+    src.indexOf('var _qaPath=') >= 0 && /通路=/.test(src) && /模型=/.test(src) && /用时/.test(src));
+  // G5 缓存命中短路：不发起网络请求，meta 显示 通路=缓存
+  let gFetch = 0; const gSave = window.fetch;
+  window.QA_FLOAT_BUSY = false;
+  window.fetch = function () { gFetch++; return new Promise(function () {}); };
+  const gKey = window.qaCacheKey('P1缓存命中测试问题', '', '', '', 0, null);
+  try {
+    window.qaCachePut(gKey,
+      { text: '# 缓存命中\n这是缓存的回答', ctx: [], dateIntent: null, u: window.QA_UPDATED || '' });
+    process.stdout.write('DBG key=' + gKey + ' UPDATED=' + (window.QA_UPDATED || '') + ' got=' + JSON.stringify(window.qaCacheGet(gKey)) + '\n');
+    const gi = window.document.getElementById('qaFloatInput');
+    if (gi) gi.value = 'P1缓存命中测试问题';
+    window.qaFloatAsk();
+  } catch (e) { check('P1 缓存命中：qaFloatAsk 未抛错', false, e.message); }
+  window.fetch = gSave;
+  const gMetas = window.document.querySelectorAll('.qa-msg.ai .qa-msg-meta');
+  const gMeta = gMetas.length ? gMetas[gMetas.length - 1].textContent : '';
+  check('P1 缓存命中：未发起任何网络请求', gFetch === 0, 'fetchCalls=' + gFetch);
+  check('P1 缓存命中：meta 显示 通路=缓存', gMeta.indexOf('通路=缓存') >= 0, gMeta);
+  // G6 缓存守卫排除 retryMode / ctxOverride（「重新生成」可绕过缓存）
+  check('P1 缓存守卫排除 retryMode / ctxOverride',
+    /_qaCacheKey=\(!retryMode && !ctxOverride\)/.test(src) && /if\(_qaCacheKey && !retryMode\)/.test(src));
+
   console.log('\n===== JS 运行时错误 =====');
   check('无阻塞性 JS 错误', errors.length === 0, errors.slice(0, 3).join(' | '));
 
