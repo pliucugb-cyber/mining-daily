@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-2258" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-2323" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -173,7 +173,7 @@ body[data-filter-mode="history"] #archFavCount{display:none}
 body.dark .col-rail .expo-mini{background:var(--surface);border-color:var(--line-1)}
 body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
 /* 头部 */
-.header{background:#1a3a5c;color:#fff;border-radius: var(--r-lg);padding:var(--s5) var(--s5);margin-bottom:var(--s4)}
+.header{background:#1a3a5c;color:#fff;border-radius: var(--r-lg);padding:var(--s4) var(--s5);margin-bottom:var(--s4)}
 .header h1{font-size: var(--fs-display);display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap}
 .date-badge{background:var(--up);color:#fff;font-size: var(--fs-body);padding:3px var(--s3);border-radius: 20px;font-weight:600;white-space:nowrap}
 .header .sub{font-size: var(--fs-body);opacity:.85;margin-top:var(--s2)}
@@ -404,31 +404,6 @@ body.dark .lv-major{background:#3a1f1c;color:#ff8f8f}
 body.dark .au-official{background:#1b3145;color:var(--brand-ink)}
 body.dark .au-assoc{background:#2e1f3d;color:#c9a3e0}
 body.dark .au-media{background:var(--surface-3);color:var(--ink-500)}
-/* ==================== 阅读模式（9-06 新增：只留判断/要闻/价格/今日新闻）==================== */
-.reading-toggle{height:34px;border:none;border-radius:17px;padding:0 var(--s4);background:rgba(255,255,255,.16);color:#fff;font-size:var(--fs-h3);line-height:1;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-weight:600;transition:.2s;white-space:nowrap}
-.reading-toggle::before{content:'📖'}
-.reading-toggle:hover{background:rgba(255,255,255,.28)}
-.reading-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
-.reading-toggle.active{background:rgba(255,255,255,.9);color:var(--ink-900)}
-body.dark .reading-toggle{background:rgba(0,0,0,.28);color:#fff}
-body.dark .reading-toggle:hover{background:rgba(0,0,0,.45)}
-body.dark .reading-toggle.active{background:#2c5f8a;color:#fff}
-body.reading-mode .toc-sidebar,
-body.reading-mode #digestStrip,
-body.reading-mode #archiveSection,
-body.reading-mode #archivedFavSection,
-body.reading-mode #hotListSection,
-body.reading-mode #installGuideSection,
-body.reading-mode #mobileInstallBar,
-body.reading-mode .stats-bar,
-body.reading-mode #qaFab{display:none !important}
-body.reading-mode .container{max-width:820px}
-.reading-exit{position:sticky;top:8px;z-index:60;display:none;margin-bottom:var(--s3);font-size:var(--fs-body);font-weight:500;color:#fff;background:#0e7490;border-radius:var(--r-md);padding:var(--s2) var(--s3);cursor:pointer;box-shadow:0 2px 10px rgba(15,23,42,.18)}
-body.reading-mode .reading-exit{display:block}
-body.dark .reading-exit{background:#38bdf8;color:#0b1220}
-@media(max-width:600px){
-  .reading-exit{margin-bottom:var(--s2);font-size: var(--fs-meta)}
-}
 /* ==================== 价格卡点击 + 走势图弹层（9-04 新增）==================== */
 .price-card[data-slug]{cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
 .price-card[data-slug]:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(26,58,92,.14);border-color:var(--ink-900)}
@@ -645,7 +620,7 @@ body.dark .ai-empty, body.dark .ai-disabled{background:var(--surface);border-col
    页面骨架（背景、区块、新闻条目、价格卡、侧栏、按钮）缺配套样式，
    暗色下会大面积白底黑字 —— 这里补齐基础层，并新增右上角切换按钮。 */
 .header{position:relative}
-.header-actions{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:var(--s2);z-index:2}
+.header-actions{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:var(--s2);z-index:2}
 .theme-toggle{height:34px;border:none;border-radius: 17px;padding:3px;background:rgba(255,255,255,.16);color:#fff;font-size: var(--fs-h3);line-height:1;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:2px}
 .theme-toggle:hover{background:rgba(255,255,255,.28)}
 .theme-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
@@ -1358,7 +1333,7 @@ body.dark .filter-state{background:#123040;border-color:#1d3d4d;color:var(--ink-
 .pc-value, .pc-chg, .pc-unit, .stat-num, .toc-count, .toc-count-fresh, .sub-count, .day-group, .news-meta{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 /* 只在移动端放大，桌面鼠标操作维持原尺寸，避免视觉回归 */
 @media(max-width:1100px){
-  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.toc-main-item,.toc-back-top,.reading-toggle,#briefToggle,.mobile-install-close,.md-search-btn,.md-fav-btn,.nf-clear{min-height:44px}
+  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.toc-main-item,.toc-back-top,#briefToggle,.mobile-install-close,.md-search-btn,.md-fav-btn,.nf-clear{min-height:44px}
   /* 2026-09-11 视觉规范评审修复 G2A–G2D：图标按钮补 min-width:44px（G2E .nf-clear 仅补高——加宽会盖住输入文字，按报告改用热区策略） */
   .theme-toggle,.pwa-header-btn,#briefToggle,.mobile-install-close,.md-search-btn,.md-fav-btn{min-width:44px}
 }
@@ -2028,7 +2003,6 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
   <div class="header-actions" data-page-node-id="yJYZi46Jr7ZF8gVCztwhXK">
     <button class="theme-toggle" id="themeToggle" onclick="window.toggleTheme&&window.toggleTheme()" title="切换深色 / 浅色模式" aria-label="切换深色或浅色模式" data-page-node-id="2iDzxnPLAUp6us12HurPQU"><span class="theme-option light" data-page-node-id="Oaq0BbspbHbHEGiQqEAhXM">☀️</span><span class="theme-option dark" data-page-node-id="3WKWDNkc8RniCqHAgzYWdR">🌙</span></button>
     <button class="pwa-header-btn" id="pwaHeaderBtn" type="button" title="将本页安装到电脑桌面" hidden data-page-node-id="GNGgVLBi3LF8M1CcNASx0d">💻 添加到桌面</button>
-    <button class="reading-toggle" id="readingToggle" type="button" onclick="window.toggleReadingMode&&window.toggleReadingMode()" title="只显示今日简报、金属价格与今日新闻" data-page-node-id="PUjIdpQMuWEUqYq7W7gcgy">阅读</button>
   </div>
   <h1 data-page-node-id="S5DUV8BO8QSMOdwBtUTJ83">⛏️ 矿业新闻日报 <span class="date-badge" data-page-node-id="hCCkUOj51jKh8M4hgHwkAC">2026年09月11日 星期五</span></h1>
 </div>
@@ -2038,7 +2012,6 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
     <span class="brief-badge" data-page-node-id="Sujifs7ChkDDi6nYimkrhV">情报</span>
     <span class="brief-title" data-page-node-id="iHgpDJRQJWfdGY7BClClAG">今日简报</span>
     <span class="brief-sub" id="briefSub" data-page-node-id="dSAFjxok9U4JQ8fA9coGxX"></span>
-    <span class="brief-date" id="briefDate" data-page-node-id="7Te0Yh0KB8bp3DsyQTk9T1"></span>
     <button id="briefToggle" type="button" aria-label="折叠或展开简报" title="折叠/展开">▾</button>
   </div>
   <div class="brief-card" data-page-node-id="DL9ezeqD58z9kGQxMZhKPR">
@@ -2046,7 +2019,6 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
     <button class="brief-more" id="briefMore" type="button" hidden data-page-node-id="0mU25b5YB8lNqFehLN2Wgk">展开全部</button>
   </div>
 </div>
-<div class="reading-exit" id="readingExitBar" role="button" tabindex="0" onclick="window.toggleReadingMode&&window.toggleReadingMode()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.toggleReadingMode&&window.toggleReadingMode();}" title="退出阅读模式" data-page-node-id="Zyus0JiMMHAPp1HSgx9GJf">阅读模式：只显示今日简报、金属价格与今日新闻　·　点击此处或按 Esc 退出 ✕</div>
 <!-- ==================== 今日要闻（9-04 新增，每日自动提取 3~5 条关键信息）==================== -->
 <div class="digest-strip" id="digestStrip" data-page-node-id="FJwnxoUlMQmkEFXOTb8Ajz">
   <div class="digest-head" data-page-node-id="SHylSejGak9rsOaXN7y5vI">

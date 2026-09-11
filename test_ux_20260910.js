@@ -59,28 +59,14 @@ setTimeout(() => {
   const missing = [...used].filter(n => !defined.has(n));
   ok('所有 var(--x) 均有定义（无悬空引用）', missing.length === 0, missing.length ? '悬空: ' + missing.join(', ') : used.size + ' 个引用全部有定义');
 
-  console.log('\n===== ② P0-2 阅读模式 =====');
-  const btn = d.getElementById('readingToggle');
-  ok('阅读入口 #readingToggle 存在', !!btn);
-  ok('阅读入口不再带 hidden（此前是死功能）', btn && !btn.hasAttribute('hidden'));
-  ok('CSS 中阅读态显示退出条', /body\.reading-mode\s+\.reading-exit\{display:block\}/.test(html));
-  const bar = d.getElementById('readingExitBar');
-  ok('退出条 #readingExitBar 存在', !!bar);
-  ok('退出条整条可点击（onclick）', bar && /toggleReadingMode\(\)/.test(bar.getAttribute('onclick') || ''));
-  ok('退出条可键盘操作（role+tabindex+onkeydown）',
-    bar && bar.getAttribute('role') === 'button' && bar.getAttribute('tabindex') === '0' && /Enter/.test(bar.getAttribute('onkeydown') || ''));
-  ok('退出条 sticky 常驻（position:sticky）', /\.reading-exit\{position:sticky/.test(html));
-  ok('退出条文案含退出指引', bar && /退出/.test(bar.textContent || ''), (bar ? bar.textContent : '').trim().slice(0, 40));
-  ok('restoreReadingMode 已解除停用（无裸 return 开头）',
-    !/function restoreReadingMode\(\)\{\s*return;/.test(html));
-  // 运行时：点击入口 → 进入阅读态 → 再点退出
-  if (btn) {
-    btn.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
-    ok('点击后进入阅读态', d.body.classList.contains('reading-mode'));
-    ok('进入后按钮文案变为「退出」', /退出/.test(btn.textContent || ''), btn.textContent);
-    btn.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
-    ok('再次点击退出阅读态', !d.body.classList.contains('reading-mode'));
-  }
+  console.log('\n===== ② 阅读模式已移除（9-11 用户要求）=====');
+  ok('阅读入口 #readingToggle 已删除', !d.getElementById('readingToggle'));
+  ok('退出条 #readingExitBar 已删除', !d.getElementById('readingExitBar'));
+  ok('全局函数 toggleReadingMode 已移除', typeof w.toggleReadingMode === 'undefined');
+  ok('全局函数 restoreReadingMode 已移除', typeof w.restoreReadingMode === 'undefined');
+  ok('CSS 中不再含阅读态规则 body.reading-mode', !/body\.reading-mode/.test(html));
+  ok('CSS 中不再含 .reading-toggle 样式', !/\.reading-toggle/.test(html));
+  ok('CSS 中不再含 .reading-exit 样式', !/\.reading-exit/.test(html));
 
   console.log('\n===== ③ P0-3 搜索 0 命中空态 =====');
   ok('mdSyncSearchEmpty 已定义', typeof w.mdSyncSearchEmpty === 'function');
