@@ -136,6 +136,28 @@ setTimeout(() => {
   check('上滑后重现', shownUp);
   check('5px 反向抖动不触发切换（12px 滞后）', noFlick);
 
+  console.log('\n===== ⑪ 底部导航：首页改名 + 非首页 tab 隐藏顶部分类栏（2026-09-11 优化）=====');
+  const homeTab = doc.querySelector('#mobileTabBar .mtab[data-go="home"]');
+  check('底部主导航已注入（#mobileTabBar）', !!homeTab);
+  const homeLabel = homeTab ? ((homeTab.querySelector('span:last-child') || {}).textContent || '') : '';
+  check('底部首页 tab 标签为「首页」（原「推荐」已改名，避免与顶部分类重复）', homeLabel === '首页', '实际「' + homeLabel + '」');
+  const topCats = doc.querySelectorAll('#mdTop .mctab');
+  check('顶部分类栏仍有 4 个分类（推荐/热榜/往期/会议）', topCats.length === 4, '实际 ' + topCats.length);
+  function clickGo(go){ const b = doc.querySelector('#mobileTabBar .mtab[data-go="' + go + '"]'); if (b) b.dispatchEvent(new window.Event('click', { bubbles: true })); }
+  check('初始（首页）顶部分类栏可见（无 md-hide-catbar）', !doc.body.classList.contains('md-hide-catbar'));
+  clickGo('price');
+  check('点击价格 tab → 隐藏顶部分类栏（body.md-hide-catbar）', doc.body.classList.contains('md-hide-catbar'));
+  check('隐藏规则 CSS 存在 body.md-hide-catbar .md-cat-bar{display:none}', /body\.md-hide-catbar \.md-cat-bar\{display:none\}/.test(html));
+  clickGo('rights');
+  check('点击矿权 tab → 隐藏顶部分类栏', doc.body.classList.contains('md-hide-catbar'));
+  clickGo('qa');
+  check('点击问 tab → 隐藏顶部分类栏', doc.body.classList.contains('md-hide-catbar'));
+  clickGo('mine');
+  check('点击我的 tab → 隐藏顶部分类栏', doc.body.classList.contains('md-hide-catbar'));
+  clickGo('home');
+  check('切回首页 tab → 恢复显示顶部分类栏', !doc.body.classList.contains('md-hide-catbar'));
+  check('切回首页后 body[data-md-cat=tuijian]', doc.body.getAttribute('data-md-cat') === 'tuijian');
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));

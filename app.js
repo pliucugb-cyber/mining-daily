@@ -2601,7 +2601,7 @@ function mdMobileTabBar(){
   var SVG_QA='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5z"/></svg>';
   var bar=document.createElement('nav');
   bar.id='mobileTabBar'; bar.setAttribute('aria-label','移动端主导航');
-  bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">'+SVG_HOME+'</span><span>推荐</span></button>'
+  bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">'+SVG_HOME+'</span><span>首页</span></button>'
     +'<button class="mtab" data-go="price"><span class="mi">'+SVG_PRICE+'</span><span>价格</span></button>'
     +'<button class="mtab" data-go="qa"><span class="mi">'+SVG_QA+'</span><span>问</span></button>'
     +'<button class="mtab" data-go="rights"><span class="mi">'+SVG_RIGHTS+'</span><span>矿权</span></button>'
@@ -2620,6 +2620,8 @@ function mdMobileTabBar(){
   bar.addEventListener('click',function(e){
     var b=e.target.closest('.mtab'); if(!b) return;
     var go=b.getAttribute('data-go');
+    // 2026-09-11 优化：仅首页 tab 显示顶部分类栏，其余 tab 隐藏（分类栏是首页子导航，重复显示无意义）
+    document.body.classList.toggle('md-hide-catbar', go!=='home');
     if(go==='mine'){ sheet.hidden=!sheet.hidden; setActive(sheet.hidden?null:'mine'); return; }
     sheet.hidden=true;
     if(go!=='qa' && typeof qaFloatClose==='function'){ qaFloatClose(); }
@@ -2649,6 +2651,7 @@ function mdMobileTabBar(){
     sheet.hidden=true; setActive(null);
   });
   setActive('home');
+  document.body.classList.remove('md-hide-catbar');
 }
 // ⑧ 我的面板：内联安装分步卡（按 iOS/Android 自动识别；已安装置灰）
 function mdRenderInstallCard(){
