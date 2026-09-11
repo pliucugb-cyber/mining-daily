@@ -2481,6 +2481,8 @@ function triggerPwaInstall(){
 // 分类选择：写入 body[data-md-cat]，CSS 据此显隐对应区块；收藏/浏览记录视图(data-filter-mode)下不干预
 function mdSelectCat(cat){
   var top=document.getElementById('mdTop'); if(!top) return;
+  document.body.classList.remove('md-search-open');
+  document.body.classList.remove('md-top-hidden');
   document.body.setAttribute('data-md-cat',cat);
   [].forEach.call(top.querySelectorAll('.mctab'),function(b){
     var on=b.getAttribute('data-cat')===cat;
@@ -2498,14 +2500,32 @@ function mdSyncNav(cat){
     b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go);
   });
 }
+// ④ 推荐/往期按日期硬切分：标记往期中与推荐追更窗口重叠的条目（渲染期过滤，不改生成脚本）
+function mdMarkArchiveDups(){
+  try{
+    var today=document.getElementById('todaySection'); if(!today) return;
+    var set={};
+    today.querySelectorAll('.news-item .news-meta').forEach(function(m){ var mm=m.textContent.match(/(\d{2})-(\d{2})/); if(mm) set[mm[1]+'-'+mm[2]]=1; });
+    var arc=document.getElementById('archiveSection'); if(!arc) return;
+    arc.querySelectorAll('.news-item').forEach(function(it){
+      var m=it.querySelector('.news-meta'); if(!m) return;
+      var mm=m.textContent.match(/(\d{2})-(\d{2})/);
+      if(mm && set[mm[1]+'-'+mm[2]]) it.classList.add('md-dup');
+    });
+  }catch(e){}
+}
 // 顶部搜索图标：定位到推荐页资讯检索条并展开筛选 chip
 function mdOpenSearch(){
+  document.body.classList.remove('md-top-hidden');
   if(document.body.getAttribute('data-md-cat')!=='tuijian'){ mdSelectCat('tuijian'); }
   var bar=document.getElementById('newsFilterBar');
-  if(bar){ try{ bar.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} }
-  var chips=document.getElementById('nfChips'); if(chips) chips.classList.add('show');
-  var tog=document.getElementById('nfToggle'); if(tog) tog.setAttribute('aria-expanded','true');
-  var s=document.getElementById('nfSearch'); if(s){ try{ s.focus(); }catch(e){} }
+  if(bar){
+    var open=document.body.classList.toggle('md-search-open');
+    if(open){
+      var chips=document.getElementById('nfChips'); if(chips) chips.classList.add('show');
+      var s=document.getElementById('nfSearch'); if(s){ try{ s.focus(); }catch(e){} }
+    }
+  }
 }
 
 // 顶栏收藏/历史红点：集合非空即显示（移动端常驻图标上的待查看提示）
@@ -2514,6 +2534,15 @@ function mdUpdateFavBadges(){
     var fb=document.getElementById('mdFavBadge'); if(fb) fb.classList.toggle('show', !!(window.getFavs&&getFavs().length>0));
     var hb=document.getElementById('mdHistBadge'); if(hb) hb.classList.toggle('show', !!(window.getHistory&&getHistory().length>0));
   }catch(e){}
+}
+// ① 顶栏智能吸顶：下滚隐藏、上滑/到顶重现（阅读时让出空间，分类栏随顶栏整体可见）
+var mdTopLastY=0, mdTopTick=false;
+function mdTopOnScroll(){
+  var y=window.pageYOffset||document.documentElement.scrollTop||0;
+  if(y<80){ document.body.classList.remove('md-top-hidden'); mdTopLastY=y; return; }
+  if(y>mdTopLastY+6){ document.body.classList.add('md-top-hidden'); }
+  else if(y<mdTopLastY-6){ document.body.classList.remove('md-top-hidden'); }
+  mdTopLastY=y;
 }
 // 顶部 App Bar + 分类 Tab（注入到 body 最前，sticky 吸顶；skip-link 之后以保证其为 body 首个元素）
 function mdMobileTopTabs(){
@@ -2556,6 +2585,7 @@ function mdMobileTopTabs(){
   document.addEventListener('click',function(e){ if(e.target.closest && (e.target.closest('.btn-star')||e.target.closest('.news-title'))){ setTimeout(mdUpdateFavBadges,0); } });
   if(window.addEventListener) window.addEventListener('storage', mdUpdateFavBadges);
   mdSelectCat('tuijian');
+  try{ window.addEventListener('scroll',function(){ if(!mdTopTick){ mdTopTick=true; requestAnimationFrame(function(){ mdTopOnScroll(); mdTopTick=false; }); } },{passive:true}); }catch(e){}
 }
 
 // 底部 4 主导航 Tab（首页/价格/矿权/我的，内联 SVG 图标；AI 改回右下悬浮球，搜索提到顶栏）
@@ -2579,7 +2609,9 @@ function mdMobileTabBar(){
     '<button data-act="theme">🌓 深色 / 浅色</button>'+
     '<div class="mine-install" id="mineInstallCard"></div>'+
     '<button data-act="top">⬆️ 返回顶部</button>';
+  sheet.innerHTML+='<div class="mine-meta" id="mineMeta"></div>';
   document.body.appendChild(bar); document.body.appendChild(sheet);
+  try{ var _dm=document.getElementById('mineMeta'); if(_dm){ var _du=document.getElementById('dataUpdatedAt'); _dm.textContent='数据更新时间：'+(_du?_du.textContent.trim():'—')+' · 信息聚合展示，版权归原机构所有'; } }catch(e){}
   mdRenderInstallCard();
   function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go); }); }
   bar.addEventListener('click',function(e){
@@ -2746,6 +2778,7 @@ window.addEventListener('DOMContentLoaded',function(){
   // 移动端：顶部 App Bar + 分类 Tab + 底部 4 全局动作 Tab（仅 ≤768px 通过 CSS 显示；桌面隐藏）
   mdMobileTopTabs();
   mdMobileTabBar();
+  mdMarkArchiveDups();
   // ⑨ 会议会展区块注入；⑥ 移动端问答头部返回箭头
   mdInitMeetingSection();
   mdQaMobileBackArrow();
@@ -4663,7 +4696,8 @@ function setupNewsFilterBar(){
     applyFilter(); updateNfCount();
   });
   if(cl)cl.addEventListener('click',function(){
-    input.value=''; newsSearchText=''; cl.hidden=true;
+    if(!input.value){ document.body.classList.remove('md-search-open'); return; }
+    input.value=''; newsSearchText=''; if(!document.body.classList.contains('md-search-open')) cl.hidden=true;
     document.querySelectorAll('.nf-chip').forEach(function(x){x.classList.toggle('active', x.getAttribute('data-kw')==='');});
     applyFilter(); updateNfCount();
   });

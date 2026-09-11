@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-1404" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-1512" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -717,9 +717,11 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   #mineSheet[hidden]{display:none}
   #mineSheet button{text-align:left;border:none;background:none;color:var(--ink-900);font-size:var(--fs-body);padding:var(--s3) var(--s2);border-radius:var(--r-md);cursor:pointer}
   #mineSheet button:active{background:var(--surface-2)}
+  .mine-meta{font-size:var(--fs-meta);color:var(--ink-500);line-height:1.5;padding:var(--s2) 0 0;margin-top:var(--s1);border-top:1px solid var(--line-2)}
   /* ===== P0 移动端结构重构（2026-09-10）：轻量 App Bar + 6 分类 Tab + 底部 4 全局动作 Tab ===== */
   .header{display:none!important}
-  #mdTop{position:sticky;top:env(safe-area-inset-top,0px);z-index:230;background:var(--surface);border-bottom:1px solid var(--line-2);box-shadow:0 1px 3px rgba(15,23,42,.06);padding:calc(env(safe-area-inset-top,0px) + 4px) var(--s3) 6px;display:block}
+  #mdTop{position:sticky;top:env(safe-area-inset-top,0px);z-index:230;background:var(--surface);border-bottom:1px solid var(--line-2);box-shadow:0 1px 3px rgba(15,23,42,.06);padding:calc(env(safe-area-inset-top,0px) + 4px) var(--s3) 6px;display:block;transition:transform .22s ease,margin-bottom .22s ease}
+  body.md-top-hidden #mdTop{transform:translateY(-100%);margin-bottom:calc(-1 * var(--md-top-h,96px))}
   .md-top-brand{display:flex;align-items:baseline;gap:8px;white-space:nowrap;overflow:hidden}
   .md-brand{font-size:var(--fs-h3);font-weight:600;color:var(--ink-900);letter-spacing:.3px}
   .md-date{font-size:12px;color:var(--ink-500);overflow:hidden;text-overflow:ellipsis}
@@ -751,13 +753,18 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   body[data-md-cat="rights"]:not([data-filter-mode]) #rightsSection{display:block!important}
   body[data-md-cat="archive"]:not([data-filter-mode]) #archiveSection{display:block!important}
   body[data-md-cat="meeting"]:not([data-filter-mode]) #meetingSection{display:block!important}
+  /* ③ 页脚仅「推荐」下显示；其余分类下隐藏数据来源+版权 */
+  body[data-md-cat]:not([data-md-cat="tuijian"]):not([data-filter-mode]) .footer{display:none!important}
+  /* ④ 往期 tab 下隐藏与推荐追更窗口重叠的条目（按日期硬切分） */
+  body[data-md-cat="archive"] #archiveSection .news-item.md-dup{display:none!important}
   /* 检索条吸顶位置让位于分类栏（高度由 JS 写入 --md-top-h） */
-  .news-filter-bar{top:calc(var(--md-top-h,96px) + env(safe-area-inset-top,0px))}
-  /* ⑤ 底部「问」做成发光球（区别于其它 tab），轻微脉冲 */
-  .mtab[data-go="qa"] .mi{width:46px;height:46px;border-radius:50%;margin-top:-16px;background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 55%,#22d3ee 100%);color:#fff;box-shadow:0 6px 18px rgba(99,102,241,.45),0 0 0 4px rgba(99,102,241,.12);animation:qaOrbPulse 2.6s ease-in-out infinite}
-  .mtab[data-go="qa"].active .mi{background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 55%,#06b6d4 100%)}
-  .mtab[data-go="qa"] span{font-size:10px}
-  @keyframes qaOrbPulse{0%,100%{box-shadow:0 6px 18px rgba(99,102,241,.45),0 0 0 4px rgba(99,102,241,.12)}50%{box-shadow:0 8px 24px rgba(139,92,246,.6),0 0 0 9px rgba(139,92,246,.16)}}
+  /* ⑤ 移动端：检索条改为搜索图标触发的顶部面板（默认隐藏，不再常驻吸顶） */
+  #newsFilterBar{position:fixed;top:calc(var(--md-top-h,96px) + env(safe-area-inset-top,0px));left:0;right:0;z-index:225;display:none;margin:var(--s2) 0;box-shadow:0 6px 20px rgba(15,23,42,.14);border-radius:var(--r-lg)}
+  body.md-search-open #newsFilterBar{display:block;animation:qaFloatIn .18s ease}
+  body.md-search-open #nfClear{display:inline-flex!important}
+  /* ⑤ 底部「问」改为与其它 tab 一致的平铺样式：单一品牌色，无渐变/发光/脉冲 */
+  .mtab[data-go="qa"]{color:var(--brand)}
+  .mtab[data-go="qa"].active{color:var(--brand)}
   /* ⑥ 问答面板移动端沉浸式全屏 + 进入动画 + 返回箭头（头部不再可拖动） */
   #qaFloat.open{animation:qaFloatIn .22s ease}
   .qa-float-head{cursor:default}
@@ -1459,10 +1466,10 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   /* P0-3：底部导航内联 SVG 图标尺寸 */
   .mtab .mi svg{width:22px;height:22px;display:block}
   /* 顶部搜索按钮 */
-  .md-search-btn{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:none;background:var(--surface-2);color:var(--ink-700);border-radius:50%;cursor:pointer}
+  .md-search-btn{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:none;background:var(--surface-2);color:var(--ink-700);border-radius:50%;cursor:pointer}
   .md-search-btn:active{background:var(--surface-3)}
   /* P1：顶栏收藏/历史常驻图标 + 未读红点 */
-  .md-fav-btn{position:relative;margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:none;background:var(--surface-2);color:var(--ink-700);border-radius:50%;cursor:pointer}
+  .md-fav-btn{position:relative;margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:none;background:var(--surface-2);color:var(--ink-700);border-radius:50%;cursor:pointer}
   .md-fav-btn:active{background:var(--surface-3)}
   .md-fav-btn svg{width:20px;height:20px;display:block}
   .md-search-btn{margin-left:6px}

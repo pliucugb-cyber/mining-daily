@@ -72,9 +72,10 @@ setTimeout(() => {
   check('price tab 展示规则保留 #priceStrip', /data-md-cat="price"[^}]*#priceStrip\{display:block!important\}/.test(html));
   check('安装引导整段在手机隐藏', /#installGuideSection\{display:none!important\}/.test(html));
 
-  console.log('\n===== ⑤ 问按钮发光球（CSS 断言）=====');
-  check('底部问 tab 圆形渐变发光球样式存在', /\.mtab\[data-go="qa"\] \.mi\{[^}]*border-radius:50%[^}]*qaOrbPulse/.test(html));
-  check('发光脉冲动画 keyframes 存在', /@keyframes qaOrbPulse\{/.test(html));
+  console.log('\n===== ⑤ 问按钮：与其它 tab 一致的平铺样式（无渐变/发光/脉冲）=====');
+  check('问 tab 改为平铺一致样式（单一品牌色）', /\.mtab\[data-go="qa"\]\{color:var\(--brand\)\}/.test(html));
+  check('问 tab 不再使用渐变发光球', !/\.mtab\[data-go="qa"\] \.mi\{[^}]*qaOrbPulse/.test(html));
+  check('发光脉冲动画 keyframes 已移除', !/@keyframes qaOrbPulse\{/.test(html));
 
   console.log('\n===== ⑥ 问答全屏 + 返回箭头 =====');
   check('手机端问答面板 100vw/100dvh 全屏', /#qaFloat\{top:0;left:0;right:auto;bottom:auto;width:100vw;height:100dvh/.test(html));
