@@ -47,6 +47,20 @@ def _token_line():
         return ''
 
 
+def _token_dict():
+    """结构化 token 用量，写入 .last_run_status.json 供跨日趋势；失败/无记录返回 None。"""
+    try:
+        from token_usage import summarize
+        sid = os.environ.get('CODEBUDDY_SESSION_ID', '')
+        s = summarize(sid)
+        if s['calls'] == 0:
+            return None
+        return {'input': s['input'], 'output': s['output'], 'total': s['total'],
+                'cache': s['cache'], 'calls': s['calls']}
+    except Exception:
+        return None
+
+
 def _play(sound):
     try:
         ps = f'(New-Object System.Media.SoundPlayer \'{sound}\').PlaySync()'
@@ -64,6 +78,9 @@ def _write_status(status, task, msg):
         'time': time.strftime('%Y-%m-%d %H:%M:%S'),
         'ts': int(time.time()),
     }
+    tk = _token_dict()
+    if tk:
+        data['token'] = tk
     try:
         STATUS.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
     except Exception as e:
