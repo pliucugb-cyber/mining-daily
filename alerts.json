@@ -1,7 +1,7 @@
 {
  "date": "2026-09-11",
  "has_history": true,
- "history_days": 15,
+ "history_days": 14,
  "alerts": [
   {
    "commodity": "锌",
@@ -12,14 +12,38 @@
    "type": "price"
   },
   {
+   "commodity": "白银",
+   "market": "上金所 Ag(T+D)",
+   "move": "-5.07%",
+   "severity": "high",
+   "detail": "白银（上金所 Ag(T+D)）最新收报 15,586.00，单日 -5.07%（数据日期 2026-09-11）。",
+   "type": "price"
+  },
+  {
+   "commodity": "碳酸锂",
+   "market": "GFEX 主连",
+   "move": "-4.59%",
+   "severity": "medium",
+   "detail": "碳酸锂（GFEX 主连）最新收报 134,820.00，单日 -4.59%（数据日期 2026-09-11）。",
+   "type": "price"
+  },
+  {
    "commodity": "铜",
    "market": "LME 03",
    "move": "-4.25%",
    "severity": "medium",
    "detail": "LME 铜（LME 03）最新收报 14,182.50 美元/吨，单日 -4.25%（数据日期 09-10）。",
    "type": "price"
+  },
+  {
+   "commodity": "沪锡",
+   "market": "SHFE 主连",
+   "move": "-3.64%",
+   "severity": "medium",
+   "detail": "沪锡（SHFE 主连）最新收报 410,290.00，单日 -3.64%（数据日期 2026-09-11）。",
+   "type": "price"
   }
  ],
- "summary": "今日异动 2 项：锌 -5.14%（LME 03）；铜 -4.25%（LME 03）。",
+ "summary": "今日异动 5 项：锌 -5.14%（LME 03）；白银 -5.07%（上金所 Ag(T+D)）；碳酸锂 -4.59%（GFEX 主连）；铜 -4.25%（LME 03）；沪锡 -3.64%（SHFE 主连）。",
  "max_severity": "high"
 }
