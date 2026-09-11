@@ -1614,17 +1614,21 @@ const TAG_DICT=[
 {t:'人工智能',c:'tech'},{t:'智能制造',c:'tech'},{t:'数字化',c:'tech'},{t:'智能',c:'tech'},
 {t:'创新',c:'tech'},{t:'科技',c:'tech'},{t:'技术',c:'tech'}
 ];
+// 2026-09-11 视觉评审 F6：本表**只留文案**。配色已迁到 index.html 的 .tag-chip.tc-<类别> 段
+// （亮/暗各一套，全部配对 ≥4.5）。原先在这里维护 color/bg 再于 injectTags() 内联下发，
+// 内联样式恒压过 body.dark .tag-chip → 暗色下 11 组配色全部失效；且亮色另有 4 组不达 AA。
+// 新增类别：在此加一项 label，并在 index.html 补 .tc-<类别> 的亮、暗两条规则。
 const TAG_STYLE={
-strategy:{color:'#b45309',bg:'#fef3c7',label:'战略'},
-metal:{color:'#d35400',bg:'#fdf2e9',label:'矿种'},
-rights:{color:'#2980b9',bg:'#ebf5fb',label:'矿权'},
-explore:{color:'#16a085',bg:'#e8f8f5',label:'勘查'},
-capital:{color:'#c0392b',bg:'#fdedec',label:'资本'},
-policy:{color:'#8e44ad',bg:'#f4ecf7',label:'政策'},
-market:{color:'#0e7490',bg:'#e0f2fe',label:'市场'},
-edu:{color:'#6d4c41',bg:'#efebe9',label:'培训'},
-global:{color:'#475569',bg:'#f1f5f9',label:'国际'},
-tech:{color:'#0f766e',bg:'#ccfbf1',label:'科技'}
+strategy:{label:'战略'},
+metal:{label:'矿种'},
+rights:{label:'矿权'},
+explore:{label:'勘查'},
+capital:{label:'资本'},
+policy:{label:'政策'},
+market:{label:'市场'},
+edu:{label:'培训'},
+global:{label:'国际'},
+tech:{label:'科技'}
 };
 // 展示优先级（2026-09-06）：每条只展示 2 个标签，优先挑"信息量高"的类别——
 // 战略专项 > 矿种 > 政策/矿权 > 其他泛化词（科技、市场…泛化词不占位，避免满屏同色标签）
@@ -1870,14 +1874,14 @@ function injectTags(){
     const wrap=document.createElement('div');
     wrap.className='news-tags';
     tags.slice(0,TAG_MAX_SHOW).forEach(tg=>{   // 只展示最具代表性的前 N 个，其余仍参与筛选
-      const st=TAG_STYLE[tg.c]||{color:'#7f8c8d',bg:'#f4f6f7',label:'关键词'};
+      const st=TAG_STYLE[tg.c]||{label:'关键词'};
       const chip=document.createElement('span');
-      chip.className='tag-chip';
+      // 2026-09-11 F6：配色改由 CSS 类驱动（.tc-<类别>），不再内联注入 color/background。
+      // 内联样式恒压过 body.dark .tag-chip，是暗色 11 组配色全部失效的根因。
+      chip.className='tag-chip tc-'+(TAG_STYLE[tg.c]?tg.c:'default');
       chip.textContent='#'+tg.t;
       chip.dataset.tag=tg.t;
       chip.title=st.label+'：'+tg.t+'（点击筛选同类新闻）';
-      chip.style.color=st.color;
-      chip.style.background=st.bg;
       wrap.appendChild(chip);
     });
     const head=el.querySelector('.news-head');

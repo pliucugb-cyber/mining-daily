@@ -1920,6 +1920,43 @@ body.dark .mtab{color:var(--ink-300)}
   }
 })();
 </script>
+<!-- ===== 2026-09-11 视觉评审 F6：关键词标签配色改为类驱动（亮/暗两套）=====
+     背景：app.js injectTags() 原先把 TAG_STYLE 的 color/bg 以 chip.style.color/background
+     内联注入；内联样式恒压过任何选择器（含 body.dark .tag-chip），于是暗色模式下 11 组
+     标签配色全部失效、统一回落到 --surface-3/--ink-500（把彩色标签的语义区分抹平）；
+     另外亮色下 metal(3.78) / rights(3.89) / explore(3.00) / default(3.21) 四组不达 AA。
+     现状：.tag-chip 只管结构（见上方 230 行），配色全部由 `.tag-chip.tc-<类别>` 承担。
+     实测对比度：亮 4.51–6.92；暗 5.14–9.92 —— 11 组 × 2 套全部 ≥4.5。
+     ⚠️ 新增标签类别时：app.js 的 TAG_STYLE 加一项 label，此处补亮、暗各一条。
+     选择器写成 `body.dark .tag-chip.tc-X`（0,3,1）以确保压过 `body.dark .tag-chip`（0,2,1）。 -->
+<style>
+/* 亮色 */
+.tag-chip.tc-strategy{color:#b45309;background:#fef3c7}
+.tag-chip.tc-metal{color:#ba4a00;background:#fdf2e9}
+.tag-chip.tc-rights{color:#2573a6;background:#ebf5fb}
+.tag-chip.tc-explore{color:#117c67;background:#e8f8f5}
+.tag-chip.tc-capital{color:#c0392b;background:#fdedec}
+.tag-chip.tc-policy{color:#8e44ad;background:#f4ecf7}
+.tag-chip.tc-market{color:#0e7490;background:#e0f2fe}
+.tag-chip.tc-edu{color:#6d4c41;background:#efebe9}
+.tag-chip.tc-global{color:#475569;background:#f1f5f9}
+.tag-chip.tc-tech{color:#0f766e;background:#ccfbf1}
+.tag-chip.tc-default{color:#667172;background:#f4f6f7}
+/* 暗色：底色取与 --bg/--surface 同族的深色调，前景取同色相亮色 */
+body.dark .tag-chip.tc-strategy{color:#fbbf24;background:#3a2c14}
+body.dark .tag-chip.tc-metal{color:#fb923c;background:#3b2313}
+body.dark .tag-chip.tc-rights{color:#38bdf8;background:#123040}
+body.dark .tag-chip.tc-explore{color:#34d399;background:#10322c}
+body.dark .tag-chip.tc-capital{color:#f87171;background:#3a1f1f}
+body.dark .tag-chip.tc-policy{color:#c084fc;background:#2f1f3d}
+body.dark .tag-chip.tc-market{color:#22d3ee;background:#10313a}
+body.dark .tag-chip.tc-edu{color:#d6d3d1;background:#2f2622}
+body.dark .tag-chip.tc-global{color:#94a3b8;background:#26313f}
+body.dark .tag-chip.tc-tech{color:#2dd4bf;background:#0f3330}
+body.dark .tag-chip.tc-default{color:#94a3b8;background:#26313f}
+/* 暗色下 hover 需提亮（基础规则是 brightness(.92)，会把深底压得更暗、反而降对比） */
+body.dark .tag-chip:hover{filter:brightness(1.15)}
+</style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">
 <!-- 2026-09-11：脚本未加载/缓存陈旧时的可见逃生条（默认隐藏，由内联引信或 app.js 控制） -->

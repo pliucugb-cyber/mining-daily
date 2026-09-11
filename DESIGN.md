@@ -1,9 +1,15 @@
 # DESIGN.md — 矿业日报（mining-daily）
 
-> 版本 v2 · 2026-09-08 · 设计系统架构：Diana
+> 版本 v3 · 2026-09-11 · 设计系统架构：Diana
 > 参考混搭：**Linear 的密度与排版节奏 + Stripe 的数据可信感 + IBM Carbon 的中性灰阶与无障碍标准**
 > 定位：中文行业资讯 + 行情数据的**高密度阅读型**静态页（PWA），桌面双栏、移动单列。
 > 目标行数 280-350 · 所有数值可直接复制使用 · 供 AI 编程代理消费
+>
+> **v3 修订原则（重要）**：凡是"规范所写"与"实现 + 测试"冲突的，一律**以实现为准改规范**，
+> 而不是让代码退回规范——因为本项目的多数偏离是**有意识的无障碍修正**，且已由测试锁定。
+> 详细对账见 **附录 D**。v3 共修正 3 处规范自身不达 AA 的取值、9 处数值冲突、
+> 补齐 4 类已实现的例外、标注 2 个已失效 token。
+> v3 之后如需引入新的偏离，请同步更新附录 D，否则下一轮审计会再次把规范当权威而误判。
 
 ---
 
@@ -19,6 +25,7 @@
 3. **等宽数字**：所有价格、涨跌幅、计数使用 `tabular-nums`，跳动时不抖
 4. **弱化的已读态**：用文字色降级而非整块透明度，保证小字号可读性
 5. **零装饰**：无渐变、无插画、无动效装饰；仅在 hover/聚焦有 120ms 过渡
+   （唯一例外：移动端底部「问」AI 球——渐变 + 外发光 + 脉冲，因为它必须与其它 tab 强区分，见 §7 Don'ts 6）
 
 **光影与质感**：纯扁平 + 极低饱和阴影。阴影色统一走 `rgba(0, 55, 112, …)` 蓝调（取自 Stripe），避免中性黑阴影在浅灰底上发脏。深色模式不用阴影，改用 1px 亮边框表达层级。
 
@@ -28,47 +35,78 @@
 
 ### 2.1 Primary / Neutral 中性灰阶（IBM Carbon 对比度标准）
 
-| 角色 | CSS 变量 | HEX | 使用场景 |
-|---|---|---|---|
-| 标题文字 | `--ink-900` | `#16202b` | 页面标题、卡片标题（对比度 15.3:1） |
-| 正文文字 | `--ink-700` | `#3d4b5a` | 摘要、列表正文（8.9:1） |
-| 次要文字 | `--ink-500` | `#6b7a89` | 来源、时间、表头（4.9:1，满足 AA） |
-| 弱化文字 | `--ink-300` | `#94a3b8` | 已读条目、占位提示（**不用于正文**） |
-| 分隔线 | `--line-1` | `#e5eaf0` | 卡片内分隔、列表项之间 |
-| 控件边框 | `--line-2` | `#d5dde5` | 输入框、按钮、筛选器边框 |
+| 角色 | CSS 变量 | HEX（亮） | HEX（暗） | 对比度 亮/暗（on `--surface`） | 使用场景 |
+|---|---|---|---|---|---|
+| 标题文字 | `--ink-900` | `#16202b` | `#e8eef3` | 16.46 / 13.38 | 页面标题、卡片标题 |
+| 正文文字 | `--ink-700` | `#3d4b5a` | `#b6c2ce` | 8.93 / 8.64 | 摘要、列表正文 |
+| 次要文字 | `--ink-500` | `#5f6d7a` | `#8b9bad` | **5.31** / 5.51 | 来源、时间、表头、灰字控件 |
+| 弱化文字 | `--ink-300` | `#64737f` | `#8394a5` | **4.88** / 5.03 | 已读条目、占位提示 |
+| 分隔线 | `--line-1` | `#e5eaf0` | `#2a3542` | — | 卡片内分隔、列表项之间 |
+| 控件边框 | `--line-2` | `#d5dde5` | `#35424f` | — | 输入框、按钮、筛选器边框 |
+
+> **v3 修正**：`--ink-500` 与 `--ink-300` 的旧值（`#6b7a89` / `#94a3b8`）**实算分别只有 4.40 / 2.56**，
+> 都不到 AA。规范写的"4.9:1"是错的——这是 v2 最严重的问题，按旧值产出的样式在实测中会被判不及格。
+> 现改为实现中已生效的值，并附实测对比度。
+> **`--ink-300` 的定位**：仍只用于"已读/占位"等**非正文**文字。它在白底 4.88、`--surface-2` 4.55 达标，
+> 但在 `--surface-3`(`#eef2f6`) 上为 **4.34**（暗色 `#26313f` 上 4.23）——这是已知且**已接受**的
+> 0.16 缺口，涉及 2 处（`.toc-count-fresh.is-empty`、`.rc-deadline.rc-expired`）。若将来要补，
+> 应新增专用 token 而不是抬 `--ink-300` 本体（抬本体会压平"已读/未读"的层级差）。
 
 ### 2.2 Brand & Dark 品牌与深色
 
-| 角色 | CSS 变量 | HEX | 使用场景 |
-|---|---|---|---|
-| 品牌主色 | `--brand` | `#0e7490` | 选中态背景、链接、区块竖条 |
-| 品牌深色 | `--brand-ink` | `#0b5a70` | 品牌文字、hover 态（7.2:1） |
-| 品牌浅底 | `--brand-soft` | `#e6f4f7` | NEW 徽章底、选中项浅底 |
-| 深色模式底 | `--dark-bg` | `#141b24` | `body.dark` 页面底 |
-| 深色模式卡 | `--dark-surface` | `#1b2430` | 深色卡片 |
-| 深色模式线 | `--dark-line` | `#2a3542` | 深色分隔与边框 |
-| 深色模式字 | `--dark-ink` | `#e8eef3` | 深色正文（13.8:1） |
+| 角色 | CSS 变量 | HEX（亮） | HEX（暗） | 使用场景 |
+|---|---|---|---|---|
+| 品牌主色 | `--brand` | `#0e7490` | `#38bdf8` | 选中态背景、链接、区块竖条 |
+| 品牌深色 | `--brand-ink` | `#0b5a70` | `#7dd3fc` | 品牌文字、hover 态 |
+| 品牌浅底 | `--brand-soft` | `#e6f4f7` | `#123040` | NEW 徽章底、选中项浅底 |
+| 链接 hover | `--accent-hover` | `#0f788d` | `#7dd3fc` | 标题 hover 色 |
+
+> **v3 修正（机制层，重要）**：v2 曾列出 `--dark-bg / --dark-surface / --dark-line / --dark-ink`
+> 四个深色变量。**这四个变量在实现中根本不存在**，按 v2 写样式会得到一对无效的 `var()`。
+>
+> 实际机制是**同名覆盖**：`body.dark{ … }` 把**上面同一批变量名**（`--ink-* / --line-* / --bg /
+> --surface-* / --brand* / --accent-hover`）整体重新赋值。所以写组件样式时**只需写一遍**
+> `color:var(--ink-700)`，深色模式自动跟随；**不要**去写 `body.dark .x{color:#b6c2ce}` 这类平行规则，
+> 那正是本项目历史上一再出现的"漏改"来源。
+>
+> 完整暗色映射见 §2.1 / §2.4 / §2.5 各表的"HEX（暗）"列。
 
 ### 2.3 Accent / Interactive 强调与交互
 
-| 角色 | CSS 变量 | HEX | 使用场景 |
-|---|---|---|---|
-| 链接 hover | `--accent-hover` | `#128fa8` | 标题 hover 色 |
-| 聚焦环 | `--focus-ring` | `#0e749040` | 键盘聚焦 2px 外环 |
-| 战略徽章 | `--tag-strategy` | `#4f46e5` | 「战略」徽章文字 |
-| 重大徽章 | `--tag-major` | `#d93a2b` | 「重大」徽章文字 |
+| 角色 | CSS 变量 | HEX（亮） | HEX（暗） | 使用场景 |
+|---|---|---|---|---|
+| 战略徽章字 | `--tag-strategy` | `#4f46e5` | `#8b8cf9` | 「战略」徽章文字 |
+| 战略徽章底 | `--tag-strategy-bg` | `#eeedfe` | `#232a4d` | 「战略」徽章底色 |
+| 重大徽章字 | `--tag-major` | `#c0392b` | `#ff6b5b` | 「重大」徽章文字 |
+| 重大徽章底 | `--tag-major-bg` | `#fceaea` | `#3a2020` | 「重大」徽章底色 |
+
+> **`--focus-ring` 不存在**（v3 标注）：v2 把它写成 token `#0e749040`，但实现里没有这个变量，
+> 聚焦环一律写**字面值** `outline:2px solid rgba(14,116,144,.25)`（等价于 8 位 hex `#0e749040`）。
+> 若将来要收敛，正确做法是在 `:root` 补 `--focus-ring: rgba(14,116,144,.25)` 再替换全部字面值，
+> **不要**继续沿用"文档里有、代码里没有"的状态。
+> **`--tag-major` 由 `#d93a2b` 改为 `#c0392b`**：前者是 §2.4 的 `--up`（涨），与"重大"语义混用会让
+> 读者分不清"红"是涨还是重要；实现已统一到 `--danger` 的深红。
 
 ### 2.4 Semantic 语义色（中国市场习惯：涨红跌绿）
 
-| 角色 | CSS 变量 | HEX | 使用场景 |
-|---|---|---|---|
-| 涨 / 上升 | `--up` | `#d93a2b` | 价格上涨、正向变化 |
-| 跌 / 下降 | `--down` | `#128a5f` | 价格下跌、负向变化 |
-| 平 / 持平 | `--flat` | `#6b7a89` | 无变化 |
-| 成功 | `--success` | `#128a5f` | 操作成功提示 |
-| 警告 | `--warning` | `#b7791f` | 数据过期、待确认 |
-| 危险 | `--danger` | `#c0392b` | 删除、失效链接 |
-| 信息 | `--info` | `#0e7490` | 说明、提示条 |
+| 角色 | CSS 变量 | HEX（亮） | HEX（暗） | 对比度（亮） | 使用场景 |
+|---|---|---|---|---|---|
+| 涨 / 上升 | `--up` | `#d93a2b` | `#ff6b5b` | 4.57 | 价格上涨、正向变化 |
+| 跌 / 下降 | `--down` | `#0e7a52` | `#35c48d` | **5.35** | 价格下跌、负向变化 |
+| 平 / 持平 | `--flat` | ~~`#6b7a89`~~ | ~~`#8b9bad`~~ | — | **⚠️ 已失效（v3）** |
+| 成功 | `--success` | `#0e7a52` | `#35c48d` | 5.35 | 操作成功提示 |
+| 警告 | `--warning` | `#966319` | `#e0a83a` | 5.13 | 数据过期、待确认 |
+| 危险 | `--danger` | `#c0392b` | `#ff6b5b` | 5.44 | 删除、失效链接 |
+| 信息 | `--info` | `#0e7490` | `#38bdf8` | 5.36 | 说明、提示条 |
+
+> **`--down` 由 `#128a5f` 改为 `#0e7a52`**：v2 的值实算仅 **4.35**，不达 AA（而规范却把它列在
+> "语义色"这种要能安全承载小字号的用途上）。实现用的 `#0e7a52` 为 5.35，与之同值的 `--success` 一并更新。
+> **`--warning` 由 `#b7791f` 改为 `#966319`**：v2 值实算 **3.64**，同样不到 AA。
+> **`--flat` 已失效**：全仓 `var(--flat)` 引用 **0 次**——"持平"语义实际由 `.pc-chg{color:var(--ink-500)}`
+> 承担。token 定义仍在 `:root`/`body.dark` 里（留作占位），但**不要再使用**；下次清理可一并删除。
+> **`--up` 也用作 hover 色**（热榜/要闻标题）：这是**有意的热度表达**而非误用。它是红字而非红底白字，
+> 在白底上 4.57 达标，无对比度损失。评审曾按 §2.4"语义色不得挪用"判为违规，v3 明确此项**属例外**。
+> （上表对比度均按 `--surface` = `#fff` 实算；`--danger` 在浅底徽章如 `#e8f8f0` 上是 4.87，仍达标。）
 
 ### 2.5 Surface 表面层级
 
@@ -81,12 +119,15 @@
 
 ### 2.6 Shadow Colors 阴影色
 
-统一蓝调，禁止纯黑阴影：
-```css
---shadow-color-sm: rgba(0, 55, 112, 0.06);
---shadow-color-md: rgba(0, 55, 112, 0.08);
---shadow-color-lg: rgba(16, 32, 43, 0.12);
-```
+统一蓝调，禁止纯黑阴影。
+
+> **v3 修正**：v2 在此定义了 `--shadow-color-sm/md/lg` 三个**纯颜色** token，但实现中不存在——
+> 实现把"颜色 + 偏移 + 模糊"直接封装成 **5 层完整阴影**（`--shadow-xs…xl`，见 §6.1），
+> 组件直接引用整条阴影值，无需再拆颜色。
+>
+> 因此本节的正确用法是：**引用 §6.1 的 `--shadow-xs/sm/md/lg/xl`**，不要按 v2 的写法引用
+> `var(--shadow-color-md)`（会静默失效，得到 `box-shadow:none`）。蓝调基准仍为
+> `rgba(0,55,112,…)`（Stripe），大阴影用 `rgba(16,32,43,…)` 加深。
 
 ---
 
@@ -139,7 +180,7 @@
 .btn-secondary:hover{border-color:#0e7490;color:#0b5a70;background:#e6f4f7}
 
 /* Ghost */
-.btn-ghost{background:transparent;color:#6b7a89;border:1px solid transparent;
+.btn-ghost{background:transparent;color:var(--ink-500);border:1px solid transparent;
   border-radius:8px;padding:6px 10px;font-size:12px}
 .btn-ghost:hover{background:#eef2f6;color:#16202b}
 
@@ -152,6 +193,17 @@
 .btn:focus-visible{outline:2px solid #0e749040;outline-offset:2px}
 ```
 高度：桌面 32px（padding 6px + 12px 字 + 边框），移动端触控区 ≥ 44px。
+
+> **例外：pill（药丸）控件几何**（v3 明确）。本项目另有一族 **pill 控件**——主题/阅读模式切换、
+> 筛选 chip、日期徽章、`--tag-*` 徽章、`.rr-type`、`.md-fav-btn` 等，它们的实际高度为
+> **34–38px**、圆角为 **17/19/20px 或 999px**。
+>
+> 这不是"违反 §4.1"，而是**另一族控件**：32px 是对 `.btn`（6px padding + 12px 字 + 1px 边框）的推导值，
+> 与 pill 不是同一控件族；pill 的圆角就是"高 ÷ 2"，**高度不改则圆角本就正确**。
+> 把 pill 圆角改成 8px 会破坏药丸造型，属大范围视觉回归。
+>
+> **判定规则**：矩形按钮按 32px/8px；pill 按"高度自洽 + 全圆角"。新增 pill 时请沿用此规则，
+> 不要再按 §9.1 的 4/8/12 硬套。
 
 ### 4.2 Cards
 
@@ -170,7 +222,7 @@
 ```css
 .input{background:#fff;border:1px solid #d5dde5;border-radius:8px;
   padding:7px 12px;font-size:13px;color:#16202b;height:34px}
-.input::placeholder{color:#94a3b8}
+.input::placeholder{color:#64737f}
 .input:focus{border-color:#0e7490;outline:none;
   box-shadow:0 0 0 3px rgba(14,116,144,.12)}
 ```
@@ -178,7 +230,7 @@
 ### 4.4 Navigation（侧栏目录 / 顶部工具条）
 
 ```css
-.nav-item{font-size:13px;color:#6b7a89;padding:7px 12px;border-radius:8px;
+.nav-item{font-size:13px;color:var(--ink-500);padding:7px 12px;border-radius:8px;
   display:flex;align-items:center;gap:8px}
 .nav-item:hover{background:#eef2f6;color:#16202b}
 .nav-item.active{background:#e6f4f7;color:#0b5a70;font-weight:500}
@@ -194,10 +246,45 @@
 .badge-new{background:#e6f4f7;color:#0b5a70}
 .badge-strategy{background:#eeedfe;color:#4f46e5}
 .badge-major{background:#fceaea;color:#c0392b}
-.tag-chip{font-size:12px;padding:2px 8px;border-radius:4px;
-  background:#eef2f6;color:#3d4b5a}
+.tag-chip{font-size:12px;font-weight:600;padding:1px 8px;border-radius:4px;
+  line-height:1.6;letter-spacing:.3px;white-space:nowrap;cursor:pointer}
+  /* 只含结构；配色见下方 .tc-* 表 */
 ```
 **硬约束**：每条新闻 `.tag-chip` ≤ 2 个，徽章 ≤ 2 个。
+
+> **v3 修订：`.tag-chip` 配色改为「按类别枚举」**（原为单一灰底）。原因：标签的颜色承载**类别语义**
+> （战略/矿种/矿权/勘查/资本/政策/市场/培训/国际/科技），单一灰底会把这个语义抹平。
+>
+> **实现方式**（改动时请照此办理）：
+> - 结构仍在 `.tag-chip` 基类（`font-size/padding/border-radius/…`）；
+> - 配色由 **`.tag-chip.tc-<类别>`** 承担，类别名与 `app.js` 的 `TAG_STYLE` 一一对应；
+> - **深色必须写成 `body.dark .tag-chip.tc-X`**（特异性 0,3,1），否则会被兜底的
+>   `body.dark .tag-chip`（0,2,1）压掉；
+> - 未知类别回落 `.tc-default`；
+> - ⚠️ **不要用 `chip.style.color/background` 内联下发**——内联样式恒压过所有选择器，
+>   本项目曾因此让暗色下 11 组配色**全部失效**（2026-09-11 F6）。
+>
+> **允许此处硬编码 hex**（§7 Do's 第 1 条的例外）：这是**枚举型调色板**，11 类 × 亮暗 = 22 个值，
+> 互相之间无复用关系，token 化只会增加 22 个一次性变量；与 §4.5 徽章色、§4.3 语义色同属
+> "调色板字面值"一类。**除此之外的颜色仍必须走变量。**
+
+| 类别 | class | 亮色（字 / 底） | 暗色（字 / 底） | 对比度 亮 / 暗 |
+|---|---|---|---|---|
+| 战略 | `.tc-strategy` | `#b45309` / `#fef3c7` | `#fbbf24` / `#3a2c14` | 4.51 / 8.11 |
+| 矿种 | `.tc-metal` | `#ba4a00` / `#fdf2e9` | `#fb923c` / `#3b2313` | 4.68 / 6.46 |
+| 矿权 | `.tc-rights` | `#2573a6` / `#ebf5fb` | `#38bdf8` / `#123040` | 4.65 / 6.44 |
+| 勘查 | `.tc-explore` | `#117c67` / `#e8f8f5` | `#34d399` / `#10322c` | 4.67 / 7.21 |
+| 资本 | `.tc-capital` | `#c0392b` / `#fdedec` | `#f87171` / `#3a1f1f` | 4.79 / 5.44 |
+| 政策 | `.tc-policy` | `#8e44ad` / `#f4ecf7` | `#c084fc` / `#2f1f3d` | 5.08 / 5.74 |
+| 市场 | `.tc-market` | `#0e7490` / `#e0f2fe` | `#22d3ee` / `#10313a` | 4.67 / 7.63 |
+| 培训 | `.tc-edu` | `#6d4c41` / `#efebe9` | `#d6d3d1` / `#2f2622` | 6.42 / 9.92 |
+| 国际 | `.tc-global` | `#475569` / `#f1f5f9` | `#94a3b8` / `#26313f` | 6.92 / 5.14 |
+| 科技 | `.tc-tech` | `#0f766e` / `#ccfbf1` | `#2dd4bf` / `#0f3330` | 4.86 / 7.34 |
+| 兜底 | `.tc-default` | `#667172` / `#f4f6f7` | `#94a3b8` / `#26313f` | 4.65 / 5.14 |
+
+> 亮色原有 4 组不达 AA（矿种 3.78 / 矿权 3.89 / 勘查 3.00 / 兜底 3.21），已按"保留底、压暗字"修正。
+> 暗色 padding 里 `border-radius` 走 `--r-sm`(4px)；移动端 `<768px` 另有更小字号规则。
+> 回归测试：`test_tagchip_contrast.py`（19 项，含亮/暗对比度、类别集合一致性、反内联回退）。
 
 ### 4.6 Modals / Dialogs
 
@@ -212,32 +299,36 @@
 
 ### 4.7 项目特有组件
 
+> **v3 说明**：以下三块是**可复制的参考实现**，类名已对齐线上真实渲染（`.news-item` / `.news-title` / `.news-summary` / `.news-meta` / `.news-tags` / `.tag-chip`；价格区为 `.price-card` / `.pc-name` / `.pc-value` / `.pc-chg`；区块标题为 `.section-title`）。v2 曾用 `.news-sum` / `.px-name` / `.px-val` / `.px-chg` / `.sec-title`——**这些名字线上不存在**（只在 v1 文档 `docs/design-spec.html` 里），照抄会得到「改了没用」的死代码。
+
 **新闻条目（核心组件）**
 ```css
 .news-item{padding:12px 16px;border-bottom:1px solid #e5eaf0;background:#fff}
 .news-title{font-size:14px;font-weight:500;line-height:1.5;color:#16202b}
-.news-meta{font-size:12px;color:#6b7a89;margin-top:4px;display:flex;gap:8px}
-.news-sum{font-size:13px;line-height:1.6;color:#3d4b5a;margin-top:6px;
+.news-meta{font-size:12px;color:var(--ink-500);margin-top:4px;display:flex;gap:8px}
+.news-summary{font-size:13px;line-height:1.6;color:#3d4b5a;margin-top:6px;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.news-item.read .news-title{color:#94a3b8}
-.news-item.read .news-sum{color:#94a3b8}
+.news-item.read .news-title{color:var(--ink-300)}
+.news-item.read .news-summary{color:var(--ink-300)}
 ```
 > **关键修订**：已读态用 `--ink-300` 文字色，**不用** `opacity:.55`——透明度会让 13px 中文在白底上发灰模糊。
+> **移动端**（`@768`）：`.news-item` 改为卡片（`1px --line-2` + `--r-lg` + `--shadow-sm`），`.news-summary` 加 `-webkit-line-clamp:3`；详见 §8.4。
 
 **价格行（密度核心）**
 ```css
-.px-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;
+.price-card{display:grid;grid-template-columns:…;gap:12px;
   padding:8px 0;border-bottom:1px solid #e5eaf0;align-items:baseline}
-.px-name{font-size:12px;color:#6b7a89}
-.px-val{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;
+.pc-name{font-size:12px;color:var(--ink-500)}
+.pc-value{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;
   font-family:var(--font-num)}
-.px-chg{font-size:12px;font-variant-numeric:tabular-nums;min-width:56px;text-align:right}
-.px-chg.up{color:#d93a2b} .px-chg.down{color:#128a5f}
+.pc-chg{font-size:12px;font-variant-numeric:tabular-nums;min-width:56px;text-align:right}
+.pc-chg.up{color:var(--up)} .pc-chg.down{color:var(--down)}
 ```
+> ⚠️ `renderLmePrices()` **不得**触碰 `.pc-name` / `.pc-chg` 的 `textContent`，也**不得**用其它数据源覆盖卡片价——数值唯一来源是当日 `lme_data.json`。
 
 **区块标题**
 ```css
-.sec-title{font-size:16px;font-weight:600;line-height:1.4;color:#16202b;
+.section-title{font-size:16px;font-weight:600;line-height:1.4;color:#16202b;
   padding-left:12px;border-left:3px solid #0e7490;margin:32px 0 12px}
 ```
 
@@ -255,6 +346,10 @@
 | `--s4` | 16px | **卡片内边距（标准）**、卡片间距 |
 | `--s5` | 24px | 弹窗内边距、大卡片间距 |
 | `--s6` | 32px | **区块之间** |
+| `--s7` | 40px | 空态/大留白区块（`--empty` 类容器） |
+
+> v3 补记：`--s7` 在实现中已存在并使用（v2 遗漏），但**不要**用它替代 `--s6` 做区块间距——
+> 区块间距仍是 32px，40px 只用于"整块空态提示"这类需要额外呼吸感的地方。
 
 ### 5.2 Grid System
 
@@ -307,6 +402,16 @@
 | 遮罩 mask | 1000 |
 | 弹窗 dialog | 1010 |
 | Toast / 通知 | 1100 |
+
+实现中对应的 token：`--z-sticky:100 / --z-sidebar:200 / --z-fab:900 / --z-mask:1000 / --z-dialog:1010 / --z-toast:1100`。
+
+> **已知例外（v3 登记，待处理）**：启动故障自愈横幅 `#mdBootWarn` 用了 `z-index:99999`，
+> **超出本表上限**。它是 2026-09-11 事故当天为"页面全挂时唯一可见的出口"临时加的，
+> 刻意凌驾一切；但保留 99999 会让"z-index 有天花板"这条约束失效。
+>
+> 处置意见：**先观察 1 天**，确认自愈链稳定后再收敛到 `--z-toast`(1100)。
+> 收敛时必须同时确认它仍能盖住 `.qa-fab`（900）、遮罩（1000）与弹窗（1010）——若有遮挡需求，
+> 应新增 `--z-critical:1200` 并**同步更新本表**，而不是回到 99999。
 
 ### 6.4 Backdrop Effects
 
@@ -371,33 +476,41 @@
 ### 9.1 Quick Reference（快速参考）
 
 ```
-色：ink-900 #16202b / ink-700 #3d4b5a / ink-500 #6b7a89 / ink-300 #94a3b8
-线：#e5eaf0 / 控件边 #d5dde5 | 面：#f5f7fa / #fff / #eef2f6
-品牌：#0e7490 / 深 #0b5a70 / 浅底 #e6f4f7
-语义：涨 #d93a2b 跌 #128a5f 警告 #b7791f 危险 #c0392b
+色(亮)：ink-900 #16202b / ink-700 #3d4b5a / ink-500 #5f6d7a / ink-300 #64737f
+线：#e5eaf0(--line-1) / 控件边 #d5dde5(--line-2) | 面：#f5f7fa(--bg) / #fff(--surface) / #eef2f6(--surface-3)
+品牌：--brand #0e7490 / 深 #0b5a70 / 浅底 #e6f4f7 / hover #0f788d
+语义：涨 --up #d93a2b 跌 --down #0e7a52 警告 --warning #966319 危险 --danger #c0392b 信息 --info #0e7490
+  平：用 --ink-500；~~--flat #6b7a89~~ 已失效（0 引用，勿新用）
+暗(全部由 body.dark{} 同名覆盖)：底 #141b24 / 卡 #1b2430 / 面2 #202b38 / 面3 #26313f / 线 #2a3542·#35424f
+  ink 900/700/500/300 = #e8eef3 / #b6c2ce / #8b9bad / #8394a5；品牌→#38bdf8；涨跌→#ff6b5b / #35c48d；warning→#e0a83a
+  ⚠️ 没有 --dark-bg / --dark-surface / --dark-* 这套变量，机制就是「同名覆盖」
 字：24/20/16/14/13/12/10 — 字重仅 400/500/600 — 禁半像素级
-圆角：4(徽章) / 8(控件) / 12(卡片)
-间距：4/8/12/16/24/32 — 卡内 16 — 区块间 32
-阴影：0 1px 3px rgba(0,55,112,.06) — 深色模式关阴影用边框
+圆角：4(徽章) / 8(控件) / 12(卡片) — pill 控件用 999 或自一致半高（34–38px 高）
+间距：--s1..--s6 = 4/8/12/16/24/32（另有 --s7 40px，仅空状态用）— 卡内 16 — 区块间 32
+阴影：0 1px 3px rgba(0,55,112,.06) — 深色模式关阴影(--shadow-xs/sm/md→none)用边框
+z：sticky 100 / sidebar 200 / fab 900 / mask 1000 / dialog 1010 / toast 1100（例外：#mdBootWarn 用 99999，待收敛）
 动效：120ms ease，仅 hover/focus
 ```
 
 ### 9.2 Component Prompts（可直接复制）
 
 1. **新闻条目卡片**
-   > 生成一个新闻列表项：14px/500 标题（hover 变 #128fa8）、12px 元信息行（来源 · 时间 · 分类 chip）、13px/1.6 摘要两行截断，卡片 16px 内边距、12px 圆角、1px #e5eaf0 边框。已读态标题与摘要转 #94a3b8，不用 opacity。
+   > 生成一个新闻列表项：14px/500 标题（hover 变 `var(--accent-hover)` #0f788d）、12px 元信息行（来源 · 时间 · 分类 chip）、13px/1.6 摘要两行截断，卡片 16px 内边距、12px 圆角、1px `var(--line-1)` 边框。已读态标题与摘要转 `var(--ink-300)`，不用 opacity。
 
 2. **价格数据行**
-   > 生成紧凑价格行：左品种名 12px，中价格 15px/600 等宽数字，右涨跌幅 12px（涨 #d93a2b 跌 #128a5f 平 #6b7a89），行高 8px 上下 padding，底边 1px #e5eaf0。桌面 2–3 列网格。
+   > 生成紧凑价格行：左品种名 12px（`.pc-name`，用 `var(--ink-500)`），中价格 15px/600 等宽数字，右涨跌幅 12px（`.pc-chg`；涨 `var(--up)` 跌 `var(--down)`，平用 `var(--ink-500)`），行高 8px 上下 padding，底边 1px `var(--line-1)`。桌面 2–3 列网格。
 
 3. **区块标题**
-   > 生成区块标题：16px/600，左侧 3px #0e7490 竖条，左内边距 12px，上间距 32px 下间距 12px。
+   > 生成区块标题：16px/600，左侧 3px `var(--brand)` 竖条，左内边距 12px，上间距 32px 下间距 12px。
 
 4. **筛选器组**
-   > 生成横向筛选芯片组：12px、8px 圆角、padding 6px 14px，默认白底 #d5dde5 边框，选中态 #0e7490 底白字，hover 边框转品牌色。
+   > 生成横向筛选芯片组：12px、8px 圆角、padding 6px 14px，默认 `var(--surface)` 底 + `var(--line-2)` 边框，选中态 `var(--brand)` 底白字，hover 边框转品牌色。
 
 5. **深色模式卡片**
-   > 把这张卡片适配深色模式：背景 #1b2430，边框 #2a3542，关闭全部 box-shadow，标题 #e8eef3、正文 #b6c2ce、次要 #8b9bad，品牌色转 #38bdf8。
+   > 把这张卡片适配深色模式：背景 #1b2430(`--surface`)，边框 #2a3542(`--line-1`)，`--shadow-xs/sm/md` 置 none，标题 #e8eef3(`--ink-900`)、正文 #b6c2ce(`--ink-700`)、次要 #8b9bad(`--ink-500`)，品牌色转 #38bdf8(`--brand`)。**写 `body.dark{}` 同名覆盖，不要另起 `--dark-*` 变量。**
+
+6. **分类标签 chip（枚举调色板）**
+   > 生成分类标签：10px 字号、`var(--r-sm)` 圆角、padding 1px 8px。配色**按类别枚举**，写成 `.tag-chip.tc-<类别>` 与 `body.dark .tag-chip.tc-<类别>` **两组规则**（亮/暗各一套，对比度各自 ≥4.5，共 11 类）。JS 侧 `TAG_STYLE` **只存 label**，绝不设 `chip.style.color/background`；className 形如 `tag-chip tc-metal`，未知类别回落 `.tc-default`。
 
 ### 9.3 Iteration Guide（迭代建议 10 条）
 
@@ -443,3 +556,38 @@
 - 会展 IIFE 关键词 `EXPO_WORDS` / `window.__expoIsExpo` / `#expoMini`、热榜 `#hotListSection`、矿权 `.rights-list` / `.rights-row` 选择器不得改名
 - 改完 index.html 必须 bump `<meta name="build-version">`，改完 sw.js 必须 bump `CACHE_NAME`
 - 验证链：`preflight_check.py` → `test_smoke_0908.js` → `deploy_pages.py`（唯一推送源）
+
+## 附录 D：v2 → v3 规范对账表（2026-09-11）
+
+**v3 修订原则**：规范与实现冲突时，**以实现为准**——因为所有偏离都是经过实测的无障碍修正、且被测试锁定；滞后的是规范，不是代码。下表逐条列出 v2 写了什么、实现实际是什么、v3 怎么处理。
+
+| # | 位置 | v2 原描述 | 实现现状 | 判定 | v3 处理 |
+|---|---|---|---|---|---|
+| 1 | §2.1 | `--ink-500 #6b7a89`（对比度 4.40，**自身不达 AA**） | `#5f6d7a`（5.31） | 规范错 | 改为实现值 |
+| 2 | §2.1 | `--ink-300 #94a3b8`（2.56，**严重不达**） | `#64737f`（4.88） | 规范错 | 改为实现值 |
+| 3 | §2.4 | `--down #128a5f`（4.35） | `#0e7a52`（5.35） | 规范错 | 改为实现值 |
+| 4 | §2.4 | `--warning #b7791f`（3.64） | `#966319`（5.13） | 规范错 | 改为实现值 |
+| 5 | §2.4 | `--flat` 作为「平」色 | 仅 `:root`/`body.dark` 两处**声明**，`var(--flat)` **0 处使用** | 死 token | 标 `~~已失效~~`；「平」用 `--ink-500` |
+| 6 | §2.2 | `--dark-bg / --dark-surface / --dark-line / --dark-ink` | **四个都不存在**；机制是 `body.dark{}` **同名覆盖** | 规范错 | 重写机制说明，禁新造 `--dark-*` |
+| 7 | §2.3 | `--focus-ring` | 不存在；焦点环用字面 `rgba(14,116,144,.25)`（3 处） | 规范错 | 删变量说明 |
+| 8 | §2.6 | `--shadow-color-sm/md/lg` | 不存在；正确用法是 §6.1 的 5 条完整阴影 | 规范错 | 替换为说明 |
+| 9 | §4.1 | 控件统一 32px 高 / 8px 圆角 | pill（药丸）控件 34–38px / 999px 或 19–20px | 实现超越规范 | 补「pill 例外」段 |
+| 10 | §4.3 | placeholder `#94a3b8` | `#64737f` | 同 #2 | 改实现值 |
+| 11 | §4.5 | `.tag-chip` 单一配色 | **11 组按类别枚举**，亮/暗各一套 | 规范缺章节 | 补完整对照表 + 实现规则 |
+| 12 | §4.7 | `.news-sum` / `.px-name` / `.px-val` / `.px-chg` / `.sec-title` | 线上实为 `.news-summary` / `.pc-name` / `.pc-value` / `.pc-chg` / `.section-title` | 规范错（v1 遗留名） | 全部改名 + 加警示 |
+| 13 | §5.1 | 间距 6 级 | 另有 `--s7:40px`（空状态专用） | 规范不全 | 补一行 + 限定用途 |
+| 14 | §6.3 | z-index 表最大 1100 | `#mdBootWarn` 用 `99999` | 实现例外 | 登记；**观察 1 天后**收敛到 `--z-toast`(1100) 或新增 `--z-critical:1200` |
+| 15 | §7 | Do's 1「禁硬编码颜色」 | 枚举 chip **必须**写 HEX | 规范自相矛盾 | 加「枚举调色板」例外 |
+| 16 | §7 | Don'ts 6「禁渐变/发光」 | 「问」球是渐变 + 发光 + 脉冲 | 实现例外 | 登记 H2 例外（**决定保留**） |
+| 17 | §8.4 | 「字号不随断点缩放」 | `@768` 有意放大 `.news-title`→16px / `.news-summary`→14px | 实现例外 | 登记例外，并记录 `@600` 反向收回的级联问题 |
+| 18 | §9.1 / §9.2 | 提示词含 `#6b7a89` / `#94a3b8` / `#128a5f` / `#b7791f` / `#128fa8` | 均已换新值 | 规范过期 | 全量同步，并新增 1 条 chip 提示 |
+| 19 | 附录 C | 锚点写作 `#col-rail` | 页面元素是 `<aside class="col-rail">`（**无 id**），原规则全部失效 | 规范错 | 已修为 `.col-rail` |
+
+**v3 明确未处理（另立专项，勿混入样式改动）**
+
+- **80 条死 CSS 选择器**（`.qa-*(~28)` / `.ba-*(8)` / `.bs-*(4)` / `.rc-*` 卡式布局(8) / `.rr-method·.rr-date·.rr-num` / `.top1-3` / `.lv-*` / 旧 `.brief-*` / `.qa-resize-*(8)`）——删除前必须跑死选择器审计，并**保留仍然存活的 `.rc-deadline`（含 `.rc-urgent/.rc-soon/.rc-normal/.rc-expired`）与 `.rc-extra`**。
+- **`--ink-300` on `--surface-3` = 4.34/4.23**（差 0.16 未达 4.5，共 2 处：`.toc-count-fresh.is-empty`、`.rc-deadline.rc-expired`）——**接受现状**。将来修法是新增一个更深的灰 token，**不是**抬高 `--ink-300`（会连带影响正文对比）。
+- **移动端「会议」tab 与会展条目重复**（评审项 A4）——属产品决策，**维持现状**；理由与三个备选方案见 `ux-ia-product-2026-09-11.md` 附 D。
+
+**验证入口**：`test_tagchip_contrast.py`(19) · `test_mobile_ux_batch.js` · `test_preflight_div.py`(11) · `preflight_check.py`。
+
