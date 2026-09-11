@@ -2566,19 +2566,26 @@ function mdMobileTopTabs(){
   try{ window.addEventListener('scroll',function(){ if(!mdTopTick){ mdTopTick=true; requestAnimationFrame(function(){ mdTopOnScroll(); mdTopTick=false; }); } },{passive:true}); }catch(e){}
 }
 
-// 底部 4 主导航 Tab（首页/价格/矿权/我的，内联 SVG 图标；AI 改回右下悬浮球，搜索提到顶栏）
+// 底部 5 主导航 Tab（首页/价格/AI 搜/矿权/我的，内联 SVG 图标）
+// 2026-09-12 修正过时注释：原写「AI 改回右下悬浮球，搜索提到顶栏」，但实测 #qaFab 在移动端
+//   display:none（index.html:1471 覆盖 :724），顶部搜索按钮也恒为 display:none（:1484 顶层规则
+//   覆盖 :1458 的 @media 规则，同特异性后者胜）→「AI 搜」tab 实为移动端唯一检索入口。
 function mdMobileTabBar(){
   if(document.getElementById('mobileTabBar')) return;
   var SVG_HOME='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h4v-5h4v5h4v-9"/></svg>';
   var SVG_PRICE='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9M9 20V4M14 20v-6M19 20V7"/></svg>';
   var SVG_RIGHTS='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4"/><path d="M10 12h6M10 16h6"/></svg>';
   var SVG_USER='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
-  var SVG_QA='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5z"/></svg>';
+  // 2026-09-12 用户定夺「方案 A」：放大镜（检索）+ 四角星芒（AI）双语义，替代原空心对话气泡
+  // （M4 5h16v11H9l-5 4V5z —— 只表达"说话"，既无搜索也无 AI 语义）。文字标签同步改为「AI 搜」。
+  // 约束：单色描边 currentColor，禁止渐变/发光/脉冲（test_mobile_ux_batch.js:77-78 会拦）。
+  // 星芒用 stroke-width 1.7（主图形 2）：22px 实际渲染下细一号才不糊成一团。
+  var SVG_QA='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="12" r="5.5"/><path d="M13.4 15.9 18.3 20.8"/><path d="M17.6 3.2 18.66 6.14 21.6 7.2 18.66 8.26 17.6 11.2 16.54 8.26 13.6 7.2 16.54 6.14Z" stroke-width="1.7"/></svg>';
   var bar=document.createElement('nav');
   bar.id='mobileTabBar'; bar.setAttribute('aria-label','移动端主导航');
   bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">'+SVG_HOME+'</span><span>首页</span></button>'
     +'<button class="mtab" data-go="price"><span class="mi">'+SVG_PRICE+'</span><span>价格</span></button>'
-    +'<button class="mtab" data-go="qa"><span class="mi">'+SVG_QA+'</span><span>问</span></button>'
+    +'<button class="mtab" data-go="qa" aria-label="AI 搜：新闻检索与问答"><span class="mi">'+SVG_QA+'</span><span>AI 搜</span></button>'
     +'<button class="mtab" data-go="rights"><span class="mi">'+SVG_RIGHTS+'</span><span>矿权</span></button>'
     +'<button class="mtab" data-go="mine"><span class="mi">'+SVG_USER+'</span><span>我的</span></button>';
   var sheet=document.createElement('div'); sheet.id='mineSheet'; sheet.hidden=true;
@@ -2593,7 +2600,7 @@ function mdMobileTabBar(){
   mdRenderInstallCard();
   function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go); }); }
   // 2026-09-11 优化③：非首页隐藏分类栏时，品牌行显示当前 tab 名给位置感
-  var MD_BRAND_NAMES={'home':'⛏️ 矿业新闻日报','price':'价格','rights':'矿权','qa':'问','mine':'我的'};
+  var MD_BRAND_NAMES={'home':'⛏️ 矿业新闻日报','price':'价格','rights':'矿权','qa':'AI 搜','mine':'我的'};
   function mdSetBrandForTab(go){ var brand=document.querySelector('#mdTop .md-brand'); if(brand) brand.textContent=MD_BRAND_NAMES[go]||MD_BRAND_NAMES.home; }
   // 统一 tab 切换逻辑（点击 / 初始化恢复共用）；autoOpen 控制问/我的浮层是否在「恢复」时自动展开
   function activateTab(go, autoOpen){
