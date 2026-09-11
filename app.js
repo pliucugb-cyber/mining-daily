@@ -2617,24 +2617,37 @@ function mdMobileTabBar(){
   try{ var _dm=document.getElementById('mineMeta'); if(_dm){ var _du=document.getElementById('dataUpdatedAt'); _dm.textContent='数据更新时间：'+(_du?_du.textContent.trim():'—')+' · 信息聚合展示，版权归原机构所有'; } }catch(e){}
   mdRenderInstallCard();
   function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go); }); }
-  bar.addEventListener('click',function(e){
-    var b=e.target.closest('.mtab'); if(!b) return;
-    var go=b.getAttribute('data-go');
-    // 2026-09-11 优化：仅首页 tab 显示顶部分类栏，其余 tab 隐藏（分类栏是首页子导航，重复显示无意义）
+  // 2026-09-11 优化③：非首页隐藏分类栏时，品牌行显示当前 tab 名给位置感
+  var MD_BRAND_NAMES={'home':'⛏️ 矿业新闻日报','price':'价格','rights':'矿权','qa':'问','mine':'我的'};
+  function mdSetBrandForTab(go){ var brand=document.querySelector('#mdTop .md-brand'); if(brand) brand.textContent=MD_BRAND_NAMES[go]||MD_BRAND_NAMES.home; }
+  // 统一 tab 切换逻辑（点击 / 初始化恢复共用）；autoOpen 控制问/我的浮层是否在「恢复」时自动展开
+  function activateTab(go, autoOpen){
     document.body.classList.toggle('md-hide-catbar', go!=='home');
-    if(go==='mine'){ sheet.hidden=!sheet.hidden; setActive(sheet.hidden?null:'mine'); return; }
+    mdSetBrandForTab(go);
     sheet.hidden=true;
-    if(go!=='qa' && typeof qaFloatClose==='function'){ qaFloatClose(); }
+    if(go!=='qa' && typeof qaFloatClose==='function'){ try{ qaFloatClose(); }catch(e){} }
     if(go==='home'){ mdSelectCat('tuijian'); }
     else if(go==='price'){ mdSelectCat('price'); }
     else if(go==='rights'){ mdSelectCat('rights'); }
     else if(go==='qa'){
-      if(typeof qaFloatToggle==='function') qaFloatToggle();
+      if(autoOpen && typeof qaFloatToggle==='function') qaFloatToggle();
       var _qp=document.getElementById('qaFloat');
       setActive(_qp && _qp.classList.contains('open') ? 'qa' : null);
       return;
+    } else if(go==='mine'){
+      if(autoOpen){ sheet.hidden=false; setActive('mine'); }
+      else { setActive(null); }
+      return;
     }
+    setActive(go);
     try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); }
+  }
+  bar.addEventListener('click',function(e){
+    var b=e.target.closest('.mtab'); if(!b) return;
+    var go=b.getAttribute('data-go');
+    activateTab(go, true);
+    // 2026-09-11 优化①：记住上次停留的内容 tab（问/我的为浮层，不持久化）
+    if(go==='home'||go==='price'||go==='rights'){ try{ localStorage.setItem('md_last_tab', go); }catch(e){} }
   });
   sheet.addEventListener('click',function(e){
     var b=e.target.closest('button[data-act]'); if(!b) return;
@@ -2650,8 +2663,10 @@ function mdMobileTabBar(){
     if(e.target.closest('#mineSheet')||(e.target.closest('.mtab')&&e.target.closest('.mtab').getAttribute('data-go')==='mine')) return;
     sheet.hidden=true; setActive(null);
   });
-  setActive('home');
-  document.body.classList.remove('md-hide-catbar');
+  // 2026-09-11 优化①：初始化恢复上次停留的内容 tab（问/我的为浮层不持久化，回退首页）
+  var mdSavedTab='home';
+  try{ var _s=localStorage.getItem('md_last_tab'); if(_s==='home'||_s==='price'||_s==='rights') mdSavedTab=_s; }catch(e){}
+  activateTab(mdSavedTab, false);
 }
 // ⑧ 我的面板：内联安装分步卡（按 iOS/Android 自动识别；已安装置灰）
 function mdRenderInstallCard(){

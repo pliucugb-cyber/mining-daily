@@ -158,6 +158,21 @@ setTimeout(() => {
   check('切回首页 tab → 恢复显示顶部分类栏', !doc.body.classList.contains('md-hide-catbar'));
   check('切回首页后 body[data-md-cat=tuijian]', doc.body.getAttribute('data-md-cat') === 'tuijian');
 
+  console.log('\n===== ⑫ 底部导航增强：记住 tab + 品牌行 tab 名 + 非首页隐藏搜索（2026-09-11 优化①②③）=====');
+  function brandText(){ var b=doc.querySelector('#mdTop .md-brand'); return b?b.textContent:''; }
+  function lsGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
+  clickGo('price');
+  check('① 点价格 → 持久化 md_last_tab=price', lsGet('md_last_tab')==='price');
+  check('③ 点价格 → 品牌行显示「价格」', brandText()==='价格', '实际「'+brandText()+'」');
+  check('② 非首页隐藏搜索图标 CSS 规则存在', /body\.md-hide-catbar #mdSearchBtn\{display:none\}/.test(html));
+  check('③ 非首页隐藏日期 CSS 规则存在', /body\.md-hide-catbar \.md-date\{display:none\}/.test(html));
+  clickGo('rights');
+  check('③ 点矿权 → 品牌行显示「矿权」', brandText()==='矿权', '实际「'+brandText()+'」');
+  clickGo('home');
+  check('③ 回首页 → 品牌行恢复含「矿业新闻日报」', brandText().indexOf('矿业新闻日报')>=0, '实际「'+brandText()+'」');
+  check('① 回首页 → md_last_tab=home', lsGet('md_last_tab')==='home');
+  check('② 搜索按钮结构仍在（display:none 由 CSS 控制）', !!doc.getElementById('mdSearchBtn'));
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));
