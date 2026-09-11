@@ -2171,13 +2171,12 @@ function digestScore(r){
 }
 function digestEsc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function renderDigest(){
-  var list=document.getElementById('digestList'),dateEl=document.getElementById('digestDate');
+  var list=document.getElementById('digestList');
   if(!list)return;
-  var anchor=qaReportDate(),week=['日','一','二','三','四','五','六'];
-  if(dateEl){
-    var dt=anchor?new Date(anchor+'T00:00:00'):new Date();
-    dateEl.textContent=(anchor?anchor.replace(/-/g,'.'):(dt.getFullYear()+'.'+(dt.getMonth()+1)+'.'+dt.getDate()))+' 星期'+week[dt.getDay()];
-  }
+  // 2026-09-12：#digestDate 已删除——它渲染的「2026.09.11 星期五」与头部红底 .date-badge
+  // 「2026年09月11日 星期五」是同一天的重复日期（§9.1「头部日期为唯一来源」）。
+  // 非当日发布的条目仍由 dtag 单独标注日期，信息不丢。
+  var anchor=qaReportDate();
   // 选条逻辑见 computeDigestPicks()：优先当日发布 → 今日收录补齐 → 全库最新一天；并做跨源同事件去重
   var picks=computeDigestPicks();
   if(!picks.length){
