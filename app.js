@@ -1770,13 +1770,11 @@ function renderBrief(d){
   if(!rep.trim()&&!news.length&&!alerts.length&&!metals.length)return;
   var sEl=document.getElementById('briefSub');
   if(sEl){
-    // 有 stats 就报今日收录量，说明简报覆盖的是当日全部内容（不只是行情）
-    var st=d.stats||{};
-    var n=st.new_count;
-    // 2026-09-11 IA评审 A7：底部「首页」与顶部「推荐」同目的地，文案对齐为「推荐」（data-go 仍为 home，导航逻辑不变）
-    sEl.textContent=(typeof n==='number'&&n>0)
-      ? ('今日收录 '+n+' 条 · 按分类摘要')
-      : '每日 9:30 随日报生成';
+    // 2026-09-11 用户反馈：简报里的「今日收录 N 条」与侧栏/统计条「今日新增」口径不同，
+    //   今日收录 = 生成时纳入当日的全部条目（含被移入「会议/会展」专区的、降级为「补录」的旧闻）；
+    //   今日新增 = 页面实时可见、仍在时效内的新鲜条目。
+    // 两个数字并列会让读者以为数据打架，故简报不再重复条数；条数统一由侧栏/统计条呈现。
+    sEl.textContent='按分类摘要';
   }
   var main=document.getElementById('briefMain');
   if(main){
