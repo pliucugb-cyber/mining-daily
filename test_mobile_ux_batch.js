@@ -173,6 +173,24 @@ setTimeout(() => {
   check('① 回首页 → md_last_tab=home', lsGet('md_last_tab')==='home');
   check('② 搜索按钮结构仍在（display:none 由 CSS 控制）', !!doc.getElementById('mdSearchBtn'));
 
+  console.log('\n===== ⑬ 刷新红条误报修复：启动宽限期内不报整页降级（2026-09-11 体验修复）=====');
+  check('mdDegraded 是函数', typeof window.mdDegraded === 'function');
+  check('启动宽限标志 __mdBootGrace 已声明', 'undefined' !== typeof window.__mdBootGrace);
+  // 模拟「app.js 尚未求值」的刷新加载窗口：宽限期内 mdDegraded 必须返回空串（不闪红条）
+  var _ev = window.__mdAppEvaluated, _gr = window.__mdBootGrace;
+  try { window.__mdAppEvaluated = false; window.__mdBootGrace = false; } catch (e) {}
+  check('宽限期内（未求值）mdDegraded 返回空串 → 不挂红条', window.mdDegraded() === '', 'mdDegraded=' + JSON.stringify(window.mdDegraded()));
+  // 宽限期内即便 mdSyncBanner 被 1.2s 自愈轮次调用，error 红条也不应出现
+  try { window.mdSyncBanner(); } catch (e) {}
+  var _warn = doc.getElementById('mdBootWarn');
+  check('宽限期内 mdSyncBanner 不显示 error 红条', !(_warn && _warn.getAttribute('data-md-level') === 'error' && _warn.style.display === 'flex'));
+  // 宽限期结束后仍为「未求值」才判整页降级（真实故障检测不丢）
+  try { window.__mdBootGrace = true; } catch (e) {}
+  check('宽限期后仍未求值 → 判定整页降级（app.js 未执行）', window.mdDegraded() === 'app.js 未执行', 'mdDegraded=' + JSON.stringify(window.mdDegraded()));
+  // 还原：app 已求值 → 必为健康
+  try { window.__mdAppEvaluated = _ev; window.__mdBootGrace = _gr; } catch (e) {}
+  check('app 已求值 → mdDegraded 返回空串（健康）', window.mdDegraded() === '');
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));

@@ -5208,3 +5208,7 @@ function toggleTheme(){
 // 诊断价值：线上若看到 __mdBooted=true 而 __mdAppEvaluated 缺失，即说明脚本在求值中途抛错中断
 // （09-10 / 09-11 三轮事故都是这个形态）。过去没有任何可观测手段，只能靠猜。
 window.__mdAppEvaluated=true;
+// 求值完成后立即重算横幅状态：清除加载窗口内可能残留的任何误报（双保险）。
+// 此时 mdDegraded() 必返回 ''（app 已执行），mdSyncBanner 会隐藏 error 红条，
+// 并把单组件标注 / info 条对齐到 app 真实渲染后的状态。
+try{ if(typeof window.mdSyncBanner==='function') window.mdSyncBanner(); }catch(e){}

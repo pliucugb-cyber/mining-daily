@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-2222" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-1512" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1665,6 +1665,12 @@ body.dark .mtab{color:var(--ink-300)}
   window.__mdInfoShownCount=0;     // 已浮现 info 条的良性报错条数（避免重复弹）
   window.__mdInfoTimer=null;
   window.__mdBannerLevel='none';
+  // ⑤ 启动宽限：app.js 是 defer 外部脚本（内容指纹化 → 每次部署都缓存未命中），
+  // 弱网/首屏刷新时可能晚于 1.2s 自愈轮次才求值完成。宽限期内 mdDegraded() 不把
+  // 「app.js 未执行」判成整页降级，避免健康页每次刷新都闪一下红条（用户实测反馈）。
+  // 真正的「app.js 永远没跑」由 12s 看门狗负责——宽限期(10s)短于看门狗，二者不冲突。
+  window.__mdBootGrace=false;
+  setTimeout(function(){ window.__mdBootGrace=true; }, 10000);
   // 第三方统计（GoatCounter 等）取不到属正常，不能拿它报警，否则横幅天天误报。
   function mdIgnoreUrl(u){
     return !u || /goatcounter|gc\.zgo\.at|google-analytics|doubleclick|hm\.baidu|cnzz/.test(String(u));
@@ -1853,7 +1859,8 @@ body.dark .mtab{color:var(--ink-300)}
   //    良性错误仍被记录、仍在诊断里可见，只是不单独挂红条。
   function mdDegraded(){
     try{
-      if(!window.__mdAppEvaluated) return 'app.js 未执行';
+      // 启动宽限期内不判整页降级：app.js 尚未求值可能只是「还在加载」，而非「坏了」
+      if(!window.__mdAppEvaluated) return window.__mdBootGrace ? 'app.js 未执行' : '';
       var miss=mdMissingAssets();
       if(miss.length) return '核心数据缺失（'+miss.map(function(a){return a.f;}).join(',')+'）';
       // 注：单个区块未渲染（mdPending）不再走整页红条——改由 mdSyncBanner 的组件级 amber 标注（建议④）
