@@ -3,6 +3,7 @@
  * 覆盖：① 热榜手机 10 条 / 桌面 5 条  ② 往期字号（CSS，字符串断言）
  *       ③+④ 推荐不显示价格、价格仅价格 tab  ⑤ 问按钮发光球（CSS 断言）
  *       ⑥ 问答全屏 + 返回箭头  ⑧ 我的面板内联安装卡 + 删阅读模式  ⑨ 会议 tab + 区块注入
+ *       ⑩ 顶栏智能吸顶：隐藏只做 transform，不得折叠布局（2026-09-11 P0）
  * 运行：node test_mobile_ux_batch.js
  */
 const fs = require('fs');
@@ -109,6 +110,31 @@ setTimeout(() => {
   check('点击会议 tab 写入 body[data-md-cat=meeting]', doc.body.getAttribute('data-md-cat') === 'meeting');
   try { window.mdSelectCat('tuijian'); } catch (e) {}
   check('切回推荐写入 body[data-md-cat=tuijian]', doc.body.getAttribute('data-md-cat') === 'tuijian');
+
+  console.log('\n===== ⑩ 顶栏智能吸顶：隐藏不得改动布局（2026-09-11 P0 修复）=====');
+  const hidRule = (html.match(/body\.md-top-hidden #mdTop\{[^}]*\}/) || [''])[0];
+  check('隐藏规则存在', hidRule.length > 0, hidRule.slice(0, 70));
+  check('隐藏只做 transform 位移', /transform:translateY\(-100%\)/.test(hidRule));
+  check('隐藏不再折叠布局（无 margin-bottom）', !/margin-bottom/.test(hidRule), hidRule.slice(0, 110));
+  check('#mdTop 过渡不再含 margin-bottom', !/transition:[^;}]*margin-bottom/.test(html));
+  check('隐藏时不可点（pointer-events:none）', /pointer-events\s*:\s*none/.test(hidRule));
+  // 行为断言：滞后阈值 12px —— 小抖动不得来回切换
+  let _sy = 0;
+  try { Object.defineProperty(window, 'pageYOffset', { get: () => _sy, configurable: true }); } catch (e) {}
+  try { Object.defineProperty(doc.documentElement, 'scrollHeight', { get: () => 3000, configurable: true }); } catch (e) {}
+  try { Object.defineProperty(window, 'innerHeight', { value: 700, configurable: true, writable: true }); } catch (e) {}
+  _sy = 0; window.mdTopOnScroll();
+  const shownTop = !doc.body.classList.contains('md-top-hidden');
+  _sy = 400; window.mdTopOnScroll();
+  const hiddenDown = doc.body.classList.contains('md-top-hidden');
+  _sy = 300; window.mdTopOnScroll();
+  const shownUp = !doc.body.classList.contains('md-top-hidden');
+  _sy = 295; window.mdTopOnScroll();
+  const noFlick = !doc.body.classList.contains('md-top-hidden');
+  check('顶部不隐藏', shownTop);
+  check('下滚 400px 后隐藏', hiddenDown);
+  check('上滑后重现', shownUp);
+  check('5px 反向抖动不触发切换（12px 滞后）', noFlick);
 
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
