@@ -62,7 +62,10 @@ setTimeout(() => {
   const INK500 = /--ink-500:\s*(#[0-9a-fA-F]{6})/.exec(css);
   ok('--ink-500 本身达 AA', INK500 && ratio(INK500[1], '#ffffff') >= 4.5,
     INK500 ? INK500[1] + ' → ' + ratio(INK500[1], '#ffffff').toFixed(2) : '未取到');
-  ['.brief-sub', '.ba-mkt', '.rr-date'].forEach(function (sel) {
+  // 2026-09-11 死 CSS 清理：原断言列表含 .ba-mkt / .rr-date —— 这两个类早已无任何渲染
+  // （renderRightsSection() 不再输出 .ba-*，.rr-date 也已从矿权行移除），只是 CSS 一直没删，
+  // 断言才「看起来成立」。该批死 CSS 已清理，故把锚点换成仍然渲染的同类次要文字元素。
+  ['.brief-sub', '.rr-region'].forEach(function (sel) {
     const re = new RegExp('\\' + sel + '\\{[^}]*?color:([^;}]+)');
     const m = re.exec(css);
     const val = m ? m[1].trim() : '(未取到)';
