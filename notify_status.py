@@ -19,6 +19,7 @@ notify_status.py — 自动化失败/异常主动通知（方案 C）。
 """
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
@@ -27,6 +28,23 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 STATUS = ROOT / '.last_run_status.json'
 SOUND_NOTIFY = 'C:/Windows/Media/Windows Notify.wav'
+
+# 把「本次会话 token 用量」自动附到通知里（item: 收尾汇报 token 数）。
+# token_usage.py 与本脚本同目录；导入失败也不影响主流程。
+sys.path.insert(0, str(ROOT))
+
+
+def _token_line():
+    try:
+        from token_usage import summarize
+        sid = os.environ.get('CODEBUDDY_SESSION_ID', '')
+        s = summarize(sid)
+        if s['calls'] == 0:
+            return ' | token 未知（记录缺失）'
+        return (' | 本次token 输入{input:,}(缓存命中{cache:,}) '
+                '输出{output:,} 调用{calls}次 合计{total:,}').format(**s)
+    except Exception:
+        return ''
 
 
 def _play(sound):
@@ -61,14 +79,14 @@ def main():
 
     if args.kind == 'fail':
         _play(SOUND_NOTIFY)
-        _write_status('fail', args.task, args.msg)
+        _write_status('fail', args.task, args.msg + _token_line())
         print('NOTIFIED_FAIL')
     elif args.kind == 'warn':
         _play(SOUND_NOTIFY)
-        _write_status('warn', args.task, args.msg)
+        _write_status('warn', args.task, args.msg + _token_line())
         print('NOTIFIED_WARN')
     else:  # ok：仅写状态，不重复发声
-        _write_status('ok', args.task, args.msg)
+        _write_status('ok', args.task, args.msg + _token_line())
         print('NOTIFIED_OK')
 
 
