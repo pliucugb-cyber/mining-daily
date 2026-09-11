@@ -118,6 +118,42 @@ def fetch_em(sec, retry=3):
             time.sleep(2.0 * (i + 1))
 
 
+def lme_ref_date():
+    """LME_DATA 的基准日期 = lme_data.json 的 date。
+
+    06:00 流水线里 fetch_lme.py 先跑、本脚本后跑，所以此处读到的是「今天的」lme_data.json。
+    它由 fetch_lme.py 在伦敦闭市窗口内生成：date 是报告日，price 是「最近一个已收盘交易日」
+    的收盘价。因此任何 date >= 该基准日的 LME 日K bar，都必然是基准日出报告之后才开盘、
+    尚未收盘的一根（伦敦 01:00 开市 → 北京 08:00 起东财就多出当日 bar），不能当收盘价入图。
+    读不到时返回空串，由调用方退回「北京当日」兜底。
+    """
+    try:
+        with open(os.path.join(BASE, "lme_data.json"), encoding="utf-8") as f:
+            return str(json.load(f).get("date") or "").strip()
+    except Exception:
+        return ""
+
+
+def beijing_today():
+    return datetime.datetime.now(
+        datetime.timezone(datetime.timedelta(hours=8))).strftime("%Y-%m-%d")
+
+
+def drop_unclosed_lme_bar(pts, ref):
+    """丢掉尾部「尚未收盘」的 LME bar。
+
+    不变量：走势图末点 == lme_data.json 里那个收盘价 —— 这样前端卡片（唯一来源 LME_DATA）
+    与走势图末点天然一致，不需要任何跨源覆盖（2026-09-11 修复价格卡方向反转的根因）。
+    只从尾部丢，且至少保留 2 根（前端画线要求 points.length>=2）。
+    """
+    if not pts or len(pts) < 2:
+        return pts
+    ref = ref or beijing_today()
+    while len(pts) > 2 and pts[-1][0] >= ref:
+        pts = pts[:-1]
+    return pts
+
+
 def main():
     # 合并模式：本次抓取失败的品种保留旧数据（接口限流时部分品种会失败，不清空）
     detail_path = os.path.join(BASE, "price_history_detail.json")
@@ -128,6 +164,7 @@ def main():
         except Exception:
             old = {}
     series, failed = {}, []
+    ref = lme_ref_date()          # LME 未收盘 bar 的判别基准（见 drop_unclosed_lme_bar）
     for slug, kind, code, name, unit in INSTRUMENTS:
         try:
             pts = fetch_sina(code) if kind == "sina" else fetch_em(code)
@@ -146,6 +183,14 @@ def main():
                 if extra:
                     pts = pts + extra
                     src += "+em补尾"
+            # 2026-09-11：LME 丢弃「尚未收盘的当日 bar」。必须在补尾之后做——
+            # 否则补尾会把旧数据里的未收盘 bar 又拼回尾部。
+            if kind == "em":
+                n0 = len(pts)
+                pts = drop_unclosed_lme_bar(pts, ref)
+                if len(pts) < n0:
+                    print("  %-6s %-10s 丢弃未收盘 bar（基准日 %s，末点保留到 %s）"
+                          % (name, code, ref or beijing_today(), pts[-1][0]))
             series[slug] = {"name": name, "unit": unit, "code": code,
                             "source": src, "points": pts}
             print("  %-6s %-10s %d根  最新 %s %s" % (name, code, len(pts), pts[-1][0], pts[-1][1]))

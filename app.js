@@ -3091,24 +3091,19 @@ function renderLmePrices(){
       return;
     }
     var map={};
-    var dRef=D.date||String(D.updated||'').substring(0,10);   // LME_DATA 的基准日期
     D.metals.forEach(function(m){map[m.slug]=m;});
-    // 2026-09-04 修复：卡片直接复用走势图（PRICE_HISTORY）的日K收盘价，
-    // 消除「卡片实时价」与「走势图日K收盘」不一致（同一金属两张价）的观感问题。
-    // 2026-09-09 P0 修复：新增日期守卫——走势图末点日期必须 >= LME_DATA 日期才覆盖，null 不回填；否则保留 LME_DATA 原值兜底（旧逻辑会拿昨日价覆盖今日价并反转涨跌方向）。
-    (function(){
-      var H=window.PRICE_HISTORY;
-      if(!H||!H.series)return;
-      D.metals.forEach(function(m){
-        var s=H.series[m.slug];
-        if(!s||!s.points||s.points.length<2)return;
-        var n=s.points.length, last=s.points[n-1][1], prev=s.points[n-2][1], lastDate=s.points[n-1][0];
-        if(typeof last!=='number'||typeof prev!=='number'||!prev)return;
-        if(dRef&&lastDate&&String(lastDate)<dRef)return;   // 走势图比 LME_DATA 旧 → 不覆盖
-        var chg=last-prev, pct=chg/prev*100;
-        m.price=last; m.chg=chg; m.chg_pct=pct;
-      });
-    })();
+    // 2026-09-11 修复（价格卡数值 ≠ lme_data.json，方向反转）：
+    // 2026-09-04 起这里会把卡片价覆盖成走势图（PRICE_HISTORY）的末两点，用意是消除
+    // 「卡片价」与「走势图末点」两张价的观感差。但 PRICE_HISTORY 的 LME 序列来自东财
+    // push2his 日K，伦敦开市后（北京 08:00 起）会多出一根「当日尚未收盘」的盘中 bar；
+    // 而 lme_data.json 由 06:00 在伦敦闭市窗口生成，其 price 是最近一个已收盘交易日的
+    // 收盘价。两者都挂当日日期，09-09 加的 `lastDate < dRef` 守卫因此放行，
+    // 盘中价覆盖了收盘价 → 涨跌方向反转（锡 54115 ▼-1565 被改成 54825 ▲+710）。
+    // 且此处是就地改写 LME_DATA 对象，连带 qaPriceBrief() 的问答答案一起出错。
+    // 现改为：价格卡数值唯一来源 = LME_DATA（对应 test_data_integrity.js 的契约与项目红线，
+    // 禁止跨源覆盖）。「卡片 / 走势图一致」改由数据侧保证——fetch_price_history.py 不再
+    // 输出未收盘的 LME bar，走势图末点因此与 LME_DATA 的收盘价天然相等。
+    // 注：null 价一律走下方 `-- / 暂无数据` 分支，绝不回填历史点位（09-09 P0 教训）。
     lmeCards.forEach(function(card){
       var m=map[card.getAttribute('data-slug')];
       var v=card.querySelector('.pc-value'),c=card.querySelector('.pc-chg');
