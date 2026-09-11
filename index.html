@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-0024" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-0102" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -703,18 +703,24 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .md-top-brand{display:flex;align-items:baseline;gap:8px;white-space:nowrap;overflow:hidden}
   .md-brand{font-size:var(--fs-h3);font-weight:600;color:var(--ink-900);letter-spacing:.3px}
   .md-date{font-size:12px;color:var(--ink-500);overflow:hidden;text-overflow:ellipsis}
-  .md-cat-bar{display:flex;gap:2px;overflow-x:auto;margin-top:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .md-cat-bar::-webkit-scrollbar{display:none}
+  /* 2026-09-12 移动端排版：分类栏由「左对齐窄条」改为「四等分铺满」。
+     原 .mctab 是 flex:0 0 auto（宽度=文字宽），4 个 tab 只占屏幕左侧约 1/3，
+     右侧大片留白、视觉重心偏左；现改 flex:1 1 0 四等分，占满整行。 */
+  .md-cat-bar{display:flex;gap:0;margin-top:4px}
   /* 2026-09-11 优化：底部非首页 tab（价格/问/矿权/我的）隐藏顶部分类栏，避免与首页子导航重复 */
   body.md-hide-catbar .md-cat-bar{display:none}
   /* 2026-09-11 优化②：搜索为首页专属（仅首页有检索条），非首页隐藏搜索图标，避免误触被拽回首页 */
   body.md-hide-catbar #mdSearchBtn{display:none}
   /* 2026-09-11 优化③：非首页时品牌行改显示当前 tab 名，日期让位以留空间 */
   body.md-hide-catbar .md-date{display:none}
-  /* 2026-09-11 视觉规范评审修复 A3：越档字号 15px → var(--fs-h3) 14px */
-  .mctab{flex:0 0 auto;border:none;background:none;color:var(--ink-700);font-size:var(--fs-h3);padding:7px 6px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s}
+  /* 2026-09-11 视觉规范评审修复 A3：越档字号 15px → var(--fs-h3) 14px
+     2026-09-12 用户反馈「字太小」：14px → var(--fs-h2) 16px（回到字号体系内，非野值），
+     并四等分铺满 + 加大触控热区（下内边距 9px，总高约 41px）。 */
+  .mctab{flex:1 1 0;text-align:center;border:none;background:none;color:var(--ink-700);font-size:var(--fs-h2);padding:8px 0 9px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s;-webkit-tap-highlight-color:transparent}
+  .mctab:active{color:var(--brand)}
   .mctab.active{color:var(--brand);font-weight:600}
-  .mctab.active::after{content:'';position:absolute;left:6px;right:6px;bottom:0;height:3px;background:var(--brand);border-radius:2px}
+  /* 下划线改为居中定宽（24px），四等分下与文字等宽对齐，避免整格通栏显得像分隔线 */
+  .mctab.active::after{content:'';position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:24px;height:3px;background:var(--brand);border-radius:2px}
   #qaFab{display:flex!important;left:auto;right:14px;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:215;top:auto}
   /* 分类内容过滤：选中分类后仅显示对应区块；收藏/浏览记录视图(data-filter-mode)下不干预，避免与 fav/history 规则冲突 */
   /* 2026-09-11 视觉规范评审修复 A1：本组第三条与下方 hot 规则原写 `#col-rail`，但页面元素是 <aside class="col-rail">（无 id）→ 规则全部失效；

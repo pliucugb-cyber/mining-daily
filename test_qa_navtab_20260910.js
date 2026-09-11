@@ -51,7 +51,7 @@ setTimeout(() => {
   ok('#mobileTabBar 存在', !!bar);
   const qaBtn = bar && bar.querySelector('.mtab[data-go="qa"]');
   ok('存在 data-go="qa" 的「问」tab', !!qaBtn, qaBtn ? '文本=' + qaBtn.textContent.trim() : '缺失');
-  ok('「问」tab 文本为「问」', qaBtn && qaBtn.textContent.trim() === '问');
+  ok('「问」tab 文本为「AI 搜」（2026-09-12 方案 A 改名）', qaBtn && qaBtn.textContent.trim() === 'AI 搜');
   if (bar) {
     const seq = [...bar.querySelectorAll('.mtab')].map(b => b.getAttribute('data-go'));
     ok('tab 顺序 = 首页/价格/问/矿权/我的（居中）',
