@@ -20,8 +20,9 @@
 
 
 
+/* 2026-09-11 视觉规范评审修复 E4：--ink-300 亮色值提到达 AA（白底 2.56→4.88，#f5f7fa 2.39→4.55；仅改值不改变量名） */
 :root{
---ink-900:#16202b;--ink-700:#3d4b5a;--ink-500:#5f6d7a;--ink-300:#94a3b8;
+--ink-900:#16202b;--ink-700:#3d4b5a;--ink-500:#5f6d7a;--ink-300:#64737f;
 --line-1:#e5eaf0;--line-2:#d5dde5;
 --bg:#f5f7fa;--surface:#ffffff;--surface-2:#f5f7fa;--surface-3:#eef2f6;
 --brand:#0e7490;--brand-ink:#0b5a70;--brand-soft:#e6f4f7;--accent-hover:#0f788d;
@@ -340,12 +341,14 @@ body.dark .hot-title:hover{color:#ff7a7a}
 .digest-list li{position:relative;padding:var(--s2) 0 var(--s2) var(--s4);font-size: var(--fs-h3);line-height:1.55;border-bottom:1px dashed #f0f3f6;cursor:pointer;transition:background .15s}
 .digest-list li:hover{background:#fafcff}
 .digest-list li:last-child{border-bottom:none}
-.digest-list li::before{content:'';position:absolute;left:3px;top:14px;width:5px;height:5px;border-radius: 50%;background:#c0392b}
+/* 2026-09-11 视觉规范评审修复 D4：项目符号硬编码 #c0392b → var(--danger)（同值，走 token） */
+.digest-list li::before{content:'';position:absolute;left:3px;top:14px;width:5px;height:5px;border-radius: 50%;background:var(--danger)}
 .digest-list a{color:var(--ink-900);text-decoration:none;transition:color .15s}
 .digest-list a:hover{color:var(--up)}
 .digest-link{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* 要闻条目右侧的日期标签：非当日发布的旧稿显示，避免读者误以为是今天的新闻 */
-.digest-dtag{position:absolute;right:0;top:7px;font-size: var(--fs-meta);color:#98a4b0;background:#f4f7fa;border-radius: var(--r-sm);padding:1px var(--s2);font-weight:600;white-space:nowrap}
+/* 2026-09-11 视觉规范评审修复 E3：日期标签 2.36:1 → var(--ink-500)（该浅底 4.94:1） */
+.digest-dtag{position:absolute;right:0;top:7px;font-size: var(--fs-meta);color:var(--ink-500);background:#f4f7fa;border-radius: var(--r-sm);padding:1px var(--s2);font-weight:600;white-space:nowrap}
 .digest-list li{padding-right:52px}
 .digest-empty{padding:var(--s2) 0 2px;color:var(--ink-300);font-size: var(--fs-body)}
 body.dark .digest-dtag{background:#2a3644;color:#8fa3b5}
@@ -381,7 +384,8 @@ body.dark .digest-list a:hover{color:#ff7a7a}
 .brief-more:hover{background:var(--surface-3)}
 .brief-sec{margin:var(--s3) 0 var(--s2);font-size: var(--fs-h3);font-weight:600;color:var(--ink-900);letter-spacing:.5px;display:flex;align-items:center;gap:var(--s2)}
 .brief-sec:first-child{margin-top:0}
-.brief-sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,#dfe6ee,transparent)}
+/* 2026-09-11 视觉规范评审修复 H3：装饰性渐变下划线 → 1px 实线 var(--line-1) */
+.brief-sec::after{content:'';flex:1;height:1px;background:var(--line-1)}
 .brief-md ul:last-child{margin-bottom:0}
 .brief-alert{padding:var(--s2) 0;border-bottom:1px dashed var(--line-1);font-size: var(--fs-meta);line-height:1.5}
 .brief-alert:last-child{border-bottom:none}
@@ -412,7 +416,7 @@ body.dark .brief-md strong{color:var(--ink-900)}
 body.dark .brief-sec{color:#9fc4e8}
 body.dark .brief-more{background:var(--bg);border-color:var(--line-1);color:#9fc4e8}
 body.dark .brief-more:hover{background:var(--surface)}
-body.dark .brief-sec::after{background:linear-gradient(90deg,#2c3845,transparent)}
+body.dark .brief-sec::after{background:var(--line-1)}
 body.dark .brief-alert{border-bottom-color:var(--line-1)}
 body.dark .ba-name{color:var(--ink-700)}
 body.dark .ba-detail{color:var(--ink-500)}
@@ -568,7 +572,8 @@ body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 .qa-msg.ai .qa-msg-bubble{background:var(--surface);border:1px solid #e8eef3;color:var(--ink-900);border-top-left-radius:3px;box-shadow: var(--shadow-sm)}
 .qa-msg.user .qa-msg-bubble{background:var(--tag-strategy);color:#fff;border-top-right-radius:3px}
 .qa-msg-meta{font-size: var(--fs-nano);color:var(--ink-500);margin-top:3px}
-.qa-msg-time{font-size: var(--fs-nano);color:#aab4bf;margin-top:2px;text-align:right}
+/* 2026-09-11 视觉规范评审修复 E2：时间戳 2.10:1 → var(--ink-500) 5.31:1 */
+.qa-msg-time{font-size: var(--fs-nano);color:var(--ink-500);margin-top:2px;text-align:right}
 .qa-thinking{display:flex;align-items:center;gap:var(--s2);color:var(--ink-500);font-size: var(--fs-meta)}
 .qa-dot{width:7px;height:7px;border-radius: 50%;background:var(--tag-strategy);animation:qaBlink 1s infinite ease-in-out}
 @keyframes qaBlink{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
@@ -632,9 +637,11 @@ body.dark .qa-sources-count{color:var(--ink-500)}
 body.dark .qa-sources-count b{color:var(--ink-900)}
 body.dark .qa-msg-sources li{color:var(--ink-700)}
 body.dark .qa-msg-sources a{color:var(--tag-strategy);border-color:#4f46e5}
-body.dark .qa-src-date{color:#64748b}
+/* 2026-09-11 视觉规范评审修复 F-DARK-QASRC：暗色来源日期 3.29:1 → var(--ink-500) 5.51:1 */
+body.dark .qa-src-date{color:var(--ink-500)}
 body.dark .qa-src-group-title{color:#cdd9e5;background:#222e3c}
-body.dark .qa-msg-time{color:#5b6b7c}
+/* 2026-09-11 视觉规范评审修复 E2/F-DARK-QATIME：暗色时间戳 2.86:1 → var(--ink-500) 5.51:1 */
+body.dark .qa-msg-time{color:var(--ink-500)}
 body.dark .qa-msg-action{color:var(--ink-500)}
 body.dark .qa-msg-action:hover{background:var(--surface-3);color:var(--tag-strategy)}
 body.dark .qa-float-foot{background:var(--surface);border-top-color:var(--line-1)}
@@ -656,7 +663,8 @@ body.dark .qa-float-btn{background:var(--surface-3);color:var(--ink-700)}
 .ai-item-rows{display:grid;gap:3px;padding-left:2px}
 .ai-row{display:flex;gap:var(--s2);font-size: var(--fs-meta);line-height:1.6;color:var(--ink-700)}
 .ai-row .ai-label{flex-shrink:0;display:inline-block;font-size: var(--fs-meta);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:600;margin-top:2px;background:#eef2ff;color:var(--tag-strategy);min-width:30px;text-align:center}
-.ai-row.risk .ai-label{background:#fef2f2;color:#dc2626}
+/* 2026-09-11 视觉规范评审修复 E12：风险标签 4.41:1 → var(--danger)（#fef2f2 底上 4.97:1） */
+.ai-row.risk .ai-label{background:#fef2f2;color:var(--danger)}
 .ai-row .ai-text{flex:1}
 .ai-loading,.ai-empty,.ai-disabled{padding:var(--s5);text-align:center;color:var(--ink-300);font-size: var(--fs-body);background:var(--surface-2);border-radius: var(--r-md);border:1px dashed var(--line-2)}
 .ai-disabled{color:var(--ink-500)}
@@ -726,7 +734,8 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   #mobileTabBar{display:flex;position:fixed;left:0;right:0;bottom:0;height:calc(56px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line-2);box-shadow:0 -1px 3px rgba(15,23,42,.06);z-index:210;padding-bottom:env(safe-area-inset-bottom,0px)}
   .mtab{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none;color:var(--ink-700);cursor:pointer;padding:4px 0;line-height:1.2;transition:color .15s}
   .mtab .mi{font-size:20px;line-height:1;opacity:.75;transition:opacity .15s}
-  .mtab span{font-size:11px}
+  /* 2026-09-11 视觉规范评审修复 A4：越档字号 11px → var(--fs-meta) 12px */
+  .mtab span{font-size:var(--fs-meta)}
   .mtab::before{content:'';position:absolute;top:0;left:28%;right:28%;height:2.5px;background:var(--brand);border-radius:0 0 2px 2px;opacity:0;transition:opacity .15s}
   .mtab.active{color:var(--brand)}
   .mtab.active .mi{opacity:1}
@@ -760,11 +769,14 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .md-date{font-size:12px;color:var(--ink-500);overflow:hidden;text-overflow:ellipsis}
   .md-cat-bar{display:flex;gap:2px;overflow-x:auto;margin-top:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .md-cat-bar::-webkit-scrollbar{display:none}
-  .mctab{flex:0 0 auto;border:none;background:none;color:var(--ink-700);font-size:15px;padding:7px 6px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s}
+  /* 2026-09-11 视觉规范评审修复 A3：越档字号 15px → var(--fs-h3) 14px */
+  .mctab{flex:0 0 auto;border:none;background:none;color:var(--ink-700);font-size:var(--fs-h3);padding:7px 6px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s}
   .mctab.active{color:var(--brand);font-weight:600}
   .mctab.active::after{content:'';position:absolute;left:6px;right:6px;bottom:0;height:3px;background:var(--brand);border-radius:2px}
   #qaFab{display:flex!important;left:auto;right:14px;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:215;top:auto}
   /* 分类内容过滤：选中分类后仅显示对应区块；收藏/浏览记录视图(data-filter-mode)下不干预，避免与 fav/history 规则冲突 */
+  /* 2026-09-11 视觉规范评审修复 A1：本组第三条与下方 hot 规则原写 `#col-rail`，但页面元素是 <aside class="col-rail">（无 id）→ 规则全部失效；
+     现改写为 `.col-rail`（与 app.js document.querySelector('.col-rail') 一致）。 */
   body[data-md-cat]:not([data-filter-mode]) #briefStrip,
   body[data-md-cat]:not([data-filter-mode]) #digestStrip,
   body[data-md-cat]:not([data-filter-mode]) #priceStrip,
@@ -773,13 +785,13 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   body[data-md-cat]:not([data-filter-mode]) #archiveSection,
   body[data-md-cat]:not([data-filter-mode]) #rightsSection,
   body[data-md-cat]:not([data-filter-mode]) #meetingSection,
-  body[data-md-cat]:not([data-filter-mode]) #col-rail{display:none!important}
+  body[data-md-cat]:not([data-filter-mode]) .col-rail{display:none!important}
   body[data-md-cat]:not([data-md-cat="tuijian"]):not([data-filter-mode]) #newsFilterBar{display:none!important}
   body[data-md-cat="tuijian"]:not([data-filter-mode]) #briefStrip,
   body[data-md-cat="tuijian"]:not([data-filter-mode]) #digestStrip,
   body[data-md-cat="tuijian"]:not([data-filter-mode]) #todaySection{display:block!important}
   body[data-md-cat="price"]:not([data-filter-mode]) #priceStrip{display:block!important}
-  body[data-md-cat="hot"]:not([data-filter-mode]) #col-rail{display:block!important}
+  body[data-md-cat="hot"]:not([data-filter-mode]) .col-rail{display:block!important}
   body[data-md-cat="rights"]:not([data-filter-mode]) #rightsSection{display:block!important}
   body[data-md-cat="archive"]:not([data-filter-mode]) #archiveSection{display:block!important}
   body[data-md-cat="meeting"]:not([data-filter-mode]) #meetingSection{display:block!important}
@@ -812,9 +824,10 @@ body.dark #mineSheet button:active{background:var(--surface-3)}
   .nf-chip{padding:0 var(--s2);min-height:40px}
   .section-title{padding:var(--s2) var(--s3)}
 }
+/* 2026-09-11 视觉规范评审修复 F-DARK-INk300：暗色 --ink-300 3.04→5.03（#1b2430）/ 5.56（#141b24） */
 body.dark{background:#0f151c;color:var(--ink-900)}
 body.dark{
---ink-900:#e8eef3;--ink-700:#b6c2ce;--ink-500:#8b9bad;--ink-300:#5f6f80;
+--ink-900:#e8eef3;--ink-700:#b6c2ce;--ink-500:#8b9bad;--ink-300:#8394a5;
 --line-1:#2a3542;--line-2:#35424f;
 --bg:#141b24;--surface:#1b2430;--surface-2:#202b38;--surface-3:#26313f;
 --brand:#38bdf8;--brand-ink:#7dd3fc;--brand-soft:#123040;--accent-hover:#7dd3fc;
@@ -867,6 +880,8 @@ body.dark .stat-num.unread{color:#6ab4e0}
 body.dark .btn-restore{background:#4a5765;color:#fff}
 body.dark .btn-restore:hover{background:#5a6875}
 body.dark .btn-pdf{color:#0b1220}
+/* 2026-09-11 视觉规范评审修复 F1：暗色 .btn-allread 白字 on --success(#35c48d) 仅 2.23:1 → 深字 8.41:1 */
+body.dark .btn-allread{color:#0b1220}
 body.dark .news-count{color:var(--ink-500)}
 body.dark .news-item.read .news-title{color:var(--ink-300);font-weight:var(--fw-regular)}
 body.dark .news-item.read .dot{background:transparent;box-shadow:inset 0 0 0 2px #4a5765}
@@ -993,7 +1008,10 @@ body.dark .qa-airefs a{color:#6ab4e0}
    在深色背景下本就醒目且不刺眼：.btn-allread(绿) .btn-fav(橙) .btn-history(紫) .qa-fab(紫渐变)
    .qa-float-head(紫渐变) .qa-btn.qa-ai(蓝渐变) .guide-col-head(青/蓝渐变) .guide-link(深蓝渐变)
    .badge-strategy(金棕渐变) .hl-tag(橙红渐变) .ai-tag(靛蓝渐变) .install-tip .tip-close(半透明白)
-   .arch-fav / .btn 无背景色声明。审计脚本差集命中属预期。 */
+   .arch-fav / .btn 无背景色声明。审计脚本差集命中属预期。
+   ⚠️ 2026-09-11 视觉规范评审修复 F1：本条「彩色底 + 白字」只对**亮色**绿 --success(#0e7a52, 白字 5.35:1) 成立；
+   暗色 --success 为浅绿 #35c48d，白字仅 2.23:1 不达 AA，故暗色下 .btn-allread 例外地改深字 #0b1220（8.41:1），
+   见上方 `body.dark .btn-allread{color:#0b1220}`。其余元素维持本条「保留亮色」不变。 */
 /* ==================== 移动端细节（2026-09-05 补齐）==================== */
 @media (max-width:600px){
   /* iPhone 全面屏：悬浮球与问答面板避开底部 home 指示条，否则会被压住一截 */
@@ -1042,7 +1060,8 @@ body.dark .qa-airefs a{color:#6ab4e0}
 .guide-step.gs-pc{border-left-color:#1e40af}
 .guide-step.gs-pc strong{color:#1e40af}
 .guide-step.gs-warn{background:#fef2f2;border-left-color:#dc2626}
-.guide-step.gs-warn strong{color:#dc2626}
+/* 2026-09-11 视觉规范评审修复 E12：警告步骤文字 4.41:1 → var(--danger) 4.97:1 */
+.guide-step.gs-warn strong{color:var(--danger)}
 .guide-step small{color:var(--ink-500);font-size: var(--fs-meta);display:block;margin-top:3px}
 .guide-tip{margin:var(--s3) var(--s4) 0;padding:var(--s3) var(--s4);background:#fffbeb;border:1px solid #fde68a;border-radius: var(--r-md);font-size: var(--fs-meta);color:#78350f;line-height:1.65}
 .guide-link{display:block;margin:var(--s3) var(--s4) var(--s1);padding:var(--s3) var(--s4);background:#1a3a5c;color:#fff;border-radius: var(--r-md);text-align:center;font-weight:600;font-size: var(--fs-h3);word-break:break-all}
@@ -1152,7 +1171,8 @@ body.dark .qa-trend{background:var(--bg);border-color:var(--line-1);color:var(--
 .rr-mineral{flex:0 0 auto;min-width:34px;text-align:center;font-size: var(--fs-meta);font-weight:600;color:var(--brand);background:#e6f4f7;border-radius: var(--r-md);padding:1px var(--s2)}
 .rr-title{flex:1 1 auto;min-width:0;color:var(--ink-900);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rr-title:hover{color:var(--brand);text-decoration:underline}
-.rr-region{flex:0 0 auto;max-width:150px;color:#7b8a99;font-size: var(--fs-meta);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 2026-09-11 视觉规范评审修复 E9：矿权地区桌面态 3.54:1 → var(--ink-500) 5.31:1（与移动端 1495 统一；暗色 4.90 达标不动） */
+.rr-region{flex:0 0 auto;max-width:150px;color:var(--ink-500);font-size: var(--fs-meta);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rr-method{flex:0 0 auto;font-size: var(--fs-meta);padding:1px var(--s2);border-radius: var(--r-sm);background:var(--surface-3);color:#5b6b7c}
 .rr-num{flex:0 0 auto;color:#33475b;font-size: var(--fs-meta);font-variant-numeric:tabular-nums}
 .rights-row .rc-deadline{flex:0 0 auto;font-size: var(--fs-meta)}
@@ -1175,6 +1195,16 @@ body.dark .rr-num{color:var(--ink-700)}
   .news-item{padding:var(--s4) var(--s4)}
   .news-title{line-height:1.45}
 }
+/* ⚠️ 2026-09-11 起注意：本块是**旧「矿权卡」布局**的遗留 CSS，其中大部分类名早已不渲染。
+   app.js:262-317 的 renderRightsSection() 实际只输出：.rights-row / .rr-head / .rr-type /
+   .rr-title / .rr-region / .rr-grid / .rr-field(>span,>b,>b.na) / .rr-line / .rc-deadline /
+   .rc-extra —— 即本块里**只有 .rc-deadline（含 .rc-urgent/.rc-soon/.rc-normal/.rc-expired）
+   和 .rc-extra 是活的**，其余 .rights-card/.rc-top/.rc-method*/.rc-grid*/.rc-region/.rc-src/
+   .rc-title/.rc-mineral 均已失效（全仓仅在此出现，无任何 JS/HTML 输出）。
+   查证方式：grep -rn "rc-grid\|rc-method\|rc-region\|rc-src" --include=*.js --include=*.py .
+   视觉评审 E1/E6/E11/F2 误锚在此块上（改了不生效），已于 2026-09-11 回退；
+   要改矿权区颜色请改 index.html:1511+ 的 .rr-* 段与 1178/1215/1531+ 的 .rc-deadline。
+   整块失效 CSS 建议后续单独清理（删前先确认 .rc-deadline/.rc-extra 两组被保留）。 */
 .rights-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--s4)}
 .rights-card{background:var(--surface);border:1px solid #dfe6ee;border-radius: var(--r-lg);padding:var(--s5) var(--s5);display:flex;flex-direction:column;gap:var(--s3);transition:box-shadow .18s,transform .18s,border-color .18s;box-shadow: var(--shadow-md)}
 .rights-card:hover{box-shadow:0 8px 26px rgba(14,116,144,.15);transform:translateY(-2px);border-color:#c5d3e0}
@@ -1269,6 +1299,8 @@ body.dark .expo-mini-list li:hover{background:#1c2734}
 .nf-chip{font-size: var(--fs-meta);font-weight:600;padding:3px var(--s3);border-radius: var(--r-lg);background:#e8eef5;color:#2c5a85;cursor:pointer;user-select:none;transition:.15s;border:1px solid transparent}
 .nf-chip:hover{background:#dde8f3}
 .nf-chip.active{background:var(--ink-900);color:#fff}
+/* 2026-09-11 视觉规范评审修复 F4：暗色 .nf-count 原无覆盖（3.39:1）→ var(--ink-500) 5.34:1 */
+body.dark .nf-count{color:var(--ink-500)}
 .nf-count{font-size: var(--fs-meta);color:#5b7a99;margin-left:4px}
 .nf-export-btn{margin-left:8px;padding:var(--s1) var(--s3);font-size: var(--fs-meta);border:1px solid #cfdbe8;border-radius: var(--r-md);background:var(--surface);color:var(--ink-900);cursor:pointer;vertical-align:middle}
 .nf-export-btn:hover{background:var(--brand-soft)}
@@ -1444,8 +1476,9 @@ body.dark .filter-state{background:#123040;border-color:#1d3d4d;color:var(--ink-
 .sub-count,.rr-date,.day-group,.news-meta{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 /* 只在移动端放大，桌面鼠标操作维持原尺寸，避免视觉回归 */
 @media(max-width:1100px){
-  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.toc-main-item,.toc-back-top,.reading-toggle{min-height:44px}
-  .theme-toggle,.pwa-header-btn{min-width:44px}
+  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.toc-main-item,.toc-back-top,.reading-toggle,#briefToggle,.mobile-install-close,.md-search-btn,.md-fav-btn,.nf-clear{min-height:44px}
+  /* 2026-09-11 视觉规范评审修复 G2A–G2D：图标按钮补 min-width:44px（G2E .nf-clear 仅补高——加宽会盖住输入文字，按报告改用热区策略） */
+  .theme-toggle,.pwa-header-btn,#briefToggle,.mobile-install-close,.md-search-btn,.md-fav-btn{min-width:44px}
 }
 @media(min-width:1440px){
   .news-grid{grid-template-columns:minmax(0,1fr) 320px}
@@ -1554,7 +1587,8 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   /* P1：已读圆点阴影用设计令牌替代硬编码灰（桌面保持 #c8d0d8 不动） */
   .news-item.read .dot{box-shadow:inset 0 0 0 2px var(--line-2)}
   /* P2：热榜 tab 只留矿业热榜，隐藏近期会展卡（data-md-cat 仅手机设置，桌面不触发） */
-  body[data-md-cat="hot"] #col-rail .expo-mini{display:none!important}
+  /* 2026-09-11 视觉规范评审修复 A1：锚点 #col-rail → .col-rail（页面元素 <aside class="col-rail"> 无 id） */
+  body[data-md-cat="hot"] .col-rail .expo-mini{display:none!important}
   /* P2：顶栏统一吸顶层（分类栏 z230 在搜索 z225 之上，避免 z-index 重叠；不做 DOM 嵌套以免 destabilize 搜索条） */
   .news-filter-bar{z-index:225}
   /* P0-3：底部导航内联 SVG 图标尺寸 */
@@ -2139,7 +2173,7 @@ body.dark .mtab{color:var(--ink-300)}
 <script src="news-data.js?v=3489d3ec" defer></script>
 <script src="lme-data.js?v=9a6d16e0" defer></script>
 <script src="price-history.js?v=b3e410f0" defer></script>
-<script src="app.js?v=d90f438b" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=cb2772f4" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
