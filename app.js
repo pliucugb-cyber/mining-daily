@@ -421,6 +421,8 @@ const HISTORY_KEY='mining_daily_history';
 // ⚠️ 2026-09-08 晚修复严重回归：原写法 window.lsSet(k,v) 是自调用（顶层函数声明即 window 属性），
 // 无限递归被 try/catch 吞掉 → 09-06 23:20 起所有 lsSet 写入静默失效（已读/收藏/历史/主题/QA 历史等全没存上）。
 function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+// 2026-09-11 P1 修复：qaCacheGet/qaCachePut 读缓存时调用了未定义的 lsGet，导致缓存永远命中不了（ReferenceError 被 try/catch 吞掉）。补齐镜像读函数。
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function getReadSet(){try{return new Set(JSON.parse(localStorage.getItem(STORE_KEY)||'[]'))}catch(e){return new Set()}}
 function saveReadSet(s){lsSet(STORE_KEY,JSON.stringify([...s]))}
 // 收藏存储：新格式为对象数组 {url,title,date,src}；旧格式（纯URL字符串数组）自动迁移
@@ -4094,9 +4096,22 @@ function qaFloatAsk(retryMode,ctxOverride){
   // 日期意图：不使用历史 conv，避免「紫金矿业」等前序追问污染当前「今天新增」理解
   var _conv=_dateIntent?[]:qaBuildConv();
   var _broad=_dateIntent?false:qaIsBroadQuery(q);
+  // 2026-09-11 P1：答案缓存（同机稳定复现；数据版本变化自动失效）；retryMode / ctxOverride 不走缓存
+  _qaCacheKey=(!retryMode && !ctxOverride)?qaCacheKey(q,_minSel||_min,_topSel||_top,_from,_rg,_dateIntent):'';
+  if(_qaCacheKey && !retryMode){
+    var _hit=qaCacheGet(_qaCacheKey);
+    if(_hit){
+      var msg=qaFloatAdd('ai','（命中本地答案缓存，正在渲染…）','答案缓存命中',{md:false,actions:false,ts:Date.now()});
+      _qaPath='缓存';_qaModel='deepseek-chat';_qaT0=Date.now();
+      qaFinishAnswer(_hit.text,msg.querySelector('.qa-msg-bubble'),msg,q,_hit.ctx||_ctx,_hit.dateIntent||_dateIntent);
+      QA_FLOAT_BUSY=false; if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
+      return;
+    }
+  }
+  _qaCacheKey=_qaCacheKey||qaCacheKey(q,_minSel||_min,_topSel||_top,_from,_rg,_dateIntent);
   var meta='正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候…';
   var msg=qaFloatAdd('ai','正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now()});
-  qaDeepseekCall(q,_ctx,msg,btn,_conv,_broad,_dateIntent);
+  qaDeepseekCall(q,_ctx,msg,btn,_conv,_broad,_dateIntent,_rangeIntent);
   return;
 }
 // 安全清洗外链：只允许 http/https，拦截 javascript:/data:/vbscript: 等危险协议，并转义引号
@@ -4307,7 +4322,10 @@ function qaFinishAnswer(text,bubble,msg,q,ctx,ok,dateIntent){
   var src=qaDsSourcesHtml(ctx,q);
   if(src&&bubble)bubble.insertAdjacentHTML('afterend',src);
   if(msg){
-    var meta=ok?(dateIntent?'DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条 '+dateIntent+' 本地新闻':'DeepSeek 真 AI · 已参考 '+(ctx?ctx.length:0)+' 条相关本地新闻'):'本地知识库兜底 · 全库 '+QA_ROWS.length+' 条';
+    var _ms=_qaT0?((Date.now()-_qaT0)/1000).toFixed(1):'';
+    var meta=ok
+      ? ('DeepSeek · 通路='+(_qaPath||'代理')+' · 模型='+(_qaModel||'deepseek-chat')+(_ms?(' · 用时 '+_ms+'s'):'')+' · 已参考 '+(ctx?ctx.length:0)+' 条'+(dateIntent?(' '+dateIntent+' 本地新闻'):' 相关本地新闻'))
+      : ('本地知识库兜底 · 通路='+(_qaPath||'本地兜底')+(_ms?(' · 用时 '+_ms+'s'):'')+' · 全库 '+QA_ROWS.length+' 条');
     var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=meta;
     msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);qaAppendFollowUps(msg,qaFollowUps(q,ctx));
     var actions='<div class="qa-msg-actions">'+
@@ -4320,6 +4338,7 @@ function qaFinishAnswer(text,bubble,msg,q,ctx,ok,dateIntent){
       else msg.insertAdjacentHTML('beforeend',actions);
     }
   }
+  if(ok && _qaCacheKey){ qaCachePut(_qaCacheKey,{text:text,ctx:ctx||[],dateIntent:dateIntent,u:QA_UPDATED||''}); }
   qaFloatScroll();qaSaveHistory();
 }
 // 代理模式下：优先尝试 SSE 流式；若边缘函数尚未启用流式（返回 JSON），自动回退 JSON 解析
@@ -4337,6 +4356,7 @@ function qaTryStreamOrJson(url,headers,body,bubble,msg,q,ctx,dateIntent,ac,to,bt
     .catch(function(e){
       var la=qaAiLocalAnswer(q,ctx);
       var why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||e||'网络错误');
+      _qaPath='本地兜底';
       qaFinishAnswer(la+'\n\n[DeepSeek 调用失败（'+why+'），已切换本地知识库回答]',bubble,msg,q,ctx,false,dateIntent);
       clearTimeout(to);QA_FLOAT_BUSY=false;if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
     });
@@ -4391,10 +4411,12 @@ function qaStreamPump(r,bubble,msg,q,ctx,dateIntent,ac,to,btn){
   }).catch(function(e){
     var why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||'网络错误');
     if(acc){ if(bubble)bubble.innerHTML=qaInlineRefs(qaMdRender(acc),ctx); finish(acc,true); }
-    else{ var la=qaAiLocalAnswer(q,ctx); finish(la+'\n\n[DeepSeek 流式调用失败（'+why+'），已切换本地知识库回答]',false); }
+    else{ _qaPath='本地兜底'; var la=qaAiLocalAnswer(q,ctx); finish(la+'\n\n[DeepSeek 流式调用失败（'+why+'），已切换本地知识库回答]',false); }
   });
 }
-function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
+// 2026-09-11 P1：回答元信息（通路 / 模型 / 用时），供 meta 行展示，使「同问题不同答案」可被解释
+var _qaPath='',_qaModel='',_qaT0=0,_qaCacheKey='';
+function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent,rangeIntent){
   // 2026-09-06：AI 上下文再次按相关性阈值过滤，确保正文和参考来源只出现强相关内容
   // 日期意图：已在 qaFloatAsk 中按日期严格过滤，不再做通用相关性过滤，避免误删当天条目
   var ctx=dateIntent?(ctxRaw||[]):qaFilterRelevant(ctxRaw||[],q);
@@ -4426,6 +4448,8 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
     +'\n2) 其余内容用「小标题 + 要点列表」，不要写成长段散文；'
     +'\n3) 只输出 Markdown 与纯文本，不要输出 HTML 标签，也不要用代码块包裹整篇回答；'
     +'\n4) 若用户问题含相对时间（如「近三天」「最近一周」），一律以下方给出的【条目日期范围】为准，不得自行推算或改写该区间。';
+  // 2026-09-11 P1：历史轮次仅用于指代消解，其格式不作本次样式参考（消除「上轮写表格→本轮回表格」的跨机格式差异）
+  system+='\n\n【多轮上下文说明】下方历史对话仅用于理解指代（如「上述矿权」「那笔交易」「它」），其格式与结构**不作**为本次回答的样式参考。本次回答必须严格遵循上方【输出格式（硬性要求）】，不要因为历史回答是表格/列表/散文就延续其样式；若历史回答与本次问题无关，直接忽略即可。';
   var dsMessages=[{role:'system',content:system}];
   if(conv&&conv.length){
     conv.forEach(function(t){ dsMessages.push({role:t.role,content:t.content}); });
@@ -4443,6 +4467,13 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
     });
     user+='\n';
     if(_dsWin){user+='【条目日期范围（唯一可引用的时间范围）】'+_dsWin+'，共 '+ctx.length+' 条。若回答中需要说明时间跨度，必须照抄本区间，不要自行推算或改写。\n';}
+  // 2026-09-11 P1：相对时间窗超出本地数据覆盖时，明确告知，避免误以为窗口完整
+  if(rangeIntent){
+    var _maxD='';QA_ROWS.forEach(function(r){if(r.d&&r.d>_maxD)_maxD=r.d;});
+    if(_maxD && _maxD < qaReportDate()){
+      user+='（注：本地新闻库最新条目发布于 '+_maxD+'，早于提问所指窗口终点，可引用范围以上方【条目日期范围】为上限，未覆盖完整'+rangeIntent.label+'。）\n';
+    }
+  }
   }else{
     if(dateIntent){
       user+='（本地新闻库显示 '+dateIntent+' 暂无新增报道；请直接说明无新增，并建议用户换日期或关键词。）\n\n';
@@ -4464,6 +4495,7 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
   //      因此下面的解析逻辑与直连完全一致。
   //   ② 直连模式（兜底）：仅当未配置代理地址时，才使用使用者自填的 Key（localStorage）。
   var _proxyBase=(typeof QA_API_BASE!=='undefined'&&QA_API_BASE)?String(QA_API_BASE).replace(/\/+$/,''):'';
+  _qaPath=_proxyBase?'代理':'直连';_qaModel='deepseek-chat';_qaT0=_qaT0||Date.now();
   var _dsMessages=dsMessages.concat([{role:'user',content:user}]);
   var _url,_headers,_body;
   if(_proxyBase){
@@ -4474,27 +4506,12 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
     qaTryStreamOrJson(_url,_headers,_body,bubble,msg,q,ctx,dateIntent,_ac,_to,btn);
     return;
   }
+  // 2026-09-11 P1：直连也走流式（与代理一致），失败 / 非流自动回退 JSON
   _url='https://api.deepseek.com/chat/completions';
-  _headers={'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()};
-  _body=JSON.stringify({model:'deepseek-chat',messages:_dsMessages,max_tokens:1500,temperature:0,stream:false});
-  fetch(_url,{
-    method:'POST',
-    headers:_headers,
-    body:_body,
-    signal:_ac.signal
-  })
-    .then(function(r){return r.json().then(function(d){return {ok:r.ok,status:r.status,d:d||{}};},function(){return {ok:false,status:0,d:{}};});})
-    .then(function(res){ qaApplyJson(res,bubble,msg,q,ctx,dateIntent); })
-    .catch(function(e){
-      var localAns=qaAiLocalAnswer(q,ctx);
-      var _why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||e||'网络错误');
-      qaFinishAnswer(localAns+'\n\n[DeepSeek 直连失败（'+_why+'），已切换为本地知识库回答]',bubble,msg,q,ctx,false,dateIntent);
-    })
-    .then(function(){
-      clearTimeout(_to);
-      QA_FLOAT_BUSY=false;
-      if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
-    });
+  _headers={'Content-Type':'application/json','Accept':'text/event-stream','Authorization':'Bearer '+getDsKey()};
+  _body=JSON.stringify({model:'deepseek-chat',messages:_dsMessages,max_tokens:1500,temperature:0,stream:true});
+  qaTryStreamOrJson(_url,_headers,_body,bubble,msg,q,ctx,dateIntent,_ac,_to,btn);
+  return;
 }
 // ===== 问答历史记忆（本地 localStorage）=====
 var QA_HISTORY_KEY='qa_history_v1';
@@ -4541,6 +4558,21 @@ function qaSaveHistory(){
     if(out.length>QA_HISTORY_MAX)out=out.slice(out.length-QA_HISTORY_MAX);
     lsSet(QA_HISTORY_KEY,JSON.stringify(out));
   }catch(e){}
+}
+// 2026-09-11 P1：相同「问题 + 筛选 + 数据版本」的答案缓存，避免重复调用、并使同一问题在同机稳定复现
+var QA_CACHE_KEY='qa_answer_cache_v1',QA_CACHE_MAX=30;
+function qaCacheKey(q,m,t,from,rg,di){
+  return JSON.stringify({q:q||'',m:m||'',t:t||'',from:from||'',rg:rg||0,di:di||'',u:QA_UPDATED||''});
+}
+function qaCacheGet(k){
+  try{ var s=lsGet(QA_CACHE_KEY); if(!s)return null; var map=JSON.parse(s); if(!map||!map[k])return null;
+    if(map[k].u!==(QA_UPDATED||''))return null; return map[k]; }catch(e){ return null; }
+}
+function qaCachePut(k,v){
+  try{ var s=lsGet(QA_CACHE_KEY); var map=s?JSON.parse(s):{}; if(!map||typeof map!=='object')map={};
+    map[k]=v; var ks=Object.keys(map);
+    if(ks.length>QA_CACHE_MAX){ ks.slice(0,ks.length-QA_CACHE_MAX).forEach(function(x){ delete map[x]; }); }
+    lsSet(QA_CACHE_KEY,JSON.stringify(map)); }catch(e){}
 }
 // 欢迎语（2026-09-08 晚：原「本地新闻库 N 条。」信息量为零，改为说明面板能力）
 function qaWelcomeText(){
