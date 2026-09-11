@@ -297,7 +297,12 @@ def write_index(data_dir):
     """生成 data/index.json 总索引：各月条目数与日期覆盖，供检索器快速定位"""
     months = []
     for fn in sorted(os.listdir(data_dir)):
+        # 2026-09-11 修：原本 fn.startswith('news_') 会把候选池 news_candidates_*.json
+        # 当成月库写进 index.json（曾出现 candidates_2026-09-08/09/10/11 被计为月份、
+        # total 虚增 848 条）。必须严格匹配月库命名 news_YYYY-MM.json。
         if not (fn.startswith('news_') and fn.endswith('.json')):
+            continue
+        if not re.match(r'^news_\d{4}-\d{2}\.json$', fn):  # 非月库格式：忽略
             continue
         path = os.path.join(data_dir, fn)
         try:

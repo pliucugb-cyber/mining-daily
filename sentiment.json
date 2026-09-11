@@ -1,6 +1,6 @@
 {
  "date": "2026-09-11",
- "total": 175,
+ "total": 167,
  "market_index": 52,
  "market_label": "中性",
  "by_commodity": {
@@ -11,22 +11,27 @@
   },
   "铜": {
    "score": 53,
-   "count": 54,
+   "count": 50,
    "label": "中性"
   },
   "银": {
    "score": 53,
-   "count": 12,
+   "count": 11,
+   "label": "中性"
+  },
+  "锡": {
+   "score": 53,
+   "count": 8,
    "label": "中性"
   },
   "金": {
    "score": 53,
-   "count": 83,
+   "count": 78,
    "label": "中性"
   },
   "稀土": {
    "score": 53,
-   "count": 18,
+   "count": 17,
    "label": "中性"
   },
   "铀": {
@@ -34,24 +39,14 @@
    "count": 4,
    "label": "中性"
   },
-  "锡": {
-   "score": 52,
-   "count": 9,
-   "label": "中性"
-  },
   "铅": {
    "score": 52,
-   "count": 7,
+   "count": 6,
    "label": "中性"
   },
   "铝": {
    "score": 51,
-   "count": 21,
-   "label": "中性"
-  },
-  "锑": {
-   "score": 51,
-   "count": 6,
+   "count": 20,
    "label": "中性"
   },
   "铂族": {
@@ -59,19 +54,19 @@
    "count": 7,
    "label": "中性"
   },
-  "锂": {
-   "score": 51,
-   "count": 16,
-   "label": "中性"
-  },
   "镍": {
    "score": 50,
    "count": 15,
    "label": "中性"
   },
-  "钨": {
+  "锑": {
    "score": 50,
    "count": 4,
+   "label": "中性"
+  },
+  "锂": {
+   "score": 50,
+   "count": 15,
    "label": "中性"
   },
   "钪": {
@@ -106,34 +101,39 @@
   },
   "锌": {
    "score": 49,
-   "count": 12,
+   "count": 11,
    "label": "中性"
   },
   "钴": {
    "score": 49,
    "count": 7,
    "label": "中性"
+  },
+  "钨": {
+   "score": 48,
+   "count": 3,
+   "label": "中性"
   }
  },
  "themes": [
   {
    "theme": "国际",
-   "count": 76,
+   "count": 71,
    "score": 52
   },
   {
    "theme": "找矿",
-   "count": 39,
+   "count": 36,
    "score": 53
   },
   {
    "theme": "技术",
-   "count": 34,
+   "count": 32,
    "score": 54
   },
   {
    "theme": "政策",
-   "count": 29,
+   "count": 27,
    "score": 52
   },
   {
@@ -434,5 +434,5 @@
    ]
   }
  ],
- "source": "keyword-rule（基于 index.html 收录 175 条）"
+ "source": "keyword-rule（基于 index.html 收录 167 条）"
 }

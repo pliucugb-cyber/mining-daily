@@ -179,6 +179,56 @@ def _esc(s):
     return (s or '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
+# ============ 2026-09-11 新增：跨源同事件去重 ============
+# 背景：同一条事件常被多家源同时报道（如「2026中国国际矿业大会将于9月10日开幕」
+# 被 自然资源部/中国地质调查局/中国有色金属报 三家同题转发；SMM 中英文站
+# news.smm.cn 与 news.metal.com 同题双语发布）。旧流程只按 URL 去重，
+# 结果往期区长期残留 6 组同事件重复（08-24~09-10 累积）。
+# 判定：标题归一化后完全相同，或相似度 ≥ SAME_EVENT_SIM。
+SAME_EVENT_SIM = 0.62
+
+
+def title_key(t):
+    """标题归一化：去掉标点/空白，只留中英文与数字，用于同事件比较"""
+    return re.sub(r'[^\w\u4e00-\u9fff]', '', t or '')
+
+
+def item_title(it):
+    m = re.search(r'class="news-title"[^>]*>([\s\S]*?)</a>', it)
+    if not m:
+        return ''
+    return re.sub(r'<[^>]+>', '', m.group(1)).strip()
+
+
+def same_event(t1, t2):
+    """两条标题是否在讲同一件事。短标题（<8 字，多为无信息量标题）一律判否。"""
+    import difflib
+    a, b = title_key(t1), title_key(t2)
+    if not a or not b:
+        return False
+    if a == b:
+        return True
+    if min(len(a), len(b)) < 8:
+        return False
+    if len(a) >= 10 and (a in b or b in a):
+        return True
+    return difflib.SequenceMatcher(None, a, b).ratio() >= SAME_EVENT_SIM
+
+
+def dedup_same_event(seq, key=None):
+    """按「同事件」去重，保留先出现的（调用方应按质量/时间排好序）。
+    seq 元素为 (cat, item_html)；key(item) 可自定义取标题的函数。"""
+    _key = key or item_title
+    out, kept = [], []
+    for cat, it in seq:
+        t = _key(it)
+        if any(same_event(t, k) for k in kept):
+            continue
+        kept.append(t)
+        out.append((cat, it))
+    return out
+
+
 def render_cat_groups(seq, mark_new=False):
     suffix = '条新增' if mark_new else '条'
     order, groups = [], {}

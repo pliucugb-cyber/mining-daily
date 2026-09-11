@@ -20,6 +20,7 @@ from generate_common import (
     item_after_cutoff as _item_after_cutoff,
     _lib_item as _lib_item_raw,
     _reclassify_ma as _reclassify_ma_raw,
+    dedup_same_event, item_title, same_event,
 )
 from functools import partial
 
@@ -147,6 +148,11 @@ for cat, it in prev_today + arch_keep:
         continue
     seen_url.add(url)
     merge_seq.append((_reclassify_by_url(cat, it), it))
+
+# 2026-09-11 增：跨源同事件去重（同题多源转发 / SMM 中英文双语站重复）。
+# 只按 URL 去重会漏掉「自然资源部+地调局+有色报」三家同题这类情况，
+# 往期区曾因此残留 6 组重复。放在最后、保留先出现者。
+merge_seq = dedup_same_event(merge_seq)
 
 # ============ 4. 今日新增条目（09-11 抓取，均逐源核实） ============
 
@@ -288,6 +294,19 @@ for cat, it in new_items:
 new_items = unique_new
 
 merge_seq = [x for x in merge_seq if item_url(x[1]) not in new_seen_url]
+# 2026-09-11 增：往期区内部跨源同事件再兜一次（回补的月库条目可能与已有条目同事件）
+merge_seq = dedup_same_event(merge_seq)
+# 今日新增与往期区互斥：同事件以「今日新增」为准，往期区让位
+_new_titles = [item_title(it) for _c, it in new_items]
+if _new_titles:
+    merge_seq = [x for x in merge_seq
+                 if not any(same_event(item_title(x[1]), _t) for _t in _new_titles)]
+# 自检：今日新增内部若出现同事件重复，说明 new_items 人工挑稿有误，显式告警（不静默丢弃）
+for _i in range(len(new_items)):
+    for _j in range(_i + 1, len(new_items)):
+        if same_event(item_title(new_items[_i][1]), item_title(new_items[_j][1])):
+            print('[warn] 今日新增内部疑似同事件重复: %s <-> %s'
+                  % (item_title(new_items[_i][1])[:40], item_title(new_items[_j][1])[:40]))
 
 arch_groups = render_cat_groups(merge_seq, mark_new=False)
 today_groups = render_cat_groups(new_items, mark_new=True)

@@ -38,6 +38,7 @@
   --where        只打印解析到的数据目录
 """
 import os
+import re
 import sys
 import json
 import argparse
@@ -62,13 +63,18 @@ NOT_FOUND_MSG = """[错误] 未找到矿业新闻累积库目录（需含 news_Y
 累积库由 mining-daily/export_news_json.py 每日追加生成。"""
 
 
+def is_month_lib(fn):
+    """只认月库 news_YYYY-MM.json；候选池 news_candidates_*.json 是中间产物，必须排除
+    （2026-09-11 修：原用 fn.startswith('news_') 会把候选池当月份分片读进来）"""
+    return bool(re.match(r'^news_\d{4}-\d{2}\.json$', fn))
+
+
 def has_news(d):
     """目录里确实存在月度分片才算命中，避免探到空壳目录"""
     if not d or not os.path.isdir(d):
         return False
     try:
-        return any(fn.startswith('news_') and fn.endswith('.json')
-                   for fn in os.listdir(d))
+        return any(is_month_lib(fn) for fn in os.listdir(d))
     except OSError:
         return False
 
@@ -115,7 +121,7 @@ def available_months(data_dir):
     if not os.path.isdir(data_dir):
         return []
     return sorted(fn[5:-5] for fn in os.listdir(data_dir)
-                  if fn.startswith('news_') and fn.endswith('.json'))
+                  if is_month_lib(fn))
 
 
 def month_needed(month, args):

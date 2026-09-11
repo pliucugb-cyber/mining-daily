@@ -1,13 +1,13 @@
 # URL 校验报告
 
-校验时间: 2026-09-11 06:19:17
+校验时间: 2026-09-11 08:16:35
 扫描文件: C:\Users\中铝矿业投并部\mining-daily\index.html
 
 ## 汇总
 
-- 总计: **175** 条
-- ✅ 正常: **131** 条
-- ⚠️ 警告: **7** 条
+- 总计: **167** 条
+- ✅ 正常: **124** 条
+- ⚠️ 警告: **6** 条
 - ❌ 失效: **37** 条
 
 ## ❌ 失效清单（必须修复）
@@ -60,23 +60,11 @@
 - 关键词: ['马里', '里萨', '萨南', '南柯', '柯罗', '罗金', '金矿', '矿钻']
 - ❌ 标题关键词 0/8 命中（['马里', '里萨', '萨南']…）——可能错挂源或 URL 错配
 
-### 华锡有色箭猪坡矿区锑多金属矿资源储量核实报告通过评审备案 锑资源储量规模达大型
-- URL: `https://news.smm.cn/news/104106209`
-- 来源: 上海有色网 · 09-10
-- 关键词: ['华锡', '锡有', '有色', '色箭', '箭猪', '猪坡', '坡矿', '矿区']
-- ❌ 标题关键词 0/8 命中（['华锡', '锡有', '有色']…）——可能错挂源或 URL 错配
-
 ### 巴西铁山稀土矿等项目进展：澳/乌/科多国矿端见矿
 - URL: `https://news.smm.cn/news/104104007`
 - 来源: 上海有色网 · 09-09
 - 关键词: ['巴西', '西铁', '铁山', '山稀', '稀土', '土矿', '矿等', '等项']
 - ❌ 标题关键词 0/8 命中（['巴西', '西铁', '铁山']…）——可能错挂源或 URL 错配
-
-### 智利坎加洛铜矿两孔将矿体延伸至地下800米 高品位给矿构造获验证
-- URL: `http://geochina.cgs.gov.cn/news/950`
-- 来源: 全球矿产资源信息系统 · 09-08
-- 关键词: ['智利', '利坎', '坎加', '加洛', '洛铜', '铜矿', '矿两', '两孔']
-- ❌ 标题关键词 0/8 命中（['智利', '利坎', '坎加']…）——可能错挂源或 URL 错配
 
 ### 艾芬豪将刚果（金）西部前沿铜资源量扩大30% Makoko 概略研究计划2027年启动
 - URL: `https://news.metal.com/en/newscontent/104104009-ivanhoe-expands-drc-western-forelands-copper-resource-by-30-makoko-scoping-study-planned-for-2027`
@@ -156,23 +144,11 @@
 - 关键词: ['智利', '利铜', '铜业', '业委', '委员', '员会', '全球', '球铜']
 - ❌ 标题关键词 0/8 命中（['智利', '利铜', '铜业']…）——可能错挂源或 URL 错配
 
-### 海关总署：1~8月铜材进口降6.7% 稀土进口降2.6% 铝材出口增16.7%
-- URL: `https://news.metal.com/en/newscontent/104103575-general-administration-of-customs-copper-semis-imports-down-67-rare-earth-imports-down-26-aluminum-semis-exports-up-167-january-august`
-- 来源: SMM 国际站 · 09-09
-- 关键词: ['海关', '关总', '总署', '月铜', '铜材', '材进', '进口', '口降']
-- ❌ 标题关键词 0/8 命中（['海关', '关总', '总署']…）——可能错挂源或 URL 错配
-
 ### 巴西寻平衡关键矿产管控和外资
 - URL: `https://news.smm.cn/news/104106348`
 - 来源: 上海有色网 · 09-10
 - 关键词: ['巴西', '西寻', '寻平', '平衡', '衡关', '关键', '键矿', '矿产']
 - ❌ 标题关键词 0/8 命中（['巴西', '西寻', '寻平']…）——可能错挂源或 URL 错配
-
-### 津巴布韦禁止锑、钨出口以推动本土加工
-- URL: `https://news.metal.com/en/newscontent/104103752-zimbabwe-bans-antimony-tungsten-exports-to-boost-domestic-processing`
-- 来源: SMM 国际站 · 09-09
-- 关键词: ['津巴', '巴布', '布韦', '韦禁', '禁止', '止锑', '钨出', '出口']
-- ❌ 标题关键词 0/8 命中（['津巴', '巴布', '布韦']…）——可能错挂源或 URL 错配
 
 ### 印度与俄罗斯谋求扩展矿业与关键矿产伙伴关系
 - URL: `https://news.metal.com/en/newscontent/104106349-india-russia-eye-expanded-mining-and-critical-minerals-partnership`
@@ -222,6 +198,24 @@
 - 关键词: ['江苏', '苏连', '连云', '云港', '港破', '破获', '获涉', '涉案']
 - ❌ 标题关键词 0/8 命中（['江苏', '苏连', '连云']…）——可能错挂源或 URL 错配
 
+### 数智赋能护航矿业高质量发展新征程 2026智能矿山高质量发展大会暨数智赋能本质安全论坛召开
+- URL: `https://www.cnmn.com.cn/ShowNews1.aspx?id=473443`
+- 来源: 中国有色网 · 08-25
+- 关键词: ['数智', '智赋', '赋能', '能护', '护航', '航矿', '矿业', '业高']
+- ❌ 网络错误/超时（无法访问）
+
+### 紫金矿业主营金属产量稳中有进 价值创造能力持续提升
+- URL: `https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0825/61822.html`
+- 来源: 中国有色金属工业协会 · 08-25
+- 关键词: ['紫金', '金矿', '矿业', '业主', '主营', '营金', '金属', '属产']
+- ❌ 网络错误/超时（无法访问）
+
+### Galantas 以 500 万美元交易退出爱尔兰 Omagh 金矿项目
+- URL: `https://www.mining.com/galantas-exits-omagh-gold-project-in-5m-deal`
+- 来源: MINING.COM · 09-10
+- 关键词: ['Galantas', '500', '万美', '美元', '元交', '交易', '易退', '退出']
+- ❌ 网络错误/超时（无法访问）
+
 ### 印度 KABIL 瞄准哥伦比亚关键矿产机会 供应链多元化再扩围
 - URL: `https://news.metal.com/en/newscontent/104106368-indias-kabil-eyes-colombian-critical-minerals-opportunities-as-supply-diversification-expands`
 - 来源: SMM 国际站 · 09-10
@@ -232,7 +226,13 @@
 - URL: `https://news.metal.com/en/newscontent/104101668-mmg-dugald-river-signs-2027`
 - 来源: SMM 国际站 · 09-07
 - 关键词: ['五矿', '矿资', '资源', 'Dugald', 'River', '签署', '2027', '2028']
-- ❌ 标题关键词 0/8 命中（['五矿', '矿资', '资源']…）——可能错挂源或 URL 错配
+- ❌ 网络错误/超时（无法访问）
+
+### 格陵兰萨法托克铌稀土矿获勘查许可
+- URL: `https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260824_10297598.htm`
+- 来源: 全球矿产资源 · 08-24
+- 关键词: ['格陵', '陵兰', '兰萨', '萨法', '法托', '托克', '克铌', '铌稀']
+- ❌ 网络错误/超时（无法访问）
 
 ## ⚠️ 警告清单（建议核查）
 
@@ -255,11 +255,6 @@
 - URL: `https://www.mining.com/eldorados-skouries-turns-years-of-setbacks-into-copper`
 - 来源: MINING.COM · 09-09
 - ⚠️ 标题关键词只命中 2/8（['Eldorado', 'Skouries', '铜金', '金项', '项目', '目多', '多年', '年波']）——疑似错挂
-
-### Galantas 以 500 万美元交易退出爱尔兰 Omagh 金矿项目
-- URL: `https://www.mining.com/galantas-exits-omagh-gold-project-in-5m-deal`
-- 来源: MINING.COM · 09-10
-- ⚠️ 标题关键词只命中 2/8（['Galantas', '500', '万美', '美元', '元交', '交易', '易退', '退出']）——疑似错挂
 
 ### ACG Metals 逾700万美元收购土耳其 Keşkek 金矿项目
 - URL: `https://www.mining.com/acg-metals-to-acquire-keskek-gold-project`
