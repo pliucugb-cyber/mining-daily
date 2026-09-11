@@ -149,6 +149,9 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 | 已删前端组件 `#rightsTable`、显示切换按钮 | 勿复活（口径以各自动化 prompt 红线为准） | 现行前端单视图 |
 | 简报「单条≤80字（句号截断）」与 `update_analysis_*.py::trunc80` | 2026-09-11 用户否决：36 条里 35 条被切在句中（如「HVLP4 代铜箔实…」） | `fmt_bullet(max_len=0)` 用完整摘要 |
 | 简报前端显示「今日收录 N 条」 | 与侧栏「今日新增」口径不同（实测 36 vs 32），并列显得数据打架 | `briefSub` 固定「按分类摘要」 |
+| 「今日要闻」区的 `#digestDate`（渲染「2026.09.11 星期五」） | 2026-09-12 用户判定**属重复日期**：与头部红底 `.date-badge`「2026年09月11日 星期五」是同一天 | 已删除（元素 + `.digest-date` CSS + `app.js` 填充代码）；非当日发布的条目仍由 `.digest-dtag` 单独标注 |
+| 「政策与产业」节只喂 `行业动态` | 2026-09-12 修正：节名里的「政策」无对应内容，名不副实 | 两源合并：`政策与监管` + `行业动态`（先政策后产业，各类目内按发布日期倒序） |
+| 简报每节 `recent_items(limit=4)` 硬上限 | 2026-09-12 用户要求「连条数也全」：行业动态 9 条只出 4 条、找矿 6 条只出 4 条 | `limit=0`（默认全量）；前端 `setupBriefClamp()` 420px 折叠 +「展开全部（N 条）」兜底 |
 | 阅读模式整套：`body.reading-mode` / `#readingToggle` / `#readingExitBar` / `.reading-toggle` / `.reading-exit` / `toggleReadingMode()` / `restoreReadingMode()` | 2026-09-11 用户判定价值不大，已彻底删除 | 无（勿复活；`test_ux_20260910.js` ② 段已锁死） |
 | 简报条里的「（原题：英文标题）」 | 中文摘要夹英文是噪音 | 生成器自动剥离（英文原题仍在新闻卡片保留） |
 
@@ -162,9 +165,9 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 4. **[待决策 2026-09-11 23:55] 已建的「矿业新闻日报」项目**：用户明确"就自己一个人做、不协作" → 项目的全部增量价值（成员/共享 Skill/任务转交）用不上，且占用体验版 5 个配额之一。**建议归档**（项目卡 ⋯ → 归档），日常一律走"新建任务 + 手动选 `mining-daily`"。
 5. **[可选] 把"结算口令"做成单词快捷指令**，省得每次翻速查卡。
 6. **[已完成·本项目外]**：`~/.workbuddy/artifact-index/f2f418e9-1531-4aff-9c33-b6b1f99dd5d5.json` 中 3 条指向 `C:\Windows\Temp` 的死引用已删除（58→55），备份在 `%TEMP%\artifact-index-f2f418e9.bak.json`。
-7. **[待用户定 2026-09-12] 简报每节仍上限 4 条**（36 条里只挑 ≤20）：本轮只修了「单条被截断」，未动覆盖条数。若要连条数也「全」，需调 `update_analysis_*.py::recent_items(limit=4)`。
-8. **[待用户定] 「政策与产业」节目前由 `行业动态` 类目喂数**（`recent_items('行业动态', drop_notice=True)`），与节名不符：要么把节名改成「行业动态」，要么改喂 `政策与监管` 类目。
-9. **[待确认] 「今日要闻」的 `digestDate` 是否也属重复日期**：本轮只删了简报 `briefDate`、保留头部 `.date-badge`，`digestDate` 未动。
+7. **[已解决 2026-09-12 · §10.1] 简报每节仍上限 4 条**：用户定「连条数也全」→ `recent_items` 默认 `limit=0`（全量，不再限量）；单条也早已不截断（§6 / §9.2.5）。
+8. **[已解决 2026-09-12 · §10.2] 「政策与产业」节由 `行业动态` 喂数**：用户选「两源合并、节名不变」→ 数据源 = `政策与监管` + `行业动态`（先政策后产业，各类目内按发布日期倒序），`drop_notice=True` 仍生效。
+9. **[已解决 2026-09-12 · §10.3] `digestDate` 属重复日期**：用户确认属重复 → 已删除（元素 + `.digest-date` CSS + `app.js` 填充代码），非当日条目仍由 `.digest-dtag` 标注。
 10. **[已完成 2026-09-12 00:25 · commit `19f6480`] 本文件已提交并推送**：含上一会话 §5–§7 与本次 §6/§7 追加 + §8/§9，均已入版本库。当时为免带走另一会话正在改的 `morning_report.json` / `update_analysis_20260911.py`，故单独一个 commit（只含 REFERENCE.md，+142 行）。
 
 ---
@@ -202,19 +205,51 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 1. **横幅宽限**：`__mdBootGrace`(10s) 门控 `mdDegraded()` 的「app.js 未执行」判定；`__mdRegionGrace`(10s) 门控 `mdStuckRegions()` 整体。今后新增任何"异步/网络依赖"的健康态，必须同步给宽限。
 2. **阅读模式已废**（见 §6）：见 `body.reading-mode` / `#readingToggle` / `#readingExitBar` 即为回退，`test_ux_20260910.js` ② 段会立刻失败。
 3. **简报 `briefSub` 固定为「按分类摘要」**，禁止再拼 `今日收录 N 条`（口径不同，见 §8.3）。
-4. 头部日期以 `.date-badge` 为唯一来源，简报不再另写「数据日期」。
+4. 头部日期以 `.date-badge` 为唯一来源：简报不再另写「数据日期」（`briefDate` 已删），今日要闻的 `digestDate` 也已于 2026-09-12 删除（§10.3）；非当日条目用 `.digest-dtag` 单独标注。见 `body.reading-mode`/`#readingToggle`/`#briefDate`/`#digestDate` 即为回退。
 
 ### 9.2 数据 / 生成
 
 5. **简报单条＝完整摘要，不截断**：`fmt_bullet` 默认 `max_len=0`；仅显式传 `max_len>0` 时按句末标点（。！？）截断，**绝不在句中硬切**；自动剥掉行尾「（原题：…）」。
 6. `stats.new_count`（收录口径）与页面「今日新增」（实时新鲜口径）**不必相等**，且通常 收录 ≥ 新增（差额＝移入会议专区的会展条目 ＋ 降级「补录」的旧闻）。**不要**为了让两者数值相等去改数据。
 7. 只改 `morning_report.report` 的稳妥做法：备份 4 个分析 JSON → 跑修好的生成器 → 只取新 `report` 覆盖回原文件（保住 `updated`/`stats`/`sections`）→ 其余 3 个 JSON 从备份还原（避免 `NOW` 时间戳漂移）；最后 diff 确认**仅 bullet 文本**变化。
+- **简报每节＝该类目全部 `is_new`，不限条数**（2026-09-12 新增，§10.1）：`recent_items` 默认 `limit=0` 即全量，需要限量才显式传 `limit>0`。**长度问题交给前端** `setupBriefClamp()`（420px 折叠 +「展开全部（N 条）」），不在数据层砍内容。
+- **「政策与产业」= `政策与监管` + `行业动态` 两源**（2026-09-12 新增，§10.2）：先政策后产业，各类目内按 `orig_date_full` 倒序，`drop_notice=True` 仍生效（见 §3）。**不要**退回单类目喂数——只喂「行业动态」则节名里的「政策」没有内容，只喂「政策与监管」则产业面内容从简报消失。
 
 ### 9.3 流程 / 工程
 
 8. 改 `index.html` 必 bump `build-version`；**手改主树 `sw.js` 的 `CACHE_NAME` 再跑 preflight**（`deploy_pages.py` 虽也会同步，但它在推 gh-pages 时才改，会卡在 preflight 闸门）。
 9. **行尾差异**：`index.html` / `app.js` 是 **LF**，而 `test_ux_20260910.js` 是 **CRLF**。批量替换脚本先 `repr()` 看行尾——按 `\n` 拼的多行串在 CRLF 文件上会匹配 0 次，须改按「行索引区间替换 + 保留 `\r`」。
 10. **提交只 add 本次实际改动的文件**：他人/其他会话未提交的无关改动（如 `REFERENCE.md`）不要顺手带进 commit。
-11. **改生成侧功能必须同步 06:00 与 08:00 两条自动化 prompt**，否则次日复现。本轮已同步：§11.8 取消 80 字截断、§11.8b 禁止把「今日收录 N 条」加回 `briefSub`、§11.10 加"无关改动别带进 commit"。
+11. **改生成侧功能必须同步 06:00 与 08:00 两条自动化 prompt**，否则次日复现。历轮已同步：§11.8 取消 80 字截断、§11.8b 禁止把「今日收录 N 条」加回 `briefSub`、§11.10 加"无关改动别带进 commit"、§11.8c 每节全量 + 政策与产业两源（2026-09-12）。
 12. **线上验收必须实抓字节**（`urllib` 带 `Cache-Control: no-cache`），不能只看脚本日志；GitHub Pages 有 30–70s 延迟，首读旧属正常，要重试（本轮还遇到过代理 502）。
+- **jsdom 不实现 `fetch`**（2026-09-12 实测）：直接用 `JSDOM.fromURL` 验简报会拿到「morning_report.json 不可用，简报区保持隐藏」，简报永远渲染不出来。验证简报要在 `beforeParse(w)` 里把 Node 的 `fetch` 桥进 window（`w.fetch=(u,o)=>fetch(new URL(String(u),url).href,o)`），并用本地 `http.server` 起静态服务（file:// 下也不行）。实测这样能拿到 `briefMain li` 的真实条数。
+- **判定「测试失败是不是我改出来的」**：把 HEAD 导到临时目录（`git archive HEAD | tarfile`）跑同一测试对比退出码，比凭记忆争论快且准（2026-09-12 用此法确认 `test_price_enhance.js` / `test_ready_state_tdz.js` 为既有失败）。
+
+---
+
+## §10 本次对话结论（2026-09-12 00:16–00:4x，build `20260912-0024`）
+
+> 本轮把 §7 的 7 / 8 / 9 / 10 四条待办一次做完，均由用户当面拍板。
+
+### 10.1 简报每节改为全量（不再限 4 条）
+
+- 改动：`update_analysis_YYYYMMDD.py::recent_items` 默认 `limit=0`（全量），原 `limit=4` 会让「行业动态」9 条只出 4 条、「找矿」6 条只出 4 条。
+- 依据：前端 `setupBriefClamp()` 已有 420px 折叠 +「展开全部（N 条）」，放全不会把价格区顶到屏幕外 → 长度问题在展示层解决，不在数据层砍内容。
+- 实测（jsdom + 本地 http + fetch 桥接）：`briefMain li = 24` = 行情 2 + 政策与产业 12 + 勘查与技术 6 + 并购与投资 3 + 矿权 1。
+
+### 10.2 「政策与产业」改为两源合并
+
+- 改动：`recent_items('政策与监管', drop_notice=True) + recent_items('行业动态', drop_notice=True)`，**先政策后产业**，各类目内按 `orig_date_full` 倒序。
+- 09-11 实测分布：政策与监管 3 + 行业动态 9 = 12 条（此前只有行业动态 4 条）。`drop_notice` 保持 True（§3）。
+
+### 10.3 删除 `digestDate`（判定为重复日期）
+
+- 删除三处：`index.html` 的 `<span class="digest-date" id="digestDate">`、两条 `.digest-date` CSS（亮/暗）、`app.js::renderDigest()` 的填充代码（含已无用的 `week` / `dt`）。
+- 头 `.date-badge`（红底）保留为唯一日期来源；要闻条非当日发布时仍由 `.digest-dtag` 标注，信息不丢。
+- 实测：jsdom 下 `#digestDate` = null、`.digest-date` 节点 = 0、`digestList li = 4` 正常。
+
+### 10.4 工程观察
+
+- **并发会话**：本轮进行中，另一会话于 00:25 / 00:28 提交并推送了 `19f6480` / `680c24c`（只动 `REFERENCE.md`），远端与本地一度同时前进。结论：**同一 `mining-daily` 目录别开两个会话同时改**，至少不要同时提交；提交前先 `git log --oneline -3 origin/main` 看远端是否被别人推过。
+- **既有失败（非本轮引入）**：`test_price_enhance.js`（① 组 3 条，今日异动全为下跌、只有锌一条进条）、`test_ready_state_tdz.js`（「app.js 末行是求值完成信标」——实际信标在第 5 行倒数位置，末行是 `mdSyncBanner` 调用）。两者在 HEAD 上同样 exit=1。要不要修属新决策，本轮未动。
 
