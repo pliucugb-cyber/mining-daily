@@ -30,39 +30,59 @@ def _proj_root():
     return os.path.expanduser('~/.workbuddy/projects')
 
 
-def _iter_events(session_id):
-    """遍历所有项目 jsonl，产出匹配 session_id 且含 usage 的事件（按事件 id 去重）。"""
-    seen = set()
+def _proj_dirs():
+    """项目目录候选：优先当前 cwd 对应的那个（自动化里就一个），找不到再回退全部。"""
     base = _proj_root()
     if not os.path.isdir(base):
-        return
-    for path in glob.glob(os.path.join(base, '*', '*.jsonl')):
-        try:
-            fh = open(path, encoding='utf-8', errors='replace')
-        except OSError:
-            continue
-        with fh:
-            for line in fh:
-                line = line.strip()
-                if not line.startswith('{'):
-                    continue
-                if session_id and session_id not in line:
-                    continue
-                try:
-                    o = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
-                if session_id and o.get('sessionId') != session_id:
-                    continue
-                eid = o.get('id')
-                if eid in seen:
-                    continue
-                seen.add(eid)
-                u = o.get('usage')
-                if not isinstance(u, dict):
-                    u = (o.get('message') or {}).get('usage')
-                if isinstance(u, dict):
-                    yield u
+        return []
+    cwd = os.environ.get('CODEBUDDY_PROJECT_DIR') or os.getcwd()
+    slug = cwd.replace(':', '-').replace(os.sep, '-').strip('-')
+    target = os.path.join(base, slug)
+    if os.path.isdir(target):
+        return [target]
+    return [os.path.join(base, d) for d in os.listdir(base)
+            if os.path.isdir(os.path.join(base, d))]
+
+
+def _iter_events(session_id):
+    """遍历项目 jsonl，产出匹配 session_id 且含 usage 的事件（按事件 id 去重）。
+
+    一次会话的记录只落在某一个项目目录里，找到后即刻停止扫描其余目录，
+    避免对全量项目做无谓 I/O。
+    """
+    seen = set()
+    for proj in _proj_dirs():
+        found_any = False
+        for path in glob.glob(os.path.join(proj, '*.jsonl')):
+            try:
+                fh = open(path, encoding='utf-8', errors='replace')
+            except OSError:
+                continue
+            with fh:
+                for line in fh:
+                    line = line.strip()
+                    if not line.startswith('{'):
+                        continue
+                    if session_id and session_id not in line:
+                        continue
+                    try:
+                        o = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    if session_id and o.get('sessionId') != session_id:
+                        continue
+                    eid = o.get('id')
+                    if eid in seen:
+                        continue
+                    seen.add(eid)
+                    u = o.get('usage')
+                    if not isinstance(u, dict):
+                        u = (o.get('message') or {}).get('usage')
+                    if isinstance(u, dict):
+                        yield u
+                        found_any = True
+        if found_any and session_id:
+            break
 
 
 def summarize(session_id):
