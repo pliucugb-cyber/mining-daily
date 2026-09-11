@@ -18,7 +18,7 @@
 //    2026-09-10 事故——本行被改写成 `const P260910-1900';`（语法错误），
 //    导致 sw.js 无法解析 → SW 永远无法更新 → 用户卡在旧的/不完整缓存里，页面区块一直停在「加载中…」。
 //    现 deploy_pages.py 与 preflight_check.py 都会对 sw.js 做语法校验，写坏即拒绝部署。
-const CACHE_NAME = 'mining-daily-20260911-1804';
+const CACHE_NAME = 'mining-daily-20260911-1404';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
