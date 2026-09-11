@@ -1768,8 +1768,6 @@ function renderBrief(d){
   var sent=sec.sentiment||null;
   var rep=String(d.report||'');
   if(!rep.trim()&&!news.length&&!alerts.length&&!metals.length)return;
-  var dEl=document.getElementById('briefDate');
-  if(dEl)dEl.textContent=d.date?('数据日期 '+d.date):'';
   var sEl=document.getElementById('briefSub');
   if(sEl){
     // 有 stats 就报今日收录量，说明简报覆盖的是当日全部内容（不只是行情）
@@ -1847,25 +1845,6 @@ function loadBrief(){
       if(strip)strip.hidden=true;
     });
 }
-// ==================== 阅读模式（9-06 新增：只留判断 / 5件事 / 价格 / 今日新闻）====================
-function toggleReadingMode(){
-  var on=document.body.classList.toggle('reading-mode');
-  var btn=document.getElementById('readingToggle');
-  if(btn){btn.classList.toggle('active',on);btn.textContent=on?'退出':'阅读';}
-  try{lsSet('readingMode',on?'1':'0');}catch(e){}
-  if(on){try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}}
-}
-function restoreReadingMode(){
-  var v=null;
-  try{v=localStorage.getItem('readingMode');}catch(e){}
-  if(v!=='1')return;
-  document.body.classList.add('reading-mode');
-  var btn=document.getElementById('readingToggle');
-  if(btn){btn.classList.add('active');btn.textContent='退出';}
-}
-document.addEventListener('keydown',function(e){
-  if((e.key==='Escape'||e.key==='Esc')&&document.body.classList.contains('reading-mode'))toggleReadingMode();
-});
 var TAG_MAX_SHOW=2;   // 每条新闻最多展示 2 个关键词标签（其余仍写入 dataset 供筛选，避免满屏彩色标签）
 function injectTags(){
   document.querySelectorAll('.news-item').forEach(el=>{
@@ -2338,7 +2317,6 @@ mdSafeStep('foldOldArchive',foldOldArchive);
 mdSafeStep('initArchiveFold',initArchiveFold);   // 往期区 4 个子分类可折叠抽屉 + 行业动态按日折叠（2026-09-07）
 // injectOrigDateBadges();   // 2026-09-06 停用（与 meta 日期重复）
 mdSafeStep('loadBrief',loadBrief);
-mdSafeStep('restoreReadingMode',restoreReadingMode);
 mdSafeStep('applyFilter',applyFilter);
 mdSafeStep('refresh',refresh);
 // ===== PWA 安装引导（克制入口：PC顶部按钮 + 移动端底部浮条）=====
