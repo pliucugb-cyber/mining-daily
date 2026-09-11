@@ -257,12 +257,21 @@ def is_low_value_notice(n):
     return any(w in t for w in LOW_VALUE_NOTICE)
 
 
-def recent_items(category, limit=4, drop_notice=False):
-    arr = [n for n in news if n.get('category') == category and n.get('is_new')]
+def recent_items(category, limit=0, drop_notice=False):
+    """取该类目当日新增条目（2026-09-12 起默认全量）。
+
+    limit=0（默认）= 不截断条数。历史上 limit=4 会让「行业动态」9 条只出 4 条、
+    「找矿」6 条只出 4 条，读者看到的简报是残缺的。前端 setupBriefClamp() 已有
+    420px 折叠 +「展开全部（N 条）」兜底，放全不会把价格区顶到屏幕外，故不再限条数。
+    需要限量时显式传 limit>0。
+    category 可传单个类目名，也可传列表（多类目并按传入顺序拼接）。
+    """
+    cats = list(category) if isinstance(category, (list, tuple)) else [category]
+    arr = [n for n in news if n.get('category') in cats and n.get('is_new')]
     if drop_notice:
         arr = [n for n in arr if not is_low_value_notice(n)]
     arr.sort(key=lambda x: x.get('orig_date_full', ''), reverse=True)
-    return arr[:limit]
+    return arr[:limit] if limit else arr
 
 
 # —— 行情：只保留领涨/领跌要点 + 一句点评（完整报价由价格卡承担，不重复枚举）——
@@ -292,7 +301,11 @@ _price_comment = ('- 美国 8 月 PPI 超预期叠加欧央行加息，美元走
     '内外盘共振下行，唯沪铅相对抗跌，短期波动或继续放大。')
 quote_text = '\n'.join(quote_lines + [_price_comment])
 
-policy_text = '\n'.join(fmt_bullet(n) for n in recent_items('行业动态', drop_notice=True)) or '今日暂无新的政策与产业动态。'
+# 「政策与产业」= 政策与监管 + 行业动态 两源（2026-09-12 修正）：
+# 此前只喂「行业动态」，节名里的「政策」无对应内容，名不副实。现先政策后产业拼接，
+# 两类目内部各自按发布日期倒序；drop_notice 仍生效，剥离治理/信披类公告（见 REFERENCE.md §3）。
+_policy_items = recent_items('政策与监管', drop_notice=True) + recent_items('行业动态', drop_notice=True)
+policy_text = '\n'.join(fmt_bullet(n) for n in _policy_items) or '今日暂无新的政策与产业动态。'
 tech_text = '\n'.join(fmt_bullet(n) for n in recent_items('找矿成果与勘查技术')) or '今日暂无新的勘查与技术动态。'
 ma_text = '\n'.join(fmt_bullet(n) for n in recent_items('并购与投资')) or '今日暂无新增并购/投资类公告。'
 
