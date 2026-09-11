@@ -2536,12 +2536,15 @@ function mdUpdateFavBadges(){
   }catch(e){}
 }
 // ① 顶栏智能吸顶：下滚隐藏、上滑/到顶重现（阅读时让出空间，分类栏随顶栏整体可见）
-var mdTopLastY=0, mdTopTick=false;
+// 2026-09-11 P0：隐藏只走 transform（不动布局，避免整列内容跳动）；滞后阈值 12px 抗惯性滚动抖动。
+var mdTopLastY=0, mdTopTick=false, mdTopBarH=0;
 function mdTopOnScroll(){
   var y=window.pageYOffset||document.documentElement.scrollTop||0;
-  if(y<80){ document.body.classList.remove('md-top-hidden'); mdTopLastY=y; return; }
-  if(y>mdTopLastY+6){ document.body.classList.add('md-top-hidden'); }
-  else if(y<mdTopLastY-6){ document.body.classList.remove('md-top-hidden'); }
+  var maxY=Math.max(0,(document.documentElement.scrollHeight||0)-(window.innerHeight||0));
+  if(y<80 || maxY<120){ document.body.classList.remove('md-top-hidden'); mdTopLastY=y; return; }
+  if(mdTopBarH && y<=mdTopBarH){ document.body.classList.remove('md-top-hidden'); mdTopLastY=y; return; }
+  if(y>mdTopLastY+12){ document.body.classList.add('md-top-hidden'); }
+  else if(y<mdTopLastY-12){ document.body.classList.remove('md-top-hidden'); }
   mdTopLastY=y;
 }
 // 顶部 App Bar + 分类 Tab（注入到 body 最前，sticky 吸顶；skip-link 之后以保证其为 body 首个元素）
@@ -2569,7 +2572,7 @@ function mdMobileTopTabs(){
   var skip=document.getElementById('mdSkipLink');
   if(skip && skip.parentNode){ skip.parentNode.insertBefore(top, skip.nextSibling); }
   else { document.body.insertBefore(top, document.body.firstChild); }
-  try{ document.documentElement.style.setProperty('--md-top-h', top.offsetHeight+'px'); }catch(e){}
+  try{ mdTopBarH=top.offsetHeight||0; document.documentElement.style.setProperty('--md-top-h', (mdTopBarH||96)+'px'); }catch(e){}
   top.querySelector('.md-cat-bar').addEventListener('click',function(e){
     var b=e.target.closest('.mctab'); if(!b) return;
     mdSelectCat(b.getAttribute('data-cat'));

@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-1512" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-2150" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -720,8 +720,12 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .mine-meta{font-size:var(--fs-meta);color:var(--ink-500);line-height:1.5;padding:var(--s2) 0 0;margin-top:var(--s1);border-top:1px solid var(--line-2)}
   /* ===== P0 移动端结构重构（2026-09-10）：轻量 App Bar + 6 分类 Tab + 底部 4 全局动作 Tab ===== */
   .header{display:none!important}
-  #mdTop{position:sticky;top:env(safe-area-inset-top,0px);z-index:230;background:var(--surface);border-bottom:1px solid var(--line-2);box-shadow:0 1px 3px rgba(15,23,42,.06);padding:calc(env(safe-area-inset-top,0px) + 4px) var(--s3) 6px;display:block;transition:transform .22s ease,margin-bottom .22s ease}
-  body.md-top-hidden #mdTop{transform:translateY(-100%);margin-bottom:calc(-1 * var(--md-top-h,96px))}
+  /* 2026-09-11 P0 修复：智能吸顶只做 transform 位移，绝不动布局。
+     原实现配 margin-bottom:-var(--md-top-h) 折叠了 96px 布局高度，下滚时整列内容被顶起 96px、
+     上滑时又落回，表现为价格等内容「一直在跳」。sticky 吸顶状态下本就覆盖内容、不占视口顶部空间，
+     无需回收 margin。 */
+  #mdTop{position:sticky;top:env(safe-area-inset-top,0px);z-index:230;background:var(--surface);border-bottom:1px solid var(--line-2);box-shadow:0 1px 3px rgba(15,23,42,.06);padding:calc(env(safe-area-inset-top,0px) + 4px) var(--s3) 6px;display:block;transition:transform .22s ease}
+  body.md-top-hidden #mdTop{transform:translateY(-100%);pointer-events:none}
   .md-top-brand{display:flex;align-items:baseline;gap:8px;white-space:nowrap;overflow:hidden}
   .md-brand{font-size:var(--fs-h3);font-weight:600;color:var(--ink-900);letter-spacing:.3px}
   .md-date{font-size:12px;color:var(--ink-500);overflow:hidden;text-overflow:ellipsis}
@@ -2209,7 +2213,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=ca5d7248" defer></script>
 <script src="lme-data.js?v=5c44c071" defer></script>
 <script src="price-history.js?v=eb6d896f" defer></script>
-<script src="app.js?v=4dc83fcf" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=ad0d01c6" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
