@@ -165,7 +165,7 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 7. **[待用户定 2026-09-12] 简报每节仍上限 4 条**（36 条里只挑 ≤20）：本轮只修了「单条被截断」，未动覆盖条数。若要连条数也「全」，需调 `update_analysis_*.py::recent_items(limit=4)`。
 8. **[待用户定] 「政策与产业」节目前由 `行业动态` 类目喂数**（`recent_items('行业动态', drop_notice=True)`），与节名不符：要么把节名改成「行业动态」，要么改喂 `政策与监管` 类目。
 9. **[待确认] 「今日要闻」的 `digestDate` 是否也属重复日期**：本轮只删了简报 `briefDate`、保留头部 `.date-badge`，`digestDate` 未动。
-10. **[待提交] 本文件 `REFERENCE.md` 当前未 commit**：含上一会话 §5–§7 与本次 §6/§7 追加 + §8/§9。本地新任务可直接读文件；若要留痕需单独 commit（勿与日报改动混在一起）。
+10. **[已完成 2026-09-12 00:25 · commit `19f6480`] 本文件已提交并推送**：含上一会话 §5–§7 与本次 §6/§7 追加 + §8/§9，均已入版本库。当时为免带走另一会话正在改的 `morning_report.json` / `update_analysis_20260911.py`，故单独一个 commit（只含 REFERENCE.md，+142 行）。
 
 ---
 
