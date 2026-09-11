@@ -4809,10 +4809,8 @@ else { setupNewsFilterBar(); setupExportButtons(); }
   }
   function init(){
     try{
-      if(!isDesktop()) return;                      // 移动端侧栏为顶部横条，不展示迷你卡
       var box=document.getElementById('expoMini');
       var ul=document.getElementById('expoMiniList');
-      if(!box||!ul) return;
       var secs=[document.getElementById('todaySection'),document.getElementById('archiveSection')];
       var picked=[];
       secs.forEach(function(sec){
@@ -4844,9 +4842,11 @@ else { setupNewsFilterBar(); setupExportButtons(); }
         html+='<li><a href="'+safeHref(u)+'" target="_blank" rel="noopener" title="'+esc(t)+'">'+esc(t)+'</a>'
             +(d?'<span class="expo-mini-date">'+esc(d)+'</span>':'')+'</li>';
       });
-      ul.innerHTML=html;
-      box.style.display='';
-      // 条目移入隐藏容器：仍在 DOM 内（保留已读/收藏/搜索），但主区不再重复展示
+      // 桌面端侧栏迷你卡：仅桌面展示；移动端隐藏（列表由「会议」tab 承担）。
+      if(isDesktop() && box && ul){ ul.innerHTML=html; box.style.display=''; }
+      // 条目移入隐藏容器：仍在 DOM 内（保留已读/收藏/搜索），但主区不再重复展示。
+      // 关键：移动端也必须执行本步，否则会展条目既出现在主信息流、又在「会议」tab 出现双份（A4 重复根因）。
+      // —— 不按主列表 URL 过滤「会议」tab（移动端会清空该 tab），正解即让 vault 迁移在移动端也执行。
       var vault=document.getElementById('expoVault');
       if(!vault){ vault=document.createElement('div'); vault.id='expoVault'; vault.style.display='none'; document.body.appendChild(vault); }
       picked.forEach(function(el){ el.classList.remove('is-new'); vault.appendChild(el); });

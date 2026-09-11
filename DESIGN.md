@@ -406,13 +406,14 @@
 
 实现中对应的 token：`--z-sticky:100 / --z-sidebar:200 / --z-fab:900 / --z-mask:1000 / --z-dialog:1010 / --z-toast:1100`。
 
-> **已知例外（v3 登记，待处理）**：启动故障自愈横幅 `#mdBootWarn` 用了 `z-index:99999`，
+> **已知例外（v3 登记，2026-09-11 已收敛）**：启动故障自愈横幅 `#mdBootWarn` 原用 `z-index:99999`，
 > **超出本表上限**。它是 2026-09-11 事故当天为"页面全挂时唯一可见的出口"临时加的，
 > 刻意凌驾一切；但保留 99999 会让"z-index 有天花板"这条约束失效。
 >
-> 处置意见：**先观察 1 天**，确认自愈链稳定后再收敛到 `--z-toast`(1100)。
-> 收敛时必须同时确认它仍能盖住 `.qa-fab`（900）、遮罩（1000）与弹窗（1010）——若有遮挡需求，
-> 应新增 `--z-critical:1200` 并**同步更新本表**，而不是回到 99999。
+> 处置结论：**已收敛** —— 新增 `--z-critical:1200`（index.html `:root` token 行），
+> 横幅 `z-index` 改为 `var(--z-critical)`，并同步更新本表（§9.1 z 列已含 critical 1200）。
+> 1200 仍高于 `.qa-fab`（900）、遮罩（1000）、弹窗（1010）与 toast（1100），遮挡需求满足，
+> 同时恢复了"z-index 有天花板"约束（上限 1200）。
 
 ### 6.4 Backdrop Effects
 
@@ -499,7 +500,7 @@
 圆角：4(徽章) / 8(控件) / 12(卡片) — pill 控件用 999 或自一致半高（34–38px 高）
 间距：--s1..--s6 = 4/8/12/16/24/32（另有 --s7 40px，仅空状态用）— 卡内 16 — 区块间 32
 阴影：0 1px 3px rgba(0,55,112,.06) — 深色模式关阴影(--shadow-xs/sm/md→none)用边框
-z：sticky 100 / sidebar 200 / fab 900 / mask 1000 / dialog 1010 / toast 1100（例外：#mdBootWarn 用 99999，待收敛）
+z：sticky 100 / sidebar 200 / fab 900 / mask 1000 / dialog 1010 / toast 1100 / **critical 1200**（#mdBootWarn 逃生横幅用 --z-critical:1200，2026-09-11 收敛自 99999）
 动效：120ms ease，仅 hover/focus
 ```
 
@@ -591,7 +592,7 @@ z：sticky 100 / sidebar 200 / fab 900 / mask 1000 / dialog 1010 / toast 1100（
 | 11 | §4.5 | `.tag-chip` 单一配色 | **11 组按类别枚举**，亮/暗各一套 | 规范缺章节 | 补完整对照表 + 实现规则 |
 | 12 | §4.7 | `.news-sum` / `.px-name` / `.px-val` / `.px-chg` / `.sec-title` | 线上实为 `.news-summary` / `.pc-name` / `.pc-value` / `.pc-chg` / `.section-title` | 规范错（v1 遗留名） | 全部改名 + 加警示 |
 | 13 | §5.1 | 间距 6 级 | 另有 `--s7:40px`（空状态专用） | 规范不全 | 补一行 + 限定用途 |
-| 14 | §6.3 | z-index 表最大 1100 | `#mdBootWarn` 用 `99999` | 实现例外 | 登记；**观察 1 天后**收敛到 `--z-toast`(1100) 或新增 `--z-critical:1200` |
+| 14 | §6.3 | z-index 表最大 1100 | `#mdBootWarn` 用 `99999` | 实现例外 | **已收敛**（2026-09-11）→ 新增 `--z-critical:1200`，横幅改 `var(--z-critical)`，表上限升至 1200 |
 | 15 | §7 | Do's 1「禁硬编码颜色」 | 枚举 chip **必须**写 HEX | 规范自相矛盾 | 加「枚举调色板」例外 |
 | 16 | §7 | Don'ts 6「禁渐变/发光」 | 「问」球是渐变 + 发光 + 脉冲 | 实现例外 | 登记 H2 例外（**决定保留**） |
 | 17 | §8.4 | 「字号不随断点缩放」 | `@768` 有意放大 `.news-title`→16px / `.news-summary`→14px | 实现例外 | 登记例外，并记录 `@600` 反向收回的级联问题 |
@@ -634,8 +635,8 @@ z：sticky 100 / sidebar 200 / fab 900 / mask 1000 / dialog 1010 / toast 1100（
 **仍未处理（另立专项）**
 
 - **`--ink-300` on `--surface-3` = 4.34/4.23**（差 0.16 未达 4.5，共 2 处：`.toc-count-fresh.is-empty`、`.rc-deadline.rc-expired`）——**接受现状**。将来修法是新增一个更深的灰 token，**不是**抬高 `--ink-300`（会连带影响正文对比）。
-- **移动端「会议」tab 与会展条目重复**（评审项 A4）——属产品决策，**维持现状**；理由与三个备选方案见 `ux-ia-product-2026-09-11.md` 附 D。
-- **`#mdBootWarn` 的 `z-index:99999`** —— 观察 1 天后收敛到 `--z-toast`(1100) 或新增 `--z-critical:1200`。
+- **移动端「会议」tab 与会展条目重复**（评审项 A4）——**已修复**（2026-09-11）：根因是 expo/vault IIFE 的 `init()` 开头 `if(!isDesktop()) return;` 把 vault 迁移也挡在移动端外，会展条目既留主信息流又进「会议」tab。改为「vault 迁移在所有视口执行、仅桌面迷你卡由 isDesktop() 把关」，重复源消除；回归测试见 `test_a4_expo_mobile.js`。
+- **`#mdBootWarn` 的 `z-index:99999`** —— **已收敛**（2026-09-11）：改为 `var(--z-critical)`（1200），新增 `--z-critical` token，表上限升至 1200。详见 §6.3 例外处置结论。
 
 **验证入口**：`test_tagchip_contrast.py`(19) · `test_mobile_ux_batch.js` · `test_preflight_div.py`(11) · `preflight_check.py` · `_tmp/_dead_class_render_check.js`(10)。
 
