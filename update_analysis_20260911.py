@@ -220,21 +220,25 @@ top_news = [{'d': n.get('orig_date_full', ''), 't': n['title'], 's': n['source']
             for n in new_items[:5]]
 
 
-def trunc80(body, max_len=80):
-    body = (body or '').strip()
+def fmt_bullet(n, max_len=0):
+    """简报单条（2026-09-11 用户要求「总结全」）：默认使用完整摘要，不再按 80 字截断。
+
+    历史上 max_len=80 会把 36 条里的 35 条切在句子中间（如「HVLP4 代铜箔实…」），
+    读者看到的是半句话。改为整条呈现：max_len=0 不截断；若显式传 max_len>0，
+    只按句末标点（。！？）截到该长度内，绝不在句中硬切。
+    """
+    body = (n.get('summary') or n.get('title') or '').strip()
     if not body:
         return ''
-    if len(body) > max_len:
+    # 简报是中文摘要，行尾「（原题：英文标题）」对读者是噪音；英文原题在新闻卡片上已保留。
+    _i = body.find('（原题：')
+    if _i > 0:
+        body = body[:_i].rstrip()
+    if max_len and len(body) > max_len:
         cut = body[:max_len]
-        pos = cut.rfind('。')
-        body = cut[:pos + 1] if pos >= 30 else cut.rstrip('，、；：') + '…'
-    return body
-
-
-def fmt_bullet(n, max_len=80):
-    body = trunc80(n.get('summary') or n.get('title') or '', max_len)
-    if not body:
-        return ''
+        pos = max(cut.rfind('。'), cut.rfind('！'), cut.rfind('？'))
+        if pos >= 40:
+            body = cut[:pos + 1]
     s = n.get('source', '').strip()
     return '- %s%s' % (body, '（%s）' % s if s else '')
 
@@ -283,10 +287,9 @@ quote_lines = [
         _up[0], format(_up[1], ',.%df' % _up[4]), _up[3], _up[2],
         _down[0], format(_down[1], ',.%df' % _down[4]), _down[3], _down[2]),
 ]
-_price_comment = ('- %s' % trunc80(
-    '美国 8 月 PPI 超预期叠加欧央行加息，美元走强引发基本金属与贵金属同步重挫：'
+_price_comment = ('- 美国 8 月 PPI 超预期叠加欧央行加息，美元走强引发基本金属与贵金属同步重挫：'
     '沪银跌逾 5%、碳酸锂跌近 4.6%、沪锡跌逾 3.6%，伦锌单日重挫 5.14%、伦铜回吐 4.25%，'
-    '内外盘共振下行，唯沪铅相对抗跌，短期波动或继续放大。'))
+    '内外盘共振下行，唯沪铅相对抗跌，短期波动或继续放大。')
 quote_text = '\n'.join(quote_lines + [_price_comment])
 
 policy_text = '\n'.join(fmt_bullet(n) for n in recent_items('行业动态', drop_notice=True)) or '今日暂无新的政策与产业动态。'
