@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260911-1258" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260911-1423" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1818,6 +1818,23 @@ body.dark .tag-chip.tc-tech{color:#2dd4bf;background:#0f3330}
 body.dark .tag-chip.tc-default{color:#94a3b8;background:#26313f}
 /* 暗色下 hover 需提亮（基础规则是 brightness(.92)，会把深底压得更暗、反而降对比） */
 body.dark .tag-chip:hover{filter:brightness(1.15)}
+</style>
+<style>
+/* ===== 2026-09-11：新闻问答 Markdown 表格样式 =====
+   背景：qaMdRender 此前不认识竖线字符，模型按提示词给出的表格会被渲染成裸竖线。
+   本轮 renderer 已补 table 输出，此处补样式。
+   悬浮球问答面板较窄，用 .qa-table-wrap 横向滚动，避免表格撑破气泡。 */
+.qa-table-wrap{overflow-x:auto;margin:var(--s2) 0;border:1px solid var(--line-1);border-radius: var(--r-md)}
+.qa-msg-bubble table{width:100%;border-collapse:collapse;font-size: var(--fs-meta);line-height:1.5}
+.qa-msg-bubble th,.qa-msg-bubble td{padding:4px var(--s2);text-align:left;border-bottom:1px solid var(--line-1);white-space:nowrap}
+.qa-msg-bubble th{background:var(--surface-2);font-weight:var(--fw-semibold);color:var(--ink-900)}
+.qa-msg-bubble td{color:var(--ink-700)}
+.qa-msg-bubble tbody tr:last-child td{border-bottom:none}
+.qa-msg-bubble tbody tr:nth-child(even){background:var(--surface-2)}
+body.dark .qa-table-wrap{border-color:var(--line-1)}
+body.dark .qa-msg-bubble th{background:var(--surface-3);color:var(--ink-900)}
+body.dark .qa-msg-bubble td{color:var(--ink-700)}
+body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 </style>
 </head>
 <body data-page-node-id="08Sd4G734SYCb8nvkfAZJP">

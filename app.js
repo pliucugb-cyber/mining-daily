@@ -3716,6 +3716,41 @@ function qaFloatScroll(){
   var b=document.getElementById('qaFloatBody');if(b)b.scrollTop=b.scrollHeight;
 }
 // 轻量 Markdown → HTML（仅支持回答常见格式：加粗、列表、标题、代码、引用、链接）
+// ===== 2026-09-11：Markdown 表格渲染 =====
+// 此前 qaMdRender 完全不认识竖线字符：模型按提示词输出的表格会被渲染成裸竖线
+// （竖线拼成的表头 + 分隔行），读者看到的是「格式乱」而不是表格。
+// 判定规则收紧为「当前行含竖线 且 下一行是分隔行」，避免把正文里的竖线误判成表格。
+function qaMdIsTableSep(l){
+  return /^[\s|:-]{3,}$/.test(l) && l.indexOf('-')>=0 && l.indexOf('|')>=0;
+}
+function qaMdSplitRow(l){
+  // 按竖线拆列，但跳过行内代码 <code>…</code> 内的竖线——
+  // 否则 `| \`x|y\` | 2 |` 会被拆成 4 列、把 </code> 挤到错误的单元格里。
+  var s=String(l).trim().replace(/^\|/,'').replace(/\|$/,'');
+  var cells=[],cur='',inCode=false;
+  for(var i=0;i<s.length;i++){
+    if(s.substr(i,6)==='<code>'){inCode=true;cur+='<code>';i+=5;continue;}
+    if(s.substr(i,7)==='</code>'){inCode=false;cur+='</code>';i+=6;continue;}
+    if(s.charAt(i)==='|'&&!inCode){cells.push(cur.trim());cur='';continue;}
+    cur+=s.charAt(i);
+  }
+  cells.push(cur.trim());
+  return cells;
+}
+function qaMdTableHtml(rows){
+  var head=qaMdSplitRow(rows[0]),al=qaMdSplitRow(rows[1]||'');
+  var st=function(a){return /^:-+:$/.test(a)?' style="text-align:center"':(/^-+:$/.test(a)?' style="text-align:right"':'');};
+  var h='<div class="qa-table-wrap"><table><thead><tr>';
+  head.forEach(function(c,i){h+='<th'+st(al[i]||'')+'>'+c+'</th>';});
+  h+='</tr></thead><tbody>';
+  for(var r=2;r<rows.length;r++){
+    var cells=qaMdSplitRow(rows[r]);
+    h+='<tr>';
+    for(var j=0;j<head.length;j++){h+='<td'+st(al[j]||'')+'>'+(cells[j]||'')+'</td>';}
+    h+='</tr>';
+  }
+  return h+'</tbody></table></div>';
+}
 function qaMdRender(md){
   if(!md)return '';
   var text=esc(md).replace(/\r\n/g,'\n');
@@ -3741,11 +3776,26 @@ function qaMdRender(md){
   var lines=text.split('\n');
   var out=[], inList=false, listType='ul';
   function flushList(){if(inList){out.push('</'+listType+'>');inList=false;}}
-  lines.forEach(function(line){
+  for(var li=0;li<lines.length;li++){
+    var line=lines[li];
+    // 2026-09-11：表格块（表头行 + 分隔行 → <table>）
+    if(line.indexOf('|')>=0 && li+1<lines.length && qaMdIsTableSep(lines[li+1])){
+      var trows=[];
+      var _hc=qaMdSplitRow(lines[li]).length;
+      while(li<lines.length && lines[li].trim() && lines[li].indexOf('|')>=0){
+        // 单元格数多于表头 ⇒ 多半是紧跟表格的普通句子（含竖线），结束表格交给正文，避免截断丢字
+        if(trows.length>=2 && qaMdSplitRow(lines[li]).length>_hc)break;
+        trows.push(lines[li]);li++;
+      }
+      li--;
+      flushList();
+      out.push('');out.push(qaMdTableHtml(trows));out.push('');
+      continue;
+    }
     var t=line.trim();
-    if(!t){flushList();out.push('');return;}
-    if(/^<(h[1-4]|pre|blockquote|img)/.test(line)){flushList();out.push(line);return;}
-    if(/^__CODE_BLOCK_/.test(line)){flushList();out.push(line);return;}
+    if(!t){flushList();out.push('');continue;}
+    if(/^<(h[1-4]|pre|blockquote|img|div|table)/.test(line)){flushList();out.push(line);continue;}
+    if(/^__CODE_BLOCK_/.test(line)){flushList();out.push(line);continue;}
     var ul=line.match(/^[\*\-]\s+(.*)$/);
     var ol=line.match(/^(\d+)\.\s+(.*)$/);
     if(ul){
@@ -3757,13 +3807,13 @@ function qaMdRender(md){
     }else{
       flushList();out.push(line);
     }
-  });
+  }
   flushList();
   var html=out.join('\n');
   codes.forEach(function(c,i){html=html.replace(placeholders[i],c);});
   return html.split(/\n\n+/).filter(Boolean).map(function(b){
     b=b.trim();
-    if(/^<(h[1-4]|pre|blockquote|ul|ol)/.test(b))return b;
+    if(/^<(h[1-4]|pre|blockquote|ul|ol|div|table)/.test(b))return b;
     return '<p>'+b.replace(/\n/g,'<br>')+'</p>';
   }).join('\n');
 }
@@ -4014,6 +4064,8 @@ function qaFloatAsk(retryMode,ctxOverride){
   if(inp)inp.value='';
   var _ctx=ctxOverride;
   var _dateIntent=qaDetectDateIntent(q);
+  // 2026-09-11：问题里写了相对时间窗（近三天/近一周/本周…）时，以问题为准
+  var _rangeIntent=_dateIntent?null:qaDetectRangeIntent(q);
   if(!_ctx){
     var _min=(document.getElementById('qaFloatMineral')||{}).value||'';
     var _top=(document.getElementById('qaFloatTopic')||{}).value||'';
@@ -4026,7 +4078,11 @@ function qaFloatAsk(retryMode,ctxOverride){
       // 日期意图：只看当天（或最近 1 天）新闻，避免滚动到历史条目
       _from=_dateIntent;
       _rg=0;
-    }else if(_rg>0){var _max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>_max)_max=r.d;});if(_max){var _dt=new Date(_max+'T00:00:00');_dt.setDate(_dt.getDate()-_rg+1);_from=_dt.toISOString().slice(0,10);}}
+    }else{
+      var _max='';QA_ROWS.forEach(function(r){if(r.d&&r.d>_max)_max=r.d;});
+      if(_rangeIntent)_rg=qaRangeDays(_rangeIntent,_max);
+      if(_rg>0&&_max){_from=qaShiftDate(_max,_rg-1);}
+    }
     var _filtered=qaFilter(QA_ROWS,[],_minSel||_min,_topSel||_top,_from,'and');
     // 日期意图：不过度依赖相关性排序，直接按日期降序取当天前 15 条
     _ctx=_dateIntent?_filtered.slice(0,15):qaRankByRelevance(q,_filtered).slice(0,20);
@@ -4103,6 +4159,52 @@ function qaDetectDateIntent(q){
     return anchor;
   }
   return null;
+}
+// 2026-09-11：相对时间窗解析（近N天/近N日/近N周/近N个月 + 本周/本月）。
+// 此前只识别「今天/最新」，用户问「近三天矿权交易」会被当成普通检索 →
+// 走全库相关性 Top-20 → 标题里的时间窗是模型自己写的，两台电脑结果不一致。
+function qaDetectRangeIntent(q){
+  if(!q)return null;
+  var q2=q.replace(/\s/g,'');
+  if(/(本|这|当)周/.test(q2))return {week:true,label:'本周'};
+  if(/(本|这|当)(个)?月/.test(q2))return {month:true,label:'本月'};
+  var m=q2.match(/(近|最近|过去|前)([0-9]{1,3}|[一二两三四五六七八九十]+)(天|日|周|星期|个月|月)/);
+  if(!m)return null;
+  var raw=m[2],n=0;
+  if(/^[0-9]+$/.test(raw)){n=parseInt(raw,10);}
+  else{
+    var D={'一':1,'二':2,'两':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9};
+    if(raw==='十'){n=10;}
+    else if(raw.charAt(0)==='十'){n=10+(D[raw.charAt(1)]||0);}
+    else if(raw.charAt(raw.length-1)==='十'){n=(D[raw.charAt(0)]||0)*10;}
+    else if(raw.length===2){n=(D[raw.charAt(0)]||0)*10+(D[raw.charAt(1)]||0);}
+    else{n=D[raw]||0;}
+  }
+  if(!n||n<1||n>90)return null;
+  var unit=m[3];
+  var days=(unit==='周'||unit==='星期')?n*7:((unit==='个月'||unit==='月')?n*30:n);
+  return {days:days,n:n,unit:unit,label:'近'+raw+unit};
+}
+// 日期回退：一律用本地日期字段拼字符串，绝不用 toISOString()——
+// 后者会把 '2026-09-11T00:00:00'（本地 UTC+8）序列化成 '2026-09-10T16:00:00Z'，
+// slice(0,10) 得到 09-10，「近 N 天」实际多算一天（2026-09-11 实测）。
+function qaShiftDate(ymd,minusDays){
+  var d=new Date(ymd+'T12:00:00');
+  if(isNaN(d.getTime()))return '';
+  d.setDate(d.getDate()-minusDays);
+  var p=function(n){return (n<10?'0':'')+n;};
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+}
+// 把「本周/本月」换算成天数（锚点用数据最新日期，不依赖客户端时钟）
+function qaRangeDays(ri,maxDate){
+  if(!ri)return 0;
+  if(ri.days)return ri.days;
+  if(!maxDate)return 0;
+  var d=new Date(maxDate+'T12:00:00');
+  if(isNaN(d.getTime()))return 0;
+  if(ri.week)return ((d.getDay()+6)%7)+1;
+  if(ri.month)return d.getDate();
+  return 0;
 }
 function qaIsBroadQuery(q){
   if(!q)return false;
@@ -4297,6 +4399,9 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
   // 日期意图：已在 qaFloatAsk 中按日期严格过滤，不再做通用相关性过滤，避免误删当天条目
   var ctx=dateIntent?(ctxRaw||[]):qaFilterRelevant(ctxRaw||[],q);
   var bubble=msg?msg.querySelector('.qa-msg-bubble'):null;
+  // 2026-09-11：把「本次条目实际日期范围」明确交给模型，禁止它自己编时间窗
+  var _dsDates=(ctx||[]).map(function(c){return c&&c.d;}).filter(Boolean).sort();
+  var _dsWin=_dsDates.length?(_dsDates[0]+' 至 '+_dsDates[_dsDates.length-1]):'';
   var system=('你是资深矿业行业分析师，服务于「矿业新闻日报」产品。'
     +'回答用中文、简洁专业、结构化呈现（优先用要点列表或小标题，避免一大段文字）。'
     +'若提供了相关新闻条目，请先对这些条目进行系统整理和归纳，再按主题/维度给出综合性回答；不要简单逐条复述每条新闻的标题或全文。'
@@ -4315,6 +4420,12 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
   // 2026-09-09 Phase E：价格快照注入提示
   system+='\n若问题涉及具体金属价格，且用户消息中提供了「本地价格快照」，请基于快照作答并标注数据日期与单位，说明这是日报本地快照（非实时行情）；不要编造快照之外的价格。';
   // 2026-09-06 晚（B）：多轮追问——把历史轮次作为前置对话，使追问能理解"它""这家"等指代
+  // 2026-09-11：格式契约 + 时间窗硬约束（此前格式随采样漂移、标题里的时间窗由模型自编）
+  system+='\n\n【输出格式（硬性要求）】'
+    +'\n1) 凡涉及分类计数、构成、对比（如「类型分布」「矿种数量」「涨跌对比」），必须用 Markdown 表格：第一行表头，第二行分隔行（形如 |---|---|），每行列数一致，不要用 HTML；'
+    +'\n2) 其余内容用「小标题 + 要点列表」，不要写成长段散文；'
+    +'\n3) 只输出 Markdown 与纯文本，不要输出 HTML 标签，也不要用代码块包裹整篇回答；'
+    +'\n4) 若用户问题含相对时间（如「近三天」「最近一周」），一律以下方给出的【条目日期范围】为准，不得自行推算或改写该区间。';
   var dsMessages=[{role:'system',content:system}];
   if(conv&&conv.length){
     conv.forEach(function(t){ dsMessages.push({role:t.role,content:t.content}); });
@@ -4331,6 +4442,7 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
       user+=(i+1)+'. ['+d+'] '+t+(s?('（'+s+'）'):'')+(u?(' 链接：'+u):'')+'\n';
     });
     user+='\n';
+    if(_dsWin){user+='【条目日期范围（唯一可引用的时间范围）】'+_dsWin+'，共 '+ctx.length+' 条。若回答中需要说明时间跨度，必须照抄本区间，不要自行推算或改写。\n';}
   }else{
     if(dateIntent){
       user+='（本地新闻库显示 '+dateIntent+' 暂无新增报道；请直接说明无新增，并建议用户换日期或关键词。）\n\n';
@@ -4357,14 +4469,14 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent){
   if(_proxyBase){
     _url=_proxyBase+'/api/qa';
     _headers={'Content-Type':'application/json','Accept':'text/event-stream'};
-    _body=JSON.stringify({messages:_dsMessages,max_tokens:1000,temperature:0.3,stream:true});
+    _body=JSON.stringify({messages:_dsMessages,max_tokens:1500,temperature:0,stream:true});
     // Phase B：优先流式；边缘函数未更新时 qaTryStreamOrJson 自动回退 JSON
     qaTryStreamOrJson(_url,_headers,_body,bubble,msg,q,ctx,dateIntent,_ac,_to,btn);
     return;
   }
   _url='https://api.deepseek.com/chat/completions';
   _headers={'Content-Type':'application/json','Authorization':'Bearer '+getDsKey()};
-  _body=JSON.stringify({model:'deepseek-chat',messages:_dsMessages,max_tokens:1000,temperature:0.3,stream:false});
+  _body=JSON.stringify({model:'deepseek-chat',messages:_dsMessages,max_tokens:1500,temperature:0,stream:false});
   fetch(_url,{
     method:'POST',
     headers:_headers,
