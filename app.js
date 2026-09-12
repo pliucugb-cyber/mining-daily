@@ -3081,8 +3081,15 @@ function mdRefreshMineTheme(){
 }
 // ===== ⑧bis 安装卡片：状态感知 + 排障（2026-09-12 重写）=====
 // 用户反馈「手机端两种安装方式都失败」。查证结论：网站侧完全合规——真 Chrome 的
-//   Page.getInstallabilityErrors 返回 0 条错误；问题出在安装的**执行环节**（安卓上
-//   Chrome 要过系统「安装未知应用」权限 + 连 Google 服务生成应用包）。
+//   Page.getInstallabilityErrors 返回 0 条错误；问题出在安装的**执行环节**。
+//   2026-09-12 深夜用户实测确诊：那台国行小米**接上科学上网后立刻装上了** ⇒ 唯一卡点
+//   是「手机能不能连上 Google 服务」（安卓 Chrome 的「安装」= 让 Google Play 服务现场
+//   生成一个真正的应用包 WebAPK，**不走系统安装器**——所以「安装未知应用」权限在这条路上
+//   根本不是卡点，那是上一轮的错误归因，此处更正）。
+//   ⇒ 对国内用户（绝大多数手机够不到 Google 服务），「安装」这条路**基本不可用**，
+//     真正通用的只有各浏览器菜单里的「添加到主屏幕 / 添加到桌面」。
+//   ⇒ 故本轮改版：卡片**默认主推通用路径**（按当前浏览器给具体菜单项），
+//     「安装」降级为需要 Google 服务的进阶选项；微信内置浏览器单独提示「先在浏览器打开」。
 // 但站内确实有个真 bug 让用户更容易卡住：卡片原先只在页面初始化时渲染一次，而
 //   beforeinstallprompt 是之后（且常在用户交互后）才触发 —— 事件到达时按钮该出现，
 //   卡片却早已画完，于是「立即安装」按钮永远不出现。现在三个时机都会重渲染：
@@ -3116,11 +3123,34 @@ function mdPwaPlatformName(){
   if(IS_MOBILE_UA) return '移动端';
   return '桌面';
 }
+function mdPwaIsWeChat(){ return /MicroMessenger/i.test(navigator.userAgent); }
+// 「添加到主屏幕」的菜单项名称各浏览器不同，按当前浏览器给一条最短路径——
+//   用户群体用什么手机、什么浏览器都有，泛泛说「添加到主屏幕」等于没说。
+function mdPwaShortcutStep(){
+  var ua=navigator.userAgent;
+  if(IS_IOS) return '点底部「<b>分享 □↑</b>」（Safari）→ 上滑找到「<b>添加到主屏幕</b>」→ 点「添加」。';
+  if(/MiuiBrowser/i.test(ua)) return '点右下角「<b>☰</b>」→「<b>添加到桌面</b>」。';
+  if(/HuaweiBrowser/i.test(ua)) return '点底部「<b>☰</b>」→「<b>添加到桌面</b>」。';
+  if(/UCBrowser/i.test(ua)) return '点底部「<b>≡</b>」→「<b>添加到桌面</b>」。';
+  if(/QQBrowser/i.test(ua)) return '点底部「<b>≡</b>」→「<b>添加到桌面</b>」。';
+  if(/SamsungBrowser/i.test(ua)) return '点右下角「<b>≡</b>」→「<b>添加页面到</b>」→「<b>主屏幕</b>」。';
+  if(/Edg\//.test(ua)) return '点底部「<b>⋯</b>」→「<b>添加到手机</b>」（或「添加到主屏幕」）。';
+  if(/Firefox\//.test(ua)) return '点「<b>⋮</b>」→「<b>安装</b>」或「<b>添加到主屏幕</b>」。';
+  if(/Chrome\//.test(ua)) return '点右上角「<b>⋮</b>」→「<b>添加到主屏幕</b>」→ 确认。';
+  return '点浏览器菜单「<b>⋮</b>」或「<b>≡</b>」→ 找「<b>添加到主屏幕 / 添加到桌面</b>」→ 确认。';
+}
 function mdPwaHelpHTML(){
   return '<div class="mine-install-helpbody">'
-    +'<b>安卓 Chrome</b>：① 先给浏览器开「安装未知应用」权限；② 安卓上 Chrome 要向 Google 服务申请生成应用包，<b>手机连不上 Google 服务时这一步会失败</b>。这时改用菜单里的「<b>创建快捷方式</b>」——图标同样出现在桌面，点开即可用。'
-    +'<br><b>电脑 Chrome / Edge</b>：地址栏右侧的「安装」图标最稳，不受手机那两道限制（建议先用电脑装一次）。'
-    +'<br><b>iPhone / iPad</b>：只能走 Safari 的「分享 □↑ → 添加到主屏幕」。'
+    +'<b>为什么点「安装」会失败？</b>安卓上 Chrome 的「安装」= 让手机里的 <b>Google 服务</b>现场生成一个应用包。'
+    +'国内绝大多数手机没有 Google 服务，所以会出现<b>点了没反应、或提示在安装但桌面一直没有图标</b>——'
+    +'它不报错，也不代表日报有问题。'
+    +'<br><b>通用办法（任何品牌手机、任何浏览器都能用）</b>：'+mdPwaShortcutStep()
+    +'<br><b>小米 / 红米（MIUI / HyperOS）</b>：若在 Chrome 里点了「添加到主屏幕」仍无反应，先去 <b>设置 → 应用设置 → 应用管理 → Chrome → 权限管理</b>，把「<b>桌面快捷方式</b>」设为允许，再回来添加（实测可行）。'
+    +'<br>用这条得到的图标，点开会带一层浏览器外框，但<b>功能完全一样、断网也能看</b>（日报已缓存到本机）。'
+    +'<br><b>想要「没有地址栏」的原生样子</b>：只能让手机连上 Google 服务（用「安装」），'
+    +'或者先在<b>电脑 Chrome / Edge</b> 上装——电脑端不受这个限制。'
+    +'<br><b>iPhone / iPad</b>：走 Safari 的「分享 □↑ → 添加到主屏幕」，本地完成、不需要 Google 服务。'
+    +'<br><b>微信里打开的</b>：微信自己没有「添加到桌面」入口，必须先「⋯ → 在浏览器打开」。'
     +'</div>';
 }
 function mdPwaDiagHTML(){
@@ -3162,16 +3192,27 @@ function mdRenderInstallCard(){
   var html;
   if(IS_STANDALONE){
     html='<div class="mine-install-title">✅ 已安装到主屏幕</div><div class="mine-install-note">日报已作为独立应用运行，可随时从主屏图标进入。</div>';
-  }else if(IS_IOS){
-    html='<div class="mine-install-title">📱 安装到主屏幕</div><div class="mine-install-note">① 点 Safari 底部「分享 □↑」<br>② 上滑找到「添加到主屏幕」<br>③ 点「添加」即可</div>';
-  }else if(window.__deferredPrompt){
-    html='<div class="mine-install-title">📲 安装到主屏幕</div><div class="mine-install-note">装好后像 App 一样独立打开，断网也能看。</div>'
-      +'<button type="button" class="mine-install-btn" data-pwa="install">立即安装</button>';
   }else{
-    html='<div class="mine-install-title">📲 安装到主屏幕</div><div class="mine-install-note">浏览器菜单（⋮）→「安装应用 / 添加到主屏幕」→ 确认添加。</div>';
+    // 默认主推「通用路径」：任何品牌手机、任何浏览器都能用，不依赖 Google 服务。
+    html='<div class="mine-install-title">📲 装到手机桌面</div>'
+      +'<div class="mine-install-note">'+mdPwaShortcutStep()+'</div>';
+    if(mdPwaIsWeChat()){
+      // 微信内置浏览器没有任何「添加到桌面」入口 —— 这是国内用户最常见的卡点，必须点破
+      html+='<div class="mine-install-warn">📮 你是在<b>微信里</b>打开这个链接，微信自己没有「添加到桌面」入口。'
+        +'请先点右上角 <b>⋯ →「在浏览器打开」</b>，再回到这里照上面的步骤操作。</div>';
+    }
+    if(window.__deferredPrompt && !mdPwaIsWeChat()){
+      // 微信 WebView 里点这个必然无效，不给按钮免得误导；其余场景保留（有 Google 服务的机型能拿到独立窗口）
+      html+='<button type="button" class="mine-install-btn" data-pwa="install">安装为独立应用</button>'
+        +'<div class="mine-install-note">装好后没有地址栏，更像原生 App。'
+        +'<b>前提是手机能连 Google 服务</b>（国内手机多半连不上；点了没反应就用上面的「添加到桌面」）。</div>';
+    }
   }
   if(!IS_STANDALONE && tried && stalled){
-    html+='<div class="mine-install-warn">⚠️ 上次点了安装却没装上。安卓常见两条：浏览器缺「安装未知应用」权限；或手机连不上 Google 服务（Chrome 要靠它生成应用包）。可改用「创建快捷方式」，或先在电脑上装。</div>';
+    html+='<div class="mine-install-warn">⚠️ 上次点了「安装」但桌面没出现图标 —— '
+      +'这不是日报的问题：安卓 Chrome 的「安装」要靠手机里的 <b>Google 服务</b>生成应用包，'
+      +'国内多数手机没有，所以走到一半就静默结束了。'
+      +'<br>👉 <b>改用上面「添加到桌面」这条路</b>，一定能成，功能和离线一样不少。</div>';
   }
   if(!IS_STANDALONE){
     html+='<button type="button" class="mine-install-help" data-pwa="help">'+(_mdPwaDiagOpen?'收起 ▲':'装不上？点这里 ▼')+'</button>';
