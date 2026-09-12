@@ -79,7 +79,8 @@ setTimeout(() => {
   check('安装引导整段在手机隐藏', /#installGuideSection\{display:none!important\}/.test(html));
 
   console.log('\n===== ⑤ 问按钮：与其它 tab 一致的平铺样式（无渐变/发光/脉冲）=====');
-  check('问 tab 改为平铺一致样式（单一品牌色）', /\.mtab\[data-go="qa"\]\{color:var\(--brand\)\}/.test(html));
+  check('问 tab 非激活态为中性灰（不再恒亮品牌色）', /\.mtab\[data-go="qa"\]\{color:var\(--ink-700\)\}/.test(html));
+  check('问 tab 激活态仍高亮品牌色', /\.mtab\[data-go="qa"\]\.active\{color:var\(--brand\)\}/.test(html));
   check('问 tab 不再使用渐变发光球', !/\.mtab\[data-go="qa"\] \.mi\{[^}]*qaOrbPulse/.test(html));
   check('发光脉冲动画 keyframes 已移除', !/@keyframes qaOrbPulse\{/.test(html));
 
@@ -143,6 +144,39 @@ setTimeout(() => {
       check('点关闭按钮 → body 移除 md-mine-open', !doc.body.classList.contains('md-mine-open'));
     }
   }
+
+  console.log('\n===== ⑱ 2026-09-12 移动端优化：徽标 / 说明 / 单条移除 =====');
+  try {
+    window.localStorage.setItem('mining_daily_favorites', JSON.stringify([{url:'https://ex.com/f1',title:'收藏A'},{url:'https://ex.com/f2',title:'收藏B'}]));
+    window.localStorage.setItem('mining_daily_history', JSON.stringify([{url:'https://ex.com/h1',title:'历史A'},{url:'https://ex.com/h2',title:'历史B'},{url:'https://ex.com/h3',title:'历史C'}]));
+    if(typeof window.mdUpdateFavBadges==='function') window.mdUpdateFavBadges();
+    const fb=doc.getElementById('mineFavBadge');
+    const hb=doc.getElementById('mineHistBadge');
+    check('收藏徽标显示数量 2', !!fb && fb.textContent==='2', fb?('text='+fb.textContent):'无');
+    check('浏览记录徽标显示数量 3', !!hb && hb.textContent==='3', hb?('text='+hb.textContent):'无');
+  } catch(e){ check('徽标刷新', false, '异常 '+e.message); }
+  try {
+    const hBtn = sheet ? sheet.querySelector('[data-act="history"]') : null;
+    if(hBtn){
+      hBtn.dispatchEvent(new window.MouseEvent('click', {bubbles:true, cancelable:true}));
+      check('进入 history 聚合视图（data-filter-mode=history）', doc.body.getAttribute('data-filter-mode')==='history', 'mode='+doc.body.getAttribute('data-filter-mode'));
+      const sub=doc.getElementById('favViewSub');
+      check('返回条下方说明含「共 N 条」', !!sub && /共\s*\d+\s*条/.test(sub.textContent||''), sub?('text='+sub.textContent):'无');
+      const list=doc.getElementById('archFavList');
+      const before=list?list.querySelectorAll('.news-item').length:0;
+      const rmBtn=list?list.querySelector('.news-item .aggregate-item-remove'):null;
+      check('聚合列表每条含单条移除按钮', !!rmBtn);
+      if(rmBtn){
+        rmBtn.dispatchEvent(new window.MouseEvent('click', {bubbles:true, cancelable:true}));
+        const after=doc.getElementById('archFavList')?doc.getElementById('archFavList').querySelectorAll('.news-item').length:0;
+        check('点移除后聚合列表条目减少', after<before, before+'→'+after);
+        const n=JSON.parse(window.localStorage.getItem('mining_daily_history')||'[]').length;
+        check('点移除后浏览记录存储减少', n<3, 'history='+n);
+      }
+    } else { check('进入 history 聚合视图', false, '找不到 history 按钮'); }
+  } catch(e){ check('说明行/单条移除流程', false, '异常 '+e.message); }
+  // 清理本段种子数据，避免污染后续空态测试（⑦ 依赖空收藏/空历史）
+  try{ window.localStorage.removeItem('mining_daily_favorites'); window.localStorage.removeItem('mining_daily_history'); if(typeof window.mdUpdateFavBadges==='function') window.mdUpdateFavBadges(); }catch(e){}
 
   console.log('\n===== ⑨ 会议 tab + 会议会展区块 =====');
   const mctabs = doc.querySelectorAll('#mdTop .mctab');
@@ -271,7 +305,7 @@ setTimeout(() => {
   check('图标内含白色「Ai」字', /(?:text|tspan)[^>]*>Ai<\/text>/.test(html));
   check('底栏 AI 搜文字标签保留', /data-go="qa"[^>]*>[\s\S]{0,120}<span>AI 搜<\/span>/.test(html));
   check('呼吸脉冲 keyframes 仍不存在（旧禁令保留，不许回退）', !/@keyframes qaOrbPulse\{/.test(html));
-  check('底栏 qa tab 仍持品牌色（色由文字标签承载）', /\.mtab\[data-go="qa"\]\{color:var\(--brand\)\}/.test(html));
+  check('底栏 qa tab 激活态由文字标签承载品牌色', /\.mtab\[data-go="qa"\]\.active\{color:var\(--brand\)\}/.test(html));
 
   // ---- 顶栏三栏化：‹ 返回 / AI 搜 / ⋯（CSS 断言）----
   check('桌面：‹ 返回键默认隐藏', /\.qa-float-head \.qa-back\{display:none/.test(html));

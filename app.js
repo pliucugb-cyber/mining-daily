@@ -609,6 +609,7 @@ function updateFavCount(){
   const t=document.getElementById('tocFavCount');
   if(t)t.textContent=n;
   // 2026-09-09：左侧目录「我的收藏」不再显示数字，也始终可见（0 条不隐藏）
+  if(typeof mdUpdateFavBadges==='function') mdUpdateFavBadges();
 }
 // ===== 已归档收藏渲染：收藏但新闻已不在当前页面的条目 =====
 // 兼容别名：历史调用点较多，统一转发到权威 esc（行为更严：null 安全 + 转义 '）
@@ -716,6 +717,8 @@ function renderFavHistoryAggregate(mode){
   });
   list.appendChild(frag);
   if(countEl)countEl.textContent=items.length+'条';
+  var subEl=document.getElementById('favViewSub');
+  if(subEl) subEl.textContent=(mode==='fav'?'共 '+items.length+' 条 · 倒序排列':'共 '+items.length+' 条 · 按浏览时间倒序');
   if(items.length===0){
     const _favArt='<svg class="empty-art" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
       +'<rect x="26" y="22" width="76" height="84" rx="12" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 7" opacity=".55"/>'
@@ -736,6 +739,16 @@ function renderFavHistoryAggregate(mode){
       : '<div class="aggregate-empty">'+_histArt+'<div class="empty-title">还没有浏览记录</div><div class="empty-tip">打开任意条目后会自动记录到这里</div><button class="empty-cta" type="button" data-act="fav-back">去首页看看</button></div>';
     list.innerHTML=emptyMsg;
   }
+  // 2026-09-12：为聚合列表每条加单条移除按钮（fav/history 沉浸式视图内）
+  list.querySelectorAll('.news-item').forEach(function(el){
+    var rm=document.createElement('button');
+    rm.className='aggregate-item-remove';
+    rm.type='button';
+    rm.setAttribute('data-act','item-remove');
+    rm.setAttribute('aria-label','移除该条');
+    rm.textContent='×';
+    el.appendChild(rm);
+  });
   // 为聚合列表注入星标/未读按钮并同步收藏态
   injectStars();
   applyFavStates();
@@ -788,6 +801,8 @@ function updateHistoryCount(){
   // 2026-09-09：左侧目录「浏览记录」不再显示数字，也始终可见（0 条不隐藏）
   var _mc=document.querySelector('.mine-clear'); if(_mc)_mc.disabled=(n===0);
   var _tc=document.querySelector('.toc-clear'); if(_tc)_tc.disabled=(n===0);
+  var _fc=document.querySelector('.favview-clear'); if(_fc)_fc.disabled=(n===0);
+  if(typeof mdUpdateFavBadges==='function') mdUpdateFavBadges();
 }
 
 // 2026-09-12：清空浏览记录（「我的」面板与桌面左侧目录共用 data-act=clear-history，capture 委托统一拦截）
@@ -848,6 +863,50 @@ document.addEventListener('click',function(e){
     }
   }
 });
+
+// 2026-09-12：收藏/浏览记录沉浸式视图——单条移除（仅 fav/history 聚合列表内）
+document.addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('[data-act="item-remove"]'):null;
+  if(!b)return;
+  e.preventDefault(); e.stopPropagation();
+  var item=b.closest('.news-item');
+  var url=item&&item.getAttribute('data-url');
+  if(!url)return;
+  var mode=document.body.getAttribute('data-filter-mode');
+  if(mode==='fav'){ saveFavs(getFavs().filter(function(f){return f.url!==url;})); if(typeof updateFavCount==='function') updateFavCount(); renderFavHistoryAggregate('fav'); }
+  else if(mode==='history'){ saveHistory(getHistory().filter(function(h){return h.url!==url;})); if(typeof updateHistoryCount==='function') updateHistoryCount(); renderFavHistoryAggregate('history'); }
+  if(typeof mdUpdateFavBadges==='function') mdUpdateFavBadges();
+});
+
+// 2026-09-12：手机端收藏/浏览记录沉浸式视图，从左边缘右滑返回（iOS 习惯）
+// 从「我的」面板进入则回「我的」面板；否则回首页（与「‹ 返回」点击行为一致）
+(function(){
+  var sx=0, sy=0, t0=0, tracking=false, decided=false, horiz=false;
+  document.addEventListener('touchstart',function(e){
+    if(!e.touches||e.touches.length!==1){ tracking=false; return; }
+    if(window.innerWidth>768){ tracking=false; return; }
+    var fm= document.body.getAttribute('data-filter-mode');
+    if(fm!=='fav' && fm!=='history'){ tracking=false; return; }
+    if(e.touches[0].clientX>28){ tracking=false; return; }
+    sx=e.touches[0].clientX; sy=e.touches[0].clientY; t0=Date.now(); tracking=true; decided=false; horiz=false;
+  },{passive:true});
+  document.addEventListener('touchmove',function(e){
+    if(!tracking||decided||!e.touches||e.touches.length!==1)return;
+    var dx=e.touches[0].clientX-sx, dy=e.touches[0].clientY-sy;
+    if(Math.abs(dx)>10||Math.abs(dy)>10){ decided=true; horiz=Math.abs(dx)>Math.abs(dy); }
+  },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(!tracking)return; tracking=false;
+    if(!horiz)return;
+    var cx=(e.changedTouches&&e.changedTouches[0])?e.changedTouches[0].clientX:sx;
+    var dx=cx-sx, dt=Date.now()-t0;
+    if(dx>70 && dt<800){
+      if(window.__mdFavFromMine && typeof window.mdActivateTab==='function'){
+        window.__mdFavFromMine=false; window.mdActivateTab('mine', true);
+      } else if(typeof setFilter==='function'){ setFilter('none'); }
+    }
+  },{passive:true});
+})();
 
 // ===== 新一轮找矿突破战略行动专项：按关键词自动识别并归类 =====
 // 命中关键词的新闻从"今日新增/往期内容"移动到专项区对应子类（不重复展示）
@@ -2717,7 +2776,14 @@ function mdMarkArchiveDups(){
 // 用户要求精简顶栏：收藏/历史两个常驻圆钮已从顶栏移除，其上的未读红点随之退役，
 // 两个入口统一收在底部「我的」面板内（data-act="fav"/"history"），功能未减。
 // 本函数保留为空实现：既有调用点（收藏点击、storage 变更）仍会触发，去掉会留下死调用。
-function mdUpdateFavBadges(){}
+function mdUpdateFavBadges(){
+  try{
+    var fb=document.getElementById('mineFavBadge');
+    if(fb){ var nf=getFavs().length; fb.textContent=nf?String(nf):''; }
+    var hb=document.getElementById('mineHistBadge');
+    if(hb){ var nh=getHistory().length; hb.textContent=nh?String(nh):''; }
+  }catch(e){}
+}
 // ① 顶栏智能吸顶：下滚隐藏、上滑/到顶重现（阅读时让出空间，分类栏随顶栏整体可见）
 // 2026-09-11 P0：隐藏只走 transform（不动布局，避免整列内容跳动）；滞后阈值 12px 抗惯性滚动抖动。
 var mdTopLastY=0, mdTopTick=false, mdTopBarH=0;
@@ -2792,8 +2858,8 @@ function mdMobileTabBar(){
   sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-modal','true'); sheet.setAttribute('aria-label','我的');
   sheet.innerHTML='<div class="mine-header"><span class="mine-title">我的</span><button class="mine-close" data-act="close" aria-label="关闭">✕</button></div>'+
     '<div class="mine-list">'+
-    '<button class="mine-item" data-act="fav"><span class="mine-icon">★</span><span class="mine-label">我的收藏</span><span class="mine-chevron">›</span></button>'+
-    '<button class="mine-item" data-act="history"><span class="mine-icon">🕘</span><span class="mine-label">浏览记录</span><span class="mine-chevron">›</span></button>'+
+    '<button class="mine-item" data-act="fav"><span class="mine-icon">★</span><span class="mine-label">我的收藏</span><span class="mine-badge" id="mineFavBadge"></span><span class="mine-chevron">›</span></button>'+
+    '<button class="mine-item" data-act="history"><span class="mine-icon">🕘</span><span class="mine-label">浏览记录</span><span class="mine-badge" id="mineHistBadge"></span><span class="mine-chevron">›</span></button>'+
     '<button class="mine-item" data-act="theme"><span class="mine-icon">🌓</span><span class="mine-label">深色 / 浅色</span><span class="mine-state" id="mineThemeState">当前：浅色</span></button>'+
     '<div class="mine-install" id="mineInstallCard"></div>'+
     '</div>';

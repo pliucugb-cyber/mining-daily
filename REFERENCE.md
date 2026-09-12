@@ -1358,3 +1358,23 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - 移动端「我的」面板的浏览记录行不得重新出现「清空」按钮；清空仅保留在浏览记录聚合视图返回条。
 - 从「我的」进收藏/浏览记录，底部「我的」tab 必须保持高亮，沉浸式「‹ 返回」必须回到「我的」面板（不得回首页）。
 - 不得移除 line 2871 外部点击关闭监听的 fav-back 白名单，否则返回闭环会被立刻抵消弹回首页。
+### 32. 移动端 UX 优化（用户续提 1/2/4/5/6，build 20260912-2020）
+### 32.1 用户指令
+- 执行 2026-09-12 提出的移动端优化建议第 1、2、4、5、6 条（第 3 条「主题行加当前态勾选」用户未点，跳过）。
+### 32.2 改动
+- ① 底栏「AI 搜」撞色：`.mtab[data-go="qa"]` 非激活态由恒亮品牌色改为中性灰 `var(--ink-700)`，仅 `.active` 高亮品牌色，避免与「首页」激活态撞色。
+- ② 「我的」面板加条数徽标：mine-item 内新增 `#mineFavBadge`/`#mineHistBadge`（`.mine-badge`，0 条经 `:empty` 自动隐藏）；实现 `mdUpdateFavBadges()` 并接入 `updateFavCount()`/`updateHistoryCount()`，收藏/浏览记录变动实时刷新。
+- ④ 左边缘右滑返回：新增 touchstart/move/end 委托，仅手机端（≤768）、在收藏/浏览记录沉浸式视图、从左边缘（clientX≤28）起、水平位移>70px 且 <800ms 时触发；从「我的」进入则回「我的」面板，否则回首页（与「‹ 返回」点击行为一致）。
+- ⑤ 单条移除：聚合列表每条注入 `.aggregate-item-remove`（×）按钮（hover 显隐），document 委托 `[data-act="item-remove"]` 按 url 从 fav/history 存储移除并重渲染；`updateHistoryCount` 顺带在 0 条时禁用 `.favview-clear`。
+- ⑥ 返回条说明：`#favViewBar` 下方新增 `#favViewSub`，`renderFavHistoryAggregate` 写入「共 N 条 · 倒序排列 / 按浏览时间倒序」。
+### 32.3 代码落点
+- app.js：`mdUpdateFavBadges()`（line 2720 原空函数实现）；`mdMobileTabBar` mine-item 加 badge span（line 2795-2796）；`updateFavCount`/`updateHistoryCount` 末行调 `mdUpdateFavBadges`；`renderFavHistoryAggregate` 写 `#favViewSub` + 注入 `.aggregate-item-remove`；新增 `item-remove` 点击委托与左边缘右滑 IIFE（line 850 后）。
+- index.html：`build-version` → `20260912-2020`；`.mine-badge`/`.favview-sub`/`.aggregate-item-remove` 样式；`#favViewSub` 元素（line 2390 后）；`.mtab[data-go="qa"]` 改中性灰。
+- sw.js：`CACHE_NAME` 由 `deploy_pages.py` 依 build-version 自动派生（无需手改）。
+- test_mobile_ux_batch.js：修正过时 `qa` 品牌色断言为「非激活中性灰 / 激活品牌色」；新增 ⑱ 段（徽标数量、返回条说明含「共 N 条」、单条移除减条目减存储），段末清理种子 localStorage 避免污染空态测试。总断言 186 → **194**（0 失败）。
+### 32.4 测试与验证
+- `test_mobile_ux_batch.js` 194/0；回归 `test_qa_navtab_20260910.js` 18/0、`test_mobile_opt_20260910.js` 37/0、`test_view_switch.js` 22/0、`test_smoke_0908.js` 74/0、`test_qa_features.js` 61/0、`node --check app.js` 干净。
+- `test_fav_history_aggregate.js` 仍 4 条预存失败（与沉浸式单栏设计冲突的旧测试，非本次引入）。
+### 32.5 红线
+- 底栏 tab 仅激活态高亮品牌色；AI 搜 非激活必须中性灰，不得回退为恒亮。
+- 左边缘右滑返回需与「‹ 返回」点击行为一致（从我的进入→回我的面板）。
