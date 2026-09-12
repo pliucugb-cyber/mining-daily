@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-2020" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-2037" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -125,7 +125,7 @@ body[data-filter-mode="fav"] #mdTop,
 body[data-filter-mode="history"] #mdTop,
 body[data-filter-mode="fav"] .col-rail,
 body[data-filter-mode="history"] .col-rail{display:none!important}
-/* 收藏/历史视图保留右侧矿业热榜 + 近期会展，只隐藏非相关内容；双栏布局避免中间过空 */
+/* 收藏/历史视图：沉浸式聚合，统一单栏布局，避免隐藏的 col-rail 产生右侧空白 */
 @media(min-width:1101px){
 body[data-filter-mode="fav"] .news-grid,
 body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr);gap:var(--s5)}
@@ -1491,7 +1491,9 @@ body.dark .filter-state{background:#123040;border-color:#1d3d4d;color:var(--ink-
 }
 @media(min-width:1440px){
   .news-grid{grid-template-columns:minmax(0,1fr) 320px}
-  body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr) 320px}
+  /* 2026-09-12：浏览记录与我的收藏共用同一套沉浸式单栏聚合视图，不再为隐藏的 col-rail 保留 320px 空白 */
+  body[data-filter-mode="fav"] .news-grid,
+  body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr)}
 }
 /* 「跳到主内容」：默认移出视口，键盘聚焦时才出现（不占版面、不干扰鼠标用户） */
 .md-skip-link{position:absolute;left:-9999px;top:0;z-index:9999;padding:10px 16px;

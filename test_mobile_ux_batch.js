@@ -155,6 +155,9 @@ setTimeout(() => {
     check('收藏徽标显示数量 2', !!fb && fb.textContent==='2', fb?('text='+fb.textContent):'无');
     check('浏览记录徽标显示数量 3', !!hb && hb.textContent==='3', hb?('text='+hb.textContent):'无');
   } catch(e){ check('徽标刷新', false, '异常 '+e.message); }
+  // 2026-09-12：桌面端收藏/浏览记录沉浸式视图布局必须一致，避免 history 保留隐藏 col-rail 导致右侧 320px 空白
+  check('history 与 fav 在 1440px+ 下共用单栏布局（无 320px 隐藏右栏）',
+    !/body\[data-filter-mode="history"\]\s*\.news-grid\s*\{\s*grid-template-columns:\s*minmax\(0,1fr\)\s+320px\s*\}/.test(html));
   try {
     const hBtn = sheet ? sheet.querySelector('[data-act="history"]') : null;
     if(hBtn){
