@@ -1010,3 +1010,84 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 
 - `.mtab[data-go="qa"]` 常驻品牌青色：首页激活时会出现**两个青色 tab**（当前 tab + AI 搜入口）。
   属视觉歧义，非 bug；改动小但涉及导航语义，等用户拍板后再动。
+
+
+## §22 「我的」面板独立全屏页化（2026-09-12 用户体验）
+
+### 22.1 用户原话与问题
+
+> "当我点"我的"时，还需要优化一下，我觉得"我的"是一个单独的界面，点完之后没有必要还出现其他内容。点完之后，只出现我的收藏、浏览记录、深色/浅色、安装到主屏幕就行了，其他都删了。"
+
+截图显示：点击底部「我的」tab 后，只浮出一个底部 sheet，背后的「今日简报」等内容仍然可见，
+导致「我的」不像一个独立界面。
+
+### 22.2 方案定稿
+
+将 `#mineSheet` 从**底部半屏 sheet** 改为**覆盖全部内容的独立全屏设置页**：
+
+- 仅保留四项：
+  1. **我的收藏**（★）
+  2. **浏览记录**（🕘）
+  3. **深色 / 浅色**（🌓，右侧显示「当前：浅色/深色」状态标签）
+  4. **安装到主屏幕**（📲/📱，保持 iOS/Android 自动识别分步卡）
+- 删除：「返回顶部」按钮、`#mineMeta`（数据更新时间/版权说明）、原 `mine-meta` 分隔线。
+- 新增独立页头：左侧「我的」标题 + 右侧 ✕ 关闭按钮。
+- 四项以卡片行呈现：左侧图标 + 标签 + 右侧 › 箭头；主题行右侧改为状态标签。
+- 底部导航栏始终可见；点其他 tab 直接切换并关闭「我的」页。
+
+### 22.3 交互细节
+
+- 打开「我的」页：`body.classList.add('md-mine-open')`，`#mineSheet` 由 `display:none` 切为
+  `display:flex`；`body{overflow:hidden}` 禁止底层滚动；`body > *:not(#mobileTabBar):not(#mineSheet)`
+  全部隐藏，确保只剩标题栏、设置列表、底部导航。
+- 关闭「我的」页：
+  - 点 ✕ / 点空白处 / 点其他内容 tab → **回到之前的内容 tab**（通过 `mdLastContentTab` 记忆，
+    默认首页），而不是把所有 tab 高亮都清空。
+  - 点「我的收藏」/「浏览记录」→ 先切回首页（`activateTab('home', false)`），再触发
+    `toggleFavFilter()` / `toggleHistoryFilter()`。这样收藏/历史显示的是全库聚合，
+    而不是「当前 tab（如价格）下的空结果」。
+- 主题切换：点整行切换，同时更新 `#mineThemeState` 文本。
+
+### 22.4 代码落点
+
+- `index.html` `@media(max-width:768px)` 内 `#mineSheet` 规则重写：
+  ```css
+  #mineSheet{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--surface);z-index:220;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+  body.md-mine-open{overflow:hidden}
+  body.md-mine-open #mineSheet{display:flex}
+  body.md-mine-open > *:not(#mobileTabBar):not(#mineSheet){display:none!important}
+  .mine-header{...}
+  .mine-list{...}
+  .mine-item{...}
+  ```
+- `app.js` `mdMobileTabBar()`：
+  - `sheet.innerHTML` 改为 `.mine-header` + `.mine-list`（3 个 `.mine-item` + `#mineInstallCard`）。
+  - 新增 `mdRefreshMineTheme()`。
+  - `activateTab()` 增加 `mdLastContentTab` 记忆；非 mine tab 离开时移除 `md-mine-open`。
+  - sheet 点击：fav/history → `activateTab('home', false)` + filter；close → `activateTab(mdLastContentTab, false)`。
+  - 外部点击 → `activateTab(mdLastContentTab, false)`。
+- build-version：`20260912-1431` → `20260912-1500`；`sw.js` `CACHE_NAME` 同步。
+
+### 22.5 测试与验证
+
+- `test_mobile_ux_batch.js` ⑧ 段重写，断言从 6 条扩到 16 条 → 全文件 **153 PASS / 0 FAIL**。
+  新增覆盖：删除返回顶部/`#mineMeta`、独立页头/关闭按钮、3 个 `.mine-item`、主题状态标签、
+  点「我的」tab 添加 `md-mine-open`、点关闭移除 `md-mine-open`。
+- `test_mobile_opt_20260910.js` ④ 段同步：验证点收藏/历史后 `data-filter-mode` 正确且
+  `md-mine-open` 移除、`mineSheet` 隐藏 → **37 PASS / 0 FAIL**。
+- `test_smoke_0908.js` **74/0**、`test_qa_navtab_20260910.js` **18/0**、
+  `preflight_check.py --fail-on-error` 全绿。
+
+### 22.6 红线（08:00 复核不得判为回退）
+
+- 「我的」页**只含四项**是合法形态；把返回顶部 / 数据更新时间 / 简报内容重新加回「我的」页才属回退。
+- `#mineSheet` 作为**全屏覆盖页**（而非底部 sheet）是合法形态；把它改回底部 sheet 才属回退。
+- 收藏/历史入口必须存在且能正确切到 `data-filter-mode`；移除或改成非全库过滤才属回退。
+
+### 22.7 额外优化建议（已实施或待拍板）
+
+- ✅ 主题行带状态标签，一眼可见当前模式。
+- ✅ 收藏/历史点完后先回首页再过滤，避免在价格/矿权等 tab 下看到空结果。
+- ✅ 关闭/返回时回到之前的内容 tab，而不是把所有 tab 高亮清空。
+- ⏸ 可在「我的」页顶部加用户头像/首字母，但用户要求"只出现四项"，先不做。
+- ⏸ 可补充「清除浏览记录」快捷入口，但超出当前四项范围，待后续需求。

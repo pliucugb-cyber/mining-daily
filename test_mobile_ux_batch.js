@@ -2,7 +2,7 @@
  * 2026-09-10 手机端 UX 批量优化验证（jsdom）
  * 覆盖：① 热榜手机 10 条 / 桌面 5 条  ② 往期字号（CSS，字符串断言）
  *       ③+④ 推荐不显示价格、价格仅价格 tab  ⑤ 问按钮发光球（CSS 断言）
- *       ⑥ 问答全屏 + 返回箭头  ⑧ 我的面板内联安装卡 + 删阅读模式  ⑨ 会议 tab + 区块注入
+ *       ⑥ 问答全屏 + 返回箭头  ⑧ 我的面板独立全屏页（仅四项）  ⑨ 会议 tab + 区块注入
  *       ⑮ AI 搜面板：彩色 Ai 图标 / 窄屏全屏（形态隔离，清桌面内联记忆）/ 顶栏⋯菜单 / 空态推荐检索词
  *          —— 2026-09-12 用户定夺；同轮把 2026-09-11「禁止渐变」的旧约定作废（脉冲禁令保留）
  *       ⑩ 顶栏智能吸顶：隐藏只做 transform，不得折叠布局（2026-09-11 P0）
@@ -87,14 +87,35 @@ setTimeout(() => {
   const cb = doc.querySelector('#qaFloat .pchart-close');
   check('手机端关闭按钮改为返回箭头 ‹', !!cb && cb.textContent === '‹', cb ? ('glyph=' + cb.textContent) : '无按钮');
 
-  console.log('\n===== ⑧ 我的面板：内联安装卡 + 删阅读模式 =====');
+  console.log('\n===== ⑧ 我的面板：独立全屏设置页（仅四项） =====');
   const sheet = doc.getElementById('mineSheet');
   check('mineSheet 存在', !!sheet);
   check('阅读模式按钮已从我的面板删除', !!(sheet && !sheet.querySelector('[data-act="reading"]')));
   check('旧「安装到桌面」按钮已从我的面板删除', !!(sheet && !sheet.querySelector('[data-act="install"]')));
+  check('「返回顶部」按钮已从我的面板删除', !!(sheet && !sheet.querySelector('[data-act="top"]')));
+  check('mineMeta 已从我的面板删除', !!(sheet && !sheet.querySelector('#mineMeta')));
+  check('有独立页头 .mine-header', !!(sheet && sheet.querySelector('.mine-header')));
+  check('页头标题为「我的"', !!(sheet && sheet.querySelector('.mine-title') && sheet.querySelector('.mine-title').textContent === '我的'));
+  check('页头有关闭按钮 data-act="close"', !!(sheet && sheet.querySelector('.mine-close[data-act="close"]')));
+  const items = sheet ? sheet.querySelectorAll('.mine-item') : [];
+  check('设置项共 3 个（收藏/历史/主题）', items.length === 3, '实际 ' + items.length);
+  check('第一项：我的收藏', !!(items[0] && items[0].getAttribute('data-act') === 'fav'));
+  check('第二项：浏览记录', !!(items[1] && items[1].getAttribute('data-act') === 'history'));
+  check('第三项：深色/浅色（带状态标签）', !!(items[2] && items[2].getAttribute('data-act') === 'theme' && items[2].querySelector('#mineThemeState')));
   const card = doc.getElementById('mineInstallCard');
-  check('内联安装分步卡已注入', !!card, card ? ('内容片段=' + (card.textContent || '').slice(0, 18)) : '无');
+  check('安装到主屏幕卡片已注入', !!card, card ? ('内容片段=' + (card.textContent || '').slice(0, 18)) : '无');
   check('安装卡含系统识别提示', !!card && /主屏幕|安装/.test(card.textContent || ''));
+  // 行为：点底部「我的」tab 应添加 body.md-mine-open
+  const mineTab = doc.querySelector('.mtab[data-go="mine"]');
+  if (mineTab) {
+    mineTab.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+    check('点「我的」tab → body 添加 md-mine-open', doc.body.classList.contains('md-mine-open'));
+    const closeBtn = sheet.querySelector('.mine-close');
+    if (closeBtn) {
+      closeBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+      check('点关闭按钮 → body 移除 md-mine-open', !doc.body.classList.contains('md-mine-open'));
+    }
+  }
 
   console.log('\n===== ⑨ 会议 tab + 会议会展区块 =====');
   const mctabs = doc.querySelectorAll('#mdTop .mctab');

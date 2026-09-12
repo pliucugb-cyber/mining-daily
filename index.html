@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1431" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1500" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -729,11 +729,22 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .nf-search{min-height:44px;font-size:16px}
   .nf-chip{min-height:44px;display:inline-flex;align-items:center;padding:0 var(--s3)}
   .nf-chips{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
-  #mineSheet{display:flex;flex-direction:column;position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line-2);box-shadow:0 -4px 20px rgba(15,23,42,.18);z-index:220;padding:var(--s2) var(--s3) calc(var(--s3) + env(safe-area-inset-bottom,0px));gap:var(--s1)}
-  #mineSheet[hidden]{display:none}
-  #mineSheet button{text-align:left;border:none;background:none;color:var(--ink-900);font-size:var(--fs-body);padding:var(--s3) var(--s2);border-radius:var(--r-md);cursor:pointer}
-  #mineSheet button:active{background:var(--surface-2)}
-  .mine-meta{font-size:var(--fs-meta);color:var(--ink-500);line-height:1.5;padding:var(--s2) 0 0;margin-top:var(--s1);border-top:1px solid var(--line-2)}
+  /* 「我的」独立全屏页（2026-09-12）：不再是从底部浮出的半屏 sheet，而是覆盖全部内容的设置页 */
+  #mineSheet{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--surface);z-index:220;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+  body.md-mine-open{overflow:hidden}
+  body.md-mine-open #mineSheet{display:flex}
+  body.md-mine-open > *:not(#mobileTabBar):not(#mineSheet){display:none!important}
+  .mine-header{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 var(--s3);border-bottom:1px solid var(--line-2)}
+  .mine-title{font-size:var(--fs-h2);font-weight:600;color:var(--ink-900)}
+  .mine-close{width:36px;height:36px;border:none;border-radius:50%;background:var(--surface-2);color:var(--ink-700);font-size:var(--fs-h2);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+  .mine-close:active{background:var(--surface-3)}
+  .mine-list{flex:1 1 auto;overflow-y:auto;padding:var(--s3);display:flex;flex-direction:column;gap:var(--s2);padding-bottom:calc(var(--s3) + env(safe-area-inset-bottom,0px))}
+  .mine-item{display:flex;align-items:center;gap:var(--s3);width:100%;text-align:left;border:none;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:var(--s3) var(--s3);color:var(--ink-900);font-size:var(--fs-body);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .mine-item:active{background:var(--surface-2)}
+  .mine-icon{font-size:20px;line-height:1;width:28px;text-align:center}
+  .mine-label{flex:1 1 auto}
+  .mine-chevron{color:var(--ink-400);font-size:var(--fs-h2)}
+  .mine-state{font-size:var(--fs-meta);color:var(--ink-500)}
   /* ===== P0 移动端结构重构（2026-09-10）：轻量 App Bar + 6 分类 Tab + 底部 4 全局动作 Tab ===== */
   .header{display:none!important}
   /* 2026-09-11 P0 修复：智能吸顶只做 transform 位移，绝不动布局。
@@ -812,9 +823,15 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   @keyframes qaFloatIn{from{transform:translateY(14px);opacity:.55}to{transform:translateY(0);opacity:1}}
 }
 body.dark #mobileTabBar{background:var(--bg);border-top-color:var(--line-1)}
-body.dark #mineSheet{background:var(--bg);border-top-color:var(--line-1)}
-body.dark #mineSheet button{color:var(--ink-700)}
-body.dark #mineSheet button:active{background:var(--surface-3)}
+body.dark #mineSheet{background:var(--bg)}
+body.dark .mine-header{border-bottom-color:var(--line-1)}
+body.dark .mine-title{color:var(--ink-900)}
+body.dark .mine-close{background:var(--surface-3);color:var(--ink-500)}
+body.dark .mine-close:active{background:var(--surface-3)}
+body.dark .mine-item{background:var(--bg);border-color:var(--line-1);color:var(--ink-700)}
+body.dark .mine-item:active{background:var(--surface-3)}
+body.dark .mine-chevron{color:var(--ink-500)}
+body.dark .mine-state{color:var(--ink-500)}
 /* Phase 3 极小屏 ≤360px 适配（此前最小断点为 600px，缺此档 → iPhone SE/小屏安卓会挤） */
 @media(max-width:360px){
   body{font-size:14px;line-height:1.55}
@@ -1615,11 +1632,12 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   /* 空态引导在窄屏占满一行更易点 */
   .qa-sug-cards{gap:7px}
   .qa-sug{padding:5px 11px}
-  /* ⑧「我的」面板内联安装分步卡（替代原无反应的「安装到桌面」按钮） */
-  #mineInstallCard{border:1px solid var(--line-2);border-radius:var(--r-md);padding:var(--s3);background:var(--surface-2);margin:var(--s1) 0}
+  /* ⑧「我的」独立页：安装到主屏幕卡片（替代原无反应的「安装到桌面」按钮） */
+  #mineInstallCard{border:1px solid var(--line-2);border-radius:var(--r-lg);padding:var(--s3);background:var(--surface-2)}
   #mineInstallCard .mine-install-title{font-weight:600;color:var(--ink-900);font-size:var(--fs-body);margin-bottom:4px}
   #mineInstallCard .mine-install-note{font-size:var(--fs-meta);color:var(--ink-500);line-height:1.5}
   #mineInstallCard .mine-install-btn{margin-top:var(--s2);border:none;background:var(--brand);color:#fff;border-radius:var(--r-md);padding:var(--s2) var(--s4);font-size:var(--fs-meta);font-weight:600;cursor:pointer}
+  body.dark #mineInstallCard{background:var(--surface-3);border-color:var(--line-1)}
 }
 /* 桌面：隐藏「筛选 ▾」（移动端专属控件）。
    2026-09-12 检索统一（用户定夺）：此处原有的 .md-search-btn{display:none} 已删除 ——

@@ -2,7 +2,7 @@
 //   ① .mctab 对比度 token（源码级）
 //   ② 8 个金属 chip 加 nf-chip-metal 类（DOM 保留，桌面不变；仅移动端 CSS 隐藏）
 //   ③ 顶栏精简（2026-09-12）：收藏/历史常驻圆钮已移除，红点随之退役，死 CSS 已清理
-//   ④ 入口下移：从「我的」面板点击收藏/历史 → 切换 body[data-filter-mode]
+//   ④ 入口下移：从独立「我的」页点击收藏/历史 → 关闭我的页并切换 body[data-filter-mode]
 //   ⑤ 顶栏/页面已无 .md-badge 红点元素
 //   ⑥ 各移动 CSS 规则字符串存在（news-summary clamp / tag-chip 圆角 / badge-new 去 pulse / dot 令牌 / 热榜会展卡隐藏 / z-index 合并）
 //   ⑦ 桌面不破坏：金属 chip 仍在 DOM（8 个）、#newsFilterBar 存在、0 致命 JS 错误
@@ -81,24 +81,31 @@ setTimeout(() => {
   ok('品牌行高度改造：align-items:center + min-height:36px',
     /\.md-top-brand\{display:flex;align-items:center;[^}]*min-height:36px\}/.test(html));
 
-  console.log('\n===== ④ 入口下移：从「我的」面板切换 filter-mode =====');
+  console.log('\n===== ④ 入口下移：从独立「我的」页切换 filter-mode =====');
   const sheet = d.getElementById('mineSheet');
-  ok('#mineSheet 存在（入口承接面板）', !!sheet);
+  ok('#mineSheet 存在（独立全屏设置页）', !!sheet);
   const favEntry = sheet && sheet.querySelector('button[data-act="fav"]');
   const histEntry = sheet && sheet.querySelector('button[data-act="history"]');
-  ok('「我的」面板含收藏入口 button[data-act="fav"]', !!favEntry);
-  ok('「我的」面板含浏览记录入口 button[data-act="history"]', !!histEntry);
+  ok('「我的」页含收藏入口 button[data-act="fav"]', !!favEntry);
+  ok('「我的」页含浏览记录入口 button[data-act="history"]', !!histEntry);
+  // 先打开「我的」页
+  const mineTab = d.querySelector('.mtab[data-go="mine"]');
+  if (mineTab) mineTab.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
   if (favEntry) {
     favEntry.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
-    ok('点「★ 我的收藏」→ body[data-filter-mode]="fav"', d.body.getAttribute('data-filter-mode') === 'fav',
+    ok('点「我的收藏」→ body[data-filter-mode]="fav"', d.body.getAttribute('data-filter-mode') === 'fav',
       '当前=' + d.body.getAttribute('data-filter-mode'));
-    favEntry.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+    ok('点「我的收藏」后关闭我的页（md-mine-open 移除）', !d.body.classList.contains('md-mine-open'));
+    ok('点「我的收藏」后 mineSheet 隐藏', sheet.hidden);
   } else ok('点收藏切换', false, '入口缺失');
+  // 重新打开我的页再点历史
+  if (mineTab) mineTab.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
   if (histEntry) {
     histEntry.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
-    ok('点「🕘 浏览记录」→ body[data-filter-mode]="history"', d.body.getAttribute('data-filter-mode') === 'history',
+    ok('点「浏览记录」→ body[data-filter-mode]="history"', d.body.getAttribute('data-filter-mode') === 'history',
       '当前=' + d.body.getAttribute('data-filter-mode'));
-    histEntry.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+    ok('点「浏览记录」后关闭我的页（md-mine-open 移除）', !d.body.classList.contains('md-mine-open'));
+    ok('点「浏览记录」后 mineSheet 隐藏', sheet.hidden);
   } else ok('点历史切换', false, '入口缺失');
 
   console.log('\n===== ⑤ 未读红点随按钮退役 =====');
