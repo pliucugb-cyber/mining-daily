@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-0852" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-0907" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -715,8 +715,8 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .md-cat-bar{display:flex;gap:0;margin-top:4px}
   /* 2026-09-11 优化：底部非首页 tab（价格/问/矿权/我的）隐藏顶部分类栏，避免与首页子导航重复 */
   body.md-hide-catbar .md-cat-bar{display:none}
-  /* 2026-09-11 优化②：搜索为首页专属（仅首页有检索条），非首页隐藏搜索图标，避免误触被拽回首页 */
-  body.md-hide-catbar #mdSearchBtn{display:none}
+  /* 2026-09-11 优化②原为「非首页隐藏顶栏搜索图标」，2026-09-12 检索统一（用户定夺）后
+     顶栏搜索按钮已整体移除，该规则随按钮一同删除。 */
   /* 2026-09-11 优化③：非首页时品牌行改显示当前 tab 名，日期让位以留空间 */
   body.md-hide-catbar .md-date{display:none}
   /* 2026-09-11 视觉规范评审修复 A3：越档字号 15px → var(--fs-h3) 14px
@@ -754,10 +754,12 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   /* ④ 往期 tab 下隐藏与推荐追更窗口重叠的条目（按日期硬切分） */
   body[data-md-cat="archive"] #archiveSection .news-item.md-dup{display:none!important}
   /* 检索条吸顶位置让位于分类栏（高度由 JS 写入 --md-top-h） */
-  /* ⑤ 移动端：检索条改为搜索图标触发的顶部面板（默认隐藏，不再常驻吸顶） */
+  /* ⑤ 移动端：桌面用的检索条（#newsFilterBar，由 app.js 注入、桌面端常驻）在移动端整体隐藏。
+     2026-09-12 检索统一（用户定夺）：移动端检索能力改由底部「AI 搜」面板（#qaFloat）承载，
+     此条在移动端不再呈现。display:none 是硬约束 —— 删掉它会在移动端露出桌面组件。
+     原「body.md-search-open #newsFilterBar{display:block}」及配套 #nfClear 规则随之删除：
+     md-search-open 已无任何添加点（唯一添加者 mdOpenSearch 已移除），规则永不生效。 */
   #newsFilterBar{position:fixed;top:calc(var(--md-top-h,96px) + env(safe-area-inset-top,0px));left:0;right:0;z-index:225;display:none;margin:var(--s2) 0;box-shadow:0 6px 20px rgba(15,23,42,.14);border-radius:var(--r-lg)}
-  body.md-search-open #newsFilterBar{display:block;animation:qaFloatIn .18s ease}
-  body.md-search-open #nfClear{display:inline-flex!important}
   /* ⑤ 底部「问」改为与其它 tab 一致的平铺样式：单一品牌色，无渐变/发光/脉冲 */
   .mtab[data-go="qa"]{color:var(--brand)}
   .mtab[data-go="qa"].active{color:var(--brand)}
@@ -1343,9 +1345,9 @@ body.dark .filter-state{background:#123040;border-color:#1d3d4d;color:var(--ink-
 .pc-value, .pc-chg, .pc-unit, .stat-num, .toc-count, .toc-count-fresh, .sub-count, .day-group, .news-meta{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 /* 只在移动端放大，桌面鼠标操作维持原尺寸，避免视觉回归 */
 @media(max-width:1100px){
-  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.toc-main-item,.toc-back-top,#briefToggle,.mobile-install-close,.md-search-btn,.nf-clear{min-height:44px}
+  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.toc-main-item,.toc-back-top,#briefToggle,.mobile-install-close,.nf-clear{min-height:44px}
   /* 2026-09-11 视觉规范评审修复 G2A–G2D：图标按钮补 min-width:44px（G2E .nf-clear 仅补高——加宽会盖住输入文字，按报告改用热区策略） */
-  .theme-toggle,.pwa-header-btn,#briefToggle,.mobile-install-close,.md-search-btn{min-width:44px}
+  .theme-toggle,.pwa-header-btn,#briefToggle,.mobile-install-close{min-width:44px}
 }
 @media(min-width:1440px){
   .news-grid{grid-template-columns:minmax(0,1fr) 320px}
@@ -1460,13 +1462,10 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   .news-filter-bar{z-index:225}
   /* P0-3：底部导航内联 SVG 图标尺寸 */
   .mtab .mi svg{width:22px;height:22px;display:block}
-  /* 顶部搜索按钮 */
-  .md-search-btn{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:none;background:var(--surface-2);color:var(--ink-700);border-radius:50%;cursor:pointer}
-  .md-search-btn:active{background:var(--surface-3)}
+  /* 2026-09-12 检索统一（用户定夺）：顶栏搜索按钮（.md-search-btn）整体移除，其样式随之删除。 */
   /* 2026-09-12 顶栏精简：.md-fav-btn（收藏/历史圆钮）与 .md-badge（未读红点）随两个按钮一并移除，
      原 P1 规则已成死代码，此处删除；触控热区清单里也同步去掉 .md-fav-btn。
      两个入口改由底部「我的」面板承载（app.js mdMobileTabBar 的 data-act="fav"/"history"）。 */
-  .md-search-btn{margin-left:6px}
   /* AI 悬浮球：移动端圆形化、上移避让底部导航 */
   .qa-fab .qa-fab-txt{display:none}
   .qa-fab{width:52px;height:52px;padding:0;justify-content:center;border-radius:50%}
@@ -1482,9 +1481,11 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   #mineInstallCard .mine-install-note{font-size:var(--fs-meta);color:var(--ink-500);line-height:1.5}
   #mineInstallCard .mine-install-btn{margin-top:var(--s2);border:none;background:var(--brand);color:#fff;border-radius:var(--r-md);padding:var(--s2) var(--s4);font-size:var(--fs-meta);font-weight:600;cursor:pointer}
 }
-/* 桌面：隐藏「筛选 ▾」与顶部搜索按钮（移动端专属控件） */
+/* 桌面：隐藏「筛选 ▾」（移动端专属控件）。
+   2026-09-12 检索统一（用户定夺）：此处原有的 .md-search-btn{display:none} 已删除 ——
+   它本意是「只在桌面隐藏」，但因不在媒体查询内、又与 @media 内的显示规则同特异性，
+   实际把顶栏搜索按钮在移动端也一并隐藏了（死控件）；按钮本身已随决议整体移除。 */
 .nf-toggle{display:none}
-.md-search-btn{display:none}
 /* 深色模式：底部导航非激活态用浅灰（浅色模式用 --ink-700，过 AA） */
 body.dark .mtab{color:var(--ink-300)}
 </style>
@@ -2212,7 +2213,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=27eab705" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=9e56dac3" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=12e6317a" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
@@ -2233,7 +2234,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <button class="qa-fab" id="qaFab" title="新闻检索 / AI 问答（可拖动调整位置）" onclick="window.qaFabClick&&window.qaFabClick(event)" data-page-node-id="6Ka2v8zIKmQZIq48X3DFwp"><span class="qa-fab-ico" data-page-node-id="Et1ekOfJsPy8fqbimfa1ah">🔍</span><span class="qa-fab-txt" data-page-node-id="t3eWIwkTXUsYQt2aqAjCUZ">搜新闻 / 问 AI</span></button>
 <div class="qa-float" id="qaFloat" data-page-node-id="SMuRhS8iqMPtiN769pZUaE">
   <div class="qa-float-head" data-page-node-id="Fw0aW0hTkzilozIGAlJLAj">
-    <span class="qa-float-title" data-page-node-id="Qgx3dxDE15DSH4L4hwV74k">💬 新闻问答</span>
+    <span class="qa-float-title" data-page-node-id="Qgx3dxDE15DSH4L4hwV74k">🔍 AI 搜 · 检索与问答</span>
     <div class="qa-head-actions" data-page-node-id="2y3yxkX3DRFzDSVPUu4zyV">
       <button class="qa-head-action" type="button" onclick="window.qaExportHistory&&window.qaExportHistory(this)" title="复制全部对话" data-page-node-id="BU3b3Sqjc5kTD8xBKPUEbV">📤 导出</button>
       <button class="qa-head-action" type="button" onclick="window.qaClearHistory&&window.qaClearHistory()" title="清空本次会话历史" data-page-node-id="gnWnL64EvaBimbZWUnCRdF">🗑 清空</button>
@@ -2256,7 +2257,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
   </div>
   <div class="qa-float-body" id="qaFloatBody" data-page-node-id="nd0EyI5kVl0DOVnIlIBaWb"></div>
   <div class="qa-float-foot" data-page-node-id="ClSV4Aqm5KW0LZGGVEAZMx">
-    <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="" aria-label="输入问题" autocomplete="off" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX">
+    <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="" aria-label="输入关键词检索或问题" autocomplete="off" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX">
     <button class="qa-float-btn qa-mic" id="qaFloatMic" type="button" title="语音输入" aria-label="语音输入"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:auto"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M12 18v3"></path><path d="M5 10v2a7 7 0 0 0 14 0v-2"></path></svg></button>
     <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词" onclick="window.qaFloatSearch&&window.qaFloatSearch()" data-page-node-id="DcqZEFlU8VgjnfLfZc4l82">检索</button>
     <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答" onclick="window.qaFloatAsk&&window.qaFloatAsk()" data-page-node-id="qJ4h2ouUiWwBV8nMhyMoNF">AI</button>
