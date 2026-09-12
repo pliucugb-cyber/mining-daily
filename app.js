@@ -2740,7 +2740,8 @@ function mdMobileTabBar(){
   function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go); }); }
   // 2026-09-12：「我的」独立页关闭/返回收藏历史时，回到之前的内容 tab（默认首页）。
   var mdLastContentTab='home';
-function mdQaBack(){ try{ qaFloatClose(); }catch(e){} activateTab(mdLastContentTab||'home', false); }
+  var mdQaReturn='home';
+function mdQaBack(){ try{ qaFloatClose(); }catch(e){} var _t=mdQaReturn||mdLastContentTab||'home'; if(_t==='mine'){ try{ activateTab('mine', true); }catch(e){ activateTab(mdLastContentTab||'home', false); } } else { activateTab(_t, false); } }
 window.qaFloatBack=mdQaBack;
   // 2026-09-11 优化③：非首页隐藏分类栏时，品牌行显示当前 tab 名给位置感
   var MD_BRAND_NAMES={'home':'⛏️ 矿业新闻日报','price':'价格','rights':'矿权','qa':'AI 搜','mine':'我的'};
@@ -2764,6 +2765,8 @@ window.qaFloatBack=mdQaBack;
         return;
       }
       if(autoOpen && typeof qaFloatToggle==='function') qaFloatToggle();
+      // 2026-09-12：记录返回目标——若「我的」覆盖层开着，返回时重新打开「我的」
+      mdQaReturn = document.body.classList.contains('md-mine-open') ? 'mine' : mdLastContentTab;
       setActive(_qp && _qp.classList.contains('open') ? 'qa' : null);
       return;
     } else if(go==='mine'){
@@ -2801,6 +2804,30 @@ window.qaFloatBack=mdQaBack;
     if(e.target.closest('#mineSheet')||(e.target.closest('.mtab')&&e.target.closest('.mtab').getAttribute('data-go')==='mine')) return;
     activateTab(mdLastContentTab, false);
   });
+  // 2026-09-12：手机端从面板顶部下拉关闭 AI 搜（回到进入前界面）
+  function mdQaBindSwipe(){
+    var p=document.getElementById('qaFloat'); if(!p) return;
+    var head=p.querySelector('.qa-float-head'); if(!head) return;
+    var sy=0,st=0,on=false;
+    head.addEventListener('touchstart',function(e){ if(e.touches.length!==1)return; sy=e.touches[0].clientY; st=Date.now(); on=true; },{passive:true});
+    head.addEventListener('touchmove',function(e){ if(!on)return; var dy=e.touches[0].clientY-sy; if(window.innerWidth<=768&&dy>0){ var bd=p.querySelector('.qa-float-body'); if(!bd||bd.scrollTop<=0){ head.style.transform='translateY('+Math.min(dy*0.4,40)+'px)'; } } },{passive:true});
+    head.addEventListener('touchend',function(e){ if(!on)return; on=false; head.style.transform=''; var dy=(e.changedTouches[0]?e.changedTouches[0].clientY:sy)-sy; var dt=Date.now()-st; if(window.innerWidth<=768&&dy>70&&dt<700){ var bd=p.querySelector('.qa-float-body'); var atTop=(!bd||bd.scrollTop<=0); if(atTop){ try{ mdQaBack(); }catch(e2){} } } });
+  }
+  mdQaBindSwipe();
+  // 2026-09-12：桌面端 Esc 关闭 AI 搜浮层，焦点回到悬浮球
+  function mdQaBindKeys(){
+    document.addEventListener('keydown',function(e){
+      if(e.key!=='Escape'&&e.key!=='Esc')return;
+      if(window.innerWidth>768){
+        var p=document.getElementById('qaFloat');
+        if(p&&p.classList.contains('open')){
+          try{ qaFloatClose(); }catch(e2){}
+          var fab=document.getElementById('qaFab'); if(fab){ try{ fab.focus(); }catch(e3){} }
+        }
+      }
+    });
+  }
+  mdQaBindKeys();
   // 2026-09-11 优化①：初始化恢复上次停留的内容 tab（问/我的为浮层不持久化，回退首页）
   var mdSavedTab='home';
   try{ var _s=localStorage.getItem('md_last_tab'); if(_s==='home'||_s==='price'||_s==='rights') mdSavedTab=_s; }catch(e){}
@@ -3620,7 +3647,7 @@ function pcChartClose(){
   });
 })();
 // ===== 左下角问答悬浮球（9-04 新增，复用全库 QA_ROWS 与 /api/qa 能力）=====
-var QA_FLOAT_BUSY=false, QA_FLOAT_AC=null, QA_FLOAT_TO=null, QA_FLOAT_MSG=null;
+var QA_FLOAT_BUSY=false, QA_FLOAT_AC=null, QA_FLOAT_TO=null, QA_FLOAT_MSG=null, QA_FLOAT_LAST_Q='';
 function qaFloatToggle(){
   var p=document.getElementById('qaFloat'),b=document.getElementById('qaFab');
   if(!p)return;
@@ -3638,11 +3665,11 @@ function qaFloatResetBusy(){
   if(QA_FLOAT_TO){ clearTimeout(QA_FLOAT_TO); QA_FLOAT_TO=null; }
   QA_FLOAT_MSG=null;
   var btn=document.getElementById('qaFloatAi');
-  if(btn){ btn.disabled=false; btn.textContent='✨ AI 回答'; btn.classList.remove('qa-cancel'); }
+  if(btn){ btn.disabled=false; btn.textContent='✨ AI 回答'; btn.classList.remove('qa-cancel'); btn.setAttribute('aria-label','AI 回答'); }
 }
 function qaFloatSetBusyUI(){
   var btn=document.getElementById('qaFloatAi');
-  if(btn){ btn.disabled=false; btn.textContent='取消'; btn.classList.add('qa-cancel'); }
+  if(btn){ btn.disabled=false; btn.textContent='取消'; btn.classList.add('qa-cancel'); btn.setAttribute('aria-label','取消生成'); }
 }
 // 点击/拖动区分：短距离移动视为点击，否则视为拖动并阻止打开面板
 var QA_FAB_MOVED=false;
@@ -4372,15 +4399,23 @@ function qaAiLocalAnswer(q,ctx){
 }
 function qaFloatAsk(retryMode,ctxOverride){
   if(QA_FLOAT_BUSY){
-    // 用户主动取消正在进行的 AI 请求
+    // 用户主动取消正在进行的 AI 请求：保留已流式内容，末尾追加「已取消 + 重新生成」
     if(QA_FLOAT_AC){ try{ QA_FLOAT_AC.abort('user-cancel'); }catch(e){} }
     if(QA_FLOAT_TO){ clearTimeout(QA_FLOAT_TO); QA_FLOAT_TO=null; }
     QA_FLOAT_BUSY=false;
     QA_FLOAT_AC=null;
-    var _btn=document.getElementById('qaFloatAi'); if(_btn){_btn.disabled=false; _btn.textContent='✨ AI 回答'; _btn.classList.remove('qa-cancel');}
+    var _btn=document.getElementById('qaFloatAi'); if(_btn){_btn.disabled=false; _btn.textContent='✨ AI 回答'; _btn.classList.remove('qa-cancel'); _btn.setAttribute('aria-label','AI 回答');}
     if(QA_FLOAT_MSG){
-      var _b=QA_FLOAT_MSG.querySelector('.qa-msg-bubble'); if(_b) _b.innerHTML='<div class="qa-cancelled">已取消。</div>';
-      var _mm=QA_FLOAT_MSG.querySelector('.qa-msg-meta'); if(_mm) _mm.textContent='';
+      var _b=QA_FLOAT_MSG.querySelector('.qa-msg-bubble');
+      var _had=(_b && (_b.textContent||'').trim().length>0);
+      if(_had){
+        var _foot=document.createElement('div'); _foot.className='qa-cancel-foot';
+        _foot.innerHTML='<span class="qa-cancelled">已取消生成</span> <button type="button" class="qa-regenerate" onclick="window.qaFloatReask&&window.qaFloatReask()">重新生成</button>';
+        _b.appendChild(_foot);
+        var _mm=QA_FLOAT_MSG.querySelector('.qa-msg-meta'); if(_mm) _mm.textContent='';
+      } else if(_b){
+        _b.innerHTML='<div class="qa-cancelled">已取消。</div>';
+      }
       QA_FLOAT_MSG=null;
     } else {
       qaFloatAdd('ai','已取消。','',{md:false});
@@ -4390,6 +4425,7 @@ function qaFloatAsk(retryMode,ctxOverride){
   var inp=document.getElementById('qaFloatInput'),btn=document.getElementById('qaFloatAi');
   var q=inp?(inp.value||'').trim():'';
   if(!q){qaFloatAdd('ai','请先输入问题，例如「最近有哪些稀土政策」「锂价为什么大跌」。','',{md:false});return;}
+  QA_FLOAT_LAST_Q=q;
   QA_FLOAT_BUSY=true;
   qaFloatSetBusyUI();
   if(!retryMode){qaFloatAdd('user',q,'',{md:false,ts:Date.now(),anchorTop:true});qaSaveHistory();}
@@ -4443,6 +4479,23 @@ function qaFloatAsk(retryMode,ctxOverride){
   QA_FLOAT_MSG=msg;
   qaDeepseekCall(q,_ctx,msg,btn,_conv,_broad,_dateIntent,_rangeIntent);
   return;
+}
+// 2026-09-12：取消/网络失败后「重新生成」——复用最近一次问题重新检索并作答
+function qaFloatReask(){
+  var inp=document.getElementById('qaFloatInput');
+  var q=QA_FLOAT_LAST_Q||(inp?(inp.value||'').trim():'');
+  if(!q)return;
+  if(inp)inp.value=q;
+  qaFloatAsk(false);
+}
+window.qaFloatReask=qaFloatReask;
+// 2026-09-12：真实网络失败/超时，给出明确的失败条 + 重新生成（不再静默兜底）
+function qaFloatShowNetFail(msg,q){
+  if(!msg)return;
+  if(msg.querySelector('.qa-net-fail'))return;
+  var foot=document.createElement('div'); foot.className='qa-net-fail';
+  foot.innerHTML='⚠️ 网络异常，AI 回答不完整。<button type="button" class="qa-regenerate" onclick="window.qaFloatReask&&window.qaFloatReask()">重新生成</button>';
+  msg.appendChild(foot);
 }
 // 安全清洗外链：只允许 http/https，拦截 javascript:/data:/vbscript: 等危险协议，并转义引号
 function qaSafeUrl(u){
@@ -4694,6 +4747,7 @@ function qaTryStreamOrJson(url,headers,body,bubble,msg,q,ctx,dateIntent,ac,to,bt
       var why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||e||'网络错误');
       _qaPath='本地兜底';
       qaFinishAnswer(la+'\n\n[DeepSeek 调用失败（'+why+'），已切换本地知识库回答]',bubble,msg,q,ctx,false,dateIntent);
+      qaFloatShowNetFail(msg,q);
     });
 }
 // 解析非流式 JSON 响应（含 401/错误文案），与流式共用 qaFinishAnswer
@@ -4749,8 +4803,8 @@ function qaStreamPump(r,bubble,msg,q,ctx,dateIntent,ac,to,btn){
       return;
     }
     var why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||'网络错误');
-    if(acc){ if(bubble)bubble.innerHTML=qaInlineRefs(qaMdRender(acc),ctx); finish(acc,true); }
-    else{ _qaPath='本地兜底'; var la=qaAiLocalAnswer(q,ctx); finish(la+'\n\n[DeepSeek 流式调用失败（'+why+'），已切换本地知识库回答]',false); }
+    if(acc){ if(bubble)bubble.innerHTML=qaInlineRefs(qaMdRender(acc),ctx); finish(acc,true); qaFloatShowNetFail(msg,q); }
+    else{ _qaPath='本地兜底'; var la=qaAiLocalAnswer(q,ctx); finish(la+'\n\n[DeepSeek 流式调用失败（'+why+'），已切换本地知识库回答]',false); qaFloatShowNetFail(msg,q); }
   });
 }
 // 2026-09-11 P1：回答元信息（通路 / 模型 / 用时），供 meta 行展示，使「同问题不同答案」可被解释
