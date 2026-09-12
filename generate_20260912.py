@@ -187,7 +187,7 @@ new_items = [
     # ---------- 🔍 找矿成果与勘查技术 ----------
     (CAT_ZK, ni('https://news.metal.com/en/newscontent/104111528-alchemy-resources-starts-drilling-copper-gold-targets-at-yellow-mountain',
                 'SMM 国际站', '09-11',
-                'Alchemy 在西澳 Yellow Mountain 铜金靶区开钻 最多 15 孔',
+                'Alchemy 在新南威尔士州 Yellow Mountain 铜金靶区开钻 最多 15 孔',
                 '澳大利亚 Alchemy Resources 于 9 月 11 日宣布，已在新南威尔士州 Yellow Mountain 与 Overflow 项目启动反循环钻探，本轮计划施工最多 15 个钻孔并预计约 3 周完成。持股 80% 的 Yellow Mountain 项目将验证已知铜金与多金属矿化的延伸范围，并测试两个从未钻探过的地球物理靶区；该矿区此前钻探曾见 113 米、铜当量品位 1.17% 的矿化段（含铜 0.33%、金 0.37 克/吨、银 24.3 克/吨、铅 0.86%、锌 1.23%）。Overflow 项目目前控制约 34.2 万盎司金当量推断资源量，本轮同样沿走向与深部追索矿化延伸。',
                 orig_title='Alchemy Resources Starts Drilling Copper-Gold Targets at Yellow Mountain')),
     (CAT_ZK, ni('https://geoglobal.mnr.gov.cn/zx/kcykf/resources_update/202609/t20260911_10312021.htm',
