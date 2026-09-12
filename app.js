@@ -3199,7 +3199,7 @@ window.addEventListener('DOMContentLoaded',function(){
   mdRecordLastSeen();
   mdInitOfflineBanner();
   var bt=document.getElementById('briefToggle');
-  if(bt)bt.addEventListener('click',function(){ var s=document.getElementById('briefStrip'); if(s)s.classList.toggle('brief-collapsed'); });
+  if(bt)bt.addEventListener('click',function(){ var s=document.getElementById('briefStrip'); if(!s)return; var on=s.classList.toggle('brief-collapsed'); bt.setAttribute('aria-expanded',on?'false':'true'); });
   mdInsertLastSeen(); setTimeout(mdInsertLastSeen, 400);
   if(IS_STANDALONE){ hidePwaInstallPrompt(); mdHideInstallIfStandalone(); return; }
   // iOS / 桌面未触发 beforeinstallprompt 时，延迟到用户首次交互（滚动/点击/按键）或停留 ≥8s 再提示，降低首屏打扰

@@ -1489,3 +1489,42 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
   - ⚠️ **推送成功 ≠ 线上生效**：GitHub Pages 构建约 1~2 分钟延迟，只拉一次会拿到**旧** HTML（本次实测先拿到 build 2107）。验收必须**轮询**等 `build-version` 变成新值再下结论。
 - 移动端骨架屏（设计稿可选项，本轮未做）。
 - 决策④ 用户未明确表态，本轮按"不加"执行；若要加左侧 3px 品牌条须回改。
+## §37 2026-09-12 修复：今日简报右上角折叠按钮「点不动」
+
+**症状**（用户反馈）：今日简报标题行右侧那个 28px 小圆按钮（▾），电脑端与手机端都点了没反应。
+
+**根因：选择器把 id 当成了 class**
+- `index.html` 里写的是 `.briefStrip.brief-collapsed{...}`，想选中
+  `<div class="brief-strip" id="briefStrip">`。
+- 但元素的 **class 是 `brief-strip`，`briefStrip` 是它的 id**。该选择器匹配不到任何元素。
+- 于是 `#briefToggle` 的 JS 监听**确实** toggle 了 `brief-collapsed` 类，却没有任何样式响应
+  → 观感就是「点不动 / 没反应」。**JS 无辜，是 CSS 选择器写错了。**
+
+**这个按钮是干什么的**：折叠/展开**整块今日简报**（折叠后只留「情报 今日简报 按分类摘要」标题行，
+按钮旋转 −90°）。
+⚠️ 与卡片底部那个「展开全部（16 条）」**不是一回事**：后者是长文高度裁剪
+（`#briefMain.brief-clamp`，内容 >420px 时折到 380px），只控制正文展开，不收起整块。
+
+**修复**
+1. `.briefStrip.brief-collapsed` → `.brief-strip.brief-collapsed`（2 处：卡片隐藏 + 按钮旋转）。
+2. 顺带清理 `@media print` 里同形状的三个死类选择器 `.todaySection,.rightsSection,.archiveSection`
+   —— 同样是 id 名当 class 用。这三个元素本身都带 `class="section"`，已被同一规则的 `.section` 覆盖，
+   故删除后**行为不变**（纯卫生，防止后人照抄）。
+3. 可访问性：`#briefToggle` 增 `aria-expanded="true"`，JS 折叠时同步为 `false`。
+
+**新增守卫（`test_brief_layers.js` ④，7 条断言）**
+- 折叠规则必须挂在真实类名 `.brief-strip` 上；不得再出现 `.briefStrip` 形式。
+- 折叠旋转规则同源；按钮须为 `button` 且带 `aria-expanded`；JS toggle 后同步 aria。
+- **通用守卫**：从 `index.html` 抽 `<style>` 块（**先剔 `<script>` 再抽**，否则 JS 字符串会被当 CSS 解析，
+  实测会抽出 `.querySelector` 这种假阳性），断言**不存在「与页面某个 id 同名」的 camelCase 类选择器**
+  —— 本工程约定 class = kebab-case、id = camelCase，撞名基本就是写错。这条能一次拦住整类 bug。
+
+**红线（不得回退）**
+- 选元素一律用其**真实**标识：class 用 `.kebab-case`，id 用 `#camelCase`；不要凭记忆混用。
+- 改 `index.html` 后，`aria-expanded` 等状态属性必须与 JS 行为同步。
+
+**待办**
+- 折叠状态**未持久化**（刷新即恢复展开）；若要记住，走 localStorage + 初始化时给 `#briefStrip` 补类。
+- jsdom 对 `<style>` 里 CSS 的应用能力有限，故本轮守卫用**静态断言**（选择器 / 属性）而非计算样式；
+  「折叠后卡片真的消失」目前只能靠真机肉眼确认。
+

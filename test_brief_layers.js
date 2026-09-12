@@ -264,6 +264,38 @@ async function loadPage(stripSections) {
     if (s2) s2.close();
   }
 
+  // ---------- ④ 折叠按钮（#briefToggle）选择器守卫 ----------
+  // 2026-09-12：用户反馈「今日简报右上角那个小圆按钮点不动」。
+  //   根因：CSS 写成 `.briefStrip.brief-collapsed` —— 元素的 class 是 `brief-strip`，
+  //   而 `briefStrip` 是它的 **id**。选择器匹配不到任何元素，JS 确实 toggle 了 class，
+  //   但没有任何样式响应，观感就是「点了没反应」。
+  console.log('\n===== ④ 折叠按钮选择器守卫 =====');
+  {
+    const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+    const appjs = fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8');
+    // 只取真正的 <style> 块：先剔掉 <script>，否则 JS 字符串里的内容会被当 CSS 解析
+    const noScript = html.replace(/<script[\s\S]*?<\/script>/gi, '');
+    const css = (noScript.match(/<style[^>]*>[\s\S]*?<\/style>/gi) || []).join('\n');
+    check('取到 index.html 的 CSS 块', css.length > 1000, css.length + ' 字符');
+
+    check('折叠规则挂在真实类名 .brief-strip 上',
+      /\.brief-strip\.brief-collapsed\s+\.brief-card\s*\{[^}]*display\s*:\s*none/.test(css));
+    check('不再出现 .briefStrip 这类「把 id 当 class」的选择器', !/\.briefStrip[\s.{:,#]/.test(css));
+    check('折叠时按钮旋转同样用 .brief-strip',
+      /\.brief-strip\.brief-collapsed\s+#briefToggle\s*\{[^}]*rotate\(-90deg\)/.test(css));
+    check('#briefToggle 是 button 且初始 aria-expanded=true',
+      /<button id="briefToggle"[^>]*aria-expanded="true"/.test(html));
+    check('JS 折叠时同步 aria-expanded',
+      /classList\.toggle\('brief-collapsed'\)[\s\S]{0,140}aria-expanded/.test(appjs));
+
+    // 通用守卫：CSS 里不得出现「与页面某个 id 同名」的 camelCase 类选择器
+    //   （本工程约定：class 用 kebab-case、id 用 camelCase；撞名基本就是写错了）
+    const ids = new Set((html.match(/\bid="[^"]+"/g) || []).map(s => s.slice(4, -1)));
+    const cls = new Set((css.match(/\.[A-Za-z_][A-Za-z0-9_-]*/g) || []).map(s => s.slice(1)));
+    const collide = [...cls].filter(c => ids.has(c) && /[a-z][A-Z]/.test(c));
+    check('CSS 无「id 名当类名」的死选择器', collide.length === 0, collide.join(', ') || '无');
+  }
+
   console.log('\n==== 简报渲染回归：' + pass + ' PASS / ' + fail + ' FAIL ====');
   process.exit(fail ? 1 : 0);
 })();
