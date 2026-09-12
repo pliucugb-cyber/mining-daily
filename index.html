@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-2140" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-2155" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1340,7 +1340,7 @@ body.dark .expo-mini-list li:hover{background:#1c2734}
   body{padding-left:0!important}
   .toc-sidebar,.qa-fab,.qa-float,.pchart-mask,.mobile-install-bar,.notice,.install-tip,.fold-toggle,.stats-bar .btn,.price-strip-note,#gcStat{display:none!important}
   .old-folded{display:block!important}
-  .section,.brief-strip,.price-strip,.hotlist-section,.todaySection,.rightsSection,.archiveSection{box-shadow:none!important;border-color:#d8dee6!important;break-inside:avoid;margin:var(--s2) 0}
+  .section,.brief-strip,.price-strip,.hotlist-section{box-shadow:none!important;border-color:#d8dee6!important;break-inside:avoid;margin:var(--s2) 0}
   .news-item{break-inside:avoid}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
@@ -1664,8 +1664,8 @@ body.dark .rr-amount.na{color:var(--ink-500)}
 #briefToggle{flex:0 0 auto;margin-left:auto;border:none;background:var(--surface-2);color:var(--ink-500);
   width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;transition:transform .2s}
 #briefToggle:active{background:var(--surface-3)}
-.briefStrip.brief-collapsed .brief-card{display:none}
-.briefStrip.brief-collapsed #briefToggle{transform:rotate(-90deg)}
+.brief-strip.brief-collapsed .brief-card{display:none}
+.brief-strip.brief-collapsed #briefToggle{transform:rotate(-90deg)}
 /* P1-6：骨架屏 + 无网络空态 */
 .skeleton{position:relative;overflow:hidden;background:var(--surface-2);border-radius:var(--r-md)}
 .skeleton::after{content:'';position:absolute;inset:0;transform:translateX(-100%);
@@ -2281,7 +2281,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
     <span class="brief-badge" data-page-node-id="Sujifs7ChkDDi6nYimkrhV">情报</span>
     <span class="brief-title" data-page-node-id="iHgpDJRQJWfdGY7BClClAG">今日简报</span>
     <span class="brief-sub" id="briefSub" data-page-node-id="dSAFjxok9U4JQ8fA9coGxX"></span>
-    <button id="briefToggle" type="button" aria-label="折叠或展开简报" title="折叠/展开">▾</button>
+    <button id="briefToggle" type="button" aria-label="折叠或展开简报" title="折叠/展开" aria-expanded="true">▾</button>
   </div>
   <div class="brief-card" data-page-node-id="DL9ezeqD58z9kGQxMZhKPR">
     <div class="brief-md" id="briefMain" data-page-node-id="nCJ5rYv7iler54tWucV3L3"><div class="brief-empty" data-page-node-id="wFtAqhN3k1iuKN65phPOhP">简报加载中…</div></div>
@@ -2483,7 +2483,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=40a91489" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=83169d95" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=eadc7123" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
