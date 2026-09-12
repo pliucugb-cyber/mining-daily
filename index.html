@@ -3,11 +3,11 @@
 <head data-page-node-id="tiNVC5otClsOUngsPe9Mh3">
 <meta charset="UTF-8" data-page-node-id="FzZ6sii3R0cWQeyz0omxPs">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="p3hMTaNSwsPqfuBBUDXpsE">
-<meta name="theme-color" content="#1a3a5c" data-page-node-id="ODB0kBvFPW7AF6fzGbTDzY">
+<meta name="theme-color" content="#0e7490" data-page-node-id="ODB0kBvFPW7AF6fzGbTDzY">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-2107" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-2140" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -20,26 +20,26 @@
 
 /* 2026-09-11 视觉规范评审修复 E4：--ink-300 亮色值提到达 AA（白底 2.56→4.88，#f5f7fa 2.39→4.55；仅改值不改变量名） */
 :root{
---ink-900:#16202b;--ink-700:#3d4b5a;--ink-500:#5f6d7a;--ink-300:#64737f;
+--ink-900:#16202b;--ink-700:#3d4b5a;--ink-500:#5f6d7a;--ink-400:#8794a1;--ink-300:#64737f;--ink-200:#c3ccd6;--muted:#6b7a89;
 --line-1:#e5eaf0;--line-2:#d5dde5;
 --bg:#f5f7fa;--surface:#ffffff;--surface-2:#f5f7fa;--surface-3:#eef2f6;
---brand:#0e7490;--brand-ink:#0b5a70;--brand-soft:#e6f4f7;--accent-hover:#0f788d;
+--brand:#0e7490;--brand-ink:#0b5a70;--brand-soft:#e6f4f7;--brand-600:#0c6275;--chip-bg:#e6f4f7;--chip-ink:#0b5a70;--scrim:rgba(15,23,42,.45);--accent-hover:#0f788d;
 --tag-strategy:#4f46e5;--tag-strategy-bg:#eeedfe;--tag-major:#c0392b;--tag-major-bg:#fceaea;
 --up:#d93a2b;--down:#0e7a52;--flat:#6b7a89;
---success:#0e7a52;--warning:#966319;--danger:#c0392b;--info:#0e7490;
+--success:#0e7a52;--warning:#966319;--danger:#dc2626;--info:#0e7490;
 --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
 --font-num:"SF Mono","JetBrains Mono",ui-monospace,Consolas,monospace;
 --fs-display:24px;--fs-h1:20px;--fs-h2:16px;--fs-h3:14px;--fs-body:13px;--fs-meta:12px;--fs-nano:10px;--fs-caption:12px;
---fw-regular:400;--fw-medium:500;--fw-semibold:600;
---r-sm:4px;--r-md:8px;--r-lg:12px;
---s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:40px;--md-top-h:96px;
+--fw-regular:400;--fw-medium:500;--fw-semibold:600;--fw-bold:700;
+--r-sm:4px;--r-md:8px;--r-lg:12px;--r-xl:20px;--r-pill:999px;
+--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:40px;--s8:48px;--s9:56px;--md-top-h:96px;
 --shadow-xs:0 1px 2px rgba(16,32,43,.04);
 --shadow-sm:0 1px 3px rgba(0,55,112,.06);
 --shadow-md:0 4px 12px rgba(0,55,112,.08);
 --shadow-lg:0 12px 32px rgba(16,32,43,.12);
 --shadow-xl:0 24px 48px rgba(16,32,43,.16);
 --z-sticky:100;--z-sidebar:200;--z-fab:900;--z-mask:1000;--z-dialog:1010;--z-toast:1100;--z-critical:1200;
---dur:120ms;--ease:ease;
+--dur:120ms;--dur-fast:140ms;--dur-slow:340ms;--ease:ease;--ease-spring:cubic-bezier(.34,1.56,.64,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -190,6 +190,15 @@ body[data-filter-mode="fav"] #archFavList .news-item,body[data-filter-mode="hist
 body.dark .aggregate-item-remove{background:rgba(255,255,255,.12);color:var(--ink-200)}
 /* 2026-09-12：移动端无 hover，单条移除按钮常驻可见（建议⑥） */
 @media(max-width:768px){
+:root{
+--fs-display:28px;--fs-h1:22px;--fs-h2:17px;--fs-h3:15px;--fs-body:15px;--fs-meta:13px;--fs-nano:11px;--fs-caption:13px;
+--r-sm:6px;--r-md:10px;--r-lg:16px;
+--shadow-sm:0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+--shadow-md:0 4px 8px rgba(16,24,40,.05), 0 8px 24px rgba(16,24,40,.08);
+}
+}
+@media(max-width:768px){
+
 body[data-filter-mode="fav"] #archFavList .aggregate-item-remove,
 body[data-filter-mode="history"] #archFavList .aggregate-item-remove{opacity:1;background:var(--surface-3);color:var(--ink-700)}
 }
@@ -777,8 +786,8 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .mtab span{font-size:var(--fs-meta)}
   .mtab::before{content:'';position:absolute;top:0;left:28%;right:28%;height:2.5px;background:var(--brand);border-radius:0 0 2px 2px;opacity:0;transition:opacity .15s}
   .mtab.active{color:var(--brand)}
-  .mtab.active .mi{opacity:1}
-  .mtab.active::before{opacity:1}
+  .mtab.active .mi{opacity:1;background:var(--brand-soft);border-radius:var(--r-md);padding:3px}
+  .mtab.active::before{opacity:0}
   .mobile-install-bar{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
   /* 移动端隐藏「安装到桌面」整段引导（安装入口改到「我的」面板内联分步卡，见 app.js） */
   #installGuideSection{display:none!important}
@@ -808,7 +817,7 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .mine-list{flex:1 1 auto;overflow-y:auto;padding:var(--s3);display:flex;flex-direction:column;gap:var(--s2);padding-bottom:calc(var(--s3) + env(safe-area-inset-bottom,0px))}
   .mine-item{display:flex;align-items:center;gap:var(--s3);width:100%;text-align:left;border:none;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:var(--s3) var(--s3);color:var(--ink-900);font-size:var(--fs-body);cursor:pointer;-webkit-tap-highlight-color:transparent}
   .mine-item:active{background:var(--surface-2)}
-  .mine-icon{font-size:20px;line-height:1;width:28px;text-align:center}
+  .mine-icon{font-size:18px;line-height:40px;width:40px;height:40px;text-align:center;background:var(--brand-soft);border-radius:var(--r-pill);flex:0 0 auto;color:var(--brand-ink)}
   .mine-label{flex:1 1 auto}
   .mine-chevron{color:var(--ink-400);font-size:var(--fs-h2)}
   .mine-state{font-size:var(--fs-meta);color:var(--ink-500)}
@@ -833,12 +842,12 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .md-top-brand{display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;min-height:36px}
   body:not(.md-hide-catbar) .md-top-brand{justify-content:space-between}
   body.md-hide-catbar .md-top-brand{justify-content:center}
-  .md-brand{font-size:var(--fs-h3);font-weight:600;color:var(--ink-900);letter-spacing:.3px}
-  .md-date{font-size:12px;color:var(--ink-500);overflow:hidden;text-overflow:ellipsis}
+  .md-brand{font-size:var(--fs-h2);font-weight:700;color:var(--ink-900);letter-spacing:.3px}
+  .md-date{font-size:var(--fs-meta);color:var(--ink-500);overflow:hidden;text-overflow:ellipsis}
   /* 2026-09-12 移动端排版：分类栏由「左对齐窄条」改为「四等分铺满」。
      原 .mctab 是 flex:0 0 auto（宽度=文字宽），4 个 tab 只占屏幕左侧约 1/3，
      右侧大片留白、视觉重心偏左；现改 flex:1 1 0 四等分，占满整行。 */
-  .md-cat-bar{display:flex;gap:0;margin-top:4px}
+  .md-cat-bar{display:flex;gap:var(--s2);margin-top:4px}
   /* 2026-09-11 优化：底部非首页 tab（价格/问/矿权/我的）隐藏顶部分类栏，避免与首页子导航重复 */
   body.md-hide-catbar .md-cat-bar{display:none}
   /* 2026-09-11 优化②原为「非首页隐藏顶栏搜索图标」，2026-09-12 检索统一（用户定夺）后
@@ -848,11 +857,21 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   /* 2026-09-11 视觉规范评审修复 A3：越档字号 15px → var(--fs-h3) 14px
      2026-09-12 用户反馈「字太小」：14px → var(--fs-h2) 16px（回到字号体系内，非野值），
      并四等分铺满 + 加大触控热区（下内边距 9px，总高约 41px）。 */
-  .mctab{flex:1 1 0;text-align:center;border:none;background:none;color:var(--ink-700);font-size:var(--fs-h2);padding:8px 0 9px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s;-webkit-tap-highlight-color:transparent}
+  .mctab{flex:0 0 auto;text-align:center;border:none;background:none;color:var(--ink-700);font-size:var(--fs-h3);padding:7px 14px;cursor:pointer;position:relative;white-space:nowrap;font-weight:500;transition:color .15s,background .15s;-webkit-tap-highlight-color:transparent;border-radius:var(--r-pill)}
   .mctab:active{color:var(--brand)}
-  .mctab.active{color:var(--brand);font-weight:600}
+  .mctab.active{color:var(--chip-ink);font-weight:600;background:var(--chip-bg)}
   /* 下划线改为居中定宽（24px），四等分下与文字等宽对齐，避免整格通栏显得像分隔线 */
-  .mctab.active::after{content:'';position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:24px;height:3px;background:var(--brand);border-radius:2px}
+  .mctab.active::after{content:none}
+.md-search-pill{display:flex;align-items:center;gap:8px;width:100%;margin-top:6px;padding:10px var(--s4);border:1px solid var(--line-2);border-radius:var(--r-pill);background:var(--surface-2);color:var(--ink-500);font-size:var(--fs-meta);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s var(--ease),transform .12s var(--ease)}
+.md-search-pill:active{background:var(--surface-3);transform:scale(.99)}
+.md-search-pill .sp-ico{font-size:15px;line-height:1;color:var(--ink-300)}
+body.dark .md-search-pill{background:var(--surface-2);border-color:var(--line-1)}
+body.md-mine-open #mineSheet{animation:mineSlideIn var(--dur-slow) var(--ease)}
+@keyframes mineSlideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+body[data-filter-mode="fav"] #favview-bar,body[data-filter-mode="history"] #favview-bar{animation:softFade var(--dur-slow) var(--ease)}
+@keyframes softFade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){body.md-mine-open #mineSheet,body[data-filter-mode] #favview-bar{animation:none!important}*{transition-duration:.001ms!important;animation-duration:.001ms!important}}
+.mctab.active::after{content:none}
   #qaFab{display:flex!important;left:auto;right:14px;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:215;top:auto}
   /* 分类内容过滤：选中分类后仅显示对应区块；收藏/浏览记录视图(data-filter-mode)下不干预，避免与 fav/history 规则冲突 */
   /* 2026-09-11 视觉规范评审修复 A1：本组第三条与下方 hot 规则原写 `#col-rail`，但页面元素是 <aside class="col-rail">（无 id）→ 规则全部失效；
@@ -902,6 +921,7 @@ body.dark .mine-title{color:var(--ink-900)}
 body.dark .mine-close{background:var(--surface-3);color:var(--ink-500)}
 body.dark .mine-close:active{background:var(--surface-3)}
 body.dark .mine-item{background:var(--bg);border-color:var(--line-1);color:var(--ink-700)}
+body.dark{--surface-2:#1b212a;--chip-bg:#16323b;--chip-ink:#7fd3e6;--brand-soft:#16323b;--brand-ink:#9fe0ef}
 body.dark .mine-item:active{background:var(--surface-3)}
 body.dark .mine-chevron{color:var(--ink-500)}
 body.dark .mine-state{color:var(--ink-500)}
@@ -2463,7 +2483,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=40a91489" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=af94f94e" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=83169d95" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->

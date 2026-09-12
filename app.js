@@ -585,6 +585,7 @@ function toggleFav(url){
       const m=el.querySelector('.news-meta');if(m)info.date=m.textContent.split('·').pop().trim();
       const sc=el.querySelector('.src');if(sc)info.src=sc.textContent.trim();
     }
+    info.ts=new Date().toISOString();
     favs.unshift(info);
   }
   saveFavs(favs);
@@ -670,7 +671,8 @@ function renderFavHistoryAggregate(mode){
     // 当前页面内的收藏条目（克隆）
     document.querySelectorAll('.news-item').forEach(el=>{
       if(favMap.has(el.dataset.url)){
-        items.push({type:'page', date:extractItemDate(el), time:'', el:el, url:el.dataset.url});
+        var _f=favMap.get(el.dataset.url)||{};
+        items.push({type:'page', date:extractItemDate(el), time:_f.ts||'', el:el, url:el.dataset.url, data:_f});
       }
     });
     // 已滚出页面的归档收藏
@@ -2866,10 +2868,12 @@ function mdMobileTopTabs(){
   // 2026-09-12 检索统一（用户定夺）：顶栏不再注入搜索按钮 —— 原 #mdSearchBtn 恒不可见（见上方 mdOpenSearch 注释），
   //   是死控件。检索能力统一收进底部「AI 搜」tab 打开的面板，顶栏保持「品牌名 + 日期」的干净两栏。
   var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业新闻日报</span><span class="md-date">'+dateTxt+'</span></div>'
+    +'<button type="button" class="md-search-pill" aria-label="搜索矿种、新闻、AI 问答"><span class="sp-ico">🔍</span><span>搜索矿种、新闻、AI 问答</span></button>'
     +'<div class="md-cat-bar" role="tablist" aria-label="内容分类">';
   for(var i=0;i<cats.length;i++){ html+='<button class="mctab" role="tab" data-cat="'+cats[i][0]+'">'+cats[i][1]+'</button>'; }
   html+='</div>';
   top.innerHTML=html;
+  var sp=top.querySelector('.md-search-pill'); if(sp){ sp.addEventListener('click',function(){ try{ if(typeof qaFloatToggle==='function') qaFloatToggle(); }catch(e){} }); }
   var skip=document.getElementById('mdSkipLink');
   if(skip && skip.parentNode){ skip.parentNode.insertBefore(top, skip.nextSibling); }
   else { document.body.insertBefore(top, document.body.firstChild); }
@@ -3027,7 +3031,7 @@ window.qaFloatBack=mdQaBack;
 // ⑧ 我的面板：内联安装分步卡（按 iOS/Android 自动识别；已安装置灰）
 function mdRefreshMineTheme(){
   var el=document.getElementById('mineThemeState'); if(!el) return;
-  el.textContent=document.body.classList.contains('dark')?'当前：深色':'当前：浅色';
+  el.textContent=document.body.classList.contains('dark')?'当前：深色 ✓':'当前：浅色 ✓';
 }
 function mdRenderInstallCard(){
   var el=document.getElementById('mineInstallCard'); if(!el) return;
