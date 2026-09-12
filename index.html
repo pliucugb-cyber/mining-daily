@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1600" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1601" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -596,7 +596,16 @@ body.dark .qa-head-menu-list button:hover{background:var(--surface-3)}
 .qa-float-btn.primary{background:var(--tag-strategy);color:#fff;min-width:78px}
 .qa-float-btn:disabled{opacity:.5;cursor:not-allowed}
 .qa-float-btn.qa-cancel{background:var(--danger);color:#fff}
-body.dark .qa-float-btn.qa-cancel{background:var(--danger);color:#fff}
+body.dark .qa-float-btn.qa-cancel{background:var(--danger);color:#fff}
+.qa-cancelled{display:inline-block;color:var(--muted,#888);font-size:var(--fs-meta);padding:2px 0}
+.qa-cancel-foot{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s2);padding-top:var(--s2);border-top:1px dashed var(--line-1)}
+.qa-regenerate{display:inline-flex;align-items:center;height:30px;padding:0 var(--s3);border:none;border-radius:15px;background:var(--surface-3);color:var(--ink-900);font-size:var(--fs-meta);font-weight:600;cursor:pointer}
+.qa-regenerate:hover{background:var(--line-1)}
+.qa-net-fail{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s2);padding:var(--s2) var(--s3);border-radius:var(--r-md);background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.32);color:var(--danger);font-size:var(--fs-meta)}
+body.dark .qa-net-fail{background:rgba(255,107,91,.14);border-color:rgba(255,107,91,.38)}
+body.dark .qa-net-fail .qa-regenerate{background:var(--danger);color:#fff}
+.qa-net-fail .qa-regenerate{background:var(--danger);color:#fff}
+.qa-net-fail .qa-regenerate:hover{opacity:.9}
 .qa-mic{padding:0;width:38px;height:38px;border-radius:50%}
 .qa-mic.on{background:#e03131;color:#fff;animation:qa-mic-pulse 1s infinite}
 @keyframes qa-mic-pulse{0%{box-shadow:0 0 0 0 rgba(224,49,49,.5)}70%{box-shadow:0 0 0 7px rgba(224,49,49,0)}100%{box-shadow:0 0 0 0 rgba(224,49,49,0)}}
@@ -2450,7 +2459,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
     <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="输入关键词或问题…" aria-label="输入关键词检索或问题" autocomplete="off" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX">
     <button class="qa-float-btn qa-mic" id="qaFloatMic" type="button" title="语音输入" aria-label="语音输入"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:auto"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M12 18v3"></path><path d="M5 10v2a7 7 0 0 0 14 0v-2"></path></svg></button>
     <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词" onclick="window.qaFloatSearch&&window.qaFloatSearch()" data-page-node-id="DcqZEFlU8VgjnfLfZc4l82">检索</button>
-    <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答" onclick="window.qaFloatAsk&&window.qaFloatAsk()" data-page-node-id="qJ4h2ouUiWwBV8nMhyMoNF">AI</button>
+    <button class="qa-float-btn primary" id="qaFloatAi" type="button" title="AI 读完相关新闻后作答" aria-label="AI 回答" onclick="window.qaFloatAsk&&window.qaFloatAsk()" data-page-node-id="qJ4h2ouUiWwBV8nMhyMoNF">AI</button>
   </div>
   <div class="qa-float-tip" data-page-node-id="IPv0ocqpX9nxwxqSsIOHLK">💡 问答历史仅存在本机浏览器，换设备 / 清缓存会丢失；长期留存请点「📤 导出」</div>
 </div>

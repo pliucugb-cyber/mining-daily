@@ -1161,3 +1161,48 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - AI 回答按钮在请求中必须变为可点的「取消」，且点取消后**不得**再渲染本地兜底答案或继续显示「思考中…」。
 - 手机窄屏顶栏 `‹ 返回` 必须回到**打开 AI 搜之前的内容 tab**（首页/价格/矿权），并恢复对应品牌与分类栏状态；不得停留在 AI 搜高亮。
 
+## §24 AI 搜面板六条体验增强（2026-09-12 晚，build `20260912-1601`）
+
+### 24.1 背景
+用户在 §23 上线后又提出 6 条优化建议，本次**全部执行**：① 取消后保留已流式内容并给「重新生成」；② 返回键补齐「我的」闭环；③ 手机顶栏下拉手势关闭；④ 桌面 Esc 关闭 + 焦点归位；⑤ 网络失败明确提示 + 重试；⑥ 取消按钮无障碍 `aria-label`。
+
+### 24.2 方案定稿
+
+| # | 优化 | 实现 |
+|---|---|---|
+| ① | 取消保留 partial | `qaFloatAsk` 取消分支不再覆盖气泡：若已有内容（`_had`）则向气泡追加 `.qa-cancel-foot`（「已取消生成」+「重新生成」按钮，调 `window.qaFloatReask`）；仅真正空白时才显示「已取消。」。`qaFloatReask` 复用 `QA_FLOAT_LAST_Q` 重新检索并作答。 |
+| ② | 返回补「我的」 | tab IIFE 内新增 `mdQaReturn`（默认 `home`）；进入 `qa` 时若 `body.md-mine-open` 为真则记 `'mine'`，否则记 `mdLastContentTab`。`mdQaBack` 返回目标为 `mine` 时 `activateTab('mine', true)` 重新打开覆盖层。 |
+| ③ | 下拉关闭 | `mdQaBindSwipe()` 在 `.qa-float-head` 绑 touch：从顶部下拉 >70px 且 <700ms 且消息区在顶（`scrollTop<=0`）→ `mdQaBack()`；下拉时头部给 `translateY` 视觉反馈。仅 ≤768px 生效。 |
+| ④ | Esc 关闭 | `mdQaBindKeys()` 绑 document `keydown` Escape（仅 >768px）：面板开着则 `qaFloatClose()` + 焦点回到 `#qaFab`。 |
+| ⑤ | 失败提示 | 新增 `qaFloatShowNetFail(msg,q)`：在 `qaTryStreamOrJson`、`qaStreamPump` 的 catch（非 `user-cancel`）后追加 `.qa-net-fail` 红色失败条 + 「重新生成」按钮，明确提示而非静默兜底；本地兜底答案仍保留作补充。 |
+| ⑥ | 无障碍 | `qaFloatSetBusyUI` 设 `aria-label="取消生成"`；`qaFloatResetBusy` 设 `aria-label="AI 回答"`；`index.html` 的 `#qaFloatAi` 加 `aria-label="AI 回答"` 与 `type="button"`。按钮本就是 `<button>`，Tab 可达。 |
+
+### 24.3 交互细节
+- **取消保留内容**：`qaFloatAsk` 开头先判 `QA_FLOAT_BUSY`。若忙 → `abort('user-cancel')` → 清 timeout → 若气泡已有文字则追加 `.qa-cancel-foot`（含「重新生成」按钮），否则改「已取消。」；按钮恢复「✨ AI 回答」。
+- **重新生成**：`qaFloatReask` 把 `QA_FLOAT_LAST_Q` 写回输入框并调 `qaFloatAsk(false)`，发起一次全新检索作答（不依赖被中断的流式片段）。
+- **mine 返回**：`mdQaReturn` 在 tab IIFE 闭包内；从「我的」覆盖层点底部「AI 搜」时记录 `mine`，返回即 `activateTab('mine', true)` 重新展开覆盖层，底层内容 tab 不变。
+- **下拉/Esc 互斥分端**：下拉仅手机（≤768px）手势；Esc 仅桌面（>768px），避免移动端误触。
+
+### 24.4 代码落点
+- `index.html`：
+  - `#qaFloatAi` 加 `type="button"` 与 `aria-label="AI 回答"`。
+  - 新增 `.qa-cancelled` / `.qa-cancel-foot` / `.qa-regenerate` / `.qa-net-fail` 样式（含 dark 适配；`.qa-net-fail` 红底、`--danger`）。
+- `app.js`：
+  - 全局新增 `QA_FLOAT_LAST_Q`。
+  - `qaFloatAsk`：取消分支改为「保留 partial + 追加 `.qa-cancel-foot`」；开头记 `QA_FLOAT_LAST_Q=q`。
+  - 新增 `qaFloatReask()`（绑定 `window.qaFloatReask`）与 `qaFloatShowNetFail()`。
+  - `qaFloatSetBusyUI` / `qaFloatResetBusy`：补充 `aria-label` 切换。
+  - `qaTryStreamOrJson` / `qaStreamPump` catch：非取消错误后调 `qaFloatShowNetFail`。
+  - tab IIFE：新增 `mdQaReturn`、`mdQaBack` 的 mine 分支、`mdQaBindSwipe()`、`mdQaBindKeys()`，并在 IIFE 末尾调用。
+- `sw.js`：`CACHE_NAME` 同步 `mining-daily-20260912-1601`。
+
+### 24.5 测试与验证
+- `test_mobile_ux_batch.js` §⑰ 新增 6 条断言（①~⑥，源码级）。总断言从 160 升到 **166**（0 失败）。
+- 回归套件全绿：`test_mobile_opt_20260910.js` 37/0、`test_smoke_0908.js` 74/0、`test_qa_navtab_20260910.js` 18/0、`preflight_check.py --fail-on-error`、`node --check app.js`。
+
+### 24.6 红线（不得回退）
+- 取消 AI 生成后，若已有流式内容**必须**保留并给出「重新生成」入口，不得整段清空为「已取消。」
+- 从「我的」进 AI 搜再返回，**必须**重新打开「我的」覆盖层；不得落到首页。
+- 真实网络失败/超时**必须**给出可见失败条 + 重新生成（`.qa-net-fail`），不得仅静默兜底。
+- AI 回答按钮在忙/闲时 `aria-label` 必须随状态切换（取消生成 / AI 回答）。
+

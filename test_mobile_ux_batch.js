@@ -7,6 +7,8 @@
  *          —— 2026-09-12 用户定夺；同轮把 2026-09-11「禁止渐变」的旧约定作废（脉冲禁令保留）
  *       ⑩ 顶栏智能吸顶：隐藏只做 transform，不得折叠布局（2026-09-11 P0）
  *       ⑯ 顶栏瘦身(58->44px) / 输入区统一 38px 不折行 / 检索后滚动落点（2026-09-12 用户体验三条）
+ *       ⑰ AI 搜六条体验增强（2026-09-12 用户续提）：① 取消保留已流式内容+重新生成 ② 返回补「我的」闭环
+ *          ③ 手机顶栏下拉关闭 ④ 桌面 Esc 关闭+焦点归位 ⑤ 网络失败明确提示+重试 ⑥ 取消按钮无障碍 aria-label
  * 运行：node test_mobile_ux_batch.js
  */
 const fs = require('fs');
@@ -454,6 +456,20 @@ setTimeout(() => {
         'n=' + (html.match(/qaFloatScroll\(\)/g) || []).length);
   check('落点：qaFloatSettle 只在「问题落到下半屏」时才动（0.4*clientHeight）',
         /if\(off>h\*0\.4 && off<h\)qaFloatAnchorTop\(q\);/.test(html));
+
+  console.log('\n===== ⑰ AI 搜六条体验增强（2026-09-12 用户续提）=====');
+  check('① 取消：保留已流式内容 + 重新生成按钮（qa-cancel-foot / qaFloatReask）',
+        html.includes("'qa-cancel-foot'") && html.includes("window.qaFloatReask&&window.qaFloatReask()") && html.includes("已取消生成"));
+  check('② 返回：从「我的」进 AI 搜，返回重新打开「我的」覆盖层（mdQaReturn）',
+        html.includes("var mdQaReturn='home'") && html.includes("md-mine-open') ? 'mine' : mdLastContentTab") && html.includes("if(_t==='mine'){ try{ activateTab('mine', true);"));
+  check('③ 手势：手机顶栏下拉关闭面板（mdQaBindSwipe + translateY 反馈）',
+        html.includes('function mdQaBindSwipe(') && html.includes('mdQaBindSwipe();') && html.includes("translateY('+Math.min(dy*0.4,40)+'px)'"));
+  check('④ Esc：桌面端 Escape 关闭浮层并聚焦 #qaFab（mdQaBindKeys）',
+        html.includes('function mdQaBindKeys(') && html.includes('mdQaBindKeys();') && html.includes("e.key!=='Escape'") && html.includes('fab.focus()'));
+  check('⑤ 网络失败：明确失败条 + 重新生成（qaFloatShowNetFail / .qa-net-fail）',
+        html.includes('function qaFloatShowNetFail(') && html.includes("'qa-net-fail'") && (html.match(/qaFloatShowNetFail\(msg,q\)/g)||[]).length >= 2 && /\.qa-net-fail\{/.test(html));
+  check('⑥ 无障碍：取消按钮 aria-label 切换（取消生成 / AI 回答）',
+        /id="qaFloatAi"[^>]*aria-label="AI 回答"/.test(html) && html.includes("btn.setAttribute('aria-label','取消生成')") && html.includes("btn.setAttribute('aria-label','AI 回答')"));
 
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
