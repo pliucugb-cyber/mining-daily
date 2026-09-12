@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-2037" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-2107" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -125,17 +125,22 @@ body[data-filter-mode="fav"] #mdTop,
 body[data-filter-mode="history"] #mdTop,
 body[data-filter-mode="fav"] .col-rail,
 body[data-filter-mode="history"] .col-rail{display:none!important}
+/* 沉浸式聚合：桌面端隐藏左侧目录，主内容区居中更聚焦（移动端 .toc-sidebar 复用为顶部分类条，不隐藏） */
+@media(min-width:769px){
+body[data-filter-mode="fav"] .toc-sidebar,
+body[data-filter-mode="history"] .toc-sidebar{display:none!important}
+}
 /* 收藏/历史视图：沉浸式聚合，统一单栏布局，避免隐藏的 col-rail 产生右侧空白 */
 @media(min-width:1101px){
 body[data-filter-mode="fav"] .news-grid,
-body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr);gap:var(--s5)}
+body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr);gap:var(--s4)}
 }
 body[data-filter-mode="fav"] #archivedFavSection,
 body[data-filter-mode="history"] #archivedFavSection{display:block!important;background:transparent;border:none;box-shadow:none;padding-top:var(--s4);scroll-margin-top:0}
 body[data-filter-mode="fav"] #archivedFavSection .section-title,
 body[data-filter-mode="history"] #archivedFavSection .section-title{padding:var(--s4) 0;border:none;background:transparent;font-size:var(--fs-h1)}
 body[data-filter-mode="fav"] #archFavList .news-item,
-body[data-filter-mode="history"] #archFavList .news-item{background:var(--surface);border-radius:var(--r-lg);margin-bottom:var(--s3);border-bottom:none;padding:var(--s4) var(--s5);box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s}
+body[data-filter-mode="history"] #archFavList .news-item{background:var(--surface);border-radius:var(--r-lg);margin-bottom:var(--s2);border-bottom:none;padding:var(--s3) var(--s4);box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s}
 body[data-filter-mode="fav"] #archFavList .news-item:hover,
 body[data-filter-mode="history"] #archFavList .news-item:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
 body[data-filter-mode="fav"] #archFavList .news-item .btn-star,
@@ -149,6 +154,14 @@ body[data-filter-mode="history"] #archFavList .aggregate-clone .news-tags{displa
 .aggregate-empty .empty-cta{display:inline-flex;align-items:center;gap:var(--s2);margin-top:var(--s1);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:#0e7490;border:0;border-radius:10px;cursor:pointer}
 .aggregate-empty .empty-cta:hover{filter:brightness(1.06)}
 body.dark .aggregate-empty .empty-cta{background:#38bdf8;color:#0b1220}
+/* 2026-09-12：按时间分组标题 + 少条置底 CTA（建议④③） */
+.agg-group-title{display:flex;align-items:center;gap:var(--s2);margin:var(--s4) 0 var(--s2);padding-left:2px;font-size:var(--fs-meta);font-weight:600;color:var(--ink-500);letter-spacing:.5px}
+.agg-group-title::before{content:'';width:3px;height:14px;background:var(--brand);border-radius:2px;display:inline-block}
+.aggregate-foot{text-align:center;padding:var(--s5) 0 var(--s1)}
+.aggregate-foot .empty-cta{display:inline-flex;align-items:center;gap:var(--s2);margin-top:var(--s1);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:#0e7490;border:0;border-radius:10px;cursor:pointer}
+.aggregate-foot .empty-cta:hover{filter:brightness(1.06)}
+body.dark .agg-group-title{color:var(--ink-300)}
+body.dark .aggregate-foot .empty-cta{background:#38bdf8;color:#0b1220}
 /* 收藏/浏览记录视图：左侧目录与聚合标题均不显示计数 */
 #tocFavCount,#tocHistoryCount{display:none}
 body[data-filter-mode="fav"] #archFavCount,
@@ -175,6 +188,11 @@ body[data-filter-mode="fav"] #archFavList .news-item,body[data-filter-mode="hist
 .news-item:hover .aggregate-item-remove,body.dark .news-item:hover .aggregate-item-remove{opacity:1}
 .aggregate-item-remove:active{background:var(--danger);color:#fff}
 body.dark .aggregate-item-remove{background:rgba(255,255,255,.12);color:var(--ink-200)}
+/* 2026-09-12：移动端无 hover，单条移除按钮常驻可见（建议⑥） */
+@media(max-width:768px){
+body[data-filter-mode="fav"] #archFavList .aggregate-item-remove,
+body[data-filter-mode="history"] #archFavList .aggregate-item-remove{opacity:1;background:var(--surface-3);color:var(--ink-700)}
+}
 @keyframes clearPulse{0%,100%{box-shadow:0 0 0 2px rgba(229,62,62,.35)}50%{box-shadow:0 0 0 4px rgba(229,62,62,.18)}}
 .mine-clear.confirming{color:var(--danger,#e53e3e);border-color:var(--danger,#e53e3e);background:rgba(229,62,62,.08)}
 .container{max-width:1360px;margin:0 auto;padding:var(--s4)}

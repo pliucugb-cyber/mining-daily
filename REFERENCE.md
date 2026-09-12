@@ -1386,3 +1386,14 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - 原则：收藏与浏览记录共用同一套 `renderFavHistoryAggregate()` 聚合视图，布局必须完全一致。
 - 回归：`test_mobile_ux_batch.js` 新增 CSS 断言「history 与 fav 在 1440px+ 共用单栏布局（无 320px 隐藏右栏）」；总断言 194→195，0 失败。
 - 延伸建议（待排期）：若仍觉垂直间距大，可把 `#archFavList .news-item` 的 `gap/margin-bottom/padding` 再收紧一档；归档 history 卡片可补摘要；按时间分组；桌面端左侧目录在沉浸式视图下也可隐藏。
+
+### §34 2026-09-12 build 20260912-2107：收藏/浏览记录沉浸式视图六项增强（建议①②③④⑤⑥）
+- 建议① 间距收紧：沉浸式 `.news-grid` gap 由 --s5 → --s4；`#archFavList .news-item` margin-bottom --s3→--s2、padding --s4/--s5→--s3/--s4，一屏多看 1-2 条。
+- 建议② 浏览记录摘要：recordHistory 现抓取条目 .news-summary 存入历史；buildHistoryItemHtml 有 summary 时渲染摘要，与收藏卡结构一致。
+- 建议③ 少条置底 CTA：items.length∈[1,3] 时 #archFavList 底部渲染 `.aggregate-foot .empty-cta[data-act=go-home]`「去首页看看」（空态插画 CTA 仍用 fav-back 不变）。
+- 建议④ 按时间分组：renderFavHistoryAggregate 新增 _parseItemDate/_dayBucketOf，按 今天/昨天/更早 注入 `.agg-group-title` 分组标题，组内保持倒序。
+- 建议⑤ 桌面端隐藏左侧目录：@media(min-width:769px) 下 body[data-filter-mode=fav|history] .toc-sidebar{display:none!important}（移动端 .toc-sidebar 复用为顶部分类条，不隐藏）。
+- 建议⑥ 移动端移除按钮常驻：@media(max-width:768px) 下 #archFavList .aggregate-item-remove{opacity:1}，无需 hover 即可见。
+- 新增 go-home 点击委托：始终 setFilter('none') + mdActivateTab('home')，与返回逻辑解耦。
+- test_mobile_ux_batch.js ⑲ 段新增断言（分组标题/摘要/置底CTA/CSS 回归），总断言 194→203（0 失败）。
+- 注意：test_fav_history_aggregate.js 仍 4 条预存失败（col-rail 显示 + 空态文案，与沉浸式单栏设计冲突的旧测试），非本轮引入。

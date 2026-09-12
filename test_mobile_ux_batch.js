@@ -181,6 +181,32 @@ setTimeout(() => {
   // 清理本段种子数据，避免污染后续空态测试（⑦ 依赖空收藏/空历史）
   try{ window.localStorage.removeItem('mining_daily_favorites'); window.localStorage.removeItem('mining_daily_history'); if(typeof window.mdUpdateFavBadges==='function') window.mdUpdateFavBadges(); }catch(e){}
 
+  console.log('\n===== ⑲ 收藏/浏览记录沉浸式视图增强（2026-09-12 建议②③④⑤⑥）=====');
+  try {
+    const _iso=d=>d.toISOString();
+    window.localStorage.setItem('mining_daily_history', JSON.stringify([
+      {url:'https://ex.com/today',title:'今日铝价',src:'界面',summary:'今日氧化铝价格持稳。',time:_iso(new Date())},
+      {url:'https://ex.com/yest',title:'昨日铜矿',src:'矿权',summary:'昨日成交下滑。',time:_iso(new Date(Date.now()-86400000))},
+      {url:'https://ex.com/old',title:'更早锂矿',src:'研报',summary:'周报综述。',time:_iso(new Date(Date.now()-5*86400000))}
+    ]));
+    if(typeof window.renderFavHistoryAggregate==='function') window.renderFavHistoryAggregate('history');
+    else if(typeof window.setFilter==='function') window.setFilter('history');
+    const list=doc.getElementById('archFavList');
+    const gts=list?Array.from(list.querySelectorAll('.agg-group-title')).map(t=>t.textContent):[];
+    check('按时间分组：出现「今天」标题', gts.indexOf('今天')>=0, gts.join('|'));
+    check('按时间分组：出现「昨天」标题', gts.indexOf('昨天')>=0, gts.join('|'));
+    check('按时间分组：出现「更早」标题', gts.indexOf('更早')>=0, gts.join('|'));
+    const sums=list?list.querySelectorAll('.news-summary'):[];
+    check('浏览记录聚合卡显示摘要（与收藏卡结构一致，建议②）', sums.length>0, '摘要数='+(sums?sums.length:0));
+    const foot=list?list.querySelector('.aggregate-foot .empty-cta[data-act="go-home"]'):null;
+    check('少条时底部置底 CTA「去首页看看」（建议③）', !!foot, foot?'有':'无');
+  } catch(e){ check('沉浸式增强（分组/摘要/CTA）', false, '异常 '+e.message); }
+  try{ window.localStorage.removeItem('mining_daily_history'); }catch(e){}
+  // CSS 回归（建议①⑤⑥）
+  check('沉浸式卡片间距收紧（建议①：padding s4/s5 → s3/s4）', /#archFavList \.news-item\{[^}]*padding:var\(--s3\) var\(--s4\)/.test(html));
+  check('桌面端沉浸式隐藏左侧目录（建议⑤）', /@media\(\s*min-width:\s*769px\s*\)\s*\{[^}]*body\[data-filter-mode="(?:fav|history)"\]\s*\.toc-sidebar\{display:none!important\}/.test(html));
+  check('移动端单条移除按钮常驻可见（建议⑥）', /@media\(\s*max-width:\s*768px\s*\)\s*\{[^}]*#archFavList \.aggregate-item-remove\{opacity:1/.test(html));
+
   console.log('\n===== ⑨ 会议 tab + 会议会展区块 =====');
   const mctabs = doc.querySelectorAll('#mdTop .mctab');
   check('顶部分类 Tab 共 4 个（含会议）', mctabs.length === 4, '实际 ' + mctabs.length);
@@ -530,7 +556,7 @@ setTimeout(() => {
   check('① 顶栏/右栏隐藏：fav/history 下 #mdTop 与 .col-rail 均 display:none!important',
         html.includes('body[data-filter-mode="fav"] #mdTop,') && html.includes('body[data-filter-mode="history"] #mdTop,') && html.includes('body[data-filter-mode="fav"] .col-rail,') && /\.col-rail\{display:none!important\}/.test(html));
   check('② 单栏：fav/history .news-grid 改为 minmax(0,1fr) 单列（右栏不再占位）',
-        html.includes('body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr);gap:var(--s5)}'));
+        html.includes('body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr);gap:var(--s4)}'));
   check('③ 沉浸式返回条：#favViewBar / #favViewTitle / data-act="fav-back" 存在',
         html.includes('id="favViewBar"') && html.includes('id="favViewTitle"') && html.includes('data-act="fav-back"'));
   check('④ 同步函数：mdSyncFavViewBar 定义且在 setFilter 内被调用',
