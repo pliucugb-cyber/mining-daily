@@ -1,9 +1,14 @@
 // 简报五节结构化渲染回归测试（2026-09-12，二次修订）
 //
-// 背景：用户反馈「某天新闻特别多时，今日简报把全部内容塞在首屏，太长了」。
-//   首版做「要点层 highlights + 完整层 brief_sections」两层；用户随后指出要点层与下方
-//   「今日要闻」内容重复，要求移除 → 现为单一形态：五节结构化摘要 + 高度折叠
-//   （默认收起），内容一条不减（§9.2 每节全量、单条不截断仍有效）。
+// 演进（三次修订，勿混淆）：
+//   ① 首版「要点层 highlights + 完整层 brief_sections」两层；用户指出要点层与下方
+//      「今日要闻」内容重复 → 移除要点层，改为单一形态：五节结构化 + 默认收起。
+//      该轮**没动内容长度**，展开后仍是 18 条 / 4184 字、平均每条 232 字（= 把新闻列表抄一遍）。
+//   ② 2026-09-12 三次修订：用户反馈「3500 多字实在太多，只要关键信息」→
+//      简报条目改为**逐条精炼句**（每条 ≤ 80 字）+ 剔除低信息量例行条目（发运/工商变更…），
+//      实测 16 条 / 1057 字。§9.2.5「单条不截断」与 §10.1「每节全量」由此被 §16 取代：
+//      精炼句由生成端 BRIEF_DIGEST 逐条撰写，不再是 news.summary 的原样搬运。
+//   ③ 本测试对②加硬约束：单条 ≤80 字、总量 ≤1200 字、无例行条目、条数少于当日新增。
 //
 // 本测试覆盖三块：
 //   ① 数据契约（直接读 morning_report.json，不需要浏览器）
@@ -52,6 +57,34 @@ if (Array.isArray(bsec)) {
   const badU = bsec.filter(s => s.items.some(it => it.u && !/^https?:\/\//.test(it.u)));
   check('item 的 u（若有）均为 http(s) 链接', badU.length === 0,
     badU.length ? '异常 ' + badU.length + ' 节' : '带链接 ' + bsec.reduce((n, s) => n + s.items.filter(i => i.u).length, 0) + ' 条');
+}
+
+// —— 2026-09-12 三次修订：内容本身精炼（用户要求「把关键信息总结一下就行」）——
+const BRIEF_MAX = 80, BRIEF_TOTAL_MAX = 1200;
+const ROUTINE_WORDS = ['装车发运', '出厂检验', '启运', '工商登记变更', '工商变更', '完成工商',
+  '业绩说明会', '投资者关系', '机构调研', '持续督导', '核查意见', '法律意见书',
+  '股东大会', '董事会决议', '监事会', '异常波动', '问询函', '关注函',
+  '更正公告', '补充公告', '权益变动', '减持', '增持'];
+if (Array.isArray(bsec)) {
+  const allT = bsec.reduce((a, s) => a.concat(s.items.map(i => i.t)), []);
+  const over = allT.filter(t => t.length > BRIEF_MAX);
+  const lens = allT.map(t => t.length);
+  check('每条精炼句 ≤ ' + BRIEF_MAX + ' 字', over.length === 0,
+    over.length ? over.length + ' 条超长：' + over.map(t => t.length + '字').join(',')
+                : '最长 ' + Math.max.apply(null, lens) + ' 字');
+  const totalChars = lens.reduce((n, v) => n + v, 0);
+  check('简报总字数 ≤ ' + BRIEF_TOTAL_MAX + '（原 4184 字）', totalChars <= BRIEF_TOTAL_MAX,
+    totalChars + ' 字 / ' + allT.length + ' 条，平均 ' + Math.round(totalChars / allT.length) + ' 字');
+  const hit = allT.filter(t => ROUTINE_WORDS.some(w => t.indexOf(w) >= 0));
+  check('无低信息量例行条目混入简报', hit.length === 0,
+    hit.length ? hit.map(t => t.slice(0, 22)).join(' | ') : '0 条（例行条目仅在下方新闻列表）');
+  const newCount = (REPORT.stats && REPORT.stats.new_count) || 0;
+  check('简报条数少于当日新增条数（体现精选）', allT.length < newCount,
+    allT.length + ' 条简报 vs ' + newCount + ' 条新增');
+  check('精炼句非空且不含「（原题：」噪声',
+    allT.every(t => t.trim() && t.indexOf('（原题：') < 0));
+  check('每条精炼句以句末标点收尾', allT.every(t => /[。！？）]$/.test(t.trim())),
+    allT.filter(t => !/[。！？）]$/.test(t.trim())).map(t => t.slice(-12)).join(' | ') || '全部合规');
 }
 
 check('report 仍保留（兜底文本）', typeof REPORT.report === 'string' && REPORT.report.trim().length > 0,

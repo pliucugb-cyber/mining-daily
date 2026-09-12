@@ -4,7 +4,7 @@
 报告日期 2026-09-12（国内 SHFE/上金所最新收盘 09-11；LME 09-11 收盘）
 morning_report 固定五节：行情 / 政策与产业 / 勘查与技术 / 并购与投资 / 矿权市场
 """
-import json, datetime, collections
+import json, datetime, collections, re
 
 REPORT = '2026-09-12'
 ASOF = '09-11'
@@ -335,63 +335,142 @@ def to_items(arr):
     return out
 
 
-# ---------- 两层简报（2026-09-12 用户要求：首屏别被淹没）----------
-# 完整层 brief_sections：五节结构化。空节不收录 —— 不再输出「今日暂无…」占位句白占高度。
-# report 由 brief_sections 拼出，保证「展开完整摘要」与结构化数据永远一致；report 仅作兜底
-# （旧版前端 / SW 缓存到旧 JSON 时仍能渲染）。
-# 注：本条不违反 §9.2「每节全量」与 §10.1「不限条数」——内容一条不减，只是改为两层呈现。
-brief_sections = [
-    {'name': '行情', 'items': [{'t': quote_lines[0][2:], 'u': '', 's': ''},
-                              {'t': _price_comment[2:], 'u': '', 's': ''}]},
-    {'name': '政策与产业', 'items': to_items(_policy_items)},
-    {'name': '勘查与技术', 'items': to_items(recent_items('找矿成果与勘查技术'))},
-    {'name': '并购与投资', 'items': to_items(recent_items('并购与投资'))},
-    {'name': '矿权市场', 'items': [{'t': rights_text, 'u': '', 's': ''}]},
-]
-brief_sections = [s for s in brief_sections if s['items']]
-for _s in brief_sections:
-    _s['count'] = len(_s['items'])
+# ---------- 简报精炼（2026-09-12 三次修订：用户要求「内容本身缩减」）----------
+# 演进：① 09-11 用户要「总结全」→ 单条不截断、每节不限条数（§9.2.5 / §10.1）；
+#   ② 09-12 上午先做「要点层 + 完整层」两层，用户否决要点层，定为「五节结构化 + 默认收起」。
+#   两次都没动**内容长度**：展开后仍是 18 条 / 4184 字、平均每条 232 字 —— 条目直接
+#   搬运 news['summary']（与下方新闻卡片同源），等于把新闻列表又抄了一遍。
+# ③ 09-12 用户定夺「精炼单条·保留全貌 + 剔除例行条目 + 立即重做当日」：
+#   简报条目改为**逐条撰写的精炼句**（BRIEF_DIGEST），不再搬运整段摘要；
+#   每条硬上限 BRIEF_MAX 字，超限直接 RuntimeError（逼撰写者压缩，不静默截断）；
+#   低信息量例行条目（发运/工商变更/业绩说明会…）不进简报（下方新闻列表仍可查）。
+#   某节一条未写时用 digest_summary() 自动截句兜底，保证不空节。
+# 详见 REFERENCE.md §16。
+BRIEF_MAX = 80
 
+# 例行条目关键词：命中即视为低信息量，禁止进简报。与 §3 的低价值公告一脉相承。
+ROUTINE_NOTICE = [
+    '装车发运', '出厂检验', '启运', '工商登记变更', '工商变更', '完成工商',
+    '业绩说明会', '投资者关系', '机构调研', '持续督导', '核查意见', '法律意见书',
+    '股东大会', '董事会决议', '监事会', '异常波动', '问询函', '关注函',
+    '更正公告', '补充公告', '权益变动', '减持', '增持',
+]
+
+
+def digest_summary(body, max_len=BRIEF_MAX):
+    """长摘要 → ≤max_len 的关键句：整句优先，单句超长退到逗号/分号，绝不在句中硬切。"""
+    body = (body or '').strip()
+    _i = body.find('（原题：')
+    if _i > 0:
+        body = body[:_i].rstrip()
+    if len(body) <= max_len:
+        return body
+    out = ''
+    for seg in re.split(r'(?<=[。！？])', body):
+        if len(out) + len(seg) > max_len:
+            break
+        out += seg
+    if out:
+        return out
+    cut = body[:max_len]
+    pos = max(cut.rfind('，'), cut.rfind('；'), cut.rfind('、'))
+    return cut[:pos + 1] if pos >= 20 else cut
+
+
+# 简报条目：逐条撰写的精炼句（≤BRIEF_MAX 字，只留 主体 + 动作 + 关键数字）。
+#   cat = 所属分节；t = 精炼句；k = 用于在当日条目标题里匹配 url 的关键词（空 = 无链接）。
+BRIEF_DIGEST = [
+    {'cat': '行情', 'k': '',
+     't': '领涨：LME 锌 3,882 美元/吨（+0.70%）；领跌：白银 15,586 元/千克（-5.07%）。'},
+    {'cat': '行情', 'k': '',
+     't': '国内 9 月 11 日普跌：白银 -5.07%、碳酸锂 -4.59%、沪铜 -2.86%，LME 涨跌互现；美国 PPI 超预期、美联储偏鹰，夜盘贵金属跳水。'},
+    {'cat': '政策与产业', 'k': '绿色矿山建设规范',
+     't': '《绿色矿山建设规范》系列国标（10 个部分）发布，覆盖煤炭、有色、黄金等主要矿种；同日发布我国首项《固体矿产绿色勘查规范》国标。'},
+    {'cat': '政策与产业', 'k': '矿区生态修复典型案例',
+     't': '全国第三批矿区生态修复典型案例 24 个发布；\u201c十四五\u201d期间部署 68 个示范工程、中央奖补超 168 亿元，带动修复历史遗留废弃矿区 335 万亩。'},
+    {'cat': '政策与产业', 'k': '规范矿业权管理',
+     't': '自然资源部就《规范矿业权管理有关事项的通知（征求意见稿）》公开征求意见情况发布公告，该文件为落实《矿产资源法》起草，已进入出台前最后阶段。'},
+    {'cat': '政策与产业', 'k': '布赖拜',
+     't': '辽宁宏达集团在哈萨克斯坦克孜勒奥尔达州开工布赖拜铅锌采选项目，建设期两年、计划 2028 年建成，一期年产铅锌原料 21 万吨、白银 20 吨。'},
+    {'cat': '政策与产业', 'k': '扎哈淖尔',
+     't': '中铝国际总承包的内蒙古扎哈淖尔 35 万吨绿电铝项目推进建设，是霍林河\u201c煤—新能源—电—铝\u201d联营及源网荷储直供的标志性工程。'},
+    {'cat': '勘查与技术', 'k': 'Alchemy',
+     't': '澳企 Alchemy 在新南威尔士州 Yellow Mountain 与 Overflow 项目启动反循环钻探，共 15 个钻孔、约 3 周。'},
+    {'cat': '勘查与技术', 'k': '马库库',
+     't': '艾芬豪矿业刚果（金）马库库铜矿铜金属资源量升至约 1200 万吨，较 2025 年估算增 30%，钻探仍在继续扩大资源量。'},
+    {'cat': '并购与投资', 'k': '美国稀土',
+     't': '美国稀土公司在南卡罗来纳州动工建设稀土金属与磁体工厂，投资约 12 亿美元、建筑面积 80 万平方英尺，预计创造约 490 个岗位。'},
+    {'cat': '并购与投资', 'k': 'Venalum',
+     't': '嘉能可与摩科瑞参与竞逐委内瑞拉最大铝冶炼厂 Venalum，该厂年产能约 43 万吨原铝、多年减产，交易尚在讨论、未达成协议。'},
+    {'cat': '并购与投资', 'k': '智利 7 月铜产量',
+     't': '智利 7 月铜产量同比降 9.4%，Escondida 降 22.1%、Codelco 降 5%；全年预计约 527 万吨、同比降 2.6%。'},
+    {'cat': '并购与投资', 'k': '五矿资源',
+     't': '中国五矿资源（MMG）敦促欧盟批准其 5 亿美元收购英美资源巴西镍业务，欧盟委员会正调查该案，预计下周发出正式警告。'},
+    {'cat': '并购与投资', 'k': '津巴布韦',
+     't': 'SMM：津巴布韦锂出口限制政策推动境内加工，将重塑投资流向并促使行业整合，加工环节需更高前期资本投入。'},
+    {'cat': '并购与投资', 'k': '自由港',
+     't': '自由港预计推进亚利桑那州 Bagdad 铜矿扩建，资本开支约 45 亿美元、较原估算增约 30%，选矿产能将翻倍以上、年产铜增约 9~11 万吨。'},
+    {'cat': '矿权市场', 'k': '',
+     't': '矿权交易专区窗口内累计 37 宗；今日无新增公告，最新一批为甘肃漳县石川重山里金矿普、金塔梧桐沟铜及、吉林集安团结铅锌等（09-11）。'},
+]
+
+# 分节顺序（与 §2 桶序 / generate_YYYYMMDD.py 的 THEME_BUCKET 一致）
+SEC_NAMES = ['行情', '政策与产业', '勘查与技术', '并购与投资', '矿权市场']
+
+# —— 三项硬校验：超长 / 越界分节 / 混入例行条目，任一命中即拒绝生成（fail loud）——
+for _d in BRIEF_DIGEST:
+    if _d['cat'] not in SEC_NAMES:
+        raise RuntimeError('BRIEF_DIGEST 分节名不在五节内：%s' % _d['cat'])
+    if len(_d['t']) > BRIEF_MAX:
+        raise RuntimeError('BRIEF_DIGEST 条目超 %d 字（实 %d 字）：%s'
+                           % (BRIEF_MAX, len(_d['t']), _d['t']))
+    for _w in ROUTINE_NOTICE:
+        if _w in _d['t']:
+            raise RuntimeError('BRIEF_DIGEST 混入例行条目（命中「%s」）：%s' % (_w, _d['t']))
+
+# —— 关键词 → url / 来源（在当日新增条目标题里找第一条匹配；找不到则留空，优雅降级）——
+for _d in BRIEF_DIGEST:
+    _d['u'], _d['s'] = '', ''
+    if _d['k']:
+        for _n in new_items:
+            if _d['k'] in (_n.get('title') or ''):
+                _d['u'] = _n.get('url', '')
+                _d['s'] = (_n.get('source') or '').strip()
+                break
+
+# —— 兜底源：某节一条未写时，从该类目当日摘要自动截句（保证不空节）——
+SEC_FALLBACK = {
+    '政策与产业': _policy_items,
+    '勘查与技术': recent_items('找矿成果与勘查技术'),
+    '并购与投资': recent_items('并购与投资'),
+}
+
+brief_sections = []
+for _name in SEC_NAMES:
+    _items = [{'t': d['t'], 'u': d['u'], 's': d['s']}
+              for d in BRIEF_DIGEST if d['cat'] == _name]
+    if not _items and _name in SEC_FALLBACK:
+        _items = [{'t': digest_summary(x.get('summary') or x.get('title') or ''),
+                   'u': x.get('url', ''), 's': (x.get('source') or '').strip()}
+                  for x in SEC_FALLBACK[_name][:3]]
+        _items = [i for i in _items if i['t']]
+    if not _items and _name == '行情':
+        _items = [{'t': quote_lines[0][2:], 'u': '', 's': ''}]
+    if not _items and _name == '矿权市场':
+        _items = [{'t': rights_text, 'u': '', 's': ''}]
+    if _items:
+        brief_sections.append({'name': _name, 'count': len(_items), 'items': _items})
+
+# report 由 brief_sections 拼出：保证「report 兜底文本」与结构化数据永不失同步。
 report = '\n\n'.join(
     '**%s：**\n%s' % (s['name'], '\n'.join(
         '- %s%s' % (it['t'], ('（%s）' % it['s']) if it['s'] else '') for it in s['items']))
     for s in brief_sections) + '\n'
 
-# 要点层 highlights（3–5 条）：由模型在撰写当日脚本时从当日数据中挑选，原则——
-#   ① 价格异动 severity=high 优先；② 政策原文/国标/法规发布；③ 重大并购与资源量变化；
-#   ④ 勘查成果；⑤ 尽量覆盖不同分节，避免 5 条全属同一节。
-# 字段：cat=所属分节（前端做小标）；t=一句话要点（≤50 字）；k=用于关联原文的关键词。
-# 脚本按 k 在当日条目标题里找第一条匹配，自动填 u（= 卡片 data-url，供前端点击跳转）；
-# k 留空或无匹配则 u 为空，前端渲染成纯文本（优雅降级，不报错）。
-highlights = [
-    {'cat': '行情', 't': '白银单日 -5.07%、碳酸锂 -4.59%，贵金属夜盘跳水且基本金属普跌', 'k': ''},
-    {'cat': '政策与产业', 't': '绿色矿山建设规范等 10 部国家标准集中发布，覆盖主要矿产类型', 'k': '绿色矿山建设规范'},
-    {'cat': '政策与产业', 't': '全国第三批矿区生态修复典型案例 24 个发布，中央奖补超 168 亿元', 'k': '矿区生态修复'},
-    {'cat': '勘查与技术', 't': '刚果（金）马库库铜矿资源量大增 30%，约 1200 万吨铜金属', 'k': '马库库'},
-    {'cat': '并购与投资', 't': '智利 7 月铜产量同比 -9.4%，Escondida 铜矿降 22.1%', 'k': '铜产量'},
-]
-
-if len(highlights) < 2:
-    # 兜底：模型漏写要点时不至于首屏空白——按异动 severity → 条目打分取候补
-    _fb = [{'cat': '行情', 't': '%s %s（%s）' % (a['commodity'], a['move'], a['market']), 'k': ''}
-           for a in alerts[:3]]
-    for _n in sorted(new_items, key=lambda x: -score_item(x)):
-        if len(_fb) >= 5:
-            break
-        _t = (_n.get('title') or '').strip()
-        if _t:
-            _fb.append({'cat': '', 't': _t[:50], 'k': ''})
-    highlights = _fb
-
-highlights = highlights[:5]
-for _h in highlights:
-    _h.setdefault('u', '')
-    if _h.get('k'):
-        for _n in new_items:
-            if _h['k'] in (_n.get('title') or ''):
-                _h['u'] = _n.get('url', '')
-                break
-    _h.pop('k', None)
+# highlights：单一真源 —— 由 brief_sections 各节首条派生，最多 5 条。
+#   前端自 §15 起不再渲染该字段（与「今日要闻」重复），保留产出仅为将来复用/兼容旧前端。
+highlights = [{'cat': s['name'], 't': s['items'][0]['t'], 'u': s['items'][0]['u']}
+              for s in brief_sections][:5]
 
 _cat = collections.Counter(n.get('category', '') for n in new_items)
 
