@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1800" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1822" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -143,9 +143,12 @@ body[data-filter-mode="history"] #archFavList .news-item .btn-star{top:12px;righ
 body[data-filter-mode="fav"] #archFavList .aggregate-clone .news-tags,
 body[data-filter-mode="history"] #archFavList .aggregate-clone .news-tags{display:none}
 .aggregate-empty{text-align:center;padding:var(--s7) var(--s4);color:var(--ink-500);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
-.aggregate-empty .empty-icon{font-size:56px;line-height:1;margin-bottom:var(--s4);opacity:.55}
+.aggregate-empty .empty-art{width:128px;height:128px;margin:0 auto var(--s4);display:block}
 .aggregate-empty .empty-title{font-size:var(--fs-h1);font-weight:600;color:var(--ink-700);margin-bottom:var(--s2)}
-.aggregate-empty .empty-tip{font-size:var(--fs-body);color:var(--ink-300)}
+.aggregate-empty .empty-tip{font-size:var(--fs-body);color:var(--ink-300);max-width:32em;margin:0 auto var(--s4)}
+.aggregate-empty .empty-cta{display:inline-flex;align-items:center;gap:var(--s2);margin-top:var(--s1);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:#0e7490;border:0;border-radius:10px;cursor:pointer}
+.aggregate-empty .empty-cta:hover{filter:brightness(1.06)}
+body.dark .aggregate-empty .empty-cta{background:#38bdf8;color:#0b1220}
 /* 收藏/浏览记录视图：左侧目录与聚合标题均不显示计数 */
 #tocFavCount,#tocHistoryCount{display:none}
 body[data-filter-mode="fav"] #archFavCount,
@@ -2419,7 +2422,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=40a91489" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=cb967370" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=e192184b" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->

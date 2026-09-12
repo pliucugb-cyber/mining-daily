@@ -717,9 +717,23 @@ function renderFavHistoryAggregate(mode){
   list.appendChild(frag);
   if(countEl)countEl.textContent=items.length+'条';
   if(items.length===0){
+    const _favArt='<svg class="empty-art" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+      +'<rect x="26" y="22" width="76" height="84" rx="12" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 7" opacity=".55"/>'
+      +'<path d="M64 38 L69.6 54.2 L86.8 54.6 L73.1 65 L78.1 81.4 L64 71.6 L49.9 81.4 L54.9 65 L41.2 54.6 L58.4 54.2 Z" fill="#0e7490"/>'
+      +'<path d="M96 36 L98 42 L104 44 L98 46 L96 52 L94 46 L88 44 L94 42 Z" fill="#38bdf8"/>'
+      +'<path d="M34 78 L35.5 82.5 L40 84 L35.5 85.5 L34 90 L32.5 85.5 L28 84 L32.5 82.5 Z" fill="#38bdf8"/>'
+      +'</svg>';
+    const _histArt='<svg class="empty-art" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+      +'<circle cx="64" cy="58" r="32" fill="none" stroke="#0e7490" stroke-width="4"/>'
+      +'<path d="M64 58 L64 40" stroke="#0e7490" stroke-width="4" stroke-linecap="round"/>'
+      +'<path d="M64 58 L80 64" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>'
+      +'<circle cx="64" cy="58" r="4.5" fill="#0e7490"/>'
+      +'<path d="M36 96 C28 104 30 116 44 116 C62 116 74 102 74 102" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="5 7" stroke-linecap="round" opacity=".5"/>'
+      +'<path d="M67 101 L75 103 L71 110" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
+      +'</svg>';
     const emptyMsg = mode==='fav'
-      ? '<div class="aggregate-empty"><div class="empty-icon">⭐</div><div class="empty-title">暂无收藏</div><div class="empty-tip">打开任意条目后，点击右侧的 ★ 即可收藏到这里</div></div>'
-      : '<div class="aggregate-empty"><div class="empty-icon">📋</div><div class="empty-title">暂无浏览记录</div><div class="empty-tip">打开任意条目后会自动记录到这里</div></div>';
+      ? '<div class="aggregate-empty">'+_favArt+'<div class="empty-title">还没有收藏</div><div class="empty-tip">打开任意条目后，点击右侧的 ★ 即可收藏到这里</div><button class="empty-cta" type="button" data-act="fav-back">去首页看看</button></div>'
+      : '<div class="aggregate-empty">'+_histArt+'<div class="empty-title">还没有浏览记录</div><div class="empty-tip">打开任意条目后会自动记录到这里</div><button class="empty-cta" type="button" data-act="fav-back">去首页看看</button></div>';
     list.innerHTML=emptyMsg;
   }
   // 为聚合列表注入星标/未读按钮并同步收藏态
