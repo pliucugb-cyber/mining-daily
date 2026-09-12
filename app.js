@@ -2740,13 +2740,15 @@ function mdMobileTabBar(){
   function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go); }); }
   // 2026-09-12：「我的」独立页关闭/返回收藏历史时，回到之前的内容 tab（默认首页）。
   var mdLastContentTab='home';
+function mdQaBack(){ try{ qaFloatClose(); }catch(e){} activateTab(mdLastContentTab||'home', false); }
+window.qaFloatBack=mdQaBack;
   // 2026-09-11 优化③：非首页隐藏分类栏时，品牌行显示当前 tab 名给位置感
   var MD_BRAND_NAMES={'home':'⛏️ 矿业新闻日报','price':'价格','rights':'矿权','qa':'AI 搜','mine':'我的'};
   function mdSetBrandForTab(go){ var brand=document.querySelector('#mdTop .md-brand'); if(brand) brand.textContent=MD_BRAND_NAMES[go]||MD_BRAND_NAMES.home; }
   // 统一 tab 切换逻辑（点击 / 初始化恢复共用）；autoOpen 控制问/我的浮层是否在「恢复」时自动展开
   function activateTab(go, autoOpen){
     document.body.classList.toggle('md-hide-catbar', go!=='home');
-    if(go!=='mine') mdLastContentTab=go;
+    if(go==='home' || go==='price' || go==='rights') mdLastContentTab=go;
     mdSetBrandForTab(go);
     sheet.hidden=true;
     document.body.classList.remove('md-mine-open');
@@ -2755,8 +2757,13 @@ function mdMobileTabBar(){
     else if(go==='price'){ mdSelectCat('price'); }
     else if(go==='rights'){ mdSelectCat('rights'); }
     else if(go==='qa'){
-      if(autoOpen && typeof qaFloatToggle==='function') qaFloatToggle();
       var _qp=document.getElementById('qaFloat');
+      var _wasOpen=!!(_qp && _qp.classList.contains('open'));
+      if(autoOpen && _wasOpen){
+        mdQaBack();
+        return;
+      }
+      if(autoOpen && typeof qaFloatToggle==='function') qaFloatToggle();
       setActive(_qp && _qp.classList.contains('open') ? 'qa' : null);
       return;
     } else if(go==='mine'){
@@ -3613,17 +3620,29 @@ function pcChartClose(){
   });
 })();
 // ===== 左下角问答悬浮球（9-04 新增，复用全库 QA_ROWS 与 /api/qa 能力）=====
-var QA_FLOAT_BUSY=false;
+var QA_FLOAT_BUSY=false, QA_FLOAT_AC=null, QA_FLOAT_TO=null, QA_FLOAT_MSG=null;
 function qaFloatToggle(){
   var p=document.getElementById('qaFloat'),b=document.getElementById('qaFab');
   if(!p)return;
   var open=p.classList.toggle('open');
   if(b)b.classList.toggle('on',open);
-  if(open){var i=document.getElementById('qaFloatInput');if(i)setTimeout(function(){i.focus();},80);qaStopBreathe();try{qaHeadMenuClose();}catch(e){}}
+  if(open){var i=document.getElementById('qaFloatInput');if(i&&window.innerWidth>768)setTimeout(function(){i.focus();},80);qaStopBreathe();try{qaHeadMenuClose();}catch(e){}}
 }
 function qaFloatClose(){
   var p=document.getElementById('qaFloat');if(p)p.classList.remove('open');
   var b=document.getElementById('qaFab');if(b)b.classList.remove('on');
+}
+function qaFloatResetBusy(){
+  QA_FLOAT_BUSY=false;
+  QA_FLOAT_AC=null;
+  if(QA_FLOAT_TO){ clearTimeout(QA_FLOAT_TO); QA_FLOAT_TO=null; }
+  QA_FLOAT_MSG=null;
+  var btn=document.getElementById('qaFloatAi');
+  if(btn){ btn.disabled=false; btn.textContent='✨ AI 回答'; btn.classList.remove('qa-cancel'); }
+}
+function qaFloatSetBusyUI(){
+  var btn=document.getElementById('qaFloatAi');
+  if(btn){ btn.disabled=false; btn.textContent='取消'; btn.classList.add('qa-cancel'); }
 }
 // 点击/拖动区分：短距离移动视为点击，否则视为拖动并阻止打开面板
 var QA_FAB_MOVED=false;
@@ -4352,12 +4371,27 @@ function qaAiLocalAnswer(q,ctx){
   return text;
 }
 function qaFloatAsk(retryMode,ctxOverride){
-  if(QA_FLOAT_BUSY)return;
+  if(QA_FLOAT_BUSY){
+    // 用户主动取消正在进行的 AI 请求
+    if(QA_FLOAT_AC){ try{ QA_FLOAT_AC.abort('user-cancel'); }catch(e){} }
+    if(QA_FLOAT_TO){ clearTimeout(QA_FLOAT_TO); QA_FLOAT_TO=null; }
+    QA_FLOAT_BUSY=false;
+    QA_FLOAT_AC=null;
+    var _btn=document.getElementById('qaFloatAi'); if(_btn){_btn.disabled=false; _btn.textContent='✨ AI 回答'; _btn.classList.remove('qa-cancel');}
+    if(QA_FLOAT_MSG){
+      var _b=QA_FLOAT_MSG.querySelector('.qa-msg-bubble'); if(_b) _b.innerHTML='<div class="qa-cancelled">已取消。</div>';
+      var _mm=QA_FLOAT_MSG.querySelector('.qa-msg-meta'); if(_mm) _mm.textContent='';
+      QA_FLOAT_MSG=null;
+    } else {
+      qaFloatAdd('ai','已取消。','',{md:false});
+    }
+    return;
+  }
   var inp=document.getElementById('qaFloatInput'),btn=document.getElementById('qaFloatAi');
   var q=inp?(inp.value||'').trim():'';
   if(!q){qaFloatAdd('ai','请先输入问题，例如「最近有哪些稀土政策」「锂价为什么大跌」。','',{md:false});return;}
   QA_FLOAT_BUSY=true;
-  if(btn){btn.disabled=true;btn.textContent='思考中…';}
+  qaFloatSetBusyUI();
   if(!retryMode){qaFloatAdd('user',q,'',{md:false,ts:Date.now(),anchorTop:true});qaSaveHistory();}
   if(inp)inp.value='';
   var _ctx=ctxOverride;
@@ -4400,13 +4434,13 @@ function qaFloatAsk(retryMode,ctxOverride){
       var msg=qaFloatAdd('ai','（命中本地答案缓存，正在渲染…）','答案缓存命中',{md:false,actions:false,ts:Date.now(),keepScroll:true});
       _qaPath='缓存';_qaModel='deepseek-chat';_qaT0=Date.now();
       qaFinishAnswer(_hit.text,msg.querySelector('.qa-msg-bubble'),msg,q,_hit.ctx||_ctx,_hit.dateIntent||_dateIntent);
-      QA_FLOAT_BUSY=false; if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
       return;
     }
   }
   _qaCacheKey=_qaCacheKey||qaCacheKey(q,_minSel||_min,_topSel||_top,_from,_rg,_dateIntent);
   var meta='正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候…';
   var msg=qaFloatAdd('ai','正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now(),keepScroll:true});
+  QA_FLOAT_MSG=msg;
   qaDeepseekCall(q,_ctx,msg,btn,_conv,_broad,_dateIntent,_rangeIntent);
   return;
 }
@@ -4635,6 +4669,7 @@ function qaFinishAnswer(text,bubble,msg,q,ctx,ok,dateIntent){
     }
   }
   if(ok && _qaCacheKey){ qaCachePut(_qaCacheKey,{text:text,ctx:ctx||[],dateIntent:dateIntent,u:QA_UPDATED||''}); }
+  qaFloatResetBusy();
   qaFloatSettle();qaSaveHistory();
 }
 // 代理模式下：优先尝试 SSE 流式；若边缘函数尚未启用流式（返回 JSON），自动回退 JSON 解析
@@ -4650,11 +4685,15 @@ function qaTryStreamOrJson(url,headers,body,bubble,msg,q,ctx,dateIntent,ac,to,bt
         .then(function(res){ qaApplyJson(res,bubble,msg,q,ctx,dateIntent); });
     })
     .catch(function(e){
+      clearTimeout(to);
+      if(e && (e.message==='user-cancel' || (e.name==='AbortError' && /user-cancel/i.test(e.message)))){
+        qaFloatResetBusy();
+        return;
+      }
       var la=qaAiLocalAnswer(q,ctx);
       var why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||e||'网络错误');
       _qaPath='本地兜底';
       qaFinishAnswer(la+'\n\n[DeepSeek 调用失败（'+why+'），已切换本地知识库回答]',bubble,msg,q,ctx,false,dateIntent);
-      clearTimeout(to);QA_FLOAT_BUSY=false;if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
     });
 }
 // 解析非流式 JSON 响应（含 401/错误文案），与流式共用 qaFinishAnswer
@@ -4705,6 +4744,10 @@ function qaStreamPump(r,bubble,msg,q,ctx,dateIntent,ac,to,btn){
     if(bubble)bubble.innerHTML=qaInlineRefs(qaMdRender(acc),ctx);
     finish(acc||'(模型未返回内容)',!!acc);
   }).catch(function(e){
+    if(e && (e.message==='user-cancel' || (e.name==='AbortError' && /user-cancel/i.test(e.message)))){
+      qaFloatResetBusy();
+      return;
+    }
     var why=(e&&e.name==='AbortError')?'响应超时（>35s）':((e&&e.message)||'网络错误');
     if(acc){ if(bubble)bubble.innerHTML=qaInlineRefs(qaMdRender(acc),ctx); finish(acc,true); }
     else{ _qaPath='本地兜底'; var la=qaAiLocalAnswer(q,ctx); finish(la+'\n\n[DeepSeek 流式调用失败（'+why+'），已切换本地知识库回答]',false); }
@@ -4783,7 +4826,8 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent,rangeIntent){
   user+='请直接给出回答，无需寒暄。'
   if(bubble)bubble.innerHTML='<div class="qa-thinking"><span class="qa-dot"></span>DeepSeek 正在组织答案（约 10~30 秒，可先浏览上方参考来源）…</div>';
   // 2026-09-06 晚：35s 超时兜底，避免 DeepSeek 卡住时面板长期转圈
-  var _ac=new AbortController();var _to=setTimeout(function(){_ac.abort();},35000);
+  var _ac=new AbortController();var _to=setTimeout(function(){_ac.abort('timeout');},35000);
+  QA_FLOAT_AC=_ac; QA_FLOAT_TO=_to;
   // 2026-09-08：两种调用方式，优先走代理
   //   ① 代理模式（推荐 / 默认）：QA_API_BASE 指向 Netlify 边缘函数，Key 存在平台环境变量里。
   //      本页是 GitHub Pages 公开静态页，任何写进页面的 Key 都等于公开（curl 即得），

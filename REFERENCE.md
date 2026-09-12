@@ -1103,3 +1103,61 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - 空态：无浏览记录时 `updateHistoryCount()` 把两个清空按钮置 `disabled`（视觉置灰），避免无效点击。
 - 红线补充：两项清空按钮（`.mine-clear` / `.toc-clear`）必须都存在于 DOM；点清空必须真清空 localStorage 且不误开聚合视图；不可把「清空」做成跳转。
 - 测试：`test_mobile_ux_batch.js` §⑧ +4 条断言（共 **157/0**）——两项按钮存在 + 点「清空」后 `mining_daily_history` 被删/空、目录计数刷新为 0。
+
+## §23 AI 搜面板手机体验收尾（2026-09-12，build `20260912-1600`）
+
+### 23.1 用户反馈与问题
+
+1. **首次打开 AI 搜就弹键盘**：手机点底部「AI 搜」tab，面板刚打开输入框立即 focus，键盘占掉大半屏，体验压迫。应只在用户主动点输入框时才弹出键盘。
+2. **AI 问答缺少取消**：点击「AI 回答」后，等待 DeepSeek 返回的 10~30 秒内没有取消入口，用户只能干等或杀页面。
+3. **返回按钮语义错误**：手机窄屏顶栏的 `‹ 返回` 点完后，底部 tab 仍高亮「AI 搜」、品牌行仍显示「AI 搜」，相当于没真正退出。用户期望回到打开 AI 搜之前的那个内容界面。
+
+### 23.2 方案定稿
+
+| 问题 | 解决方案 | 手机表现 | 桌面表现 |
+|---|---|---|---|
+| 自动弹键盘 | `qaFloatToggle` 只在 `window.innerWidth>768` 时 `input.focus()` | 首次打开/ reopened 都不弹键盘 | 桌面打开仍自动聚焦，方便键鼠 |
+| 取消 AI 请求 | 进行中的 AI 请求把「✨ AI 回答」按钮变「取消」（可点击）；再点即 `AbortController.abort('user-cancel')` | 按钮变红底白字「取消」，点一下立即停止并显示「已取消。」 | 同样适用 |
+| 返回上一界面 | 返回按钮走 `mdQaBack()`：关闭面板 + `activateTab(mdLastContentTab)` | 从哪个内容 tab 来，回哪个 tab；顶栏品牌、分类栏同步恢复 | 桌面右上角 ✕ 仍仅关闭浮窗（桌面无 tab 高亮问题） |
+
+### 23.3 交互细节
+
+- **取消状态**：
+  - `qaFloatAsk` 入口先判断 `QA_FLOAT_BUSY`。若忙 → `QA_FLOAT_AC.abort('user-cancel')` → 清 timeout → 把占位气泡改写为 `<div class="qa-cancelled">已取消。</div>` → 按钮恢复「✨ AI 回答」。
+  - 为避免「用户取消」走原有兜底答案，网络/流式 catch 里判断 `e.message==='user-cancel'`（或 `AbortError` 且 message 含 `user-cancel`）时仅 `qaFloatResetBusy()`，不渲染本地兜底。
+  - 超时仍走原兜底，但把 timeout abort reason 设为 `'timeout'`。
+- **返回上一界面**：
+  - `mdLastContentTab` 只记录真实内容 tab（`home/price/rights`），不记录 `qa`/`mine`。
+  - `mdQaBack()` 在 tab IIFE 内定义，拥有 `activateTab` 与 `mdLastContentTab` 闭包；绑定到 `window.qaFloatBack`。
+  - 再次点击底部「AI 搜」tab（面板已打开）时，也走 `mdQaBack()` 关闭并返回上一页。
+- **焦点隔离**：首次打开面板仍收起 `⋯` 菜单、停止呼吸灯，只是不再 focus。
+
+### 23.4 代码落点
+
+- `index.html`：
+  - 顶栏返回按钮 `onclick="window.qaFloatBack&&window.qaFloatBack()"`。
+  - 新增 `.qa-float-btn.qa-cancel` 样式（红底白字）及 dark 适配。
+- `app.js`：
+  - 全局新增 `QA_FLOAT_AC / QA_FLOAT_TO / QA_FLOAT_MSG`。
+  - `qaFloatToggle`：`i.focus()` 加 `window.innerWidth>768`  guard。
+  - `qaFloatAsk`：开头支持取消分支；忙时调 `qaFloatSetBusyUI()` 把按钮文案改为「取消」。
+  - `qaDeepseekCall`：`_to` 的 abort reason 改为 `'timeout'`；赋值 `QA_FLOAT_AC / QA_FLOAT_TO`。
+  - `qaTryStreamOrJson` / `qaStreamPump` catch：识别 `'user-cancel'` 后只 reset，不走兜底。
+  - `qaFinishAnswer`：末尾统一 `qaFloatResetBusy()`。
+  - tab IIFE 内：加 `mdQaBack()` 并绑定 `window.qaFloatBack`；`activateTab('qa', true)` 已打开时走 `mdQaBack()`。
+
+### 23.5 测试与验证
+
+- `test_mobile_ux_batch.js` §⑮ +3 条断言：
+  - 返回按钮 onclick 调 `qaFloatBack`。
+  - 源码含 `innerWidth>768` 才 focus。
+  - 从首页进 AI 搜后点返回，底部 tab 回到首页且恢复顶部分类栏。
+- 总断言数从 157 升到 **160**（0 失败）。
+- 回归：`test_mobile_opt_20260910.js` 37/0、`test_smoke_0908.js` 74/0、`test_qa_navtab_20260910.js` 18/0、`preflight_check.py --fail-on-error`、 `node --check app.js` 均通过。
+
+### 23.6 红线（不得回退）
+
+- 手机打开 AI 搜面板**不得**自动 `input.focus()` 弹键盘。
+- AI 回答按钮在请求中必须变为可点的「取消」，且点取消后**不得**再渲染本地兜底答案或继续显示「思考中…」。
+- 手机窄屏顶栏 `‹ 返回` 必须回到**打开 AI 搜之前的内容 tab**（首页/价格/矿权），并恢复对应品牌与分类栏状态；不得停留在 AI 搜高亮。
+

@@ -334,7 +334,19 @@ setTimeout(() => {
   // ---- 顶栏 DOM 结构 ----
   var _back = doc.querySelector('#qaFloat .qa-back');
   check('顶栏 ‹ 返回键已注入 DOM', !!_back);
-  check('‹ 返回键承载返回语义（onclick 调 qaFloatToggle）', !!_back && /qaFloatToggle/.test(_back.getAttribute('onclick') || ''));
+  check('‹ 返回键承载返回语义（onclick 调 qaFloatBack）', !!_back && /qaFloatBack/.test(_back.getAttribute('onclick') || ''));
+  check('首次打开手机 AI 搜面板不自动聚焦输入框（源码含 innerWidth>768 才 focus）',
+        /if\(i&&window\.innerWidth>768\)setTimeout\(function\(\)\{i\.focus\(\);\},80\)/.test(html));
+  // 行为：从首页进 AI 搜，点返回应回到首页，而不是继续停在 AI 搜
+  function activeGo(){ var b=doc.querySelector('#mobileTabBar .mtab.active'); return b?b.getAttribute('data-go'):null; }
+  function clickGo(go){ var b=doc.querySelector('#mobileTabBar .mtab[data-go="'+go+'"]'); if(b) b.dispatchEvent(new window.Event('click',{bubbles:true})); }
+  clickGo('home');
+  var _beforeGo = activeGo()||'home';
+  clickGo('qa');
+  check('点 AI 搜 tab 打开面板并高亮 qa', _panel.classList.contains('open') && activeGo()==='qa');
+  if(_back){ try{ _back.click(); }catch(e){} }
+  check('点返回后回到之前的内容 tab（且恢复顶部分类栏）', activeGo()===_beforeGo && !doc.body.classList.contains('md-hide-catbar'),
+        'before=' + _beforeGo + ' after=' + activeGo() + ' catbarHidden=' + doc.body.classList.contains('md-hide-catbar'));
   var _menu = doc.getElementById('qaHeadMenu');
   var _menuList = doc.getElementById('qaHeadMenuList');
   check('顶栏 ⋯ 菜单键已注入（id=qaHeadMenu）', !!_menu);
