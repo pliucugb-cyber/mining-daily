@@ -662,3 +662,134 @@ jsdom **不评估 `@media`**，响应式必须用真实 Chrome。探针 `tmp/rvp
 - 真实 Chrome 探针 **25 条全绿**（`%TEMP%\md_rvprobe.py`）；
 - 全量回归 **12 项零失败**；补跑 `test_ux_20260910`(41) / `test_view_switch`(22) / `test_p2_20260910`(30) / `test_p02_visibility`(19) / `test_qa_features`(56) / `test_perf_appjs_20260910`(14) / `test_fav_history_aggregate`(29) 均零失败；
 - `preflight_check.py` 全绿，build `20260912-1105`。
+---
+
+## §18 P0 真 bug 修复：app.js 自愈信标回到末行（2026-09-12 11:2x，build `20260912-1120`）
+
+### 18.1 先说结论：P0 清单里那"三个真 bug"，只有一条是真的
+
+P0 清单的"已知三个真 bug"抄自 **§11.3**，而 §11.3 的标题写着"待用户拍板" ——
+但其中**两条已在当天更晚的 §12 / §13 就地解决**。逐条实测复核（真实 Chrome 探针
+`%TEMP%\md_probe_mobile.py`，390/360/320 三档视口）：
+
+| §11.3 项 | 现状 | 实测证据 |
+|---|---|---|
+| ① 顶栏搜索按钮恒 `display:none` → 首页检索条无入口 | **已修**（§13，build 0907） | `#mdSearchBtn=已移除`；样式表内 `.md-search-btn` 规则数 **0**；面板标题 `🔍 AI 搜 · 检索与问答` |
+| ② ≤360px 品牌行日期被截断 | **已修**（§12.2，build 0852） | 三档视口 `date` `scrollW=127` 且无 `<<< 被截断` 标记；品牌行 `scrollW==clientW` 无溢出；320px 亦完整显示 |
+| ③「问」tab 常驻品牌色 | **不是 bug，是既定设计** | `test_mobile_ux_batch.js:77` 断言 `.mtab[data-go="qa"]{color:var(--brand)}` **必须存在**（该段标题「与其它 tab 一致的平铺样式，无渐变/发光/脉冲」）。动它才是破坏决议 |
+
+**教训（同类第二次）：** 提改进 / 修 bug 前不能只读"待办清单"小节，必须回查其后是否已有小节把它解决。
+本次犯了同样的错 —— 只读 §11.3 就下了"三个 bug 全未修"的结论，险些把已修项与既定设计当活干。
+
+### 18.2 真正发现并修掉的 bug：自愈信标被挤出 app.js 末行
+
+- **现象**：`test_ready_state_tdz.js` **13 PASS / 1 FAIL**，唯一红项＝结构断言「app.js 末行是「求值完成」信标」。
+  实测末非空行是 `try{ if(typeof window.mdSyncBanner==='function') window.mdSyncBanner(); }catch(e){}`，
+  信标 `window.__mdAppEvaluated=true;` 在其**之前**（第 5259 行 / 共 5264 行）。
+- **为什么算 bug**：信标在末行 ⟺「信标存在」可判定「脚本完整求值到底」。
+  §9.1 与 06:00/08:00 prompt 红线写的都是「app.js **末行** `__mdAppEvaluated=true`」——
+  末行之后仍有顶层语句时该判定失效：后置语句若中断，信标已在，会被误读成"跑完了"。
+  这是 09-10 / 09-11 三轮事故唯一的线上可观测手段，不能退化。
+- **约束冲突**：`mdSyncBanner()` 又**必须**在 `__mdAppEvaluated === true` 之后调用
+  （`mdDegraded()` 见 `false` 会误判"app 未执行"而挂红条）。同步写法下两条需求互斥。
+- **解法（用本项目既有写法）**：把横幅同步延到本轮求值之后 —— `index.html:1718` 的看门狗本就是
+  `setTimeout(mdSyncBanner,0)`。定时器在本轮脚本求值结束后才触发，届时信标已为 `true`：
+
+  ```js
+  // 横幅同步（延后；与 index.html 看门狗同款写法）
+  setTimeout(function(){ try{ if(typeof window.mdSyncBanner==='function') window.mdSyncBanner(); }catch(e){} },0);
+  // 「求值完成」信标 —— 必须留在本文件最后一行
+  window.__mdAppEvaluated=true;
+  ```
+
+- `mdSyncBanner` 全仓库**仅此一处调用**；另有 `index.html:1952-1953` 的 12s/16s/20s/26s/34s/44s/60s
+  定时轮次兜底，延后 0ms 无副作用。
+
+### 18.3 改动清单
+
+| 文件 | 改动 | diff | 行尾 |
+|---|---|---|---|
+| `app.js` | 末段重排：横幅同步改 `setTimeout(...,0)` 并**前置**，信标回到末行 | +6/−4 | LF |
+| `index.html` | `build-version` `20260912-1105` → `20260912-1120` | 1/1 | CRLF |
+| `sw.js` | `CACHE_NAME` → `mining-daily-20260912-1120` | 1/1 | CRLF |
+
+### 18.4 本轮踩到的工具坑（重要，会再遇到）
+
+**别用「二进制读入 → decode → 改 → `replace('\n','\r\n')` 写回」去改 CRLF 文件 —— 会把 `\r\n` 变成 `\r\r\n`。**
+
+- 现象：`index.html` 出现 **2350/2350**、`sw.js` **201/201** 的整文件假 diff；实测 `raw.count(b'\r\r\n')` = 2350 / 201。
+- 根因：`open(...,'rb').read().decode('utf-8')` 得到的文本**保留 `\r\n`**，再统一 `replace('\n','\r\n')`
+  等于给每个已有的 CR 又加了一个 CR。
+- **对策（本次采用）**：只做**字节级**替换 —— 不 decode、不碰行尾，直接
+  `raw.replace(b'content="OLD"', b'content="NEW"')`，并断言 `len(out)==len(raw)`、`out.count(b'\r\r\n')==0`。
+  结果 diff 收敛到 1/1。
+- **推论**：本机 `core.autocrlf=true`（无 `.gitattributes`），行尾失真的 diff 会以"整文件重写"形态出现。
+  **改完任何 CRLF 文件，先 `git diff --numstat` 看行数** —— 比读内容更快抓到事故。
+- `app.js` 是纯 LF（`LF==5265`、`CRLF==0`），同一脚本对它无害，所以当时没立刻暴露。
+- 另：断言"信标前 3 行都是含「信标」的注释"是错的 —— 只有首行含该词；写断言时要按**实际**内容，别按想象。
+- 另：断言文件结尾空白行也要按**实际**（本文件是「信标 + 单个换行」），别想当然写成两个空行。
+
+### 18.5 测试与闸门
+
+- `test_ready_state_tdz.js` **14 PASS / 0 FAIL**（原 13/1）
+- `preflight_check.py` **全绿**（build `20260912-1120`、`CACHE_NAME` 一致、div 收支平衡、`sw.js` 语法 OK）
+- 全量回归 **`=== FAILED: none`** —— **本项目首次全套零失败**（此前 `test_ready_state_tdz` 是唯一长期红项，
+  §9.3 曾把它记为"既有失败"；该记录作废）
+- **未推送、未部署**：改动留在工作区（`git status -s` 仅 `M app.js` / `M index.html` / `M sw.js`），
+  待用户批准后走 `deploy_pages.py`（`~/.ssh` 越权需批准，见技能 `ssh-push-under-sandbox`）。
+
+
+---
+
+## §19 矿权列表排序（把「点列头排序」落地，2026-09-12 11:3x，build `20260912-1140`）
+
+### 19.1 起因：同一段里的三处死代码
+
+`app.js` 的 `rightsSort`（`{key,dir}` + sort 分支）早已存在，但**没有任何 UI 能设置它**；
+同段渲染里另有两处死代码：`mineral` 排序分支（无入口）与 `var mineralHtml=`（算出来从未拼进模板），
+外加一个只算不用的 `numTxt`（`var numTxt=""; if...` 之后未出现在返回串里）。本轮全部处置：前者接上 UI，后三者删除。
+
+### 19.2 落地形态：排序 chip 组，而不是「与列严格对齐的表头」
+
+列表行是 `display:flex`，右端两列（金额/截止期）都是**内容撑宽的 pill**——做成等宽列头在宽屏下必然错位。
+故采用 `.rights-cols` 排序条：
+
+| 元素 | 说明 |
+|---|---|
+| `.rights-cols` | 列表容器**第一个子元素**（由 `renderRightsSection` 注入 innerHTML）；基础 `display:none`，仅 `@media(min-width:769px)` + `#rightsCards:not(.rv-cards)` 时 `display:flex` |
+| `.rc-sort` ×3 | `data-sk=""`（默认·紧迫度）/ `"deadline"`（到期日）/ `"price"`（成交价）；激活态 `.is-on` + `aria-pressed`，激活时按钮文案带 `↑`/`↓` |
+| `.rc-sort-hint` | 右端「共 N 宗」（N = 筛选后全量，不是折叠后可见条数） |
+| `.rr-amount` | 行内金额列；基础 `display:none`，同样只在桌面列表态 `inline-block` |
+
+### 19.3 交互与口径（三条硬约定）
+
+1. **三态循环**：点同一维度 = 升↔降反转；点另一维度 = 切换并给「最有用的首个方向」
+   （成交价 → `desc` 先看最值钱的；到期日 → `asc` 先看最紧迫的）；点「默认·紧迫度」= `key=null` 复位。
+2. **缺值恒沉底**：`price`/`deadline` 为 `null` 的条目在**任何方向**都排最后
+   （旧代码用 `-1` 哨兵，升序时「没有金额」会窜到最前；已改）。
+3. **排序状态不写 localStorage**（不存在 `mdRightsSort`）：刷新即回默认紧迫度——
+   `.rights-note` 对读者承诺的就是「按紧迫度排序」，持久化会让文案与实际不符。
+   视图偏好 `mdRightsView` 仍持久化，二者不同。
+
+### 19.4 必须与之一致的三处（改坏了会静默错位/错序）
+
+- **排序值 = 显示值**：`.rr-amount` 用 `r.price`（`parseRights` 已按类型归一：结果公示取成交价、其余取起始价），
+  与「按成交价排序」的取值**同源**，防止「列里显示一个数、排序按另一个数」。
+- **事件委托**：排序 chip 在 innerHTML 里，每次重渲染都会重建 → 监听绑在 `#rightsCards` 容器上
+  （`bindRightsSort`，`__rsBound` 防重），不绑子按钮。**测试同理**：点完 chip 必须重新 `querySelector` 取按钮，
+  旧引用已脱离 DOM（本轮踩过：3 条断言假 FAIL，数据其实全对）。
+- **排序走 `renderRightsSection()`**：它改变行的顺序与集合，必须重渲染；
+  只有视图切换（卡片/列表）才「只改类名、不重渲染」。
+
+### 19.5 红线
+
+- 排序条是**合法形态**，不得当「回退」删除；`#rightsTable` / `.rights-view-btn` / `.rights-card` 禁令不变。
+- 手机端恒为卡片，`.rights-cols` 与 `.rr-amount` 在 ≤768px 不得出现（基础 `display:none` 兜住）。
+
+### 19.6 验证
+
+- `test_smoke_0908.js` ⑨ 段 8 → **17 条**（总 65 → **74**）：排序条在位 / 3 chip / 默认激活 / 金额列随行 /
+  点成交价降序且缺值沉底 / 再点反向 / 切维度 / 复位 / 不写 localStorage / CSS 契约。
+- 真实 Chrome 探针（`tmp/rvprobe.html` + `%TEMP%\md_rvprobe.py`，新增 `listprice`/`listdeadline` 两用例）
+  **41 条断言全绿**，含真机证据「点成交价 → 首行金额 8365 = 全集最大值」。
+- 全量回归 12 项零失败；补跑 10 项零失败；`preflight_check.py` 全绿。

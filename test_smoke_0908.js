@@ -280,6 +280,47 @@ setTimeout(() => {
     /#rightsCards:not\(\.rv-cards\) \.rr-due\{display:inline-block\}/.test(html)
     && /@media\(max-width:768px\)\{\.rights-views\{display:none\}\}/.test(html));
 
+  // 列表排序条（2026-09-12：把原本无入口的死代码 rightsSort 接上）
+  const cols9 = rc9 ? rc9.querySelector('.rights-cols') : null;
+  const sortBtns = rc9 ? rc9.querySelectorAll('.rc-sort') : [];
+  check('⑨ 列表排序条在位（默认/到期日/成交价 三个 chip）', !!cols9 && sortBtns.length === 3, 'chips=' + sortBtns.length);
+  check('⑨ 默认激活「默认·紧迫度」chip',
+    !!rc9.querySelector('.rc-sort[data-sk=""].is-on') && !rc9.querySelector('.rc-sort.is-on[data-sk="price"]'));
+  const amtEls = () => rc9.querySelectorAll('.rights-row .rr-amount');
+  check('⑨ 金额列 .rr-amount 随行渲染', amtEls().length === dueRows, 'amount=' + amtEls().length + ' rows=' + dueRows);
+  const amtNums = () => [...amtEls()].map(el => el.classList.contains('na') ? null : parseFloat((el.textContent || '').replace(/[^\d.]/g, '')));
+  // 注意：点 chip 会 renderRightsSection() 重建 innerHTML，旧节点引用会脱离 DOM——每次点击后重新查询。
+  const sortBtn = (sk) => rc9.querySelector('.rc-sort[data-sk="' + sk + '"]');
+  const clickSort = (sk) => { const b = sortBtn(sk); b.dispatchEvent(new window.Event('click', { bubbles: true })); };
+  try {
+    clickSort('price');
+    const d1 = amtNums(); const nn1 = d1.filter(v => v != null);
+    const desc = nn1.every((v, i) => i === 0 || nn1[i - 1] >= v);
+    const nullTail = d1.slice(nn1.length).every(v => v == null);
+    check('⑨ 点「成交价」→ 按金额降序、缺值沉底',
+      sortBtn('price').classList.contains('is-on') && desc && nullTail,
+      'n=' + nn1.length + ' 降序=' + desc + ' 沉底=' + nullTail);
+    clickSort('price');
+    const nn2 = amtNums().filter(v => v != null);
+    const asc = nn2.every((v, i) => i === 0 || nn2[i - 1] <= v);
+    check('⑨ 再点「成交价」→ 反向为升序（按钮带方向箭头）',
+      asc && /[↑↓]/.test(sortBtn('price').textContent),
+      '升序=' + asc + ' 文案=' + (sortBtn('price').textContent || '').trim());
+    clickSort('deadline');
+    check('⑨ 点「到期日」→ 切换维度（按截止日升序）',
+      sortBtn('deadline').classList.contains('is-on') && !sortBtn('price').classList.contains('is-on'));
+    clickSort('');
+    check('⑨ 点「默认·紧迫度」→ 排序复位',
+      sortBtn('').classList.contains('is-on') && !sortBtn('deadline').classList.contains('is-on')
+      && !sortBtn('price').classList.contains('is-on'));
+    check('⑨ 排序状态不写 localStorage（刷新即回默认紧迫度）',
+      !doc.defaultView.localStorage.getItem('mdRightsSort'));
+  } catch (e) { check('⑨ 排序交互（点 chip 重排 / 反向 / 复位）', false, e.message); }
+  check('⑨ CSS：列表态开排序条与金额列、默认隐藏',
+    /#rightsCards:not\(\.rv-cards\) \.rights-cols\{display:flex\}/.test(html)
+    && /#rightsCards:not\(\.rv-cards\) \.rr-amount\{display:inline-block\}/.test(html)
+    && /\.rights-cols\{display:none/.test(html));
+
   console.log('\n===== ⑩ 计数口径一致（2026-09-08 深夜） =====');
   // 子分类「N条新增」原是生成脚本写死的静态值，会展条目被收纳/旧闻降级后不再更新，
   // 出现「3+16+13=32」与顶部「28 今日新增」对不上。现由 syncSubCounts() 按 DOM 重算。
