@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-2359" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260913-0031" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -1745,20 +1745,40 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   /* ⑧「我的」独立页：安装到主屏幕卡片（替代原无反应的「安装到桌面」按钮） */
   #mineInstallCard{border:1px solid var(--line-2);border-radius:var(--r-lg);padding:var(--s3);background:var(--surface-2)}
   #mineInstallCard .mine-install-title{font-weight:600;color:var(--ink-900);font-size:var(--fs-body);margin-bottom:4px}
-  #mineInstallCard .mine-install-note{font-size:var(--fs-meta);color:var(--ink-500);line-height:1.5}
+  #mineInstallCard .mine-install-note{font-size:var(--fs-meta);color:var(--ink-500);line-height:1.8;margin-top:4px}
   #mineInstallCard .mine-install-btn{margin-top:var(--s2);border:none;background:var(--brand);color:#fff;border-radius:var(--r-md);padding:var(--s2) var(--s4);font-size:var(--fs-meta);font-weight:600;cursor:pointer}
+  /* 动作词走主题色、菜单符号做成小药丸 —— 用颜色和符号分层，少写长句
+     （2026-09-12 用户要求：「是不是也可以用不同的颜色字体作为区分」）。 */
+  #mineInstallCard b{color:var(--brand-ink);font-weight:600}
+  #mineInstallCard code{font-family:var(--font-num);font-size:.94em;border:1px solid var(--line-1);border-radius:4px;padding:0 5px;color:var(--ink-900);white-space:nowrap}
   /* 2026-09-12：安装失败排障（装不上时给出可执行的两步，而不是让用户反复试） */
-  #mineInstallCard .mine-install-warn{margin-top:var(--s2);font-size:var(--fs-meta);color:var(--warning);line-height:1.5}
-  #mineInstallCard .mine-install-help{margin-top:var(--s2);border:none;background:none;padding:0;color:var(--brand);font-size:var(--fs-meta);cursor:pointer;text-decoration:underline}
-  #mineInstallCard .mine-install-helpbody{margin-top:var(--s2);font-size:var(--fs-meta);color:var(--ink-500);line-height:1.6}
-  /* 2026-09-12：安装引导正文改为分步排版（p/ul/li）—— 手机屏上必须有明确层级，一坨文字没人看 */
-  #mineInstallCard .mine-install-helpbody p{margin:0 0 6px}
-  #mineInstallCard .mine-install-helpbody p.h{margin:10px 0 4px;font-weight:700;color:var(--ink-900);font-size:var(--fs-meta)}
-  #mineInstallCard .mine-install-helpbody p.h:first-child{margin-top:0}
-  #mineInstallCard .mine-install-helpbody ul{margin:0 0 6px;padding-left:16px;list-style:disc}
-  #mineInstallCard .mine-install-helpbody li{margin:3px 0;line-height:1.55}
-  #mineInstallCard .mine-install-helpbody li.on{color:var(--ink-900)}
-  #mineInstallCard .mine-install-helpbody li.on .tag{color:var(--brand);font-weight:600}
+  #mineInstallCard .mine-install-warn{margin-top:var(--s2);font-size:var(--fs-meta);color:var(--warning);line-height:1.75}
+  #mineInstallCard .mine-install-warn b{color:var(--warning)}
+  #mineInstallCard .mine-install-help{margin-top:var(--s3);border:none;background:none;padding:0;color:var(--brand);font-size:var(--fs-meta);cursor:pointer;text-decoration:underline}
+  /* —— 安装帮助正文：2026-09-12 第三轮排版重做（用户反馈「文字太多、读起来压力大」）——
+     ① 行高 1.6 → 1.9；② 顶部只留一条「你该怎么做」的行动卡（识别到浏览器就给那一条）；
+     ③ 对照表与常见问题收进 <details> 折叠，默认收起；④ 层次靠颜色和符号，不靠长句。
+     底色刻意不用 —— 暗色主题下卡片本身就是 var(--surface-3)，叠同色底会看不见。 */
+  #mineInstallCard .mine-install-helpbody{margin-top:var(--s3);font-size:var(--fs-meta);color:var(--ink-500);line-height:1.9}
+  #mineInstallCard .mine-install-helpbody p{margin:0 0 8px}
+  #mineInstallCard .pwa-hero{border-left:3px solid var(--brand);padding:2px 0 2px 12px;margin:0 0 4px}
+  #mineInstallCard .pwa-hero.warn{border-left-color:var(--warning)}
+  #mineInstallCard .pwa-hero-tag{font-size:var(--fs-nano);font-weight:700;color:var(--brand);letter-spacing:.04em;margin-bottom:6px}
+  #mineInstallCard .pwa-hero.warn .pwa-hero-tag{color:var(--warning)}
+  #mineInstallCard .pwa-hero-body{font-size:var(--fs-body);color:var(--ink-900);line-height:1.9}
+  #mineInstallCard .pwa-hero-sub{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line-1);font-size:var(--fs-nano);color:var(--ink-500);line-height:1.8}
+  #mineInstallCard .pwa-fold{margin:12px 0 0;border-top:1px dashed var(--line-1);padding-top:10px}
+  #mineInstallCard .pwa-fold summary{cursor:pointer;color:var(--brand);font-weight:600;line-height:1.8;list-style:none}
+  #mineInstallCard .pwa-fold summary::-webkit-details-marker{display:none}
+  #mineInstallCard .pwa-fold summary::before{content:'▸ ';font-size:.85em}
+  #mineInstallCard .pwa-fold[open] summary::before{content:'▾ '}
+  #mineInstallCard .pwa-fold[open] summary{margin-bottom:10px}
+  #mineInstallCard .pwa-list{margin:0;padding:0;list-style:none}
+  #mineInstallCard .pwa-row{padding:9px 0;border-bottom:1px dashed var(--line-1);line-height:1.85}
+  #mineInstallCard .pwa-row:last-child{border-bottom:none;padding-bottom:2px}
+  #mineInstallCard .pwa-row-name{display:block;color:var(--ink-900);font-weight:600;margin-bottom:3px}
+  #mineInstallCard .pwa-faq .h{margin:12px 0 5px;font-weight:700;color:var(--ink-900);font-size:var(--fs-meta)}
+  #mineInstallCard .pwa-faq .h:first-child{margin-top:0}
   #mineInstallCard .mine-install-diag{margin-top:var(--s2);padding:var(--s2);border-radius:var(--r-sm);background:var(--surface-3);font-family:var(--font-num);font-size:var(--fs-nano);color:var(--ink-500);line-height:1.7}
   body.dark #mineInstallCard{background:var(--surface-3);border-color:var(--line-1)}
 }
@@ -2518,7 +2538,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=40a91489" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=06f1e527" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=8b0561a7" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
