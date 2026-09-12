@@ -2489,19 +2489,14 @@ function mdMarkArchiveDups(){
     });
   }catch(e){}
 }
-// 顶部搜索图标：定位到推荐页资讯检索条并展开筛选 chip
-function mdOpenSearch(){
-  document.body.classList.remove('md-top-hidden');
-  if(document.body.getAttribute('data-md-cat')!=='tuijian'){ mdSelectCat('tuijian'); }
-  var bar=document.getElementById('newsFilterBar');
-  if(bar){
-    var open=document.body.classList.toggle('md-search-open');
-    if(open){
-      var chips=document.getElementById('nfChips'); if(chips) chips.classList.add('show');
-      var s=document.getElementById('nfSearch'); if(s){ try{ s.focus(); }catch(e){} }
-    }
-  }
-}
+// 2026-09-12 检索统一（用户定夺）：mdOpenSearch() 已删除。
+//   它原是顶栏搜索按钮（#mdSearchBtn）的唯一调用点，用于展开首页那条移动端浮层检索条
+//   （#newsFilterBar + body.md-search-open）。而 #mdSearchBtn 恒为 display:none ——
+//   index.html 顶层 .md-search-btn{display:none} 与 @media 内的 display:inline-flex
+//   同特异性、源码顺序靠后者胜，移动端从未显示过该按钮，故该函数从未被触发，属死代码。
+//   按用户决定，检索能力统一由底部「AI 搜」面板承载
+//   （#qaFloat：矿种/主题/时间筛选 + 检索 + AI 问答），顶栏不再保留搜索入口。
+//   注：body.md-search-open 的类操作（mdSelectCat / nfClear 中）保留 —— 删去会留死调用，且无害。
 
 // 顶栏收藏/历史红点（2026-09-12 退役）
 // 用户要求精简顶栏：收藏/历史两个常驻圆钮已从顶栏移除，其上的未读红点随之退役，
@@ -2530,10 +2525,10 @@ function mdMobileTopTabs(){
   var dateTxt='';
   try{ var d=document.querySelector('.date-badge'); if(d) dateTxt=d.textContent.trim(); }catch(e){}
   var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期'],['meeting','会议']];
-  var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业新闻日报</span><span class="md-date">'+dateTxt+'</span>'
-    +'<button class="md-search-btn" id="mdSearchBtn" type="button" aria-label="搜索新闻">'
-    +'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
-    +'</button></div><div class="md-cat-bar" role="tablist" aria-label="内容分类">';
+  // 2026-09-12 检索统一（用户定夺）：顶栏不再注入搜索按钮 —— 原 #mdSearchBtn 恒不可见（见上方 mdOpenSearch 注释），
+  //   是死控件。检索能力统一收进底部「AI 搜」tab 打开的面板，顶栏保持「品牌名 + 日期」的干净两栏。
+  var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业新闻日报</span><span class="md-date">'+dateTxt+'</span></div>'
+    +'<div class="md-cat-bar" role="tablist" aria-label="内容分类">';
   for(var i=0;i<cats.length;i++){ html+='<button class="mctab" role="tab" data-cat="'+cats[i][0]+'">'+cats[i][1]+'</button>'; }
   html+='</div>';
   top.innerHTML=html;
@@ -2546,8 +2541,6 @@ function mdMobileTopTabs(){
     mdSelectCat(b.getAttribute('data-cat'));
     try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); }
   });
-  var sb=document.getElementById('mdSearchBtn');
-  if(sb) sb.addEventListener('click', mdOpenSearch);
   mdUpdateFavBadges();
   document.addEventListener('click',function(e){ if(e.target.closest && (e.target.closest('.btn-star')||e.target.closest('.news-title'))){ setTimeout(mdUpdateFavBadges,0); } });
   if(window.addEventListener) window.addEventListener('storage', mdUpdateFavBadges);
@@ -2556,9 +2549,10 @@ function mdMobileTopTabs(){
 }
 
 // 底部 5 主导航 Tab（首页/价格/AI 搜/矿权/我的，内联 SVG 图标）
-// 2026-09-12 修正过时注释：原写「AI 改回右下悬浮球，搜索提到顶栏」，但实测 #qaFab 在移动端
-//   display:none（index.html:1471 覆盖 :724），顶部搜索按钮也恒为 display:none（:1484 顶层规则
-//   覆盖 :1458 的 @media 规则，同特异性后者胜）→「AI 搜」tab 实为移动端唯一检索入口。
+// 2026-09-12 检索统一（用户定夺）：本 tab（打开 #qaFloat 面板）是移动端检索能力的唯一入口。
+//   #qaFab 移动端 display:none（媒体查询内 #qaFab{display:none!important}）；
+//   原顶栏搜索按钮因顶层 .md-search-btn{display:none} 恒不可见，已连同 mdOpenSearch() 一并移除。
+//   面板内检索闭环：矿种/主题/时间三个筛选器 + 「检索」（全库关键词）+「AI」（读新闻后作答）。
 function mdMobileTabBar(){
   if(document.getElementById('mobileTabBar')) return;
   var SVG_HOME='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h4v-5h4v5h4v-9"/></svg>';

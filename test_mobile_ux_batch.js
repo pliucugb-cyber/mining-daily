@@ -158,20 +158,25 @@ setTimeout(() => {
   check('切回首页 tab → 恢复显示顶部分类栏', !doc.body.classList.contains('md-hide-catbar'));
   check('切回首页后 body[data-md-cat=tuijian]', doc.body.getAttribute('data-md-cat') === 'tuijian');
 
-  console.log('\n===== ⑫ 底部导航增强：记住 tab + 品牌行 tab 名 + 非首页隐藏搜索（2026-09-11 优化①②③）=====');
+  console.log('\n===== ⑫ 底部导航增强：记住 tab + 品牌行 tab 名 + 检索统一进「AI 搜」面板（2026-09-11 优化①②③ / 09-12 决议）=====');
   function brandText(){ var b=doc.querySelector('#mdTop .md-brand'); return b?b.textContent:''; }
   function lsGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
   clickGo('price');
   check('① 点价格 → 持久化 md_last_tab=price', lsGet('md_last_tab')==='price');
   check('③ 点价格 → 品牌行显示「价格」', brandText()==='价格', '实际「'+brandText()+'」');
-  check('② 非首页隐藏搜索图标 CSS 规则存在', /body\.md-hide-catbar #mdSearchBtn\{display:none\}/.test(html));
+  // 2026-09-12 检索统一（用户定夺）：顶栏搜索按钮已整体移除（DOM/绑定/mdOpenSearch/CSS 全清），
+  //   检索能力统一由底部「AI 搜」面板承载 → 断言翻转为「必须不存在」。
+  //   注意用 ^[ \t]* 锚定规则体行首，避开注释里提到的 .md-search-btn（曾两次踩到"匹配到注释"的坑）。
+  check('② 顶栏搜索按钮 CSS 已清除（检索统一进「AI 搜」面板）', !/^[ \t]*\.md-search-btn\s*\{/m.test(html));
   check('③ 非首页隐藏日期 CSS 规则存在', /body\.md-hide-catbar \.md-date\{display:none\}/.test(html));
   clickGo('rights');
   check('③ 点矿权 → 品牌行显示「矿权」', brandText()==='矿权', '实际「'+brandText()+'」');
   clickGo('home');
   check('③ 回首页 → 品牌行恢复含「矿业新闻日报」', brandText().indexOf('矿业新闻日报')>=0, '实际「'+brandText()+'」');
   check('① 回首页 → md_last_tab=home', lsGet('md_last_tab')==='home');
-  check('② 搜索按钮结构仍在（display:none 由 CSS 控制）', !!doc.getElementById('mdSearchBtn'));
+  check('② 顶栏搜索按钮已从 DOM 移除', !doc.getElementById('mdSearchBtn'));
+  check('② 未残留 md-search-open 生效规则', !/^[ \t]*body\.md-search-open\b/m.test(html));
+  check('② 桌面检索条 #newsFilterBar 在移动端仍隐藏', /#newsFilterBar\{position:fixed/.test(html) && /#newsFilterBar\{position:fixed[^}]*display:none/.test(html));
 
   console.log('\n===== ⑬ 刷新红条误报修复：启动宽限期内不报整页降级（2026-09-11 体验修复）=====');
   check('mdDegraded 是函数', typeof window.mdDegraded === 'function');
