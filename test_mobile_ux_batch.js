@@ -499,6 +499,33 @@ setTimeout(() => {
         _syncOk && _tH==='浏览记录' && _cH!=='none' && _cH!=='' && _tF==='我的收藏' && (_cF==='none'||_cF===''),
         'tH='+_tH+' cH='+_cH+' tF='+_tF+' cF='+_cF);
 
+  // ⑦⑧⑨ 插画化空态（2026-09-12 续）：fav/history 为空时呈现 SVG 插画 + 引导按钮
+  let _emptyOk=false,_eTitle='',_hasArt=false,_hasCta=false,_ctaAct='';
+  try{
+    if(typeof window.setFilter==='function'){
+      window.setFilter('fav');
+      var _list=doc.getElementById('archFavList');
+      var _art=_list?_list.querySelector('.empty-art'):null;
+      var _ti=_list?_list.querySelector('.empty-title'):null;
+      var _cta=_list?_list.querySelector('.empty-cta'):null;
+      _eTitle=_ti?_ti.textContent:'';
+      _hasArt=!!_art;
+      _hasCta=!!_cta;
+      _ctaAct=_cta?(_cta.getAttribute('data-act')||''):'';
+      window.setFilter('none');
+      _emptyOk=true;
+    }
+  }catch(e){ _emptyOk=false; }
+  check('⑦ 插画化空态：fav 为空渲染 SVG 插画(.empty-art)+标题「还没有收藏」+引导按钮(.empty-cta→fav-back)',
+        _emptyOk && _hasArt && _eTitle==='还没有收藏' && _hasCta && _ctaAct==='fav-back',
+        'art='+_hasArt+' title='+_eTitle+' cta='+_hasCta+' act='+_ctaAct);
+  check('⑧ 插画化空态源码：.empty-art/.empty-cta/两套 SVG(星标+时钟)均已内置',
+        html.includes('class="empty-art"') && html.includes('empty-cta') && html.includes('还没有收藏') && html.includes('还没有浏览记录') && html.includes('viewBox="0 0 128 128"'),
+        '');
+  check('⑨ 空态样式：.empty-art/.empty-cta 已在 index.html 定义',
+        /\.aggregate-empty \.empty-art\{/.test(html) && /\.aggregate-empty \.empty-cta\{/.test(html),
+        '');
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));

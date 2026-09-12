@@ -1227,3 +1227,26 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 ### 25.5 测试与验证
 - `test_mobile_ux_batch.js` §⑱ 新增 6 条（源码级 + 运行时进入 history/fav 校验标题与清空显隐）。总断言 166 → **172**（0 失败）。
 - 回归：`test_mobile_opt_20260910.js` 37/0、`test_smoke_0908.js` 74/0、`test_qa_navtab_20260910.js` 18/0、`node --check app.js` 干净。
+
+
+### 26 收藏/浏览记录「插画化空态」提示（2026-09-12 晚，build `20260912-1822`）
+### 26.1 背景
+§25 已让 fav/history 进入沉浸式视图，但**收藏为空 / 浏览记录为空**时，`renderFavHistoryAggregate(mode)` 仍只渲染一个 emoji（⭐/📋）+ 文案的朴素空态（`aggregate-empty`）。用户要求升级为「插画化空态提示」，让空状态更有引导性、与整体视觉风格统一。
+### 26.2 方案
+- 空态不再用 emoji，改为**内联 SVG 插画**（128×128，`viewBox="0 0 128 128"`）：
+  - 收藏：虚线空卡片 + 品牌色实心星标 `#0e7490` + 两颗浅蓝星芒 `#38bdf8`（`_favArt`）。
+  - 浏览记录：品牌色时钟圆盘 + 指针 + 浅蓝秒针 + 虚线历史回环（neutral 描边用 `currentColor`，随主题在暗色下自动转亮）（`_histArt`）。
+- 结构：`.aggregate-empty` 内 = `.empty-art`(SVG) + `.empty-title` + `.empty-tip` + `.empty-cta`(引导按钮)。
+- 引导按钮 `.empty-cta`：「去首页看看」，复用 `data-act="fav-back"` → 全局委托 `setFilter('none')` 回首页内容 tab（不新增 handler，避免重复逻辑）。
+- 文案：「还没有收藏」/「还没有浏览记录」，tip 保留原操作说明（点 ★ 收藏 / 自动记录）。
+### 26.3 代码落点
+- index.html：`.aggregate-empty .empty-icon` 规则改为 `.empty-art`（128×128 居中）+ 新增 `.empty-tip` 限宽居中 + `.empty-cta` 按钮样式（含 `body.dark .empty-cta` 用 `#38bdf8` 浅蓝底深字，与 `.se-btn` 暗色一致）；`build-version`→`20260912-1822`。
+- app.js：`renderFavHistoryAggregate` 空态分支用 `_favArt`/`_histArt` 两段 SVG 字符串替换原 emoji，`list.innerHTML=emptyMsg` 不变。
+- sw.js：`CACHE_NAME` → `mining-daily-20260912-1822`。
+### 26.4 测试与验证
+- `test_mobile_ux_batch.js` §⑱ 新增 3 条（⑦ fav 空态渲染 `.empty-art`+标题「还没有收藏」+`.empty-cta`→fav-back；⑧ 两套 SVG 源码内置；⑨ `.empty-art/.empty-cta` 样式已在 index.html 定义）。总断言 172 → **175**（0 失败）。
+- 回归：`test_mobile_opt_20260910.js` 37/0、`test_smoke_0908.js` 74/0、`test_qa_navtab_20260910.js` 18/0、`node --check app.js` 干净、`preflight_check.py` 通过。
+### 26.5 红线（不得回退）
+- fav/history 空态**必须**是插画化（`.empty-art` SVG），不得退化回纯 emoji（`.empty-icon`）。
+- 引导按钮「去首页看看」必须复用 `data-act="fav-back"` 回首页，不得新增独立跳转逻辑。
+- SVG 中 neutral 描边用 `currentColor`（继承 `.aggregate-empty` 的 `var(--ink-500)`），**不得**写死浅灰，否则暗色下虚线/回环不可见。
