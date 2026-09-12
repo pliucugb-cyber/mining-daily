@@ -1,14 +1,17 @@
-// 简报两层化回归测试（2026-09-12）
+// 简报五节结构化渲染回归测试（2026-09-12，二次修订）
 //
 // 背景：用户反馈「某天新闻特别多时，今日简报把全部内容塞在首屏，太长了」。
-//   处置：不砍数据（§9.2 每节全量、单条不截断仍有效），改为两层呈现——
-//   要点层 highlights（3-5 条一句话，常驻）+ 完整层 brief_sections（五节全量，按需展开）。
-//   并附带：高异动前置行、节标题条数、条目点击定位到下方新闻卡片。
+//   首版做「要点层 highlights + 完整层 brief_sections」两层；用户随后指出要点层与下方
+//   「今日要闻」内容重复，要求移除 → 现为单一形态：五节结构化摘要 + 高度折叠
+//   （默认收起），内容一条不减（§9.2 每节全量、单条不截断仍有效）。
 //
 // 本测试覆盖三块：
 //   ① 数据契约（直接读 morning_report.json，不需要浏览器）
 //   ② 渲染行为（jsdom + 本地 http + fetch 桥接，因为 jsdom 不实现 fetch）
-//   ③ 回退路径（把 highlights/brief_sections 剥掉后必须退回旧的 report markdown 渲染）
+//   ③ 回退路径（把 brief_sections 剥掉后必须退回旧的 report markdown 渲染）
+//
+// ⚠️ jsdom 不做布局，scrollHeight 恒为 0，折叠判定会静默失效；故在 beforeParse 里把
+//    HTMLElement.prototype.scrollHeight 覆盖为定值，让折叠分支真实走一遍。
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
@@ -27,24 +30,7 @@ function skip(name, why) { console.log('  SKIP  ' + name + (why ? '  → ' + why
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // ==================== ① 数据契约 ====================
-console.log('===== ① 数据契约：highlights / brief_sections =====');
-
-const hls = REPORT.highlights;
-check('highlights 存在且为数组', Array.isArray(hls));
-check('要点条数在 3-5 条之间', Array.isArray(hls) && hls.length >= 3 && hls.length <= 5,
-  '实际 ' + (Array.isArray(hls) ? hls.length : 'N/A'));
-
-if (Array.isArray(hls)) {
-  check('每条要点都有非空 t', hls.every(h => h && typeof h.t === 'string' && h.t.trim().length > 0));
-  const tooLong = hls.filter(h => h && typeof h.t === 'string' && h.t.length > 56);
-  check('每条要点是「一句话」（≤56 字）', tooLong.length === 0,
-    tooLong.length ? '超长 ' + tooLong.length + ' 条，最长 ' + Math.max(...tooLong.map(h => h.t.length)) + ' 字' : '最长 ' + Math.max(...hls.map(h => (h.t || '').length)) + ' 字');
-  const withCat = hls.filter(h => h && typeof h.cat === 'string' && h.cat.trim());
-  check('要点均带分节标签 cat', withCat.length === hls.length, withCat.length + '/' + hls.length);
-  const badU = hls.filter(h => h.u && !/^https?:\/\//.test(h.u));
-  check('要点 u（若有）均为 http(s) 链接', badU.length === 0, badU.length ? '异常 ' + badU.length + ' 条' : '带链接 ' + hls.filter(h => h.u).length + ' 条');
-  check('要点结构里不残留内部字段 k', hls.every(h => !('k' in h)));
-}
+console.log('===== ① 数据契约：brief_sections / report =====');
 
 const bsec = REPORT.brief_sections;
 check('brief_sections 存在且为数组', Array.isArray(bsec));
@@ -60,9 +46,12 @@ if (Array.isArray(bsec)) {
   check('每条 item 的 t 非空', bsec.every(s => s.items.every(it => it && typeof it.t === 'string' && it.t.trim())));
   const total = bsec.reduce((n, s) => n + s.items.length, 0);
   const repBullets = String(REPORT.report || '').split('\n').filter(l => l.trim().startsWith('- ')).length;
-  check('完整层总条数 == report 的条目数', total === repBullets, total + ' vs ' + repBullets);
+  check('分节总条数 == report 的条目数', total === repBullets, total + ' vs ' + repBullets);
   const noName = bsec.filter(s => !['行情', '政策与产业', '勘查与技术', '并购与投资', '矿权市场'].includes(s.name));
   check('节名都在五节白名单内', noName.length === 0, noName.map(s => s.name).join(','));
+  const badU = bsec.filter(s => s.items.some(it => it.u && !/^https?:\/\//.test(it.u)));
+  check('item 的 u（若有）均为 http(s) 链接', badU.length === 0,
+    badU.length ? '异常 ' + badU.length + ' 节' : '带链接 ' + bsec.reduce((n, s) => n + s.items.filter(i => i.u).length, 0) + ' 条');
 }
 
 check('report 仍保留（兜底文本）', typeof REPORT.report === 'string' && REPORT.report.trim().length > 0,
@@ -70,15 +59,25 @@ check('report 仍保留（兜底文本）', typeof REPORT.report === 'string' &&
 check('stats/sections/top_news 未被破坏',
   !!REPORT.stats && !!REPORT.sections && Array.isArray(REPORT.top_news));
 
+// highlights：2026-09-12 二次修订后前端不再渲染。生成端可继续产出，但若产出则结构须合法。
+const hls = REPORT.highlights;
+if (Array.isArray(hls) && hls.length) {
+  check('highlights 仍产出且结构合法（前端当前不渲染，留待复用）',
+    hls.every(h => h && typeof h.t === 'string' && h.t.trim()) && hls.length <= 8,
+    hls.length + ' 条');
+} else {
+  skip('highlights 结构校验', '生成端已不产出该字段（前端本就不渲染，无影响）');
+}
+
 // ==================== ② / ③ 渲染 ====================
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8', '.png': 'image/png', '.css': 'text/css; charset=utf-8' };
 
-function makeServer(stripLayers) {
+function makeServer(stripSections) {
   return http.createServer((req, res) => {
     const u = new URL(req.url, 'http://127.0.0.1:' + PORT);
     const name = decodeURIComponent(u.pathname).replace(/^\/+/, '') || 'index.html';
-    if (name === 'morning_report.json' && stripLayers) {
+    if (name === 'morning_report.json' && stripSections) {
       const body = JSON.stringify(Object.assign({}, REPORT, { highlights: undefined, brief_sections: undefined }));
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(body);
@@ -103,10 +102,13 @@ function installFetch(win) {
   win.HTMLElement.prototype.scrollTo = function () {};
   win.scrollTo = function () {};
   win.HTMLElement.prototype.scrollIntoView = function () {};
+  // jsdom 不做布局：scrollHeight 恒为 0，会让「内容超高→默认收起」的分支静默不执行。
+  // 这里固定返回 900（> 420 阈值），保证折叠逻辑被真实覆盖。
+  Object.defineProperty(win.HTMLElement.prototype, 'scrollHeight', { configurable: true, get() { return 900; } });
 }
 
-async function loadPage(stripLayers) {
-  const server = makeServer(stripLayers);
+async function loadPage(stripSections) {
+  const server = makeServer(stripSections);
   await new Promise(r => server.listen(PORT, '127.0.0.1', r));
   const dom = await JSDOM.fromURL('http://127.0.0.1:' + PORT + '/index.html', {
     runScripts: 'dangerously', resources: 'usable', pretendToBeVisual: true, beforeParse: installFetch
@@ -118,39 +120,47 @@ async function loadPage(stripLayers) {
     if (m && m.querySelectorAll('li').length > 0 && !doc.querySelector('#briefMain .skeleton')) break;
     await sleep(150);
   }
+  await sleep(400); // 等 setupBriefClamp 里的 setTimeout(apply,300) 走完
   return { dom, win, doc, server };
 }
 
 (async () => {
   let s1 = null, s2 = null;
   try {
-    // ---------- ② 两层渲染（正常数据）----------
-    console.log('\n===== ② 渲染：要点层 + 完整层 =====');
+    // ---------- ② 渲染（正常数据）----------
+    console.log('\n===== ② 渲染：五节结构化摘要 + 默认收起 =====');
     const p1 = await loadPage(false); s1 = p1.server;
     const doc = p1.doc, win = p1.win;
 
     const main = doc.getElementById('briefMain');
     check('#briefMain 已渲染内容', !!main && main.textContent.trim().length > 0);
 
-    const hlLis = doc.querySelectorAll('#briefMain .brief-hl > li');
-    check('要点层渲染 li 数 == highlights 条数', hlLis.length === (hls || []).length,
-      hlLis.length + ' vs ' + (hls || []).length);
+    // —— 要点层与高异动行必须消失（本轮改动的核心）——
+    check('不再渲染要点层（.brief-hl）', doc.querySelectorAll('#briefMain .brief-hl').length === 0);
+    check('不再渲染要点层容器（.brief-hl-wrap）', doc.querySelectorAll('#briefMain .brief-hl-wrap').length === 0);
+    check('不再渲染类别小标（.hl-cat）', doc.querySelectorAll('#briefMain .hl-cat').length === 0);
+    check('不再渲染高异动行（.brief-alert）', doc.querySelectorAll('#briefMain .brief-alert').length === 0);
+    const wantAlert = !!(REPORT.sections && REPORT.sections.anomalies && REPORT.sections.anomalies.max_severity === 'high');
+    check('数据即使有 high 级异动也不出现异动行', wantAlert ? doc.querySelectorAll('#briefMain .brief-alert').length === 0 : true,
+      'max_severity=' + (REPORT.sections && REPORT.sections.anomalies ? REPORT.sections.anomalies.max_severity : '?') + '（异动行已于 2026-09-12 二次修订移除）');
 
     const sub = doc.getElementById('briefSub');
-    check('副标题为「必看 N 条」', !!sub && /^必看\s*\d+\s*条$/.test(sub.textContent.trim()),
+    check('副标题固定为「按分类摘要」', !!sub && sub.textContent.trim() === '按分类摘要',
       sub ? sub.textContent.trim() : '(无)');
 
+    // —— 结构化分节层 ——
     const full = doc.querySelector('#briefMain .brief-full');
-    check('完整层存在', !!full);
-    check('完整层默认隐藏', !!full && (full.hidden === true || full.hasAttribute('hidden')));
+    check('结构化分节层存在', !!full);
+    check('分节层不带 hidden（默认在 DOM 内，靠高度裁剪收起）',
+      !!full && !full.hasAttribute('hidden') && full.hidden === false);
 
     if (full) {
       const fullLis = full.querySelectorAll('li');
       const total = (bsec || []).reduce((n, s) => n + s.items.length, 0);
-      check('完整层 li 数 == brief_sections 总条数', fullLis.length === total, fullLis.length + ' vs ' + total);
+      check('分节层 li 数 == brief_sections 总条数', fullLis.length === total, fullLis.length + ' vs ' + total);
 
       const secs = full.querySelectorAll('.brief-sec');
-      check('完整层节标题数 == brief_sections 节数', secs.length === (bsec || []).length,
+      check('节标题数 == brief_sections 节数', secs.length === (bsec || []).length,
         secs.length + ' vs ' + (bsec || []).length);
 
       const badges = [...full.querySelectorAll('.brief-sec .sec-n')];
@@ -158,35 +168,28 @@ async function loadPage(stripLayers) {
       const badgeOk = badges.every((b, i) => parseInt(b.textContent, 10) === (bsec[i] ? bsec[i].items.length : -1));
       check('条数徽标数值与该节实际条数一致', badgeOk, badges.map(b => b.textContent).join(','));
 
-      const noEmptySec = !/今日暂无/.test(full.textContent);
-      check('完整层不出现「今日暂无…」占位句', noEmptySec);
+      check('分节层不出现「今日暂无…」占位句', !/今日暂无/.test(full.textContent));
     }
 
-    const alert = doc.querySelector('#briefMain .brief-alert');
-    const wantAlert = !!(REPORT.sections && REPORT.sections.anomalies && REPORT.sections.anomalies.max_severity === 'high');
-    check('高异动行按 max_severity 出现/不出现', wantAlert === !!alert,
-      'max_severity=' + (REPORT.sections && REPORT.sections.anomalies ? REPORT.sections.anomalies.max_severity : '?') + ' 行=' + (alert ? '有' : '无'));
-    if (alert) check('高异动行含「今日异动」标签', /今日异动/.test(alert.textContent));
-
+    // —— 默认收起（420px 折叠）——
     const more = doc.getElementById('briefMore');
+    check('默认收起：内容超高时 #briefMain 带 brief-clamp（折叠后 380px）', main.classList.contains('brief-clamp'));
     check('展开按钮可见', !!more && more.hidden === false);
-    check('按钮文案为「展开完整分类摘要（N 条）」',
-      !!more && /^展开完整分类摘要（\d+ 条）$/.test(more.textContent.trim()),
+    check('按钮文案为「展开全部（N 条）」', !!more && /^展开全部（\d+ 条）$/.test(more.textContent.trim()),
       more ? more.textContent.trim() : '(无)');
 
-    // 展开
-    if (more && full) {
+    if (more) {
       more.dispatchEvent(new win.MouseEvent('click', { bubbles: true }));
-      check('点击后完整层可见', full.hidden === false);
+      check('点击后解除折叠', !main.classList.contains('brief-clamp'));
       check('点击后按钮变「收起」', more.textContent.trim() === '收起', more.textContent.trim());
       more.dispatchEvent(new win.MouseEvent('click', { bubbles: true }));
-      check('再点击完整层回到隐藏', full.hidden === true);
-      check('再点击按钮恢复展开文案', /展开完整分类摘要/.test(more.textContent.trim()), more.textContent.trim());
+      check('再点击恢复折叠', main.classList.contains('brief-clamp'));
+      check('再点击按钮恢复展开文案', /^展开全部/.test(more.textContent.trim()), more.textContent.trim());
     }
 
-    // 点击跳转
+    // —— 条目点击定位下方新闻卡片 ——
     const jumps = [...doc.querySelectorAll('#briefMain a[data-jump]')];
-    check('有要点/条目带 data-jump 链接', jumps.length > 0, jumps.length + ' 条');
+    check('分节条目带 data-jump 链接', jumps.length > 0, jumps.length + ' 条');
     if (jumps.length) {
       const a = jumps[0];
       const url = a.getAttribute('data-jump');
@@ -206,23 +209,21 @@ async function loadPage(stripLayers) {
   }
 
   try {
-    // ---------- ③ 回退路径（剥掉两个新字段）----------
-    console.log('\n===== ③ 回退：无 highlights/brief_sections 时 =====');
+    // ---------- ③ 回退路径（剥掉两个字段）----------
+    console.log('\n===== ③ 回退：无 brief_sections 时走 markdown =====');
     const p2 = await loadPage(true); s2 = p2.server;
     const doc2 = p2.doc;
     const main2 = doc2.getElementById('briefMain');
     check('#briefMain 仍有内容（回退渲染成功）', !!main2 && main2.textContent.trim().length > 0);
-    check('回退时不渲染要点层', doc2.querySelectorAll('#briefMain .brief-hl > li').length === 0);
-    check('回退时不渲染结构化完整层', !doc2.querySelector('#briefMain .brief-full'));
+    check('回退时不渲染结构化分节层', !doc2.querySelector('#briefMain .brief-full'));
     check('回退时渲染 report 的 markdown 列表', doc2.querySelectorAll('#briefMain > ul > li').length > 0,
       doc2.querySelectorAll('#briefMain > ul > li').length + ' 条');
+    check('回退时也不渲染要点层/异动行',
+      doc2.querySelectorAll('#briefMain .brief-hl, #briefMain .brief-alert').length === 0);
     const sub2 = doc2.getElementById('briefSub');
-    check('回退时副标题为「按分类摘要」', !!sub2 && sub2.textContent.trim() === '按分类摘要',
+    check('回退时副标题同为「按分类摘要」', !!sub2 && sub2.textContent.trim() === '按分类摘要',
       sub2 ? sub2.textContent.trim() : '(无)');
-    const more2 = doc2.getElementById('briefMore');
-    check('回退时走 420px 折叠路径（按钮文案为「展开全部…」或隐藏）',
-      !more2 || more2.hidden === true || /^展开全部/.test(more2.textContent.trim()),
-      more2 ? ('hidden=' + more2.hidden + ' text=' + more2.textContent.trim()) : '(无按钮)');
+    check('回退时同样走高度折叠（内容超高）', !!main2 && main2.classList.contains('brief-clamp'));
   } catch (e) {
     fail++;
     console.log('  FAIL  ③ 回退阶段异常 → ' + (e && e.message));
@@ -230,6 +231,6 @@ async function loadPage(stripLayers) {
     if (s2) s2.close();
   }
 
-  console.log('\n==== 简报两层回归：' + pass + ' PASS / ' + fail + ' FAIL ====');
+  console.log('\n==== 简报渲染回归：' + pass + ' PASS / ' + fail + ' FAIL ====');
   process.exit(fail ? 1 : 0);
 })();
