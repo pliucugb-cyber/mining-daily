@@ -100,8 +100,15 @@ setTimeout(() => {
   ok('#qaFloat 移动端扩为整页（100dvh / top:0 / left:0）',
     /#qaFloat\{top:0;left:0;right:auto;bottom:auto;width:100vw;height:100dvh;max-height:none;border-radius:0;border:none;box-shadow:none\}/.test(html));
   ok('整页头部/底部留安全区',
-    /\.qa-float-head\{padding-top:calc\(var\(--s3\) \+ env\(safe-area-inset-top,0px\)\)\}/.test(html)
+    // 2026-09-12：顶栏竖向 padding 由 --s3(12px) 收紧到 6px（整条 58px -> 44px，用户反馈太厚）
+    /\.qa-float-head\{padding-top:calc\(6px \+ env\(safe-area-inset-top,0px\)\)\}/.test(html)
     && /\.qa-float-foot\{padding-bottom:calc\(var\(--s3\) \+ env\(safe-area-inset-bottom,0px\)\)\}/.test(html));
+  ok('顶栏已瘦身：竖向 padding 6px（桌面/窄屏同源）',
+    /\.qa-float-head\{position:relative;display:flex;align-items:center;justify-content:space-between;padding:6px var\(--s3\);/.test(html));
+  ok('顶栏已瘦身：返回键/菜单键/✕ 统一 32px',
+    /\.qa-float-head \.qa-back\{display:none;[^}]*width:32px;height:32px;/.test(html)
+    && /\.qa-float-head \.qa-head-menu-btn\{display:none;[^}]*height:32px;/.test(html)
+    && /\.qa-float-head \.pchart-close\{width:32px;height:32px;/.test(html));
 
   console.log('\n===== ⑥ 桌面不被破坏（DOM 层）=====');
   ok('#qaFab 元素仍在 DOM（桌面保留悬浮球）', !!d.getElementById('qaFab'));

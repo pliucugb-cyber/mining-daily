@@ -216,7 +216,11 @@ setTimeout(() => {
 
   console.log('\n===== ⑦ 新闻问答面板 =====');
   const qaInput = doc.getElementById('qaFloatInput');
-  check('⑦ 输入框不显示占位提示词', !!qaInput && !qaInput.getAttribute('placeholder'));
+  // 2026-09-12 反转：原「输入框不显示占位提示词」——用户反馈底部输入区「看着很别扭」，
+  //   空框没有任何提示是主要原因之一。改为「有简短占位词（<=12 字）」，aria-label 仍保留。
+  check('⑦ 输入框有简短占位提示（2026-09-12 由「不放占位词」反转，<=12 字）',
+    !!qaInput && !!qaInput.getAttribute('placeholder') && qaInput.getAttribute('placeholder').length <= 12,
+    qaInput && qaInput.getAttribute('placeholder'));
   check('⑦ 输入框保留 aria-label（可访问性）', !!qaInput && !!qaInput.getAttribute('aria-label'));
   const qaBody = doc.getElementById('qaFloatBody');
   const firstMsg = qaBody ? qaBody.querySelector('.qa-msg.ai .qa-msg-bubble') : null;

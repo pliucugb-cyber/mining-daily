@@ -895,3 +895,118 @@ P0 清单的"已知三个真 bug"抄自 **§11.3**，而 §11.3 的标题写着"
   **合法形态**（列进去，否则复核会把它们当回退删掉）；只保留「`qaOrbPulse` 脉冲」为禁项。
 - **06:00 生成**：无需改数据处理；补充一句——改 `app.js` 的 AI 搜面板后必须跑
   `test_mobile_ux_batch.js`（含 ⑮ 段）与真机探针。
+
+## 21. AI 搜面板第二轮体验优化（2026-09-12 晚）
+
+用户对着手机截图提的四条：①顶栏太厚 ②底部输入区别扭 ③检索完跳到回答末尾、
+要往回翻 ④其他优化建议。四条全部落地，本地三套测试 + 真机探针全绿。
+
+### 21.1 三条根因（都不是「CSS 写错了」，而是没写）
+
+| # | 现象 | 根因 | 修法 |
+|---|---|---|---|
+| ① | 顶栏 58px 显厚 | `padding: var(--s3) var(--s4)`（12/16px）+ 控件 34px | `padding: 6px var(--s3)`，控件统一 **32px** → **44px** |
+| ② | 输入区整行 50px、看着别扭 | **`<input>` 默认 `min-width`≈177px 不让位** → flex 挤压 → `检索`（需 48px 实得 43px）、`✨ AI 回答`（需 84px 实得 71px）**双双折两行** → 行被撑高 | `input{min-width:0}` + `btn{flex:0 0 auto;white-space:nowrap;height:38px}` + `foot{align-items:center}` |
+| ③ | 检索完必跳回答末尾 | `qaFloatScroll(){ b.scrollTop = b.scrollHeight }` 一律甩到底；命中 100 条时答案高约 1.2 万 px → 问题被甩到可视区上方约 **12097px** | 三档落点策略（见 21.2） |
+
+- ②的隐蔽点：50px 这个高度**没有任何一条 CSS 写过**——是折行撑出来的。
+  只量 `height` 只会看到「莫名 50px」，必须同时量 `white-space`/`min-width` 才定位得到。
+  探针为此新增「关掉 stretch 的自然高度」量法。
+- 实测前后：行高 **75px → 63px**；四件控件 **统一 38px**、单行不折行；
+  输入框宽 194 → **173px**（腾给按钮，属预期）。
+
+### 21.2 滚动落点：三档策略 + 一个兜底
+
+新增四函数（紧随 `qaFloatScroll` 定义）：
+
+- `qaFloatNearBottom(b, tol)` — 距底 ≤80px 即「用户贴着底」。
+- `qaFloatFollow()` — **只在贴着底时**才 `scrollTop = scrollHeight`（流式追加不打扰上翻的用户）。
+- `qaFloatAnchorTop(el)` — 把 `el` 顶到滚动区上方留 10px 余量；**必须自带 clamp**（`0 ≤ t ≤ scrollHeight-clientHeight`），
+  否则短内容下会出现负数 scrollTop（浏览器忽略 → 表现为「没生效」）。
+- `qaFloatAnchorLastQuestion()` — 找最后一条 `.qa-msg.user` 并锚顶（历史恢复用）。
+- `qaFloatSettle()` — 答完后的兜底：仅当「最后一条问题落在下半屏（`off > h*0.4`）且还在屏内（`off < h`）」时才提回顶部；
+  **用户已自己滚走则不打断**。
+
+三档分配：
+
+| 时机 | 传参 | 效果 |
+|---|---|---|
+| 用户刚发出的问题 | `{md:false, anchorTop:true}` | 问题钉顶 |
+| 紧随其后的答案 / 「思考中」占位 / 缓存命中消息 | `keepScroll:true` | 不动，避免把问题顶跑 |
+| 答完（`qaFinishAnswer`）、`qaLoadHistory` 收尾 | `qaFloatSettle()` / `qaFloatAnchorLastQuestion()` | 只在必要时纠正 |
+
+`qaFloatAdd` 尾部改为：
+
+```js
+body.appendChild(d);
+if(opts.anchorTop) qaFloatAnchorTop(d);
+else if(!opts.keepScroll) qaFloatFollow();
+return d;
+```
+
+**契约**：`qaFloatScroll()` 的调用点由 4 处减为 **2 处**（函数定义 + 空态引导 `qaFloatRenderSuggest`）。
+任何新增调用点都必须先说明为什么「贴着底才跟随」不适用——测试 ⑯ 段守着这个数。
+
+### 21.3 输入区契约（可回归的硬指标）
+
+| 选择器 | 关键声明 |
+|---|---|
+| `.qa-float-foot` | `display:flex; align-items:center; gap:var(--s2); padding:var(--s3)` |
+| `.qa-float-input` | `flex:1 1 auto; **min-width:0**; height:38px; border-radius:19px` |
+| `.qa-float-btn` | `flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; height:38px; **white-space:nowrap**; border-radius:19px` |
+| `.qa-float-btn.primary` | `min-width:78px`（`✨ AI 回答` 的底线宽度） |
+| `.qa-mic` | `padding:0; width:38px; height:38px; border-radius:50%` |
+| `.qa-float-filters` | 竖向 padding `var(--s3)` → `var(--s2)`（103 → 95px） |
+
+- `min-width:0` 是这一段的**承重墙**：删掉它，折行会立刻回来（`②` 的表象复现）。
+- `min-width:78px` 只保底、不锁死；窄屏 320px 下仍由 `input` 让位，不出现横向溢出。
+
+### 21.4 约定反转：输入框占位提示
+
+- **2026-09-05 的「输入框不放占位词」约定就此作废**。
+  现为 `placeholder="输入关键词或问题…"`（≤12 字），并补 `aria-label`。
+- 反转理由：空框无任何提示时，用户不知道能输什么；成本为零、收益明确。
+- `test_smoke_0908.js` ⑦ 已同步翻转为「有简短占位提示且 ≤12 字」；
+  **08:00 复核不得再把 placeholder 判为回退删掉**。
+
+### 21.5 测试与验证
+
+- `test_mobile_ux_batch.js` 新增 **⑯ 段（22 条断言）** → 全文件 **142 PASS / 0 FAIL**。
+  覆盖：顶栏 6px / 安全区 / ‹⋯✕ 三键 32px；输入区 `align-items:center` / `input 38px min-width:0` /
+  `btn nowrap 38px` / `mic 38px` 圆 / `primary min-width:78px` / placeholder ≤12 字 + `aria-label` /
+  筛选行 padding；五函数导出 / **反证 `!body.appendChild(d);qaFloatScroll();`** /
+  `anchorTop:true` 出现 ≥2 次 / `keepScroll:true` 存在 / `qaFloatSettle(); qaSaveHistory()` 且旧串已删 /
+  `qaFloatScroll()` 恰好 2 处 / `off>h*0.4 && off<h`。
+- `test_smoke_0908.js` **74 PASS / 0 FAIL**（⑦ 翻转）；`test_qa_navtab_20260910.js`
+  **18 PASS / 0 FAIL**（`padding-top` 改 `calc(6px + env(safe-area-inset-top,0px))`，
+  新增「竖向 padding 6px」「三键统一 32px」两条）。
+- 真机探针（`tmp/rvprobe.html` + `%TEMP%\md_rvprobe.py`，**11 用例 / 76 条断言**）：新增
+  `qastyle`（量 foot/input/search/ai/mic/head/back/filters 计算样式）、`qachat` / `qachat2`（二轮）/
+  `qachatd`（桌面）+ `scrollMetrics()`。关键证据：
+
+```
+qastyle  head=44 foot=63 input=173x38 rows=1
+         footBtns: mic 38x38 / search 48x38 / ai 83x38  同一 top、cs=nowrap
+qachat   scrollTop=0     lastQ=225  atBottom=False   （首轮：问题落在首屏内，不滚动）
+qachat2  scrollTop=12859 lastQ=10   atBottom=False   （二轮：问题钉顶）
+qachatd  scrollTop=190   lastQ=10   atBottom=False   （桌面同）
+qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡片）
+```
+
+- **探针坑（第四次同类）**：`scrollMetrics()` 最初取**第一条** `.qa-msg.user` 作为
+  `questionTopInBody`，多轮场景必然误导（第一轮那条本就被顶到上方）。
+  对策：增加 `lastQuestionTopInBody` 与 `questionCount`，断言一律看**最后一条**问题。
+
+### 21.6 红线补充（08:00 复核不得判为回退）
+
+- 顶栏 **44px**、输入区四件控件 **统一 38px 不折行**、`placeholder` 的存在，
+  三者均为**合法形态**，不得「还原」。
+- 窄屏全屏 / 桌面可拖拽卡片（8 个 `.qa-resize-handle`）/ 彩色渐变 `Ai` 图标 —— 与 20.7 同，
+  继续合法；`@keyframes qaOrbPulse` 继续禁。
+- 空态推荐词仍**只在完全空态**出现（20.5 的取舍不变）。
+- 落点契约（21.2）是**硬约束**：`qaFloatScroll()` 调用点数量为 2，多一处即回退。
+
+### 21.7 BACKLOG（未做，待拍板）
+
+- `.mtab[data-go="qa"]` 常驻品牌青色：首页激活时会出现**两个青色 tab**（当前 tab + AI 搜入口）。
+  属视觉歧义，非 bug；改动小但涉及导航语义，等用户拍板后再动。

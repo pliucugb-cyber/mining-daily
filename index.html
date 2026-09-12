@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1250" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1431" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -488,19 +488,21 @@ body.dark .pchart-close{background:var(--surface-3);color:var(--ink-700)}
 .qa-resize-se{bottom:0;right:0;width:6px;height:6px;cursor:nwse-resize}
 .qa-resize-sw{bottom:0;left:0;width:12px;height:12px;cursor:nesw-resize}
 body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
-.qa-float-head{position:relative;display:flex;align-items:center;justify-content:space-between;padding:var(--s3) var(--s4);background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;cursor:grab;user-select:none}
+/* 2026-09-12：顶栏瘦身（用户：最上面这条有点宽/太厚）——竖向 padding 12→6px、控件 34→32px，整条 58px → 44px。
+   6px 取在 --s1(4px) 与 --s2(8px) 之间：再压按钮就贴边了，且 32px 已是可点住的下限。 */
+.qa-float-head{position:relative;display:flex;align-items:center;justify-content:space-between;padding:6px var(--s3);background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;cursor:grab;user-select:none}
 .qa-float-head .pchart-close{cursor:pointer}
 .qa-float-title{font-size: var(--fs-h3);font-weight:600}
-.qa-float-head .pchart-close{background:rgba(255,255,255,.2);color:#fff}
+.qa-float-head .pchart-close{width:32px;height:32px;font-size:var(--fs-h2);border-radius:50%;background:rgba(255,255,255,.2);color:#fff}
 .qa-float-head .qa-head-actions{display:flex;align-items:center;gap:var(--s2)}
 .qa-float-head .qa-head-action{background:rgba(255,255,255,.15);border:none;border-radius: var(--r-md);color:#fff;font-size: var(--fs-meta);padding:var(--s1) var(--s2);cursor:pointer}
 .qa-float-head .qa-head-action:hover{background:rgba(255,255,255,.3)}
 /* 2026-09-12：窄屏返回键（桌面隐藏，桌面仍用右侧 ✕） */
-.qa-float-head .qa-back{display:none;align-items:center;justify-content:center;width:34px;height:34px;border:none;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:var(--fs-h1);line-height:1;cursor:pointer;flex-shrink:0;padding:0}
+.qa-float-head .qa-back{display:none;align-items:center;justify-content:center;width:32px;height:32px;border:none;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:var(--fs-h1);line-height:1;cursor:pointer;flex-shrink:0;padding:0}
 .qa-float-head .qa-back:hover{background:rgba(255,255,255,.3)}
 /* ⋯ 菜单：桌面有空间，导出/清空平铺，⋯ 隐藏 */
 .qa-head-actions{position:relative}
-.qa-float-head .qa-head-menu-btn{display:none;align-items:center;justify-content:center;background:rgba(255,255,255,.15);border:none;border-radius:var(--r-md);color:#fff;font-size:var(--fs-h2);line-height:1;padding:2px var(--s2);cursor:pointer}
+.qa-float-head .qa-head-menu-btn{display:none;align-items:center;justify-content:center;background:rgba(255,255,255,.15);border:none;border-radius:var(--r-md);color:#fff;font-size:var(--fs-h2);line-height:1;height:32px;padding:0 var(--s2);cursor:pointer}
 .qa-float-head .qa-head-menu-btn:hover{background:rgba(255,255,255,.3)}
 .qa-head-menu-list{position:absolute;top:calc(100% + 6px);right:0;z-index:20;min-width:158px;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-md);box-shadow:0 8px 24px rgba(15,23,42,.18);padding:4px;display:flex;flex-direction:column;gap:2px}
 .qa-head-menu-list[hidden]{display:none}
@@ -576,13 +578,21 @@ body.dark .qa-head-menu-list button:hover{background:var(--surface-3)}
 .qa-fu-label{font-size:var(--fs-nano);color:var(--ink-500)}
 .qa-fu-chip{border:1px solid #cdd8e6;background:#eef3fb;color:#33414f;border-radius:14px;padding:3px 10px;font-size:var(--fs-meta);cursor:pointer}
 .qa-fu-chip:hover{background:var(--tag-strategy);color:#fff;border-color:var(--tag-strategy)}
-.qa-float-foot{position:relative;z-index:3;display:flex;gap:var(--s2);padding:var(--s3);border-top:1px solid var(--line-1);background:var(--surface)}
-.qa-float-input{position:relative;z-index:4;flex:1;border:1px solid #dbe2ea;border-radius: var(--r-md);padding:var(--s2) var(--s3);font-size: var(--fs-body);outline:none}
+/* 2026-09-12：底部输入区重做（用户：这一行看着很别扭）。原样三个病：
+   ① 输入框带着 <input> 的默认最小宽（≈177px）不肯让位 → 两个文字按钮被压到内容宽以下；
+   ② 于是「检索」只剩 43px、「✨ AI 回答」只剩 71px，双双折成两行 → 整行被撑到 50px；
+   ③ 结果 输入框 33px / 按钮 50px / 麦克风 34px 三种高度并存，横竖都对不齐。
+   改：输入框 min-width:0 允许收缩；按钮 flex:0 0 auto + white-space:nowrap 永不折行；
+   四件控件统一 38px 高 + 胶囊圆角 + 垂直居中。 */
+.qa-float-foot{position:relative;z-index:3;display:flex;align-items:center;gap:var(--s2);padding:var(--s3);border-top:1px solid var(--line-1);background:var(--surface)}
+.qa-float-input{position:relative;z-index:4;flex:1 1 auto;min-width:0;height:38px;border:1px solid #dbe2ea;border-radius:19px;padding:0 var(--s3);font-size:var(--fs-body);color:var(--ink-900);outline:none}
+.qa-float-input::placeholder{color:var(--ink-300)}
 .qa-float-input:focus{border-color:var(--tag-strategy)}
-.qa-float-btn{position:relative;z-index:4;border:none;border-radius: var(--r-md);padding:var(--s2) var(--s3);font-size: var(--fs-meta);font-weight:600;cursor:pointer;background:var(--surface-3);color:var(--ink-900)}
-.qa-float-btn.primary{background:var(--tag-strategy);color:#fff}
+.qa-float-btn{position:relative;z-index:4;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;height:38px;white-space:nowrap;border:none;border-radius:19px;padding:0 var(--s3);font-size:var(--fs-meta);font-weight:600;cursor:pointer;background:var(--surface-3);color:var(--ink-900)}
+/* min-width 与「✨ AI 回答」自然宽相当：避免「思考中…」把按钮缩窄、输入框跟着抖一下 */
+.qa-float-btn.primary{background:var(--tag-strategy);color:#fff;min-width:78px}
 .qa-float-btn:disabled{opacity:.5;cursor:not-allowed}
-.qa-mic{padding:var(--s2);display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px}
+.qa-mic{padding:0;width:38px;height:38px;border-radius:50%}
 .qa-mic.on{background:#e03131;color:#fff;animation:qa-mic-pulse 1s infinite}
 @keyframes qa-mic-pulse{0%{box-shadow:0 0 0 0 rgba(224,49,49,.5)}70%{box-shadow:0 0 0 7px rgba(224,49,49,0)}100%{box-shadow:0 0 0 0 rgba(224,49,49,0)}}
 .qa-float-tip{font-size: var(--fs-nano);color:var(--ink-300);padding:var(--s2) var(--s3) var(--s3);background:var(--surface);border-top:1px solid #f1f4f7;line-height:1.4;user-select:none}
@@ -1086,7 +1096,7 @@ body{padding-left:0;padding-top:56px}
 }
 }
 /* ===== 悬浮球内筛选条（2026-09-04 由页顶新闻问答迁移而来）===== */
-.qa-float-filters{display:flex;flex-wrap:wrap;gap:var(--s2);padding:var(--s3) var(--s3);border-bottom:1px solid var(--line-1);background:#f3f6fa}
+.qa-float-filters{display:flex;flex-wrap:wrap;gap:var(--s2);padding:var(--s2) var(--s3);border-bottom:1px solid var(--line-1);background:#f3f6fa}
 .qa-fsel{flex:1;min-width:0;padding:var(--s2) var(--s2);border:1px solid #d5deea;border-radius: var(--r-md);font-size: var(--fs-meta);background:var(--surface);color:#33414f;cursor:pointer;outline:none}
 .qa-fsel:focus{border-color:var(--tag-strategy)}
 .qa-fsel-btns{display:flex;gap:var(--s2);flex:1 1 100%}
@@ -1590,7 +1600,7 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   #qaFab{display:none!important}
   /* 移动端：问答面板扩为近全屏整页（点「问」即全屏问答界面） */
   #qaFloat{top:0;left:0;right:auto;bottom:auto;width:100vw;height:100dvh;max-height:none;border-radius:0;border:none;box-shadow:none}
-  .qa-float-head{padding-top:calc(var(--s3) + env(safe-area-inset-top,0px))}
+  .qa-float-head{padding-top:calc(6px + env(safe-area-inset-top,0px))}
   .qa-float-foot{padding-bottom:calc(var(--s3) + env(safe-area-inset-bottom,0px))}
   /* 2026-09-12：全屏顶栏三栏化 ——「‹ 返回 / AI 搜 / ⋯」。
      导出与清空收进 ⋯：全屏后「✕」与「‹」语义重复，三个按钮并排会把标题挤没。 */
@@ -2400,7 +2410,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
   </div>
   <div class="qa-float-body" id="qaFloatBody" data-page-node-id="nd0EyI5kVl0DOVnIlIBaWb"></div>
   <div class="qa-float-foot" data-page-node-id="ClSV4Aqm5KW0LZGGVEAZMx">
-    <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="" aria-label="输入关键词检索或问题" autocomplete="off" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX">
+    <input type="text" class="qa-float-input" id="qaFloatInput" placeholder="输入关键词或问题…" aria-label="输入关键词检索或问题" autocomplete="off" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX">
     <button class="qa-float-btn qa-mic" id="qaFloatMic" type="button" title="语音输入" aria-label="语音输入"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:auto"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M12 18v3"></path><path d="M5 10v2a7 7 0 0 0 14 0v-2"></path></svg></button>
     <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词" onclick="window.qaFloatSearch&&window.qaFloatSearch()" data-page-node-id="DcqZEFlU8VgjnfLfZc4l82">检索</button>
     <button class="qa-float-btn primary" id="qaFloatAi" title="AI 读完相关新闻后作答" onclick="window.qaFloatAsk&&window.qaFloatAsk()" data-page-node-id="qJ4h2ouUiWwBV8nMhyMoNF">AI</button>

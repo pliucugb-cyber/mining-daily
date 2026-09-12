@@ -6,6 +6,7 @@
  *       ⑮ AI 搜面板：彩色 Ai 图标 / 窄屏全屏（形态隔离，清桌面内联记忆）/ 顶栏⋯菜单 / 空态推荐检索词
  *          —— 2026-09-12 用户定夺；同轮把 2026-09-11「禁止渐变」的旧约定作废（脉冲禁令保留）
  *       ⑩ 顶栏智能吸顶：隐藏只做 transform，不得折叠布局（2026-09-11 P0）
+ *       ⑯ 顶栏瘦身(58->44px) / 输入区统一 38px 不折行 / 检索后滚动落点（2026-09-12 用户体验三条）
  * 运行：node test_mobile_ux_batch.js
  */
 const fs = require('fs');
@@ -343,6 +344,64 @@ setTimeout(() => {
   check('推荐词只在完全空态渲染（有历史时不打扰会话）', /if\(!fb\.children\.length\)\{[\s\S]{0,200}qaFloatRenderSuggest\(\);/.test(html));
 
   Object.defineProperty(window, 'innerWidth', { value: 375, configurable: true, writable: true });
+
+  console.log('\n===== ⑯ 顶栏厚度 / 输入区形态 / 检索后滚动落点（2026-09-12）=====');
+  // 用户反馈三条：① 顶栏太厚 ② 底部输入区折行、三种高度很难看 ③ 检索后跳到回答末尾要往回翻
+  check('顶栏瘦身：竖向 padding 6px（整条 58px -> 44px）',
+        /\.qa-float-head\{position:relative;display:flex;align-items:center;justify-content:space-between;padding:6px var\(--s3\);/.test(html));
+  check('顶栏瘦身：窄屏顶部安全区同步为 6px',
+        /\.qa-float-head\{padding-top:calc\(6px \+ env\(safe-area-inset-top,0px\)\)\}/.test(html));
+  check('顶栏瘦身：‹ 返回键 32px（原 34px）',
+        /\.qa-float-head \.qa-back\{display:none;[^}]*width:32px;height:32px;/.test(html));
+  check('顶栏瘦身：⋯ 菜单键显式 height:32px（与返回键等高）',
+        /\.qa-float-head \.qa-head-menu-btn\{display:none;[^}]*height:32px;padding:0 var\(--s2\)/.test(html));
+  check('顶栏瘦身：桌面 ✕ 32px（压过 601px 断点的 34px）',
+        /\.qa-float-head \.pchart-close\{width:32px;height:32px;/.test(html));
+
+  check('输入区：foot 垂直居中（align-items:center）',
+        /\.qa-float-foot\{position:relative;z-index:3;display:flex;align-items:center;gap:var\(--s2\);padding:var\(--s3\);/.test(html));
+  check('输入区：输入框允许收缩 + 固定 38px + 胶囊圆角',
+        /\.qa-float-input\{position:relative;z-index:4;flex:1 1 auto;min-width:0;height:38px;border:1px solid #dbe2ea;border-radius:19px;padding:0 var\(--s3\)/.test(html));
+  check('输入区：按钮 flex:0 0 auto + nowrap + 38px（永不折成两行）',
+        /\.qa-float-btn\{position:relative;z-index:4;flex:0 0 auto;[^}]*height:38px;white-space:nowrap;/.test(html));
+  check('输入区：麦克风 38px 圆形（原 34px 方角）',
+        /\.qa-mic\{padding:0;width:38px;height:38px;border-radius:50%\}/.test(html));
+  check('输入区：AI 按钮 min-width 防「思考中…」抖动',
+        /\.qa-float-btn\.primary\{background:var\(--tag-strategy\);color:#fff;min-width:78px\}/.test(html));
+  var _qInp2 = doc.getElementById('qaFloatInput');
+  check('输入区：占位提示已加（2026-09-12 反转「不放占位词」旧约定，<=12 字）',
+        !!_qInp2 && !!_qInp2.getAttribute('placeholder') && _qInp2.getAttribute('placeholder').length <= 12,
+        String(_qInp2 && _qInp2.getAttribute('placeholder')));
+  check('输入区：仍保留 aria-label（可访问性不回退）',
+        !!_qInp2 && !!_qInp2.getAttribute('aria-label'));
+  check('筛选行：竖向 padding 收紧为 --s2（103px -> 95px）',
+        /\.qa-float-filters\{display:flex;flex-wrap:wrap;gap:var\(--s2\);padding:var\(--s2\) var\(--s3\);/.test(html));
+
+  console.log('  ---- 检索后滚动落点（问题 ③）----');
+  check('落点：新增 qaFloatNearBottom / qaFloatFollow / qaFloatAnchorTop / qaFloatSettle 并导出',
+        typeof window.qaFloatNearBottom === 'function' && typeof window.qaFloatFollow === 'function'
+        && typeof window.qaFloatAnchorTop === 'function' && typeof window.qaFloatSettle === 'function'
+        && typeof window.qaFloatAnchorLastQuestion === 'function');
+  check('落点：★ qaFloatAdd 不再无条件滚到底（旧写法必须已删）',
+        !/body\.appendChild\(d\);qaFloatScroll\(\);/.test(html)
+        && /if\(opts\.anchorTop\)qaFloatAnchorTop\(d\);/.test(html)
+        && /else if\(!opts\.keepScroll\)qaFloatFollow\(\);/.test(html));
+  check('落点：检索/提问的「问题」带 anchorTop（钉到顶部）',
+        (html.match(/anchorTop:true/g) || []).length >= 2,
+        'n=' + (html.match(/anchorTop:true/g) || []).length);
+  check('落点：答案/检索结果带 keepScroll（不把问题顶走）',
+        /\{html:true,keepScroll:true\}/.test(html));
+  check('落点：★ 答完不再甩到底部（收尾改 qaFloatSettle）',
+        /qaFloatSettle\(\);qaSaveHistory\(\),?/.test(html) && !/qaFloatScroll\(\);qaSaveHistory\(\);/.test(html));
+  check('落点：检索完成也走 qaFloatSettle',
+        /qaFloatAdd\('ai',html,'全库 '\+QA_ROWS\.length\+' 条 · 检索于本地，不经任何服务',\{html:true,keepScroll:true\}\);\s*try\{qaFloatSettle\(\);\}/.test(html));
+  check('落点：恢复历史后停在最后一条提问（与刚检索完一致）',
+        /qaFloatAnchorLastQuestion\(\);\s*\}catch\(e\)\{\}/.test(html));
+  check('落点：qaFloatScroll 仅剩「定义 + 空态引导」两处（其余已改跟随/锚定）',
+        (html.match(/qaFloatScroll\(\)/g) || []).length === 2,
+        'n=' + (html.match(/qaFloatScroll\(\)/g) || []).length);
+  check('落点：qaFloatSettle 只在「问题落到下半屏」时才动（0.4*clientHeight）',
+        /if\(off>h\*0\.4 && off<h\)qaFloatAnchorTop\(q\);/.test(html));
 
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
