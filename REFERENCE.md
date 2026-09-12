@@ -793,3 +793,105 @@ P0 清单的"已知三个真 bug"抄自 **§11.3**，而 §11.3 的标题写着"
 - 真实 Chrome 探针（`tmp/rvprobe.html` + `%TEMP%\md_rvprobe.py`，新增 `listprice`/`listdeadline` 两用例）
   **41 条断言全绿**，含真机证据「点成交价 → 首行金额 8365 = 全集最大值」。
 - 全量回归 12 项零失败；补跑 10 项零失败；`preflight_check.py` 全绿。
+
+
+## §20 「AI 搜」面板形态重做（彩色 Ai 图标 / 窄屏全屏 / 顶栏 ⋯ / 空态引导，2026-09-12 12:5x，build `20260912-1250`）
+
+用户三点诉求（配 4 张截图）：① 底栏「AI 搜」图标要像主流 App 的**彩色 AI 图标**；
+② 打开后**铺满整页**（当时是半屏卡片）；③ 征询其他优化建议。
+
+四项 AskUserQuestion 定夺（**全取推荐项**）：
+彩色渐变 Ai 圆角方块 / **仅移动端全屏**（桌面保留可拖拽卡片）/ 空态加推荐检索词 / 顶栏改「‹ 返回 / AI 搜 / ⋯」。
+
+### 20.1 根因：全屏 CSS 一直都在，被内联样式盖掉了
+
+- `index.html` 的 `@media(max-width:768px)` 里 `#qaFloat{top:0;left:0;width:100vw;height:100dvh;...}`
+  **早就存在**，`test_mobile_ux_batch.js` ⑥ 段还在守它——所以「没做全屏」这个判断是错的。
+- 真正成因：`qaFloatRestoreSize()/qaFloatRestorePos()` 在初始化时**无条件**把
+  `qaFloatSize`/`qaFloatPos`（桌面拖拽/缩放记忆）写成**内联样式**；内联优先级高于媒体查询
+  → 手机上打开变成「顶在屏幕中部的 440×560 卡片」。
+- **反向污染同样存在**：手机全屏时的尺寸经 `ResizeObserver` 写回 `qaFloatSize`，桌面打开又变全屏（双向串味）。
+- 一句话结论：这不是「没做全屏」，是**记忆与形态没有隔离**。
+
+### 20.2 落地：形态隔离（`app.js`）
+
+| 函数 | 作用 |
+|---|---|
+| `qaFloatIsMobile()` | `innerWidth<=768`，**唯一形态判据** |
+| `qaFloatClearInlineLayout()` | 清 `#qaFloat` 的 width/height/left/top/right/bottom/position |
+| `qaFloatSyncViewport()` | 手机 → 清内联（交还媒体查询全屏）；桌面 → 恢复记忆 |
+| 早退点 ×5 | `qaFloatSavePos` / `qaFloatSaveSize` / ResizeObserver 回调 / `qaFloatRestorePos` / `qaFloatRestoreSize` 首行 `if(qaFloatIsMobile())return;` |
+
+- `qaFloatAddResizeHandles()` / `qaFloatStartResize()` 也在手机端直接 return：
+  手机恒全屏，**不挂缩放柄、不允许缩放**（否则全屏会被拖坏）。
+- 初始化那行 `qaFloatRestoreSize();qaFloatRestorePos();` → `qaFloatSyncViewport();`；
+  并新增 `window.addEventListener('resize', qaFloatSyncViewport)` 处理横竖屏切换 / 拖动窗口跨断点。
+
+### 20.3 图标：彩色渐变 Ai（**旧约定反转，务必记住**）
+
+- `SVG_QA` 由「放大镜 + 星芒」单色描边改为**渐变圆角方块 + 白色 Ai**
+  （`<linearGradient id="qaAiGrad">` `#6366f1 → #a855f7`，`<rect rx="6.5">` 铺满，`<text>Ai</text>`）。
+- 渐变写死在 SVG 内部（`fill="url(#qaAiGrad)"`），**不依赖 currentColor**；
+  `.mtab[data-go="qa"]{color:var(--brand)}` 只作用于文字标签，两者不冲突。
+- ⚠️ **2026-09-11 立的「单色描边 / 禁止渐变」约定就此作废**。当时否掉的是
+  **呼吸脉冲动画**与渐变发光球 `qaOrbPulse` —— **那条禁令继续有效**
+  （`@keyframes qaOrbPulse` 不得出现；`test_mobile_ux_batch.js` ⑮ 段守着）。
+
+### 20.4 顶栏：窄屏三栏化「‹ 返回 / AI 搜 / ⋯」
+
+| 元素 | 桌面（>768px） | 窄屏（≤768px） |
+|---|---|---|
+| `.qa-back`（‹） | `display:none` | `display:inline-flex` |
+| `.qa-float-title` | 全称「🔍 AI 搜 · 检索与问答」 | 「AI 搜」+ `flex:1;text-align:center` |
+| `.qa-act-export` / `.qa-act-clear` | 平铺可见 | `display:none`（收进 ⋯） |
+| `.qa-head-menu-btn`（⋯） | `display:none` | `display:inline-flex` |
+| `.pchart-close`（✕） | 可见（关闭） | `display:none`（与 ‹ 语义重复） |
+| `#qaHeadMenuList` | 绝对定位浮层；`[hidden]` 时不渲染 | 同（`min-width:172px`、按钮 11px 内边距便于触控） |
+
+- 新增 `qaHeadMenuToggle/qaHeadMenuClose/qaMenuExport/qaMenuClear`（后两者转发到原 `qaExportHistory`/`qaClearHistory`）。
+- `qaFloatToggle()` 打开面板时先 `qaHeadMenuClose()`；另有 `document` click 委托：
+  点 `.qa-head-actions` 以外任意处收起菜单。
+- 标题与 ✕ 文案由 `mdQaMobileBackArrow()` 按视口写：窄屏同时把 ✕ 文案写成 `‹`、标题简化为「AI 搜」。
+
+### 20.5 空态引导：推荐检索词 chips
+
+- `qaSuggestQueries()`：**只从库内近期真有命中的矿种/主题里挑**
+  （`QA_ROWS.slice(-150)` 统计 `t+m+g` 命中数，取 top5；全部落空宁可不显示）——
+  不凭想象造词，保证点下去必有结果。
+- `qaFloatRenderSuggest()` 在 `#qaFloatBody` 末尾插入 `.qa-sug-cards`
+  （`.qa-sug-tip` 引导语 + 复用既有 `.qa-sug` chip，`onclick="qaSugQuery(this)"`）；
+  `qaSugQuery()` 把词填进输入框并调 `qaFloatSearch()`。
+- **只在「完全空态」渲染**：初始化分支 `if(!fb.children.length)` 与 `qaClearHistory()` 末尾；
+  `qaFloatSearch()` 开头 `qaRemoveSuggest()` 收起。
+  → **有历史会话时不出现**，避免打扰；这是刻意取舍，探针曾因这条误报一次 FAIL（见 20.6）。
+
+### 20.6 测试与验证
+
+- `test_mobile_ux_batch.js` 新增 **⑮ 段（52 条断言）**：图标渐变 / 文字 / 脉冲禁令 ·
+  顶栏六条 CSS 契约 · 形态隔离（桌面按记忆恢复、**手机清内联**、手机不写回记忆、不挂缩放柄、
+  缩放入口失效）· `resize` 监听 · ⋯ 菜单 DOM + 展开收起 + `aria-expanded` ·
+  推荐词产出与点击检索。文件总计 **120 PASS / 0 FAIL**。
+- 真实 Chrome 探针（`tmp/rvprobe.html` + `%TEMP%\md_rvprobe.py`，8 用例）：**64 条断言全绿**。
+  `qamobile` 用例在 iframe 加载**前**伪造桌面记忆（`qaFloatPos={left:40,top:320}`、
+  `qaFloatSize={440,560}`），真机证据：面板 `430×1000 = 视口`、贴齐 `0,0`、
+  内联 `w='' h='' l='' t=''` —— 直接证明 bug 已修。
+- **探针坑（第三次同类）**：`qamobile` 点了推荐词 → 写入 `qa_history_v1` → 下一个用例
+  `qadesktop` 加载到历史 → 跳过空态 → `sugCount=0` **假 FAIL**。
+  对策：探针前置清理**必须连会话历史一起清**（`localStorage.removeItem('qa_history_v1')`），
+  与既有的 `mdRightsView`/`mdRightsSort` 同一处理。
+
+### 20.7 红线（08:00 复核不得判为回退）
+
+- 窄屏全屏**合法**：`#qaFloat` 在 ≤768px 的 `100vw/100dvh` 与 `qaFloatSyncViewport()` 都必须保留；
+  手机端出现内联 `style.width/left` = 真回退。
+- 桌面端**仍是可拖拽/可缩放卡片**（8 个 `.qa-resize-handle` 在位），不得为省事统一成全屏。
+- **彩色渐变 Ai 图标合法**；`@keyframes qaOrbPulse` 与渐变发光球仍禁（`app.js` 里
+  `qaOrbPulse` 仅允许出现在注释中）。
+- 推荐词只在完全空态出现，属既定取舍；不得为「让它常在」而挂到有历史的分支上。
+
+### 20.8 两条自动化 prompt 的同步点（已做）
+
+- **08:00 复核**：把「窄屏全屏 / 桌面卡片 / 彩色 Ai 图标 / ⋯ 菜单 / 空态推荐词」列为
+  **合法形态**（列进去，否则复核会把它们当回退删掉）；只保留「`qaOrbPulse` 脉冲」为禁项。
+- **06:00 生成**：无需改数据处理；补充一句——改 `app.js` 的 AI 搜面板后必须跑
+  `test_mobile_ux_batch.js`（含 ⑮ 段）与真机探针。
