@@ -2742,10 +2742,12 @@ function showPwaInstallPrompt(){
     if(IS_IOS){
       txt.textContent='Safari 点“分享”→“添加到主屏幕”，像 App 一样使用';
       btn.textContent='如何添加';
-      btn.onclick=function(){ alert('① 点 Safari 底部“分享”按钮（□↑）\n② 上滑找到“添加到主屏幕”\n③ 点“添加”即可'); };
+      btn.onclick=function(){ alert('添加到主屏幕：\n① 点 Safari 底部「分享 □↑」\n② 上滑找到「添加到主屏幕」\n③ 点「添加」'); };
     }else{
-      txt.textContent='安装到主屏幕，离线也能看日报';
-      btn.textContent='安装';
+      txt.textContent='添加到手机桌面，离线也能看日报';
+      // 按钮文案跟着真实能力走：只有浏览器确实给了安装事件（能连 Google 服务的机型）才叫「安装」，
+      //   否则叫「怎么加」并给菜单路径 —— 按钮写「安装」点了却毫无反应，正是用户踩过的那一脚。
+      btn.textContent=window.__deferredPrompt?'安装':'怎么加';
       btn.onclick=function(){ triggerPwaInstall(); };
     }
     bar.hidden=false;
@@ -2818,11 +2820,14 @@ function triggerPwaInstall(){
       try{ mdRenderInstallCard(); }catch(err){}
     });
   }else{
-    // 无浏览器提示时（如 Firefox/Safari），给手动指引
+    // 浏览器没给安装事件时（iOS / 各家自带浏览器 / 国产内核）走手动指引：
+    //   ① 用 mdPwaShortcutPlain() 复用同一份对照表 —— 别再手写「点右上角 ⋮」，那是只认 Chrome 的说法；
+    //   ② 只讲手机，不提电脑（电脑版在地址栏点一下就能装）。
     if(IS_IOS){
-      alert('请按以下步骤添加到主屏幕：\n① 点 Safari 底部“分享”按钮（□↑）\n② 上滑找到“添加到主屏幕”\n③ 点“添加”');
+      alert('添加到主屏幕：\n① 点 Safari 底部「分享 □↑」\n② 上滑找到「添加到主屏幕」\n③ 点「添加」');
     }else{
-      alert('请按以下步骤添加：\n① 点浏览器右上角“⋮”菜单\n② 选择“安装应用 / 添加到桌面”\n③ 确认添加');
+      alert('添加到手机桌面：\n' + mdPwaShortcutPlain()
+        + '\n\n找不到的话，就在浏览器菜单里找「添加到主屏幕 / 添加到桌面」。');
     }
   }
 }
@@ -3040,7 +3045,16 @@ window.qaFloatBack=mdQaBack;
   });
   document.addEventListener('click',function(e){
     if(sheet.hidden) return;
-    if(e.target.closest('#mineSheet')||(e.target.closest('.mtab')&&e.target.closest('.mtab').getAttribute('data-go')==='mine')) return;
+    // 2026-09-12（用户实测 bug）：面板里有些点击会**就地重渲染自己** —— 安装引导的「装不上？
+    //   点这里」展开/收起就是整体换 innerHTML。重渲染会把 e.target 从 DOM 里摘下来，事件冒泡到这里时
+    //   e.target.closest('#mineSheet') 已经返回 null，于是被误判成「点了面板外面」→ 面板被关掉、
+    //   弹回首页（用户观感：点一下跳首页，要再进一次「我的」才能看到展开的内容）。
+    //   composedPath() 是**派发事件那一刻就固定下来的路径**，不受中途重渲染影响；用它判断才可靠。
+    var mdPath=(typeof e.composedPath==='function')?e.composedPath():null;
+    if(mdPath && mdPath.indexOf(sheet)>=0) return;
+    if(e.target && e.target.isConnected===false) return;   // 兜底：目标已被换掉，同样不算「点外面」
+    if(e.target.closest&&e.target.closest('#mineSheet')) return;
+    if(e.target.closest('.mtab')&&e.target.closest('.mtab').getAttribute('data-go')==='mine') return;
     // 2026-09-12：从沉浸式收藏/浏览记录视图点「‹ 返回」会重新打开「我的」面板；该点击不算「点外部关闭」，否则会被立刻关掉又弹回首页。
     if(e.target.closest('[data-act="fav-back"]')) return;
     activateTab(mdLastContentTab, false);
@@ -3124,33 +3138,71 @@ function mdPwaPlatformName(){
   return '桌面';
 }
 function mdPwaIsWeChat(){ return /MicroMessenger/i.test(navigator.userAgent); }
-// 「添加到主屏幕」的菜单项名称各浏览器不同，按当前浏览器给一条最短路径——
-//   用户群体用什么手机、什么浏览器都有，泛泛说「添加到主屏幕」等于没说。
-function mdPwaShortcutStep(){
-  var ua=navigator.userAgent;
-  if(IS_IOS) return '点底部「<b>分享 □↑</b>」（Safari）→ 上滑找到「<b>添加到主屏幕</b>」→ 点「添加」。';
-  if(/MiuiBrowser/i.test(ua)) return '点右下角「<b>☰</b>」→「<b>添加到桌面</b>」。';
-  if(/HuaweiBrowser/i.test(ua)) return '点底部「<b>☰</b>」→「<b>添加到桌面</b>」。';
-  if(/UCBrowser/i.test(ua)) return '点底部「<b>≡</b>」→「<b>添加到桌面</b>」。';
-  if(/QQBrowser/i.test(ua)) return '点底部「<b>≡</b>」→「<b>添加到桌面</b>」。';
-  if(/SamsungBrowser/i.test(ua)) return '点右下角「<b>≡</b>」→「<b>添加页面到</b>」→「<b>主屏幕</b>」。';
-  if(/Edg\//.test(ua)) return '点底部「<b>⋯</b>」→「<b>添加到手机</b>」（或「添加到主屏幕」）。';
-  if(/Firefox\//.test(ua)) return '点「<b>⋮</b>」→「<b>安装</b>」或「<b>添加到主屏幕</b>」。';
-  if(/Chrome\//.test(ua)) return '点右上角「<b>⋮</b>」→「<b>添加到主屏幕</b>」→ 确认。';
-  return '点浏览器菜单「<b>⋮</b>」或「<b>≡</b>」→ 找「<b>添加到主屏幕 / 添加到桌面</b>」→ 确认。';
+// 「添加到主屏幕」的菜单项名称各浏览器不同：收敛成**一张对照表**（单一数据源）——
+//   折叠态只取「当前浏览器」那一条（最短路径），展开排障给**全部**：
+//   用户常常不知道自己用的是哪个浏览器，而且**很多人手机上根本没装 Chrome**
+//   （2026-09-12 用户明确要求「并不是每个人手机上都会安装 Chrome 浏览器」→ 必须逐个给）。
+//   表顺序即判定优先级：安卓各家自带浏览器的 UA 里都含 "Chrome"，必须先判它们、最后才判 Chrome。
+function mdPwaShortcutTable(){
+  function hit(re){ return function(){ return re.test(navigator.userAgent); }; }
+  return [
+    {k:'ios',    n:'iPhone / iPad（Safari）', t:'点底部「<b>分享 □↑</b>」（Safari 浏览器）→ 上滑找到「<b>添加到主屏幕</b>」→ 点「添加」', hit:function(){ return IS_IOS; }},
+    {k:'miui',   n:'小米浏览器',              t:'点右下角「<b>☰</b>」→「<b>添加到桌面</b>」',                       hit:hit(/MiuiBrowser/i)},
+    {k:'huawei', n:'华为浏览器',              t:'点底部「<b>☰</b>」→「<b>添加到桌面</b>」',                         hit:hit(/HuaweiBrowser/i)},
+    {k:'uc',     n:'UC 浏览器',               t:'点底部「<b>≡</b>」→「<b>添加到桌面</b>」',                         hit:hit(/UCBrowser/i)},
+    {k:'qq',     n:'QQ 浏览器',               t:'点底部「<b>≡</b>」→「<b>添加到桌面</b>」',                         hit:hit(/QQBrowser/i)},
+    {k:'samsung',n:'三星浏览器',              t:'点右下角「<b>≡</b>」→「<b>添加页面到</b>」→「<b>主屏幕</b>」',         hit:hit(/SamsungBrowser/i)},
+    {k:'edge',   n:'Edge',                    t:'点底部「<b>⋯</b>」→「<b>添加到手机</b>」（或「添加到主屏幕」）',   hit:hit(/Edg\//)},
+    {k:'firefox',n:'Firefox',                 t:'点「<b>⋮</b>」→「<b>安装</b>」或「<b>添加到主屏幕</b>」',             hit:hit(/Firefox\//)},
+    {k:'chrome', n:'安卓 Chrome',              t:'点右上角「<b>⋮</b>」→「<b>添加到主屏幕</b>」→ 确认',               hit:hit(/Chrome\//)}
+  ];
 }
+function mdPwaShortcutGeneric(){
+  return '点浏览器菜单（一般在<b>右上角 ⋮</b>，或<b>右下角 ☰ / ≡ / ⋯</b>）→ 找「<b>添加到主屏幕</b>」或「<b>添加到桌面</b>」→ 确认。';
+}
+// 当前浏览器 = 表里第一条命中的。
+// 微信里点开的是它自己的 WebView，「在浏览器打开」之后用户会用哪个浏览器并不知道 → 返回 null 走通用句。
+function mdPwaCurrentShortcut(){
+  if(mdPwaIsWeChat()) return null;
+  var rows=mdPwaShortcutTable();
+  for(var i=0;i<rows.length;i++){ if(rows[i].hit()) return rows[i]; }
+  return null;
+}
+function mdPwaShortcutStep(){
+  var r=mdPwaCurrentShortcut();
+  return r ? r.t+'。' : mdPwaShortcutGeneric();
+}
+// alert() 只能放纯文本（不能带 <b>）→ 复用同一份对照表，别再手写第二份（那必然只认 Chrome）
+function mdPwaShortcutPlain(){ return mdPwaShortcutStep().replace(/<[^>]+>/g,''); }
+// 手机端安装引导正文。两条硬约定（2026-09-12 用户定夺）：
+//   ① **只讲手机** —— 电脑版在浏览器里点一下就能装，不该占用手机引导的篇幅；
+//   ② **按浏览器逐个给** —— 用户手机上装的不一定是 Chrome，泛泛一句「添加到主屏幕」等于没说。
+// 顺序也是刻意的：先给「照着做就行」的步骤（① 通用 → ② 对号入座 → ③ 微信 → ④ 点不动怎么办），
+//   把「为什么安装会失败」放到后面（⑤⑥）—— 一上来讲原理会把只想装个图标的用户挡住。
 function mdPwaHelpHTML(){
+  var cur=mdPwaCurrentShortcut();
+  var rows=mdPwaShortcutTable().map(function(r){
+    var on=!!(cur&&cur.k===r.k);
+    return '<li'+(on?' class="on"':'')+'><b>'+r.n+'</b>：'+r.t
+      +(on?'<span class="tag">← 你现在用的浏览器</span>':'')+'</li>';
+  }).join('');
   return '<div class="mine-install-helpbody">'
-    +'<b>为什么点「安装」会失败？</b>安卓上 Chrome 的「安装」= 让手机里的 <b>Google 服务</b>现场生成一个应用包。'
-    +'国内绝大多数手机没有 Google 服务，所以会出现<b>点了没反应、或提示在安装但桌面一直没有图标</b>——'
-    +'它不报错，也不代表日报有问题。'
-    +'<br><b>通用办法（任何品牌手机、任何浏览器都能用）</b>：'+mdPwaShortcutStep()
-    +'<br><b>小米 / 红米（MIUI / HyperOS）</b>：若在 Chrome 里点了「添加到主屏幕」仍无反应，先去 <b>设置 → 应用设置 → 应用管理 → Chrome → 权限管理</b>，把「<b>桌面快捷方式</b>」设为允许，再回来添加（实测可行）。'
-    +'<br>用这条得到的图标，点开会带一层浏览器外框，但<b>功能完全一样、断网也能看</b>（日报已缓存到本机）。'
-    +'<br><b>想要「没有地址栏」的原生样子</b>：只能让手机连上 Google 服务（用「安装」），'
-    +'或者先在<b>电脑 Chrome / Edge</b> 上装——电脑端不受这个限制。'
-    +'<br><b>iPhone / iPad</b>：走 Safari 的「分享 □↑ → 添加到主屏幕」，本地完成、不需要 Google 服务。'
-    +'<br><b>微信里打开的</b>：微信自己没有「添加到桌面」入口，必须先「⋯ → 在浏览器打开」。'
+    +'<p class="h">① 最省事的办法（任何手机、任何浏览器都能用）</p>'
+    +'<p>'+mdPwaShortcutGeneric()+'</p>'
+    +'<p class="h">② 按你手机上的浏览器对号入座</p>'
+    +'<ul class="pwa-list">'+rows+'</ul>'
+    +'<p class="h">③ 如果你是在微信里打开这个链接</p>'
+    +'<p>微信自己没有「添加到桌面」入口，得先用浏览器打开：点右上角「<b>⋯</b>」→「<b>在浏览器打开</b>」，再照 ② 里你那一条做。</p>'
+    +'<p class="h">④ 点了菜单却没有任何反应？（小米 / 红米最常见）</p>'
+    +'<p>先去 <b>设置 → 应用设置 → 应用管理 → Chrome（或你正在用的浏览器）→ 权限管理</b>，把「<b>桌面快捷方式</b>」设为允许，再回来添加一次（实测可行）。</p>'
+    +'<p class="h">⑤ 为什么点「安装」多半会失败？</p>'
+    +'<p>手机浏览器里的「安装」不是做个快捷方式，而是要调用手机里的 <b>Google 服务</b>现场生成应用包。'
+    +'国内绝大多数手机没有 Google 服务，于是会出现<b>点了没反应</b>、或者<b>提示在安装但桌面始终没有图标</b>——'
+    +'它不报错，也不代表日报有问题。用「添加到主屏幕」就绕开了这一步。</p>'
+    +'<p class="h">⑥ 这样装出来的图标，点开会带一层浏览器外框</p>'
+    +'<p>因为它是快捷方式、不是独立应用；但<b>功能和离线缓存完全一样</b>，断网也能看（日报已缓存到本机）。'
+    +'想要「没有地址栏」的原生样子，只有能连 Google 服务的手机才做得到（用上面那个「安装为独立应用」）；'
+    +'连不上就是做不到，不必反复试。</p>'
     +'</div>';
 }
 function mdPwaDiagHTML(){
@@ -3194,25 +3246,29 @@ function mdRenderInstallCard(){
     html='<div class="mine-install-title">✅ 已安装到主屏幕</div><div class="mine-install-note">日报已作为独立应用运行，可随时从主屏图标进入。</div>';
   }else{
     // 默认主推「通用路径」：任何品牌手机、任何浏览器都能用，不依赖 Google 服务。
-    html='<div class="mine-install-title">📲 装到手机桌面</div>'
-      +'<div class="mine-install-note">'+mdPwaShortcutStep()+'</div>';
+    html='<div class="mine-install-title">📲 装到手机桌面</div>';
     if(mdPwaIsWeChat()){
-      // 微信内置浏览器没有任何「添加到桌面」入口 —— 这是国内用户最常见的卡点，必须点破
+      // 微信内置浏览器没有任何「添加到桌面」入口 —— 这是国内用户最常见的卡点，必须点破。
+      //   顺序也要对：先说「你在微信里、得先出去」，再给出去之后的步骤
+      //   （原先先列 Chrome 步骤、再说要跳浏览器，用户照做必然白忙）。
       html+='<div class="mine-install-warn">📮 你是在<b>微信里</b>打开这个链接，微信自己没有「添加到桌面」入口。'
-        +'请先点右上角 <b>⋯ →「在浏览器打开」</b>，再回到这里照上面的步骤操作。</div>';
+        +'请先点右上角 <b>⋯ →「在浏览器打开」</b>，再照下面这条做：</div>'
+        +'<div class="mine-install-note">'+mdPwaShortcutStep()+'</div>';
+    }else{
+      html+='<div class="mine-install-note">'+mdPwaShortcutStep()+'</div>';
     }
     if(window.__deferredPrompt && !mdPwaIsWeChat()){
       // 微信 WebView 里点这个必然无效，不给按钮免得误导；其余场景保留（有 Google 服务的机型能拿到独立窗口）
       html+='<button type="button" class="mine-install-btn" data-pwa="install">安装为独立应用</button>'
         +'<div class="mine-install-note">装好后没有地址栏，更像原生 App。'
-        +'<b>前提是手机能连 Google 服务</b>（国内手机多半连不上；点了没反应就用上面的「添加到桌面」）。</div>';
+        +'<b>前提是手机能连 Google 服务</b>（国内手机多半连不上；连不上就用上面的「添加到主屏幕」，一样看）。</div>';
     }
   }
   if(!IS_STANDALONE && tried && stalled){
     html+='<div class="mine-install-warn">⚠️ 上次点了「安装」但桌面没出现图标 —— '
-      +'这不是日报的问题：安卓 Chrome 的「安装」要靠手机里的 <b>Google 服务</b>生成应用包，'
-      +'国内多数手机没有，所以走到一半就静默结束了。'
-      +'<br>👉 <b>改用上面「添加到桌面」这条路</b>，一定能成，功能和离线一样不少。</div>';
+      +'这不是日报的问题：手机上的「安装」要靠 <b>Google 服务</b>生成应用包，'
+      +'国内多数手机够不到，所以走到一半就静默结束了（不报错）。'
+      +'<br>👉 <b>改用上面的「添加到主屏幕 / 添加到桌面」</b>，一定能成，功能和离线一样不少。</div>';
   }
   if(!IS_STANDALONE){
     html+='<button type="button" class="mine-install-help" data-pwa="help">'+(_mdPwaDiagOpen?'收起 ▲':'装不上？点这里 ▼')+'</button>';

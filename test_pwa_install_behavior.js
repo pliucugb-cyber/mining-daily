@@ -19,6 +19,9 @@
  *   ⑥ 已安装（display-mode:standalone）→ 显示已安装、无安装入口
  *   ⑦ iOS → 显示 Safari 分享指引
  *   ⑧ 微信内置浏览器 → 提示「⋯ → 在浏览器打开」，且不给安装按钮（点了必然无效）
+ *   ⑨ 面板内点「装不上？点这里」展开排障 → **不得把「我的」面板关掉弹回首页**
+ *      （2026-09-12 用户实测 bug：卡片就地重渲染把 e.target 摘离 DOM，document 的
+ *       「点面板外面就关闭」兜底把它误判成外部点击）
  *   ⑤ 内还断言：失败文案不再错误归因「安装未知应用」权限（2026-09-12 实测更正）
  *
  * 运行：node test_pwa_install_behavior.js
@@ -120,8 +123,22 @@ const cardText = doc => { const c = cardEl(doc); return c ? (c.textContent || ''
   check('展开后点名「Google 服务」这一真实卡点', t3.indexOf('Google 服务') >= 0,
     '安卓 Chrome 装 PWA 需连 Google 服务生成应用包，国内手机够不到 —— 这是根因');
   check('展开后给出「添加到主屏幕」这条通用退路', t3.indexOf('添加到主屏幕') >= 0);
-  check('展开后给出电脑端/iPhone 两条可行路径',
-    t3.indexOf('电脑') >= 0 && t3.indexOf('Safari') >= 0);
+  // 2026-09-12 用户指示：这段文字**只讲手机**——电脑版在浏览器里点一下就能装，
+  //   不该占用手机引导的篇幅（用户原话：「不要提电脑版如何安装」）。
+  check('只讲手机安装、不提电脑端（用户明确要求）',
+    t3.indexOf('电脑') < 0 && t3.indexOf('PC') < 0);
+  check('给出 iPhone / Safari 这条手机端路径', t3.indexOf('Safari') >= 0);
+  // 用户 2026-09-12：「并不是每个人手机上都会安装 Chrome 浏览器」→ 必须给全浏览器对照。
+  const BROWSERS = ['Chrome', '小米浏览器', '华为浏览器', 'UC 浏览器', 'QQ 浏览器',
+    '三星浏览器', 'Edge', 'Firefox'];
+  const hitB = BROWSERS.filter(n => t3.indexOf(n) >= 0);
+  check('按浏览器逐个给出入口（覆盖 >=6 种，不只讲 Chrome）', hitB.length >= 6,
+    '命中 ' + hitB.length + '/' + BROWSERS.length + '：' + hitB.join('/'));
+  check('标出「你现在用的浏览器」是哪一条', t3.indexOf('你现在用的浏览器') >= 0,
+    '给出 8 条对照却不标当前那条，用户不知道该看哪条');
+  check('给出微信里打开时的走法（⋯ → 在浏览器打开）', t3.indexOf('在浏览器打开') >= 0);
+  check('手机引导按 ①②③④ 分步排版（不是一整段糊在一起）',
+    ['①', '②', '③', '④'].every(m => t3.indexOf(m) >= 0));
   // 用户 2026-09-12 实测：MIUI/HyperOS 上 Chrome 的「添加到主屏幕」需要系统「桌面快捷方式」权限
   check('展开后给出小米「桌面快捷方式」权限这条实测可行路径',
     t3.indexOf('桌面快捷方式') >= 0 && t3.indexOf('权限管理') >= 0,
@@ -150,8 +167,11 @@ const cardText = doc => { const c = cardEl(doc); return c ? (c.textContent || ''
   const t5 = cardText(p2.doc);
   check('卡片出现 ⚠️ 失败排障提示', t5.indexOf('⚠️') >= 0 && t5.indexOf('没出现图标') >= 0,
     '实际片段：' + t5.slice(0, 40));
+  // 断言盯的是**意图**（指向不依赖 Google 服务的通用退路），不是某一句具体措辞：
+  //   各浏览器菜单里那项一会儿叫「添加到主屏幕」、一会儿叫「添加到桌面」，两种写法都算通过。
   check('提示里点名真实原因并指向通用退路',
-    t5.indexOf('Google 服务') >= 0 && t5.indexOf('添加到桌面') >= 0,
+    t5.indexOf('Google 服务') >= 0 &&
+    (t5.indexOf('添加到主屏幕') >= 0 || t5.indexOf('添加到桌面') >= 0),
     '实际片段：' + t5.slice(0, 60));
   check('失败提示不再归因「安装未知应用」权限', t5.indexOf('安装未知应用') < 0);
 
@@ -193,6 +213,37 @@ const cardText = doc => { const c = cardEl(doc); return c ? (c.textContent || ''
     '实际片段：' + t8.slice(0, 60));
   check('微信内不给「安装为独立应用」按钮（微信 WebView 点了必然无效）',
     !p5.doc.querySelector('#mineInstallCard [data-pwa="install"]'));
+
+  // ==================== ⑨ 面板内展开排障不得关闭「我的」 ====================
+  // 用户 2026-09-12 实测：在「我的」里点「装不上？点这里」，页面会弹回首页，
+  //   要再进一次「我的」才能看到展开的内容 —— 明显不合理。
+  // 根因：安装卡片展开/收起是**就地重渲染**（el.innerHTML 整体替换），
+  //   把 e.target 从 DOM 里摘了下来；事件冒泡到 document 时 e.target.closest('#mineSheet')
+  //   返回 null，被「点面板外面就关闭」的兜底逻辑误判成外部点击。
+  //   → 所以这段断言盯的不是「代码在不在」，而是**面板到底还在不在**。
+  console.log('\n===== ⑨ 面板内展开排障：不得把「我的」关掉弹回首页 =====');
+  const p6 = boot({}); doms.push(p6.dom);
+  await sleep(300);
+  const mineTab = p6.doc.querySelector('#mobileTabBar .mtab[data-go="mine"]');
+  check('底部导航里有「我的」tab', !!mineTab);
+  if (mineTab) mineTab.click();
+  const sheet6 = p6.doc.getElementById('mineSheet');
+  check('点「我的」后面板打开',
+    !!sheet6 && !sheet6.hidden && p6.doc.body.classList.contains('md-mine-open'));
+  const help6 = p6.doc.querySelector('#mineInstallCard [data-pwa="help"]');
+  if (help6) help6.click();
+  check('一次点击就展开排障正文（不必退出再进一次）',
+    cardText(p6.doc).indexOf('Google 服务') >= 0);
+  check('展开排障后：面板仍然开着（旧实现必失败）',
+    !!sheet6 && !sheet6.hidden && p6.doc.body.classList.contains('md-mine-open'),
+    '旧实现：重渲染把 e.target 摘离 DOM → document 的「点外部关闭」误判 → 面板关闭并弹回首页');
+  const help6b = p6.doc.querySelector('#mineInstallCard [data-pwa="help"]');
+  check('展开按钮就地变成「收起」',
+    !!help6b && help6b.textContent.indexOf('收起') >= 0,
+    help6b ? '实际=' + help6b.textContent : '按钮丢失');
+  if (help6b) help6b.click();
+  check('再点一次收起后：面板依然开着',
+    !!sheet6 && !sheet6.hidden && p6.doc.body.classList.contains('md-mine-open'));
 
   console.log('\n===== 结果：' + pass + ' PASS / ' + fail + ' FAIL =====');
   for (const d of doms) { try { d.window.close(); } catch (e) {} }

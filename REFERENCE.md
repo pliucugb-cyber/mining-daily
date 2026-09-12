@@ -1863,6 +1863,40 @@ WebAPK 由 Google 服务生成应用包、**不走系统安装器**，那条权�
 - 若将来想要"真应用"（独立窗口、无浏览器地址栏）**且不依赖 Google 服务**：站点已合规，
   可用 PWABuilder / bubblewrap 打 **TWA 包侧载**。属于「值得再说」的可选项，不是必需。
 - **本轮改版只在自动化与线上字节层验收过**；真机上「按新文案操作能装上」由用户实测确认。
+### 41.8 第二轮修复（2026-09-12 深夜）：面板被误关 + 正文重排
+
+**用户实测反馈两条**：
+
+1. 「我的」面板里点「装不上，点这里」，**面板会关掉并跳回首页**，得再进一次「我的」才能看到内容；
+2. 卡片正文没提手机以外的情况、也没分步，**且不该讲电脑版**（电脑在浏览器里点一下就能装）。
+
+**① 面板被误关 —— 根因是重渲染把 `e.target` 摘离了 DOM**
+
+`document` 上挂着「点面板外部即关闭」的监听，判据原是 `#mineSheet.contains(e.target)`。
+展开排障 → 调 `mdRenderInstallCard()` → `el.innerHTML=html` → **`e.target`（那个按钮）当场脱离 DOM** →
+`contains()` 返回 false → 判定为「点了外部」→ 关面板 + `setActive('home')`。
+
+修法：改用 **`e.composedPath()`**（事件派发那一刻就固定下来的路径，不受中途重渲染影响）：
+
+```js
+var mdPath=(typeof e.composedPath==='function')?e.composedPath():null;
+if(mdPath && mdPath.indexOf(sheet)>=0) return;
+```
+
+**② 正文重排 + 只讲手机**
+
+- 正文改为 **6 步分步排版**（`p.h` 小标题 + `ul.pwa-list > li`）：通用办法 → 按浏览器对号入座 → 微信里面打开 → 点了没反应（小米权限）→ 为什么「安装」多半失败 → 快捷方式的观感/离线；
+- **只讲手机**：卡片文案里不得出现「电脑」；
+- **不让用户先猜自己是哪个浏览器**：新增 `mdPwaShortcutTable()` 9 行对照表（iOS / 小米 / 华为 / UC / QQ / 三星 / Edge / Firefox / Chrome），
+  折叠态只给命中的那一条、展开态给全部并标出「← 你现在用的浏览器」；泛用句 `mdPwaShortcutGeneric()` 兜底。
+  判定顺序＝表序（各家自带浏览器 UA 都含 `Chrome`，必须先判它们）；
+- 浮条文案 `安装` → **`怎么加`**，正文 `安装到主屏幕` → **`添加到手机桌面`**。
+
+**③ 验证**
+
+- `test_pwa_install.py` **45 PASS / 0 FAIL**；`test_pwa_install_behavior.js` **37 PASS / 0 FAIL**（新增 ⑨ 段 6 条，覆盖「一次点击即展开、展开后面板仍开、再点收起仍开」）。
+- **真 Chrome 双版本对照**（同一探针点同一个按钮）：`HEAD` 旧版 `openAfterHelp=false`（复现用户 bug）→ 新版 `true`（已修）。这条证明了「jsdom 过 ≠ 真机过」之外的补充：**组件级 bug 也要用真浏览器做新旧对照**。
+
 ## §42 全站形态契约与复核清单（生成侧必留 · 复核侧回退指纹）
 
 > **用途**：本节是**全站形态的唯一权威清单**，被两条自动化直接引用 ——
@@ -1937,15 +1971,30 @@ WebAPK 由 Google 服务生成应用包、**不走系统安装器**，那条权�
 - **收藏视图不得显示「清空」**（清空仅针对浏览记录，且点完就地重渲染、不跳走）。
 - 空态须为插画化 `.empty-art` SVG（§26），**不得退回纯 emoji `.empty-icon`**。
 
-### 42.7 PWA 安装引导（§41，2026-09-12 晚确诊后定稿）
+### 42.7 PWA 安装引导（§41，2026-09-12 两轮修复后定稿）
+
+**结构与声明（第一轮）**
 
 - `mdRenderInstallCard()` 必须在**三个时机**重渲染：进「我的」/ `beforeinstallprompt` 到达 / `appinstalled` 到达。
 - `manifest.json` 必须含 `id`（`/mining-daily/`）与 **4 个图标**（any 2 + maskable 2，**声明尺寸须与真实 PNG 一致**）。
 - head 四条不得删：`mobile-web-app-capable` + `apple-mobile-web-app-capable` / `-status-bar-style` / `-title`。
-- 卡片**默认只主推「添加到主屏幕」**（`mdPwaShortcutStep()` 按 UA 给**具体菜单项**：小米 / 华为 / UC / QQ / 三星 / Edge / Firefox / Chrome / iOS + 兜底）。
-- 「安装」降级为进阶项：按钮文案「**安装为独立应用**」+ 注明前提（**要能连 Google 服务**）；`mdPwaIsWeChat()` 为真时**不给该按钮**、只提示「⋯ → 在浏览器打开」（WebView 点了必然无效）。
 - 按钮属性用 `data-pwa`，**严禁复活** `data-act="install"`。
+- 「安装」是进阶项：按钮文案「**安装为独立应用**」+ 注明前提（**要能连 Google 服务**）；`mdPwaIsWeChat()` 为真时**不给该按钮**、只提示「⋯ → 在浏览器打开」（WebView 点了必然无效）。
 - 排障文案点名根因「**Google 服务**」+ 小米「桌面快捷方式」权限（设置→应用设置→应用管理→Chrome→权限管理→允许）；**严禁**把「安装未知应用」权限当卡点（第一轮的错误归因；WebAPK 由 Google 服务生成、不走系统安装器）。
+- 静态 `#installGuideSection`（含「电脑端」整栏）在 **≤768px 由 `@media` 内 `display:none!important` 整段隐藏**（2026-09-12 核过：手机端安装入口只有「我的」卡片 + 底部浮条）。**不要再为它写手机端补丁**——父级本就不可见，写了也是死代码。
+
+**面板内交互（第二轮，2026-09-12 深夜）**
+
+- ⚠️**「我的」面板内点「装不上？点这里」不得把面板关掉、不得弹回首页**：document 级「点外部关闭」必须用 **`e.composedPath()`** 判定（`mdPath.indexOf(sheet)>=0` 即 `return`）。原因是展开会调 `mdRenderInstallCard()` 重渲染 → `e.target` 那一刻已被摘离 DOM → `sheet.contains(e.target)` 恒为 false → 被误判成「点了外部」→ 关面板 + 切回首页。**严禁退回 `contains()` 单判**。
+- 展开/收起按钮文案就地切换：`装不上？点这里 ▼` ↔ `收起 ▲`。
+
+**正文排版与括号内的浏览器覆盖（第二轮）**
+
+- 卡片正文**只讲手机**：**不得出现「电脑」**（电脑版在浏览器里点一下就能装，不占手机引导的篇幅）。app.js 里其余「电脑」只允许出现在**注释**中。
+- 正文必须是**分步排版**（`p.h` 小标题 + `ul.pwa-list > li`），一坨密集文字视为回退；节奏固定为：① 通用办法 → ② 按浏览器对号入座 → ③ 微信里打开 → ④ 点了没反应（小米权限）→ ⑤ 为什么「安装」多半失败 → ⑥ 快捷方式的观感与离线能力。
+- **浏览器对照表 `mdPwaShortcutTable()` 是唯一数据源**（9 行：iOS / 小米 / 华为 / UC / QQ / 三星 / Edge / Firefox / Chrome），**判定顺序即表序**——各家自带浏览器 UA 都含 `Chrome`，必须先判它们、最后才判 Chrome。泛用兜底 `mdPwaShortcutGeneric()`；去标签纯文本 `mdPwaShortcutPlain()`（`alert` 用，**不得再手写第二份**）。
+- 折叠态只给**当前浏览器**那一条（`mdPwaCurrentShortcut()`）；展开态给**全部 9 条**，命中项加 `.on` + 「← 你现在用的浏览器」。**理由**：很多手机没装 Chrome（用户 2026-09-12 明确要求），泛泛一句「添加到主屏幕」等于没说。
+- 移动端浮条文案：`#mobileInstallText` = 「添加到移动端桌面…」实际值 **「添加到手机桌面，离线也能看日报」**；`#mobileInstallBtn` = **「怎么加」**（原「安装」）。
 
 ### 42.8 前端信标 · 日期唯一来源 · 文案 · 行情口径
 
@@ -1965,8 +2014,8 @@ WebAPK 由 Google 服务生成应用包、**不走系统安装器**，那条权�
 | `node test_brief_layers.js` | **47** | 简报分层渲染（jsdom） |
 | `node test_smoke_0908.js` | **74** | 全站冒烟（含矿权双视图 8 + 列表排序 9） |
 | `node test_mobile_ux_batch.js` | **172** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6 |
-| `PY test_pwa_install.py` | **40 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性） |
-| `node test_pwa_install_behavior.js` | **26 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt` 等） |
+| `PY test_pwa_install.py` | **45 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
+| `node test_pwa_install_behavior.js` | **37 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板） |
 | `PY test_price_history_unclosed.py` | **0 失败** | 走势图末点确有已收盘数据 |
 | `node test_data_integrity.js` | 锁卡片值/方向 == `lme_data.json` | 行情口径 |
 | `%TEMP%\md_rvprobe.py` | **11 用例 / 76 断言** | 真机（真实 Chrome）响应式与形态探针 |

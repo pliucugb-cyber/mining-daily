@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-2310" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-2345" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -1751,6 +1751,14 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   #mineInstallCard .mine-install-warn{margin-top:var(--s2);font-size:var(--fs-meta);color:var(--warning);line-height:1.5}
   #mineInstallCard .mine-install-help{margin-top:var(--s2);border:none;background:none;padding:0;color:var(--brand);font-size:var(--fs-meta);cursor:pointer;text-decoration:underline}
   #mineInstallCard .mine-install-helpbody{margin-top:var(--s2);font-size:var(--fs-meta);color:var(--ink-500);line-height:1.6}
+  /* 2026-09-12：安装引导正文改为分步排版（p/ul/li）—— 手机屏上必须有明确层级，一坨文字没人看 */
+  #mineInstallCard .mine-install-helpbody p{margin:0 0 6px}
+  #mineInstallCard .mine-install-helpbody p.h{margin:10px 0 4px;font-weight:700;color:var(--ink-900);font-size:var(--fs-meta)}
+  #mineInstallCard .mine-install-helpbody p.h:first-child{margin-top:0}
+  #mineInstallCard .mine-install-helpbody ul{margin:0 0 6px;padding-left:16px;list-style:disc}
+  #mineInstallCard .mine-install-helpbody li{margin:3px 0;line-height:1.55}
+  #mineInstallCard .mine-install-helpbody li.on{color:var(--ink-900)}
+  #mineInstallCard .mine-install-helpbody li.on .tag{color:var(--brand);font-weight:600}
   #mineInstallCard .mine-install-diag{margin-top:var(--s2);padding:var(--s2);border-radius:var(--r-sm);background:var(--surface-3);font-family:var(--font-num);font-size:var(--fs-nano);color:var(--ink-500);line-height:1.7}
   body.dark #mineInstallCard{background:var(--surface-3);border-color:var(--line-1)}
 }
@@ -2474,8 +2482,8 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <!-- 移动端 PWA 安装浮条 -->
 <div class="mobile-install-bar" id="mobileInstallBar" hidden data-page-node-id="cTqBS81GyD0fsjVmr5mIqo">
   <span class="mobile-install-icon" data-page-node-id="guSyGcWWG2BtJUCjd0YUiY">⛏️</span>
-  <span class="mobile-install-text" id="mobileInstallText" data-page-node-id="NKDYU6Qq1d7RZPHPuFAKqL">安装到主屏幕，离线也能看日报</span>
-  <button class="mobile-install-btn" id="mobileInstallBtn" type="button" data-page-node-id="VFG5WYGs5nUGiIOsTTrxKS">安装</button>
+  <span class="mobile-install-text" id="mobileInstallText" data-page-node-id="NKDYU6Qq1d7RZPHPuFAKqL">添加到手机桌面，离线也能看日报</span>
+  <button class="mobile-install-btn" id="mobileInstallBtn" type="button" data-page-node-id="VFG5WYGs5nUGiIOsTTrxKS">怎么加</button>
   <button class="mobile-install-close" id="mobileInstallClose" type="button" title="我知道了" data-page-node-id="aYGJNx5kFm9mKzBT1vKQp3">✕</button>
 </div>
 

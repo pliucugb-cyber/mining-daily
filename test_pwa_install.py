@@ -31,7 +31,11 @@
   ④ app.js 安装链路的三个重渲染时机（防回退守卫，本轮修的正是这个）；
   ⑤ key 漂移守卫（localStorage 键字面量各只准出现一次）；
   ⑥ 通用引导（按浏览器给具体菜单项 + 微信「在浏览器打开」+ 小米桌面快捷方式权限
-     + 不再错误归因「安装未知应用」）。
+     + 不再错误归因「安装未知应用」）；
+  ⑦ 2026-09-12 第二轮：文案只讲手机（不提电脑端）、浏览器入口收敛成单一对照表、
+     「我的」面板的「点外面关闭」改用事件派发时的路径判断
+     （原先点「装不上？点这里」会因就地重渲染把 e.target 摘离 DOM 而被误判成外部点击 →
+      面板关闭、弹回首页，用户实测反馈）。
 
 运行：python test_pwa_install.py
 """
@@ -221,7 +225,9 @@ check('排障文案点名真实卡点（Google 服务）',
 #   那不是文案；所以这里只扫**卡片渲染函数体内的字符串**，扫全文件必然误判。
 def _card_user_text(src):
     parts = []
-    for fn in ('mdPwaShortcutStep', 'mdPwaHelpHTML', 'mdRenderInstallCard'):
+    for fn in ('mdPwaShortcutTable', 'mdPwaShortcutGeneric', 'mdPwaCurrentShortcut',
+               'mdPwaShortcutStep', 'mdPwaShortcutPlain', 'mdPwaHelpHTML',
+               'mdRenderInstallCard'):
         m = re.search(r'function %s\(\)\{.*?\n\}' % fn, src, re.S)
         if m:
             parts.append(m.group(0))
@@ -252,6 +258,26 @@ check('微信内不显示「安装为独立应用」按钮（点了必然无效�
       'window.__deferredPrompt && !mdPwaIsWeChat()' in app_js)
 check('已安装态仍保留（standalone 下不显示安装引导）',
       'IS_STANDALONE' in app_js and '已安装到主屏幕' in app_js)
+
+# —— 2026-09-12 用户第二轮反馈：文案只讲手机 + 覆盖全浏览器 + 修「展开排障却跳首页」——
+check('卡片文案只讲手机、不提电脑端（用户要求：电脑版在浏览器里点一下就装上了）',
+      '电脑' not in _card_text,
+      '扫的是卡片渲染函数体内的字符串（已去注释），不含别处的代码注释')
+_BROWSERS = ('Chrome', '小米浏览器', '华为浏览器', 'UC 浏览器', 'QQ 浏览器',
+             '三星浏览器', 'Edge', 'Firefox')
+_hit = [n for n in _BROWSERS if n in _card_text]
+check('卡片按浏览器逐个给入口（覆盖 >=6 种，不只讲 Chrome）',
+      len(_hit) >= 6, '命中 %d/%d：%s' % (len(_hit), len(_BROWSERS), '/'.join(_hit)))
+check('浏览器入口收敛成一张对照表（折叠态与展开态同源，不再各写一份）',
+      app_js.count('function mdPwaShortcutTable(){') == 1
+      and 'function mdPwaCurrentShortcut(){' in app_js
+      and 'function mdPwaShortcutGeneric(){' in app_js,
+      '原先每个浏览器一行 if-return，展开态要再抄一遍 → 必然「改一处漏一处」')
+check('「点外面关闭我的」改用事件派发时的路径判断（就地重渲染不再被误判成外部点击）',
+      'e.composedPath()' in app_js and 'mdPath.indexOf(sheet)>=0' in app_js,
+      '2026-09-12 用户实测：点「装不上？点这里」会把面板关掉、弹回首页')
+check('旧的「closest 单判」写法已删除（防回退到会跳首页的版本）',
+      "if(e.target.closest('#mineSheet')||(e.target.closest('.mtab')" not in app_js)
 
 # —— key 漂移守卫：键值字面量各只准出现一次 ——
 print('\n===== ④ key 漂移守卫（防「改一处漏一处」）=====')
