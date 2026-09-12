@@ -2687,18 +2687,28 @@ const IS_ANDROID=/Android/i.test(navigator.userAgent);
 const IS_MOBILE_UA=/Android|iPhone|iPad|iPod|Mobile|HarmonyOS/i.test(navigator.userAgent);
 
 // 捕获浏览器安装提示（Chrome/Edge/Android）
+// 2026-09-12：新增两个「安装结果」记忆键。安卓 Chrome 的安装要过系统权限 + Google 服务
+//   生成应用包两道，失败时页面这边**收不到任何报错**（只有 userChoice=accepted，然后永远
+//   等不到 appinstalled）。故把「点过安装」与「点了却没装上」记下来，卡片据此给出排障，
+//   而不是让用户对着菜单反复试。
+var MD_PWA_TRY_KEY='md_pwa_install_tried';
+var MD_PWA_STALL_KEY='md_pwa_install_stalled';
 window.__deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();
   window.__deferredPrompt=e;
+  mdPwaFlag(MD_PWA_STALL_KEY,null);
   showPwaInstallPrompt();
+  try{ mdRenderInstallCard(); }catch(err){}
 });
 
 // 安装完成后隐藏入口
 window.addEventListener('appinstalled',function(){
   window.__deferredPrompt=null;
+  mdPwaFlag(MD_PWA_STALL_KEY,null);   // 装上了 → 清掉「失败」记忆
   hidePwaInstallPrompt();
   mdHideInstallIfStandalone();
+  try{ mdRenderInstallCard(); }catch(err){}
 });
 
 function mdHideInstallIfStandalone(){
@@ -2794,12 +2804,18 @@ function toggleInstallGuide(){
 }
 function triggerPwaInstall(){
   if(window.__deferredPrompt){
+    mdPwaFlag(MD_PWA_TRY_KEY,'1');
+    mdPwaFlag(MD_PWA_STALL_KEY,null);
+    _mdPwaDiagOpen=false;
+    try{ mdRenderInstallCard(); }catch(err){}
     window.__deferredPrompt.prompt();
     window.__deferredPrompt.userChoice.then(function(choice){
       window.__deferredPrompt=null;
       if(choice&&choice.outcome==='accepted'){
         hidePwaInstallPrompt();
+        mdArmInstallStallWatch();
       }
+      try{ mdRenderInstallCard(); }catch(err){}
     });
   }else{
     // 无浏览器提示时（如 Firefox/Safari），给手动指引
@@ -2992,7 +3008,7 @@ window.qaFloatBack=mdQaBack;
       setActive(_qp && _qp.classList.contains('open') ? 'qa' : null);
       return;
     } else if(go==='mine'){
-      if(autoOpen){ sheet.hidden=false; document.body.classList.add('md-mine-open'); mdRefreshMineTheme(); setActive('mine'); }
+      if(autoOpen){ sheet.hidden=false; document.body.classList.add('md-mine-open'); mdRefreshMineTheme(); mdRenderInstallCard(); setActive('mine'); }
       else { setActive(null); }
       return;
     }
@@ -3063,24 +3079,105 @@ function mdRefreshMineTheme(){
   var el=document.getElementById('mineThemeState'); if(!el) return;
   el.textContent=document.body.classList.contains('dark')?'当前：深色 ✓':'当前：浅色 ✓';
 }
+// ===== ⑧bis 安装卡片：状态感知 + 排障（2026-09-12 重写）=====
+// 用户反馈「手机端两种安装方式都失败」。查证结论：网站侧完全合规——真 Chrome 的
+//   Page.getInstallabilityErrors 返回 0 条错误；问题出在安装的**执行环节**（安卓上
+//   Chrome 要过系统「安装未知应用」权限 + 连 Google 服务生成应用包）。
+// 但站内确实有个真 bug 让用户更容易卡住：卡片原先只在页面初始化时渲染一次，而
+//   beforeinstallprompt 是之后（且常在用户交互后）才触发 —— 事件到达时按钮该出现，
+//   卡片却早已画完，于是「立即安装」按钮永远不出现。现在三个时机都会重渲染：
+//   ① 进入「我的」；② beforeinstallprompt 到达；③ appinstalled 到达。
+var _mdPwaDiagOpen=false;
+var _mdPwaStallTimer=null;
+function mdPwaFlag(k,v){
+  try{
+    if(v===undefined) return localStorage.getItem(k);
+    if(v===null){ localStorage.removeItem(k); return null; }
+    localStorage.setItem(k,v); return v;
+  }catch(e){ return null; }
+}
+function mdPwaBrowserName(){
+  var ua=navigator.userAgent;
+  if(/MicroMessenger/i.test(ua)) return '微信内置浏览器';
+  if(/Edg\//.test(ua)) return 'Edge';
+  if(/QQBrowser/i.test(ua)) return 'QQ 浏览器';
+  if(/UCBrowser/i.test(ua)) return 'UC 浏览器';
+  if(/HuaweiBrowser/i.test(ua)) return '华为浏览器';
+  if(/MiuiBrowser/i.test(ua)) return '小米浏览器';
+  if(/SamsungBrowser/i.test(ua)) return '三星浏览器';
+  if(IS_IOS) return 'Safari';
+  if(/Chrome\//.test(ua)) return 'Chrome';
+  if(/Firefox\//.test(ua)) return 'Firefox';
+  return '未知浏览器';
+}
+function mdPwaPlatformName(){
+  if(IS_IOS) return 'iOS';
+  if(IS_ANDROID) return '安卓';
+  if(IS_MOBILE_UA) return '移动端';
+  return '桌面';
+}
+function mdPwaHelpHTML(){
+  return '<div class="mine-install-helpbody">'
+    +'<b>安卓 Chrome</b>：① 先给浏览器开「安装未知应用」权限；② 安卓上 Chrome 要向 Google 服务申请生成应用包，<b>手机连不上 Google 服务时这一步会失败</b>。这时改用菜单里的「<b>创建快捷方式</b>」——图标同样出现在桌面，点开即可用。'
+    +'<br><b>电脑 Chrome / Edge</b>：地址栏右侧的「安装」图标最稳，不受手机那两道限制（建议先用电脑装一次）。'
+    +'<br><b>iPhone / iPad</b>：只能走 Safari 的「分享 □↑ → 添加到主屏幕」。'
+    +'</div>';
+}
+function mdPwaDiagHTML(){
+  var sw='不可用';
+  try{ if(navigator.serviceWorker) sw=navigator.serviceWorker.controller?'已接管':'未接管'; }catch(e){}
+  var rows=[
+    '模式：'+(IS_STANDALONE?'独立应用':'浏览器标签页'),
+    '环境：'+mdPwaPlatformName()+' · '+mdPwaBrowserName(),
+    '安装提示：'+(window.__deferredPrompt?'已就绪':'未就绪'),
+    '离线能力：'+sw,
+    '点过安装：'+(mdPwaFlag(MD_PWA_TRY_KEY)==='1'?'是':'否')
+  ];
+  return '<div class="mine-install-diag">'+rows.join('<br>')+'</div>';
+}
+function mdBindInstallCard(){
+  var el=document.getElementById('mineInstallCard');
+  if(!el||el.__mdPwaBound) return;
+  el.__mdPwaBound=true;
+  el.addEventListener('click',function(e){
+    var t=(e.target&&e.target.closest)?e.target.closest('[data-pwa]'):null; if(!t) return;
+    var act=t.getAttribute('data-pwa');
+    if(act==='install'){ try{ triggerPwaInstall(); }catch(err){} }
+    else if(act==='help'){ _mdPwaDiagOpen=!_mdPwaDiagOpen; try{ mdRenderInstallCard(); }catch(err){} }
+  });
+}
+function mdArmInstallStallWatch(){
+  try{ if(_mdPwaStallTimer) clearTimeout(_mdPwaStallTimer); }catch(e){}
+  _mdPwaStallTimer=setTimeout(function(){
+    if(IS_STANDALONE) return;
+    mdPwaFlag(MD_PWA_STALL_KEY,'1');
+    try{ mdRenderInstallCard(); }catch(err){}
+  },25000);
+}
 function mdRenderInstallCard(){
   var el=document.getElementById('mineInstallCard'); if(!el) return;
+  mdBindInstallCard();
+  var tried=mdPwaFlag(MD_PWA_TRY_KEY)==='1';
+  var stalled=mdPwaFlag(MD_PWA_STALL_KEY)==='1';
+  var html;
   if(IS_STANDALONE){
-    el.innerHTML='<div class="mine-install-title">✅ 已安装到主屏幕</div><div class="mine-install-note">日报已作为独立应用运行，可随时从主屏图标进入。</div>';
-    return;
+    html='<div class="mine-install-title">✅ 已安装到主屏幕</div><div class="mine-install-note">日报已作为独立应用运行，可随时从主屏图标进入。</div>';
+  }else if(IS_IOS){
+    html='<div class="mine-install-title">📱 安装到主屏幕</div><div class="mine-install-note">① 点 Safari 底部「分享 □↑」<br>② 上滑找到「添加到主屏幕」<br>③ 点「添加」即可</div>';
+  }else if(window.__deferredPrompt){
+    html='<div class="mine-install-title">📲 安装到主屏幕</div><div class="mine-install-note">装好后像 App 一样独立打开，断网也能看。</div>'
+      +'<button type="button" class="mine-install-btn" data-pwa="install">立即安装</button>';
+  }else{
+    html='<div class="mine-install-title">📲 安装到主屏幕</div><div class="mine-install-note">浏览器菜单（⋮）→「安装应用 / 添加到主屏幕」→ 确认添加。</div>';
   }
-  if(IS_IOS){
-    el.innerHTML='<div class="mine-install-title">📱 安装到主屏幕</div><div class="mine-install-note">① 点 Safari 底部「分享 □↑」<br>② 上滑找到「添加到主屏幕」<br>③ 点「添加」即可</div>';
-    return;
+  if(!IS_STANDALONE && tried && stalled){
+    html+='<div class="mine-install-warn">⚠️ 上次点了安装却没装上。安卓常见两条：浏览器缺「安装未知应用」权限；或手机连不上 Google 服务（Chrome 要靠它生成应用包）。可改用「创建快捷方式」，或先在电脑上装。</div>';
   }
-  el.innerHTML='<div class="mine-install-title">📲 安装到主屏幕</div><div class="mine-install-note">浏览器菜单（⋮）→「安装应用 / 添加到主屏幕」→ 确认添加。</div>';
-  try{
-    if(window.__deferredPrompt){
-      var b=document.createElement('button'); b.type='button'; b.className='mine-install-btn'; b.textContent='立即安装';
-      b.onclick=function(){ try{ triggerPwaInstall(); }catch(e){} };
-      el.appendChild(b);
-    }
-  }catch(e){}
+  if(!IS_STANDALONE){
+    html+='<button type="button" class="mine-install-help" data-pwa="help">'+(_mdPwaDiagOpen?'收起 ▲':'装不上？点这里 ▼')+'</button>';
+    if(_mdPwaDiagOpen) html+=mdPwaHelpHTML()+mdPwaDiagHTML();
+  }
+  el.innerHTML=html;
 }
 // ⑨ 会议会展：运行时注入 #meetingSection（置于 #rightsSection 之后，避开生成区），从全库抽取会展类新闻
 function mdInitMeetingSection(){

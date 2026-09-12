@@ -1751,3 +1751,85 @@ new = re.sub(r'<title>[^<]*</title>', lambda _m: '<title>%s</title>' % want, src
 - 层 B 状态是**全局一份**（手机/电脑共用），与层 A 一致；如需按端或按天区分，另行裁定。
 - 本层与层 A 一样，**观感只能在真机/真浏览器确认**（jsdom 只证明逻辑，不证明「看着对不对」）。
 
+
+## §41 PWA「装到桌面」排查与加固（2026-09-12 晚，build `20260912-2251`）
+
+> 用户：「想把日报安装到桌面一直不成功，Chrome 里这两种方式（安装 / 创建快捷方式）都试了都不行。」
+> 附手机截图：Chrome 底部弹层「安装并创建快捷方式」→ 两行「安装」「创建快捷方式」。
+
+### 41.1 先证明网站侧没问题（唯一权威办法：问浏览器本人）
+
+不靠猜。用真 Chrome 的 DevTools 协议直接问它（Node 内置 WebSocket 连 CDP，探针 `%TEMP%\md_cdp_pwa.js`）：
+
+| 查询 | 结果 |
+|---|---|
+| `Page.getAppManifest` | 清单解析 `errors` 为空 |
+| **`Page.getInstallabilityErrors`** | **0 条错误** —— Chrome 认为该站「可安装」 |
+| 清单声明的 4 个图标线上取字节 | 全部 200，且**真实 PNG 尺寸与声明一致**（192/192、512/512） |
+| `beforeinstallprompt` | 在干净 Chrome 里确实触发了（`window.__deferredPrompt` 非空） |
+
+结论：**网站侧完全合规**（HTTPS + manifest 齐 + 图标合规 + SW 带 fetch + start_url 在 scope 内）。
+失败发生在安装的**执行环节**，而不在页面本身。
+
+### 41.2 但站内确实有一个真 bug（本轮修复，也是截图能对上的那个）
+
+`app.js` 的 `mdRenderInstallCard()` **只在页面初始化时被调用了一次**（注入底栏/
+
+我的面板那一刻），而 `beforeinstallprompt` 往往在此之后（且常需用户交互/停留）才触发。
+事件到达时 `window.__deferredPrompt` 才有值，卡片却早已画完 →
+**「立即安装」按钮永远不出现**，用户只能照文字去翻浏览器菜单。
+用户截图里卡片显示的正是**文字指引而非按钮** —— 这就是这个 bug 的指纹。
+
+修复：三个时机都重渲染 —— ① 进入「我的」时；② `beforeinstallprompt` 到达；③ `appinstalled` 到达。
+
+### 41.3 改动清单
+
+| 文件 | 改动 |
+|---|---|
+| `manifest.json` | 新增 `id`（固定应用身份；缺省时 Chrome 拿 start_url 当身份，将来改 start_url 会被当成新应用）、`lang`、`categories`、`prefer_related_applications:false`；把**已存在但没挂上**的两个 maskable 图标写进 `icons` 并显式声明 `purpose`（any 2 + maskable 2） |
+| `index.html` | head 补 `mobile-web-app-capable` 与 `apple-mobile-web-app-capable / -status-bar-style / -title`（iOS「添加到主屏幕」后要独立全屏，缺这三条会**仍带 Safari 外壳** = 用户观感「装了没用」）；安装卡补四条样式（warn / help / helpbody / diag） |
+| `app.js` | 安装卡改状态感知：① 三个时机重渲染；② 记「点过安装」`md_pwa_install_tried`、记「点了却没装上」`md_pwa_install_stalled`（`userChoice=accepted` 后 25 秒仍无 `appinstalled` 即判失败）；③ 展开式排障 + 体检（模式 / 环境 / 安装提示是否就绪 / SW 是否接管 / 是否点过） |
+
+键名常量 `MD_PWA_TRY_KEY` / `MD_PWA_STALL_KEY` 集中定义，并有 key 漂移守卫（字面量各只准出现 1 次）。
+
+### 41.4 手机侧的两个真实卡点（网站改不了，必须如实告知用户）
+
+安卓上 Chrome「安装」PWA = 装一个**真实的 Android 应用（WebAPK）**，这一步有两道关卡：
+
+1. **系统的「安装未知应用」权限** —— MIUI/HyperOS/EMUI/ColorOS 等国产 ROM 上，Chrome 可能没有该权限，
+   装到一半被系统静默拦下（桌面不出现图标，页面侧也**收不到任何报错**）。
+2. **Google 服务通道** —— WebAPK 由 Google 的应用包服务生成，**手机连不上 Google 服务时这一步必然失败**。
+   国内网络环境下，这正是「安装点了没反应 / 提示失败」的最常见成因。
+
+因此可用的替代路径（已写进卡片内的排障文案）：
+- Chrome 菜单里的「**创建快捷方式**」：图标同样出现在桌面、功能完全一样（只是在浏览器里打开）；
+- **电脑 Chrome / Edge**：地址栏右侧「安装」最稳，不走手机那套限制（PC 端不依赖 WebAPK 服务）；
+- **iPhone / iPad**：Safari「分享 □↑ → 添加到主屏幕」，本地完成，同样不依赖 Google。
+
+### 41.5 测试
+
+- 新增 `test_pwa_install.py`（静态闸门，**34 PASS / 0 FAIL**）：manifest 必填/硬化字段、
+  **每个图标的声明尺寸 vs 真实 PNG 尺寸**、head 的清单引用与 iOS 声明、app.js 安装链路的三个重渲染时机、
+  key 漂移守卫；其中 `check_manifest()` 被**实跑**（删 id / 改错尺寸 / display=browser / 图标不存在
+  四种坏输入都必须判假），避免写成恒真的假守卫。
+- 新增 `test_pwa_install_behavior.js`（jsdom 行为，**22 PASS / 0 FAIL**）：派发 `beforeinstallprompt`
+  后卡片**自动**出现按钮（这条在旧实现上必然 FAIL，是它的价值）、展开排障、点击真的调用 `prompt()`、
+  失败记忆触发警示、standalone 与 iOS 两种形态。
+- 全量闸门：21 个 node + 9 个 python 闸门，零失败。
+
+### 41.6 红线（不得回退）
+
+1. **安装卡必须在三个时机重渲染**（进「我的」/ `beforeinstallprompt` / `appinstalled`）；
+   任何"省一次调用"的改动都会让按钮在真机上再也不出现 —— 本轮修的正是这个。
+2. **`manifest.json` 必须保留 `id` 与 maskable 图标**；图标声明尺寸必须与真实 PNG 一致。
+3. **head 的四条声明不得删**（`mobile-web-app-capable` + 三条 `apple-mobile-web-app-*`）。
+4. **排障文案必须点名两条真实原因**（「安装未知应用」权限 / Google 服务），不许退化成「请重试」。
+5. 安装按钮的属性用 `data-pwa`，**不得复活** `data-act="install"`（该按钮 2026-09-12 已从面板删除，有断言守着）。
+
+### 41.7 待办
+
+- **待用户确认手机环境**：品牌/ROM、点「安装」后的具体表现（无反应 / 报错文字 / 图标出现但点开是浏览器）、
+  该机能否访问 Google 服务。三者齐了才能判定是上面哪一道关卡，并决定要不要走「真 APK」路线
+  （PWA 已合规，可用 PWABuilder/bubblewrap 打 TWA 包侧载，绕过 WebAPK 服务）。
+- 卡片里的失败守望是 25 秒判据；若某机型 `appinstalled` 不上报而实际已装上，会出现一次误报
+  （文案是条件式「若没出现图标」措辞，不是硬断言）。
