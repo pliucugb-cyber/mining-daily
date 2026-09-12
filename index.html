@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1601" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1800" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -120,11 +120,15 @@ body[data-filter-mode="history"] #rightsSection,
 body[data-filter-mode="history"] #installGuideSection,
 body[data-filter-mode="history"] .footer,
 body[data-filter-mode="history"] #mobileInstallBar,
-body[data-filter-mode="history"] .news-filter-bar{display:none!important}
+body[data-filter-mode="history"] .news-filter-bar{display:none!important}
+body[data-filter-mode="fav"] #mdTop,
+body[data-filter-mode="history"] #mdTop,
+body[data-filter-mode="fav"] .col-rail,
+body[data-filter-mode="history"] .col-rail{display:none!important}
 /* 收藏/历史视图保留右侧矿业热榜 + 近期会展，只隐藏非相关内容；双栏布局避免中间过空 */
 @media(min-width:1101px){
 body[data-filter-mode="fav"] .news-grid,
-body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr) 300px;gap:var(--s5)}
+body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr);gap:var(--s5)}
 }
 body[data-filter-mode="fav"] #archivedFavSection,
 body[data-filter-mode="history"] #archivedFavSection{display:block!important;background:transparent;border:none;box-shadow:none;padding-top:var(--s4);scroll-margin-top:0}
@@ -145,7 +149,15 @@ body[data-filter-mode="history"] #archFavList .aggregate-clone .news-tags{displa
 /* 收藏/浏览记录视图：左侧目录与聚合标题均不显示计数 */
 #tocFavCount,#tocHistoryCount{display:none}
 body[data-filter-mode="fav"] #archFavCount,
-body[data-filter-mode="history"] #archFavCount{display:none}
+body[data-filter-mode="history"] #archFavCount{display:none}
+.favview-bar{position:sticky;top:0;z-index:225;display:flex;align-items:center;gap:var(--s3);padding:calc(env(safe-area-inset-top,0px) + 8px) var(--s3) 8px;background:var(--surface);border-bottom:1px solid var(--line-2);box-shadow:0 1px 3px rgba(15,23,42,.06)}
+body.dark .favview-bar{background:#15191f;border-color:rgba(255,255,255,.08)}
+.favview-back{display:inline-flex;align-items:center;height:34px;padding:0 var(--s3);border:none;border-radius:17px;background:var(--surface-3);color:var(--ink-900);font-size:var(--fs-body);font-weight:600;cursor:pointer}
+.favview-back:hover{background:var(--line-1)}
+.favview-title{font-size:var(--fs-h3);font-weight:700;color:var(--ink-900);flex:1 1 auto}
+.favview-clear{display:inline-flex;align-items:center;height:34px;padding:0 var(--s3);border:none;border-radius:17px;background:rgba(192,57,43,.12);color:var(--danger);font-size:var(--fs-meta);font-weight:600;cursor:pointer}
+body.dark .favview-clear{background:rgba(255,107,91,.16)}
+.favview-clear:hover{opacity:.92}
 .container{max-width:1360px;margin:0 auto;padding:var(--s4)}
 /* ===== 2026-09-08 双栏布局：桌面端「左主列 + 右栏」，消除右侧大片空白 ===== */
 .news-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s5);align-items:start}
@@ -2363,7 +2375,8 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 </div>
 </div>
 <!-- ==================== 已归档收藏 ==================== -->
-<div class="section" id="archivedFavSection" style="display:none" data-page-node-id="TasvMnm8dhzmi0x8329aJO">
+<div class="section" id="archivedFavSection" style="display:none" data-page-node-id="TasvMnm8dhzmi0x8329aJO">
+<div class="favview-bar" id="favViewBar"><button class="favview-back" type="button" data-act="fav-back" aria-label="返回">‹ 返回</button><span class="favview-title" id="favViewTitle">我的收藏</span><button class="favview-clear" type="button" data-act="clear-history" style="display:none" aria-label="清空浏览记录">清空</button></div>
 <div class="section-title" data-page-node-id="MY70tmwCK1HAUzMGVg10cH">🗂️ 已归档收藏（原新闻已滚出页面，收藏记录永久保留）<span class="news-count" id="archFavCount" data-page-node-id="F8kZntuW6QGbm8uv9U8cGB">0条</span></div>
 <div id="archFavList" data-page-node-id="X01kqiSgMddXbZ403nODmV"></div>
 </div>

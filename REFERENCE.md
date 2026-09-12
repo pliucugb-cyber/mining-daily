@@ -1206,3 +1206,24 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - 真实网络失败/超时**必须**给出可见失败条 + 重新生成（`.qa-net-fail`），不得仅静默兜底。
 - AI 回答按钮在忙/闲时 `aria-label` 必须随状态切换（取消生成 / AI 回答）。
 
+
+### 25 收藏/浏览记录沉浸式视图（2026-09-12 晚，build `20260912-1800`）
+### 25.1 背景
+用户从「我的」面板点「我的收藏」/「浏览记录」后，页面仍显示**顶部分类 tab（推荐/热榜/往期/会议，即吸顶的 `#mdTop`）**与**右侧矿业热榜栏 `.col-rail`**，看着像还在首页，与“只显示收藏/记录内容”的预期不符。
+根因：fav/history 的 CSS 隐藏了 `.header`/`#todaySection`/`#archiveSection` 等正文区块，但**漏隐藏 `#mdTop` 与 `.col-rail`**；且桌面 `.news-grid` 在 fav/history 下仍是双列（`minmax(0,1fr) 300px`），右栏位置被预留。
+### 25.2 方案
+- CSS：fav/history 下追加隐藏 `body[data-filter-mode="fav"|"history"] #mdTop` 与 `.col-rail`（`display:none!important`）；`.news-grid` 改为单列 `minmax(0,1fr)`。
+- 沉浸式返回条：在 `#archivedFavSection` 顶部注入 `.favview-bar`（`#favViewBar`），含「‹ 返回」按钮（`data-act="fav-back"`，aria-label="返回"）+ 标题 `#favViewTitle` + 「清空」按钮（`.favview-clear`，仅 history 模式可见）。
+- JS：`setFilter()` 内调用 `mdSyncFavViewBar(mode)` 同步标题（fav→我的收藏 / history→浏览记录）与清空按钮显隐；新增全局点击委托 `[data-act="fav-back"]` → `setFilter('none')` 回到首页内容 tab。
+- 「清空」复用既有 `data-act="clear-history"` capture 委托（与「我的」面板/桌面目录共用），在 history 视图内直接清空并就地重渲染。
+### 25.3 红线（不得回退）
+- 进入 fav/history **必须**隐藏 `#mdTop` 与 `.col-rail`，且桌面为单列；不得再露出首页分类 tab 与右侧热榜。
+- 收藏视图**不得**显示「清空」按钮（清空仅针对浏览记录）；浏览记录视图清空后须就地更新（可撤销），不得跳走。
+- 「‹ 返回」必须回到进入前的内容 tab（默认首页），不得停留在收藏/记录视图。
+### 25.4 代码落点
+- index.html：fav/history 隐藏块 + `#mdTop`/`.col-rail` 规则；`.news-grid` 单列；`.favview-bar` 样式；`#archivedFavSection` 内 `.favview-bar` DOM；`build-version`→`20260912-1800`。
+- app.js：`mdSyncFavViewBar(mode)`；`setFilter` 内调用；`[data-act="fav-back"]` 点击委托。
+- sw.js：`CACHE_NAME` → `mining-daily-20260912-1800`。
+### 25.5 测试与验证
+- `test_mobile_ux_batch.js` §⑱ 新增 6 条（源码级 + 运行时进入 history/fav 校验标题与清空显隐）。总断言 166 → **172**（0 失败）。
+- 回归：`test_mobile_opt_20260910.js` 37/0、`test_smoke_0908.js` 74/0、`test_qa_navtab_20260910.js` 18/0、`node --check app.js` 干净。

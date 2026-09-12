@@ -471,6 +471,34 @@ setTimeout(() => {
   check('⑥ 无障碍：取消按钮 aria-label 切换（取消生成 / AI 回答）',
         /id="qaFloatAi"[^>]*aria-label="AI 回答"/.test(html) && html.includes("btn.setAttribute('aria-label','取消生成')") && html.includes("btn.setAttribute('aria-label','AI 回答')"));
 
+  console.log('\n===== ⑱ 收藏/浏览记录沉浸式视图（2026-09-12 用户反馈）=====');
+  check('① 顶栏/右栏隐藏：fav/history 下 #mdTop 与 .col-rail 均 display:none!important',
+        html.includes('body[data-filter-mode="fav"] #mdTop,') && html.includes('body[data-filter-mode="history"] #mdTop,') && html.includes('body[data-filter-mode="fav"] .col-rail,') && /\.col-rail\{display:none!important\}/.test(html));
+  check('② 单栏：fav/history .news-grid 改为 minmax(0,1fr) 单列（右栏不再占位）',
+        html.includes('body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr);gap:var(--s5)}'));
+  check('③ 沉浸式返回条：#favViewBar / #favViewTitle / data-act="fav-back" 存在',
+        html.includes('id="favViewBar"') && html.includes('id="favViewTitle"') && html.includes('data-act="fav-back"'));
+  check('④ 同步函数：mdSyncFavViewBar 定义且在 setFilter 内被调用',
+        html.includes('function mdSyncFavViewBar(mode)') && html.includes('mdSyncFavViewBar(mode);'));
+  check('⑤ 清空按钮：仅在浏览记录显示（.favview-clear + data-act="clear-history" 在返回条内）',
+        html.includes('class="favview-clear" type="button" data-act="clear-history"'));
+  let _syncOk=false,_tH='',_cH='',_tF='',_cF='';
+  try{
+    if(typeof window.setFilter==='function'){
+      window.setFilter('history');
+      var _bt=doc.getElementById('favViewTitle'); _tH=_bt?_bt.textContent:'';
+      var _cl=doc.querySelector('#favViewBar .favview-clear'); _cH=_cl?(_cl.style.display||'(empty)'):'NA';
+      window.setFilter('fav');
+      var _bt2=doc.getElementById('favViewTitle'); _tF=_bt2?_bt2.textContent:'';
+      var _cl2=doc.querySelector('#favViewBar .favview-clear'); _cF=_cl2?(_cl2.style.display||'(empty)'):'NA';
+      window.setFilter('none');
+      _syncOk=true;
+    }
+  }catch(e){ _syncOk=false; }
+  check('⑥ 运行时：进入 history→标题「浏览记录」且清空可见；进入 fav→标题「我的收藏」且清空隐藏',
+        _syncOk && _tH==='浏览记录' && _cH!=='none' && _cH!=='' && _tF==='我的收藏' && (_cF==='none'||_cF===''),
+        'tH='+_tH+' cH='+_cH+' tF='+_tF+' cF='+_cF);
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));
