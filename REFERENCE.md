@@ -1863,3 +1863,135 @@ WebAPK 由 Google 服务生成应用包、**不走系统安装器**，那条权�
 - 若将来想要"真应用"（独立窗口、无浏览器地址栏）**且不依赖 Google 服务**：站点已合规，
   可用 PWABuilder / bubblewrap 打 **TWA 包侧载**。属于「值得再说」的可选项，不是必需。
 - **本轮改版只在自动化与线上字节层验收过**；真机上「按新文案操作能装上」由用户实测确认。
+## §42 全站形态契约与复核清单（生成侧必留 · 复核侧回退指纹）
+
+> **用途**：本节是**全站形态的唯一权威清单**，被两条自动化直接引用 ——
+> - **生成侧（06:00 重建）**：按 §42.1–§42.8 的「必留指纹」逐项保留，**缺任一即回退**；
+> - **复核侧（08:00 复验）**：按 §42.1–§42.10 逐项核对，命中任一「回退指纹」即就地修复。
+>
+> 各部件**为什么这样设计**仍以对应专题节（§16 / §17 / §19–§34 / §38 / §40 / §41）为准；
+> **两者冲突时以专题节为准** —— 本节是它们的**可执行投影**，只列「指纹」（ID / 类名 / 键名 / 数值 / 文案），不重述缘由。
+> ⚠️ 本节里的**数值、类名、文案都是硬约束**：动产品就必须同步改**对应测试的期望值**，否则产品是对的、测试报假 FAIL；
+> 断言只应盯**渲染出的文案**，不要把代码注释算进去（注释里出现某词 ≠ 用户能在页面上看到它）。
+
+### 42.1 简报（专题 §16 精炼句 / §38 折叠持久化 / §40 裁剪态持久化）
+
+**形态**：逐条精炼句（≤80 字）+ 五节结构化（`brief_sections`）+ 前端默认收起（380px 裁剪）。
+
+- **五节**：行情 / 政策与产业 / 勘查与技术 / 并购与投资 / 矿权市场（**风险提示节已删**）。
+- **「政策与产业」须为两源**＝「政策与监管」+「行业动态」，先政策后产业，各类目内按 `orig_date_full` 倒序拼接；两类目都须 `drop_notice=True` 走 `LOW_VALUE_NOTICE`。只剩单一类目＝回退。
+- **`brief_sections` 契约**：`[{name, count, items:[{t,u,s}]}]`；每节 `count == items.length`；**空节不收录**（不输出「今日暂无…」占位句）；`t`＝逐条撰写的精炼句（**不是 `news.summary` 搬运**）、`u`＝该条 url、`s`＝来源；`report` 由 `brief_sections` 拼出并保留（前端兜底用）。
+- **生成器四构件**（照抄当日 `update_analysis_YYYYMMDD.py`）：`BRIEF_MAX=80` / `ROUTINE_NOTICE` / `BRIEF_DIGEST`（逐条精炼句 `[{cat,t,k}]`，k＝关联原文关键词，脚本自动匹配填 u）/ `digest_summary()`；三项硬校验（超长 / 分节名越界 / 混入例行条目）任一命中即 `RuntimeError`，属**预期拦截**——压缩条目本身，不要放宽校验。**每天必须按当日内容逐条重写 BRIEF_DIGEST**，勿沿用昨天的句子。
+- **页面**：`#briefSub` 固定「按分类摘要」、**不得出条数**；`.brief-full` 在 `#briefMain` 内、**不带 hidden**，`li` 总数 == 各节条数之和；默认由 `#briefMain.brief-clamp` 裁到 **380px**；`#briefMore` 文案「展开全部（N 条）」↔「收起」；点简报条目能定位到下方对应新闻卡片（`a[data-jump]`）。
+- **`highlights`（≤5 条）**：由各节首条自动派生，**可继续产出但不渲染，不作为复核项**，缺了不影响页面。
+- **回退指纹**（出现任一即回退 → 删净 + bump build-version + 重跑 preflight）：
+  1. 任一条目 >80 字、或用 `news.summary` 式长句、或出现「（原题：」英文残留；
+  2. 简报纯文本总量 >1200 字；
+  3. 命中 `ROUTINE_NOTICE`（装车发运 / 出厂检验 / 启运 / 工商变更 / 业绩说明会 / 投资者关系 / 机构调研 / 持续督导 / 核查意见 / 法律意见书 / 股东大会 / 董事会决议 / 监事会 / 异常波动 / 问询函 / 关注函 / 更正公告 / 补充公告 / 权益变动 / 减持 / 增持）；
+  4. 简报条数 ≥ `stats.new_count`；
+  5. 退回「每节≤4条」硬截断或「每节全量」旧写法；
+  6. 要点层残留：`.brief-hl` / `.brief-hl-wrap` / `.hl-cat` / `.brief-alert`、副标题「必看 N 条」、按钮「展开完整分类摘要」、或 `.brief-full` 带 `hidden`；
+  7. 「政策与产业」只剩单源。
+- **缺 `brief_sections`** ＝生成器退回旧写法 → 按 06:00 §11.8a 修当日 `update_analysis_YYYYMMDD.py` 后重跑（备份 4 个分析 JSON → 只取新 `report`/`brief_sections` 覆盖 → 还原其余 3 个，避免 NOW 时间戳漂移）。
+- **持久化（§38 / §40）**：折叠态与「展开全部（N 条）」裁剪态**永久记住且首帧前恢复**；重建时**不得删掉那两处 pre-paint 内联恢复脚本**。
+- **历史沿革（勿恢复）**：2026-09-11 曾取消「单条≤80字」改完整摘要；2026-09-12 曾取消「每节≤4条」改全量。现在方向相反——**内容本身要短**，不靠前端折叠兜底。
+- **⚠️ 不要**把「今日收录 N 条」加回简报副标题：`stats.new_count`（生成时纳入当日的全部条目）与页面「今日新增」（实时可见且在时效内的新鲜条目）口径本就不同，并列会让读者以为数据打架；条数统一由侧栏 / 统计条呈现。
+
+### 42.2 布局与功能（生成侧必留）
+
+- **必留**：桌面双栏 `.news-grid` → `col-main` + `col-rail`（含 `#hotListSection` **无序号** + `#hotRefreshBtn` + `#expoMini`）、搜索 + 标签筛选、CSV / PDF 导出、防 CDN 横跳、三 HTML marker、`injectRightsResultSummary()`、会展 IIFE、矿权双视图与排序条（见 42.3）。
+- **会展**：须为右栏 `#expoMini` / `#expoMiniList`（匿名 IIFE，关键词 `EXPO_WORDS` / `EXPO_SKIP` / `🎪近期会展` / `expoMini` / `window.__expoIsExpo`），全量 + 限高 300px 滚动；不占今日名额 / 不进热榜。纯广告招商不收。
+- **不得存在**：`marketPulse`、`#expoSection`（主区已删，勿建回）、`#specialSection`（「找矿专项」已取消；找矿类留原位，重要条目由前端 `initSpecial()` 打 ⭐ 战略徽章·靛蓝）。
+- **其他**：`rightsSection` 主列表**不得**出现 `ky.mnr.gov.cn` 矿权条（只进 `#rightsCards`）；💰 子分类存在链 `cninfo`；外链 `target="_blank"`。
+
+### 42.3 矿权双视图与排序（§17 / §19）
+
+- `rightsSection` `display:block`；桌面＝`#rightsCards` + 三筛选 + 视图切换器 `.rights-views .rv-btn`（两态 `data-rv=cards|list`，卡片默认，`.is-on` 与 `aria-pressed` 同步）+ 矿权 CSV（在 `.rights-actions` 内同组右对齐）；标题「💼 矿权交易 · 结构化摘要」；`.rights-note` 紧迫度排序句（近7日到期置顶倒计时，7-14天标橙，其余按截止日，已过期置灰）；TOC 入口。
+- 现行形态是**同一套 DOM 由 `#rightsCards.rv-cards` 切形态**：卡片＝桌面自适应多列网格（默认），列表＝紧凑行 + `.rr-due` 截止期；手机端恒为卡片、`.rights-views` 在 ≤768px `display:none`；偏好存 `localStorage['mdRightsView']`。
+- 排序条：`.rights-cols` 必须是 `#rightsCards` 的**第一个子元素**（`renderRightsSection` 注入 innerHTML），内含 3 个 `.rc-sort` chip（`data-sk` 依次 `""` / `deadline` / `price`，默认激活 `data-sk=""`；激活态带 `.is-on` + `aria-pressed`，文案带 ↑/↓）+ `.rc-sort-hint`；每行须有 `.rr-amount`（**条数 == 行数**，文本「N 万元」或「—」）；仅桌面列表态可见（基础 `display:none`，卡片态与 ≤768px 均不出现）。排序值须与 `.rr-amount` 同源（都用 `r.price`），缺值（price/deadline 为 null）恒沉底。
+- **不得存在**：`#rightsTable` 系列 / `.rights-view-btn` / `.rights-card`（2026-09-08 删掉的表格视图，禁令不变）。
+- **回退指纹**：① 排序条或 `.rr-amount` 缺失；② chip 不是 3 个 / 激活态与箭头不同步；③ 存在 `mdRightsSort` 键（**排序必须不持久化**，刷新即回默认紧迫度）；④ 重新引入 `rightsSort.key==="mineral"` 分支或 `var mineralHtml=`（09-12 已删的死代码）；⑤ 卡片态或 ≤768px 能看到 `.rights-cols` / `.rr-amount`；⑥ 点 chip 未重渲染（误用「只改类名」的视图切换路径）。
+- 保留 `injectRightsResultSummary()` 结果聚合兜底；重建须用当日 `generate_YYYYMMDD.py`（`gen_today.py` 已废弃），内置 `strip_rights_html()` 剥离主列表矿权条。
+
+### 42.4 AI 搜面板（§20 / §21 / §23 / §24）
+
+- **入口与形态**：底栏「AI 搜」入口 + `#qaFloat` 面板。**窄屏（≤768px）全屏** 100vw/100dvh 贴齐 0,0，**不得有内联 width/height/left/top**、不挂缩放柄；**桌面仍为 440×560 可拖拽卡片 + 8 个缩放柄**（不得为省事统一全屏）。
+- **图标**＝**彩色渐变 Ai 圆角方块**（SVG 内 `linearGradient id="qaAiGrad"` + 白色 `Ai`；2026-09-11 的「单色描边 / 禁止渐变」**已作废**，但 `@keyframes qaOrbPulse` 与渐变发光球**仍禁**，只许出现在注释里）。
+- **顶栏**：桌面＝「🔍 AI 搜 · 检索与问答」+ 📤 + 🗑 + ✕；窄屏＝「‹ 返回 / AI 搜 / ⋯」（`#qaHeadMenuList` 2 项）。**顶栏整条 44px**（三键统一 32px；回到 58px 即回退）。
+- **底部输入区四控件**（`#qaFloatInput` / `#qaFloatMic` / `#qaFloatSearch` / `#qaFloatAi`）**同一行、统一 38px、不折行**：`.qa-float-input{min-width:0}` 是承重墙（删掉「检索」/「✨ AI 回答」立刻折行、行高回到 50px+）；`#qaFloatInput` **必须有** `placeholder="输入关键词或问题…"` + `aria-label`（2026-09-05 的「输入框不放占位词」**已作废**，不得把 placeholder 判为回退删掉）；筛选行 `.qa-float-filters` 竖向 padding 用 `var(--s2)`。
+- **空态推荐词** `.qa-sug-cards` / `.qa-sug-tip` / `.qa-sug` **只在完全空态**渲染（3–5 个）。
+- **滚动落点契约**：函数 `qaFloatNearBottom` / `qaFloatFollow` / `qaFloatAnchorTop` / `qaFloatAnchorLastQuestion` / `qaFloatSettle` 全在；刚发出 / 刚恢复的问题传 `{anchorTop:true}` 钉顶、其后答案与「思考中」占位传 `{keepScroll:true}`、答完 `qaFloatSettle()` 仅在「最后一条问题落在下半屏」时提回顶部、`qaFloatFollow()` 只在距底 ≤80px 跟随；`qaFloatScroll()` 调用点**恰好 2 处**（函数定义 + 空态引导）；旧行为「一律 `scrollTop=scrollHeight` 甩到底」是 bug，**不得还原**。
+- **手机体验（§23 / §24）**：首开**不自动 focus 弹键盘**；AI 忙时按钮变可点「取消」红底，取消后保留已流式内容 +「重新生成」；窄屏「‹ 返回」回到打开前的内容 tab 并恢复顶栏品牌与分类栏；从「我的」进入后返回须**重新打开「我的」**（`mdQaReturn`）；窄屏顶栏下拉手势（`mdQaBindSwipe`）可关闭；桌面 Esc（`mdQaBindKeys`）关闭并把焦点归位 `#qaFab`；网络失败须出现 `.qa-net-fail` 明确提示条，**不得静默回退本地兜底**；取消按钮 `aria-label` 切换。
+
+### 42.5 「我的」面板（§22 / §27 / §31）
+
+- `#mineSheet` 必须是**全屏覆盖页**（`position:fixed` 四边 0），由 `body.md-mine-open` 控制；打开时 `body > *:not(#mobileTabBar):not(#mineSheet)` **全部隐藏**（改回底部 sheet 属回退）。
+- 内容**仅四项**：我的收藏 / 浏览记录 / 深色·浅色（须显示「当前：浅色/深色」）/ 安装到主屏幕。加回返回顶部 / 数据更新时间 / 简报内容 / 其他入口**均属回退**。
+- 收藏 / 历史点击 → 关闭我的页并切 `body[data-filter-mode="fav"/"history"]`；关闭 / 点空白回到之前的内容 tab（默认首页）。
+- 浏览记录带「清空」（手机 `.mine-clear` + 桌面 `.toc-clear`：capture 阶段委托 `preventDefault` 后 `clearHistory()`，**只清记录不跳转**、8 秒 `mdUndoToast` 撤销、无记录 `disabled`；桌面左侧目录已精简为不重复入口，见 §27）。
+
+### 42.6 收藏 / 浏览记录沉浸式（§25 / §26 / §33 / §34）
+
+- fav / history 下**必须隐藏**吸顶 `#mdTop` 与右侧 `.col-rail`、桌面单列（`minmax(0,1fr)`；§33）。
+- 顶部 `.favview-bar` 返回条：「‹ 返回」`data-act="fav-back"`（回进入前 tab）、标题 `#favViewTitle` 随模式切换。
+- **收藏视图不得显示「清空」**（清空仅针对浏览记录，且点完就地重渲染、不跳走）。
+- 空态须为插画化 `.empty-art` SVG（§26），**不得退回纯 emoji `.empty-icon`**。
+
+### 42.7 PWA 安装引导（§41，2026-09-12 晚确诊后定稿）
+
+- `mdRenderInstallCard()` 必须在**三个时机**重渲染：进「我的」/ `beforeinstallprompt` 到达 / `appinstalled` 到达。
+- `manifest.json` 必须含 `id`（`/mining-daily/`）与 **4 个图标**（any 2 + maskable 2，**声明尺寸须与真实 PNG 一致**）。
+- head 四条不得删：`mobile-web-app-capable` + `apple-mobile-web-app-capable` / `-status-bar-style` / `-title`。
+- 卡片**默认只主推「添加到主屏幕」**（`mdPwaShortcutStep()` 按 UA 给**具体菜单项**：小米 / 华为 / UC / QQ / 三星 / Edge / Firefox / Chrome / iOS + 兜底）。
+- 「安装」降级为进阶项：按钮文案「**安装为独立应用**」+ 注明前提（**要能连 Google 服务**）；`mdPwaIsWeChat()` 为真时**不给该按钮**、只提示「⋯ → 在浏览器打开」（WebView 点了必然无效）。
+- 按钮属性用 `data-pwa`，**严禁复活** `data-act="install"`。
+- 排障文案点名根因「**Google 服务**」+ 小米「桌面快捷方式」权限（设置→应用设置→应用管理→Chrome→权限管理→允许）；**严禁**把「安装未知应用」权限当卡点（第一轮的错误归因；WebAPK 由 Google 服务生成、不走系统安装器）。
+
+### 42.8 前端信标 · 日期唯一来源 · 文案 · 行情口径
+
+- **自愈信标**：保留内联引信 `#mdBootWarn` + `window.mdHardReset()` + 2.5s 兜底。
+- **`app.js` 结构**：模块级 `let`/`const` 在前 60 行；`__mdBooted` / `__mdInitDone` 在；**末非空行必须就是** `window.__mdAppEvaluated=true`（其后不得再有顶层语句）；顶层业务函数一律 `setTimeout(fn,0)`（防 TDZ）。
+- **日期唯一来源 ＝ 头部红底 `.date-badge`**：`#briefDate`（09-11 删）与 `#digestDate`（09-12 删）**均不得再输出**——它们与头部 `.date-badge` 是同一天的重复日期，出现即为回退（删掉 + bump build-version 后重跑 preflight）；要闻条非当日发布由 `.digest-dtag` 标注。
+- **站点标题**须为「矿业新闻日报 · YYYY-MM-DD」（§39；`deploy_pages.py` 会自动规范化，但生成脚本不得改回纯日期）。
+- **其他文案**：头部无副标题；往期标题「滚动保留最近30天」；底部两行数据来源 / 国际来源照旧；口径句「能源与黑色不收；铁矿仅留全球供需与价格」；「数据更新时间」由前端 `applyDataUpdatedAt()` 读 `NEWS_DATA.updated`（**勿写死**）；累计访问 `gcStatLine` 默认隐藏；标注精简（只 NEW / 战略 / 重大，`tag-chip` ≤2）。
+- **行情口径**：价格两行 ＝ `priceCardsShfe`（国内 10 卡）+ `priceCardsLme`（LME 6 卡，slug `lcpt` / `lalt` / `lldt` / `lznt` / `lnkt` / `ltnt`，美元/吨），**严禁同列矩阵**；数值**唯一来源** `lme_data.json` / `lme-data.js`（严禁手抄；某品种 null → 该卡 `value="--"` `chg="暂无数据"` `class="price-card flat"`）；前端 `renderLmePrices()` 只读 `LME_DATA` 不做跨源覆盖；⚠️**走势图末点＝昨天（最近已收盘日）是正确的**，禁手改 `price_history_detail.json` / `price-history.js`、禁回填盘中价。
+
+### 42.9 测试基线与期望通过数
+
+收工前按改动范围跑对应测试，**全部须 0 失败**：
+
+| 命令 | 期望 | 覆盖 |
+|---|---|---|
+| `node test_brief_layers.js` | **47** | 简报分层渲染（jsdom） |
+| `node test_smoke_0908.js` | **74** | 全站冒烟（含矿权双视图 8 + 列表排序 9） |
+| `node test_mobile_ux_batch.js` | **172** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6 |
+| `PY test_pwa_install.py` | **40 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性） |
+| `node test_pwa_install_behavior.js` | **26 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt` 等） |
+| `PY test_price_history_unclosed.py` | **0 失败** | 走势图末点确有已收盘数据 |
+| `node test_data_integrity.js` | 锁卡片值/方向 == `lme_data.json` | 行情口径 |
+| `%TEMP%\md_rvprobe.py` | **11 用例 / 76 断言** | 真机（真实 Chrome）响应式与形态探针 |
+
+- **涉及 `app.js` / `index.html` 的 AI 搜面板、「我的」面板、收藏·浏览记录、简报** → 必跑前三项 + 探针。
+- **涉及安装引导 / `manifest.json` / head 声明** → 必跑两个 PWA 测试。
+- **改过 CSS 断点或 `@media`** → 必须用**真实 Chrome**（jsdom 不评估 `@media`）。
+- 全量闸门（如有）＝21 个 node + 9 个 python 闸门。
+
+### 42.10 验证方法与四个「假 FAIL」坑（从两条 prompt 的节流规则迁入）
+
+**A. 简报 / 要闻类改动要验渲染**：jsdom 不实现 `fetch`，直接 `JSDOM.fromURL` 会拿不到 `morning_report.json`（简报保持隐藏）；验证须在 `beforeParse` 里把 Node 的 `fetch` 桥进 `window`，并起本地 `http.server` 用 `http://` 加载（`file://` 也不行）。⚠️ jsdom 不做布局，`scrollHeight` 恒为 0，会让「内容超高→默认收起」分支静默跳过 —— 须覆盖 `HTMLElement.prototype.scrollHeight`。
+
+**B. 响应式 / 形态改动必须用真实 Chrome 验**（jsdom 不评估 `@media`）：探针 `tmp/rvprobe.html`（iframe + `--headless=new --dump-dom` 读 `RESULT_JSON`），跑 `%TEMP%\md_rvprobe.py`，11 用例含 `cards`/`list`/`listprice`/`listdeadline`/`mobile`/`dark`/`qamobile`/`qadesktop`/`qastyle`/`qachat`/`qachat2`/`qachatd`。
+- `qamobile`：在 iframe 加载**前**伪造桌面记忆（`qaFloatPos={left:40,top:320}`、`qaFloatSize={440,560}`），验「窄屏必须清掉内联尺寸/定位并铺满视口」；`qadesktop` 验「桌面仍是 440×560 + 8 缩放柄」；`qastyle` 量顶栏/输入区的**计算样式与自然高度**（`footH`/`inputW`/`inputH`/`footBtns[].whiteSpace`/`headPadTop`）；`qachat`/`qachat2`/`qachatd` 用 `scrollMetrics()` 验**滚动落点** —— 看 `lastQuestionTopInBody`，**不要看 `questionTopInBody`**（它取第一条 `.qa-msg.user`，多轮场景必然误导）。
+- ⚠️ 坑 1：断言 `display` 别写死 `inline-block` —— flex 子元素会被浏览器 **blockify** 成 `block`；判可见性用 `offsetWidth`/`offsetHeight`。
+- ⚠️ 坑 2：探针用例之间要 `localStorage.removeItem('mdRightsView')`、`removeItem('mdRightsSort')`，**并必须 `removeItem('qa_history_v1')`** —— 否则前一个用例切的视图 / 点的推荐词会持久化（`qamobile` 点推荐词 → `qadesktop` 加载到历史 → 跳过空态 → 推荐词断言假 FAIL）。同类坑已踩三次。
+- ⚠️ 坑 3：**排序 chip 位于 innerHTML 内，点完会重渲染** → 断言取值前必须重新 `querySelector`，旧按钮引用已脱离 DOM（曾踩过：3 条断言假 FAIL，数据其实全对）。
+- ⚠️ 坑 4：**改了用户可见文案（排障正文、按钮名、提示语）后，必须同步改对应测试的期望值** —— 否则产品是对的、测试报假 FAIL。
+
+**C. 判定测试失败是否为本次引入**：把 HEAD 导到临时目录（`git archive HEAD` 用 `tarfile` 解包）跑同一测试对比退出码，别凭记忆争论。
+
+**D. 判「改回归」前先分清是产品 bug 还是测试自身缺陷**：本轮已两次遇到**测试自己的守卫写错**（守卫扫整个 `app.js` → 注释命中 → 恒判 FAIL；行为测试期望值过期 → 假 FAIL）。修的是测试，不是产品。
+
+### 42.11 怎么用（两句话）
+
+- **生成侧（06:00）**：重建完成后，按 §42.1–§42.8 的「必留指纹」逐项自检，缺任一即视为回退；形态类改动**先 Grep §42 再动手**，不要靠记忆。
+- **复核侧（08:00）**：按 §42.1–§42.10 逐项核对，命中任一「回退指纹」→ 就地修复 + bump build-version + 重跑 preflight；汇报时按 §42 的分组逐组给一句话结论 + §42.9 的测试通过数。
