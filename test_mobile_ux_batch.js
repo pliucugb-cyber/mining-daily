@@ -107,9 +107,11 @@ setTimeout(() => {
   const card = doc.getElementById('mineInstallCard');
   check('安装到主屏幕卡片已注入', !!card, card ? ('内容片段=' + (card.textContent || '').slice(0, 18)) : '无');
   check('安装卡含系统识别提示', !!card && /主屏幕|安装/.test(card.textContent || ''));
-  // 2026-09-12：浏览记录「清空」快捷按钮（手机 Mine 面板 + 桌面左侧目录共用）
+  // 2026-09-12：桌面左侧目录不再显示「安装到桌面」入口（右上角已有 pwaHeaderBtn）
+  check('桌面左侧目录不再含「安装到桌面」入口', !doc.getElementById('tocInstallItem'));
+  // 2026-09-12：浏览记录「清空」快捷按钮仅保留在手机 Mine 面板（桌面左侧目录已移除）
   check('浏览记录行含「清空」按钮 data-act="clear-history"', !!(sheet && sheet.querySelector('.mine-clear[data-act="clear-history"]')));
-  check('桌面左侧目录含「清空浏览记录」按钮 .toc-clear', !!doc.querySelector('.toc-clear[data-act="clear-history"]'));
+  check('桌面左侧目录不再含「清空浏览记录」按钮 .toc-clear', !doc.querySelector('.toc-clear[data-act="clear-history"]'));
   // 功能：点「清空」应清掉浏览记录（localStorage HISTORY_KEY）
   try {
     window.localStorage.setItem('mining_daily_history', JSON.stringify([{url:'https://x.example/a',title:'测试条目',src:'X',time:new Date().toISOString()}]));

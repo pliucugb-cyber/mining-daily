@@ -1250,3 +1250,24 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - fav/history 空态**必须**是插画化（`.empty-art` SVG），不得退化回纯 emoji（`.empty-icon`）。
 - 引导按钮「去首页看看」必须复用 `data-act="fav-back"` 回首页，不得新增独立跳转逻辑。
 - SVG 中 neutral 描边用 `currentColor`（继承 `.aggregate-empty` 的 `var(--ink-500)`），**不得**写死浅灰，否则暗色下虚线/回环不可见。
+
+
+### 27 桌面左侧目录精简：移除「清空浏览记录」与「安装到桌面」入口（2026-09-12 晚，build `20260912-1842`）
+### 27.1 背景
+用户反馈：① 电脑端左侧目录「浏览记录」行内的「清空」按钮多余，因为进入浏览记录视图后顶部 `.favview-bar` 已有清空按钮；② 电脑端浏览器网页版左侧目录的「安装到桌面」多余，因为页面右上角已有「添加到桌面」按钮。
+### 27.2 方案
+- 直接移除 `index.html` 中 `#tocHistoryItem` 内的 `<button class="toc-clear" data-act="clear-history">清空</button>`。
+- 直接移除 `index.html` 中整个 `#tocInstallItem`（📲 安装到桌面）。
+- 保留功能：
+  - 清空浏览记录仍可通过「我的」面板 → 浏览记录行右侧 `.mine-clear` 或进入浏览记录视图后的 `.favview-clear` 触发。
+  - 安装到桌面仍可通过顶部右上角 `#pwaHeaderBtn` 或「我的」面板内「安装到主屏幕」卡片触发。
+- app.js 中 `mdHideInstallIfStandalone` 对 `tocInstallItem` 的引用有 `if(toc)` 保护，移除 DOM 后不报错。
+### 27.3 代码落点
+- index.html：移除 `#tocHistoryItem .toc-clear`；移除 `#tocInstallItem`；`build-version` → `20260912-1842`。
+- sw.js：`CACHE_NAME` → `mining-daily-20260912-1842`。
+### 27.4 测试与验证
+- `test_mobile_ux_batch.js` §⑧ 注释更新；断言「桌面左侧目录含清空按钮」改为「不再含」；新增断言「桌面左侧目录不再含安装到桌面入口」。总断言 175 → **176**（0 失败）。
+- 回归：`test_mobile_opt_20260910.js` 37/0、`test_smoke_0908.js` 74/0、`test_qa_navtab_20260910.js` 18/0、`preflight_check.py` 全绿、`node --check app.js` 干净。
+### 27.5 红线（不得回退）
+- 桌面左侧目录**不得**再出现 `#tocInstallItem` 或 `.toc-clear[data-act="clear-history"]`。
+- 功能入口必须保留：手机 Mine 面板 `.mine-clear`、浏览记录视图 `.favview-clear`、顶部 `#pwaHeaderBtn`、手机安装卡片。
