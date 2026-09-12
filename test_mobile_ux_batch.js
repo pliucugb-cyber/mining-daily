@@ -3,6 +3,8 @@
  * 覆盖：① 热榜手机 10 条 / 桌面 5 条  ② 往期字号（CSS，字符串断言）
  *       ③+④ 推荐不显示价格、价格仅价格 tab  ⑤ 问按钮发光球（CSS 断言）
  *       ⑥ 问答全屏 + 返回箭头  ⑧ 我的面板内联安装卡 + 删阅读模式  ⑨ 会议 tab + 区块注入
+ *       ⑮ AI 搜面板：彩色 Ai 图标 / 窄屏全屏（形态隔离，清桌面内联记忆）/ 顶栏⋯菜单 / 空态推荐检索词
+ *          —— 2026-09-12 用户定夺；同轮把 2026-09-11「禁止渐变」的旧约定作废（脉冲禁令保留）
  *       ⑩ 顶栏智能吸顶：隐藏只做 transform，不得折叠布局（2026-09-11 P0）
  * 运行：node test_mobile_ux_batch.js
  */
@@ -212,6 +214,135 @@ setTimeout(() => {
   check('宽限期后：仍未渲染 → 判为卡住（热榜）', window.mdStuckRegions().length >= 1, 'len=' + window.mdStuckRegions().length);
   // 还原
   try { window.__mdRegionGrace = _rg; if (_hotBody && _hotHtml !== null) _hotBody.innerHTML = _hotHtml; } catch (e) {}
+
+  console.log('\n===== ⑮ 「AI 搜」面板：彩色 Ai 图标 / 窄屏全屏形态隔离 / 顶栏⋯菜单 / 空态推荐检索词（2026-09-12）=====');
+  // ---- 图标：彩色渐变 Ai（用户定夺，作废 2026-09-11「单色描边」旧约定；脉冲禁令保留）----
+  check('底栏 AI 搜图标改为彩色渐变 Ai（SVG 内置 linearGradient）', /<linearGradient id="qaAiGrad"/.test(html));
+  check('渐变只作用于图标本身（方块 fill=url(#qaAiGrad)，不依赖 currentColor）', /<rect x="1" y="1" width="22" height="22" rx="6\.5" fill="url\(#qaAiGrad\)"\/>/.test(html));
+  check('图标内含白色「Ai」字', /(?:text|tspan)[^>]*>Ai<\/text>/.test(html));
+  check('底栏 AI 搜文字标签保留', /data-go="qa"[^>]*>[\s\S]{0,120}<span>AI 搜<\/span>/.test(html));
+  check('呼吸脉冲 keyframes 仍不存在（旧禁令保留，不许回退）', !/@keyframes qaOrbPulse\{/.test(html));
+  check('底栏 qa tab 仍持品牌色（色由文字标签承载）', /\.mtab\[data-go="qa"\]\{color:var\(--brand\)\}/.test(html));
+
+  // ---- 顶栏三栏化：‹ 返回 / AI 搜 / ⋯（CSS 断言）----
+  check('桌面：‹ 返回键默认隐藏', /\.qa-float-head \.qa-back\{display:none/.test(html));
+  check('窄屏：‹ 返回键显示', /\.qa-float-head \.qa-back\{display:inline-flex\}/.test(html));
+  check('桌面：⋯ 菜单键隐藏', /\.qa-float-head \.qa-head-menu-btn\{display:none/.test(html));
+  check('窄屏：⋯ 菜单键显示', /\.qa-float-head \.qa-head-menu-btn\{display:inline-flex\}/.test(html));
+  check('窄屏：导出/清空平铺按钮收起（收进 ⋯）', /\.qa-float-head \.qa-act-export,\.qa-float-head \.qa-act-clear\{display:none\}/.test(html));
+  check('窄屏：原 ✕ 让位给 ‹（隐藏）', /\.qa-float-head \.pchart-close\{display:none\}/.test(html));
+  check('窄屏：标题居中占满中间列', /\.qa-float-head \.qa-float-title\{flex:1;text-align:center/.test(html));
+  check('⋯ 菜单列表 [hidden] 时不渲染', /\.qa-head-menu-list\[hidden\]\{display:none\}/.test(html));
+  check('⋯ 菜单列表是绝对定位浮层（不挤压顶栏）', /\.qa-head-menu-list\{position:absolute/.test(html));
+  check('⋯ 菜单有暗色适配', /body\.dark \.qa-head-menu-list\{/.test(html));
+
+  // ---- 空态推荐检索词（CSS）----
+  check('空态推荐词容器样式存在', /\.qa-sug-cards\{/.test(html) && /\.qa-sug-tip\{/.test(html));
+
+  // ---- 形态隔离：窄屏全屏、桌面可拖拽（行为断言，这是「手机上打开是半屏卡片」的修复）----
+  var _panel = doc.getElementById('qaFloat');
+  check('qaFloatIsMobile / qaFloatSyncViewport / qaFloatClearInlineLayout 已导出',
+        typeof window.qaFloatIsMobile === 'function' && typeof window.qaFloatSyncViewport === 'function' && typeof window.qaFloatClearInlineLayout === 'function');
+  check('qaFloatIsMobile 在 375 宽为真', window.innerWidth === 375 && window.qaFloatIsMobile() === true, 'w=' + window.innerWidth);
+
+  // 伪造「桌面拖拽/缩放留下的记忆」，再切桌面 → 应恢复内联尺寸/定位（桌面形态不被破坏）
+  Object.defineProperty(window, 'innerWidth', { value: 1280, configurable: true, writable: true });
+  check('qaFloatIsMobile 在 1280 宽为假', window.qaFloatIsMobile() === false);
+  try {
+    window.localStorage.setItem('qaFloatPos', JSON.stringify({ left: 40, top: 320 }));
+    window.localStorage.setItem('qaFloatSize', JSON.stringify({ width: 440, height: 560 }));
+  } catch (e) {}
+  window.qaFloatSyncViewport();
+  check('桌面：按记忆恢复内联尺寸', _panel.style.width === '440px' && _panel.style.height === '560px',
+        'w=' + JSON.stringify(_panel.style.width) + ' h=' + JSON.stringify(_panel.style.height));
+  var _expTop = Math.min(320, Math.max(window.innerHeight - 560, 0));
+  check('桌面：按记忆恢复内联定位（越界时收敛在视口内）',
+        _panel.style.left === '40px' && _panel.style.top === _expTop + 'px',
+        'l=' + JSON.stringify(_panel.style.left) + ' t=' + JSON.stringify(_panel.style.top) + '  期望 top=' + _expTop + 'px');
+
+  // 切回手机 → 必须清掉内联尺寸/定位，交还媒体查询的全屏规则（★ 本轮核心修复）
+  Object.defineProperty(window, 'innerWidth', { value: 375, configurable: true, writable: true });
+  window.qaFloatSyncViewport();
+  check('★ 手机：清掉内联尺寸（修复「顶着屏幕中部的半屏卡片」）',
+        _panel.style.width === '' && _panel.style.height === '',
+        'w=' + JSON.stringify(_panel.style.width) + ' h=' + JSON.stringify(_panel.style.height));
+  check('★ 手机：清掉内联定位（top/left/right/bottom/position 全清）',
+        _panel.style.left === '' && _panel.style.top === '' && _panel.style.position === '' && _panel.style.right === '' && _panel.style.bottom === '',
+        'l=' + JSON.stringify(_panel.style.left) + ' t=' + JSON.stringify(_panel.style.top) + ' pos=' + JSON.stringify(_panel.style.position));
+
+  // 反向污染：手机全屏尺寸不得被写回桌面记忆（否则桌面打开又变全屏）
+  window.qaFloatSaveSize(); window.qaFloatSavePos();
+  var _szSaved = null, _posSaved = null;
+  try { _szSaved = window.localStorage.getItem('qaFloatSize'); _posSaved = window.localStorage.getItem('qaFloatPos'); } catch (e) {}
+  check('★ 手机：不写回桌面记忆（防反向污染）',
+        _szSaved === JSON.stringify({ width: 440, height: 560 }) && _posSaved === JSON.stringify({ left: 40, top: 320 }),
+        'size=' + _szSaved + ' pos=' + _posSaved);
+
+  // 手机恒全屏 → 不挂缩放柄、缩放入口失效（否则全屏被拖坏）
+  try { window.qaFloatAddResizeHandles(); } catch (e) {}
+  check('★ 手机：不挂缩放柄', doc.querySelectorAll('#qaFloat .qa-resize-handle').length === 0,
+        'n=' + doc.querySelectorAll('#qaFloat .qa-resize-handle').length);
+  var _resizeBail = false;
+  try { _resizeBail = (window.qaFloatStartResize({ target: { closest: function () { return null; } } }) === undefined); } catch (e) { _resizeBail = false; }
+  check('★ 手机：缩放入口直接返回（不进入拖拽逻辑）', _resizeBail);
+  try { window.localStorage.removeItem('qaFloatPos'); window.localStorage.removeItem('qaFloatSize'); } catch (e) {}
+
+  // 跨断点监听已挂上（横竖屏切换 / 拖动窗口时会重新分流）
+  check('已注册 resize → qaFloatSyncViewport', /addEventListener\('resize',\s*function\s*\(\)\s*\{\s*qaFloatSyncViewport\(\);\s*\}\)/.test(html));
+
+  // ---- 顶栏 DOM 结构 ----
+  var _back = doc.querySelector('#qaFloat .qa-back');
+  check('顶栏 ‹ 返回键已注入 DOM', !!_back);
+  check('‹ 返回键承载返回语义（onclick 调 qaFloatToggle）', !!_back && /qaFloatToggle/.test(_back.getAttribute('onclick') || ''));
+  var _menu = doc.getElementById('qaHeadMenu');
+  var _menuList = doc.getElementById('qaHeadMenuList');
+  check('顶栏 ⋯ 菜单键已注入（id=qaHeadMenu）', !!_menu);
+  check('⋯ 菜单键声明 aria-haspopup / aria-expanded', !!_menu && _menu.getAttribute('aria-haspopup') === 'true' && _menu.getAttribute('aria-expanded') === 'false');
+  check('⋯ 菜单列表默认隐藏（hidden 属性）', !!_menuList && _menuList.hasAttribute('hidden'));
+  check('⋯ 菜单含 2 项（导出全部对话 / 清空会话历史）', !!_menuList && _menuList.querySelectorAll('button').length === 2,
+        '实际 ' + (_menuList ? _menuList.querySelectorAll('button').length : -1));
+  check('⋯ 菜单项绑定 window.qaMenuExport / window.qaMenuClear',
+        typeof window.qaMenuExport === 'function' && typeof window.qaMenuClear === 'function');
+  var _a1 = (_menuList ? _menuList.querySelectorAll('button')[0].getAttribute('onclick') : '') || '';
+  var _a2 = (_menuList ? _menuList.querySelectorAll('button')[1].getAttribute('onclick') : '') || '';
+  check('菜单项 1 = 导出（qaMenuExport）', /qaMenuExport/.test(_a1), _a1);
+  check('菜单项 2 = 清空（qaMenuClear）', /qaMenuClear/.test(_a2), _a2);
+
+  // 展开 / 收起（含 aria 状态回写）
+  window.qaHeadMenuToggle();
+  check('qaHeadMenuToggle 展开菜单', !!_menuList && !_menuList.hasAttribute('hidden'));
+  check('展开后 aria-expanded=true', !!_menu && _menu.getAttribute('aria-expanded') === 'true');
+  window.qaHeadMenuClose();
+  check('qaHeadMenuClose 收起菜单', !!_menuList && _menuList.hasAttribute('hidden'));
+  check('收起后 aria-expanded=false', !!_menu && _menu.getAttribute('aria-expanded') === 'false');
+  check('qaFloatToggle 打开面板时自动收起 ⋯ 菜单（避免残留浮层）', /if\(open\)\{[\s\S]{0,200}qaHeadMenuClose\(\);/.test(html));
+
+  // ---- 空态推荐检索词（行为断言）----
+  var _sugs = window.qaSuggestQueries();
+  check('qaSuggestQueries 产出 3-5 个高命中词（不凭想象造词）', _sugs.length >= 3 && _sugs.length <= 5,
+        'n=' + _sugs.length + ' → ' + _sugs.join('/'));
+  var _body = doc.getElementById('qaFloatBody');
+  try { _body.innerHTML = ''; } catch (e) {}
+  window.qaFloatRenderSuggest();
+  check('空态渲染出推荐检索词 chips', doc.querySelectorAll('#qaFloatBody .qa-sug').length >= 3,
+        'n=' + doc.querySelectorAll('#qaFloatBody .qa-sug').length);
+  check('推荐词带「试试这些检索词」引导', !!doc.querySelector('#qaFloatBody .qa-sug-tip'));
+  var _chip = doc.querySelector('#qaFloatBody .qa-sug');
+  check('推荐词 chip 可点（role=button + tabindex + onclick）',
+        !!_chip && _chip.getAttribute('role') === 'button' && _chip.getAttribute('tabindex') === '0' && /qaSugQuery/.test(_chip.getAttribute('onclick') || ''));
+  var _chipQ = _chip ? _chip.getAttribute('data-q') : null;
+  var _nBefore = doc.querySelectorAll('#qaFloatBody .qa-msg.user').length;
+  if (_chip) { try { window.qaSugQuery(_chip); } catch (e) {} }
+  var _users = doc.querySelectorAll('#qaFloatBody .qa-msg.user');
+  check('点推荐词 → 发起检索（生成用户消息）', _users.length === _nBefore + 1, 'userMsgs=' + _users.length);
+  var _lastTxt = _users.length ? (_users[_users.length - 1].textContent || '') : '';
+  check('检索词已作为检索条件提交', !!_chipQ && _lastTxt.indexOf(_chipQ) >= 0, 'chip=' + _chipQ + ' msg=' + _lastTxt.slice(0, 40));
+  check('检索后收起推荐引导（不残留在答案下方）', doc.querySelectorAll('#qaFloatBody .qa-sug').length === 0,
+        'left=' + doc.querySelectorAll('#qaFloatBody .qa-sug').length);
+  check('清空会话后推荐词回归（qaClearHistory 末尾重渲染）', /function qaClearHistory\(\)\{[\s\S]{0,400}qaFloatRenderSuggest\(\);/.test(html));
+  check('推荐词只在完全空态渲染（有历史时不打扰会话）', /if\(!fb\.children\.length\)\{[\s\S]{0,200}qaFloatRenderSuggest\(\);/.test(html));
+
+  Object.defineProperty(window, 'innerWidth', { value: 375, configurable: true, writable: true });
 
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));

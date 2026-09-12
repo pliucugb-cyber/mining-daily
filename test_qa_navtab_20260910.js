@@ -51,7 +51,19 @@ setTimeout(() => {
   ok('#mobileTabBar 存在', !!bar);
   const qaBtn = bar && bar.querySelector('.mtab[data-go="qa"]');
   ok('存在 data-go="qa" 的「问」tab', !!qaBtn, qaBtn ? '文本=' + qaBtn.textContent.trim() : '缺失');
-  ok('「问」tab 文本为「AI 搜」（2026-09-12 方案 A 改名）', qaBtn && qaBtn.textContent.trim() === 'AI 搜');
+  // 2026-09-12：图标换成「渐变圆角方块 + <text>Ai</text>」（用户定夺），该字形是装饰性的
+  //   （svg 带 aria-hidden="true"），但会混进 Element.textContent → 旧断言读到 "AiAI 搜" 而假 FAIL。
+  //   标签文本应取**真正的标签 span**；同时把「图标必须装饰化」这条契约定下来。
+  const qaLabel = qaBtn && (qaBtn.querySelector('span:last-child') || null);
+  ok('「问」tab 文本为「AI 搜」（2026-09-12 方案 A 改名；取标签 span，图标不计入）',
+    !!qaLabel && (qaLabel.textContent || '').trim() === 'AI 搜',
+    'label=' + (qaLabel ? qaLabel.textContent.trim() : 'n/a'));
+  const qaSvg = qaBtn && qaBtn.querySelector('.mi svg');
+  ok('AI 搜图标对辅助技术隐藏（aria-hidden，装饰性）',
+    !!qaSvg && qaSvg.getAttribute('aria-hidden') === 'true' && qaSvg.getAttribute('focusable') === 'false');
+  ok('AI 搜 tab 有完整 aria-label（覆盖图标字形）',
+    !!qaBtn && /AI 搜/.test(qaBtn.getAttribute('aria-label') || ''),
+    qaBtn ? qaBtn.getAttribute('aria-label') : '');
   if (bar) {
     const seq = [...bar.querySelectorAll('.mtab')].map(b => b.getAttribute('data-go'));
     ok('tab 顺序 = 首页/价格/问/矿权/我的（居中）',

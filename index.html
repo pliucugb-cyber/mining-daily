@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1155" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1250" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -495,6 +495,23 @@ body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 .qa-float-head .qa-head-actions{display:flex;align-items:center;gap:var(--s2)}
 .qa-float-head .qa-head-action{background:rgba(255,255,255,.15);border:none;border-radius: var(--r-md);color:#fff;font-size: var(--fs-meta);padding:var(--s1) var(--s2);cursor:pointer}
 .qa-float-head .qa-head-action:hover{background:rgba(255,255,255,.3)}
+/* 2026-09-12：窄屏返回键（桌面隐藏，桌面仍用右侧 ✕） */
+.qa-float-head .qa-back{display:none;align-items:center;justify-content:center;width:34px;height:34px;border:none;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:var(--fs-h1);line-height:1;cursor:pointer;flex-shrink:0;padding:0}
+.qa-float-head .qa-back:hover{background:rgba(255,255,255,.3)}
+/* ⋯ 菜单：桌面有空间，导出/清空平铺，⋯ 隐藏 */
+.qa-head-actions{position:relative}
+.qa-float-head .qa-head-menu-btn{display:none;align-items:center;justify-content:center;background:rgba(255,255,255,.15);border:none;border-radius:var(--r-md);color:#fff;font-size:var(--fs-h2);line-height:1;padding:2px var(--s2);cursor:pointer}
+.qa-float-head .qa-head-menu-btn:hover{background:rgba(255,255,255,.3)}
+.qa-head-menu-list{position:absolute;top:calc(100% + 6px);right:0;z-index:20;min-width:158px;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-md);box-shadow:0 8px 24px rgba(15,23,42,.18);padding:4px;display:flex;flex-direction:column;gap:2px}
+.qa-head-menu-list[hidden]{display:none}
+.qa-head-menu-list button{border:none;background:none;text-align:left;padding:8px 10px;border-radius:6px;font-size:var(--fs-meta);color:var(--ink-900);cursor:pointer;white-space:nowrap}
+.qa-head-menu-list button:hover{background:var(--surface-2)}
+body.dark .qa-head-menu-list{background:var(--surface);border-color:var(--line-1);box-shadow:0 8px 24px rgba(0,0,0,.5)}
+body.dark .qa-head-menu-list button{color:var(--ink-900)}
+body.dark .qa-head-menu-list button:hover{background:var(--surface-3)}
+/* 2026-09-12：空态推荐检索词容器（chip 复用已有的 .qa-sug） */
+.qa-sug-cards{margin-top:var(--s2);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.qa-sug-tip{width:100%;font-size:var(--fs-meta);color:var(--ink-500)}
 .qa-float-body{flex:1;overflow-y:auto;padding:var(--s3);background:#f7f9fb;touch-action:pan-y;-webkit-overflow-scrolling:touch}
 .qa-msg{margin-bottom:var(--s3);max-width:100%}
 .qa-msg.user{margin-left:auto;max-width:85%}
@@ -1575,6 +1592,19 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   #qaFloat{top:0;left:0;right:auto;bottom:auto;width:100vw;height:100dvh;max-height:none;border-radius:0;border:none;box-shadow:none}
   .qa-float-head{padding-top:calc(var(--s3) + env(safe-area-inset-top,0px))}
   .qa-float-foot{padding-bottom:calc(var(--s3) + env(safe-area-inset-bottom,0px))}
+  /* 2026-09-12：全屏顶栏三栏化 ——「‹ 返回 / AI 搜 / ⋯」。
+     导出与清空收进 ⋯：全屏后「✕」与「‹」语义重复，三个按钮并排会把标题挤没。 */
+  .qa-float-head{justify-content:flex-start;gap:var(--s2)}
+  .qa-float-head .qa-back{display:inline-flex}
+  .qa-float-head .qa-float-title{flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .qa-float-head .qa-act-export,.qa-float-head .qa-act-clear{display:none}
+  .qa-float-head .qa-head-menu-btn{display:inline-flex}
+  .qa-float-head .pchart-close{display:none}
+  .qa-head-menu-list{min-width:172px}
+  .qa-head-menu-list button{padding:11px 12px;font-size:var(--fs-h3)}
+  /* 空态引导在窄屏占满一行更易点 */
+  .qa-sug-cards{gap:7px}
+  .qa-sug{padding:5px 11px}
   /* ⑧「我的」面板内联安装分步卡（替代原无反应的「安装到桌面」按钮） */
   #mineInstallCard{border:1px solid var(--line-2);border-radius:var(--r-md);padding:var(--s3);background:var(--surface-2);margin:var(--s1) 0}
   #mineInstallCard .mine-install-title{font-weight:600;color:var(--ink-900);font-size:var(--fs-body);margin-bottom:4px}
@@ -2341,10 +2371,16 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <button class="qa-fab" id="qaFab" title="新闻检索 / AI 问答（可拖动调整位置）" onclick="window.qaFabClick&&window.qaFabClick(event)" data-page-node-id="6Ka2v8zIKmQZIq48X3DFwp"><span class="qa-fab-ico" data-page-node-id="Et1ekOfJsPy8fqbimfa1ah">🔍</span><span class="qa-fab-txt" data-page-node-id="t3eWIwkTXUsYQt2aqAjCUZ">搜新闻 / 问 AI</span></button>
 <div class="qa-float" id="qaFloat" data-page-node-id="SMuRhS8iqMPtiN769pZUaE">
   <div class="qa-float-head" data-page-node-id="Fw0aW0hTkzilozIGAlJLAj">
+    <button class="qa-back" type="button" onclick="window.qaFloatToggle&&window.qaFloatToggle()" aria-label="返回" data-page-node-id="qaBackBtn">‹</button>
     <span class="qa-float-title" data-page-node-id="Qgx3dxDE15DSH4L4hwV74k">🔍 AI 搜 · 检索与问答</span>
     <div class="qa-head-actions" data-page-node-id="2y3yxkX3DRFzDSVPUu4zyV">
-      <button class="qa-head-action" type="button" onclick="window.qaExportHistory&&window.qaExportHistory(this)" title="复制全部对话" data-page-node-id="BU3b3Sqjc5kTD8xBKPUEbV">📤 导出</button>
-      <button class="qa-head-action" type="button" onclick="window.qaClearHistory&&window.qaClearHistory()" title="清空本次会话历史" data-page-node-id="gnWnL64EvaBimbZWUnCRdF">🗑 清空</button>
+      <button class="qa-head-action qa-act-export" type="button" onclick="window.qaExportHistory&&window.qaExportHistory(this)" title="复制全部对话" data-page-node-id="BU3b3Sqjc5kTD8xBKPUEbV">📤 导出</button>
+      <button class="qa-head-action qa-act-clear" type="button" onclick="window.qaClearHistory&&window.qaClearHistory()" title="清空本次会话历史" data-page-node-id="gnWnL64EvaBimbZWUnCRdF">🗑 清空</button>
+      <button class="qa-head-menu-btn" id="qaHeadMenu" type="button" aria-label="更多操作" aria-expanded="false" aria-haspopup="true" onclick="window.qaHeadMenuToggle&&window.qaHeadMenuToggle(event)">⋯</button>
+      <div class="qa-head-menu-list" id="qaHeadMenuList" hidden>
+        <button type="button" onclick="window.qaMenuExport&&window.qaMenuExport(this)">📤 导出全部对话</button>
+        <button type="button" onclick="window.qaMenuClear&&window.qaMenuClear()">🗑 清空会话历史</button>
+      </div>
       <button class="pchart-close" onclick="window.qaFloatToggle&&window.qaFloatToggle()" data-page-node-id="WfjUj3JXSYYQt0B1SgcFgh">✕</button>
     </div>
   </div>

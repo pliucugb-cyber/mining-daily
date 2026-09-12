@@ -2689,9 +2689,11 @@ function mdMobileTabBar(){
   var SVG_USER='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
   // 2026-09-12 用户定夺「方案 A」：放大镜（检索）+ 四角星芒（AI）双语义，替代原空心对话气泡
   // （M4 5h16v11H9l-5 4V5z —— 只表达"说话"，既无搜索也无 AI 语义）。文字标签同步改为「AI 搜」。
-  // 约束：单色描边 currentColor，禁止渐变/发光/脉冲（test_mobile_ux_batch.js:77-78 会拦）。
-  // 星芒用 stroke-width 1.7（主图形 2）：22px 实际渲染下细一号才不糊成一团。
-  var SVG_QA='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="12" r="5.5"/><path d="M13.4 15.9 18.3 20.8"/><path d="M17.6 3.2 18.66 6.14 21.6 7.2 18.66 8.26 17.6 11.2 16.54 8.26 13.6 7.2 16.54 6.14Z" stroke-width="1.7"/></svg>';
+  // 2026-09-12（用户定夺）：改为「彩色渐变圆角方块 + 白色 Ai」，模仿主流 App 的 AI 入口，一眼可辨。
+  //   此前 2026-09-11 立的「单色描边 / 禁止渐变」约定随之作废——当时否掉的是**呼吸脉冲动画**与
+  //   渐变发光球（qaOrbPulse），那条禁令仍然有效（test_mobile_ux_batch.js 的 keyframes 断言继续守着）。
+  //   渐变写死在 SVG 内部（不依赖 currentColor），故 .mtab.active 的品牌色只作用于文字标签。
+  var SVG_QA='<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><defs><linearGradient id="qaAiGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect x="1" y="1" width="22" height="22" rx="6.5" fill="url(#qaAiGrad)"/><text x="12" y="16.5" text-anchor="middle" font-family="Segoe UI,system-ui,Arial,sans-serif" font-size="12" font-weight="700" fill="#ffffff">Ai</text></svg>';
   var bar=document.createElement('nav');
   bar.id='mobileTabBar'; bar.setAttribute('aria-label','移动端主导航');
   bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">'+SVG_HOME+'</span><span>首页</span></button>'
@@ -2822,8 +2824,34 @@ function mdRenderMeetingSection(){
 }
 // ⑥ 移动端问答面板头部「✕」改为返回箭头（沉浸式全屏）
 function mdQaMobileBackArrow(){
-  try{ if(window.innerWidth<=768){ var cb=document.querySelector('#qaFloat .pchart-close'); if(cb){ cb.textContent='‹'; cb.setAttribute('aria-label','返回'); } } }catch(e){}
+  try{
+    var mobile=window.innerWidth<=768;
+    var cb=document.querySelector('#qaFloat .pchart-close');
+    if(cb){ cb.textContent=mobile?'‹':'✕'; cb.setAttribute('aria-label',mobile?'返回':'关闭'); }
+    // 2026-09-12：窄屏顶栏改「‹ 返回 / AI 搜 / ⋯」，标题只留品牌名，避免与右侧按钮争宽被挤压
+    var tt=document.querySelector('#qaFloat .qa-float-title');
+    if(tt)tt.textContent=mobile?'AI 搜':'🔍 AI 搜 · 检索与问答';
+  }catch(e){}
 }
+// ===== 2026-09-12：AI 搜面板顶栏（窄屏极简为「‹ 返回 / AI 搜 / ⋯」）=====
+// 为什么收进菜单：全屏后「✕ 关闭」与「‹ 返回」语义重复，导出/清空/关闭三个按钮并排
+// 会把标题挤没；窄屏只留一个「⋯」，桌面（有空间、可拖拽）仍平铺三个按钮。
+function qaHeadMenuClose(){
+  var l=document.getElementById('qaHeadMenuList'); if(l)l.hidden=true;
+  var b=document.getElementById('qaHeadMenu'); if(b)b.setAttribute('aria-expanded','false');
+}
+function qaHeadMenuToggle(ev){
+  if(ev&&ev.stopPropagation)ev.stopPropagation();
+  var l=document.getElementById('qaHeadMenuList'); if(!l)return;
+  var willOpen=!!l.hidden;
+  l.hidden=!willOpen;
+  var b=document.getElementById('qaHeadMenu'); if(b)b.setAttribute('aria-expanded',willOpen?'true':'false');
+}
+function qaMenuExport(btn){ qaHeadMenuClose(); try{ qaExportHistory(btn); }catch(e){} }
+function qaMenuClear(){ qaHeadMenuClose(); try{ qaClearHistory(); }catch(e){} }
+window.qaHeadMenuToggle=qaHeadMenuToggle;
+window.qaMenuExport=qaMenuExport;
+window.qaMenuClear=qaMenuClear;
 // 2026-09-10 修复：数据看门狗。
 // 事故复盘——SW/sw.js 异常时 news-data.js 取不到 → window.NEWS_DATA 为 undefined，
 // 各渲染函数在 `if(!window.NEWS_DATA) return` 处静默返回，页面就永久停在「热榜加载中…／
@@ -3551,7 +3579,7 @@ function qaFloatToggle(){
   if(!p)return;
   var open=p.classList.toggle('open');
   if(b)b.classList.toggle('on',open);
-  if(open){var i=document.getElementById('qaFloatInput');if(i)setTimeout(function(){i.focus();},80);qaStopBreathe();}
+  if(open){var i=document.getElementById('qaFloatInput');if(i)setTimeout(function(){i.focus();},80);qaStopBreathe();try{qaHeadMenuClose();}catch(e){}}
 }
 function qaFloatClose(){
   var p=document.getElementById('qaFloat');if(p)p.classList.remove('open');
@@ -3770,8 +3798,29 @@ function qaFloatStopDrag(ev){
   var p=QA_DRAGGING.el; if(p)p.style.cursor='';
   qaFloatSavePos(); QA_DRAGGING=null;
 }
+// ===== 2026-09-12：移动端 / 桌面端面板形态隔离 =====
+// 移动端面板**本就设计为全屏**（index.html 的 @media(max-width:768px) 里
+//   #qaFloat{top:0;left:0;width:100vw;height:100dvh;...}，test_mobile_ux_batch.js 还在守它）。
+// 但 qaFloatPos / qaFloatSize 记的是**桌面拖拽缩放**的位置与尺寸，恢复时写成**内联样式**；
+// 内联优先级高于媒体查询 → 手机上打开会变成「一张顶在屏幕中部的卡片」，看着像没做全屏。
+// 反向污染同样存在：手机全屏时的尺寸会被 ResizeObserver 写回 localStorage，桌面打开又变全屏。
+// 故移动端一律**不读不写**这两项记忆，并顺手清掉可能残留的内联定位。
+function qaFloatIsMobile(){ return (window.innerWidth||0)<=768; }
+function qaFloatClearInlineLayout(){
+  var p=document.getElementById('qaFloat'); if(!p)return;
+  p.style.width=''; p.style.height=''; p.style.left=''; p.style.top='';
+  p.style.right=''; p.style.bottom=''; p.style.position='';
+}
+// 视口跨过 768 断点时切换形态：进移动端清内联，回桌面端恢复记忆
+function qaFloatSyncViewport(){
+  try{
+    if(qaFloatIsMobile()){ qaFloatClearInlineLayout(); }
+    else { qaFloatRestoreSize(); qaFloatRestorePos(); }
+  }catch(e){}
+}
 function qaFloatSavePos(){
   try{
+    if(qaFloatIsMobile())return;
     var p=document.getElementById('qaFloat'); if(!p)return;
     var rect=p.getBoundingClientRect();
     lsSet('qaFloatPos',JSON.stringify({left:rect.left,top:rect.top}));
@@ -3779,6 +3828,7 @@ function qaFloatSavePos(){
 }
 function qaFloatRestorePos(){
   try{
+    if(qaFloatIsMobile())return;
     var raw=localStorage.getItem('qaFloatPos'); if(!raw)return;
     var pos=JSON.parse(raw), p=document.getElementById('qaFloat'); if(!p)return;
     var vw=window.innerWidth, vh=window.innerHeight, w=p.offsetWidth||440, h=p.offsetHeight||560;
@@ -3791,6 +3841,7 @@ function qaFloatRestorePos(){
 // 每次缩放结束都会抛 ReferenceError（缩放本身靠 ResizeObserver 兜底才没丢尺寸）
 function qaFloatSaveSize(){
   try{
+    if(qaFloatIsMobile())return;
     var p=document.getElementById('qaFloat'); if(!p)return;
     if(window.localStorage)lsSet('qaFloatSize',JSON.stringify({width:p.offsetWidth,height:p.offsetHeight}));
   }catch(e){}
@@ -3799,6 +3850,7 @@ function qaFloatObserveSize(){
   try{
     var p=document.getElementById('qaFloat'); if(!p||!window.ResizeObserver)return;
     var ro=new ResizeObserver(function(){
+      if(qaFloatIsMobile())return;
       try{lsSet('qaFloatSize',JSON.stringify({width:p.offsetWidth,height:p.offsetHeight}));}catch(e){}
     });
     ro.observe(p);
@@ -3806,6 +3858,7 @@ function qaFloatObserveSize(){
 }
 function qaFloatRestoreSize(){
   try{
+    if(qaFloatIsMobile()){ qaFloatClearInlineLayout(); return; }
     var raw=localStorage.getItem('qaFloatSize'); if(!raw)return;
     var sz=JSON.parse(raw), p=document.getElementById('qaFloat'); if(!p||!sz.width||!sz.height)return;
     p.style.width=sz.width+'px'; p.style.height=sz.height+'px';
@@ -3814,6 +3867,7 @@ function qaFloatRestoreSize(){
 // ===== 面板四边四角自定义缩放 =====
 var QA_RESIZING=null;
 function qaFloatAddResizeHandles(){
+  if(qaFloatIsMobile())return;   // 2026-09-12：移动端恒全屏，不提供缩放柄
   var p=document.getElementById('qaFloat'); if(!p||p.querySelector('.qa-resize-handle'))return;
   ['n','s','e','w','ne','nw','se','sw'].forEach(function(dir){
     var d=document.createElement('div'); d.className='qa-resize-handle qa-resize-'+dir; d.dataset.dir=dir;
@@ -3821,6 +3875,7 @@ function qaFloatAddResizeHandles(){
   });
 }
 function qaFloatStartResize(ev){
+  if(qaFloatIsMobile())return;   // 2026-09-12：移动端恒全屏，禁止缩放（否则全屏会被拖坏）
   if(ev.target.closest && ev.target.closest('input,select,button,a,textarea,[contenteditable]'))return;
   var h=ev.target.closest && ev.target.closest('.qa-resize-handle'); if(!h)return;
   var p=document.getElementById('qaFloat'); if(!p)return;
@@ -4095,6 +4150,7 @@ function qaPriceBrief(q){
 }
 function qaFloatSearch(){
   var inp=document.getElementById('qaFloatInput');if(!inp)return;
+  try{qaRemoveSuggest();}catch(e){}   // 2026-09-12：开始检索即收起空态引导
   var q=(inp.value||'').trim();
   var mineral=(document.getElementById('qaFloatMineral')||{}).value||'';
   var topic=(document.getElementById('qaFloatTopic')||{}).value||'';
@@ -4733,7 +4789,57 @@ function qaClearHistory(){
   var body=document.getElementById('qaFloatBody');if(!body)return;
   body.innerHTML='';
   qaFloatAdd('ai',qaWelcomeText(),'本地知识库 · 零依赖',{md:true});
+  qaFloatRenderSuggest();
 }
+// ===== 2026-09-12：空态「推荐检索词」=====
+// 目的：打开面板不再只有一段说明文字，而是给出**可直接点**的检索入口，
+//   解决「打开不知道能搜什么」。词只从库内近期真命中率最高的矿种/主题里挑，
+//   保证点下去一定有结果（不凭想象造词；全部落空时宁可不显示）。
+function qaSuggestQueries(){
+  var pool=(window.QA_MINERALS||[]).slice();
+  if(!pool.length)pool=['铝','铜','金','锂','稀土','镍','锌','铁矿'];
+  var recent=QA_ROWS.slice(-150),cnt={};
+  function hits(w){
+    var n=0;
+    recent.forEach(function(r){
+      var blob=String(r.t||'')+String(r.m||'')+String((r.g||[]).join(''));
+      if(blob.indexOf(w)>=0)n++;
+    });
+    return n;
+  }
+  pool.forEach(function(w){ cnt[w]=hits(w); });
+  var out=pool.filter(function(w){return cnt[w]>0;}).sort(function(a,b){return cnt[b]-cnt[a];}).slice(0,5);
+  (window.QA_TOPICS||[]).forEach(function(w){
+    if(out.length>=5)return;
+    if(out.indexOf(w)<0&&hits(w)>0)out.push(w);
+  });
+  return out.slice(0,5);
+}
+function qaRemoveSuggest(){
+  var b=document.getElementById('qaFloatBody'); if(!b)return;
+  var el=b.querySelector('.qa-sug-cards'); if(el&&el.parentNode)el.parentNode.removeChild(el);
+}
+function qaFloatRenderSuggest(){
+  var body=document.getElementById('qaFloatBody'); if(!body)return;
+  qaRemoveSuggest();
+  var qs=qaSuggestQueries(); if(!qs.length)return;
+  var d=document.createElement('div');
+  d.className='qa-sug-cards';
+  d.innerHTML='<div class="qa-sug-tip">试试这些检索词</div>'
+    +qs.map(function(q){
+       return '<span class="qa-sug" role="button" tabindex="0" onclick="qaSugQuery(this)" data-q="'+qaEsc(q)+'">'+qaEsc(q)+'</span>';
+     }).join('');
+  body.appendChild(d);
+  qaFloatScroll();
+}
+function qaSugQuery(el){
+  var q=(el&&el.getAttribute('data-q'))||''; if(!q)return;
+  var inp=document.getElementById('qaFloatInput'); if(inp)inp.value=q;
+  qaRemoveSuggest();
+  qaFloatSearch();
+}
+window.qaFloatRenderSuggest=qaFloatRenderSuggest;
+window.qaSugQuery=qaSugQuery;
 function qaCopyAi(btn){
   var msg=btn.closest('.qa-msg');if(!msg)return;
   var raw=msg.dataset.raw||'';
@@ -5076,7 +5182,9 @@ function toggleTheme(){
   }catch(e){}
 
   // 恢复上次位置与尺寸，并挂载拖拽
-  try{qaFloatRestoreSize();qaFloatRestorePos();}catch(e){}
+  // 2026-09-12：改为按视口宽度分流——移动端清掉桌面记忆写下的内联尺寸/定位（恢复全屏），
+  //   桌面端才读取记忆。修复「手机上打开是半屏卡片」。
+  try{ qaFloatSyncViewport(); }catch(e){}
   try{qaFabRestorePos();qaFabRestoreTuck();qaFabApplyTuck();}catch(e){}
   var _fab=document.getElementById('qaFab');
   if(_fab){
@@ -5105,6 +5213,14 @@ function toggleTheme(){
     _panel.addEventListener('touchstart',qaFloatStartDrag,{passive:false});
   }
   qaFloatObserveSize();
+  // 2026-09-12：手机横竖屏切换 / 拖动窗口跨过 768 断点时，重新按形态分流
+  window.addEventListener('resize',function(){ qaFloatSyncViewport(); });
+  // 顶栏 ⋯ 菜单：点击面板外任意处收起
+  document.addEventListener('click',function(e){
+    var l=document.getElementById('qaHeadMenuList'); if(!l||l.hidden)return;
+    if(e.target&&e.target.closest&&e.target.closest('.qa-head-actions'))return;
+    qaHeadMenuClose();
+  });
 
   // 初始化会话：加载历史或显示引导
   var fb=document.getElementById('qaFloatBody');
@@ -5113,6 +5229,7 @@ function toggleTheme(){
     qaLoadHistory();
     if(!fb.children.length){
       qaFloatAdd('ai',qaWelcomeText(),'本地知识库 · 零依赖',{md:true});
+      qaFloatRenderSuggest();
     }
   }
 
