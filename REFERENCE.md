@@ -2090,7 +2090,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **改过 CSS 断点或 `@media`** → 必须用**真实 Chrome**（jsdom 不评估 `@media`）。
 - 全量闸门（如有）＝21 个 node + 9 个 python 闸门。
 
-### 42.10 验证方法与四个「假 FAIL」坑（从两条 prompt 的节流规则迁入）
+### 42.10 验证方法与已知的「假 FAIL」坑（从两条 prompt 的节流规则迁入）
 
 **A. 简报 / 要闻类改动要验渲染**：jsdom 不实现 `fetch`，直接 `JSDOM.fromURL` 会拿不到 `morning_report.json`（简报保持隐藏）；验证须在 `beforeParse` 里把 Node 的 `fetch` 桥进 `window`，并起本地 `http.server` 用 `http://` 加载（`file://` 也不行）。⚠️ jsdom 不做布局，`scrollHeight` 恒为 0，会让「内容超高→默认收起」分支静默跳过 —— 须覆盖 `HTMLElement.prototype.scrollHeight`。
 
@@ -2100,6 +2100,11 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - ⚠️ 坑 2：探针用例之间要 `localStorage.removeItem('mdRightsView')`、`removeItem('mdRightsSort')`，**并必须 `removeItem('qa_history_v1')`** —— 否则前一个用例切的视图 / 点的推荐词会持久化（`qamobile` 点推荐词 → `qadesktop` 加载到历史 → 跳过空态 → 推荐词断言假 FAIL）。同类坑已踩三次。
 - ⚠️ 坑 3：**排序 chip 位于 innerHTML 内，点完会重渲染** → 断言取值前必须重新 `querySelector`，旧按钮引用已脱离 DOM（曾踩过：3 条断言假 FAIL，数据其实全对）。
 - ⚠️ 坑 4：**改了用户可见文案（排障正文、按钮名、提示语）后，必须同步改对应测试的期望值** —— 否则产品是对的、测试报假 FAIL。
+- ⚠️ 坑 5：**线上验收不要把「线上字节」直接对「脚本指纹」**。`deploy_pages.py::bust_asset_versions()` 按**仓库根文件（未归一化）**算 `md5[:8]`，而 gh-pages 提交时 git 会把 CRLF 归一成 LF（`core.autocrlf`），于是 CRLF 源文件（`lme-data.js` / `price-history.js`）**线上字节与指纹必然不等**（`app.js` / `news-data.js` 是 LF 才对得上）—— 这是预期，不是「新旧混装」。正确做法是拆成两条独立判定：
+  ① 线上内容 == 仓库内容（两边都 `replace(b'\r\n', b'\n')` 后比）；
+  ② HTML 里的 `?v=` == `md5(仓库根文件原样字节)[:8]`。
+  （2026-09-13 线上验收时曾把它误判成两条 FAIL，白查一轮。）
+- ⚠️ 坑 6：**比对「某串是否出现在 `location.reload()` 之前」必须先锁范围**。`index.html` 里 `location.reload()` 有 3 处（`hardReset` / 版本自愈 / 内联 `controllerchange`），全文 `indexOf` 会取到最靠前的那处 → 恒判「守卫在后」的假 FAIL。要先 `split("addEventListener('controllerchange'")[1].split('});')[0]` 切出目标段再比。
 
 **C. 判定测试失败是否为本次引入**：把 HEAD 导到临时目录（`git archive HEAD` 用 `tarfile` 解包）跑同一测试对比退出码，别凭记忆争论。
 
