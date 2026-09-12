@@ -41,7 +41,7 @@
 5. 只留业务结论在上下文，完整日志交 runq 落盘；
 6. 含 Traceback/Exception/Error 的返回禁止截断。
 
-**所有内容红线在压缩后原样保留**：7 桶分类、23 域白名单、矿权单视图（无 #rightsTable）、LME 口径（价格唯一来源=lme_data.json、走势图末点=昨天正确）、前端自愈引信（`#mdBootWarn`/`window.mdHardReset()`/`app.js` 末行 `__mdAppEvaluated=true`/顶层 `setTimeout(fn,0)` 防 TDZ）、独占性互斥锁协议、低价值公告剔除。
+**所有内容红线在压缩后原样保留**：7 桶分类、23 域白名单、矿权双视图（卡片/列表；#rightsTable 表格视图仍禁复活，见 REFERENCE.md §17）、LME 口径（价格唯一来源=lme_data.json、走势图末点=昨天正确）、前端自愈引信（`#mdBootWarn`/`window.mdHardReset()`/`app.js` 末行 `__mdAppEvaluated=true`/顶层 `setTimeout(fn,0)` 防 TDZ）、独占性互斥锁协议、低价值公告剔除。
 
 ### 5. B：核心脚本加 `--quiet`（2026-09-11 完成）
 - `fetch_news.py`：argparse 加 `--quiet`。安静模式只输出「候选合计 N 条（境外 M 条）」一行 + 抓取失败源告警，去掉逐源表格与候选预览。实测 `--dry-run --quiet` 输出收敛为 1 行（238 条候选）。候选池 JSON 仍落盘，内容零影响。
@@ -52,7 +52,7 @@
 - 新建 `REFERENCE.md`：外置纯查阅类规则——§1 23 域白名单 / §2 七桶分类定义与易错边界 / §3 低价值公告剔除清单 / §4 境外信源硬门槛。
 - 三套 prompt 各自「节流规则」新增**第 8 条**：涉及白名单/七桶/低价值/境外时先 `Grep REFERENCE.md` 对应节，不靠记忆。
 - 删除 prompt 内联重复的域枚举、七桶示例、低价值清单、境外细节，改为指向 REFERENCE.md。
-- **红线不进 REFERENCE.md**，仍逐字保留在 prompt 内：互斥锁协议、LME 口径、矿权单视图（无 #rightsTable）、前端自愈引信、低价值公告剔除规则、声音提醒。
+- **红线不进 REFERENCE.md**，仍逐字保留在 prompt 内：互斥锁协议、LME 口径、矿权双视图（卡片/列表，卡片默认；#rightsTable 表格视图仍禁复活）、前端自愈引信、低价值公告剔除规则、声音提醒。
 - 收益：prompt 注入为一次性缓存前缀，瘦身降低基线上下文、减少 agent 误记风险；每轮真实增量由 runq/--quiet/A/12 轮压缩压住。
 
 ---

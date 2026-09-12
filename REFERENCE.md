@@ -1,7 +1,7 @@
 # REFERENCE.md — 矿业日报自动化 查阅类规则外置
 
 > 用途：三套自动化 prompt 已瘦身为「只保留红线 + 指向本文件」。agent 在涉及**白名单核验 / 7 桶分类 / 低价值公告剔除 / 境外信源硬门槛**时，用 Grep 查本文件对应节，不靠记忆。
-> 红线（互斥锁协议、LME 口径、矿权单视图、前端自愈引信）**不在此文件**，仍在各自动化 prompt 内，须逐字遵守。
+> 红线（互斥锁协议、LME 口径、矿权双视图、前端自愈引信）**不在此文件**，仍在各自动化 prompt 内，须逐字遵守。
 > 本文件只供 agent 查阅，不参与日报构建，勿 git add 到业务提交（属参考文档，可提交但非必需）。
 
 ---
@@ -101,7 +101,7 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 | ② | 产物已交付并稳定（日报已生成并同步线上） | 收工结算，开新 task |
 | ③ | 工具调用累计约 **60 轮** / 来回 30+ 轮 / 跨 **2 天以上** | 强制结算 |
 | ④ | 体感变慢（几秒 → 十几秒、反复"思考中"） | 立刻结算 |
-| ⑤ | **红线信号**：开始用废弃脚本、复活已删组件（如 `#rightsTable`、显示切换按钮）、违反 category/region 写入约定 | **立刻停、立刻切** |
+| ⑤ | **红线信号**：开始用废弃脚本、复活已删组件（如 `#rightsTable` 表格视图）、违反 category/region 写入约定 | **立刻停、立刻切** |
 | ⑥ | 你在重复解释早已说过的约定 | 约定该沉淀进文件 → 沉淀 + 切 |
 
 > **⑤ 对本项目最实用**：一旦出现，说明上下文里新旧混杂、自动压缩已把红线丢掉，别再往下聊。
@@ -146,7 +146,7 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 | "跨任务保留项目记忆"的说法 | 实测**不成立**：新对话上下文从零开始 | 靠文件持久（本文件 + `~/.workbuddy/MEMORY.md`） |
 | "新建项目没必要"的说法 | 部分错误：项目**可重命名/归档**，且能建多个 | 见 §5.5：项目=协作容器，**要拉人一起干时才建**；日常收工靠"固定目录 + 新建任务" |
 | 每 4 小时"长对话提速提醒"自动化 `adf619e6` | 只能响一下，治不了结构性问题 | 按 §5.2 触发条件切 task（**待用户确认后删除/暂停**） |
-| 已删前端组件 `#rightsTable`、显示切换按钮 | 勿复活（口径以各自动化 prompt 红线为准） | 现行前端单视图 |
+| 已删前端组件 `#rightsTable` 表格视图、`.rights-view-btn` | 勿复活（口径以各自动化 prompt 红线为准） | 2026-09-12 起矿权改为「卡片/列表」双视图（`.rights-views .rv-btn`，卡片默认；手机恒卡片无切换器），见 §17 |
 | 简报「单条≤80字（句号截断）」与 `update_analysis_*.py::trunc80` | 2026-09-11 用户否决：36 条里 35 条被切在句中（如「HVLP4 代铜箔实…」） | 同日改用完整摘要；**2026-09-12 三次修订再改为「逐条撰写的精炼句」（≤80 字，不是截断）见 §16** |
 | 简报单条＝`news.summary` 原样搬运（`fmt_bullet(max_len=0)` / `to_items()`） | 2026-09-12 三次修订：18 条 / 4184 字、平均每条 232 字，与下方新闻列表同源 | §16 `BRIEF_DIGEST` 精炼句（≤80 字/条） |
 | 简报每节＝该类目全部 `is_new`（`recent_items(limit=0)`） | 同上：条数与长度双失控 | §16 精选（条数 < 当日新增）+ 单条 ≤80 字；`limit=0` 仅留作兜底 |
@@ -606,3 +606,59 @@ placeholder 冗余。**改这条断言之前不要加 placeholder。** `aria-lab
 - **同文件多处文本替换一律用单进程 Python 脚本**（`count==1` 断言 + 写完立即读回）：本轮对 `update_analysis_20260912.py` 做整块替换 + 3 处压缩，一次成功；`Edit` 工具在同一消息内多次调用会互相覆盖（§13.5）。
 - **长度校验用 `ast.literal_eval` 而不是正则**：源码里的 `\u201c` 转义在正则提取时是 6 个字符、运行时才是 1 个，正则会误报超长。用 `ast.parse` + `literal_eval` 取到的才是运行时真实值。
 - **脚本行尾**：`update_analysis_20260912.py` 是 **CRLF**（整块替换时必须把新文本的 `\n` 还原成 `\r\n`，否则整文件 diff）。
+
+---
+
+## §17 矿权交易双视图（桌面 卡片/列表，2026-09-12）
+
+### 17.1 需求与定夺
+
+用户给两张截图（桌面现状＝一行一宗紧凑列表 / 手机现状＝信息卡），要求**桌面端也能在两种呈现间切换**，并征询更优做法。三项 AskUserQuestion 定夺：
+
+- **卡片布局**：自适应多列网格（**不照抄手机单列**）——宽屏自动 2~3 列；
+- **默认视图**：**卡片为默认**（用户否决了「列表默认」的推荐项，须按此执行）；
+- **列表补强**：列表态右侧补「公示期 09-23」紧凑截止期。修掉「列表按紧迫度排序、却看不到紧迫度」的缺陷。
+
+### 17.2 实现要点（关键：没有第二套渲染）
+
+- **同一套 DOM**：`.rights-row` 内本来就含 `.rr-head`（类型/标题/地区）+ `.rr-grid`（4 字段）+ 两条 `.rr-line`（截止期 badge / 竞得人）。桌面 CSS 原本只是把 `.rr-grid`、`.rr-line` 设成 `display:none` 藏起来。
+- **形态开关 = 容器类名**：`#rightsCards.rv-cards` → 卡片；无该类 → 列表。切换只切类名（`applyRightsView()`），**不重渲染**，所以不丢滚动位置与筛选状态。
+- **只新增一个元素**：`.rr-due`（列表态紧凑截止期）。它与卡片 badge **共用同一份 `txt`/`cls`**（同源，杜绝两个口径）；卡片态隐藏、手机端也隐藏。
+- **卡片态样式全部写在 `@media(min-width:769px)`**，选择器前缀 `#rightsCards.rv-cards` → 与移动端既有卡片规则（`max-width:768px`）互不干扰。
+- **手机端**：恒定卡片；`.rights-views` 在 ≤768px `display:none`（窄屏两态无意义，列表会把标题挤成两行）。
+- **记忆**：`localStorage['mdRightsView']`，默认 `cards`；`#rightsCards` 在 HTML 里**预置 `rv-cards`** 以免首屏闪一下列表。
+- **CSV 按钮**：改注入 `.rights-actions`（与切换器同组右对齐），否则 `space-between` 会把两者拆到工具栏两端。
+- 卡片态用左侧 3px 色条表现紧迫度（`:has(.rc-deadline.rc-urgent)` 红 / `.rc-soon` 橙），基础色 `--brand-soft`。
+
+### 17.3 红线变更（**必须同步，否则 08:00 会误删**）
+
+旧红线「矿权单视图（`#rightsTable` 系列 / `.rights-view-btn` 不得存在）」**已修订**：
+
+- **仍然严禁**：`#rightsTable` / `#rightsTableWrap` / `#rightsTableBody` / `.rights-view-btn` / `.rights-card` —— 09-08 删掉的表格视图不复活；
+- **现行形态**：桌面 `.rights-views .rv-btn` 两态切换（`data-rv="cards"|"list"`），**卡片为默认**；手机恒卡片、无切换器。
+
+`test_smoke_0908.js` ⑨ 段已由「视图切换按钮已删」改写为「旧表格视图未复活 + 新双视图在位」：该文件 60 → **65 条**（⑨ 段 3 → 8 条）。
+
+### 17.4 验证（真实 Chrome `--headless=new` 探针）
+
+jsdom **不评估 `@media`**，响应式必须用真实 Chrome。探针 `tmp/rvprobe.html`（iframe + `--dump-dom` 读 `RESULT_JSON`），4 组用例 **25 条断言全绿**：
+
+- **卡片态（1400）**：`display:grid`、2 列（`grid-template-columns:392px 392px`）、卡片高 246px、`.rr-grid` 两列、`.rr-due` 隐藏、切换器可见且 `is-on=cards`、无横向溢出；
+- **列表态**：1 列、行高 40px、`.rr-grid` 隐藏、`.rr-due` 显示（`公示期 09-23`）、标题 `nowrap`、`is-on=list`；
+- **手机（430）**：切换器 `display:none`、单列卡片、`.rr-due` 隐藏；
+- **暗色（`body.dark`）**：卡片仍为 grid 多列。
+
+**踩坑记录（下次直接照做）**：
+
+1. 断言 `.rr-due` 的 `display` **不能写死 `inline-block`** —— 它是 flex 子元素，浏览器会 **blockify** 成 `block`（jsdom 不 blockify，两边值不同）。判可见性用 `offsetWidth/offsetHeight`。
+2. 探针用例若共用 `--user-data-dir`，前一个用例点过「列表」会**持久化进 localStorage**，下一个用例默认就变列表 —— 这恰好反证了记忆功能生效；用例之间须先 `localStorage.removeItem('mdRightsView')`。
+3. 手机窄屏默认停在「首页」视图，`#rightsSection` 是 `display:none`（高度 0）；要测量/截图须先点 `.mtab[data-go="rights"]`。
+4. `sw.js` 的 `CACHE_NAME` 替换要连 `mining-daily-` 前缀一起带上（本轮曾误改成裸版本号 `20260912-1105`，全靠 `preflight_check.py` 的「CACHE_NAME 与 build-version 一致」检查兜住）。
+5. 切视图后**必须重跑** `applyRightsView()`：`renderRightsSection()` 被筛选/搜索/展开全部反复调用，重渲染后类名会丢（已在渲染尾部统一补调）。
+
+### 17.5 测试与闸门
+
+- `test_smoke_0908.js` **65 PASS / 0 FAIL**（⑨ 段新增 5 条：切换器在位 / 默认卡片 / 点击可切两态并可切回 / `.rr-due` 随行渲染 / 两条 CSS 契约）；
+- 真实 Chrome 探针 **25 条全绿**（`%TEMP%\md_rvprobe.py`）；
+- 全量回归 **12 项零失败**；补跑 `test_ux_20260910`(41) / `test_view_switch`(22) / `test_p2_20260910`(30) / `test_p02_visibility`(19) / `test_qa_features`(56) / `test_perf_appjs_20260910`(14) / `test_fav_history_aggregate`(29) 均零失败；
+- `preflight_check.py` 全绿，build `20260912-1105`。

@@ -1,7 +1,7 @@
 /**
  * 2026-09-08 批次改动冒烟测试（jsdom）
  * 覆盖：① 找矿专项区已取消 ② 要闻跨源去重 + 日期标注 ③ 热榜 ≤5 条且与要闻互斥
- *       ④ 会展迷你卡进侧栏 ⑤ 矿权改紧凑列表 + 去重 ⑥ 已读样式对比度
+ *       ④ 会展迷你卡进侧栏 ⑤ 矿权改紧凑列表 + 去重（09-12 起桌面恢复「卡片/列表」双视图） ⑥ 已读样式对比度
  * 运行：node test_smoke_0908.js
  */
 const fs = require('fs');
@@ -243,11 +243,42 @@ setTimeout(() => {
     check('⑧ markAllRead 后已读条数 > 0', false, e.message);
   }
 
-  console.log('\n===== ⑨ 矿权区单视图（表格已删回归守护） =====');
-  check('⑨ 表格结构已删', !doc.getElementById('rightsTable') && !doc.getElementById('rightsTableWrap') && !doc.getElementById('rightsTableBody'));
-  check('⑨ 视图切换按钮已删', doc.querySelectorAll('.rights-view-btn').length === 0);
+  console.log('\n===== ⑨ 矿权区双视图（2026-09-12 改版：卡片/列表；表格视图仍禁复活） =====');
+  // 沿革：09-08 曾删掉「卡片/表格」双视图（内容 80% 重复）。09-12 按用户要求在桌面恢复双视图，
+  // 但现行形态是「卡片（默认，自适应多列网格）/ 列表（紧凑行）」——旧的表格视图与 .rights-view-btn 仍严禁复活。
+  check('⑨ 旧表格视图未复活（无 #rightsTable 系列 / .rights-view-btn）',
+    !doc.getElementById('rightsTable') && !doc.getElementById('rightsTableWrap') && !doc.getElementById('rightsTableBody')
+    && doc.querySelectorAll('.rights-view-btn').length === 0);
   const rc9 = doc.getElementById('rightsCards');
   check('⑨ 列表容器仍在且已渲染', !!rc9 && rc9.querySelectorAll('.rights-row').length >= 1, 'rows=' + (rc9 ? rc9.querySelectorAll('.rights-row').length : 0));
+
+  // 切换器：两态按钮，默认卡片
+  const rvBtns = doc.querySelectorAll('.rights-views .rv-btn');
+  check('⑨ 切换器在位（卡片/列表 两态）', rvBtns.length === 2, 'n=' + rvBtns.length);
+  check('⑨ 默认卡片视图（#rightsCards 带 rv-cards 且卡片键 is-on）',
+    !!rc9 && rc9.classList.contains('rv-cards') && !!doc.querySelector('.rv-btn[data-rv="cards"].is-on'));
+  // 运行时切换：点「列表」→ 去掉 rv-cards 且按钮态互换；再点回「卡片」复原
+  try {
+    const listBtn = doc.querySelector('.rv-btn[data-rv="list"]');
+    const cardsBtn = doc.querySelector('.rv-btn[data-rv="cards"]');
+    listBtn.dispatchEvent(new window.Event('click', { bubbles: true }));
+    const toList = !rc9.classList.contains('rv-cards') && listBtn.classList.contains('is-on');
+    cardsBtn.dispatchEvent(new window.Event('click', { bubbles: true }));
+    const backToCards = rc9.classList.contains('rv-cards') && cardsBtn.classList.contains('is-on');
+    check('⑨ 点「列表」切紧凑行 / 点「卡片」切回（含按钮态与 aria-pressed）',
+      toList && backToCards, 'list→' + toList + ' cards→' + backToCards);
+  } catch (e) { check('⑨ 点「列表」切紧凑行 / 点「卡片」切回（含按钮态与 aria-pressed）', false, e.message); }
+
+  // 列表态截止期：每条带 deadline 的行都渲染 .rr-due（与卡片 badge 同源文案，避免两个口径）
+  const dueRows = rc9 ? rc9.querySelectorAll('.rights-row').length : 0;
+  const dueN = rc9 ? rc9.querySelectorAll('.rr-due').length : 0;
+  check('⑨ 列表态截止期元素 .rr-due 随行渲染', dueN > 0 && dueN <= dueRows, 'due=' + dueN + ' rows=' + dueRows);
+  // CSS 契约：卡片态自适应多列网格 / 列表态显示 .rr-due / 手机隐藏切换器
+  check('⑨ CSS：桌面卡片态为自适应多列网格',
+    /#rightsCards\.rv-cards\{display:grid;grid-template-columns:repeat\(auto-fill,minmax\(330px,1fr\)\)/.test(html));
+  check('⑨ CSS：列表态显示 .rr-due、手机隐藏切换器',
+    /#rightsCards:not\(\.rv-cards\) \.rr-due\{display:inline-block\}/.test(html)
+    && /@media\(max-width:768px\)\{\.rights-views\{display:none\}\}/.test(html));
 
   console.log('\n===== ⑩ 计数口径一致（2026-09-08 深夜） =====');
   // 子分类「N条新增」原是生成脚本写死的静态值，会展条目被收纳/旧闻降级后不再更新，
