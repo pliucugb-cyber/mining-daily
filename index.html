@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1040" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1105" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1102,6 +1102,24 @@ body.dark .qa-trend{background:var(--bg);border-color:var(--line-1);color:var(--
 .rights-filters label{font-size: var(--fs-meta);color:#4a5568;display:flex;align-items:center;gap:var(--s2);font-weight:600}
 .rights-filters select{padding:var(--s2) var(--s3);border:1px solid #d5deea;border-radius: var(--r-md);font-size: var(--fs-meta);background:var(--surface);color:#33414f;cursor:pointer;outline:none}
 .rights-filters select:focus{border-color:var(--brand)}
+/* 2026-09-12：矿权视图切换器（卡片/列表）——手机端隐藏（窄屏只有卡片才有意义，列表会把标题挤成两行） */
+.rights-actions{display:flex;align-items:center;gap:var(--s2);margin-left:auto}
+.rights-actions .nf-export-btn{margin-left:0}
+.rights-views{display:inline-flex;border:1px solid #d5deea;border-radius:var(--r-md);overflow:hidden;background:var(--surface)}
+.rv-btn{border:none;background:transparent;padding:var(--s1) var(--s3);font-size:var(--fs-meta);font-weight:600;
+  color:var(--ink-500);cursor:pointer;line-height:1.6;white-space:nowrap}
+.rv-btn+.rv-btn{border-left:1px solid #d5deea}
+.rv-btn:hover{background:var(--surface-2);color:var(--brand)}
+.rv-btn.is-on{background:var(--brand);color:#fff}
+.rv-btn.is-on:hover{background:var(--brand);color:#fff}
+.rv-btn:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+body.dark .rights-views{border-color:var(--line-1);background:var(--surface)}
+body.dark .rv-btn{color:var(--ink-500)}
+body.dark .rv-btn+.rv-btn{border-left-color:var(--line-1)}
+body.dark .rv-btn:hover{background:var(--surface-3)}
+body.dark .rv-btn.is-on{background:#0e7490;color:#fff}
+@media(max-width:768px){.rights-views{display:none}}
+@media(max-width:600px){.rights-actions{margin-left:0}}
 /* 2026-09-08：矿权卡片网格 → 一行一宗紧凑列表（读者反馈大卡片排版太占地方、观感差） */
 .rights-list{display:flex;flex-direction:column;gap:0;border:1px solid #e7edf4;border-radius: var(--r-lg);overflow:hidden}
 .rights-row{display:flex;align-items:center;gap:var(--s2);padding:var(--s2) var(--s3);border-bottom:1px solid #f1f5f9;font-size: var(--fs-body);line-height:1.4}
@@ -1395,14 +1413,55 @@ body.dark .price-strip::after{background:linear-gradient(90deg,rgba(27,36,48,0),
 .nf-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:none;background:var(--surface-3);
   color:var(--ink-500);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center}
 .nf-clear:active{background:var(--line-2)}
-/* P1-2：矿权交易卡模板（移动端卡片化；桌面保留紧凑列表） */
+/* P1-2：矿权交易卡模板（2026-09-12 起桌面支持「卡片/列表」双视图：同一套 DOM 由 CSS 切形态，见下方
+   #rightsCards.rv-cards；手机端恒为卡片，不显示切换器） */
 .rr-head{display:flex;align-items:baseline;gap:var(--s2);min-width:0}
 .rr-type{flex:0 0 auto;font-size:var(--fs-nano);font-weight:600;padding:2px 8px;border-radius:999px;
   background:var(--brand-soft);color:var(--brand);border:1px solid rgba(14,116,144,.12);white-space:nowrap}
-.rights-row .rr-grid{display:none}   /* 桌面：保持紧凑行，不展开字段网格 */
+.rights-row .rr-grid{display:none}   /* 桌面列表态：保持紧凑行，不展开字段网格 */
 .rights-row .rr-line{display:none}
+/* 2026-09-12：列表态右侧补紧凑截止期——列表按紧迫度排序，必须把排序依据显示出来 */
+.rr-due{display:none;flex:0 0 auto;margin-left:var(--s3);font-size:var(--fs-meta);font-weight:600;white-space:nowrap;
+  padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink-500);
+  border:1px solid rgba(100,116,139,.10);font-variant-numeric:tabular-nums}
+.rr-due.rc-urgent{background:#fff1ec;color:#c2410c;border-color:rgba(194,65,12,.16)}
+.rr-due.rc-soon{background:#fff7e6;color:#b45309;border-color:rgba(180,83,9,.16)}
+.rr-due.rc-expired{background:var(--surface-3);color:var(--ink-500);text-decoration:line-through}
 @media(min-width:769px){
+  .rights-row .rr-head{flex:1 1 auto}
   .rights-row .rr-type{margin-right:var(--s2)}
+  #rightsCards:not(.rv-cards) .rr-due{display:inline-block}
+  /* ---- 桌面卡片视图（自适应多列网格，宽屏 2~3 列）：与手机卡片同源，仅列数随宽度自适应 ---- */
+  #rightsCards.rv-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+    gap:var(--s3);border:none;border-radius:0;overflow:visible}
+  #rightsCards.rv-cards .rights-row{display:block;padding:var(--s3) var(--s4);border:1px solid #e7edf4;
+    border-left:3px solid var(--brand-soft);border-radius:var(--r-md);background:var(--surface)}
+  #rightsCards.rv-cards .rights-row:hover{background:#f8fbfe}
+  #rightsCards.rv-cards .rights-row:has(.rc-deadline.rc-urgent){border-left-color:#dc2626}
+  #rightsCards.rv-cards .rights-row:has(.rc-deadline.rc-soon){border-left-color:#f59e0b}
+  #rightsCards.rv-cards .rr-head{display:block;margin-bottom:var(--s2)}
+  #rightsCards.rv-cards .rr-type{display:inline-block;margin:0 0 6px 0}
+  #rightsCards.rv-cards .rr-title{display:block;white-space:normal;overflow:visible;text-overflow:clip;
+    font-size:var(--fs-body);font-weight:600;line-height:1.45;color:var(--ink-900)}
+  #rightsCards.rv-cards .rr-region{display:block;max-width:none;margin-top:4px;font-size:var(--fs-meta);color:var(--ink-500)}
+  #rightsCards.rv-cards .rr-due{display:none}
+  #rightsCards.rv-cards .rr-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px var(--s4);margin-top:var(--s3)}
+  #rightsCards.rv-cards .rr-field{display:flex;flex-direction:column;gap:1px;min-width:0}
+  #rightsCards.rv-cards .rr-field>span{font-size:var(--fs-nano);color:var(--ink-500)}
+  #rightsCards.rv-cards .rr-field>b{font-size:var(--fs-meta);font-weight:600;color:var(--ink-900);
+    font-variant-numeric:tabular-nums;word-break:break-word}
+  #rightsCards.rv-cards .rr-field>b.na{color:var(--ink-500);font-weight:500}
+  #rightsCards.rv-cards .rr-line{display:flex;align-items:center;gap:6px;margin-top:var(--s2);flex-wrap:wrap}
+  #rightsCards.rv-cards .rc-deadline{font-size:var(--fs-meta);font-weight:600;padding:2px 8px;border-radius:999px}
+  #rightsCards.rv-cards .rc-deadline.rc-urgent{background:#fff1ec;color:#c2410c}
+  #rightsCards.rv-cards .rc-deadline.rc-soon{background:#fff7e6;color:#b45309}
+  #rightsCards.rv-cards .rc-deadline.rc-normal{background:var(--surface-2);color:var(--ink-700)}
+  #rightsCards.rv-cards .rc-deadline.rc-expired{background:var(--surface-3);color:var(--ink-500);text-decoration:line-through}
+  #rightsCards.rv-cards .rc-extra{font-size:var(--fs-meta);color:var(--ink-700);word-break:break-word}
+  body.dark #rightsCards.rv-cards .rights-row{background:var(--bg);border-color:var(--line-1);border-left-color:#155e75}
+  body.dark #rightsCards.rv-cards .rights-row:hover{background:#1b2531}
+  body.dark #rightsCards.rv-cards .rc-deadline.rc-urgent{background:#3a1f15;color:#fdba74}
+  body.dark #rightsCards.rv-cards .rc-deadline.rc-soon{background:#332512;color:#fcd34d}
 }
 @media(max-width:768px){
   .rights-row{display:block!important;padding:var(--s3)!important}
@@ -2144,9 +2203,16 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
       </select>
     </label>
   </div>
-  <!-- 2026-09-08 深夜：卡片/表格双视图已删（内容 80% 重复，数值对比交给矿权CSV），只留紧凑列表 -->
+  <div class="rights-actions">
+    <div class="rights-views" role="group" aria-label="矿权视图切换">
+      <button class="rv-btn is-on" type="button" data-rv="cards" aria-pressed="true">▦ 卡片</button>
+      <button class="rv-btn" type="button" data-rv="list" aria-pressed="false">▤ 列表</button>
+    </div>
+  </div>
+  <!-- 2026-09-12：桌面恢复「卡片/列表」双视图（同一套 DOM + CSS 切形态，卡片为默认；手机恒为卡片、不显示切换器）；
+       旧的「表格视图」仍不恢复（#rightsTable / .rights-view-btn），数值对比交给矿权CSV。 -->
 </div>
-<div class="rights-list" id="rightsCards" data-page-node-id="rGS2SHy4RJt4h8Y1cR2Y9p"></div>
+<div class="rights-list rv-cards" id="rightsCards" data-page-node-id="rGS2SHy4RJt4h8Y1cR2Y9p"></div>
 <div class="rights-empty" id="rightsEmpty" hidden data-page-node-id="rH62SHy4RJt4h8Y1cR2Y9D">当前筛选条件下无矿权交易条目。</div>
 </div>
 <!-- ==================== 详细安装指引 ==================== -->
@@ -2228,7 +2294,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=27eab705" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=77cd58a6" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=7fe2eda1" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->

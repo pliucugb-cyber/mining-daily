@@ -166,6 +166,35 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
   var RIGHTS_COLLAPSE_AT=8;
   var rightsExpanded=false;
   function rightsSetExpanded(v){ rightsExpanded=!!v; renderRightsSection(); }
+  // 2026-09-12：矿权双视图（cards=自适应多列卡片网格 / list=紧凑行）——同一套 DOM，只切容器类名与按钮态。
+  // 默认卡片；桌面切过就记住（手机端 CSS 恒为卡片，不受此状态影响，切换器在窄屏也被 CSS 隐藏）。
+  var RIGHTS_VIEW_KEY="mdRightsView";
+  var rightsView="cards";
+  try{ var _rvSaved=localStorage.getItem(RIGHTS_VIEW_KEY); if(_rvSaved==="cards"||_rvSaved==="list") rightsView=_rvSaved; }catch(e){}
+  function applyRightsView(){
+    var el=document.getElementById("rightsCards");
+    if(el){ if(rightsView==="cards") el.classList.add("rv-cards"); else el.classList.remove("rv-cards"); }
+    var btns=document.querySelectorAll(".rights-views .rv-btn");
+    for(var i=0;i<btns.length;i++){
+      var on=btns[i].getAttribute("data-rv")===rightsView;
+      if(on) btns[i].classList.add("is-on"); else btns[i].classList.remove("is-on");
+      btns[i].setAttribute("aria-pressed", on?"true":"false");
+    }
+  }
+  function rightsSetView(v){
+    if(v!=="cards" && v!=="list") return;
+    rightsView=v;
+    try{ localStorage.setItem(RIGHTS_VIEW_KEY,v); }catch(e){}
+    applyRightsView();   // 只切类名，不重渲染：避免丢滚动位置与筛选状态
+  }
+  function bindRightsView(){
+    var btns=document.querySelectorAll(".rights-views .rv-btn");
+    for(var i=0;i<btns.length;i++){
+      if(btns[i].__rvBound) continue;
+      btns[i].__rvBound=1;
+      btns[i].addEventListener("click", function(){ rightsSetView(this.getAttribute("data-rv")); });
+    }
+  }
   // onclick 内联属性在全局作用域执行，须把 toggle 挂到 window（IIFE 内函数非全局）
   window.rightsSetExpanded=rightsSetExpanded;
   function rightsMoreBtn(listLen, shownLen){
@@ -260,7 +289,7 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
     // 默认折叠：超过阈值只显示前 N 条，其余收进「展开全部」
     var shownList=list.slice(0, rightsExpanded?list.length:RIGHTS_COLLAPSE_AT);
     cardsEl.innerHTML=shownList.map(function(r){
-      var badge="";
+      var badge="", due="";
       if(r.deadline){
         var d=daysBetween(new Date(r.deadline.replace(/-/g,"/")), ref);
         var cls="rc-normal", txt="";
@@ -276,6 +305,8 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
           else if(d<=14){ cls="rc-soon"; txt=(r.rightsType==="auction"?"拍卖 ":"截标 ")+fmtDeadline(r.deadline)+" · 剩"+d+"天"; }
         }
         badge='<span class="rc-deadline '+cls+'">'+txt+'</span>';
+        // 列表态显示这一处、卡片态显示 badge：同一份文案与颜色类，不会出现两个口径
+        due='<span class="rr-due '+cls+'">'+txt+'</span>';
       }
       var mineralHtml=r.mineral?'<span class="rc-mineral">'+r.mineral+'</span>':'';
       // 按业务类型决定展示字段
@@ -310,12 +341,14 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
         +'<a class="rr-title" href="'+safeHref(r.it.u)+'" target="_blank" rel="noopener" title="'+esc(r.it.t)+'">'+esc(r.it.t)+'</a>'
         +(r.region?'<span class="rr-region">📍 '+esc(r.region)+'</span>':'')
         +'</div>'
+        +due
         +'<div class="rr-grid">'+grid4+'</div>'
         +(badge?'<div class="rr-line">'+badge+'</div>':'')
         +(extra?'<div class="rr-line">'+extra+'</div>':'')
         +'</div>';
     }).join("")+'<div class="rights-more">'+rightsMoreBtn(list.length, shownList.length)+'</div>';
     mdApplySearchToRights();   // 2026-09-10 P1：重渲染后补跑搜索过滤
+    applyRightsView();         // 2026-09-12：重渲染后补同步视图类名（筛选/搜索/展开全部都会走到这里）
     if(emptyEl) emptyEl.hidden=list.length>0;
     if(countEl) countEl.textContent=data.length+" 条"+(list.length!==data.length?"（筛后 "+list.length+"）":"");
     if(tocEl) tocEl.textContent=String(list.length);
@@ -402,7 +435,7 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
   // （newsSearchText、STORE_KEY / FAV_KEY / ARCH_FAV_DEFAULT_TITLE 等）都在文件后段才初始化，
   // 于是抛 TDZ ReferenceError，把整个 app.js 打断在半路 —— 这就是 09-11 事故的机制。
   // 改为「本次求值结束后再初始化」：setTimeout 0，届时所有顶层声明都已就绪。
-  function mdInitRights(){ renderRightsSection(); injectRightsResultSummary(); bindRights(); }
+  function mdInitRights(){ renderRightsSection(); injectRightsResultSummary(); bindRights(); bindRightsView(); }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", mdInitRights);
   else setTimeout(mdInitRights, 0);
 })();
@@ -4830,8 +4863,10 @@ function setupExportButtons(){
   }
   var rtb=document.querySelector('.rights-toolbar');
   if(rtb && !document.getElementById('rightsCsvBtn')){
+    // 2026-09-12：与视图切换器同组右对齐（.rights-actions）；否则 space-between 会把两者拆到工具栏两端
+    var host=rtb.querySelector('.rights-actions')||rtb;
     var b2=document.createElement('button'); b2.id='rightsCsvBtn'; b2.className='nf-export-btn';
-    b2.type='button'; b2.textContent='⬇ 矿权CSV'; b2.onclick=function(e){ if(e){e.stopPropagation();} exportRightsCsv(); }; rtb.appendChild(b2);
+    b2.type='button'; b2.textContent='⬇ 矿权CSV'; b2.onclick=function(e){ if(e){e.stopPropagation();} exportRightsCsv(); }; host.appendChild(b2);
   }
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setupNewsFilterBar(); setupExportButtons(); });
