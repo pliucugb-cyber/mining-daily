@@ -19,6 +19,8 @@ WorkBuddy 的「发布为应用」链接绑定的是**本机目录绝对路径**
 
 说明
 ----
+- 部署前会按 build-version 自动派生两个值：sw.js 的 CACHE_NAME、index.html 的
+  <title>（「矿业新闻日报 · YYYY-MM-DD」，约定见 REFERENCE.md §39）；
 - 只包含前端真正用到的文件（页面、数据 js、图标、manifest、sw），
   不含 Python 脚本、data/ 抓取缓存、__pycache__ 等。
 - 遵循「未编造、可溯源」：只搬运已有文件，不生成任何内容。
@@ -49,6 +51,7 @@ def log(msg):
     msg 里若含 % 也不会被误格式化：logging 只在传 args 时才做 % 替换。
     """
     _log.info(msg)
+SITE_NAME = '矿业新闻日报'   # 站点名（浏览器标签页标题）——约定见 REFERENCE.md §39
 WORK = os.path.join(ROOT, 'tmp', 'ghpages')
 REMOTE = 'git@github.com:pliucugb-cyber/mining-daily.git'
 BRANCH = 'gh-pages'
@@ -261,10 +264,59 @@ def sync_sw_cache_name():
     validate_sw_js(name)
 
 
+def sync_site_title():
+    """2026-09-12：站点标题（浏览器标签页）由 build-version 自动派生。
+
+    用户 2026-09-12 反馈：标签页上只有一个光秃秃的日期「2026-09-12」，看不出是什么站。
+    根因是 09-07 的生成脚本把 <title> 从「矿业新闻日报 2026-09-04」改成了纯日期
+    （`re.sub(r'<title>\\d{4}-\\d{2}-\\d{2}</title>', '<title>%s</title>' % REPORT, html)`），
+    此后每天的标签页都只剩日期。
+
+    做法与 sync_sw_cache_name() 完全同源：build-version 已经是事实上的版本源
+    （形如 20260912-2205），直接从中取日期拼出规范标题「矿业新闻日报 · 2026-09-12」。
+    这样**无论当日生成脚本怎么写标题，推上线的标题都一致**——不依赖生成脚本或
+    automation prompt 的自觉（生成脚本每天新写，写什么标题不可控）。
+
+    幂等：标题已规范时不写盘、不产生 diff。
+    """
+    html_path = os.path.join(ROOT, 'index.html')
+    if not os.path.isfile(html_path):
+        return None
+    with io.open(html_path, encoding='utf-8', newline='') as f:
+        src = f.read()
+    m = re.search(r'<meta name="build-version" content="(\d{4})(\d{2})(\d{2})-\d{4}"', src)
+    if not m:
+        raise RuntimeError('index.html 的 build-version 形状异常（应形如 20260912-2205），'
+                           '无法派生站点标题（拒绝部署）')
+    want = '%s · %s-%s-%s' % (SITE_NAME, m.group(1), m.group(2), m.group(3))
+    ct = len(re.findall(r'<title>', src))
+    if ct == 0:
+        raise RuntimeError('index.html 中找不到 <title>，无法规范化站点标题（拒绝部署）')
+    # 取第一个：head 里的真标题永远在 <style> 之前（源文件里就在第 18 行）
+    pat = re.compile(r'<title>[^<]*</title>')
+    new = pat.sub(lambda _m: '<title>%s</title>' % want, src, count=1)
+    if new == src:
+        log('[deploy_pages] 站点标题已规范：%s' % want)
+        return want
+    orig = src.encode('utf-8')
+    buf = new.encode('utf-8')
+    # 兜底：只替换一个标题串，字节数变化理应很小；出入过大说明正则写坏了
+    if abs(len(buf) - len(orig)) > 200 or len(buf) < 1000:
+        raise RuntimeError('index.html 标题改写结果异常（原 %d 字节 → 新 %d 字节），拒绝写入'
+                           % (len(orig), len(buf)))
+    tmp = html_path + '.tmp'
+    with open(tmp, 'wb') as f:
+        f.write(buf)
+    os.replace(tmp, html_path)
+    log('[deploy_pages] 站点标题规范化：<title>%s</title>' % want)
+    return want
+
+
 def main():
     force = '--force' in sys.argv
-    # 4.0) 先按 build-version 同步 SW 缓存名，再复制文件（保证推上去的就是新名字）
+    # 4.0) 先按 build-version 同步 SW 缓存名与站点标题，再复制文件（保证推上去的就是新的）
     sync_sw_cache_name()
+    sync_site_title()
 
     # 1) 校验必需文件齐全
     missing = [f for f in REQUIRED if not os.path.isfile(os.path.join(ROOT, f))]

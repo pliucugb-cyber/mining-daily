@@ -1560,3 +1560,105 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 **待办**
 - 折叠态是**全局一份**（手机/电脑共用），未按端区分；也未按天重置（用户选的是「永久记住」）。
 - 同区另一个开关「展开全部（N 条）」的高度裁剪态未持久化——那是另一层开关（内容裁剪 vs 整块收起），按需再说。
+
+## §39 2026-09-12 站点标题（浏览器标签页）定为「矿业新闻日报 · YYYY-MM-DD」
+
+### 39.1 起因
+
+用户指着浏览器标签页问「这里的名称修改一下」——当时标签页上只有一个光秃秃的日期
+`2026-09-12`，完全看不出是什么站（书签/最近访问/手机端同样只有日期）。
+
+### 39.2 根因：09-07 的一次回退，不是「忘了写」
+
+| 时间 | 生成脚本写法 | 标签页显示 |
+|---|---|---|
+| 09-04 ~ 09-06 | `html.replace('<title>矿业新闻日报 2026-09-04</title>', '<title>矿业新闻日报 %s</title>' % REPORT)` | 矿业新闻日报 2026-09-04 |
+| **09-07 起** | `html = re.sub(r'<title>\d{4}-\d{2}-\d{2}</title>', '<title>%s</title>' % REPORT, html)` | **2026-09-12（站名丢失）** |
+
+`generate_20260907.py` 把标题从「站名 + 日期」改成「纯日期」，此后每天沿用、无人察觉。
+
+### 39.3 现行约定（**硬约定，不得回退**）
+
+标签页标题恒为「**矿业新闻日报 · YYYY-MM-DD**」（站名 + 中点 + 日报日期）：
+
+- 站名 `SITE_NAME` = `矿业新闻日报`，**不带 ⛏️**（标签页/书签更干净；页面内标题仍留 ⛏️）。
+- 全页只允许一个 `<title>`，即 `index.html` 里静态那一个（`app.js` 图表模板里的
+  `<title>` 是 SVG tooltip，与标签页无关）。
+- 日期取**日报日期**，与 `build-version`、头部 `.date-badge` 同源，**不是本地当前日期**。
+
+### 39.4 为什么落点在 `deploy_pages.sync_site_title()`（关键设计）
+
+**只改 `index.html` 和当日 `generate_YYYYMMDD.py` 都不够。** 生成脚本**每天新写一份**，
+明天那份写什么标题不可控（09-07 就是这么回退的）；automation prompt 也不保证被逐字执行。
+
+所以与 `sync_sw_cache_name()` 完全同源——**从 `build-version` 派生**：
+
+```python
+# deploy_pages.py，main() 里紧跟 sync_sw_cache_name() 调用
+m = re.search(r'<meta name="build-version" content="(\d{4})(\d{2})(\d{2})-\d{4}"', src)
+want = '%s · %s-%s-%s' % (SITE_NAME, m.group(1), m.group(2), m.group(3))
+new = re.sub(r'<title>[^<]*</title>', lambda _m: '<title>%s</title>' % want, src, count=1)
+```
+
+要点：
+
+- **必须 `count=1` 取第一个**：head 里的真标题永远在 `<style>` 之前（源文件里就在第 18 行）。
+  不加 `count` 会把后续 SVG/模板里的 `<title>` 一并改掉。
+- 幂等：标题已规范时不写盘、不产生 diff。
+- `build-version` 形状不合（非 `YYYYMMDD-HHMM`）或找不到 `<title>` → **抛错拒部署**；
+  fail-fast 优于静默推出一个错标题。
+- 与 `bust_asset_versions()` 一样，这一步改的是**源文件**（`ROOT/index.html`），
+  故部署后工作区可能留有未提交的标题改动——属预期，下次生成会一并提交。
+
+### 39.5 四层防线（缺一层就可能悄悄回退）
+
+| 层 | 位置 | 作用 |
+|---|---|---|
+| ① 静态真值 | `index.html` `<title>` | 页面本身带站名，JS 不跑也对 |
+| ② 生成期 | 当日 `generate_YYYYMMDD.py`（宽松 `re.subn` + 两条 assert） | 生成时就写对 |
+| ③ 发布期**自愈** | `deploy_pages.sync_site_title()` | **不依赖脚本/prompt 的自觉**，上线前强制规范 |
+| ④ 前置闸门 | `preflight_check.check_site_title()` | 漂移即报错（06:00 自动化真正会跑的一步） |
+
+测试 `python test_site_title.py`（30 项）：③④ 两处的函数是**实跑**的（不只查字符串存在），
+避免写出「永远返回 True」的假守卫；⑤ 段动态取**文件名日期最大**的 `generate_*.py` 校验其写法，
+故每天新增的生成脚本会被自动纳入检查。
+
+### 39.6 红线（08:00 复核不得判为回退）
+
+- `<title>` 必须是「矿业新闻日报 · <当天日期>」；**只剩纯日期即 09-07 的回退**，
+  须修当日 generate 脚本 + bump build-version 后重跑 preflight。
+- 标题日期必须与 `build-version` 同日（`preflight_check` 会拦）。
+- 不得给站名加 ⛏️；不得改成「矿业日报」（简称只用于 `manifest.short_name`）。
+
+### 39.7 顺带修掉的两处不一致
+
+- `manifest.json` `name: 矿业日报 → 矿业新闻日报`（安装到主屏的名字与页面站名统一；
+  `short_name` 仍留简称「矿业日报」——主屏图标标签放不下长名）。
+- `manifest.json` `theme_color: #1a3a5c → #0e7490`。§36 只改了 `index.html` 的
+  `meta[name=theme-color]`，manifest 漏改 → 安装版状态栏颜色与页面不一致。
+
+### 39.8 两条自动化 prompt 的同步点（已做）
+
+- **06:00 §11.5**「标题/badge/时间改当天」→ 明确「标题必须是「矿业新闻日报 · <当天>」，
+  用宽松 `re.subn` 覆写并 assert，**严禁写成纯日期**」。
+- **08:00 §2.6** 日期标记 → 增补「标题必须恰好是「矿业新闻日报 · <今天>」，只剩纯日期即回退」。
+
+### 39.9 本次改动清单（build `20260912-2221`）
+
+| 文件 | 改动 |
+|---|---|
+| `index.html` | `<title>` 加站名；build-version bump |
+| `manifest.json` | `name` 对齐站名；`theme_color` 与 meta 对齐 |
+| `generate_20260912.py` | 标题改写改宽松正则 + `_n_title`/格式两条 assert；新增 `SITE_NAME` |
+| `preflight_check.py` | 新增 `check_site_title()`（docstring 第 8 项 + sections 注册） |
+| `deploy_pages.py` | 新增 `sync_site_title()`，main() 中紧跟 `sync_sw_cache_name()` |
+| `sw.js` | CACHE_NAME 跟随 build-version |
+| `test_site_title.py` | 新增（30 项） |
+
+### 39.10 本轮工具经验
+
+- **Bash 工具的 PATH 仍是坏的**（`tail: command not found`）→ 长输出一律
+  `> %TEMP%/x.out 2>&1` 再用 Read 读，别接管道。
+- 校验「函数真的会用」时，**光断言字符串存在不够**：本轮把 `check_site_title`
+  对「纯日期标题」的判定、`sync_site_title` 对坏标题的自愈都**实跑**了一遍，
+  否则写出恒真的假守卫也照样全绿。

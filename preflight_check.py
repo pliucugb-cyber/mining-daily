@@ -15,6 +15,10 @@ preflight_check.py — 矿业日报自动化前置/回归健康检查。
   7. sw.js 可解析（node --check）且 CACHE_NAME 与 build-version 一致
      ——2026-09-10 事故新增。此前没有任何门禁真正解析过 sw.js，一行语法错误
      （`const P260910-1900';`）直接上线，导致 SW 无法更新、页面区块永久停在「加载中…」。
+  8. 站点标题（浏览器标签页）必须是「矿业新闻日报 · YYYY-MM-DD」，且日期与 build-version 同日
+     ——2026-09-12 用户反馈「标签页只有一个光秃秃的日期」后固化。09-07 起生成脚本把
+     <title> 从「矿业新闻日报 2026-09-04」写成了纯日期，站名丢失且无人察觉。
+     约定见 REFERENCE.md §39；deploy_pages.sync_site_title() 是同一约定的自愈兜底。
 
 退出码（2026-09 改）：
   **默认** 任一检查失败 → exit 1。旧行为是「默认只报告、exit 0」，
@@ -41,6 +45,7 @@ log = get_logger('preflight')
 
 ROOT = Path(__file__).parent
 HTML = ROOT / 'index.html'
+SITE_NAME = '矿业新闻日报'   # 站点名（浏览器标签页标题）——约定见 REFERENCE.md §39
 STATUS = ROOT / '.preflight_status.json'
 
 
@@ -210,6 +215,40 @@ def check_sw_js(text):
     return ok, findings
 
 
+def check_site_title(text):
+    """站点标题（浏览器标签页）必须是「矿业新闻日报 · YYYY-MM-DD」，且日期与 build-version 同日。
+
+    2026-09-12 用户反馈后固化：标签页上只剩一个光秃秃的日期，看不出是什么站。
+    根因是 09-07 的生成脚本把 <title> 从「矿业新闻日报 2026-09-04」改成了纯日期
+    （见 REFERENCE.md §39）。这里把它做成前置闸门——标题一旦漂移（丢站名 / 格式变 /
+    日期与 build-version 不同日），06:00 前置检查即报错，不会再无声退回纯日期。
+
+    注意：只对 index.html 原始文本做检查（不喂 app.js——它的图表模板里也有 <title> 字面量）。
+    """
+    findings = []
+    m = re.search(r'<title>([^<]*)</title>', text)
+    if not m:
+        findings.append('❌ 找不到 <title>')
+        return False, findings
+    title = m.group(1).strip()
+    m2 = re.match(r'^%s · (\d{4}-\d{2}-\d{2})$' % SITE_NAME, title)
+    if not m2:
+        findings.append('❌ 站点标题格式不符：%r（应为「%s · YYYY-MM-DD」——'
+                        '只剩纯日期即为 09-07 的回退，站名丢失，见 REFERENCE.md §39）'
+                        % (title, SITE_NAME))
+        return False, findings
+    findings.append('✅ 站点标题正常：%s' % title)
+    mb = re.search(r'<meta name="build-version" content="(\d{8})-\d{4}"', text)
+    if mb:
+        if m2.group(1).replace('-', '') == mb.group(1):
+            findings.append('✅ 标题日期与 build-version 同日（%s）' % m2.group(1))
+        else:
+            findings.append('❌ 标题日期 %s 与 build-version %s 不同日——生成时漏改标题'
+                            % (m2.group(1), mb.group(1)))
+            return False, findings
+    return True, findings
+
+
 def main():
     argv = set(sys.argv[1:])    # --fail-on-error 是 06:00 自动化在用的历史参数，现为默认行为（no-op，仅兼容保留）
     fail = '--no-fail' not in argv
@@ -240,6 +279,7 @@ def main():
         ('关键功能', check_functions(text)),
         ('关键容器', check_containers(text)),
         ('build-version', check_build_version(text)),
+        ('站点标题', check_site_title(html_text)),
         ('sw.js 语法', check_sw_js(text)),
         ('div 收支', check_div_balance(html_text)),
     ]

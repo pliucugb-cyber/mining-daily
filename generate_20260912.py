@@ -25,6 +25,7 @@ from generate_common import (
 from functools import partial
 
 
+SITE_NAME = '矿业新闻日报'   # 站点名（浏览器标签页标题）——约定见 REFERENCE.md §39
 SRC = 'index.html'
 with open(SRC, encoding='utf-8') as f:
     html = f.read()
@@ -38,7 +39,15 @@ item_after_cutoff = partial(_item_after_cutoff, report_dt=REPORT_DT, cutoff_dt=C
 DATA_ASOF = '09-09'   # 电解钴：SMM 无连续日K，保留最近一次人工值
 
 # ============ 1. 标题 / 日期 / build-version ============
-html = re.sub(r'<title>\d{4}-\d{2}-\d{2}</title>', '<title>%s</title>' % REPORT, html)
+# 站点名固定「矿业新闻日报」，标题统一写成「矿业新闻日报 · YYYY-MM-DD」。
+# 用宽松匹配吃掉落点前的任意旧标题，可覆盖三种历史写法：
+#   纯日期（2026-09-07~09-12，站名丢失）／「站名 日期」（09-04~09-06）／「站名 · 日期」。
+# 2026-09-12 修复：此前 09-07 起写成纯日期，浏览器标签页只剩一个光秃秃的日期，看不出是什么站。
+html, _n_title = re.subn(r'<title>[^<]*</title>',
+                         '<title>%s · %s</title>' % (SITE_NAME, REPORT), html, count=1)
+assert _n_title == 1, 'title 替换次数异常: %d' % _n_title
+assert '<title>%s · %s</title>' % (SITE_NAME, REPORT) in html, '站点标题格式不符'
+
 html, _n_badge = re.subn(r'(<span class="date-badge"[^>]*>)2026年09月\d{2}日 星期.',
                          r'\g<1>2026年09月12日 星期六', html)
 assert _n_badge == 1, 'date-badge 替换次数异常: %d' % _n_badge
