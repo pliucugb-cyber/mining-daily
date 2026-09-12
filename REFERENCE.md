@@ -204,7 +204,7 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 
 1. **横幅宽限**：`__mdBootGrace`(10s) 门控 `mdDegraded()` 的「app.js 未执行」判定；`__mdRegionGrace`(10s) 门控 `mdStuckRegions()` 整体。今后新增任何"异步/网络依赖"的健康态，必须同步给宽限。
 2. **阅读模式已废**（见 §6）：见 `body.reading-mode` / `#readingToggle` / `#readingExitBar` 即为回退，`test_ux_20260910.js` ② 段会立刻失败。
-3. **简报 `briefSub` 固定为「按分类摘要」**，禁止再拼 `今日收录 N 条`（口径不同，见 §8.3）。
+3. **简报 `briefSub` 显示「必看 N 条」**（N=当日 `highlights` 条数；无 `highlights` 时回退「按分类摘要」）——2026-09-12 两层改版后如此（见 §14）。**仍禁止**拼侧栏口径的 `今日收录 N 条`（口径不同，见 §8.3）。
 4. 头部日期以 `.date-badge` 为唯一来源：简报不再另写「数据日期」（`briefDate` 已删），今日要闻的 `digestDate` 也已于 2026-09-12 删除（§10.3）；非当日条目用 `.digest-dtag` 单独标注。见 `body.reading-mode`/`#readingToggle`/`#briefDate`/`#digestDate` 即为回退。
 
 ### 9.2 数据 / 生成
@@ -212,8 +212,9 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 5. **简报单条＝完整摘要，不截断**：`fmt_bullet` 默认 `max_len=0`；仅显式传 `max_len>0` 时按句末标点（。！？）截断，**绝不在句中硬切**；自动剥掉行尾「（原题：…）」。
 6. `stats.new_count`（收录口径）与页面「今日新增」（实时新鲜口径）**不必相等**，且通常 收录 ≥ 新增（差额＝移入会议专区的会展条目 ＋ 降级「补录」的旧闻）。**不要**为了让两者数值相等去改数据。
 7. 只改 `morning_report.report` 的稳妥做法：备份 4 个分析 JSON → 跑修好的生成器 → 只取新 `report` 覆盖回原文件（保住 `updated`/`stats`/`sections`）→ 其余 3 个 JSON 从备份还原（避免 `NOW` 时间戳漂移）；最后 diff 确认**仅 bullet 文本**变化。
-- **简报每节＝该类目全部 `is_new`，不限条数**（2026-09-12 新增，§10.1）：`recent_items` 默认 `limit=0` 即全量，需要限量才显式传 `limit>0`。**长度问题交给前端** `setupBriefClamp()`（420px 折叠 +「展开全部（N 条）」），不在数据层砍内容。
+- **简报每节＝该类目全部 `is_new`，不限条数**（2026-09-12 新增，§10.1）：`recent_items` 默认 `limit=0` 即全量，需要限量才显式传 `limit>0`。**长度问题交给前端**——2026-09-12 起为**两层呈现**（要点层常驻 + 完整层按需展开，见 §14）；`setupBriefClamp()` 的 420px 折叠**未删**，保留为无 `highlights` 时的兜底路径。始终**不在数据层砍内容**。
 - **「政策与产业」= `政策与监管` + `行业动态` 两源**（2026-09-12 新增，§10.2）：先政策后产业，各类目内按 `orig_date_full` 倒序，`drop_notice=True` 仍生效（见 §3）。**不要**退回单类目喂数——只喂「行业动态」则节名里的「政策」没有内容，只喂「政策与监管」则产业面内容从简报消失。
+- **简报须产出 `highlights` + `brief_sections` 两个字段**（2026-09-12 新增，见 §14）：前者=要点层（3–5 条一句话），后者=完整层（五节结构化、**空节不收录**）。两者任一缺失时前端静默回退旧 markdown 渲染——页面不报错，但两层会退化成单层，属**静默回退**，要按 §14.2 的数据契约修生成器。`report` 保留作兜底。
 
 ### 9.3 流程 / 工程
 
@@ -400,3 +401,77 @@ placeholder 冗余。**改这条断言之前不要加 placeholder。** `aria-lab
   核对"是否真落盘"一律用 `Read` 或 Python 直接读字节，不要相信 Grep。
 - 探针 `%TEMP%\md_probe_mobile.py` 已扩展：新增面板标题 / 输入框 / 两个按钮 / 样式表规则数四项实测。
   截图 `%TEMP%\md_mobile_shot.py` 新增 `qa` 档（点底栏「AI 搜」→ 面板打开），现输出 home/price/rights/qa 四张 PNG。
+
+
+---
+
+## §14 今日简报改「两层呈现」（2026-09-12 10:0x，build `20260912-1000`）
+
+### 14.1 用户诉求与解法选择
+
+- **诉求（原话）**：「今日简报这个内容还是太多了，某天的新闻可能特别多，但不要全部内容都放在这里，要不然这一块太长了。还是要筛选一下内容把重要的信息放在这里。」
+- **冲突点**：这与 **§9.2 / §10.1 刚定的「每节全量、单条不截断」方向相反**——那是 09-11、09-12 用户自己拍的板，且 §6 记载 09-06 发生过"截断后非价格内容全被吞掉"的事故。
+- **解法（三选一，用户选「两层：要点 + 可展开完整」）**：**不砍内容，加一层**——
+  - **要点层** `highlights`：3–5 条一句话（≤50 字），常驻首屏；
+  - **完整层** `brief_sections`：五节全量原样保留，点「展开完整分类摘要（N 条）」才出现。
+  - 于是「要全」与「别太长」同时成立，且**任意条数的一天首屏高度恒定**。
+- **「重要」由谁判断**：用户选**生成时由模型挑**（另两个选项是纯规则挑、规则+模型结合）→ 因此**必须同步 06:00 / 08:00 两条自动化 prompt**（见 14.6）。
+
+### 14.2 数据契约（morning_report.json 新增两字段）
+
+| 字段 | 形态 | 用途 |
+|---|---|---|
+| `highlights` | `[{cat, t, u}]`，3–5 条 | 要点层。`cat`=所属分节（前端做小标）；`t`=一句话要点（≤50 字）；`u`=对应新闻 url（缺则前端渲染成纯文本） |
+| `brief_sections` | `[{name, count, items:[{t,u,s}]}]` | 完整层。`t`=完整摘要（不截断）、`u`=原文 url（供点击跳转）、`s`=来源；**空节不收录** |
+| `report` | 字符串（**保留不动**） | 前端兜底：缺上面两字段时回退旧的 markdown 渲染 |
+
+- **要点链接的自动关联**：模型只写关键词 `k`，脚本按 `k` 在当日条目标题里找第一条匹配并填 `u`，随后 `pop('k')`。今日实测 5 条里 4 条命中（行情异动属价格数据、无对应新闻，正确留空）。
+- **`report` 改由 `brief_sections` 拼出**，保证"展开看到的"与"结构化数据"永远一致；实测 4432 字 / 18 条**一字不差**（重构等价）。
+- **空节不再渲染占位句**：以前无内容会输出「今日暂无新的勘查与技术动态。」这类句子白占高度，现直接不收录。
+
+### 14.3 前端渲染（app.js / index.html）
+
+- `renderBrief()` 新增三段：① **高异动前置行** `.brief-alert`（仅 `sections.anomalies.max_severity==='high'` 时出现，取前 3 项 + 总数）；② 要点层 `briefHighlightsHtml()`；③ 完整层 `briefSectionsHtml()`（节标题带条数徽标 `.sec-n`）。
+- `briefJumpTo(url, ev)`：条目点击 → 复用现成的 `newsItemByUrl(url)` 在同页定位到对应新闻卡片 → `scrollIntoView({block:'center'})` + `.brief-flash` 1.6s 高亮；**目标不在 DOM 时静默不动作**（优雅降级）。事件委托绑在 `#briefMain` 上（`data-jump-bound` 标记防重复绑定）。
+- `setupBriefClamp(twoLayer)`：**两层模式** = 要点层常驻、完整层由按钮切换（不做高度截断）；**旧模式**（无 highlights）= 原 420px 折叠 +「展开全部（N 条）」，**完整保留为兜底**。
+- `briefSub` 文案：`hls.length ? '必看 N 条' : '按分类摘要'`（见 14.5 与 §9.1.3 的更新）。
+
+### 14.4 实测数据（真实 Chrome headless iframe 探针 `%TEMP%\md_brief_probe.py`，三档视口）
+
+| 视口 | 要点层 | 完整层 | 折叠态 `#briefMain` 高 | 展开态高 | 要点层占视口 | 横向溢出 |
+|---|---|---|---|---|---|---|
+| 1280×900 | 5 条 | 18 条（hidden） | **203px** | 2975px | 17.1% | 无 |
+| 390×844 | 5 条 | 18 条（hidden） | 309.9px | 5394.5px | 29.7% | 无 |
+| 360×844 | 5 条 | 18 条（hidden） | 353.5px | 5930px | 34.8% | 无 |
+
+- 三档均：副标题「必看 5 条」、节徽标 `2,6,2,7,1`（与数据一致）、按钮「展开完整分类摘要（18 条）」↔「收起」切换正常、`a[data-jump]=19`、CSSOM 两层相关规则 15 条。
+- **默认高度对比**：改造前 `#briefMain` 直接渲染全量 = 2975px（桌面），现在 203px —— 约 **1/14**。
+- 高异动行实际文本：`今日异动 白银 -5.07%、碳酸锂 -4.59%、沪锡 -3.64%`（当日 `max_severity=high`）。
+
+### 14.5 与既有决议的关系（重要，别误判为回退）
+
+- **§9.2.5「单条不截断」、§9.2 / §10.1「每节全量」继续有效**——本次**没有**动 `fmt_bullet(max_len=0)` 与 `recent_items(limit=0)`。18 条一条未减，`report` 字数前后完全一致（4432）。
+- **§9.1.3 已更新**：`briefSub` 由「固定『按分类摘要』」改为**「必看 N 条」**（N=highlights 条数）。它**仍禁止**拼侧栏口径的 `今日收录 N 条`（口径冲突见 §8.3）；「必看 N 条」是简报自身条数，口径自洽。
+- **§6 废弃项不受影响**：`setupBriefClamp()` 的 420px 折叠**未删**，降级为无 `highlights` 时的兜底。
+
+### 14.6 必须同步的两条自动化 prompt（已做）
+
+- **06:00 抓取生成（`5cdcdfff`）**：§11.8 里"长度问题交给前端 setupBriefClamp"改为指向两层；新增 **§11.8a** 规定 `highlights` / `brief_sections` 的产出要求与挑选原则（severity=high → 政策/国标 → 重大并购与资源量 → 勘查成果，覆盖不同分节）；§11.8b 更新 `briefSub` 说明；§11.12 汇报项加 highlights 条数。
+- **08:00 复验核对（`21dba82b`）**：§2.8 新增**简报两层复核项**（highlights 3–5 条、brief_sections 无空节且 `count==items.length`、页面默认只见要点层、`.brief-full` 带 hidden、有 `.brief-alert`、`a[data-jump]` 可跳、`node test_brief_layers.js` 须 0 失败）；§1.9 指向该回归脚本；输出项加 highlights 条数。
+- **不改 prompt 的后果**：次日 06:00 的模型会认为 morning_report 结构就是 prompt 里描述的那样，从而**删掉这两个新字段**——前端兜底会让页面不报错，但两层退化为单层，属静默回退。
+
+### 14.7 测试与闸门
+
+- **新增 `test_brief_layers.js`（43 条断言）**，三块：
+  - ① **数据契约**：highlights 存在且 3–5 条、每条有 cat/t 且 t≤56 字、u 均为 http(s)、不残留内部字段 `k`；brief_sections 至少 1 节、**无空节**、`count==items.length`、节名在五节白名单内、完整层总条数 == `report` 条目数。
+  - ② **渲染**（jsdom + 本地 http + `beforeParse` 桥接 fetch）：要点层 li 数 == highlights、副标题「必看 N 条」、完整层默认 hidden 且 li == 总条数、节徽标数一致、无「今日暂无」、高异动行按 `max_severity` 出现、按钮展开/收起双向、`a[data-jump]` 存在且点击后目标卡片带 `brief-flash`。
+  - ③ **回退路径**：http 层把 `highlights`/`brief_sections` 剥掉返回 → 页面必须仍渲染出 `report` 的 18 条 markdown 列表、无要点层、副标题回「按分类摘要」、按钮走「展开全部」路径。
+- 全量（`%TEMP%\md_reg3.py`）：`brief_layers 43` · `mobile_ux_batch 69` · `qa_navtab 14` · `mobile_opt 33` · `smoke_0908 60` · `data_selfheal 11` · `data_integrity 9` · `tagchip 19` · `asset_versioning 15` · `price_history_unclosed 14` · `preflight` ✅ · `sw_gate` ✅ —— **零失败**。
+- 线上实抓（`%TEMP%\md_live_verify3.py`，带 no-cache）：Pages 延迟故 attempt 1 读到旧版属正常，**attempt 2 全绿**。
+
+### 14.8 本轮工具经验
+
+- **`automation_update` 的 prompt 是整体字段**：自动化定义不在本地磁盘（`~/.workbuddy` 下只有 audit-log/traces 里的历史副本，项目里只有 `memory/automations/<id>/memory.md`），所以改 prompt 必须**完整重发**。为免转录出错，先 `mode=view` 取回全文再逐段核对（本轮两条长 prompt 均一次通过）。
+- **数据层回填用 §9.2.7 的合并法**：备份 4 个分析 JSON → 重跑生成器 → **只取新增字段合并回原 JSON** → 其余 3 个从备份还原。实测 `字段差异=[]`、`updated` 未漂移，证明该法可靠。
+- 探针/截图脚本新增：`%TEMP%\md_brief_probe.py`（折叠态/展开态几何 + CSSOM 规则数）、`%TEMP%\md_brief_shot.py`（折叠态/展开态 × 桌面/移动 共 3 张 PNG）。
+- 给 Chrome 探针页传状态用 **URL hash**（`#1280x900-1`）最省事，无需在服务端解析 query。
