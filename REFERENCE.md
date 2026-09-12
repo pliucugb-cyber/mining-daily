@@ -287,3 +287,42 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 - **断言要排除注释**：验收"旧图标已消失"时，`OLD_PATH not in js` 会被自己写的注释（"替代了原气泡 M4 5h…"）判为假 → 先按行剔除 `//` 开头行再断言。
 - **沙箱下推送必须由用户批准**：`~/.ssh` 属受保护路径，`git push` 在沙箱内一律 `Can't open user config file …/.ssh/config: Permission denied`。脚本 `%TEMP%\md_push_deploy.py` 按技能 `ssh-push-under-sandbox` 写（`GIT_SSH_COMMAND` 内路径**全用正斜杠**，否则 git 走 `sh -c` 会把反斜杠吃掉）。**首次申请被用户拒绝时不要自行重试**，先问用户；用户批准后同会话内不再询问。
 
+## §12 移动端顶栏精简（2026-09-12 08:5x，build `20260912-0852`）
+
+### 12.1 用户决议与落地
+
+用户配三张手机截图提三点要求：① 首页取消顶栏「历史记录 / 收藏」两个按钮并**重排该行内容**；② 价格页同样取消两钮、把「价格」标题**居中**；③ 矿权页同样取消两钮、把「矿权」标题**居中**。
+
+- `app.js::mdMobileTopTabs()`：删掉 `#mdFavBtn`/`#mdHistBtn` 两个 `<button class="md-fav-btn">` 及其红点 `<span class="md-badge">`，以及两个 click 绑定（原逻辑是点了就切 `body[data-filter-mode]`）。**入口未丢**：底部「我的」面板 `#mineSheet` 内仍有 `data-act="fav"`（★ 我的收藏）与 `data-act="history"`（🕘 浏览记录）。
+- `mdUpdateFavBadges()` 退役为空实现 `function mdUpdateFavBadges(){}`——调用点（收藏点击、`storage` 变更）仍在，删函数会留死调用。
+- `index.html`：`.md-top-brand` 由 `align-items:baseline` 改 `center` 并加 `min-height:36px`（否则移除 44px 圆钮后品牌行会塌成单行文字）；`body:not(.md-hide-catbar) .md-top-brand{justify-content:space-between}`（首页＝品牌左 / 日期右）；`body.md-hide-catbar .md-top-brand{justify-content:center}`（非首页分类栏与日期都隐藏，只剩 tab 名 → 居中）。
+- 死 CSS 清理：删 `.md-fav-btn{…}` / `.md-fav-btn:active` / `.md-fav-btn svg` / `.md-badge{…}` / `.md-badge.show`；从 `@media(max-width:1100px)` 的两份 44px 触控热区清单里去掉 `.md-fav-btn`；`DESIGN.md` 的 pill 控件族举例同步去掉。
+- build `20260912-0607` → `20260912-0852`（`sw.js` 的 `CACHE_NAME` 同步）。
+
+### 12.2 实测数据（真实 Chrome 无头探针，四档视口）
+
+| 视口 | 首页 mdTop 高 | 分类栏 fill | 日期 x | 日期截断 | 价格页 mdTop 高 | 标题居中偏差 |
+|---|---|---|---|---|---|---|
+| 390 | 92 | 100% | 236 | 无 | 47 | 0px |
+| 360 | 92 | 100% | 206 | 无 | 47 | 0px |
+| 320 | 92 | 100% | 166 | 无 | 47 | 0px |
+| 414 | 92 | 100% | 260 | 无 | 47 | 0px |
+
+- 四档视口下 `.md-fav-btn` 数 = 0、`.md-badge` 数 = 0；价格 tab 下 `date display=none`、`catBar display=none`。
+- **顺带修掉 §11.3 遗留问题②**：原 ≤360px 品牌行日期被截断（`scrollW=127 > clientW=99.5/59.5`）——移除两个 44px 圆钮正好腾出所需宽度，320px 下也完整显示，无需再做短日期格式。
+- 首页 mdTop 由 99px → 92px；价格/矿权页 mdTop = 47px（细长的单行标题栏）。
+
+### 12.3 测试与闸门
+
+- `test_mobile_opt_20260910.js` ③④⑤ 断言随设计**翻转**：原"按钮/红点存在"改为"不存在"；触发 `data-filter-mode` 的点击改从 `#mineSheet button[data-act]` 派发；新增品牌行 `justify-content` 三条 CSS 断言。**33 PASS / 0 FAIL**。
+- `test_mobile_ux_batch.js` **67 PASS**、`test_qa_navtab_20260910.js` **14 PASS**、`preflight_check.py` ✅、`test_tagchip_contrast.py` ✅、`test_deploy_sw_gate.py` ✅、`test_asset_versioning.py` ✅。
+- 线上实抓验收（`%TEMP%\md_live_verify.py`，attempt 1 全绿）：build `20260912-0852`、`CACHE_NAME` 同步、`.md-fav-btn`/`.md-badge` 规则与 `id="mdFavBtn"`/`id="mdHistBtn"`/`id="mdFavBadge"` 在**剥注释后**均不存在、品牌行三条 CSS 均在、`mdUpdateFavBadges(){}` 为空实现、"AI 搜"双语义图标与分类栏四等分**未回退**。
+- 提交：main `3cf0416` / gh-pages `c418d01`。
+
+### 12.4 复用的工具经验
+
+- **断言注释坑（第二次踩）**：`!/\.md-fav-btn/` 会被自己解释"已删除"的注释里的类名打红 → **锚定规则体** `/\.md-fav-btn\s*[,{]/`，或先剥 `/*…*/` 与 `//` 行。本轮两处断言同时用了"锚定 + 剥注释"。
+- **手机视口截图**：`%TEMP%\md_mobile_shot.py`——本地 `http.server` + `/_shot.html`（390×844 iframe 加载 `index.html`，按 hash 派发一次 `.mtab` click 切 tab），`chrome --headless=new --screenshot --window-size=390,844 --virtual-time-budget=25000` 抓三态 PNG 到 `%TEMP%\md_shots\`。坑：HTTP handler 类名别取 `H`/`W`（会覆盖同名的尺寸常量）。
+- `mobile-preview.html`（站点上已部署的"手机视图模拟器"）可直接在 PC 上按设备档位看真机布局，不必截图。
+
+
