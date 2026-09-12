@@ -1758,6 +1758,49 @@ function briefMd(md){
   flushP();closeUl();
   return out.join('');
 }
+// ---- 两层简报（2026-09-12）：要点层默认可见，完整层按需展开 ----
+// 数据契约（morning_report.json）：highlights[] = 要点层（cat/t/u，3-5 条）；
+//   brief_sections[] = 完整层（name/count/items[{t,u,s}]，空节不收录）。
+// 任一字段缺失即整体回退到旧的 report markdown 渲染（历史 JSON / 老 SW 缓存仍可用）。
+function briefHighlightsHtml(hls){
+  var out=['<div class="brief-hl-wrap"><ol class="brief-hl">'];
+  for(var i=0;i<hls.length;i++){
+    var h=hls[i]||{};
+    var inner=(h.cat?('<span class="hl-cat">'+briefEsc(h.cat)+'</span>'):'')
+      +'<span class="hl-t">'+briefEsc(h.t||'')+'</span>';
+    out.push('<li>'+(h.u?('<a href="'+briefEsc(h.u)+'" data-jump="'+briefEsc(h.u)+'" target="_blank" rel="noopener">'+inner+'</a>'):inner)+'</li>');
+  }
+  out.push('</ol></div>');
+  return out.join('');
+}
+function briefSectionsHtml(sections){
+  var total=0,out=[];
+  for(var i=0;i<sections.length;i++){
+    var s=sections[i]||{},items=s.items||[];
+    if(!items.length)continue;
+    total+=items.length;
+    out.push('<div class="brief-sec">'+briefEsc(s.name||'')+'<span class="sec-n">'+items.length+'</span></div><ul>');
+    for(var k=0;k<items.length;k++){
+      var it=items[k]||{};
+      var txt=briefEsc(it.t||'')+(it.s?('（'+briefEsc(it.s)+'）'):'');
+      out.push('<li>'+(it.u?('<a href="'+briefEsc(it.u)+'" data-jump="'+briefEsc(it.u)+'" target="_blank" rel="noopener">'+txt+'</a>'):txt)+'</li>');
+    }
+    out.push('</ul>');
+  }
+  return '<div class="brief-full" data-total="'+total+'" hidden>'+out.join('')+'</div>';
+}
+// 简报条目 → 页面内对应新闻卡片：同页滚动定位 + 短暂高亮。
+// 目标卡片不在当前 DOM（如条目属往期/已筛掉）时不做任何事，保持优雅降级。
+function briefJumpTo(url,ev){
+  if(!url)return;
+  var el=null;
+  try{ el=(typeof newsItemByUrl==='function')?newsItemByUrl(url):null; }catch(e){}
+  if(!el)return;
+  if(ev&&ev.preventDefault)ev.preventDefault();
+  try{ el.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e2){ el.scrollIntoView(); }
+  el.classList.add('brief-flash');
+  setTimeout(function(){ el.classList.remove('brief-flash'); },1600);
+}
 function renderBrief(d){
   var strip=document.getElementById('briefStrip');
   if(!strip||!d||typeof d!=='object')return;
@@ -1767,34 +1810,77 @@ function renderBrief(d){
   var metals=(sec.signals&&sec.signals.metals)||[];
   var sent=sec.sentiment||null;
   var rep=String(d.report||'');
-  if(!rep.trim()&&!news.length&&!alerts.length&&!metals.length)return;
+  var hls=(d.highlights&&d.highlights.length)?d.highlights:[];
+  var bsec=(d.brief_sections&&d.brief_sections.length)?d.brief_sections:[];
+  if(!rep.trim()&&!news.length&&!alerts.length&&!metals.length&&!hls.length&&!bsec.length)return;
   var sEl=document.getElementById('briefSub');
   if(sEl){
-    // 2026-09-11 用户反馈：简报里的「今日收录 N 条」与侧栏/统计条「今日新增」口径不同，
-    //   今日收录 = 生成时纳入当日的全部条目（含被移入「会议/会展」专区的、降级为「补录」的旧闻）；
-    //   今日新增 = 页面实时可见、仍在时效内的新鲜条目。
-    // 两个数字并列会让读者以为数据打架，故简报不再重复条数；条数统一由侧栏/统计条呈现。
-    sEl.textContent='按分类摘要';
+    // 2026-09-11 用户反馈：「今日收录 N 条」与侧栏「今日新增」口径不同（收录含移入会议专区
+    //   与降级补录的旧闻），并列会让读者以为数据打架，故副标题不出总数。
+    // 2026-09-12 两层改版：默认展示要点层，副标题改为要点条数（简报自身口径，自洽）。
+    sEl.textContent=hls.length?('必看 '+hls.length+' 条'):'按分类摘要';
   }
   var main=document.getElementById('briefMain');
   if(main){
-    // 2026-09-08 晚：风险提示节已按用户要求整体移除（数据层模板同步删除），即便历史 JSON 里带着也不渲染
     var body=rep.replace(/^\*\*总览：\*\*\s*/,'').trim();
     var ri=body.indexOf('**风险提示：**');
     if(ri>=0)body=body.slice(0,ri).trim();
-    // 注意：不要再截断「今日头条」等分节——简报定位是当日全部内容的分类摘要，
-    // 之前因「今日5件事」卡而截断，去重删卡后只剩行情段，非价格内容全被吞掉（2026-09-06 事故）
-    var h=briefMd(body);
-    main.innerHTML=h||'<div class="brief-empty">今日简报暂未生成</div>';
+    var html='';
+    // ① 高异动前置一行：仅当日最高等级为 high 时出现
+    var maxSev=(sec.anomalies&&sec.anomalies.max_severity)||'';
+    if(alerts.length&&maxSev==='high'){
+      var one=alerts.slice(0,3).map(function(a){ return (a.commodity||'')+' '+(a.move||''); }).join('、');
+      html+='<div class="brief-alert"><span class="brief-alert-tag">今日异动</span>'
+        +briefEsc(one)+(alerts.length>3?('，共 '+alerts.length+' 项'):'')+'</div>';
+    }
+    // ② 要点层（常驻）+ 完整层（默认隐藏）
+    if(hls.length){
+      html+=briefHighlightsHtml(hls);
+      if(bsec.length){
+        html+=briefSectionsHtml(bsec);
+      }else{
+        var md=briefMd(body);
+        html+='<div class="brief-full" data-total="'+((md.match(/<li>/g)||[]).length)+'" hidden>'+md+'</div>';
+      }
+    }else{
+      html+=briefMd(body);
+    }
+    main.innerHTML=html||'<div class="brief-empty">今日简报暂未生成</div>';
+    if(!main.dataset.jumpBound){
+      main.dataset.jumpBound='1';
+      main.addEventListener('click',function(ev){
+        var n=ev.target,a=null;
+        while(n&&n!==main){ if(n.getAttribute&&n.getAttribute('data-jump')){a=n;break;} n=n.parentNode; }
+        if(a)briefJumpTo(a.getAttribute('data-jump'),ev);
+      });
+    }
   }
-  setupBriefClamp();
+  setupBriefClamp(hls.length>0);
   // 「今日5件事」卡已移除（与下方「今日要闻」重复）；top_news 仍参与简报区显隐判断
   strip.hidden=false;
 }
-// 简报内容按需折叠：分类摘要可能很长（10+ 条），默认只露出头部，避免把价格板块和新闻推到屏幕外
-function setupBriefClamp(){
+// 简报展开/折叠。
+// 两层模式（有 highlights）：要点层常驻，完整层由按钮切换显隐，不做高度截断。
+// 旧模式（无 highlights）：保持 420px 折叠 +「展开全部（N 条）」，供历史 JSON 兜底。
+function setupBriefClamp(twoLayer){
   var main=document.getElementById('briefMain'),btn=document.getElementById('briefMore');
   if(!main||!btn)return;
+  var full=main.querySelector('.brief-full');
+  if(twoLayer&&full){
+    main.classList.remove('brief-clamp');
+    btn.hidden=false;
+    var total=Number(full.getAttribute('data-total')||0);
+    var close=function(){
+      full.hidden=true; btn.dataset.open='0';
+      btn.textContent='展开完整分类摘要'+(total?('（'+total+' 条）'):'');
+    };
+    close();
+    btn.onclick=function(){
+      if(btn.dataset.open==='1'){ close(); }
+      else{ full.hidden=false; btn.dataset.open='1'; btn.textContent='收起'; }
+    };
+    return;
+  }
   main.classList.remove('brief-clamp');
   btn.hidden=true;
   var LIMIT=420;
@@ -1816,6 +1902,7 @@ function setupBriefClamp(){
     else{main.classList.remove('brief-clamp');btn.dataset.open='1';btn.textContent='收起';}
   };
 }
+
 function loadBrief(){
   var strip=document.getElementById('briefStrip');
   // 2026-09-10 P1-6：加载时先显示骨架屏微光占位，渲染完成后由 renderBrief 整体替换
