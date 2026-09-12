@@ -117,6 +117,8 @@ setTimeout(() => {
     window.localStorage.setItem('mining_daily_history', JSON.stringify([{url:'https://x.example/a',title:'测试条目',src:'X',time:new Date().toISOString()}]));
     const clr = sheet ? sheet.querySelector('.mine-clear[data-act="clear-history"]') : null;
     if (clr) {
+      // 2026-09-12：清空为轻量二次确认——首点进入确认态，再次点击才真正清空
+      clr.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
       clr.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
       const after = window.localStorage.getItem('mining_daily_history');
       check('点「清空」→ 浏览记录被清空（localStorage 已删除/空数组）', after === '[]' || after === null, 'after=' + after);
@@ -527,6 +529,29 @@ setTimeout(() => {
   check('⑨ 空态样式：.empty-art/.empty-cta 已在 index.html 定义',
         /\.aggregate-empty \.empty-art\{/.test(html) && /\.aggregate-empty \.empty-cta\{/.test(html),
         '');
+
+  // ⑩⑪ 清空按钮轻量二次确认（2026-09-12 续）：首点不立即清空，再点才清空
+  let _c1=false,_c2=false,_t1='',_cls1='',_t2='',_cls2='',_after1='',_after2='';
+  try{
+    if(typeof window.setFilter==='function'){
+      window.localStorage.setItem('mining_daily_history', JSON.stringify([{url:'https://x.example/a',title:'T',src:'X',time:new Date().toISOString()}]));
+      window.setFilter('history');
+      var _cb=doc.querySelector('#favViewBar .favview-clear');
+      if(_cb){
+        _cb.dispatchEvent(new window.MouseEvent('click',{bubbles:true,cancelable:true}));
+        _t1=_cb.textContent; _cls1=_cb.className||'';
+        _after1=window.localStorage.getItem('mining_daily_history');
+        _c1=(_t1==='确认清空？') && /confirming/.test(_cls1) && _after1 && _after1!=='[]';
+        _cb.dispatchEvent(new window.MouseEvent('click',{bubbles:true,cancelable:true}));
+        _t2=_cb.textContent; _cls2=_cb.className||'';
+        _after2=window.localStorage.getItem('mining_daily_history');
+        _c2=(_after2==='[]'||_after2===null) && !/confirming/.test(_cls2);
+      }
+      window.setFilter('none');
+    }
+  }catch(e){ _c1=false; _c2=false; }
+  check('⑩ 清空二次确认：首点变「确认清空？」+红底强提示且不立即清空', _c1, 't1='+_t1+' cls1='+_cls1+' after1='+_after1);
+  check('⑪ 清空二次确认：再次点击才真正清空且退出确认态', _c2, 't2='+_t2+' cls2='+_cls2+' after2='+_after2);
 
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));

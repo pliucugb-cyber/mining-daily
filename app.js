@@ -807,9 +807,33 @@ function clearHistory(){
 }
 // 清空：capture 阶段拦截，阻止冒泡触发「浏览记录」导航或目录 toggle
 // （点 .mine-clear / .toc-clear 不应同时打开浏览记录聚合视图）
+// 2026-09-12：轻量二次确认——首点进入确认态（按钮变「确认清空？」+红底强提示，3 秒超时自动恢复），
+// 再次点击才真正清空；点其它区域取消确认态。降低误清空心理负担（清空后仍有 8 秒撤销兜底）。
+var _clearConfirmBtn=null, _clearConfirmTimer=null;
+function mdExitClearConfirm(){
+  if(_clearConfirmBtn){
+    if(_clearConfirmBtn.classList)_clearConfirmBtn.classList.remove('confirming');
+    if(_clearConfirmBtn._origText!==undefined)_clearConfirmBtn.textContent=_clearConfirmBtn._origText;
+    _clearConfirmBtn.removeAttribute('data-confirming');
+  }
+  if(_clearConfirmTimer){ clearTimeout(_clearConfirmTimer); _clearConfirmTimer=null; }
+  _clearConfirmBtn=null;
+}
 document.addEventListener('click',function(e){
   var cl=e.target.closest?e.target.closest('[data-act="clear-history"]'):null;
-  if(cl){ e.preventDefault(); e.stopPropagation(); clearHistory(); }
+  if(cl){
+    e.preventDefault(); e.stopPropagation();
+    if(cl.getAttribute('data-confirming')==='1'){ mdExitClearConfirm(); clearHistory(); return; }
+    mdExitClearConfirm(); // 清掉其它可能存在的确认态
+    cl._origText=cl.textContent;
+    cl.setAttribute('data-confirming','1');
+    if(cl.classList)cl.classList.add('confirming');
+    cl.textContent='确认清空？';
+    _clearConfirmBtn=cl;
+    _clearConfirmTimer=setTimeout(function(){ mdExitClearConfirm(); }, 3000);
+  } else if(_clearConfirmBtn){
+    mdExitClearConfirm(); // 点其它区域 → 取消
+  }
 }, true);
 
 // 2026-09-12：收藏/浏览记录视图的「‹ 返回」——回到首页内容（清除 fav/history 筛选）

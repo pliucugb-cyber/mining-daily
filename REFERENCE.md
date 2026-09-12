@@ -1271,3 +1271,24 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 ### 27.5 红线（不得回退）
 - 桌面左侧目录**不得**再出现 `#tocInstallItem` 或 `.toc-clear[data-act="clear-history"]`。
 - 功能入口必须保留：手机 Mine 面板 `.mine-clear`、浏览记录视图 `.favview-clear`、顶部 `#pwaHeaderBtn`、手机安装卡片。
+
+
+### 28 清空按钮轻量二次确认（2026-09-12 晚，build `20260912-1852`）
+### 28.1 背景
+用户反馈：顶部 `.favview-clear` 点击即清空，虽有 8 秒撤销，但误触心理负担重。要求加二次确认或强提示。
+### 28.2 方案
+- 轻量二次确认（非原生 confirm，避免移动端突兀）：首点 `data-act="clear-history"` 进入确认态——按钮文本变「确认清空？」、加 `.confirming` 红底强提示（含呼吸动画 `clearPulse`）、3 秒超时自动恢复；再次点击才真正 `clearHistory()`。点击页面其它区域也取消确认态（全局 document click 监听）。
+- 覆盖所有清空入口：`.favview-clear`（沉浸式视图顶部）、`.mine-clear`（「我的」面板）。统一由 `clear-history` 的 capture 委托拦截。
+- `.favview-clear` 加 `title="清空后 8 秒内可撤销（再点一次确认）"`；新增 `.favview-clear.confirming` / `.mine-clear.confirming` 红底样式（含 `body.dark` 适配）。
+- 注销变量 `_clearConfirmBtn` / `_clearConfirmTimer`，函数 `mdExitClearConfirm()` 统一退出确认态。
+### 28.3 代码落点
+- app.js：重写 `clear-history` 的 capture 委托（原直接 `clearHistory()` → 二次确认）。
+- index.html：`.favview-clear` 加 `title`；新增 `.confirming` 强提示样式；`build-version` → `20260912-1852`。
+- sw.js：`CACHE_NAME` → `mining-daily-20260912-1852`。
+### 28.4 测试与验证
+- `test_mobile_ux_batch.js`：旧「点清空」改为两次点击（二次确认）；§18 新增 ⑩⑪（首点变「确认清空？」+红底且不立即清空；再次点击才清空且退出确认态）。总断言 176 → **178**（0 失败）。
+- 回归：`test_mobile_opt_20260910.js` 37/0、`test_smoke_0908.js` 74/0、`test_qa_navtab_20260910.js` 18/0、`preflight_check.py` 全绿、`node --check app.js` 干净。
+### 28.5 红线（不得回退）
+- 清空**不得**点击即生效，必须二次确认（首点确认态、再点执行），或等价的强提示。
+- `.confirming` 强提示样式不得删除（误清空防护可见）。
+- 8 秒撤销（`mdUndoToast`）保留。
