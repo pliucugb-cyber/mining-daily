@@ -2503,13 +2503,11 @@ function mdOpenSearch(){
   }
 }
 
-// 顶栏收藏/历史红点：集合非空即显示（移动端常驻图标上的待查看提示）
-function mdUpdateFavBadges(){
-  try{
-    var fb=document.getElementById('mdFavBadge'); if(fb) fb.classList.toggle('show', !!(window.getFavs&&getFavs().length>0));
-    var hb=document.getElementById('mdHistBadge'); if(hb) hb.classList.toggle('show', !!(window.getHistory&&getHistory().length>0));
-  }catch(e){}
-}
+// 顶栏收藏/历史红点（2026-09-12 退役）
+// 用户要求精简顶栏：收藏/历史两个常驻圆钮已从顶栏移除，其上的未读红点随之退役，
+// 两个入口统一收在底部「我的」面板内（data-act="fav"/"history"），功能未减。
+// 本函数保留为空实现：既有调用点（收藏点击、storage 变更）仍会触发，去掉会留下死调用。
+function mdUpdateFavBadges(){}
 // ① 顶栏智能吸顶：下滚隐藏、上滑/到顶重现（阅读时让出空间，分类栏随顶栏整体可见）
 // 2026-09-11 P0：隐藏只走 transform（不动布局，避免整列内容跳动）；滞后阈值 12px 抗惯性滚动抖动。
 var mdTopLastY=0, mdTopTick=false, mdTopBarH=0;
@@ -2523,6 +2521,9 @@ function mdTopOnScroll(){
   mdTopLastY=y;
 }
 // 顶部 App Bar + 分类 Tab（注入到 body 最前，sticky 吸顶；skip-link 之后以保证其为 body 首个元素）
+// 2026-09-12 顶栏精简（用户要求）：移除「我的收藏 / 浏览记录」两个常驻圆钮 —— 它们挤占品牌行、
+//   与底部「我的」面板内的同名入口重复。移除后首页品牌行只剩「品牌名 + 日期」，改为两端对齐；
+//   非首页（分类栏隐藏）只剩 tab 名，改为居中。收藏/浏览记录改由「我的」面板进入，功能未减。
 function mdMobileTopTabs(){
   if(document.getElementById('mdTop')) return;
   var top=document.createElement('div'); top.id='mdTop';
@@ -2530,14 +2531,6 @@ function mdMobileTopTabs(){
   try{ var d=document.querySelector('.date-badge'); if(d) dateTxt=d.textContent.trim(); }catch(e){}
   var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期'],['meeting','会议']];
   var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业新闻日报</span><span class="md-date">'+dateTxt+'</span>'
-    +'<button class="md-fav-btn" id="mdFavBtn" type="button" aria-label="我的收藏">'
-    +'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>'
-    +'<span class="md-badge" id="mdFavBadge"></span>'
-    +'</button>'
-    +'<button class="md-fav-btn" id="mdHistBtn" type="button" aria-label="浏览记录">'
-    +'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
-    +'<span class="md-badge" id="mdHistBadge"></span>'
-    +'</button>'
     +'<button class="md-search-btn" id="mdSearchBtn" type="button" aria-label="搜索新闻">'
     +'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
     +'</button></div><div class="md-cat-bar" role="tablist" aria-label="内容分类">';
@@ -2555,10 +2548,6 @@ function mdMobileTopTabs(){
   });
   var sb=document.getElementById('mdSearchBtn');
   if(sb) sb.addEventListener('click', mdOpenSearch);
-  var fb=document.getElementById('mdFavBtn');
-  if(fb) fb.addEventListener('click', function(){ var s=document.getElementById('mineSheet'); if(s) s.hidden=true; if(typeof toggleFavFilter==='function') toggleFavFilter(); });
-  var hb=document.getElementById('mdHistBtn');
-  if(hb) hb.addEventListener('click', function(){ var s=document.getElementById('mineSheet'); if(s) s.hidden=true; if(typeof toggleHistoryFilter==='function') toggleHistoryFilter(); });
   mdUpdateFavBadges();
   document.addEventListener('click',function(e){ if(e.target.closest && (e.target.closest('.btn-star')||e.target.closest('.news-title'))){ setTimeout(mdUpdateFavBadges,0); } });
   if(window.addEventListener) window.addEventListener('storage', mdUpdateFavBadges);
