@@ -82,7 +82,9 @@ setTimeout(() => {
     const header = document.querySelector('.header');
     check('fav 模式下 .header 隐藏', !header || window.getComputedStyle(header).display === 'none', header && window.getComputedStyle(header).display);
     const rail = document.querySelector('.col-rail');
-    check('fav 模式下 .col-rail 显示（保留热榜/会展）', !!rail && window.getComputedStyle(rail).display !== 'none', rail && window.getComputedStyle(rail).display);
+    check('fav 模式下 .col-rail 隐藏（§35.2 沉浸式）', !rail || window.getComputedStyle(rail).display === 'none', rail && window.getComputedStyle(rail).display);
+    const mdTop = document.getElementById('mdTop');
+    check('fav 模式下 #mdTop 隐藏（§35.2）', !mdTop || window.getComputedStyle(mdTop).display === 'none', mdTop && window.getComputedStyle(mdTop).display);
     // 关键回归：即使收藏的条目落在 today/archive 区块内，这两个区块也不得被 refreshSectionVisibility 重新显示
     check('fav 模式下即使收藏了今日条目，todaySection 仍隐藏', disp('todaySection') === 'none', disp('todaySection'));
     check('fav 模式下即使收藏了往期条目，archiveSection 仍隐藏', disp('archiveSection') === 'none', disp('archiveSection'));
@@ -105,7 +107,7 @@ setTimeout(() => {
     check('history 模式下即使记录了今日条目，todaySection 仍隐藏', disp('todaySection') === 'none', disp('todaySection'));
     check('history 模式下即使记录了往期条目，archiveSection 仍隐藏', disp('archiveSection') === 'none', disp('archiveSection'));
     const railH = document.querySelector('.col-rail');
-    check('history 模式下 .col-rail 显示（保留热榜/会展）', !!railH && window.getComputedStyle(railH).display !== 'none', railH && window.getComputedStyle(railH).display);
+    check('history 模式下 .col-rail 隐藏（§35.2 沉浸式）', !railH || window.getComputedStyle(railH).display === 'none', railH && window.getComputedStyle(railH).display);
 
     // 4) 清空收藏/历史后进入 fav，应显示空态提示
     window.localStorage.removeItem('mining_daily_favorites');
@@ -113,11 +115,11 @@ setTimeout(() => {
     window.setFilter('fav', true);
     const empty = document.querySelector('#archFavList .aggregate-empty');
     check('fav 空态提示存在', !!empty);
-    check('fav 空态文案含收藏引导', !!empty && empty.textContent.indexOf('暂无收藏') >= 0, empty && empty.textContent);
+    check('fav 空态文案含收藏引导', !!empty && empty.textContent.indexOf('还没有收藏') >= 0, empty && empty.textContent);
     window.setFilter('history', true);
     const emptyH = document.querySelector('#archFavList .aggregate-empty');
     check('history 空态提示存在', !!emptyH);
-    check('history 空态文案含浏览引导', !!emptyH && emptyH.textContent.indexOf('暂无浏览记录') >= 0, emptyH && emptyH.textContent);
+    check('history 空态文案含浏览引导', !!emptyH && emptyH.textContent.indexOf('还没有浏览记录') >= 0, emptyH && emptyH.textContent);
 
     // 5) 退出筛选后 data-filter-mode 清除
     window.setFilter('none', true);

@@ -1397,3 +1397,92 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - 新增 go-home 点击委托：始终 setFilter('none') + mdActivateTab('home')，与返回逻辑解耦。
 - test_mobile_ux_batch.js ⑲ 段新增断言（分组标题/摘要/置底CTA/CSS 回归），总断言 194→203（0 失败）。
 - 注意：test_fav_history_aggregate.js 仍 4 条预存失败（col-rail 显示 + 空态文案，与沉浸式单栏设计冲突的旧测试），非本轮引入。
+### §35 2026-09-12 收尾沉淀：移动端「我的」/收藏/浏览记录 UX 四轮演进（build 1942→2020→2037→2107）
+
+> 本轮对话由四轮构成：A 移动端「我的」面板移除冗余清空 + 返回闭环修复；B 移动端 UX 六建议执行 1/2/4/5/6；C 桌面端收藏/浏览记录统一单栏；D 桌面沉浸式视图六项增强。汇总沉淀如下。
+
+#### 35.1 ① 本次达成的结论
+- 移动端「我的」面板：浏览记录行**不再含**「清空」按钮（清空仅保留在浏览记录聚合视图返回条，带二次确认）；从「我的」进收藏/浏览记录后底部「我的」tab 保持高亮，沉浸式「‹ 返回」回到「我的」面板（返回闭环修复，build 1942）。
+- 移动端 UX 六建议执行 5 项：① 底栏 AI 搜撞色修复 ②「我的」面板条数徽标 ④ 左边缘右滑返回 ⑤ 单条移除 ⑥ 返回条说明；第 3 条「主题行当前态 ✓」未执行（build 2020）。
+- 桌面端收藏与浏览记录统一为单栏布局，消除浏览记录右侧 320px 空白（build 2037）。
+- 桌面沉浸式视图六项增强：① 垂直间距收紧 ② 浏览记录补摘要 ③ 少条(1-3)置底 CTA ④ 按 今天/昨天/更早 时间分组 ⑤ 桌面隐藏左侧目录 ⑥ 移动端单条移除按钮常驻（build 2107）。
+- 总体原则：收藏/浏览记录共用 `renderFavHistoryAggregate()` 聚合视图；进入 fav/history 必须隐藏 `#mdTop`/`.col-rail`/`.toc-sidebar`（桌面）、单列呈现。
+
+#### 35.2 ② 新确立的约定 / 红线
+- 进入 fav/history **必须**隐藏 `#mdTop`、`.col-rail`、`.toc-sidebar`（桌面），且为单列；不得再露出首页分类 tab / 右侧热榜 / 左侧目录。
+- 收藏视图**不得**显示「清空」按钮；清空仅针对浏览记录，必须二次确认 + 8 秒撤销（`mdUndoToast`）。
+- 移动端「我的」面板浏览记录行**不得**再出现「清空」按钮。
+- 从「我的」进收藏/浏览记录，底部「我的」tab **必须**保持高亮，「‹ 返回」**必须**回到「我的」面板（不得回首页）。
+- 底栏 tab **仅激活态**高亮品牌色；AI 搜非激活必须中性灰 `--ink-700`，不得回退恒亮。
+- 左边缘右滑返回需与「‹ 返回」点击行为一致（从「我的」进入 → 回「我的」面板）。
+- 单条移除按钮：移动端常驻可见（`opacity:1`），桌面 hover 显隐。
+- 时间分组按「今天 / 昨天 / 更早」；收藏时间基于 `mm-dd`（无年份），跨年边界有已知偏差（见 §35.4）。
+- 不得移除 line 2871 外部点击关闭监听的 `fav-back` 白名单，否则返回闭环被立即抵消弹回首页。
+- 空态必须为插画化 `.empty-art` SVG（§26），不得退化回纯 emoji `.empty-icon`。
+
+#### 35.3 ③ 废弃项（勿再使用）
+- 移动端「我的」面板 `.mine-clear[data-act="clear-history"]`（build 1942 移除）。
+- 桌面左侧目录 `#tocHistoryItem .toc-clear`（build 1842 移除）。
+- 桌面左侧目录 `#tocInstallItem`「安装到桌面」（build 1842 移除）。
+- 朴素 emoji 空态 `.empty-icon`（已改插画化 `.empty-art`，§26）。
+- 从「我的」进收藏/历史用 `activateTab('home', false)`（已改 `setActive('mine')`+`__mdFavFromMine=true`）。
+- 底栏 tab 恒亮品牌色（已改非激活中性灰）。
+- `QA_REC.active` 判断（Web Speech API 无此属性，§29 移除）。
+- `test_fav_history_aggregate.js` 中 4 条断言（`.col-rail` 显示 / 空态文案）与沉浸式单栏设计冲突，属陈旧，**勿再依赖其「通过」**，勿据此判定回归失败。
+
+#### 35.4 ④ 未完成事项与下一步
+- 收藏时间基于 `mm-dd`（无年份）：跨年分组边界有极小归类偏差。如需精确 → 给收藏存储加 `ts`（ISO 时间戳）字段，将 `_parseItemDate`/`_dayBucketOf` 升级为按 `ts` 分桶。
+- 轮 B 跳过的建议③「主题行加当前态 ✓」仍可做，用户未再提，排期待定。
+- `test_fav_history_aggregate.js` 仍有 4 条预存失败未同步：建议更新测试适配沉浸式单栏，或显式标记 stale 跳过，避免误导回归。
+- 下一步：用户将凭本小结开新 task；新 task 若涉及收藏/历史视图，须沿用 §35.2 红线与 §35.3 废弃项。
+
+
+### §36 2026-09-12 移动端视觉体系现代化（"早年风" → "现代编辑风"）
+
+> 起因：用户提出"手机端网页体验 / 交互偏老旧、早年设计风格"，要求系统性优化。本轮 = 纯视觉/交互现代化 + §35.4 三项待办收口。**桌面架构不动**：视觉升级全部作用域限定 ≤768px。
+
+#### 36.1 设计令牌（全局只"净新增"，既有值不改 → 桌面零回归）
+- 全局 `:root` 新增：`--brand-600:#0c6275`、`--chip-bg:#e6f4f7`、`--chip-ink:#0b5a70`、`--scrim:rgba(15,23,42,.45)`、`--r-xl:20px`、`--r-pill:999px`、`--s8:48px`、`--s9:56px`、`--dur-fast:140ms`、`--dur-slow:340ms`、`--ease-spring`、`--fw-bold:700`；`--danger` 由 `#c0392b` → `#dc2626`。
+- **移动端专属覆盖层**（独立 `@media(max-width:768px){:root{...}}`，置于样式表前部）：字阶 `--fs-body:15`（13→15，决策⑤）/ `--fs-h1:22` / `--fs-h2:17` / `--fs-h3:15` / `--fs-meta:13` / `--fs-nano:11` / `--fs-display:28`；圆角 `--r-sm:6` / `--r-md:10` / `--r-lg:16`（16/20px 现代档，决策③）；中性多层阴影。
+- **关键手法**：视觉升级一律走"移动端 `:root` 覆盖"，全局令牌不动。
+
+#### 36.2 各屏改动
+- **顶栏 `#mdTop`**（决策① 浅色表面 + 搜索药丸）：本就浅色；新增**活的搜索药丸** `.md-search-pill`（点击 `qaFloatToggle()` 打开 AI 面板，复用既有检索能力，**非死控件**）。未恢复今日稍早删除的 `#mdSearchBtn` / `mdOpenSearch`（死按钮）。
+- **分类条 `.mctab`**：由"文字 + 3px 下划线"改为**胶囊**：`--r-pill` 圆角 + 激活态 `--chip-bg` 底 + `--chip-ink` 字；`::after` 下划线 `content:none`。
+- **底栏 `.mtab`**（决策② 激活图标加品牌色圆角底）：激活态图标 `.mi` 加 `--brand-soft` 圆角底；顶部指示条 `::before` 置 `opacity:0`；AI 搜非激活仍中性灰（§35.2 红线未破）。
+- **「我的」面板**：`.mine-icon` 由 28px emoji 位置 → **40px `--brand-soft` 圆底**（emoji 居中）；`.md-brand` 字标升 `--fs-h2`/700。
+- **动效**（决策⑥）：`#mineSheet` 滑入 `mineSlideIn`（translateX 100%→0，`--dur-slow`）；`#favview-bar` 淡入 `softFade`；均含 `prefers-reduced-motion:reduce` 降级。
+- **暗色**：新增令牌补 `body.dark` 值（`--surface-2`/`--chip-bg`/`--chip-ink`/`--brand-soft`/`--brand-ink`）。
+
+#### 36.3 §35.4 三项待办收口（全部完成）
+- ① **收藏 `ts` 分桶**：`toggleFav` 写入 `info.ts=new Date().toISOString()`；fav 页克隆改为 `items.push({..., time:_f.ts||'', data:_f})`，使 `_dayBucketOf` 读到 ISO，消除 `mm-dd` 跨年偏差（`_dayBucketOf` 早已优先读 `it.data.ts`，无需改）。
+- ② **主题行当前态 ✓**：`mdRefreshMineTheme` 文案改为 `当前：深色 ✓` / `当前：浅色 ✓`。
+- ③ **4 条陈旧断言已同步**：`test_fav_history_aggregate.js` 的 `.col-rail 显示`×2 → `隐藏`、空态文案 `暂无*` → `还没有*`；新增 `#mdTop 隐藏` 守护。该测试 **30/0**。
+- **附带修复（预存缺陷，非本轮引入）**：`--ink-400` / `--ink-200` / `--muted` 被引用却未定义（HEAD `dd54117` 即如此），补入 `:root`（`#8794a1` / `#c3ccd6` / `#6b7a89`）；`test_ux_20260910.js` 由 40/1 转 **41/0**。
+
+#### 36.4 代码落点
+- `index.html`：`:root` 净新增；独立移动端 `@media(max-width:768px){:root{...}}`；`.mctab.active` / `.md-search-pill` / `.mine-icon` / `.mtab.active .mi` 等；`mineSlideIn`/`softFade` 动画块；`body.dark` 新令牌；`theme-color` meta → `#0e7490`。
+- `app.js`：`mdMobileTopTabs` 注入 `.md-search-pill` + 绑 `qaFloatToggle`；`mdRefreshMineTheme` 加 ✓；`toggleFav` 写 `ts`；fav 页克隆带 `ts`/`data`。
+- `test_fav_history_aggregate.js`：4 断言同步 + 1 守护。
+
+#### 36.5 测试与验证（零新增失败）
+- node：`test_mobile_ux_batch` **203/0** · `test_fav_history_aggregate` **30/0** · `test_qa_navtab` 18/0 · `test_mobile_opt` 37/0 · `test_p2` 30/0 · `test_p3` 33/0 · `test_view_switch` 22/0 · `test_smoke_0908` 61/0 · `test_data_integrity` 9/0 · `test_data_selfheal` 11/0 · `test_brief_layers` 47/0 · `test_init_failsafe` 27/0 · `test_sw_cache_update` 29/0 · `test_ux_20260910` **41/0** · `test_qa_features` 61/0 · `test_ready_state_tdz` 14/0。
+- Python 闸门：`preflight_check` ✅（div 收支平衡、build/SW 一致）· `test_preflight_div` 11/0 · `test_tagchip_contrast` 19/0 · `test_deploy_sw_gate` OK · `test_asset_versioning` 15/0 · `test_price_history_unclosed` 14/0。
+
+#### 36.6 红线（不得回退）
+- **视觉升级只作用于移动端**：任何"现代风"令牌/规则不得写进全局 `:root` 或桌面媒体查询（保护"架构没问题"的桌面端）。
+- 顶栏搜索药丸必须**是活的**（开 AI 面板）；不得复活死的 `#mdSearchBtn` / `mdOpenSearch`。
+- **移动端 `:root{}` 覆盖不得作为 `@media(max-width:768px)` 的首条规则**：`test_mobile_ux_batch.js` ⑧ 用正则匹配该块首条 `.aggregate-item-remove{opacity:1}`（`[^}]*` 不允许提前出现 `}`），前面插 `:root{}` 会使其失配（本轮踩坑）。须独立媒体查询或置于块尾。
+- 底栏仅激活态品牌色、AI 搜非激活中性灰（§35.2 未变）。
+- 空态仍须插画 `.empty-art`（§26）。
+- 收藏/历史卡片**不加**左侧品牌色 3px 条（决策④，保持干净）。
+
+#### 36.7 废弃项（勿再使用）
+- 分类条"文字 + 3px 下划线"激活样式（已改胶囊 `--chip-bg`）。
+- 底栏 `.mtab.active::before` 顶条指示（已改图标圆角底 `opacity:0`）。
+- `.mctab.active::after` 下划线（`content:none`）。
+
+#### 36.8 待办
+- 部署：改 `sw.js` / build-version 后推送（先按 §36.5 跑闸门）。
+- 移动端骨架屏（设计稿可选项，本轮未做）。
+- 决策④ 用户未明确表态，本轮按"不加"执行；若要加左侧 3px 品牌条须回改。
