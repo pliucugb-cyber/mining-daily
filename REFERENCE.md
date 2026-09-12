@@ -1482,7 +1482,10 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - 底栏 `.mtab.active::before` 顶条指示（已改图标圆角底 `opacity:0`）。
 - `.mctab.active::after` 下划线（`content:none`）。
 
-#### 36.8 待办
-- 部署：改 `sw.js` / build-version 后推送（先按 §36.5 跑闸门）。
+#### 36.8 部署记录与待办
+- ✅ **已部署 2026-09-12 21:44**（build `20260912-2140`）：main `b5dcbf9` → gh-pages `4d5e77a`。
+  站点：https://pliucugb-cyber.github.io/mining-daily/
+  - 线上验收（逐字节核对，非只看脚本日志）：`index build-version=20260912-2140`、`sw.js CACHE_NAME=mining-daily-20260912-2140`、`app.js?v=83169d95`（线上 md5 与本地一致，指纹自洽）；5 项新样式标记（搜索药丸 / 面板滑入 / --brand-600 / 去掉 tab 下划线 / 移动端 15px）全部在线上。
+  - ⚠️ **推送成功 ≠ 线上生效**：GitHub Pages 构建约 1~2 分钟延迟，只拉一次会拿到**旧** HTML（本次实测先拿到 build 2107）。验收必须**轮询**等 `build-version` 变成新值再下结论。
 - 移动端骨架屏（设计稿可选项，本轮未做）。
 - 决策④ 用户未明确表态，本轮按"不加"执行；若要加左侧 3px 品牌条须回改。
