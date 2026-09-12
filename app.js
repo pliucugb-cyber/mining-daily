@@ -798,6 +798,12 @@ document.addEventListener('click',function(e){
   if(cl){ e.preventDefault(); e.stopPropagation(); clearHistory(); }
 }, true);
 
+// 2026-09-12：收藏/浏览记录视图的「‹ 返回」——回到首页内容（清除 fav/history 筛选）
+document.addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('[data-act="fav-back"]'):null;
+  if(b){ e.preventDefault(); if(typeof setFilter==='function'){ setFilter('none'); } }
+});
+
 // ===== 新一轮找矿突破战略行动专项：按关键词自动识别并归类 =====
 // 命中关键词的新闻从"今日新增/往期内容"移动到专项区对应子类（不重复展示）
 // 找矿专项归集：仅当标题/摘要明确含"找矿"或"新一轮找矿突破战略行动"才归专项。
@@ -854,6 +860,7 @@ function setFilter(mode,noScroll){
   // 用户感觉「跳不过去」。新逻辑：原位已能看到命中就不动，否则滚到第一条命中并轻微高亮。
   const _y=(window.pageYOffset||document.documentElement.scrollTop||0);
   applyFilter();
+  mdSyncFavViewBar(mode);
   syncTocActive(mode);
   if(!noScroll)keepViewportAfterFilter(_y,mode);
 }
@@ -869,6 +876,17 @@ function syncTocActive(mode){
     if(el)el.classList.toggle('active',map[mode]===id);
   });
 }
+// 2026-09-12：收藏/浏览记录沉浸式视图——顶部返回条
+// 进入 fav/history 时同步标题与「清空」按钮可见性（收藏无清空，浏览记录有）
+function mdSyncFavViewBar(mode){
+  var bar=document.getElementById('favViewBar');
+  if(!bar)return;
+  var title=document.getElementById('favViewTitle');
+  if(title)title.textContent=(mode==='history')?'浏览记录':'我的收藏';
+  var clr=bar.querySelector('.favview-clear');
+  if(clr)clr.style.display=(mode==='history')?'':'none';
+}
+
 // 自身 + 所有祖先都没有 display:none / visibility:hidden 才算真可见。
 // 不用 offsetParent：它依赖布局，父级 section 被 display:none 时行为不可靠，且无法在无布局环境校验。
 function mdIsVisible(el){
