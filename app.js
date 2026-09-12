@@ -836,10 +836,17 @@ document.addEventListener('click',function(e){
   }
 }, true);
 
-// 2026-09-12：收藏/浏览记录视图的「‹ 返回」——回到首页内容（清除 fav/history 筛选）
+// 2026-09-12：收藏/浏览记录视图的「‹ 返回」——手机端若从「我的」面板进入则返回「我的」面板；否则回到首页
 document.addEventListener('click',function(e){
   var b=e.target.closest?e.target.closest('[data-act="fav-back"]'):null;
-  if(b){ e.preventDefault(); if(typeof setFilter==='function'){ setFilter('none'); } }
+  if(b){ e.preventDefault();
+    if(window.__mdFavFromMine && typeof window.mdActivateTab==='function'){
+      window.__mdFavFromMine=false;
+      window.mdActivateTab('mine', true);
+    } else if(typeof setFilter==='function'){
+      setFilter('none');
+    }
+  }
 });
 
 // ===== 新一轮找矿突破战略行动专项：按关键词自动识别并归类 =====
@@ -2786,8 +2793,7 @@ function mdMobileTabBar(){
   sheet.innerHTML='<div class="mine-header"><span class="mine-title">我的</span><button class="mine-close" data-act="close" aria-label="关闭">✕</button></div>'+
     '<div class="mine-list">'+
     '<button class="mine-item" data-act="fav"><span class="mine-icon">★</span><span class="mine-label">我的收藏</span><span class="mine-chevron">›</span></button>'+
-    '<div class="mine-history-row"><button class="mine-item" data-act="history"><span class="mine-icon">🕘</span><span class="mine-label">浏览记录</span><span class="mine-chevron">›</span></button>'+
-    '<button class="mine-clear" data-act="clear-history" type="button" aria-label="清空浏览记录">清空</button></div>'+
+    '<button class="mine-item" data-act="history"><span class="mine-icon">🕘</span><span class="mine-label">浏览记录</span><span class="mine-chevron">›</span></button>'+
     '<button class="mine-item" data-act="theme"><span class="mine-icon">🌓</span><span class="mine-label">深色 / 浅色</span><span class="mine-state" id="mineThemeState">当前：浅色</span></button>'+
     '<div class="mine-install" id="mineInstallCard"></div>'+
     '</div>';
@@ -2799,11 +2805,14 @@ function mdMobileTabBar(){
   var mdQaReturn='home';
 function mdQaBack(){ try{ qaFloatClose(); }catch(e){} var _t=mdQaReturn||mdLastContentTab||'home'; if(_t==='mine'){ try{ activateTab('mine', true); }catch(e){ activateTab(mdLastContentTab||'home', false); } } else { activateTab(_t, false); } }
 window.qaFloatBack=mdQaBack;
+  window.mdActivateTab=activateTab;
   // 2026-09-11 优化③：非首页隐藏分类栏时，品牌行显示当前 tab 名给位置感
   var MD_BRAND_NAMES={'home':'⛏️ 矿业新闻日报','price':'价格','rights':'矿权','qa':'AI 搜','mine':'我的'};
   function mdSetBrandForTab(go){ var brand=document.querySelector('#mdTop .md-brand'); if(brand) brand.textContent=MD_BRAND_NAMES[go]||MD_BRAND_NAMES.home; }
   // 统一 tab 切换逻辑（点击 / 初始化恢复共用）；autoOpen 控制问/我的浮层是否在「恢复」时自动展开
   function activateTab(go, autoOpen){
+    if(go==='home' || go==='price' || go==='rights' || go==='mine'){ try{ window.__mdFavFromMine=false; }catch(e){} }
+    if((go==='home' || go==='price' || go==='rights') && typeof setFilter==='function'){ try{ setFilter('none', true); }catch(e){} }
     document.body.classList.toggle('md-hide-catbar', go!=='home');
     if(go==='home' || go==='price' || go==='rights') mdLastContentTab=go;
     mdSetBrandForTab(go);
@@ -2843,12 +2852,13 @@ window.qaFloatBack=mdQaBack;
   sheet.addEventListener('click',function(e){
     var b=e.target.closest('button[data-act]'); if(!b) return;
     var act=b.getAttribute('data-act');
-    if(act==='fav'){
-      activateTab('home', false);
-      if(typeof toggleFavFilter==='function') toggleFavFilter();
-    } else if(act==='history'){
-      activateTab('home', false);
-      if(typeof toggleHistoryFilter==='function') toggleHistoryFilter();
+    if(act==='fav' || act==='history'){
+      sheet.hidden=true;
+      document.body.classList.remove('md-mine-open');
+      setActive('mine');
+      try{ window.__mdFavFromMine=true; }catch(e){}
+      if(act==='fav' && typeof toggleFavFilter==='function') toggleFavFilter();
+      if(act==='history' && typeof toggleHistoryFilter==='function') toggleHistoryFilter();
     } else if(act==='theme'){
       if(typeof toggleTheme==='function') toggleTheme(); mdRefreshMineTheme();
     } else if(act==='close'){
@@ -2858,6 +2868,8 @@ window.qaFloatBack=mdQaBack;
   document.addEventListener('click',function(e){
     if(sheet.hidden) return;
     if(e.target.closest('#mineSheet')||(e.target.closest('.mtab')&&e.target.closest('.mtab').getAttribute('data-go')==='mine')) return;
+    // 2026-09-12：从沉浸式收藏/浏览记录视图点「‹ 返回」会重新打开「我的」面板；该点击不算「点外部关闭」，否则会被立刻关掉又弹回首页。
+    if(e.target.closest('[data-act="fav-back"]')) return;
     activateTab(mdLastContentTab, false);
   });
   // 2026-09-12：手机端从面板顶部下拉关闭 AI 搜（回到进入前界面）

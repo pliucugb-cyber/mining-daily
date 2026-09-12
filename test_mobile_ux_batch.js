@@ -109,26 +109,28 @@ setTimeout(() => {
   check('安装卡含系统识别提示', !!card && /主屏幕|安装/.test(card.textContent || ''));
   // 2026-09-12：桌面左侧目录不再显示「安装到桌面」入口（右上角已有 pwaHeaderBtn）
   check('桌面左侧目录不再含「安装到桌面」入口', !doc.getElementById('tocInstallItem'));
-  // 2026-09-12：浏览记录「清空」快捷按钮仅保留在手机 Mine 面板（桌面左侧目录已移除）
-  check('浏览记录行含「清空」按钮 data-act="clear-history"', !!(sheet && sheet.querySelector('.mine-clear[data-act="clear-history"]')));
+  // 2026-09-12：浏览记录「清空」仅保留在浏览记录聚合视图顶部返回条；手机「我的」面板不再重复提供
+  check('我的面板不再含「清空」按钮 .mine-clear', !(sheet && sheet.querySelector('.mine-clear[data-act="clear-history"]')));
   check('桌面左侧目录不再含「清空浏览记录」按钮 .toc-clear', !doc.querySelector('.toc-clear[data-act="clear-history"]'));
-  // 功能：点「清空」应清掉浏览记录（localStorage HISTORY_KEY）
+  // 功能/体验：点「浏览记录」进入聚合视图，底部「我的」tab 保持高亮，返回回到「我的」面板
   try {
-    window.localStorage.setItem('mining_daily_history', JSON.stringify([{url:'https://x.example/a',title:'测试条目',src:'X',time:new Date().toISOString()}]));
-    const clr = sheet ? sheet.querySelector('.mine-clear[data-act="clear-history"]') : null;
-    if (clr) {
-      // 2026-09-12：清空为轻量二次确认——首点进入确认态，再次点击才真正清空
-      clr.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
-      clr.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
-      const after = window.localStorage.getItem('mining_daily_history');
-      check('点「清空」→ 浏览记录被清空（localStorage 已删除/空数组）', after === '[]' || after === null, 'after=' + after);
-      const tc = doc.getElementById('tocHistoryCount');
-      check('点「清空」→ 目录计数刷新为 0', !tc || tc.textContent === '0', tc ? ('count=' + tc.textContent) : '无计数');
+    const historyBtn = sheet ? sheet.querySelector('[data-act="history"]') : null;
+    const mineTab = doc.querySelector('.mtab[data-go="mine"]');
+    if (historyBtn) {
+      historyBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+      check('点「浏览记录」后进入 history 聚合视图', doc.body.getAttribute('data-filter-mode') === 'history', 'mode=' + doc.body.getAttribute('data-filter-mode'));
+      check('点「浏览记录」后「我的」面板关闭', sheet.hidden);
+      check('点「浏览记录」后底部「我的」tab 保持高亮', !!(mineTab && mineTab.classList.contains('active')), mineTab ? ('classes=' + mineTab.className) : '无 mine tab');
+      const backBtn = doc.querySelector('[data-act="fav-back"]');
+      if (backBtn) {
+        backBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+        check('点聚合视图「返回」后回到「我的」面板', !sheet.hidden && doc.body.classList.contains('md-mine-open'));
+      }
     } else {
-      check('点「清空」→ 浏览记录被清空', false, '找不到 .mine-clear');
+      check('点「浏览记录」进入聚合视图', false, '找不到 history 按钮');
     }
   } catch (e) {
-    check('点「清空」→ 浏览记录被清空', false, '异常 ' + e.message);
+    check('点「浏览记录」流程', false, '异常 ' + e.message);
   }
   // 行为：点底部「我的」tab 应添加 body.md-mine-open
   const mineTab = doc.querySelector('.mtab[data-go="mine"]');

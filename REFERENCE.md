@@ -1334,3 +1334,27 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - 识别失败时提示**必须**带浏览器具体指引（`qaBrowserMicGuide`），不得退回通用文案。
 - `.qa-voice-meter` 音量条容器与样式不得删除（实时收音反馈可见）。
 - 停止/失败时必须 `qaHideVoiceMeter()` 释放麦克风轨道，避免网页麦克风常亮。
+
+
+### 31 移动端「我的」面板精简 + 收藏/浏览记录返回闭环（2026-09-12 晚，build `20260912-1942`）
+### 31.1 背景
+用户发手机浏览器截图两条反馈：① 移动端「我的」面板的「浏览记录」行带「清空」快捷按钮，用户认为多余——清空只应在更深的浏览记录聚合视图（沉浸式返回条）里；② 从「我的」点「我的收藏 / 浏览记录」后，底部主导航高亮的是「首页」而非「我的」，体感违和，问「这个逻辑对不对，我怎么感觉有点怪」。并就移动端 UX 征集更多优化建议。
+### 31.2 方案
+- **移除冗余清空**：`mdMobileTabBar()` 注入的 `#mineSheet` 不再含浏览记录行的 `.mine-clear[data-act="clear-history"]` 与 `.mine-history-row` 包裹层；「清空浏览记录」仅保留在浏览记录聚合视图顶部沉浸式返回条 `.favview-clear`（已带二次确认）。桌面左侧目录的 `.toc-clear` 已在 build `20260912-1842` 移除。
+- **修复返回闭环（根因）**：旧实现从「我的」进收藏/历史时调用 `activateTab('home', false)`，导致底部「我的」tab 高亮跳回首页、沉浸式「‹ 返回」也走 `setFilter('none')` 回首页，违背「我的」心智模型。新实现：
+  1. 进入时 `setActive('mine')` 保持「我的」高亮、置 `window.__mdFavFromMine=true`，再 `toggleFavFilter/toggleHistoryFilter`，不再 `activateTab('home')`；
+  2. 沉浸式「‹ 返回」点击事件委托（`[data-act="fav-back"]`）改为：若 `__mdFavFromMine` 为真（从「我的」面板进入）→ `window.mdActivateTab('mine', true)` 重新打开「我的」面板；否则 `setFilter('none')` 回首页；
+  3. **关键修复**：存在一个「点击 #mineSheet 外部即关闭面板」的 document 级点击监听（line 2871），它在本次新增的 fav-back 委托（line 840）之后触发——看到面板刚被打开（`sheet.hidden=false`）且点击目标不在面板内部、也非「我的」tab，便调用 `activateTab(mdLastContentTab, false)` 把面板又关掉并弹回首页，正好抵消返回闭环。已在该监听开头增加 `if(e.target.closest('[data-act="fav-back"]')) return;` 白名单，使「‹ 返回」点击不被当作外部点击关闭。
+- 暴露 `window.mdActivateTab=activateTab`，供文档级委托安全调用；`activateTab` 开头对 home/price/rights/mine 清 `__mdFavFromMine`，并对 home/price/rights 调 `setFilter('none', true)` 防跨 tab 残留筛选。
+### 31.3 代码落点
+- app.js：`mdMobileTabBar()` 的 `#mineSheet` innerHTML 移除 `.mine-history-row`/`.mine-clear`；`activateTab` 头部新增 `__mdFavFromMine` 清理与 `setFilter('none', true)`；`#mineSheet` 点击监听 fav/history 分支改为 `setActive('mine')`+`__mdFavFromMine=true`+`toggleFavFilter/toggleHistoryFilter`；新增 `fav-back` document 委托（line 840）；`#mineSheet` 外部点击关闭监听（line 2871）增加 fav-back 白名单；`window.mdActivateTab=activateTab` 暴露。
+- index.html：`build-version` → `20260912-1942`。
+- sw.js：`CACHE_NAME` → `mining-daily-20260912-1942`。
+- test_mobile_ux_batch.js：将原「我的面板含清空按钮」断言替换为「我的面板不再含 `.mine-clear`」「桌面目录不再含 `.toc-clear`」；新增「点浏览记录 → history 聚合视图且面板关闭且底部我的 tab 高亮」「点聚合视图返回 → 回到我的面板」两条闭环断言。总断言 184 → **186**（0 失败）。
+### 31.4 测试与验证
+- `test_mobile_ux_batch.js` 186/0；回归 `test_qa_navtab_20260910.js` 18/0、`test_mobile_opt_20260910.js` 37/0、`test_view_switch.js` 22/0、`test_smoke_0908.js` 74/0、`node --check app.js` 干净。
+- 注：`test_fav_history_aggregate.js` 仍有 4 条失败（`.col-rail` 显示、空态引导文案），但该测试与 2026-09-12 落地的「收藏/历史沉浸式单栏」设计（`.col-rail{display:none!important}`）相冲突，属旧测试未同步，HEAD 已含该 CSS 规则，非本次引入。
+### 31.5 红线（不得回退）
+- 移动端「我的」面板的浏览记录行不得重新出现「清空」按钮；清空仅保留在浏览记录聚合视图返回条。
+- 从「我的」进收藏/浏览记录，底部「我的」tab 必须保持高亮，沉浸式「‹ 返回」必须回到「我的」面板（不得回首页）。
+- 不得移除 line 2871 外部点击关闭监听的 fav-back 白名单，否则返回闭环会被立刻抵消弹回首页。
