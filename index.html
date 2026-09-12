@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1500" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1530" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -53,6 +53,9 @@ body.has-install-bar{padding-bottom:64px}
 .toc-main-item.active{background:#e9f1f8;color:var(--ink-900);box-shadow:none}
 .toc-main-item.active .toc-count{color:#fff;background:var(--ink-900)}
 .toc-count{font-size: var(--fs-meta);color:var(--ink-500);background:var(--surface-3);padding:2px var(--s2);border-radius: var(--r-lg);font-weight:600;min-width:22px;text-align:center}
+.toc-clear{margin-left:var(--s2);flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line-2);border-radius:var(--r-md);background:var(--surface);color:var(--ink-500);font-size:var(--fs-nano);font-weight:600;padding:2px var(--s2);cursor:pointer;line-height:1.6}
+.toc-clear:hover{color:var(--danger,#e53e3e);border-color:var(--danger,#e53e3e)}
+.toc-clear:disabled{opacity:.4;cursor:default;color:var(--ink-400);border-color:var(--line-2)}
 /* 「今日新增」的「新鲜度」数字：红色高亮 + 仅在有内容时轻微脉冲，吸引目光 */
 .toc-main-item .toc-count-fresh{color:#fff;background:var(--up);font-weight:600}
 .toc-main-item .toc-count-fresh.is-empty{color:var(--ink-300);background:var(--surface-3);font-weight:600}
@@ -745,6 +748,12 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
   .mine-label{flex:1 1 auto}
   .mine-chevron{color:var(--ink-400);font-size:var(--fs-h2)}
   .mine-state{font-size:var(--fs-meta);color:var(--ink-500)}
+  .mine-history-row{display:flex;align-items:stretch;gap:var(--s2)}
+  .mine-history-row .mine-item{flex:1 1 auto;margin:0}
+  .mine-clear{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:4px;border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);color:var(--ink-500);font-size:var(--fs-meta);font-weight:600;padding:0 var(--s3);min-width:60px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .mine-clear:active{background:var(--surface-2)}
+  .mine-clear:hover{color:var(--danger,#e53e3e);border-color:var(--danger,#e53e3e)}
+  .mine-clear:disabled{opacity:.45;cursor:default;color:var(--ink-400);border-color:var(--line-2)}
   /* ===== P0 移动端结构重构（2026-09-10）：轻量 App Bar + 6 分类 Tab + 底部 4 全局动作 Tab ===== */
   .header{display:none!important}
   /* 2026-09-11 P0 修复：智能吸顶只做 transform 位移，绝不动布局。
@@ -832,6 +841,10 @@ body.dark .mine-item{background:var(--bg);border-color:var(--line-1);color:var(-
 body.dark .mine-item:active{background:var(--surface-3)}
 body.dark .mine-chevron{color:var(--ink-500)}
 body.dark .mine-state{color:var(--ink-500)}
+body.dark .mine-clear{background:var(--bg);border-color:var(--line-1);color:var(--ink-500)}
+body.dark .mine-clear:active{background:var(--surface-3)}
+body.dark .mine-clear:hover{color:var(--danger,#ff6b5b);border-color:var(--danger,#ff6b5b)}
+body.dark .mine-clear:disabled{color:var(--ink-500);border-color:var(--line-1)}
 /* Phase 3 极小屏 ≤360px 适配（此前最小断点为 600px，缺此档 → iPhone SE/小屏安卓会挤） */
 @media(max-width:360px){
   body{font-size:14px;line-height:1.55}
@@ -865,6 +878,9 @@ body.dark .toc-main-item:hover{background:var(--surface-3)}
 body.dark .toc-main-item.active{background:#2c5f8a}
 body.dark .toc-count{color:var(--ink-500);background:var(--surface-3)}
 body.dark .toc-main-item.active .toc-count{color:#1a3a5c;background:#fff}
+body.dark .toc-clear{background:var(--bg);border-color:var(--line-1);color:var(--ink-500)}
+body.dark .toc-clear:hover{color:var(--danger,#ff6b5b);border-color:var(--danger,#ff6b5b)}
+body.dark .toc-clear:disabled{color:var(--ink-500);border-color:var(--line-1)}
 body.dark .toc-back-top{color:var(--brand-ink);border-top-color:var(--line-1)}
 body.dark .toc-back-top:hover{background:var(--surface-3)}
 body.dark .stats-bar,body.dark .section,body.dark .price-strip{background:var(--bg);border-color:var(--line-1);box-shadow: var(--shadow-sm)}
@@ -1109,6 +1125,7 @@ body{padding-left:0;padding-top:56px}
 }
 .toc-main-item.active{border-color:var(--ink-900)}
 .toc-main-item .toc-count{display:none}
+.toc-clear{display:none}
 .toc-back-top{flex-shrink:0;margin-top:0;padding:var(--s2) var(--s4);border-top:none;border:1px solid var(--line-1);min-height:44px;display:flex;align-items:center;justify-content:center;
 }
 }
@@ -2155,7 +2172,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <div class="toc-main-item" data-target="archiveSection" onclick="window.switchView&&window.switchView('archive',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容</div>
 <div class="toc-main-item" data-target="rightsSection" onclick="window.switchView&&window.switchView('rights',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易</div>
 <div class="toc-main-item" id="tocFavItem" onclick="window.toggleFavFilter&&window.toggleFavFilter()" style="color:#f39c12" title="只看收藏的条目，并自动定位到第一条" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
-<div class="toc-main-item" id="tocHistoryItem" onclick="window.toggleHistoryFilter&&window.toggleHistoryFilter()" style="color:#8e44ad" title="只看浏览过的条目，并自动定位到第一条" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
+<div class="toc-main-item" id="tocHistoryItem" onclick="window.toggleHistoryFilter&&window.toggleHistoryFilter()" style="color:#8e44ad" title="只看浏览过的条目，并自动定位到第一条" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span><button type="button" class="toc-clear" data-act="clear-history" title="清空浏览记录" aria-label="清空浏览记录">清空</button></div>
 <div class="toc-main-item" id="tocInstallItem" data-target="installGuideSection" onclick="window.switchView&&window.switchView('install',this)" style="color:#0e7490" data-page-node-id="YBwrhPaRHH9FWY8WZtCYtr">📲 安装到桌面 <span class="toc-count" id="tocInstallGuideCount" style="background:#e0f2fe;color:#0e7490" data-page-node-id="QjsNHGTJP37S2ac47SMIVU">📘</span></div>
 
 <div class="toc-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-page-node-id="8iwVYYySScb07F8bSYmelj">↑ 返回顶部</div>

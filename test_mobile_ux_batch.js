@@ -105,6 +105,25 @@ setTimeout(() => {
   const card = doc.getElementById('mineInstallCard');
   check('安装到主屏幕卡片已注入', !!card, card ? ('内容片段=' + (card.textContent || '').slice(0, 18)) : '无');
   check('安装卡含系统识别提示', !!card && /主屏幕|安装/.test(card.textContent || ''));
+  // 2026-09-12：浏览记录「清空」快捷按钮（手机 Mine 面板 + 桌面左侧目录共用）
+  check('浏览记录行含「清空」按钮 data-act="clear-history"', !!(sheet && sheet.querySelector('.mine-clear[data-act="clear-history"]')));
+  check('桌面左侧目录含「清空浏览记录」按钮 .toc-clear', !!doc.querySelector('.toc-clear[data-act="clear-history"]'));
+  // 功能：点「清空」应清掉浏览记录（localStorage HISTORY_KEY）
+  try {
+    window.localStorage.setItem('mining_daily_history', JSON.stringify([{url:'https://x.example/a',title:'测试条目',src:'X',time:new Date().toISOString()}]));
+    const clr = sheet ? sheet.querySelector('.mine-clear[data-act="clear-history"]') : null;
+    if (clr) {
+      clr.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+      const after = window.localStorage.getItem('mining_daily_history');
+      check('点「清空」→ 浏览记录被清空（localStorage 已删除/空数组）', after === '[]' || after === null, 'after=' + after);
+      const tc = doc.getElementById('tocHistoryCount');
+      check('点「清空」→ 目录计数刷新为 0', !tc || tc.textContent === '0', tc ? ('count=' + tc.textContent) : '无计数');
+    } else {
+      check('点「清空」→ 浏览记录被清空', false, '找不到 .mine-clear');
+    }
+  } catch (e) {
+    check('点「清空」→ 浏览记录被清空', false, '异常 ' + e.message);
+  }
   // 行为：点底部「我的」tab 应添加 body.md-mine-open
   const mineTab = doc.querySelector('.mtab[data-go="mine"]');
   if (mineTab) {

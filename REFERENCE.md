@@ -1090,4 +1090,16 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - ✅ 收藏/历史点完后先回首页再过滤，避免在价格/矿权等 tab 下看到空结果。
 - ✅ 关闭/返回时回到之前的内容 tab，而不是把所有 tab 高亮清空。
 - ⏸ 可在「我的」页顶部加用户头像/首字母，但用户要求"只出现四项"，先不做。
-- ⏸ 可补充「清除浏览记录」快捷入口，但超出当前四项范围，待后续需求。
+- ✅ 「浏览记录」行已加「清空」快捷按钮（手机 Mine 面板 + 桌面左侧目录共用，build `20260912-1530`）。
+
+### 22.8 浏览记录「清空」快捷按钮（2026-09-12，build `20260912-1530`）
+
+- 需求：用户要求「浏览记录」旁加「清空」快捷按钮，并确认**手机与电脑网页都适用**。
+- 形态：
+  - 手机：Mine 面板「浏览记录」卡片行右侧同排增加「清空」按钮（`.mine-clear`，`data-act="clear-history"`），点击**只清空、不跳转**浏览记录聚合视图。
+  - 桌面：左侧目录「浏览记录」条目（`#tocHistoryItem`）内增加「清空」按钮（`.toc-clear`，`data-act="clear-history"`）；≤1100px 横向目录条下隐藏（避免与手机 Mine 面板重复）。
+- 交互：用一个 **capture 阶段** 全局点击委托拦截 `[data-act="clear-history"]`，`preventDefault + stopPropagation` 后调 `clearHistory()`——既清空、又不冒泡触发「浏览记录」导航或目录 `toggleHistoryFilter`。
+- `clearHistory()`：读 `getHistory()` 备份 → `localStorage.removeItem(HISTORY_KEY)` → `updateHistoryCount()` → 若当前在 `data-filter-mode=history` 则 `renderFavHistoryAggregate('history')` 刷新空态；最后用 `mdUndoToast('已清空浏览记录', undo)` 提供 8 秒撤销（撤销即 `saveHistory(prev)` 恢复）。
+- 空态：无浏览记录时 `updateHistoryCount()` 把两个清空按钮置 `disabled`（视觉置灰），避免无效点击。
+- 红线补充：两项清空按钮（`.mine-clear` / `.toc-clear`）必须都存在于 DOM；点清空必须真清空 localStorage 且不误开聚合视图；不可把「清空」做成跳转。
+- 测试：`test_mobile_ux_batch.js` §⑧ +4 条断言（共 **157/0**）——两项按钮存在 + 点「清空」后 `mining_daily_history` 被删/空、目录计数刷新为 0。
