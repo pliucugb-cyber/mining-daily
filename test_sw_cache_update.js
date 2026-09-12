@@ -11,7 +11,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const { JSDOM } = require('jsdom');
+const { JSDOM, VirtualConsole } = require('jsdom');
 
 let pass = 0, fail = 0;
 function check(name, cond, detail) {
@@ -143,6 +143,110 @@ check('preflight_check.py 已加入 sw.js 语法检查项',
   /def check_sw_js/.test(preflightSrc) && /sw\.js 语法/.test(preflightSrc),
   '06:00 自动化闸门也要能拦');
 
+// ===== ⑧ 首次安装不得触发自动刷新（2026-09-12 用户实测：手机上「过 1 分钟左右又刷一次」）=====
+// 根因：sw.js activate 无条件广播 SW_UPDATED；首装 SW 也会走到这条分支 → 页面 reload。
+// 而首装时 install 要预缓存约 1MB（index.html+app.js+数据，且 cache:'reload' 绕过 HTTP 缓存），
+// 弱网手机上耗时几十秒 —— 这就是那「1 分钟」的来源。修法：页面侧快照「本页是否已被 SW 接管」，
+// controller 为空（= 首装）则跳过刷新；真·版本更新仍照刷。
+// 真 Chrome 复现证据（%TEMP%\md_nav_reload_probe.js）：修复前首访主文档导航 2 次（第 2 次在
+// install 跑完之后，预缓存加 10s 延迟则第 2 次从 +21.6s 推迟到 +51.4s）；修复后 1 次。
+console.log('\n===== ⑧ 首装不得自动刷新（手机「过 1 分钟又刷一次」根因）=====');
+check('app.js 在文档加载期快照「本页是否已被 SW 接管」',
+  /var\s+__swCtlAtLoad\s*=\s*!!\s*navigator\.serviceWorker\.controller\s*;/.test(appSrc),
+  '快照必须取在 claim 之前（脚本执行期）；若取在 load 之后，首装时读到的已是 true，守卫失效');
+const swMsgBlock = (appSrc.split("addEventListener('message'")[1] || '').split('});')[0];
+check('SW_UPDATED 分支：controller 为空（首装）直接 return，不 reload',
+  /if\s*\(\s*!__swCtlAtLoad\s*\)\s*\{[\s\S]*?return;/.test(swMsgBlock),
+  '首装时页面内容本来就是最新（HTML/app.js 走 network-first），这一刷纯属白刷');
+check('首装守卫位于写版本戳/清缓存之前',
+  swMsgBlock.indexOf('if(!__swCtlAtLoad)') >= 0 &&
+  swMsgBlock.indexOf('if(!__swCtlAtLoad)') < swMsgBlock.indexOf('_clearHtmlCache()'),
+  '顺序颠倒会把「页面正在看的这一版」记成已自愈，反而多触发一次硬刷新');
+check('真·版本更新仍然会自动刷新（未把 reload 一并删掉）',
+  swMsgBlock.indexOf('location.reload()') >= 0,
+  '只有首装这一种情况该跳过；新版本上线后仍必须刷新到新版');
+
+// app.js 之外还有第二条 SW 注册路径：index.html 内联兜底（app.js 不可用时也要能更新 SW）。
+// ⚠️ 2026-09-12 教训：上一条守卫只改 app.js 时刷新依旧 —— 真元凶就是这里的 controllerchange。
+//    它同样在首装 claim 时触发。查 SW/刷新类代码必须 **同时扫 index.html 内联脚本**（别只 grep *.js）。
+const ctlBlock = (htmlSrc.split("addEventListener('controllerchange'")[1] || '').split('});')[0];
+check('index.html 存在内联 controllerchange 守卫段',
+  ctlBlock.length > 0 && /__swReloaded/.test(ctlBlock),
+  '这段内联脚本是 app.js 之外的第二条注册路径，不能只看 app.js');
+check('内联 controllerchange 也做「首装不刷新」判定',
+  /var\s+__mdSwCtlAtStart\s*=\s*!!\s*navigator\.serviceWorker\.controller\s*;/.test(htmlSrc) &&
+  /if\s*\(\s*!__mdSwCtlAtStart\s*\)\s*return;/.test(ctlBlock),
+  '首装时 clients.claim() 也会触发 controllerchange；漏了它页面照样会在 SW 装好后自动刷一次');
+check('内联守卫位于该段 location.reload 之前',
+  ctlBlock.indexOf('if(!__mdSwCtlAtStart)return;') >= 0 &&
+  ctlBlock.indexOf('if(!__mdSwCtlAtStart)return;') < ctlBlock.indexOf('location.reload()'),
+  '顺序颠倒等于没修');
+check('内联路径的换版刷新仍在（只拦首装，不拦真更新）',
+  ctlBlock.indexOf('location.reload()') >= 0,
+  '换版场景（开始时已被旧 SW 接管）必须继续刷新到新版');
+
+// 行为双例：用 jsdom 跑真实 app.js，派发 SW_UPDATED，看它到底有没有去 navigate。
+// jsdom 的 location.reload() 会以 jsdomError「Not implemented: navigation」暴露出来，据此计数。
+function mdSwCase(controllerValue, cb) {
+  let h = htmlSrc;
+  ['app.js', 'news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
+    const p = path.join(__dirname, f);
+    if (!fs.existsSync(p)) return;
+    h = h.replace(new RegExp('<script src="' + f + '[^>]*></script>'), () => '<script>' + fs.readFileSync(p, 'utf-8') + '</script>');
+  });
+  const nav = { n: 0 }, listeners = { message: [], controllerchange: [] };
+  const vc = new VirtualConsole();
+  vc.on('jsdomError', e => { if (/navigation/i.test(String(e && e.message))) nav.n++; });
+  const dom = new JSDOM(h, {
+    runScripts: 'dangerously', pretendToBeVisual: true, virtualConsole: vc,
+    url: 'https://pliucugb-cyber.github.io/mining-daily/',
+    beforeParse(win) {
+      if (typeof win.matchMedia !== 'function') {
+        win.matchMedia = q => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} });
+      }
+      if (typeof win.fetch !== 'function') win.fetch = () => Promise.reject(new Error('jsdom: fetch stub'));
+      try {
+        Object.defineProperty(win.navigator, 'serviceWorker', {
+          configurable: true,
+          value: {
+            controller: controllerValue,
+            register() { return Promise.resolve({ update() {} }); },
+            addEventListener(type, fn) { if (listeners[type]) listeners[type].push(fn); },
+            getRegistration() { return Promise.resolve(null); }
+          }
+        });
+      } catch (e) {}
+    }
+  });
+  const t0 = Date.now();
+  const ready = () => listeners.message.length > 0;
+  (function wait() {
+    if (ready() || Date.now() - t0 > 6000) {
+      try { if (!ready()) dom.window.dispatchEvent(new dom.window.Event('load')); } catch (e) {}
+      const t1 = Date.now();
+      (function wait2() {
+        if (ready() || Date.now() - t1 > 3000) {
+          // 先派发 controllerchange（= SW 接管本页那一刻，index.html 内联守卫在这里），
+          // 再派发 SW_UPDATED（app.js 的分支）。两次都记 navigation 次数。
+          listeners.controllerchange.slice(0, 2).forEach(fn => { try { fn(); } catch (e) {} });
+          setTimeout(() => {
+            const nCtl = nav.n;
+            listeners.message.slice(0, 2).forEach(fn => { try { fn({ data: { type: 'SW_UPDATED' } }); } catch (e) {} });
+            setTimeout(() => {
+              cb({ ctl: nCtl, msg: nav.n - nCtl, total: nav.n,
+                   m: listeners.message.length, c: listeners.controllerchange.length }, dom);
+            }, 150);
+          }, 150);
+          return;
+        }
+        setTimeout(wait2, 50);
+      })();
+      return;
+    }
+    setTimeout(wait, 50);
+  })();
+}
+
 console.log('\n===== ④ 运行时实际调用 register(固定 URL) =====');
 let html = htmlSrc;
 ['app.js', 'news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
@@ -195,7 +299,21 @@ setTimeout(() => {
         '期望 ./sw.js 实际 ' + captured);
     }
     check('无阻塞性 JS 错误', errors.length === 0, errors.slice(0, 3).join(' | '));
-    console.log('\n===== 结果：' + pass + ' PASS / ' + fail + ' FAIL =====');
-    process.exit(fail === 0 ? 0 : 1);
+
+    // ⑧ 行为双例：① 首装（controller 为空）不得刷新 ② 已被旧 SW 接管时，换版仍须刷新
+    mdSwCase(null, (a) => {
+      check('行为①：首装（controller 为空）接管 + SW_UPDATED 都不得触发刷新',
+        a.total === 0,
+        '导航次数=' + a.total + '（controllerchange ' + a.ctl + ' / message ' + a.msg + '），'
+        + '监听器 ' + a.c + 'c/' + a.m + 'm');
+      mdSwCase({ scriptURL: 'https://pliucugb-cyber.github.io/mining-daily/sw.js' }, (b) => {
+        check('行为②：已被旧 SW 接管时 controllerchange 仍会刷新（换版不会被一并吞掉）',
+          b.ctl >= 1,
+          '导航次数=' + b.total + '（controllerchange ' + b.ctl + ' / message ' + b.msg + '），'
+          + '监听器 ' + b.c + 'c/' + b.m + 'm');
+        console.log('\n===== 结果：' + pass + ' PASS / ' + fail + ' FAIL =====');
+        process.exit(fail === 0 ? 0 : 1);
+      });
+    });
   }, 100);
 }, 200);

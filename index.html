@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-2345" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-2359" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2162,9 +2162,20 @@ body.dark .mtab{color:var(--ink-300)}
   // ③ SW 注册与更新（内联版）：app.js 不可用时也要能更新 SW
   if('serviceWorker' in navigator){
     // 新 SW 接管后重载一次，确保拿到与 SW 版本一致的资源（每会话一次，防循环）
+    // 2026-09-12 修复「首次访问后过一会儿页面自己又刷一次」（手机上体感「过 1 分钟左右又刷一次」）：
+    //   controllerchange 在**首次安装**时也会触发 —— register 在 load 时才调，装好后
+    //   skipWaiting + clients.claim() 现场接管本页，于是 controller 从空变成有值。
+    //   而首装时页面内容本来就是刚从网络取到的最新版（HTML/app.js 走 network-first），
+    //   并不存在新旧混装，这一刷纯属白刷；且它会等 install 预缓存（约 1MB，且用
+    //   cache:'reload' 绕过 HTTP 缓存）跑完才发生 —— 弱网手机上就是那「1 分钟」。
+    //   判定：开始时已被 SW 接管 ⇒ 这次 controllerchange 是**换版**，该刷；
+    //        开始时 controller 为空 ⇒ 首装接管，跳过。
+    //   ⚠️ 快照必须取在此处（load 之前）：claim 在 register 之后才发生，此刻读才是首装真实状态。
+    var __mdSwCtlAtStart=!!navigator.serviceWorker.controller;
     try{
       navigator.serviceWorker.addEventListener('controllerchange',function(){
         if(window.__mdBooted&&window.__swReloaded)return;
+        if(!__mdSwCtlAtStart)return;               // 首装接管：本页内容即最新，跳过刷新
         try{
           if(sessionStorage.getItem('md_sw_reloaded')==='1')return;
           sessionStorage.setItem('md_sw_reloaded','1');

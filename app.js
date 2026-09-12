@@ -3482,6 +3482,15 @@ function _clearHtmlCache(){
 // ===== PWA：注册 Service Worker（可安装成App + 离线可看）=====
 // 2026-09-02：新版 SW 激活后自动 reload，保证所有人打开就是最新版，无需手动清缓存
 if('serviceWorker' in navigator){
+  // 2026-09-12 修复「首次访问后过一会儿页面自己又刷一次」（手机上体感「过 1 分钟左右又刷一次」）：
+  //   首装 SW 时 install 要预缓存约 1MB（index.html 402KB + app.js 337KB + 三份数据），
+  //   且用 cache:'reload' 绕过 HTTP 缓存全量重下 —— 弱网手机上这要几十秒；
+  //   install→activate 完成后 sw.js 会无条件广播 SW_UPDATED，而页面原先一律当「有新版本」→ reload。
+  //   可若本页加载时还没有 SW 接管（controller 为空），说明这就是**首次安装**：
+  //   页面内容本来就是刚从网络取到的最新版（HTML/app.js 走 network-first），不存在新旧混装，
+  //   这一刷纯属白刷。故在文档加载时快照一次「本页是否已被 SW 接管」供下面判定。
+  //   快照必须取在 claim 之前 —— 即脚本执行期（load 之前），claim 之后 controller 才可能变非空。
+  var __swCtlAtLoad=!!navigator.serviceWorker.controller;
   window.addEventListener('load',function(){
     // 2026-09-10 优化：注册 URL 固定，不再拼 build-version 查询串。
     // 浏览器对 SW 脚本自身的更新检查本来就会按 no-cache 重新校验，故 CDN 缓存旧 sw.js
@@ -3517,6 +3526,12 @@ if('serviceWorker' in navigator){
     navigator.serviceWorker.addEventListener('message',function(ev){
       if(ev.data&&ev.data.type==='SW_UPDATED'&&!window.__swReloaded){
         window.__swReloaded=true;
+        // 2026-09-12：首次安装（本页加载时还没有 SW 接管）→ 不刷新，理由见注册块顶部注释。
+        // 必须先于写版本戳/清缓存，否则会把「页面本来就在看的这一版」记成已自愈而多刷一次。
+        if(!__swCtlAtLoad){
+          try{console.info('[sw] 首次安装完成并接管本页；页面内容即最新，跳过自动刷新');}catch(e){}
+          return;
+        }
         // 先写当前 build-version，避免新页面加载后版本戳自愈再触发一次硬刷新（双刷新闪屏）
         try{var _m=document.querySelector('meta[name="build-version"]');if(_m)lsSet('md_build_ver',_m.getAttribute('content'));}catch(e){}
         _clearHtmlCache();

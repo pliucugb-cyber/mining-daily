@@ -1897,6 +1897,64 @@ if(mdPath && mdPath.indexOf(sheet)>=0) return;
 - `test_pwa_install.py` **45 PASS / 0 FAIL**；`test_pwa_install_behavior.js` **37 PASS / 0 FAIL**（新增 ⑨ 段 6 条，覆盖「一次点击即展开、展开后面板仍开、再点收起仍开」）。
 - **真 Chrome 双版本对照**（同一探针点同一个按钮）：`HEAD` 旧版 `openAfterHelp=false`（复现用户 bug）→ 新版 `true`（已修）。这条证明了「jsdom 过 ≠ 真机过」之外的补充：**组件级 bug 也要用真浏览器做新旧对照**。
 
+### 41.9 第三轮修复（2026-09-12 深夜）：首次访问后「过约 1 分钟页面自己又刷一次」
+
+**用户反馈**：「在手机上，第一次刷新之后，过 1 分钟左右，又会自动刷新一次；电脑上不确定有没有这样的漏洞。」
+
+**根因（真元凶在 `index.html` 的内联脚本里，不在 app.js）**
+
+`index.html` 的**内联兜底**注册块挂着一个 `controllerchange` 监听：
+
+```js
+navigator.serviceWorker.addEventListener('controllerchange',function(){
+  if(window.__mdBooted&&window.__swReloaded)return;   // ← 这个条件拦不住首装
+  if(sessionStorage.getItem('md_sw_reloaded')==='1')return;
+  sessionStorage.setItem('md_sw_reloaded','1');
+  window.__swReloaded=true;
+  try{ location.reload(); }catch(e){}
+});
+```
+
+`controllerchange` 不只在「换版」时触发 —— **首次安装**时 `skipWaiting()` + `clients.claim()`
+现场接管本页，`controller` 从空变成有值，同样触发。于是首次访客也白刷一次。
+而这一刷要等 `install` 跑完：它要预缓存约 1MB（`index.html` 402KB + `app.js` 337KB + 三份数据），
+且用 `cache:'reload'` **绕过 HTTP 缓存**全量重下 —— **弱网手机上这就是那「1 分钟」**。
+
+`app.js` 里 `SW_UPDATED` 消息分支是**第二条**刷新来源，同样缺首装判定（两个来源互相掩盖，
+所以「只改一处」看起来毫无效果）。
+
+**修法**：两条路径各加一个**文档加载期**快照（`controller` 在 `claim()` 之后才变非空，必须在 load 之前取），
+首装（快照为空）则跳过刷新；**换版照刷**：
+
+| 路径 | 快照变量 | 判定 |
+|---|---|---|
+| `app.js`（`SW_UPDATED` 消息） | `__swCtlAtLoad` | `if(!__swCtlAtLoad) return;`（先于写版本戳 / 清缓存） |
+| `index.html` 内联（`controllerchange`） | `__mdSwCtlAtStart` | `if(!__mdSwCtlAtStart)return;`（先于 `location.reload()`） |
+
+**证据（`%TEMP%\md_nav_reload_probe.js`：本地 `http.server` + 真 Chrome + 全新 profile + CDP 数主文档导航）**
+
+只对带 `no-cache` 的请求加延迟（= 只模拟 SW 预缓存变慢，不拖慢首屏）作 A/B：
+
+| 场景 | 修复前 | 修复后 |
+|---|---|---|
+| 首访（无额外延迟） | **2 次**导航，第 2 次在 **+21.6s** | **1 次** ✅ |
+| 首访（预缓存 +10s 延迟） | **2 次**导航，第 2 次推到 **+51.4s** | **1 次** ✅ |
+
+第二行证明第 2 次刷新的时机由 `install` 耗时决定 —— 即「手机上是 1 分钟」的量纲来源。
+埋点还抓到 `Page.frameRequestedNavigation.reason=reload`，坐实是页面发起的整页 reload。
+**电脑上同样存在这段代码**，只是宽带快、`install` 几秒就跑完，表现为「打开一会儿闪一下」，不易察觉。
+
+**测试**
+- `test_sw_cache_update.js` **39 PASS / 0 FAIL**：新增 ⑧ 段 8 条（app.js 守卫 3 + 内联守卫 4 + 换版仍刷 1）
+  + **jsdom 行为双例**（派发 `controllerchange` / `SW_UPDATED`，用 jsdom 的
+  `Not implemented: navigation` 当计数器）：首装 0 次导航、换版 1 次导航。
+- **反向验证**（§42.10 C）：把该测试拿到 `git archive HEAD`（修复前）上跑 → **6 FAIL**，
+  其中行为①报「导航次数=1（controllerchange 1 / message 0）」—— 直接指认了刷新来源。
+- 全量闸门 21 node + 9 python 全绿。
+
+**教训（已写进 §42.8 回退指纹）**：查 SW / 刷新 / 缓存类代码**必须同时扫 `index.html` 内联脚本**。
+本轮我先只改了 `app.js`，复测仍是 2 次导航 —— 因为**内联那条才是元凶**；只 grep `*.js` 会整条漏掉。
+
 ## §42 全站形态契约与复核清单（生成侧必留 · 复核侧回退指纹）
 
 > **用途**：本节是**全站形态的唯一权威清单**，被两条自动化直接引用 ——
@@ -2000,6 +2058,12 @@ if(mdPath && mdPath.indexOf(sheet)>=0) return;
 
 - **自愈信标**：保留内联引信 `#mdBootWarn` + `window.mdHardReset()` + 2.5s 兜底。
 - **`app.js` 结构**：模块级 `let`/`const` 在前 60 行；`__mdBooted` / `__mdInitDone` 在；**末非空行必须就是** `window.__mdAppEvaluated=true`（其后不得再有顶层语句）；顶层业务函数一律 `setTimeout(fn,0)`（防 TDZ）。
+- **SW 刷新契约：首次安装不得自动刷新**（2026-09-12 第三轮修的「手机上过约 1 分钟页面自己又刷一次」，缘由见 §41.9）。站内有**两条** SW 注册路径，**两条都要守卫**：
+  ① `app.js` 快照 `__swCtlAtLoad`（`SW_UPDATED` 消息分支里 `if(!__swCtlAtLoad)` → `return;` 不 reload）；
+  ② `index.html` **内联兜底**快照 `__mdSwCtlAtStart`（`controllerchange` 监听里 `if(!__mdSwCtlAtStart)return;`）。
+  两者都必须在**文档加载期**取（`controller` 在 `claim()` 之后才会变非空），且都**先于** `location.reload()`；**换版仍须刷新**（开始时已被旧 SW 接管 ⇒ 照刷）。
+  - 回退指纹：任一守卫缺失、或挪到该段 `location.reload()` 之后 ⇒ 首次访客会在 SW 装好后白刷一次；弱网手机上 install 要预缓存约 1MB（且 `cache:'reload'` 绕过 HTTP 缓存），表现为「看了一会儿页面自己跳一下」。
+  - ⚠️ **查 SW / 刷新 / 缓存类代码必须同时扫 `index.html` 内联脚本** —— 本轮真元凶就是内联那条 `controllerchange`，只 `grep *.js` 会整条漏掉（曾据此错误地以为改完 app.js 就修好了）。
 - **日期唯一来源 ＝ 头部红底 `.date-badge`**：`#briefDate`（09-11 删）与 `#digestDate`（09-12 删）**均不得再输出**——它们与头部 `.date-badge` 是同一天的重复日期，出现即为回退（删掉 + bump build-version 后重跑 preflight）；要闻条非当日发布由 `.digest-dtag` 标注。
 - **站点标题**须为「矿业新闻日报 · YYYY-MM-DD」（§39；`deploy_pages.py` 会自动规范化，但生成脚本不得改回纯日期）。
 - **其他文案**：头部无副标题；往期标题「滚动保留最近30天」；底部两行数据来源 / 国际来源照旧；口径句「能源与黑色不收；铁矿仅留全球供需与价格」；「数据更新时间」由前端 `applyDataUpdatedAt()` 读 `NEWS_DATA.updated`（**勿写死**）；累计访问 `gcStatLine` 默认隐藏；标注精简（只 NEW / 战略 / 重大，`tag-chip` ≤2）。
@@ -2014,6 +2078,7 @@ if(mdPath && mdPath.indexOf(sheet)>=0) return;
 | `node test_brief_layers.js` | **47** | 简报分层渲染（jsdom） |
 | `node test_smoke_0908.js` | **74** | 全站冒烟（含矿权双视图 8 + 列表排序 9） |
 | `node test_mobile_ux_batch.js` | **172** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6 |
+| `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **45 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **37 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板） |
 | `PY test_price_history_unclosed.py` | **0 失败** | 走势图末点确有已收盘数据 |
