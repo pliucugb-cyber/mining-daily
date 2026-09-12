@@ -1378,3 +1378,11 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 ### 32.5 红线
 - 底栏 tab 仅激活态高亮品牌色；AI 搜 非激活必须中性灰，不得回退为恒亮。
 - 左边缘右滑返回需与「‹ 返回」点击行为一致（从我的进入→回我的面板）。
+
+### §33 2026-09-12 build 20260912-2037：桌面端收藏/浏览记录沉浸式视图统一单栏布局
+
+- 问题：1440px+ 下 `body[data-filter-mode="history"] .news-grid` 仍保留 `320px` 右栏列宽，但 `.col-rail` 已被隐藏，导致「浏览记录」右侧出现 320px 空白；「我的收藏」已强制单栏。
+- 修复：`@media(min-width:1440px)` 内把 fav/history 统一为 `grid-template-columns:minmax(0,1fr)`，并同步更新 1101px 媒体查询注释，避免误导「保留右侧热榜/会展」。
+- 原则：收藏与浏览记录共用同一套 `renderFavHistoryAggregate()` 聚合视图，布局必须完全一致。
+- 回归：`test_mobile_ux_batch.js` 新增 CSS 断言「history 与 fav 在 1440px+ 共用单栏布局（无 320px 隐藏右栏）」；总断言 194→195，0 失败。
+- 延伸建议（待排期）：若仍觉垂直间距大，可把 `#archFavList .news-item` 的 `gap/margin-bottom/padding` 再收紧一档；归档 history 卡片可补摘要；按时间分组；桌面端左侧目录在沉浸式视图下也可隐藏。
