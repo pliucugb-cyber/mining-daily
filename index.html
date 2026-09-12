@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1105" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1140" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -1427,10 +1427,36 @@ body.dark .price-strip::after{background:linear-gradient(90deg,rgba(27,36,48,0),
 .rr-due.rc-urgent{background:#fff1ec;color:#c2410c;border-color:rgba(194,65,12,.16)}
 .rr-due.rc-soon{background:#fff7e6;color:#b45309;border-color:rgba(180,83,9,.16)}
 .rr-due.rc-expired{background:var(--surface-3);color:var(--ink-500);text-decoration:line-through}
+/* 2026-09-12：列表态排序条（把原本无入口的 rightsSort 接上）——卡片态与手机端均不显示。
+   chip 组不做列宽对齐：右端两列是内容撑宽的 pill，等宽对齐在宽屏下必然错位。 */
+.rights-cols{display:none;align-items:center;gap:var(--s2);flex-wrap:wrap;
+  padding:var(--s2) var(--s3);background:var(--surface-2);border-bottom:1px solid #e7edf4}
+.rc-sort-label{font-size:var(--fs-meta);font-weight:600;color:var(--ink-500);margin-right:2px}
+.rc-sort{border:1px solid #d5deea;background:var(--surface);color:var(--ink-700);
+  font-size:var(--fs-meta);font-weight:600;padding:2px var(--s3);border-radius:999px;
+  cursor:pointer;line-height:1.7;white-space:nowrap;font-family:inherit}
+.rc-sort:hover{border-color:var(--brand);color:var(--brand)}
+.rc-sort.is-on{background:var(--brand);border-color:var(--brand);color:#fff}
+.rc-sort.is-on:hover{color:#fff}
+.rc-sort:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+.rc-sort-hint{margin-left:auto;font-size:var(--fs-meta);color:var(--ink-500);font-variant-numeric:tabular-nums}
+/* 金额列：仅桌面列表态（卡片态已由 .rr-grid 给出成交价/起始价，不重复） */
+.rr-amount{display:none;flex:0 0 auto;margin-left:var(--s3);font-size:var(--fs-meta);font-weight:600;
+  color:var(--ink-900);white-space:nowrap;font-variant-numeric:tabular-nums}
+.rr-amount.na{color:var(--ink-300);font-weight:500}
+body.dark .rights-cols{background:#131a23;border-bottom-color:var(--line-1)}
+body.dark .rc-sort{background:var(--surface-3);border-color:var(--line-1);color:var(--ink-700)}
+body.dark .rc-sort:hover{border-color:#0e7490;color:var(--brand-ink)}
+body.dark .rc-sort.is-on{background:#0e7490;border-color:#0e7490;color:#fff}
+body.dark .rc-sort-label,body.dark .rc-sort-hint{color:var(--ink-500)}
+body.dark .rr-amount{color:var(--ink-700)}
+body.dark .rr-amount.na{color:var(--ink-500)}
 @media(min-width:769px){
   .rights-row .rr-head{flex:1 1 auto}
   .rights-row .rr-type{margin-right:var(--s2)}
   #rightsCards:not(.rv-cards) .rr-due{display:inline-block}
+  #rightsCards:not(.rv-cards) .rights-cols{display:flex}
+  #rightsCards:not(.rv-cards) .rr-amount{display:inline-block}
   /* ---- 桌面卡片视图（自适应多列网格，宽屏 2~3 列）：与手机卡片同源，仅列数随宽度自适应 ---- */
   #rightsCards.rv-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
     gap:var(--s3);border:none;border-radius:0;overflow:visible}
@@ -2294,7 +2320,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=27eab705" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=7fe2eda1" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=6465c906" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->

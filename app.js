@@ -161,6 +161,9 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
   function fmtMoney(v){ return v==null?"—":v.toLocaleString("zh-CN")+" 万元"; }
   function fmtArea(v){ return v==null?"—":v+" km²"; }
   function fmtDeadline(d){ return d?d.slice(5):"—"; }
+  // 2026-09-12：矿权排序（列表态「排序条」驱动）。key=null→默认紧迫度；deadline→按截止日；
+  // price→按金额（parseRights 已按类型归一：结果公示取成交价、其余取起始价）。
+  // 不写 localStorage：刷新即回默认紧迫度，与 .rights-note 对读者的承诺保持一致。
   var rightsSort={key:null,dir:"asc"};
   // 矿权卡片/表格默认按数量折叠：超过 RIGHTS_COLLAPSE_AT 条时只显示前 N 条，其余收进「展开全部」
   var RIGHTS_COLLAPSE_AT=8;
@@ -204,6 +207,47 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
       ? '<button class="rights-more-btn" type="button" onclick="rightsSetExpanded(false)">▾ 收起（'+listLen+' 条）</button>'
       : '<button class="rights-more-btn" type="button" onclick="rightsSetExpanded(true)">▸ 展开全部 '+listLen+' 条</button>';
     return btn;
+  }
+  // 2026-09-12：列表态排序条——「点列头排序」的落地形态。
+  // 做成 chip 组而非与列严格对齐：列表行右端两列（金额/截止期）都是内容撑宽的 pill，
+  // 强行等宽对齐在宽屏下必然错位；chip 组同时承担「当前按什么排」与「还能怎么排」两件事。
+  function rightsColsHtml(count){
+    function chip(key,label){
+      var on=String(rightsSort.key||"")===key;
+      var arrow=(on && key)?(rightsSort.dir==="asc"?" ↑":" ↓"):"";
+      return '<button class="rc-sort'+(on?" is-on":"")+'" type="button" data-sk="'+key+'"'
+        +' aria-pressed="'+(on?"true":"false")+'">'+label+arrow+'</button>';
+    }
+    return '<div class="rights-cols" role="group" aria-label="矿权排序">'
+      +'<span class="rc-sort-label">排序</span>'
+      +chip("","默认·紧迫度")
+      +chip("deadline","到期日")
+      +chip("price","成交价")
+      +'<span class="rc-sort-hint">共 '+count+' 宗</span>'
+      +'</div>';
+  }
+  function rightsSetSort(key){
+    if(key==="deadline" || key==="price"){
+      if(rightsSort.key===key) rightsSort.dir=(rightsSort.dir==="asc"?"desc":"asc");
+      // 首次点按给最有用的方向：金额高→低（先看最值钱的）、到期日近→远（先看最紧迫的）
+      else { rightsSort.key=key; rightsSort.dir=(key==="price"?"desc":"asc"); }
+    }else{
+      rightsSort.key=null; rightsSort.dir="asc";
+    }
+    renderRightsSection();   // 排序须重渲染（视图切换才只改类名、不重渲染）
+  }
+  function bindRightsSort(){
+    var el=document.getElementById("rightsCards");
+    if(!el || el.__rsBound) return;
+    el.__rsBound=1;
+    // 事件委托：innerHTML 每次重渲染都会重建子节点，直接绑在按钮上会丢
+    el.addEventListener("click", function(e){
+      var t=e.target, btn=null;
+      while(t && t!==el){ if(t.classList && t.classList.contains("rc-sort")){ btn=t; break; } t=t.parentNode; }
+      if(!btn) return;
+      e.preventDefault();
+      rightsSetSort(btn.getAttribute("data-sk")||"");
+    });
   }
   function getRightsData(){
     if(!window.NEWS_DATA||!window.NEWS_DATA.news) return [];
@@ -275,10 +319,12 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
     }
     list.sort(function(a,b){
       if(rightsSort.key){
-        var va,vb;
-        if(rightsSort.key==="mineral"){ va=a.mineral||""; vb=b.mineral||""; return rightsSort.dir==="asc"?va.localeCompare(vb,"zh"):vb.localeCompare(va,"zh"); }
-        if(rightsSort.key==="price"){ va=a.price==null?-1:a.price; vb=b.price==null?-1:b.price; }
-        else { va=a.deadline||"9999-12-31"; vb=b.deadline||"9999-12-31"; }
+        var va=(rightsSort.key==="price")?a.price:a.deadline;
+        var vb=(rightsSort.key==="price")?b.price:b.deadline;
+        // 缺值恒沉底：没有金额 / 没有截止日的条目不该因为降序就窜到首屏
+        if(va==null && vb==null) return 0;
+        if(va==null) return 1;
+        if(vb==null) return -1;
         return rightsSort.dir==="asc"?(va<vb?-1:va>vb?1:0):(va>vb?-1:va<vb?1:0);
       }
       var sa=score(a), sb=score(b);
@@ -288,7 +334,7 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
     });
     // 默认折叠：超过阈值只显示前 N 条，其余收进「展开全部」
     var shownList=list.slice(0, rightsExpanded?list.length:RIGHTS_COLLAPSE_AT);
-    cardsEl.innerHTML=shownList.map(function(r){
+    cardsEl.innerHTML=rightsColsHtml(list.length)+shownList.map(function(r){
       var badge="", due="";
       if(r.deadline){
         var d=daysBetween(new Date(r.deadline.replace(/-/g,"/")), ref);
@@ -308,7 +354,6 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
         // 列表态显示这一处、卡片态显示 badge：同一份文案与颜色类，不会出现两个口径
         due='<span class="rr-due '+cls+'">'+txt+'</span>';
       }
-      var mineralHtml=r.mineral?'<span class="rc-mineral">'+r.mineral+'</span>':'';
       // 按业务类型决定展示字段
       var grid4='';
       if(r.rightsType==="result"){
@@ -330,17 +375,18 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
       var extra='';
       if(r.rightsType==="result" && r.bidder) extra='<div class="rc-extra">竞得人：'+esc(r.bidder)+'</div>';
       else if(r.rightsType==="transfer" && (r.transferor || r.transferee)) extra='<div class="rc-extra">'+esc(r.transferor||'—')+' → '+esc(r.transferee||'—')+'</div>';
-      // 金额摘要：按业务类型取最相关的那个数字（结果看成交价，转让看面积，出让看起始价）
-      var numTxt="";
-      if(r.rightsType==="result") numTxt=(r.dealPrice==null?"—":r.dealPrice.toLocaleString("zh-CN")+" 万元");
-      else if(r.rightsType==="transfer") numTxt=(r.area==null?"—":fmtArea(r.area));
-      else numTxt=(r.price==null?"—":r.price.toLocaleString("zh-CN")+" 万元");
+      // 2026-09-12：金额列（仅桌面列表态显示）。用 r.price——它与「按成交价排序」的取值完全同源，
+      // 避免出现「列里显示一个数、排序按另一个数」；卡片态已在 .rr-grid 给出成交价/起始价，不重复渲染。
+      var amtTxt=(r.price==null?"—":r.price.toLocaleString("zh-CN")+" 万元");
+      var amountHtml='<span class="rr-amount'+(r.price==null?' na':'')+'" title="'
+        +(r.rightsType==="result"?"成交价":"起始价")+'">'+amtTxt+'</span>';
       return '<div class="rights-row" data-method="'+r.method+'" data-mineral="'+r.mineral+'">'
         +'<div class="rr-head">'
         +'<span class="rr-type">'+rightsTypeLabel(r)+'</span>'
         +'<a class="rr-title" href="'+safeHref(r.it.u)+'" target="_blank" rel="noopener" title="'+esc(r.it.t)+'">'+esc(r.it.t)+'</a>'
         +(r.region?'<span class="rr-region">📍 '+esc(r.region)+'</span>':'')
         +'</div>'
+        +amountHtml
         +due
         +'<div class="rr-grid">'+grid4+'</div>'
         +(badge?'<div class="rr-line">'+badge+'</div>':'')
@@ -435,7 +481,7 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
   // （newsSearchText、STORE_KEY / FAV_KEY / ARCH_FAV_DEFAULT_TITLE 等）都在文件后段才初始化，
   // 于是抛 TDZ ReferenceError，把整个 app.js 打断在半路 —— 这就是 09-11 事故的机制。
   // 改为「本次求值结束后再初始化」：setTimeout 0，届时所有顶层声明都已就绪。
-  function mdInitRights(){ renderRightsSection(); injectRightsResultSummary(); bindRights(); bindRightsView(); }
+  function mdInitRights(){ renderRightsSection(); injectRightsResultSummary(); bindRights(); bindRightsView(); bindRightsSort(); }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", mdInitRights);
   else setTimeout(mdInitRights, 0);
 })();
@@ -5253,11 +5299,13 @@ function toggleTheme(){
   setTimeout(run,3000);
 })();
 
+// 求值完成后重算横幅状态（双保险）：清除加载窗口内可能残留的任何误报。
+// 必须延到本轮求值结束再执行 —— 此刻 __mdAppEvaluated 尚未置位，同步调用会让 mdDegraded()
+// 误判「app 未执行」而挂红条；此处与 index.html 看门狗同款写法（setTimeout(mdSyncBanner,0)）。
+// 延后还有第二个作用：让下方「求值完成」信标能留在本文件最后一行
+//（回归锁 test_ready_state_tdz.js:110 要求）。
+setTimeout(function(){ try{ if(typeof window.mdSyncBanner==='function') window.mdSyncBanner(); }catch(e){} },0);
 // 2026-09-11：app.js「求值完成」信标 —— 必须留在本文件最后一行。
 // 诊断价值：线上若看到 __mdBooted=true 而 __mdAppEvaluated 缺失，即说明脚本在求值中途抛错中断
 // （09-10 / 09-11 三轮事故都是这个形态）。过去没有任何可观测手段，只能靠猜。
 window.__mdAppEvaluated=true;
-// 求值完成后立即重算横幅状态：清除加载窗口内可能残留的任何误报（双保险）。
-// 此时 mdDegraded() 必返回 ''（app 已执行），mdSyncBanner 会隐藏 error 红条，
-// 并把单组件标注 / info 条对齐到 app 真实渲染后的状态。
-try{ if(typeof window.mdSyncBanner==='function') window.mdSyncBanner(); }catch(e){}
