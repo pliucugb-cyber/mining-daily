@@ -534,9 +534,11 @@ function recordHistory(url){
   if(!item)return;
   const title=item.querySelector('.news-title')?.textContent||'';
   const src=item.querySelector('.src')?.textContent||'';
+  const sumEl=item.querySelector('.news-summary');
+  const summary=sumEl?sumEl.textContent.trim():'';
   let arr=getHistory();
   arr=arr.filter(h=>h.url!==url);
-  arr.unshift({url,title,src,time:new Date().toISOString()});
+  arr.unshift({url,title,src,summary,time:new Date().toISOString()});
   saveHistory(arr);
   updateHistoryCount();
 }
@@ -698,8 +700,18 @@ function renderFavHistoryAggregate(mode){
     if(a.time&&b.time) return new Date(b.time)-new Date(a.time);
     return String(b.date||'').localeCompare(String(a.date||''));
   });
+  // 2026-09-12：按时间分组（今天/昨天/更早），保持组内倒序
   const frag=document.createDocumentFragment();
+  let curBucket=null;
   items.forEach(function(it){
+    const bucket=_dayBucketOf(it);
+    if(bucket!==curBucket){
+      curBucket=bucket;
+      const gh=document.createElement('div');
+      gh.className='agg-group-title';
+      gh.textContent=bucket;
+      frag.appendChild(gh);
+    }
     if(it.type==='page'){
       const clone=it.el.cloneNode(true);
       clone.classList.remove('hidden');
@@ -719,6 +731,13 @@ function renderFavHistoryAggregate(mode){
   if(countEl)countEl.textContent=items.length+'条';
   var subEl=document.getElementById('favViewSub');
   if(subEl) subEl.textContent=(mode==='fav'?'共 '+items.length+' 条 · 倒序排列':'共 '+items.length+' 条 · 按浏览时间倒序');
+  // 2026-09-12：少条时底部置底 CTA（空态已有插画 CTA）
+  if(items.length>0 && items.length<=3){
+    const foot=document.createElement('div');
+    foot.className='aggregate-foot';
+    foot.innerHTML='<button class="empty-cta" type="button" data-act="go-home">去首页看看</button>';
+    list.appendChild(foot);
+  }
   if(items.length===0){
     const _favArt='<svg class="empty-art" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
       +'<rect x="26" y="22" width="76" height="84" rx="12" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 7" opacity=".55"/>'
@@ -769,11 +788,39 @@ function buildHistoryItemHtml(h){
   const title=escapeHtml(h.title||h.url||'未知条目');
   const src=escapeHtml(h.src||'浏览记录');
   const date=escapeHtml(formatHistoryDate(h.time)||'');
+  const summary=escapeHtml(h.summary||'');
   return '<div class="news-item arch-fav" data-url="'+url+'" data-embed="no">'+
     '<div class="news-head"><span class="dot"></span>'+
     '<a class="news-title" href="'+url+'" target="_blank">'+title+'</a></div>'+
     '<div class="news-meta"><span class="src">'+src+'</span>'+(date?' · '+date:'')+'</div>'+
+    (summary?'<div class="news-summary">'+summary+'</div>':'')+
     '</div>';
+}
+// 2026-09-12：将条目日期源（ISO 或 mm-dd）解析为 Date，用于按时间分组
+function _parseItemDate(s){
+  if(!s)return null;
+  const m=/^(\d{1,2})-(\d{1,2})/.exec(String(s).trim());
+  if(m){ const now=new Date(); return new Date(now.getFullYear(), parseInt(m[1],10)-1, parseInt(m[2],10)); }
+  const d=new Date(s);
+  if(!isNaN(d.getTime()))return d;
+  return null;
+}
+// 2026-09-12：计算条目所属时间分组：今天 / 昨天 / 更早
+function _dayBucketOf(it){
+  if(!it)return '更早';
+  let s='';
+  if(it.time) s=it.time;
+  else if(it.data && (it.data.ts||it.data.time)) s=(it.data.ts||it.data.time);
+  else if(it.date) s=it.date;
+  const d=_parseItemDate(s);
+  if(!d)return '更早';
+  const now=new Date();
+  const t0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const d0=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  const diff=Math.round((t0-d0)/86400000);
+  if(diff===0)return '今天';
+  if(diff===1)return '昨天';
+  return '更早';
 }
 
 // ===== 整张卡片点击打开原文（2026-09-05 增强）=====
@@ -861,6 +908,16 @@ document.addEventListener('click',function(e){
     } else if(typeof setFilter==='function'){
       setFilter('none');
     }
+  }
+});
+
+// 2026-09-12：「去首页看看」按钮——始终回到首页（与返回逻辑解耦）
+document.addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('[data-act="go-home"]'):null;
+  if(b){ e.preventDefault(); e.stopPropagation();
+    try{ window.__mdFavFromMine=false; }catch(err){}
+    if(typeof setFilter==='function') setFilter('none');
+    if(typeof window.mdActivateTab==='function') window.mdActivateTab('home', false);
   }
 });
 
