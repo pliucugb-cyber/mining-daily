@@ -1758,21 +1758,11 @@ function briefMd(md){
   flushP();closeUl();
   return out.join('');
 }
-// ---- 两层简报（2026-09-12）：要点层默认可见，完整层按需展开 ----
-// 数据契约（morning_report.json）：highlights[] = 要点层（cat/t/u，3-5 条）；
-//   brief_sections[] = 完整层（name/count/items[{t,u,s}]，空节不收录）。
-// 任一字段缺失即整体回退到旧的 report markdown 渲染（历史 JSON / 老 SW 缓存仍可用）。
-function briefHighlightsHtml(hls){
-  var out=['<div class="brief-hl-wrap"><ol class="brief-hl">'];
-  for(var i=0;i<hls.length;i++){
-    var h=hls[i]||{};
-    var inner=(h.cat?('<span class="hl-cat">'+briefEsc(h.cat)+'</span>'):'')
-      +'<span class="hl-t">'+briefEsc(h.t||'')+'</span>';
-    out.push('<li>'+(h.u?('<a href="'+briefEsc(h.u)+'" data-jump="'+briefEsc(h.u)+'" target="_blank" rel="noopener">'+inner+'</a>'):inner)+'</li>');
-  }
-  out.push('</ol></div>');
-  return out.join('');
-}
+// ---- 简报分节渲染 ----
+// 数据契约（morning_report.json）：brief_sections[] = 五节结构化（name/count/items[{t,u,s}]，空节不收录）。
+// 2026-09-12 二次修订：首版的「要点层 highlights + 高异动前置行」与下方「今日要闻」内容重复，
+//   用户要求移除 → 前端不再渲染要点层（highlights 字段生成端仍产出，留待将来复用）。
+// brief_sections 缺失时回退到 report 的 markdown 渲染（历史 JSON / 老 SW 缓存仍可用）。
 function briefSectionsHtml(sections){
   var total=0,out=[];
   for(var i=0;i<sections.length;i++){
@@ -1787,7 +1777,7 @@ function briefSectionsHtml(sections){
     }
     out.push('</ul>');
   }
-  return '<div class="brief-full" data-total="'+total+'" hidden>'+out.join('')+'</div>';
+  return '<div class="brief-full" data-total="'+total+'">'+out.join('')+'</div>';
 }
 // 简报条目 → 页面内对应新闻卡片：同页滚动定位 + 短暂高亮。
 // 目标卡片不在当前 DOM（如条目属往期/已筛掉）时不做任何事，保持优雅降级。
@@ -1810,15 +1800,14 @@ function renderBrief(d){
   var metals=(sec.signals&&sec.signals.metals)||[];
   var sent=sec.sentiment||null;
   var rep=String(d.report||'');
-  var hls=(d.highlights&&d.highlights.length)?d.highlights:[];
   var bsec=(d.brief_sections&&d.brief_sections.length)?d.brief_sections:[];
-  if(!rep.trim()&&!news.length&&!alerts.length&&!metals.length&&!hls.length&&!bsec.length)return;
+  if(!rep.trim()&&!news.length&&!alerts.length&&!metals.length&&!bsec.length)return;
   var sEl=document.getElementById('briefSub');
   if(sEl){
     // 2026-09-11 用户反馈：「今日收录 N 条」与侧栏「今日新增」口径不同（收录含移入会议专区
     //   与降级补录的旧闻），并列会让读者以为数据打架，故副标题不出总数。
-    // 2026-09-12 两层改版：默认展示要点层，副标题改为要点条数（简报自身口径，自洽）。
-    sEl.textContent=hls.length?('必看 '+hls.length+' 条'):'按分类摘要';
+    // 2026-09-12 二次修订：要点层已移除（与「今日要闻」重复），副标题固定为「按分类摘要」。
+    sEl.textContent='按分类摘要';
   }
   var main=document.getElementById('briefMain');
   if(main){
@@ -1826,22 +1815,10 @@ function renderBrief(d){
     var ri=body.indexOf('**风险提示：**');
     if(ri>=0)body=body.slice(0,ri).trim();
     var html='';
-    // ① 高异动前置一行：仅当日最高等级为 high 时出现
-    var maxSev=(sec.anomalies&&sec.anomalies.max_severity)||'';
-    if(alerts.length&&maxSev==='high'){
-      var one=alerts.slice(0,3).map(function(a){ return (a.commodity||'')+' '+(a.move||''); }).join('、');
-      html+='<div class="brief-alert"><span class="brief-alert-tag">今日异动</span>'
-        +briefEsc(one)+(alerts.length>3?('，共 '+alerts.length+' 项'):'')+'</div>';
-    }
-    // ② 要点层（常驻）+ 完整层（默认隐藏）
-    if(hls.length){
-      html+=briefHighlightsHtml(hls);
-      if(bsec.length){
-        html+=briefSectionsHtml(bsec);
-      }else{
-        var md=briefMd(body);
-        html+='<div class="brief-full" data-total="'+((md.match(/<li>/g)||[]).length)+'" hidden>'+md+'</div>';
-      }
+    // 2026-09-12 二次修订：高异动前置行与要点层已移除（与下方「今日要闻」重复）。
+    //   有 brief_sections 走五节结构化渲染（节标题带条数、条目可点击）；否则回退 report 的 markdown。
+    if(bsec.length){
+      html+=briefSectionsHtml(bsec);
     }else{
       html+=briefMd(body);
     }
@@ -1855,32 +1832,17 @@ function renderBrief(d){
       });
     }
   }
-  setupBriefClamp(hls.length>0);
+  setupBriefClamp();
   // 「今日5件事」卡已移除（与下方「今日要闻」重复）；top_news 仍参与简报区显隐判断
   strip.hidden=false;
 }
 // 简报展开/折叠。
-// 两层模式（有 highlights）：要点层常驻，完整层由按钮切换显隐，不做高度截断。
-// 旧模式（无 highlights）：保持 420px 折叠 +「展开全部（N 条）」，供历史 JSON 兜底。
-function setupBriefClamp(twoLayer){
+// 2026-09-12 二次修订：要点层移除后恢复为单一模式——内容超过 420px 判定为需折叠，
+//   折叠后只露 380px（CSS .brief-md.brief-clamp 的 max-height）。
+//   按钮「展开全部（N 条）」↔「收起」。N 取简报内全部条目数（含各节）。
+function setupBriefClamp(){
   var main=document.getElementById('briefMain'),btn=document.getElementById('briefMore');
   if(!main||!btn)return;
-  var full=main.querySelector('.brief-full');
-  if(twoLayer&&full){
-    main.classList.remove('brief-clamp');
-    btn.hidden=false;
-    var total=Number(full.getAttribute('data-total')||0);
-    var close=function(){
-      full.hidden=true; btn.dataset.open='0';
-      btn.textContent='展开完整分类摘要'+(total?('（'+total+' 条）'):'');
-    };
-    close();
-    btn.onclick=function(){
-      if(btn.dataset.open==='1'){ close(); }
-      else{ full.hidden=false; btn.dataset.open='1'; btn.textContent='收起'; }
-    };
-    return;
-  }
   main.classList.remove('brief-clamp');
   btn.hidden=true;
   var LIMIT=420;

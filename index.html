@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1000" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1022" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -394,24 +394,12 @@ body.dark .brief-sec::after{background:var(--line-1)}
   .brief-md{font-size: var(--fs-body);line-height:1.72}
 }
 
-/* ==================== 两层简报：要点层 + 完整层（2026-09-12）==================== */
-/* 用户要求：某天新闻特别多时不要全塞在首屏，只留重要信息；完整内容一条不减，收进展开层。
-   数据契约：highlights[] 要点层（3-5 条一句话）；brief_sections[] 完整层（空节不收录）。
-   缺任一字段时 app.js 回退到旧的 report markdown 渲染，故以下样式均为新增，不改动既有规则。 */
-/* 高异动前置行：仅当日 sections.anomalies.max_severity==='high' 时注入 */
-.brief-alert{display:flex;align-items:baseline;gap:var(--s2);margin:0 0 var(--s3);padding:var(--s2) var(--s3);background:#fdecea;border-left:3px solid var(--danger);border-radius:var(--r-sm);font-size: var(--fs-body);line-height:1.65;color:var(--danger)}
-.brief-alert-tag{flex:0 0 auto;font-size: var(--fs-nano);font-weight:600;letter-spacing:.5px}
-/* 要点层：常驻可见，目标是一屏内扫完 */
-.brief-hl-wrap{margin:0}
-.brief-hl{list-style:none;margin:0;padding:0;counter-reset:bhl}
-.brief-hl li{counter-increment:bhl;position:relative;padding:0 0 0 26px;margin-bottom:9px;line-height:1.68}
-.brief-hl li:last-child{margin-bottom:0}
-.brief-hl li::before{content:counter(bhl);position:absolute;left:0;top:1px;width:17px;height:17px;border-radius:50%;background:var(--surface-2);color:var(--ink-500);font-size: var(--fs-nano);font-weight:600;text-align:center;line-height:17px}
-.brief-hl a{color:inherit;text-decoration:none;display:block}
-.brief-hl a:hover .hl-t,.brief-hl a:active .hl-t{text-decoration:underline;text-underline-offset:2px}
-.hl-cat{display:inline-block;font-size: var(--fs-nano);color:var(--brand);border:1px solid var(--line-1);border-radius:var(--r-sm);padding:0 4px;margin-right:5px;vertical-align:1px;white-space:nowrap}
-/* 完整层：默认 hidden，由「展开完整分类摘要」按钮切换 */
-.brief-full[hidden]{display:none!important}
+/* ==================== 简报五节结构化渲染（2026-09-12，二次修订）==================== */
+/* 2026-09-12 首版曾做「要点层 highlights + 高异动前置行 + 完整层」两层，用户反馈要点层
+   与下方「今日要闻」内容重复 → 已连同其中样式一并删除。
+   现为单一形态：五节结构化摘要（.brief-full 容器）+ 高度折叠（判定阈值 420px，
+   折叠后 380px，见 .brief-md.brief-clamp），内容一条不减。
+   缺 brief_sections 时 app.js 回退 report 的 markdown 渲染。 */
 .brief-full .brief-sec{margin-top:var(--s4)}
 .brief-sec .sec-n{margin-left:6px;font-size: var(--fs-nano);font-weight:400;color:var(--ink-500);background:var(--surface-2);border-radius:var(--r-sm);padding:0 5px;letter-spacing:0}
 .brief-full ul li>a{color:inherit;text-decoration:none}
@@ -419,15 +407,7 @@ body.dark .brief-sec::after{background:var(--line-1)}
 /* 从简报条目跳到下方对应新闻卡片时的短暂高亮 */
 .brief-flash{animation:briefFlash 1.6s ease}
 @keyframes briefFlash{0%,100%{background:transparent}15%,55%{background:rgba(14,116,144,.13)}}
-body.dark .brief-alert{background:#3a1f1c;border-left-color:#ff8f8f;color:#ff8f8f}
-body.dark .brief-hl li::before{background:var(--surface-3)}
 body.dark .brief-sec .sec-n{background:var(--surface-3)}
-@media(max-width:600px){
-  .brief-alert{font-size: var(--fs-meta);padding:var(--s1) var(--s2);gap:6px}
-  .brief-hl li{padding-left:23px;margin-bottom:8px}
-  .brief-hl li::before{width:16px;height:16px;line-height:16px}
-  .hl-cat{margin-right:4px}
-}
 /* ==================== 徽章：重要性分级 + 信源权威（9-06 新增）==================== */
 .badge-level,.badge-authority{display:inline-block;font-size: var(--fs-nano);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:600;margin-left:8px;vertical-align:1px;white-space:nowrap;line-height:1.6}
 .lv-major{background:#fdecea;color:var(--danger)}
@@ -2248,7 +2228,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=27eab705" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=6d85c8ac" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=77cd58a6" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
