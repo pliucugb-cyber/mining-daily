@@ -2702,24 +2702,29 @@ function mdMobileTabBar(){
     +'<button class="mtab" data-go="rights"><span class="mi">'+SVG_RIGHTS+'</span><span>矿权</span></button>'
     +'<button class="mtab" data-go="mine"><span class="mi">'+SVG_USER+'</span><span>我的</span></button>';
   var sheet=document.createElement('div'); sheet.id='mineSheet'; sheet.hidden=true;
-  sheet.innerHTML='<button data-act="fav">★ 我的收藏</button>'+
-    '<button data-act="history">🕘 浏览记录</button>'+
-    '<button data-act="theme">🌓 深色 / 浅色</button>'+
+  sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-modal','true'); sheet.setAttribute('aria-label','我的');
+  sheet.innerHTML='<div class="mine-header"><span class="mine-title">我的</span><button class="mine-close" data-act="close" aria-label="关闭">✕</button></div>'+
+    '<div class="mine-list">'+
+    '<button class="mine-item" data-act="fav"><span class="mine-icon">★</span><span class="mine-label">我的收藏</span><span class="mine-chevron">›</span></button>'+
+    '<button class="mine-item" data-act="history"><span class="mine-icon">🕘</span><span class="mine-label">浏览记录</span><span class="mine-chevron">›</span></button>'+
+    '<button class="mine-item" data-act="theme"><span class="mine-icon">🌓</span><span class="mine-label">深色 / 浅色</span><span class="mine-state" id="mineThemeState">当前：浅色</span></button>'+
     '<div class="mine-install" id="mineInstallCard"></div>'+
-    '<button data-act="top">⬆️ 返回顶部</button>';
-  sheet.innerHTML+='<div class="mine-meta" id="mineMeta"></div>';
+    '</div>';
   document.body.appendChild(bar); document.body.appendChild(sheet);
-  try{ var _dm=document.getElementById('mineMeta'); if(_dm){ var _du=document.getElementById('dataUpdatedAt'); _dm.textContent='数据更新时间：'+(_du?_du.textContent.trim():'—')+' · 信息聚合展示，版权归原机构所有'; } }catch(e){}
-  mdRenderInstallCard();
+  mdRenderInstallCard(); mdRefreshMineTheme();
   function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go); }); }
+  // 2026-09-12：「我的」独立页关闭/返回收藏历史时，回到之前的内容 tab（默认首页）。
+  var mdLastContentTab='home';
   // 2026-09-11 优化③：非首页隐藏分类栏时，品牌行显示当前 tab 名给位置感
   var MD_BRAND_NAMES={'home':'⛏️ 矿业新闻日报','price':'价格','rights':'矿权','qa':'AI 搜','mine':'我的'};
   function mdSetBrandForTab(go){ var brand=document.querySelector('#mdTop .md-brand'); if(brand) brand.textContent=MD_BRAND_NAMES[go]||MD_BRAND_NAMES.home; }
   // 统一 tab 切换逻辑（点击 / 初始化恢复共用）；autoOpen 控制问/我的浮层是否在「恢复」时自动展开
   function activateTab(go, autoOpen){
     document.body.classList.toggle('md-hide-catbar', go!=='home');
+    if(go!=='mine') mdLastContentTab=go;
     mdSetBrandForTab(go);
     sheet.hidden=true;
+    document.body.classList.remove('md-mine-open');
     if(go!=='qa' && typeof qaFloatClose==='function'){ try{ qaFloatClose(); }catch(e){} }
     if(go==='home'){ mdSelectCat('tuijian'); }
     else if(go==='price'){ mdSelectCat('price'); }
@@ -2730,7 +2735,7 @@ function mdMobileTabBar(){
       setActive(_qp && _qp.classList.contains('open') ? 'qa' : null);
       return;
     } else if(go==='mine'){
-      if(autoOpen){ sheet.hidden=false; setActive('mine'); }
+      if(autoOpen){ sheet.hidden=false; document.body.classList.add('md-mine-open'); mdRefreshMineTheme(); setActive('mine'); }
       else { setActive(null); }
       return;
     }
@@ -2746,17 +2751,23 @@ function mdMobileTabBar(){
   });
   sheet.addEventListener('click',function(e){
     var b=e.target.closest('button[data-act]'); if(!b) return;
-    sheet.hidden=true;
     var act=b.getAttribute('data-act');
-    if(act==='fav'){ if(typeof toggleFavFilter==='function') toggleFavFilter(); }
-    else if(act==='history'){ if(typeof toggleHistoryFilter==='function') toggleHistoryFilter(); }
-    else if(act==='theme'){ if(typeof toggleTheme==='function') toggleTheme(); }
-    else if(act==='top'){ window.scrollTo(0,0); }
+    if(act==='fav'){
+      activateTab('home', false);
+      if(typeof toggleFavFilter==='function') toggleFavFilter();
+    } else if(act==='history'){
+      activateTab('home', false);
+      if(typeof toggleHistoryFilter==='function') toggleHistoryFilter();
+    } else if(act==='theme'){
+      if(typeof toggleTheme==='function') toggleTheme(); mdRefreshMineTheme();
+    } else if(act==='close'){
+      activateTab(mdLastContentTab, false);
+    }
   });
   document.addEventListener('click',function(e){
     if(sheet.hidden) return;
     if(e.target.closest('#mineSheet')||(e.target.closest('.mtab')&&e.target.closest('.mtab').getAttribute('data-go')==='mine')) return;
-    sheet.hidden=true; setActive(null);
+    activateTab(mdLastContentTab, false);
   });
   // 2026-09-11 优化①：初始化恢复上次停留的内容 tab（问/我的为浮层不持久化，回退首页）
   var mdSavedTab='home';
@@ -2764,6 +2775,10 @@ function mdMobileTabBar(){
   activateTab(mdSavedTab, false);
 }
 // ⑧ 我的面板：内联安装分步卡（按 iOS/Android 自动识别；已安装置灰）
+function mdRefreshMineTheme(){
+  var el=document.getElementById('mineThemeState'); if(!el) return;
+  el.textContent=document.body.classList.contains('dark')?'当前：深色':'当前：浅色';
+}
 function mdRenderInstallCard(){
   var el=document.getElementById('mineInstallCard'); if(!el) return;
   if(IS_STANDALONE){
