@@ -18,6 +18,8 @@
  *   ⑤ 预置失败记忆 → 卡片出现 ⚠️ 排障提示
  *   ⑥ 已安装（display-mode:standalone）→ 显示已安装、无安装入口
  *   ⑦ iOS → 显示 Safari 分享指引
+ *   ⑧ 微信内置浏览器 → 提示「⋯ → 在浏览器打开」，且不给安装按钮（点了必然无效）
+ *   ⑤ 内还断言：失败文案不再错误归因「安装未知应用」权限（2026-09-12 实测更正）
  *
  * 运行：node test_pwa_install_behavior.js
  */
@@ -105,7 +107,9 @@ const cardText = doc => { const c = cardEl(doc); return c ? (c.textContent || ''
   const btn = p1.doc.querySelector('#mineInstallCard [data-pwa="install"]');
   check('旧实现必失败的那条：卡片出现「立即安装」按钮', !!btn,
     btn ? '按钮文案=' + btn.textContent : '仍无按钮 → 说明事件到达后没有重渲染卡片');
-  check('按钮文案为「立即安装」', !!btn && btn.textContent === '立即安装');
+  check('按钮文案为「安装为独立应用」', !!btn && btn.textContent === '安装为独立应用');
+  check('卡片给出「添加到主屏幕」这条不依赖 Google 服务的通用路径',
+    cardText(p1.doc).indexOf('添加到主屏幕') >= 0);
 
   // ==================== ③ 排障展开 ====================
   console.log('\n===== ③「装不上？点这里」展开排障 + 体检 =====');
@@ -113,12 +117,15 @@ const cardText = doc => { const c = cardEl(doc); return c ? (c.textContent || ''
   check('有排障入口按钮', !!help, help ? '文案=' + help.textContent : '');
   if (help) help.click();
   const t3 = cardText(p1.doc);
-  check('展开后点名「安装未知应用」权限', t3.indexOf('安装未知应用') >= 0);
   check('展开后点名「Google 服务」这一真实卡点', t3.indexOf('Google 服务') >= 0,
-    '安卓 Chrome 装 PWA 需连 Google 生成应用包，国内网络下这是主因');
-  check('展开后给出「创建快捷方式」这条退路', t3.indexOf('创建快捷方式') >= 0);
+    '安卓 Chrome 装 PWA 需连 Google 服务生成应用包，国内手机够不到 —— 这是根因');
+  check('展开后给出「添加到主屏幕」这条通用退路', t3.indexOf('添加到主屏幕') >= 0);
   check('展开后给出电脑端/iPhone 两条可行路径',
     t3.indexOf('电脑') >= 0 && t3.indexOf('Safari') >= 0);
+  // 用户 2026-09-12 实测：MIUI/HyperOS 上 Chrome 的「添加到主屏幕」需要系统「桌面快捷方式」权限
+  check('展开后给出小米「桌面快捷方式」权限这条实测可行路径',
+    t3.indexOf('桌面快捷方式') >= 0 && t3.indexOf('权限管理') >= 0,
+    '这条是用户实测走通的路，必须留在文案里');
   check('体检数据含当前运行模式', t3.indexOf('模式：') >= 0);
   check('体检数据反映「安装提示已就绪」', t3.indexOf('安装提示：已就绪') >= 0,
     '实际：' + (t3.match(/安装提示：[^ ]*/) || ['(无)'])[0]);
@@ -141,9 +148,12 @@ const cardText = doc => { const c = cardEl(doc); return c ? (c.textContent || ''
   doms.push(p2.dom);
   await sleep(300);
   const t5 = cardText(p2.doc);
-  check('卡片出现 ⚠️ 失败排障提示', t5.indexOf('⚠️') >= 0 && t5.indexOf('没装上') >= 0,
+  check('卡片出现 ⚠️ 失败排障提示', t5.indexOf('⚠️') >= 0 && t5.indexOf('没出现图标') >= 0,
     '实际片段：' + t5.slice(0, 40));
-  check('提示里仍点名两条原因', t5.indexOf('安装未知应用') >= 0 && t5.indexOf('Google 服务') >= 0);
+  check('提示里点名真实原因并指向通用退路',
+    t5.indexOf('Google 服务') >= 0 && t5.indexOf('添加到桌面') >= 0,
+    '实际片段：' + t5.slice(0, 60));
+  check('失败提示不再归因「安装未知应用」权限', t5.indexOf('安装未知应用') < 0);
 
   // ==================== ⑥ 已安装 ====================
   console.log('\n===== ⑥ 已在独立窗口运行（已安装）=====');
@@ -164,6 +174,25 @@ const cardText = doc => { const c = cardEl(doc); return c ? (c.textContent || ''
     '实际片段：' + t7.slice(0, 40));
   check('iOS 不显示安卓式的「立即安装」按钮（beforeinstallprompt 在 iOS 不存在）',
     !p4.doc.querySelector('#mineInstallCard [data-pwa="install"]'));
+
+  // ==================== ⑧ 微信内置浏览器 ====================
+  console.log('\n===== ⑧ 微信内置浏览器（国内用户最常见的入口）=====');
+  const WECHAT_UA = 'Mozilla/5.0 (Linux; Android 13; 2211133C Build/TKQ1.220829.002; wv) ' +
+    'AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.0.0 Mobile Safari/537.36 ' +
+    'MicroMessenger/8.0.40.2420(0x28002837) WeChat/arm64 Weixin NetType/WIFI';
+  const p5 = boot({ ua: WECHAT_UA }); doms.push(p5.dom);
+  await sleep(300);
+  // 即使浏览器就绪（事件到达），微信里也不该给「安装」按钮
+  const ev5 = new p5.win.Event('beforeinstallprompt');
+  ev5.prompt = function () { ev5.__prompted = true; };
+  ev5.userChoice = Promise.resolve({ outcome: 'accepted' });
+  p5.win.dispatchEvent(ev5);
+  const t8 = cardText(p5.doc);
+  check('识别为微信并提示「⋯ → 在浏览器打开」',
+    t8.indexOf('微信') >= 0 && t8.indexOf('在浏览器打开') >= 0,
+    '实际片段：' + t8.slice(0, 60));
+  check('微信内不给「安装为独立应用」按钮（微信 WebView 点了必然无效）',
+    !p5.doc.querySelector('#mineInstallCard [data-pwa="install"]'));
 
   console.log('\n===== 结果：' + pass + ' PASS / ' + fail + ' FAIL =====');
   for (const d of doms) { try { d.window.close(); } catch (e) {} }

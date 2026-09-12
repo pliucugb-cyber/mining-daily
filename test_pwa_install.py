@@ -8,9 +8,15 @@
 
 排查结论（用真 Chrome 的 DevTools 协议直接问，见 REFERENCE.md §41）：
     Page.getInstallabilityErrors → 0 条错误
-即**网站侧完全合规**，Chrome 本体认为它「可安装」。失败发生在安装的**执行环节**
-（安卓上 Chrome 装 PWA = 装一个真实的 Android 应用 / WebAPK：要过系统「安装未知应用」
-权限，还要连 Google 服务生成应用包 —— 国内网络/国产 ROM 常在这两处卡住）。
+即**网站侧完全合规**，Chrome 本体认为它「可安装」。失败发生在安装的**执行环节**。
+
+2026-09-12 深夜用户**实测确诊**：那台国行小米**接上科学上网后「安装」立刻成功**
+⇒ 唯一卡点就是「手机能不能连 Google 服务」（安卓 Chrome 装 PWA = 让 Google Play 服务
+现场生成一个真正的应用包 / WebAPK，**不走系统安装器** —— 所以「安装未知应用」权限
+在这条路上根本不是卡点，那是第一轮的错误归因，已更正）。
+⇒ 结论性设计：对国内用户（绝大多数手机够不到 Google 服务）「安装」基本不可用，
+  卡片必须**默认主推各浏览器通用的「添加到主屏幕」**，并把微信内置浏览器这个最常见
+  入口单独点破（微信自己没有「添加到桌面」入口，须先「⋯ → 在浏览器打开」）。
 
 但排查中确实发现两个**站内**该修的问题，本测试即为它们上锁：
   ① manifest 未声明 `id`、未把已存在的 maskable 图标挂进清单 → 图标被塞进白圆缩小、
@@ -23,7 +29,9 @@
   ② 每个图标的声明尺寸 == **真实 PNG 尺寸**（声明 512 实际 192 这类错误会直接让 Chrome 拒装）；
   ③ index.html head 的清单引用 + iOS/移动端独立运行声明；
   ④ app.js 安装链路的三个重渲染时机（防回退守卫，本轮修的正是这个）；
-  ⑤ key 漂移守卫（localStorage 键字面量各只准出现一次）。
+  ⑤ key 漂移守卫（localStorage 键字面量各只准出现一次）；
+  ⑥ 通用引导（按浏览器给具体菜单项 + 微信「在浏览器打开」+ 小米桌面快捷方式权限
+     + 不再错误归因「安装未知应用」）。
 
 运行：python test_pwa_install.py
 """
@@ -205,9 +213,43 @@ check('安装按钮用 data-pwa（未复活已删除的 data-act="install"）',
       'data-pwa="install"' in app_js and 'data-act="install"' not in app_js)
 check('卡片含三类排障元素类名（warn / help / diag）',
       all(k in app_js for k in ('mine-install-warn', 'mine-install-help', 'mine-install-diag')))
-check('排障文案点名两条真实原因（安装未知应用权限 / Google 服务）',
-      '安装未知应用' in app_js and 'Google 服务' in app_js,
-      '这是安卓 Chrome 装 PWA 失败的两大主因，必须写清而不是泛泛「请重试」')
+check('排障文案点名真实卡点（Google 服务）',
+      'Google 服务' in app_js,
+      '安卓 Chrome 的「安装」要靠 Google 服务生成 WebAPK，国内手机够不到 —— 必须写清')
+# 「安装未知应用」是第一轮的**错误归因**（2026-09-12 深夜实测确诊：接上科学上网后「安装」
+#   立刻成功 ⇒ 卡点是 Google 服务，不是系统权限）。app.js 里留着解释这次误判的**注释**，
+#   那不是文案；所以这里只扫**卡片渲染函数体内的字符串**，扫全文件必然误判。
+def _card_user_text(src):
+    parts = []
+    for fn in ('mdPwaShortcutStep', 'mdPwaHelpHTML', 'mdRenderInstallCard'):
+        m = re.search(r'function %s\(\)\{.*?\n\}' % fn, src, re.S)
+        if m:
+            parts.append(m.group(0))
+    blob = '\n'.join(parts)
+    blob = re.sub(r'//[^\n]*', '', blob)                 # 去行注释
+    blob = re.sub(r'/\*.*?\*/', '', blob, flags=re.S)     # 去块注释
+    return blob
+
+_card_text = _card_user_text(app_js)
+assert _card_text, '未能从 app.js 提取到卡片文案区，锚点失效'
+check('卡片**文案**不再把「安装未知应用」权限当卡点（2026-09-12 实测更正）',
+      '安装未知应用' not in _card_text,
+      '该权限是上一轮的错误归因；WebAPK 由 Google 服务生成应用包、不经过系统安装器')
+check('实跑：把错误归因写回卡片文案 → 闸门必须判假',
+      '安装未知应用' in _card_user_text(app_js.replace(
+          'return \'<div class="mine-install-helpbody">\'',
+          'return \'<div class="mine-install-helpbody">安装未知应用权限\'')),
+      '否则这条守卫只是「恰好没写」，而不是真的会拦')
+check('卡片文案给出小米「桌面快捷方式」权限这条实测可行路径（2026-09-12 用户实测）',
+      '桌面快捷方式' in _card_text and '权限管理' in _card_text,
+      'MIUI/HyperOS 上 Chrome 的「添加到主屏幕」需要该权限；用户实测：允许后立刻成功')
+check('卡片默认主推通用路径（按当前浏览器给具体菜单项）',
+      'function mdPwaShortcutStep(){' in app_js and 'function mdPwaIsWeChat(){' in app_js,
+      '用户手机/浏览器五花八门，泛泛说「添加到主屏幕」等于没说')
+check('覆盖微信内置浏览器这一最常见入口（给出「在浏览器打开」）',
+      '在浏览器打开' in app_js and 'MicroMessenger' in app_js)
+check('微信内不显示「安装为独立应用」按钮（点了必然无效，不误导）',
+      'window.__deferredPrompt && !mdPwaIsWeChat()' in app_js)
 check('已安装态仍保留（standalone 下不显示安装引导）',
       'IS_STANDALONE' in app_js and '已安装到主屏幕' in app_js)
 
