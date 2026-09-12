@@ -82,6 +82,9 @@ setTimeout(() => {
   console.log('\n===== Phase D 语音输入 =====');
   check('qaGetRec 已定义', typeof window.qaGetRec === 'function');
   check('qaToggleMic 已定义', typeof window.qaToggleMic === 'function');
+  const _voiceInp = window.document.getElementById('qaFloatInput');
+  check('qaFloatInput 为 textarea（支持多行语音结果与高度调节）', !!_voiceInp && _voiceInp.tagName === 'TEXTAREA');
+  check('qaFloatInput 支持垂直 resize', !!_voiceInp && window.getComputedStyle(_voiceInp).resize === 'vertical');
 
   console.log('\n===== 渲染工具 =====');
   let md = '';

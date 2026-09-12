@@ -1292,3 +1292,24 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - 清空**不得**点击即生效，必须二次确认（首点确认态、再点执行），或等价的强提示。
 - `.confirming` 强提示样式不得删除（误清空防护可见）。
 - 8 秒撤销（`mdUndoToast`）保留。
+
+
+### 29 语音识别体验修复：网页版权限、一键关闭、可拖拽文字框（2026-09-12 晚，build `20260912-1903`）
+### 29.1 背景
+用户反馈：① 桌面快捷方式（PWA）语音识别正常，电脑网页版却识别不出文字；② 语音识别按钮点开后要点击两下才能关掉；③ 语音输入文字框无法上下调节，文字多时看不清。
+### 29.2 方案
+- **网页版权限**：`qaToggleMic` 启动识别前，先调用 `navigator.mediaDevices.getUserMedia({audio:true})` 请求麦克风权限，成功后再创建 `SpeechRecognition`。这样浏览器标签页会明确弹出权限询问，不再静默失败；PWA 也会走同一流程。
+- **一键关闭**：移除错误的 `QA_REC.active` 判断（Web Speech API 没有 `active` 属性），改为用按钮 `.on` class 判断：已在识别时点击即 `qaStopMic()`，UI 立即恢复麦克风图标。
+- **可拖拽文字框**：`#qaFloatInput` 由 `<input type="text">` 改为 `<textarea rows="1">`；CSS 增加 `resize:vertical`、`min/max-height`、`field-sizing:content`，允许用户上下拖拽扩展输入区。
+### 29.3 代码落点
+- index.html：`#qaFloatInput` 改为 textarea；`.qa-float-input` 样式增加 resize/height/padding/line-height；`#qaFloatMic` title 改为「语音输入（点击开始，再点结束）`；build-version → `20260912-1903`。
+- app.js：Phase D 语音区重写 `qaToggleMic`，新增 `qaStartMic`/`qaStopMic`/`qaMicFail` 辅助函数；启动前走 `getUserMedia` 权限请求。
+- sw.js：`CACHE_NAME` → `mining-daily-20260912-1903`。
+### 29.4 测试与验证
+- `test_mobile_ux_batch.js`：更新 `.qa-float-input` CSS 断言；新增「输入框改为 textarea」与「支持垂直 resize」两条断言。总断言 178 → **180**（0 失败）。
+- `test_qa_features.js` Phase D 新增「qaFloatInput 为 textarea」与「支持垂直 resize」两条断言。58/0。
+- 回归：`test_mobile_opt_20260910.js` 37/0、`test_smoke_0908.js` 74/0、`test_qa_navtab_20260910.js` 18/0、`preflight_check.py` 全绿、`node --check app.js` 干净。
+### 29.5 红线（不得回退）
+- 语音识别**不得**点击即静默失败；必须显式请求 `getUserMedia` 权限或在不支持时安全降级。
+- 麦克风按钮状态必须以 UI class（`.on`）为准，不得依赖不存在的 `QA_REC.active`。
+- `#qaFloatInput` 必须是 `<textarea>` 且支持 `resize:vertical`。
