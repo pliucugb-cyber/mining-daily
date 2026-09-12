@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-0607" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-0852" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -700,7 +700,13 @@ body.dark .mobile-install-close:hover{background:var(--surface-3)}
      无需回收 margin。 */
   #mdTop{position:sticky;top:env(safe-area-inset-top,0px);z-index:230;background:var(--surface);border-bottom:1px solid var(--line-2);box-shadow:0 1px 3px rgba(15,23,42,.06);padding:calc(env(safe-area-inset-top,0px) + 4px) var(--s3) 6px;display:block;transition:transform .22s ease}
   body.md-top-hidden #mdTop{transform:translateY(-100%);pointer-events:none}
-  .md-top-brand{display:flex;align-items:baseline;gap:8px;white-space:nowrap;overflow:hidden}
+  /* 2026-09-12 顶栏精简（用户要求）：移除收藏/历史两个 44px 常驻圆钮后重排品牌行。
+     原来两钮带 margin-left:auto 把右侧占满，且 align-items:baseline 让文字贴在 44px 行底；
+     移除后 ① 首页改为「品牌左 / 日期右」两端对齐；② 非首页（分类栏+日期都隐藏）只剩 tab 名，
+     改为居中；③ align-items 改 center + min-height 36px，让标题在带内垂直居中不塌成单行文字。 */
+  .md-top-brand{display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;min-height:36px}
+  body:not(.md-hide-catbar) .md-top-brand{justify-content:space-between}
+  body.md-hide-catbar .md-top-brand{justify-content:center}
   .md-brand{font-size:var(--fs-h3);font-weight:600;color:var(--ink-900);letter-spacing:.3px}
   .md-date{font-size:12px;color:var(--ink-500);overflow:hidden;text-overflow:ellipsis}
   /* 2026-09-12 移动端排版：分类栏由「左对齐窄条」改为「四等分铺满」。
@@ -1337,9 +1343,9 @@ body.dark .filter-state{background:#123040;border-color:#1d3d4d;color:var(--ink-
 .pc-value, .pc-chg, .pc-unit, .stat-num, .toc-count, .toc-count-fresh, .sub-count, .day-group, .news-meta{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 /* 只在移动端放大，桌面鼠标操作维持原尺寸，避免视觉回归 */
 @media(max-width:1100px){
-  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.toc-main-item,.toc-back-top,#briefToggle,.mobile-install-close,.md-search-btn,.md-fav-btn,.nf-clear{min-height:44px}
+  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.toc-main-item,.toc-back-top,#briefToggle,.mobile-install-close,.md-search-btn,.nf-clear{min-height:44px}
   /* 2026-09-11 视觉规范评审修复 G2A–G2D：图标按钮补 min-width:44px（G2E .nf-clear 仅补高——加宽会盖住输入文字，按报告改用热区策略） */
-  .theme-toggle,.pwa-header-btn,#briefToggle,.mobile-install-close,.md-search-btn,.md-fav-btn{min-width:44px}
+  .theme-toggle,.pwa-header-btn,#briefToggle,.mobile-install-close,.md-search-btn{min-width:44px}
 }
 @media(min-width:1440px){
   .news-grid{grid-template-columns:minmax(0,1fr) 320px}
@@ -1457,13 +1463,10 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   /* 顶部搜索按钮 */
   .md-search-btn{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:none;background:var(--surface-2);color:var(--ink-700);border-radius:50%;cursor:pointer}
   .md-search-btn:active{background:var(--surface-3)}
-  /* P1：顶栏收藏/历史常驻图标 + 未读红点 */
-  .md-fav-btn{position:relative;margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:none;background:var(--surface-2);color:var(--ink-700);border-radius:50%;cursor:pointer}
-  .md-fav-btn:active{background:var(--surface-3)}
-  .md-fav-btn svg{width:20px;height:20px;display:block}
+  /* 2026-09-12 顶栏精简：.md-fav-btn（收藏/历史圆钮）与 .md-badge（未读红点）随两个按钮一并移除，
+     原 P1 规则已成死代码，此处删除；触控热区清单里也同步去掉 .md-fav-btn。
+     两个入口改由底部「我的」面板承载（app.js mdMobileTabBar 的 data-act="fav"/"history"）。 */
   .md-search-btn{margin-left:6px}
-  .md-badge{position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:var(--up);box-shadow:0 0 0 2px var(--surface);display:none}
-  .md-badge.show{display:block}
   /* AI 悬浮球：移动端圆形化、上移避让底部导航 */
   .qa-fab .qa-fab-txt{display:none}
   .qa-fab{width:52px;height:52px;padding:0;justify-content:center;border-radius:50%}

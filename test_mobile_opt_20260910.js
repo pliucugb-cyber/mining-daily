@@ -1,9 +1,9 @@
 // 回归测试：2026-09-10 P1/P2 移动端优化落地项
 //   ① .mctab 对比度 token（源码级）
 //   ② 8 个金属 chip 加 nf-chip-metal 类（DOM 保留，桌面不变；仅移动端 CSS 隐藏）
-//   ③ 顶栏收藏/历史常驻图标 + 红点：#mdFavBtn/#mdHistBtn/#mdFavBadge/#mdHistBadge 构建成功
-//   ④ 点击收藏/历史按钮 → 切换 body[data-filter-mode]
-//   ⑤ mdUpdateFavBadges 不抛错、红点按集合非空显示
+//   ③ 顶栏精简（2026-09-12）：收藏/历史常驻圆钮已移除，红点随之退役，死 CSS 已清理
+//   ④ 入口下移：从「我的」面板点击收藏/历史 → 切换 body[data-filter-mode]
+//   ⑤ 顶栏/页面已无 .md-badge 红点元素
 //   ⑥ 各移动 CSS 规则字符串存在（news-summary clamp / tag-chip 圆角 / badge-new 去 pulse / dot 令牌 / 热榜会展卡隐藏 / z-index 合并）
 //   ⑦ 桌面不破坏：金属 chip 仍在 DOM（8 个）、#newsFilterBar 存在、0 致命 JS 错误
 // 与 test_*.js 同构：jsdom 跑 index.html，结尾 PASS/FAIL + 真实退出码。
@@ -60,36 +60,50 @@ setTimeout(() => {
     ['全部','矿权','政策','勘查','技术','风险'].every(k => !!d.querySelector('#nfChips .nf-chip[data-kw="' + (k==='全部'?'':k) + '"]')));
   ok('移动端 CSS 隐藏 .nf-chip-metal', /\.nf-chip-metal\{display:none\}/.test(html));
 
-  console.log('\n===== ③ 顶栏收藏/历史常驻图标 + 红点 =====');
-  ok('#mdFavBtn 存在', !!d.getElementById('mdFavBtn'));
-  ok('#mdHistBtn 存在', !!d.getElementById('mdHistBtn'));
-  ok('#mdFavBadge 红点存在', !!d.getElementById('mdFavBadge'));
-  ok('#mdHistBadge 红点存在', !!d.getElementById('mdHistBadge'));
-  ok('收藏按钮含星标 SVG', !!d.querySelector('#mdFavBtn svg'));
-  ok('历史按钮含时钟 SVG', !!d.querySelector('#mdHistBtn svg'));
-  ok('mdUpdateFavBadges 已定义且不抛错', typeof w.mdUpdateFavBadges === 'function');
+  console.log('\n===== ③ 顶栏精简：收藏/历史常驻圆钮已移除（2026-09-12 用户要求）=====');
+  ok('#mdFavBtn 已从顶栏移除', !d.getElementById('mdFavBtn'));
+  ok('#mdHistBtn 已从顶栏移除', !d.getElementById('mdHistBtn'));
+  ok('#mdFavBadge 红点元素已移除', !d.getElementById('mdFavBadge'));
+  ok('#mdHistBadge 红点元素已移除', !d.getElementById('mdHistBadge'));
+  ok('品牌行仍保留 品牌名 + 日期', !!d.querySelector('#mdTop .md-brand') && !!d.querySelector('#mdTop .md-date'));
+  // 注意：断言必须锚定「规则体 [`/{`]」而不是裸类名 —— 源码注释里为说明本次删除会写到
+  // `.md-fav-btn` / `.md-badge` 字样，裸 `/\.md-fav-btn/` 会被注释打红（上一轮已踩过一次）。
+  ok('死 CSS 已清理：无 .md-fav-btn 规则', !/\.md-fav-btn\s*[,{]/.test(html));
+  ok('死 CSS 已清理：无 .md-badge 规则', !/\.md-badge\s*[,{]/.test(html));
+  ok('mdUpdateFavBadges 保留为空实现且不抛错',
+    typeof w.mdUpdateFavBadges === 'function' && w.mdUpdateFavBadges() === undefined);
 
-  console.log('\n===== ④ 点击收藏/历史切换 filter-mode =====');
-  const fb = d.getElementById('mdFavBtn');
-  if (fb) {
-    fb.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
-    ok('点收藏 → body[data-filter-mode]="fav"', d.body.getAttribute('data-filter-mode') === 'fav',
-      '当前=' + d.body.getAttribute('data-filter-mode'));
-  } else ok('点收藏切换', false, '按钮缺失');
-  // 再点一次退出 fav
-  if (fb) { fb.dispatchEvent(new w.MouseEvent('click', { bubbles: true })); }
-  const hb = d.getElementById('mdHistBtn');
-  if (hb) {
-    hb.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
-    ok('点历史 → body[data-filter-mode]="history"', d.body.getAttribute('data-filter-mode') === 'history',
-      '当前=' + d.body.getAttribute('data-filter-mode'));
-    hb.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
-  } else ok('点历史切换', false, '按钮缺失');
+  console.log('\n===== ③b 品牌行重排：首页两端对齐 / 非首页居中 =====');
+  ok('首页品牌行两端对齐（品牌左 / 日期右）',
+    /body:not\(\.md-hide-catbar\) \.md-top-brand\{justify-content:space-between\}/.test(html));
+  ok('非首页品牌行居中（分类栏隐藏后只剩 tab 名）',
+    /body\.md-hide-catbar \.md-top-brand\{justify-content:center\}/.test(html));
+  ok('品牌行高度改造：align-items:center + min-height:36px',
+    /\.md-top-brand\{display:flex;align-items:center;[^}]*min-height:36px\}/.test(html));
 
-  console.log('\n===== ⑤ 红点按集合非空显示 =====');
-  // 无收藏/历史时默认不显示
-  ok('空集合时收藏红点不显示', !d.getElementById('mdFavBadge').classList.contains('show'));
-  ok('空集合时历史红点不显示', !d.getElementById('mdHistBadge').classList.contains('show'));
+  console.log('\n===== ④ 入口下移：从「我的」面板切换 filter-mode =====');
+  const sheet = d.getElementById('mineSheet');
+  ok('#mineSheet 存在（入口承接面板）', !!sheet);
+  const favEntry = sheet && sheet.querySelector('button[data-act="fav"]');
+  const histEntry = sheet && sheet.querySelector('button[data-act="history"]');
+  ok('「我的」面板含收藏入口 button[data-act="fav"]', !!favEntry);
+  ok('「我的」面板含浏览记录入口 button[data-act="history"]', !!histEntry);
+  if (favEntry) {
+    favEntry.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+    ok('点「★ 我的收藏」→ body[data-filter-mode]="fav"', d.body.getAttribute('data-filter-mode') === 'fav',
+      '当前=' + d.body.getAttribute('data-filter-mode'));
+    favEntry.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  } else ok('点收藏切换', false, '入口缺失');
+  if (histEntry) {
+    histEntry.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+    ok('点「🕘 浏览记录」→ body[data-filter-mode]="history"', d.body.getAttribute('data-filter-mode') === 'history',
+      '当前=' + d.body.getAttribute('data-filter-mode'));
+    histEntry.dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  } else ok('点历史切换', false, '入口缺失');
+
+  console.log('\n===== ⑤ 未读红点随按钮退役 =====');
+  ok('顶栏内已无 .md-badge 元素', d.querySelectorAll('#mdTop .md-badge').length === 0);
+  ok('整页已无 .md-badge 元素', d.querySelectorAll('.md-badge').length === 0);
 
   console.log('\n===== ⑥ 移动 CSS 规则齐备 =====');
   ok('news-summary 移动端 3 行截断', /news-summary\{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden\}/.test(html));
