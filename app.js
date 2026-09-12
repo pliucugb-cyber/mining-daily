@@ -772,7 +772,31 @@ function updateHistoryCount(){
   const t=document.getElementById('tocHistoryCount');
   if(t)t.textContent=n;
   // 2026-09-09：左侧目录「浏览记录」不再显示数字，也始终可见（0 条不隐藏）
+  var _mc=document.querySelector('.mine-clear'); if(_mc)_mc.disabled=(n===0);
+  var _tc=document.querySelector('.toc-clear'); if(_tc)_tc.disabled=(n===0);
 }
+
+// 2026-09-12：清空浏览记录（「我的」面板与桌面左侧目录共用 data-act=clear-history，capture 委托统一拦截）
+function clearHistory(){
+  var prev=getHistory();
+  if(!prev.length){ return; }
+  try{ localStorage.removeItem(HISTORY_KEY); }catch(e){}
+  updateHistoryCount();
+  if(document.body.getAttribute('data-filter-mode')==='history'){ renderFavHistoryAggregate('history'); }
+  if(typeof mdUndoToast==='function'){
+    mdUndoToast('已清空浏览记录', function(){
+      try{ saveHistory(prev); }catch(e){}
+      updateHistoryCount();
+      if(document.body.getAttribute('data-filter-mode')==='history'){ renderFavHistoryAggregate('history'); }
+    });
+  }
+}
+// 清空：capture 阶段拦截，阻止冒泡触发「浏览记录」导航或目录 toggle
+// （点 .mine-clear / .toc-clear 不应同时打开浏览记录聚合视图）
+document.addEventListener('click',function(e){
+  var cl=e.target.closest?e.target.closest('[data-act="clear-history"]'):null;
+  if(cl){ e.preventDefault(); e.stopPropagation(); clearHistory(); }
+}, true);
 
 // ===== 新一轮找矿突破战略行动专项：按关键词自动识别并归类 =====
 // 命中关键词的新闻从"今日新增/往期内容"移动到专项区对应子类（不重复展示）
@@ -2706,12 +2730,13 @@ function mdMobileTabBar(){
   sheet.innerHTML='<div class="mine-header"><span class="mine-title">我的</span><button class="mine-close" data-act="close" aria-label="关闭">✕</button></div>'+
     '<div class="mine-list">'+
     '<button class="mine-item" data-act="fav"><span class="mine-icon">★</span><span class="mine-label">我的收藏</span><span class="mine-chevron">›</span></button>'+
-    '<button class="mine-item" data-act="history"><span class="mine-icon">🕘</span><span class="mine-label">浏览记录</span><span class="mine-chevron">›</span></button>'+
+    '<div class="mine-history-row"><button class="mine-item" data-act="history"><span class="mine-icon">🕘</span><span class="mine-label">浏览记录</span><span class="mine-chevron">›</span></button>'+
+    '<button class="mine-clear" data-act="clear-history" type="button" aria-label="清空浏览记录">清空</button></div>'+
     '<button class="mine-item" data-act="theme"><span class="mine-icon">🌓</span><span class="mine-label">深色 / 浅色</span><span class="mine-state" id="mineThemeState">当前：浅色</span></button>'+
     '<div class="mine-install" id="mineInstallCard"></div>'+
     '</div>';
   document.body.appendChild(bar); document.body.appendChild(sheet);
-  mdRenderInstallCard(); mdRefreshMineTheme();
+  mdRenderInstallCard(); mdRefreshMineTheme(); updateHistoryCount();
   function setActive(go){ [].forEach.call(bar.querySelectorAll('.mtab'),function(b){ b.classList.toggle('active', go!==null && b.getAttribute('data-go')===go); }); }
   // 2026-09-12：「我的」独立页关闭/返回收藏历史时，回到之前的内容 tab（默认首页）。
   var mdLastContentTab='home';
