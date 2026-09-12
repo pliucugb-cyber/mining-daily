@@ -7,9 +7,16 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-2240" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-2251" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
+<!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
+     安卓/移动端 Chrome 另认 mobile-web-app-capable。缺了它们，装到桌面后仍会带浏览器外壳，
+     用户观感就是「装了没用」——这正是用户 2026-09-12 反馈的现象之一。 -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="矿业日报">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" data-page-node-id="Aw6zHfStEqwSrZryyGmD2U">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" data-page-node-id="I5l31RlrZQG6eiJxpGd4EF">
@@ -1740,6 +1747,11 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   #mineInstallCard .mine-install-title{font-weight:600;color:var(--ink-900);font-size:var(--fs-body);margin-bottom:4px}
   #mineInstallCard .mine-install-note{font-size:var(--fs-meta);color:var(--ink-500);line-height:1.5}
   #mineInstallCard .mine-install-btn{margin-top:var(--s2);border:none;background:var(--brand);color:#fff;border-radius:var(--r-md);padding:var(--s2) var(--s4);font-size:var(--fs-meta);font-weight:600;cursor:pointer}
+  /* 2026-09-12：安装失败排障（装不上时给出可执行的两步，而不是让用户反复试） */
+  #mineInstallCard .mine-install-warn{margin-top:var(--s2);font-size:var(--fs-meta);color:var(--warning);line-height:1.5}
+  #mineInstallCard .mine-install-help{margin-top:var(--s2);border:none;background:none;padding:0;color:var(--brand);font-size:var(--fs-meta);cursor:pointer;text-decoration:underline}
+  #mineInstallCard .mine-install-helpbody{margin-top:var(--s2);font-size:var(--fs-meta);color:var(--ink-500);line-height:1.6}
+  #mineInstallCard .mine-install-diag{margin-top:var(--s2);padding:var(--s2);border-radius:var(--r-sm);background:var(--surface-3);font-family:var(--font-num);font-size:var(--fs-nano);color:var(--ink-500);line-height:1.7}
   body.dark #mineInstallCard{background:var(--surface-3);border-color:var(--line-1)}
 }
 /* 桌面：隐藏「筛选 ▾」（移动端专属控件）。
@@ -2487,7 +2499,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=40a91489" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=73f914c9" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=172f434d" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
