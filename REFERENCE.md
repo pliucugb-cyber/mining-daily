@@ -204,7 +204,7 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 
 1. **横幅宽限**：`__mdBootGrace`(10s) 门控 `mdDegraded()` 的「app.js 未执行」判定；`__mdRegionGrace`(10s) 门控 `mdStuckRegions()` 整体。今后新增任何"异步/网络依赖"的健康态，必须同步给宽限。
 2. **阅读模式已废**（见 §6）：见 `body.reading-mode` / `#readingToggle` / `#readingExitBar` 即为回退，`test_ux_20260910.js` ② 段会立刻失败。
-3. **简报 `briefSub` 显示「必看 N 条」**（N=当日 `highlights` 条数；无 `highlights` 时回退「按分类摘要」）——2026-09-12 两层改版后如此（见 §14）。**仍禁止**拼侧栏口径的 `今日收录 N 条`（口径不同，见 §8.3）。
+3. **简报 `briefSub` 固定显示「按分类摘要」**（不出条数）——2026-09-12 二次修订后如此（见 §15；当天早些时候曾短暂改为「必看 N 条」，**已否决，勿恢复**）。**仍禁止**拼侧栏口径的 `今日收录 N 条`（口径不同，见 §8.3）。简报内**各节条数**由前端从 `brief_sections` 渲染（节标题徽标），属简报自身口径，可以出。
 4. 头部日期以 `.date-badge` 为唯一来源：简报不再另写「数据日期」（`briefDate` 已删），今日要闻的 `digestDate` 也已于 2026-09-12 删除（§10.3）；非当日条目用 `.digest-dtag` 单独标注。见 `body.reading-mode`/`#readingToggle`/`#briefDate`/`#digestDate` 即为回退。
 
 ### 9.2 数据 / 生成
@@ -212,9 +212,9 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 5. **简报单条＝完整摘要，不截断**：`fmt_bullet` 默认 `max_len=0`；仅显式传 `max_len>0` 时按句末标点（。！？）截断，**绝不在句中硬切**；自动剥掉行尾「（原题：…）」。
 6. `stats.new_count`（收录口径）与页面「今日新增」（实时新鲜口径）**不必相等**，且通常 收录 ≥ 新增（差额＝移入会议专区的会展条目 ＋ 降级「补录」的旧闻）。**不要**为了让两者数值相等去改数据。
 7. 只改 `morning_report.report` 的稳妥做法：备份 4 个分析 JSON → 跑修好的生成器 → 只取新 `report` 覆盖回原文件（保住 `updated`/`stats`/`sections`）→ 其余 3 个 JSON 从备份还原（避免 `NOW` 时间戳漂移）；最后 diff 确认**仅 bullet 文本**变化。
-- **简报每节＝该类目全部 `is_new`，不限条数**（2026-09-12 新增，§10.1）：`recent_items` 默认 `limit=0` 即全量，需要限量才显式传 `limit>0`。**长度问题交给前端**——2026-09-12 起为**两层呈现**（要点层常驻 + 完整层按需展开，见 §14）；`setupBriefClamp()` 的 420px 折叠**未删**，保留为无 `highlights` 时的兜底路径。始终**不在数据层砍内容**。
+- **简报每节＝该类目全部 `is_new`，不限条数**（2026-09-12 新增，§10.1）：`recent_items` 默认 `limit=0` 即全量，需要限量才显式传 `limit>0`。**长度问题交给前端**——2026-09-12 二次修订后为**五节结构化摘要 + 前端默认收起**（见 §15）：`#briefMain` 超过 420px 即折叠、只露 380px，点「展开全部（N 条）」才展开。始终**不在数据层砍内容**。
 - **「政策与产业」= `政策与监管` + `行业动态` 两源**（2026-09-12 新增，§10.2）：先政策后产业，各类目内按 `orig_date_full` 倒序，`drop_notice=True` 仍生效（见 §3）。**不要**退回单类目喂数——只喂「行业动态」则节名里的「政策」没有内容，只喂「政策与监管」则产业面内容从简报消失。
-- **简报须产出 `highlights` + `brief_sections` 两个字段**（2026-09-12 新增，见 §14）：前者=要点层（3–5 条一句话），后者=完整层（五节结构化、**空节不收录**）。两者任一缺失时前端静默回退旧 markdown 渲染——页面不报错，但两层会退化成单层，属**静默回退**，要按 §14.2 的数据契约修生成器。`report` 保留作兜底。
+- **简报须产出 `brief_sections`（必须）**（2026-09-12 新增，二次修订后为准，见 §15）：五节结构化、**空节不收录**、每节 `count==items.length`；缺失时前端静默回退旧 markdown 渲染（页面不报错，但节条数徽标与条目跳转都没了，属**静默回退**）。`highlights` 生成端仍产出但**前端已不渲染**（用户否决要点层：与「今日要闻」重复），**不作为复核项**。`report` 保留作兜底。
 
 ### 9.3 流程 / 工程
 
@@ -405,7 +405,7 @@ placeholder 冗余。**改这条断言之前不要加 placeholder。** `aria-lab
 
 ---
 
-## §14 今日简报改「两层呈现」（2026-09-12 10:0x，build `20260912-1000`）
+## §14 今日简报改「两层呈现」（2026-09-12 10:0x，build `20260912-1000`）—— ⚠️ 已同日二次修订，**要点层已被移除**，见 §15
 
 ### 14.1 用户诉求与解法选择
 
@@ -475,3 +475,60 @@ placeholder 冗余。**改这条断言之前不要加 placeholder。** `aria-lab
 - **数据层回填用 §9.2.7 的合并法**：备份 4 个分析 JSON → 重跑生成器 → **只取新增字段合并回原 JSON** → 其余 3 个从备份还原。实测 `字段差异=[]`、`updated` 未漂移，证明该法可靠。
 - 探针/截图脚本新增：`%TEMP%\md_brief_probe.py`（折叠态/展开态几何 + CSSOM 规则数）、`%TEMP%\md_brief_shot.py`（折叠态/展开态 × 桌面/移动 共 3 张 PNG）。
 - 给 Chrome 探针页传状态用 **URL hash**（`#1280x900-1`）最省事，无需在服务端解析 query。
+
+## §15 简报改「五节结构化摘要 + 默认收起」（2026-09-12 10:2x，build `20260912-1022`）
+
+> 本节是对 **§14 的同日二次修订**。§14 的「要点层」方案被用户否决（理由见 15.1），
+> §14.1 的「两层」结论、§14.3 的前端渲染描述、§14.6 的自动化同步点均已被本节取代。
+> **未变**：§14 与 §9.2 关于「内容一条不减」「单条不截断」「每节全量」的部分仍然有效。
+
+### 15.1 用户决议与落地
+
+- **用户反馈（原话）**：「我看了一下，这个内容还是不要了，要不然和下面的今日要闻重复了。」——截图圈掉了简报顶部的「今日异动」行 + 5 条要点。
+- **追加定夺**（本轮 AskUserQuestion，用户选「默认收起，长度可控」）：删掉要点层后，五节完整摘要**默认收起**。
+- **落地**：
+
+| 文件 | 改动 |
+|---|---|
+| `app.js` | 删 `briefHighlightsHtml()`；`renderBrief()` 去掉高异动行与要点层渲染；`briefSectionsHtml()` 去掉 `hidden`；`briefSub` 固定「按分类摘要」；`setupBriefClamp()` 去掉两层分支、改无参，恢复单一折叠路径 |
+| `index.html` | 删 `.brief-alert`/`.brief-alert-tag`/`.brief-hl*`/`.hl-cat` 全部 CSS 与暗色、≤600px 遗留规则，及死代码 `.brief-full[hidden]`；保留 `.brief-full .brief-sec`/`.sec-n`/`.brief-flash` |
+| `sw.js` + `index.html` | build `20260912-1000` → `20260912-1022`（`CACHE_NAME` 同步） |
+| `test_brief_layers.js` | 断言随新形态重写（41 条，含「要点层/异动行必须不存在」的反向守护） |
+
+- **`highlights` 字段的处置**：**生成端继续产出、前端不再渲染**。理由：① 为它回退自动化 prompt 的风险大于收益；② 字段留着，将来若要恢复要点层无需再改生成端。故 §14.2 的数据契约中 `highlights` 一行仍有效，但状态改为「备用、不渲染」。
+- **别把 420 与 380 搞混**：`setupBriefClamp()` 的 `LIMIT=420` 是「要不要折」的**判定阈值**；`.brief-md.brief-clamp{max-height:380px}` 是**折后高度**。改折叠高度要同时改这两处（判定值须 > 折后高度）。
+
+### 15.2 实测数据（真实 Chrome headless iframe 探针 `%TEMP%\md_brief_probe2.py`，三档视口）
+
+| 视口 | 要点层 / 异动行 | 分节层 | 节条数徽标 | 折叠态 mainH | 展开后 mainH | 按钮文案 |
+|---|---|---|---|---|---|---|
+| 1280 | 0 / 0 | hidden=false li=18 | 2,6,2,7,1 | **380** | 2756 | 展开全部（18 条） |
+| 390 | 0 / 0 | hidden=false li=18 | 2,6,2,7,1 | **380** | 5068.6 | 展开全部（18 条） |
+| 360 | 0 / 0 | hidden=false li=18 | 2,6,2,7,1 | **380** | 5560.5 | 展开全部（18 条） |
+
+- 三档均：`briefSub="按分类摘要"`、`a[data-jump]=15`、**CSSOM 内 `.brief-hl` / `.hl-cat` / `.brief-alert` 规则数 = 0**（只剩 `.brief-full` 家族 3 条）、无横向溢出。
+- `briefStrip` 整块高度：桌面 553px / 移动 545px（含头部行 + 卡片）。
+
+### 15.3 测试与闸门（12 项，零失败）
+
+`brief_layers 41` · `mobile_ux_batch 69` · `qa_navtab 14` · `mobile_opt 33` · `smoke_0908 60` · `data_selfheal 11` · `data_integrity 9` · `tagchip 19` · `asset_versioning 15` · `price_history_unclosed 14` · `preflight` ✅ · `sw_gate` ✅
+
+- 线上实抓（`%TEMP%\md_live_verify4.py`，带 no-cache）：**attempt 1 全绿**。
+- 提交 main `f4fbfc3`，gh-pages `d39e4d6`。
+
+### 15.4 两条自动化 prompt 的同步点（已做）
+
+- **06:00（`5cdcdfff`）**：§11.8a 由「两层呈现」改写为「五节结构化摘要 + 前端默认收起」；明确 `brief_sections` 为必须产物、`highlights` 为**照旧产出但不渲染**（原文加了「缺了也不影响页面，不要为它改动其它内容」）；§11.8b 的 `briefSub` 描述改为固定「按分类摘要」；步骤 8 的「长度问题交给前端两层渲染」改为「420px 折叠」。
+- **08:00（`21dba82b`）**：§2.8 复核项重写——**出现 `.brief-hl`/`.hl-cat`/`.brief-alert`、副标题「必看 N 条」、按钮「展开完整分类摘要」、`.brief-full` 带 hidden，任一即为回退到已被否决的首版**，须删净并 bump build-version；`highlights` 明确「不作为复核项」；§1.9 补充 jsdom 需覆盖 `scrollHeight` 的坑；输出清单同步。
+
+### 15.5 本轮工具经验
+
+- **折叠/布局类逻辑 jsdom 测不出来**：jsdom 不做布局，`scrollHeight` 恒为 0 → `main.scrollHeight > 420` 永远 false → 折叠分支静默跳过、按钮恒 hidden。必须在 `beforeParse` 里 `Object.defineProperty(HTMLElement.prototype,'scrollHeight',{configurable:true,get:()=>900})`，折叠逻辑才被真实覆盖。**Chrome 探针仍是唯一能验证真实折叠高度的手段。**
+- **注释里的数字要回查实现**：本轮一度把折叠高度写成 420px，实际 CSS 是 380px。写文档/注释时回查一次 CSS，别照抄历史说法。
+- **删功能要连「反向守护」一起加**：只把「要点层存在」的断言翻转成「不存在」还不够，要补一条「数据侧即使有 `high` 级异动也不出现异动行」，防止将来有人从数据侧把已删的东西带回来。
+- 脚本：`%TEMP%\md_brief_probe2.py`（新形态几何 + CSSOM 残留）、`%TEMP%\md_brief_shot.py`（4 张 PNG：桌面/移动 × 折叠/展开）。
+
+### 15.6 仍可优化（未做，待用户）
+
+- 移动端 `briefStrip` 整块 545px ≈ 视口 64.6%（其中折叠区 380px）。若要更短，可把折叠高度降到 240–280px —— 需同时改 `.brief-md.brief-clamp` 的 `max-height` 与 `setupBriefClamp()` 的 `LIMIT`。
+- 简报与下方「今日要闻」仍同源（一个是分类完整摘要，一个是标题速览）。若继续去重，可考虑简报只保留「要闻未覆盖的类目」。
