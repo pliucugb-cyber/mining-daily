@@ -325,4 +325,78 @@ reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco
 - **手机视口截图**：`%TEMP%\md_mobile_shot.py`——本地 `http.server` + `/_shot.html`（390×844 iframe 加载 `index.html`，按 hash 派发一次 `.mtab` click 切 tab），`chrome --headless=new --screenshot --window-size=390,844 --virtual-time-budget=25000` 抓三态 PNG 到 `%TEMP%\md_shots\`。坑：HTTP handler 类名别取 `H`/`W`（会覆盖同名的尺寸常量）。
 - `mobile-preview.html`（站点上已部署的"手机视图模拟器"）可直接在 PC 上按设备档位看真机布局，不必截图。
 
+## §13 检索能力统一收进「AI 搜」面板（2026-09-12 09:0x，build `20260912-0907`）
 
+### 13.1 用户决议与落地
+
+§11.3 遗留①（移动端顶栏搜索按钮恒不可见 → 首页检索条无入口）给出两条路：「恢复顶栏搜索图标」
+或「把检索能力统一收进 AI 搜面板」。**用户定夺：后者**（顶栏保持干净）。
+
+| 文件 | 改动 |
+|---|---|
+| `app.js` | 移除顶栏搜索按钮注入与事件绑定；删除 `mdOpenSearch()`；`mdMobileTabBar` 顶部注释同步记录决议 |
+| `index.html` | 删除 `.md-search-btn` 全部 CSS（@media 内主体样式 + 间距 + 顶层 `display:none` + 44px 触控热区清单引用）与失效的 `body.md-search-open` 规则；面板标题 `💬 新闻问答` → `🔍 AI 搜 · 检索与问答` |
+| `sw.js` + `index.html` | build `20260912-0852` → `20260912-0907`（`CACHE_NAME` 同步） |
+| `test_mobile_ux_batch.js` | ② 两条断言**翻转**（按钮/CSS 必须不存在）+ 新增两条守护 |
+
+**为什么 `mdOpenSearch()` 是死代码**：它是 `#mdSearchBtn` 的**唯一**调用点；而 `#mdSearchBtn` 恒为
+`display:none` —— `index.html` 顶层 `.md-search-btn{display:none}`（原意"只在桌面隐藏"）与
+`@media(max-width:768px)` 内的 `display:inline-flex` **同特异性、源码顺序靠后者胜** →
+移动端从未显示过该按钮，该函数从未被触发。
+
+### 13.2 移动端检索的现状（改动后）
+
+- **唯一入口**：底栏 `AI 搜` tab → `#qaFloat` 面板（移动端全屏 `100dvh`）。
+- **面板内检索闭环**：矿种/主题/时间三个筛选器 + `检索`（全库关键词）+ `AI`（读新闻后作答）；
+  引导由**面板欢迎语**承担（`test_smoke_0908.js` 断言欢迎语含「检索」与「AI」）。
+- **桌面检索条 `#newsFilterBar` 在移动端保持 `display:none`** —— 硬约束：它是 `app.js` 注入的桌面组件，
+  删掉该规则会让它在移动端露出来。其移动端打开类 `body.md-search-open` 已无任何添加点，
+  故 `body.md-search-open #newsFilterBar{display:block}` 与配套 `#nfClear` 两条规则一并删除。
+- **这是升级不是删减**：被移除的入口原本打开的是「首页 DOM 列表内的关键词筛选」，
+  而 `AI 搜` 面板的检索作用于**全库**（`mining_news.json` / `morning_report.json` 等）。
+- `index.html` 中 `body[data-md-cat]:not([data-md-cat="tuijian"])… #newsFilterBar{display:none!important}`
+  保留（与上一条重叠，属防御性，无害）。
+
+### 13.3 未采纳：输入框 placeholder（不要"顺手"加）
+
+本轮曾为 `#qaFloatInput` 补 `placeholder="搜关键词，或直接问 AI…"`，**已回退**：
+`test_smoke_0908.js:219` 明确断言「输入框**不**显示占位提示词」—— 既有决议要求引导由欢迎语承担，
+placeholder 冗余。**改这条断言之前不要加 placeholder。** `aria-label` 本轮已更新为「输入关键词检索或问题」（断言只要求非空）。
+
+### 13.4 实测数据（真实 Chrome 无头探针，390/360/320）
+
+| 视口 | 顶栏 `#mdSearchBtn` | CSSOM 内 `.md-search-btn` 规则数 | 品牌行 justify | 横向溢出 | 价格页 mdTop / 标题居中偏差 |
+|---|---|---|---|---|---|
+| 390 | 已移除 | 0 | space-between | 无 | 47px / 0px |
+| 360 | 已移除 | 0 | space-between | 无 | 47px / 0px |
+| 320 | 已移除 | 0 | space-between | 无 | 47px / 0px |
+
+- 面板标题实测 `🔍 AI 搜 · 检索与问答`、`placeholder=""`、`#qaFloatSearch`/`#qaFloatAi` 均在；
+  分类栏 fill 仍 100%（16px）、底栏 5 tab 图标 22×22、`.md-search-btn` 规则数 0。
+- **「CSSOM 内规则数」比字符串匹配更硬**：在探针里遍历 `styleSheets[].cssRules[].selectorText`
+  统计含 `.md-search-btn` 的选择器 = **0**，天然绕开"注释里写了类名"的干扰。
+- 闸门：`preflight_check` ✅（build/SW 一致、div 收支平衡）· `test_mobile_ux_batch` **69 PASS** ·
+  `test_qa_navtab` 14 PASS · `test_mobile_opt` 33 PASS · `test_smoke_0908` **60 PASS** ·
+  `test_qa_features` 56 PASS · `test_tagchip_contrast` ✅ · `test_deploy_sw_gate` OK · `test_asset_versioning` ✅。
+- 线上实抓验收（`%TEMP%\md_live_verify2.py`，attempt 1 全绿）：build `20260912-0907`、`CACHE_NAME` 同步、
+  剥注释后 `.md-search-btn` / `body.md-search-open` / `id="mdSearchBtn"` / `function mdOpenSearch` **均不存在**、
+  `#newsFilterBar{position:fixed…display:none` 仍在、面板标题与 placeholder 断言均符合。
+- 提交：main `10c3e0e` / gh-pages `a77f5c8`。
+
+### 13.5 ⚠️ 本轮踩到的工具坑（重要，会再遇到）
+
+**同一条消息里对同一文件发多个并行编辑，会互相覆盖 —— 且部分"成功"是假的。**
+
+- 现象：8 处改动全部返回 `Successfully edited file`，但读回磁盘发现 `index.html` 的 5 处**全部未落盘**，
+  `app.js` 呈"半生效"混合态（4 处里只有 2 处生效）。
+- 排查三步：`os.stat().st_mtime` → 直接读字节 → 查 `~/.workbuddy/projects/<slug>/*.jsonl` 的 mtime，
+  **确认当时只有本会话活跃**，排除并发会话，定位为**并行编辑的读-改-写冲突**。
+- **对策（已采用，后续默认如此）**：批量文本替换改用**单进程 Python 脚本** —— 读文件 →
+  逐条 `t.count(old)==1` 断言（不唯一就报错）→ 一次写回 → **立即读回校验**；
+  脚本落 `%TEMP%`（沙箱放行 `TEMP` 与家目录，`mining-daily` 在家目录下，可写）。
+- 附带事实：`index.html` 是 **CRLF**、`app.js` 是 **LF**、`REFERENCE.md` 是 **LF**。
+  脚本按 `raw.count(b'\r\n')` 判定行尾并在写回时还原，避免整文件 diff 假象。
+- **另**：`Grep` 工具对刚被本会话改过的文件可能返回**滞后的行号与内容**；
+  核对"是否真落盘"一律用 `Read` 或 Python 直接读字节，不要相信 Grep。
+- 探针 `%TEMP%\md_probe_mobile.py` 已扩展：新增面板标题 / 输入框 / 两个按钮 / 样式表规则数四项实测。
+  截图 `%TEMP%\md_mobile_shot.py` 新增 `qa` 档（点底栏「AI 搜」→ 面板打开），现输出 home/price/rights/qa 四张 PNG。
