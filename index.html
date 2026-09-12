@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-2155" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-2205" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -2288,6 +2288,10 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
     <button class="brief-more" id="briefMore" type="button" hidden data-page-node-id="0mU25b5YB8lNqFehLN2Wgk">展开全部</button>
   </div>
 </div>
+<!-- 2026-09-12：今日简报折叠状态持久化——在绘制前就把类贴好，避免「先展开再收起」闪一下。
+     位置必须在 #briefStrip 之后（那时元素才在 DOM 里）；key 与 app.js 的 BRIEF_COLLAPSE_KEY 共用，
+     改一处必须两处同改（test_brief_layers ④ 有漂移守卫）。 -->
+<script>try{if(localStorage.getItem('mdBriefCollapsed')==='1'){var _bcs=document.getElementById('briefStrip');if(_bcs){_bcs.classList.add('brief-collapsed');var _bct=document.getElementById('briefToggle');if(_bct)_bct.setAttribute('aria-expanded','false');}}}catch(e){}</script>
 <!-- ==================== 今日要闻（9-04 新增，每日自动提取 3~5 条关键信息）==================== -->
 <div class="digest-strip" id="digestStrip" data-page-node-id="FJwnxoUlMQmkEFXOTb8Ajz">
   <div class="digest-head" data-page-node-id="SHylSejGak9rsOaXN7y5vI">
@@ -2483,7 +2487,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=40a91489" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=eadc7123" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=01d0e967" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
