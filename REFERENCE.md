@@ -1682,3 +1682,72 @@ new = re.sub(r'<title>[^<]*</title>', lambda _m: '<title>%s</title>' % want, src
 - 验收线上不能只看 `HTTP 200`：本轮轮询第 1 次（22:25:54）拿到的仍是旧版
   （build 2205 + 纯日期），第 2 次（22:26:24）才变成新版。GitHub Pages 构建有 1~2 分钟延迟，
   必须轮询到 `build-version` 真的变成新值再下结论。
+
+## §40 2026-09-12 简报「展开全部（N 条）」裁剪态持久化（层 B）
+
+### 40.1 起因与裁定
+
+用户问「同区另一个开关『展开全部（N 条）』的状态仍没持久化，要不要一起记」→ 裁定**执行**。
+
+### 40.2 关键认知：简报区有**两个独立开关**，不是一层
+
+| | 层 A：整块收起 | 层 B：高度裁剪 |
+|---|---|---|
+| 触发 | `#briefToggle`（标题行右侧小圆按钮 ▾） | `#briefMore`（卡片底部「展开全部（N 条）」） |
+| 类名落点 | `#briefStrip.brief-collapsed` → `.brief-card{display:none}` | `#briefMain.brief-clamp` → `max-height:380px` + 底部遮罩 |
+| 存储 key | `mdBriefCollapsed` | `mdBriefMoreOpen` |
+| 恢复时机 | **解析期**：index.html 里紧跟 `#briefStrip` 的 pre-paint 内联脚本 | **app.js**：`setupBriefClamp()` 内，数据渲染后同帧 |
+| 为何恢复点不同 | `.brief-card` 是**静态 HTML**（含「简报加载中…」占位），首帧可能早于 defer 的 app.js → 不内联就会「先冒出再收起」 | 正文由 `renderBrief()` 用 JS 填，判定/clamp 与填充在**同一同步执行块**内 → 浏览器不会在中间绘制，本就无闪动 |
+
+**红线：层 B 不得加 pre-paint 内联脚本。** 它没有闪动问题，加了只会多出一个 key 副本。
+④ 段有守卫断言 `index.html` 里**不得出现** `mdBriefMoreOpen`。
+
+### 40.3 核心陷阱：`scrollHeight=0`（本次唯一的非显然判断）
+
+层 A 的恢复发生在**解析期** → 数据到达时 `#briefStrip` 已是 `brief-collapsed`，`#briefMain` 处在
+`display:none` 的子树里，`scrollHeight` 恒为 **0**，量不出「内容超高（> 420px）」。
+若不处理，`apply()` 会走 else 分支把按钮和 clamp 一起清掉 —— 用户展开整块后看到的是
+「内容全展开、按钮消失」，层 B 静默失效。
+
+解法两条，**成对、缺一不可**：
+
+1. `apply()` 开头守卫：`if(strip && strip.classList.contains('brief-collapsed')) return;`（不可见时不改判）；
+2. `#briefToggle` 的 click handler 展开后补判：`if(!on && briefClampReapply) briefClampReapply();`
+   （`setupBriefClamp()` 把内部 `apply` 挂到模块级 `briefClampReapply`）。
+
+### 40.4 顺带修掉一个既有隐患
+
+旧 `apply()` 在 `setTimeout(apply,300)`（字体/宽度变化后的重判定）里**无条件**加 `brief-clamp`。
+用户若在那次重判定前点开「展开全部」，展开态会被重新收起（`dataset.open` 一并回退）。
+现在 `apply()` 统一走 `wantOpen()`（读存储），与用户刚做的点击一致，不再互相打架。
+
+### 40.5 改动位置
+
+- `app.js`：重写 `setupBriefClamp()`（新增 `BRIEF_MORE_KEY`、模块级 `briefClampReapply`、
+  `wantOpen`/`setOpen`、可见性守卫、`aria-expanded` 同步、else 分支清理 `dataset.open`）；
+  `#briefToggle` 的 click handler 末尾加一行补判。
+- `test_brief_layers.js`：`installFetch(win,prefs)` / `loadPage(stripSections,prefs,portArg)`
+  支持预置存储与指定端口；④ 段新增 8 条静态守卫；新增 ⑥ 段 17 条行为验证（含层 A×层 B 交叉用例）。
+- **未改 `index.html`**（层 B 不涉及静态结构与内联脚本）。
+
+### 40.6 测试
+
+`test_brief_layers.js` 65 → **91 PASS / 0 FAIL**。
+⑥ 段的关键断言不是「代码在」而是「**补判真的跑了**」：
+`整块收起时加载 → 层 B 保持初始态`，随后 `点 #briefToggle 展开整块 → 按存储恢复出 brief-clamp`。
+（jsdom 不做布局，但 `installFetch` 已把 `scrollHeight` 固定为 900 > 420，故该分支可覆盖。）
+
+### 40.7 红线
+
+- 层 A / 层 B 的 key **不可互换**；两个字面量各只准出现 1 次（④ 段有漂移守卫）。
+- `mdBriefMoreOpen` 只准出现在 `app.js`；`index.html` 里一旦出现即为违反。
+- 层 B 的「可见性守卫」与「展开后补判」**成对**：删任一处，层 A 收起形态下的层 B 会**静默**失效
+  （没有报错、按钮也能点，只是初次展开整块后按钮不出现）。
+- `loadPage()` 连续调用必须传**不同端口**，否则 `EADDRINUSE` —— 同步 `listen` 早于上一个 server 的
+  异步 `close`（后者要等 keep-alive 连接自然结束）。
+
+### 40.8 待办
+
+- 层 B 状态是**全局一份**（手机/电脑共用），与层 A 一致；如需按端或按天区分，另行裁定。
+- 本层与层 A 一样，**观感只能在真机/真浏览器确认**（jsdom 只证明逻辑，不证明「看着对不对」）。
+

@@ -106,9 +106,9 @@ if (Array.isArray(hls) && hls.length) {
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8', '.png': 'image/png', '.css': 'text/css; charset=utf-8' };
 
-function makeServer(stripSections) {
+function makeServer(stripSections, port) {
   return http.createServer((req, res) => {
-    const u = new URL(req.url, 'http://127.0.0.1:' + PORT);
+    const u = new URL(req.url, 'http://127.0.0.1:' + port);
     const name = decodeURIComponent(u.pathname).replace(/^\/+/, '') || 'index.html';
     if (name === 'morning_report.json' && stripSections) {
       const body = JSON.stringify(Object.assign({}, REPORT, { highlights: undefined, brief_sections: undefined }));
@@ -127,7 +127,10 @@ function makeServer(stripSections) {
   });
 }
 
-function installFetch(win) {
+function installFetch(win, prefs) {
+  // 2026-09-12：支持在解析前预置 localStorage（⑥ 段要验层 A/层 B 的恢复路径）。
+  //   必须在 beforeParse 里写——内联恢复脚本在解析到 #briefStrip 之后就执行了。
+  if (prefs) { for (const k of Object.keys(prefs)) { try { win.localStorage.setItem(k, prefs[k]); } catch (e) {} } }
   win.fetch = (u, o) => globalThis.fetch(new URL(String(u), win.location.href).toString(), o || {});
   if (typeof win.matchMedia !== 'function') {
     win.matchMedia = q => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} });
@@ -140,11 +143,15 @@ function installFetch(win) {
   Object.defineProperty(win.HTMLElement.prototype, 'scrollHeight', { configurable: true, get() { return 900; } });
 }
 
-async function loadPage(stripSections) {
-  const server = makeServer(stripSections);
-  await new Promise(r => server.listen(PORT, '127.0.0.1', r));
-  const dom = await JSDOM.fromURL('http://127.0.0.1:' + PORT + '/index.html', {
-    runScripts: 'dangerously', resources: 'usable', pretendToBeVisual: true, beforeParse: installFetch
+async function loadPage(stripSections, prefs, portArg) {
+  // ⑥ 段要连续开多个页面；同一端口会被上一个尚未关闭的 server 占用（EADDRINUSE），
+  //   故允许指定端口而不是等异步 close 完成（后者要等 keep-alive 连接自然结束，慢且不稳）。
+  const port = portArg || PORT;
+  const server = makeServer(stripSections, port);
+  await new Promise(r => server.listen(port, '127.0.0.1', r));
+  const dom = await JSDOM.fromURL('http://127.0.0.1:' + port + '/index.html', {
+    runScripts: 'dangerously', resources: 'usable', pretendToBeVisual: true,
+    beforeParse: w => installFetch(w, prefs)
   });
   const win = dom.window, doc = win.document;
   const deadline = Date.now() + 12000;
@@ -303,6 +310,23 @@ async function loadPage(stripSections) {
       'app.js x' + (appjs.match(/BRIEF_COLLAPSE_KEY\s*=/g) || []).length +
       ' / html x' + (html.match(new RegExp(BKEY, 'g')) || []).length);
 
+    // 2026-09-12：层 B（内容高度裁剪态）——与层 A 是两把不同的钥匙，不可互换。
+    //   层 A 收起整块简报、恢复在 index.html 的内联脚本里；层 B 只裁剪正文高度、只在 app.js 恢复。
+    const MKEY = 'mdBriefMoreOpen';
+    check('app.js 用常量保存层B 的 key', appjs.includes("var BRIEF_MORE_KEY='" + MKEY + "'"));
+    check('层B 读折叠状态（getItem）', /getItem\(BRIEF_MORE_KEY\)/.test(appjs));
+    check('层B 写折叠状态（setItem）', /setItem\(BRIEF_MORE_KEY\b/.test(appjs));
+    check('层B key 定义 1 次，且与层A key 不同',
+      (appjs.match(/BRIEF_MORE_KEY\s*=/g) || []).length === 1 && MKEY !== BKEY,
+      'MKEY=' + MKEY + ' / BKEY=' + BKEY);
+    check('层B 刻意不做 pre-paint 内联恢复（index.html 里不得出现该 key）',
+      !html.includes(MKEY), 'html 出现 ' + (html.match(new RegExp(MKEY, 'g')) || []).length + ' 次');
+    check('层B 有「整块收起时不改判」的守卫（scrollHeight=0 陷阱）',
+      /brief-collapsed'\)\)return;/.test(appjs));
+    check('层B 暴露 apply 供展开整块后补判', /briefClampReapply=apply;/.test(appjs));
+    check('层B 在 #briefToggle 展开后补判', /if\(!on&&briefClampReapply\)briefClampReapply\(\)/.test(appjs));
+    check('层B 按钮同步 aria-expanded', /var setOpen=function[\s\S]{0,400}aria-expanded/.test(appjs));
+
     // 通用守卫：CSS 里不得出现「与页面某个 id 同名」的 camelCase 类选择器
     //   （本工程约定：class 用 kebab-case、id 用 camelCase；撞名基本就是写错了）
     const ids = new Set((html.match(/\bid="[^"]+"/g) || []).map(s => s.slice(4, -1)));
@@ -348,6 +372,71 @@ async function loadPage(stripSections) {
     const s3 = d3.window.document.getElementById('briefStrip');
     check('从未折叠过（无存储）→ 默认展开', !!s3 && !s3.classList.contains('brief-collapsed'));
     d3.window.close();
+  }
+
+  // ---------- ⑥ 层 B（内容高度裁剪态）持久化行为验证 ----------
+  // 2026-09-12：层 B 与层 A 是**两个独立开关**（key 也不同）：
+  //   层 A 收起整块简报（#briefStrip.brief-collapsed，pre-paint 内联脚本恢复）；
+  //   层 B 只裁剪正文高度（#briefMain.brief-clamp，仅在 app.js 里恢复）。
+  // jsdom 不做布局，但 loadPage 的 installFetch 已把 scrollHeight 固定为 900（> 420 阈值），
+  //   所以「内容超高 → 需要折叠」这条分支在这里能被真实覆盖。
+  console.log('\n===== ⑥ 层 B 裁剪态持久化行为（预置存储 → 恢复 / 双向写入） =====');
+  {
+    const servers = [];
+    try {
+      const mOf = d => d.getElementById('briefMain');
+      const bOf = d => d.getElementById('briefMore');
+
+      // 1) 存过「展开」→ 加载即恢复为展开
+      const q1 = await loadPage(false, { mdBriefMoreOpen: '1' }, PORT + 1); servers.push(q1.server);
+      const m1 = mOf(q1.doc), b1 = bOf(q1.doc);
+      check('层B 存储=1 → 恢复展开（#briefMain 无 brief-clamp）', !!m1 && !m1.classList.contains('brief-clamp'));
+      check('层B 存储=1 → 按钮可见且文案为「收起」', !!b1 && !b1.hidden && b1.textContent.trim() === '收起',
+        b1 ? 'hidden=' + b1.hidden + ' / 文案=' + b1.textContent.trim() : '(无按钮)');
+      check('层B 存储=1 → 按钮 aria-expanded=true', !!b1 && b1.getAttribute('aria-expanded') === 'true');
+
+      b1.click();  // 收起
+      check('层B 点「收起」→ 加回 brief-clamp', m1.classList.contains('brief-clamp'));
+      check('层B 点「收起」→ 文案回到「展开全部（N 条）」', /^展开全部（\d+ 条）$/.test(b1.textContent.trim()),
+        b1.textContent.trim());
+      check('层B 点「收起」→ 存储写 0', q1.win.localStorage.getItem('mdBriefMoreOpen') === '0');
+
+      b1.click();  // 再展开
+      check('层B 再点开 → 移除 brief-clamp', !m1.classList.contains('brief-clamp'));
+      check('层B 再点开 → 文案为「收起」', b1.textContent.trim() === '收起', b1.textContent.trim());
+      check('层B 再点开 → 存储写 1', q1.win.localStorage.getItem('mdBriefMoreOpen') === '1');
+      q1.dom.window.close();
+
+      // 2) 从未存过 → 默认折叠（与本次改动前的既有行为一致，不能反过来）
+      const q2 = await loadPage(false, null, PORT + 2); servers.push(q2.server);
+      const m2 = mOf(q2.doc), b2 = bOf(q2.doc);
+      check('层B 无存储 → 默认折叠（带 brief-clamp）', !!m2 && m2.classList.contains('brief-clamp'));
+      check('层B 无存储 → 按钮文案为「展开全部（N 条）」', !!b2 && /^展开全部（\d+ 条）$/.test(b2.textContent.trim()),
+        b2 ? b2.textContent.trim() : '(无按钮)');
+      check('层B 无存储 → aria-expanded=false', !!b2 && b2.getAttribute('aria-expanded') === 'false');
+      q2.dom.window.close();
+
+      // 3) 层 A 与层 B 的交叉：本层唯一「看不出来但会丢状态」的坑。
+      //    层 A 的恢复发生在**解析期**（内联脚本）→ 数据到达时整块已是 display:none，
+      //    此时 #briefMain 的 scrollHeight=0，量不出「内容超高」。
+      //    故正确行为：加载期不改判，等 #briefToggle 展开整块时补判一次。
+      //    断言设计：只有在「补判真的执行了」时才会出现 brief-clamp —— 有区分力。
+      const q3 = await loadPage(false, { mdBriefCollapsed: '1' }, PORT + 3); servers.push(q3.server);
+      const m3 = mOf(q3.doc), b3 = bOf(q3.doc), t3 = q3.doc.getElementById('briefToggle');
+      check('层A+层B 交叉：整块收起时加载 → 层B 保持初始态（未误判）', !!m3 && !m3.classList.contains('brief-clamp'));
+      check('层A+层B 交叉：整块确实是收起的', !!q3.doc.getElementById('briefStrip').classList.contains('brief-collapsed'));
+      t3.click();  // 展开整块 → handler 里补判层 B
+      check('层B 展开整块后补判生效 → 按默认折叠（带 brief-clamp）', m3.classList.contains('brief-clamp'));
+      check('层B 展开整块后补判生效 → 按钮转为可见', !!b3 && !b3.hidden);
+      check('层B 展开整块后补判生效 → 文案为「展开全部（N 条）」', /^展开全部（\d+ 条）$/.test(b3.textContent.trim()),
+        b3.textContent.trim());
+      q3.dom.window.close();
+    } catch (e) {
+      fail++;
+      console.log('  FAIL  ⑥ 层B 阶段异常 → ' + (e && e.message));
+    } finally {
+      servers.forEach(s => { try { s.close(); } catch (e) {} });
+    }
   }
 
   console.log('\n==== 简报渲染回归：' + pass + ' PASS / ' + fail + ' FAIL ====');
