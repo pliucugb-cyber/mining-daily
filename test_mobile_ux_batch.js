@@ -436,6 +436,14 @@ setTimeout(() => {
         !!_qInp2 && _qInp2.tagName === 'TEXTAREA');
   check('输入区：textarea 支持垂直 resize',
         !!_qInp2 && window.getComputedStyle(_qInp2).resize === 'vertical');
+  check('语音：音量条容器 #qaVoiceMeter 已就位（识别时显示实时音量）',
+        !!doc.getElementById('qaVoiceMeter'));
+  check('语音：qaBrowserMicGuide 已定义（失败给出浏览器具体指引）',
+        typeof window.qaBrowserMicGuide === 'function');
+  check('语音：qaAppendPiece 已定义（结果追加而非覆盖 + 句末补标点）',
+        typeof window.qaAppendPiece === 'function');
+  check('语音：qaShowVoiceMeter / qaHideVoiceMeter 已定义（接入麦克风分析音量）',
+        typeof window.qaShowVoiceMeter === 'function' && typeof window.qaHideVoiceMeter === 'function');
   check('筛选行：竖向 padding 收紧为 --s2（103px -> 95px）',
         /\.qa-float-filters\{display:flex;flex-wrap:wrap;gap:var\(--s2\);padding:var\(--s2\) var\(--s3\);/.test(html));
 

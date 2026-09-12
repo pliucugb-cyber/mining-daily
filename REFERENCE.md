@@ -1313,3 +1313,24 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - 语音识别**不得**点击即静默失败；必须显式请求 `getUserMedia` 权限或在不支持时安全降级。
 - 麦克风按钮状态必须以 UI class（`.on`）为准，不得依赖不存在的 `QA_REC.active`。
 - `#qaFloatInput` 必须是 `<textarea>` 且支持 `resize:vertical`。
+
+
+### 30 语音识别三项增强：实时音量条 / 结果追加 / 失败浏览器指引（2026-09-12 晚，build `20260912-1918`）
+### 30.1 背景
+用户在上一轮（§29 网页版权限+一键关闭+可拖拽输入框）后追加三点：① 语音输入时显示实时音量/波形动画；② 语音结果自动追加而非覆盖输入框已有文字；④ 识别失败时给出浏览器具体指引（非通用文案）。
+### 30.2 方案
+- **实时音量条**：`qaToggleMic` 的 `doStart(stream)` 在 `getUserMedia` 成功后接入 `qaShowVoiceMeter(stream)`——创建 `AudioContext` + `AnalyserNode`，`requestAnimationFrame` 循环读取 `getByteFrequencyData` 计算平均音量，驱动 `#qaVoiceMeter` 内 14 根 `<i>` 条高度（正弦相位做波形感）。停止时 `qaHideVoiceMeter` 取消 rAF、关闭 AudioContext、停止麦克风轨道、隐藏容器。
+- **结果追加**：`onresult` 改为按 `isFinal` 把每段累积到 `QA_SPEECH_BASE`（识别开始时初始化为输入框现有文字），用 `qaAppendPiece(base,piece)` 追加——自动加空格分隔、并在句末无标点时补「。」；临时结果实时跟在后面；输入框自动滚动到底并定位光标。
+- **失败浏览器指引**：`qaMicFail` 末尾追加 `qaBrowserMicGuide()` 返回的字符串，按 `navigator.userAgent` 区分 Chrome / Edge / Firefox / Safari 给出「点地址栏左侧锁/盾牌图标把麦克风设为允许」的具体步骤。
+### 30.3 代码落点
+- app.js：新增 `qaBrowserMicGuide` / `qaAppendPiece` / `qaShowVoiceMeter` / `qaHideVoiceMeter` 与模块变量 `QA_VOICE_METER` / `QA_VOICE_RAF` / `QA_VOICE_CTX` / `QA_VOICE_STREAM` / `QA_SPEECH_BASE`；`qaStopMic` / `qaMicFail` 调用 `qaHideVoiceMeter()`；`doStart` 改为接收 `stream` 并显示音量条、重写 `onresult`；`getUserMedia().then` 传入 `stream`。
+- index.html：新增 `.qa-voice-meter`（绝对定位在 foot 上方、`opacity/visibility` 过渡、含 `body.dark .qa-voice-meter i`）+ 容器 `<div class="qa-voice-meter" id="qaVoiceMeter" hidden></div>`；`build-version` → `20260912-1918`。
+- sw.js：`CACHE_NAME` → `mining-daily-20260912-1918`。
+### 30.4 测试与验证
+- `test_mobile_ux_batch.js` 输入区段新增 4 条（#qaVoiceMeter 容器、`qaBrowserMicGuide`/`qaAppendPiece`/`qaShowVoiceMeter` 已定义）；`test_qa_features.js` Phase D 新增 3 条（`qaBrowserMicGuide` 返回含「允许」、`qaAppendPiece` 补「。」且不重复、两个音量条函数已定义）。总断言 batch 180→**184**、qa_features 58→**61**（均 0 失败）。
+- 回归：`test_mobile_opt_20260910.js` 37/0、`test_smoke_0908.js` 74/0、`test_qa_navtab_20260910.js` 18/0、`preflight_check.py` 全绿、`node --check app.js` 干净。
+### 30.5 红线（不得回退）
+- 语音结果**不得**覆盖输入框已有文字，必须追加（`qaAppendPiece`）且句末补标点。
+- 识别失败时提示**必须**带浏览器具体指引（`qaBrowserMicGuide`），不得退回通用文案。
+- `.qa-voice-meter` 音量条容器与样式不得删除（实时收音反馈可见）。
+- 停止/失败时必须 `qaHideVoiceMeter()` 释放麦克风轨道，避免网页麦克风常亮。
