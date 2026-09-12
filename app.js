@@ -4272,27 +4272,53 @@ function qaInitMic(){
   btn.innerHTML=QA_MIC_ICON;
   btn.addEventListener('click',qaToggleMic);
 }
+function qaStartMic(btn){if(btn){btn.classList.add('on');btn.innerHTML='⏹';btn.title='结束语音输入（再点一次停止）';}}
+function qaStopMic(btn){
+  if(btn){btn.classList.remove('on');btn.innerHTML=QA_MIC_ICON;btn.title='语音输入（点击开始，再点结束）';}
+  var rec=QA_REC;QA_REC=null;
+  if(rec){try{rec.stop();}catch(e){} try{rec.abort();}catch(e){}}
+}
+function qaMicFail(msg){
+  var btn=document.getElementById('qaFloatMic');
+  if(btn){btn.classList.remove('on');btn.innerHTML=QA_MIC_ICON;btn.title='语音输入（点击开始，再点结束）';}
+  QA_REC=null;
+  if(msg)qaFloatAdd('ai','🎤 '+msg+'。请检查浏览器麦克风权限，或直接在输入框键入。','',{md:false});
+}
 function qaToggleMic(){
   var btn=document.getElementById('qaFloatMic'),inp=document.getElementById('qaFloatInput');
   var SR=qaGetRec();
   if(!SR){if(btn)btn.style.display='none';return;}
-  if(QA_REC&&QA_REC.active){try{QA_REC.stop();}catch(e){}return;}
-  var rec;
-  try{rec=new SR();}catch(e){return;}
-  QA_REC=rec;rec.lang='zh-CN';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
-  rec.onresult=function(ev){
-    var txt='';
-    for(var i=0;i<ev.results.length;i++){txt+=ev.results[i][0].transcript;}
-    if(inp)inp.value=txt;
-  };
-  rec.onerror=function(e){
-    if(btn){btn.classList.remove('on');btn.innerHTML=QA_MIC_ICON;}
-    QA_REC=null;
-    var msg=(e&&e.error==='not-allowed')?'麦克风权限被拒绝':((e&&e.error)||'未知错误');
-    qaFloatAdd('ai','🎤 语音识别失败（'+msg+'）。请检查浏览器麦克风权限，或直接在输入框键入。','',{md:false});
-  };
-  rec.onend=function(){if(btn){btn.classList.remove('on');btn.innerHTML=QA_MIC_ICON;}QA_REC=null;};
-  try{rec.start();if(btn){btn.classList.add('on');btn.textContent='⏹';}}catch(e){QA_REC=null;}
+  // 正在识别 -> 立即停止
+  if(btn&&btn.classList.contains('on')){qaStopMic(btn);return;}
+  function doStart(){
+    var rec;
+    try{rec=new SR();}catch(e){qaMicFail('创建语音识别失败');return;}
+    QA_REC=rec;rec.lang='zh-CN';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
+    rec.onresult=function(ev){
+      var txt='';
+      for(var i=0;i<ev.results.length;i++){txt+=ev.results[i][0].transcript;}
+      if(inp)inp.value=txt;
+    };
+    rec.onerror=function(e){
+      qaStopMic(btn);
+      var msg=(e&&e.error==='not-allowed')?'麦克风权限被拒绝':((e&&e.error)||'未知错误');
+      qaMicFail('语音识别失败（'+msg+'）');
+    };
+    rec.onend=function(){qaStopMic(btn);};
+    try{rec.start();qaStartMic(btn);}catch(e){qaMicFail('启动语音识别失败');}
+  }
+  // 先请求麦克风权限，避免网页版 SpeechRecognition 静默失败
+  if(typeof navigator!=='undefined'&&navigator.mediaDevices&&typeof navigator.mediaDevices.getUserMedia==='function'){
+    navigator.mediaDevices.getUserMedia({audio:true}).then(doStart).catch(function(err){
+      var msg='无法获取麦克风';
+      if(err&&err.name==='NotAllowedError')msg='麦克风权限被拒绝';
+      else if(err&&err.name==='NotFoundError')msg='未找到麦克风设备';
+      else if(err&&err.message)msg=err.message;
+      qaMicFail(msg);
+    });
+  }else{
+    doStart();
+  }
 }
 // ===== Phase E：本地价格快照注入 RAG（AI 可答「铜价 / LME铝」等，无需外部 Key）=====
 var QA_METAL_SLUGS={
