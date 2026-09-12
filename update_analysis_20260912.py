@@ -301,15 +301,10 @@ _price_comment = ('- 国内 9 月 11 日收盘普跌：白银 -5.07%、碳酸锂
     '内外盘出现分化。驱动来自美国 8 月 PPI 超预期与美联储主席人选沃什的鹰派表态，市场加息押注升温；'
     '据 SMM 隔夜行情，9 月 11 日夜盘贵金属跳水（COMEX 黄金 -3.43%、白银 -4.48%）、基本金属普跌且伦锡与沪镍跌幅居前，'
     '氧化铝逆势涨超 2%，短期波动预计继续放大。')
-quote_text = '\n'.join(quote_lines + [_price_comment])
-
 # 「政策与产业」= 政策与监管 + 行业动态 两源（2026-09-12 修正）：
 # 此前只喂「行业动态」，节名里的「政策」无对应内容，名不副实。现先政策后产业拼接，
 # 两类目内部各自按发布日期倒序；drop_notice 仍生效，剥离治理/信披类公告（见 REFERENCE.md §3）。
 _policy_items = recent_items('政策与监管', drop_notice=True) + recent_items('行业动态', drop_notice=True)
-policy_text = '\n'.join(fmt_bullet(n) for n in _policy_items) or '今日暂无新的政策与产业动态。'
-tech_text = '\n'.join(fmt_bullet(n) for n in recent_items('找矿成果与勘查技术')) or '今日暂无新的勘查与技术动态。'
-ma_text = '\n'.join(fmt_bullet(n) for n in recent_items('并购与投资')) or '今日暂无新增并购/投资类公告。'
 
 # 矿权市场（数据层 rights，单独从月度库读取，不进 index.html 正文）
 rights_lib = json.load(open('data/news_2026-09.json', encoding='utf-8'))['news']
@@ -323,27 +318,88 @@ rights_text = ('矿权交易专区窗口内累计 %d 宗（挂牌/协议/转让/
                ('今日新增 %d 宗：%s。' % (len(rk_new), rights_highlights) if rk_new
                 else '今日无新增矿权公告，最新一批：%s。' % rights_highlights))
 
-report = """**行情：**
-%s
 
-**政策与产业：**
-%s
+def to_items(arr):
+    """news 条目 → 结构化 bullet [{t,u,s}]；正文为空则丢弃。
 
-**勘查与技术：**
-%s
+    t = 完整摘要（不截断，剥掉行尾「（原题：…）」英文题），u = 原文链接（= 页面卡片 data-url）。
+    """
+    out = []
+    for n in arr:
+        body = (n.get('summary') or n.get('title') or '').strip()
+        _i = body.find('（原题：')
+        if _i > 0:
+            body = body[:_i].rstrip()
+        if body:
+            out.append({'t': body, 'u': n.get('url', ''), 's': (n.get('source') or '').strip()})
+    return out
 
-**并购与投资：**
-%s
 
-**矿权市场：**
-- %s
-""" % (quote_text, policy_text, tech_text, ma_text, rights_text)
+# ---------- 两层简报（2026-09-12 用户要求：首屏别被淹没）----------
+# 完整层 brief_sections：五节结构化。空节不收录 —— 不再输出「今日暂无…」占位句白占高度。
+# report 由 brief_sections 拼出，保证「展开完整摘要」与结构化数据永远一致；report 仅作兜底
+# （旧版前端 / SW 缓存到旧 JSON 时仍能渲染）。
+# 注：本条不违反 §9.2「每节全量」与 §10.1「不限条数」——内容一条不减，只是改为两层呈现。
+brief_sections = [
+    {'name': '行情', 'items': [{'t': quote_lines[0][2:], 'u': '', 's': ''},
+                              {'t': _price_comment[2:], 'u': '', 's': ''}]},
+    {'name': '政策与产业', 'items': to_items(_policy_items)},
+    {'name': '勘查与技术', 'items': to_items(recent_items('找矿成果与勘查技术'))},
+    {'name': '并购与投资', 'items': to_items(recent_items('并购与投资'))},
+    {'name': '矿权市场', 'items': [{'t': rights_text, 'u': '', 's': ''}]},
+]
+brief_sections = [s for s in brief_sections if s['items']]
+for _s in brief_sections:
+    _s['count'] = len(_s['items'])
+
+report = '\n\n'.join(
+    '**%s：**\n%s' % (s['name'], '\n'.join(
+        '- %s%s' % (it['t'], ('（%s）' % it['s']) if it['s'] else '') for it in s['items']))
+    for s in brief_sections) + '\n'
+
+# 要点层 highlights（3–5 条）：由模型在撰写当日脚本时从当日数据中挑选，原则——
+#   ① 价格异动 severity=high 优先；② 政策原文/国标/法规发布；③ 重大并购与资源量变化；
+#   ④ 勘查成果；⑤ 尽量覆盖不同分节，避免 5 条全属同一节。
+# 字段：cat=所属分节（前端做小标）；t=一句话要点（≤50 字）；k=用于关联原文的关键词。
+# 脚本按 k 在当日条目标题里找第一条匹配，自动填 u（= 卡片 data-url，供前端点击跳转）；
+# k 留空或无匹配则 u 为空，前端渲染成纯文本（优雅降级，不报错）。
+highlights = [
+    {'cat': '行情', 't': '白银单日 -5.07%、碳酸锂 -4.59%，贵金属夜盘跳水且基本金属普跌', 'k': ''},
+    {'cat': '政策与产业', 't': '绿色矿山建设规范等 10 部国家标准集中发布，覆盖主要矿产类型', 'k': '绿色矿山建设规范'},
+    {'cat': '政策与产业', 't': '全国第三批矿区生态修复典型案例 24 个发布，中央奖补超 168 亿元', 'k': '矿区生态修复'},
+    {'cat': '勘查与技术', 't': '刚果（金）马库库铜矿资源量大增 30%，约 1200 万吨铜金属', 'k': '马库库'},
+    {'cat': '并购与投资', 't': '智利 7 月铜产量同比 -9.4%，Escondida 铜矿降 22.1%', 'k': '铜产量'},
+]
+
+if len(highlights) < 2:
+    # 兜底：模型漏写要点时不至于首屏空白——按异动 severity → 条目打分取候补
+    _fb = [{'cat': '行情', 't': '%s %s（%s）' % (a['commodity'], a['move'], a['market']), 'k': ''}
+           for a in alerts[:3]]
+    for _n in sorted(new_items, key=lambda x: -score_item(x)):
+        if len(_fb) >= 5:
+            break
+        _t = (_n.get('title') or '').strip()
+        if _t:
+            _fb.append({'cat': '', 't': _t[:50], 'k': ''})
+    highlights = _fb
+
+highlights = highlights[:5]
+for _h in highlights:
+    _h.setdefault('u', '')
+    if _h.get('k'):
+        for _n in new_items:
+            if _h['k'] in (_n.get('title') or ''):
+                _h['u'] = _n.get('url', '')
+                break
+    _h.pop('k', None)
 
 _cat = collections.Counter(n.get('category', '') for n in new_items)
 
 morning = {
     'date': REPORT,
     'report': report,
+    'highlights': highlights,
+    'brief_sections': brief_sections,
     'stats': {
         'new_count': len(new_items),
         'total': len(news),

@@ -1,0 +1,235 @@
+// 简报两层化回归测试（2026-09-12）
+//
+// 背景：用户反馈「某天新闻特别多时，今日简报把全部内容塞在首屏，太长了」。
+//   处置：不砍数据（§9.2 每节全量、单条不截断仍有效），改为两层呈现——
+//   要点层 highlights（3-5 条一句话，常驻）+ 完整层 brief_sections（五节全量，按需展开）。
+//   并附带：高异动前置行、节标题条数、条目点击定位到下方新闻卡片。
+//
+// 本测试覆盖三块：
+//   ① 数据契约（直接读 morning_report.json，不需要浏览器）
+//   ② 渲染行为（jsdom + 本地 http + fetch 桥接，因为 jsdom 不实现 fetch）
+//   ③ 回退路径（把 highlights/brief_sections 剥掉后必须退回旧的 report markdown 渲染）
+const fs = require('fs');
+const path = require('path');
+const http = require('http');
+const { JSDOM } = require('jsdom');
+
+const ROOT = __dirname;
+const PORT = 8822;
+const REPORT = JSON.parse(fs.readFileSync(path.join(ROOT, 'morning_report.json'), 'utf8'));
+
+let pass = 0, fail = 0;
+function check(name, cond, why) {
+  if (cond) { pass++; console.log('  PASS  ' + name + (why ? '  → ' + why : '')); }
+  else { fail++; console.log('  FAIL  ' + name + (why ? '  → ' + why : '')); }
+}
+function skip(name, why) { console.log('  SKIP  ' + name + (why ? '  → ' + why : '')); }
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// ==================== ① 数据契约 ====================
+console.log('===== ① 数据契约：highlights / brief_sections =====');
+
+const hls = REPORT.highlights;
+check('highlights 存在且为数组', Array.isArray(hls));
+check('要点条数在 3-5 条之间', Array.isArray(hls) && hls.length >= 3 && hls.length <= 5,
+  '实际 ' + (Array.isArray(hls) ? hls.length : 'N/A'));
+
+if (Array.isArray(hls)) {
+  check('每条要点都有非空 t', hls.every(h => h && typeof h.t === 'string' && h.t.trim().length > 0));
+  const tooLong = hls.filter(h => h && typeof h.t === 'string' && h.t.length > 56);
+  check('每条要点是「一句话」（≤56 字）', tooLong.length === 0,
+    tooLong.length ? '超长 ' + tooLong.length + ' 条，最长 ' + Math.max(...tooLong.map(h => h.t.length)) + ' 字' : '最长 ' + Math.max(...hls.map(h => (h.t || '').length)) + ' 字');
+  const withCat = hls.filter(h => h && typeof h.cat === 'string' && h.cat.trim());
+  check('要点均带分节标签 cat', withCat.length === hls.length, withCat.length + '/' + hls.length);
+  const badU = hls.filter(h => h.u && !/^https?:\/\//.test(h.u));
+  check('要点 u（若有）均为 http(s) 链接', badU.length === 0, badU.length ? '异常 ' + badU.length + ' 条' : '带链接 ' + hls.filter(h => h.u).length + ' 条');
+  check('要点结构里不残留内部字段 k', hls.every(h => !('k' in h)));
+}
+
+const bsec = REPORT.brief_sections;
+check('brief_sections 存在且为数组', Array.isArray(bsec));
+check('brief_sections 至少 1 节', Array.isArray(bsec) && bsec.length > 0,
+  '实际 ' + (Array.isArray(bsec) ? bsec.length : 'N/A') + ' 节');
+if (Array.isArray(bsec)) {
+  const emptyItems = bsec.filter(s => !s || !Array.isArray(s.items) || s.items.length === 0);
+  check('无空节（空节不收录）', emptyItems.length === 0, emptyItems.length ? '空节 ' + emptyItems.length + ' 个' : '共 ' + bsec.length + ' 节');
+  const badCount = bsec.filter(s => s.count !== s.items.length);
+  check('每节 count == items.length', badCount.length === 0,
+    badCount.length ? badCount.map(s => s.name + ':' + s.count + '/' + s.items.length).join(',') : '');
+  check('每节 name 非空', bsec.every(s => s && typeof s.name === 'string' && s.name.trim()));
+  check('每条 item 的 t 非空', bsec.every(s => s.items.every(it => it && typeof it.t === 'string' && it.t.trim())));
+  const total = bsec.reduce((n, s) => n + s.items.length, 0);
+  const repBullets = String(REPORT.report || '').split('\n').filter(l => l.trim().startsWith('- ')).length;
+  check('完整层总条数 == report 的条目数', total === repBullets, total + ' vs ' + repBullets);
+  const noName = bsec.filter(s => !['行情', '政策与产业', '勘查与技术', '并购与投资', '矿权市场'].includes(s.name));
+  check('节名都在五节白名单内', noName.length === 0, noName.map(s => s.name).join(','));
+}
+
+check('report 仍保留（兜底文本）', typeof REPORT.report === 'string' && REPORT.report.trim().length > 0,
+  (REPORT.report || '').length + ' 字');
+check('stats/sections/top_news 未被破坏',
+  !!REPORT.stats && !!REPORT.sections && Array.isArray(REPORT.top_news));
+
+// ==================== ② / ③ 渲染 ====================
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8', '.png': 'image/png', '.css': 'text/css; charset=utf-8' };
+
+function makeServer(stripLayers) {
+  return http.createServer((req, res) => {
+    const u = new URL(req.url, 'http://127.0.0.1:' + PORT);
+    const name = decodeURIComponent(u.pathname).replace(/^\/+/, '') || 'index.html';
+    if (name === 'morning_report.json' && stripLayers) {
+      const body = JSON.stringify(Object.assign({}, REPORT, { highlights: undefined, brief_sections: undefined }));
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(body);
+      return;
+    }
+    const p = path.join(ROOT, name);
+    if (!fs.existsSync(p) || !fs.statSync(p).isFile()) {
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end('404');
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': MIME[path.extname(name)] || 'application/octet-stream' });
+    fs.createReadStream(p).pipe(res);
+  });
+}
+
+function installFetch(win) {
+  win.fetch = (u, o) => globalThis.fetch(new URL(String(u), win.location.href).toString(), o || {});
+  if (typeof win.matchMedia !== 'function') {
+    win.matchMedia = q => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} });
+  }
+  win.HTMLElement.prototype.scrollTo = function () {};
+  win.scrollTo = function () {};
+  win.HTMLElement.prototype.scrollIntoView = function () {};
+}
+
+async function loadPage(stripLayers) {
+  const server = makeServer(stripLayers);
+  await new Promise(r => server.listen(PORT, '127.0.0.1', r));
+  const dom = await JSDOM.fromURL('http://127.0.0.1:' + PORT + '/index.html', {
+    runScripts: 'dangerously', resources: 'usable', pretendToBeVisual: true, beforeParse: installFetch
+  });
+  const win = dom.window, doc = win.document;
+  const deadline = Date.now() + 12000;
+  while (Date.now() < deadline) {
+    const m = doc.getElementById('briefMain');
+    if (m && m.querySelectorAll('li').length > 0 && !doc.querySelector('#briefMain .skeleton')) break;
+    await sleep(150);
+  }
+  return { dom, win, doc, server };
+}
+
+(async () => {
+  let s1 = null, s2 = null;
+  try {
+    // ---------- ② 两层渲染（正常数据）----------
+    console.log('\n===== ② 渲染：要点层 + 完整层 =====');
+    const p1 = await loadPage(false); s1 = p1.server;
+    const doc = p1.doc, win = p1.win;
+
+    const main = doc.getElementById('briefMain');
+    check('#briefMain 已渲染内容', !!main && main.textContent.trim().length > 0);
+
+    const hlLis = doc.querySelectorAll('#briefMain .brief-hl > li');
+    check('要点层渲染 li 数 == highlights 条数', hlLis.length === (hls || []).length,
+      hlLis.length + ' vs ' + (hls || []).length);
+
+    const sub = doc.getElementById('briefSub');
+    check('副标题为「必看 N 条」', !!sub && /^必看\s*\d+\s*条$/.test(sub.textContent.trim()),
+      sub ? sub.textContent.trim() : '(无)');
+
+    const full = doc.querySelector('#briefMain .brief-full');
+    check('完整层存在', !!full);
+    check('完整层默认隐藏', !!full && (full.hidden === true || full.hasAttribute('hidden')));
+
+    if (full) {
+      const fullLis = full.querySelectorAll('li');
+      const total = (bsec || []).reduce((n, s) => n + s.items.length, 0);
+      check('完整层 li 数 == brief_sections 总条数', fullLis.length === total, fullLis.length + ' vs ' + total);
+
+      const secs = full.querySelectorAll('.brief-sec');
+      check('完整层节标题数 == brief_sections 节数', secs.length === (bsec || []).length,
+        secs.length + ' vs ' + (bsec || []).length);
+
+      const badges = [...full.querySelectorAll('.brief-sec .sec-n')];
+      check('每个节标题都带条数徽标', badges.length === secs.length, badges.length + '/' + secs.length);
+      const badgeOk = badges.every((b, i) => parseInt(b.textContent, 10) === (bsec[i] ? bsec[i].items.length : -1));
+      check('条数徽标数值与该节实际条数一致', badgeOk, badges.map(b => b.textContent).join(','));
+
+      const noEmptySec = !/今日暂无/.test(full.textContent);
+      check('完整层不出现「今日暂无…」占位句', noEmptySec);
+    }
+
+    const alert = doc.querySelector('#briefMain .brief-alert');
+    const wantAlert = !!(REPORT.sections && REPORT.sections.anomalies && REPORT.sections.anomalies.max_severity === 'high');
+    check('高异动行按 max_severity 出现/不出现', wantAlert === !!alert,
+      'max_severity=' + (REPORT.sections && REPORT.sections.anomalies ? REPORT.sections.anomalies.max_severity : '?') + ' 行=' + (alert ? '有' : '无'));
+    if (alert) check('高异动行含「今日异动」标签', /今日异动/.test(alert.textContent));
+
+    const more = doc.getElementById('briefMore');
+    check('展开按钮可见', !!more && more.hidden === false);
+    check('按钮文案为「展开完整分类摘要（N 条）」',
+      !!more && /^展开完整分类摘要（\d+ 条）$/.test(more.textContent.trim()),
+      more ? more.textContent.trim() : '(无)');
+
+    // 展开
+    if (more && full) {
+      more.dispatchEvent(new win.MouseEvent('click', { bubbles: true }));
+      check('点击后完整层可见', full.hidden === false);
+      check('点击后按钮变「收起」', more.textContent.trim() === '收起', more.textContent.trim());
+      more.dispatchEvent(new win.MouseEvent('click', { bubbles: true }));
+      check('再点击完整层回到隐藏', full.hidden === true);
+      check('再点击按钮恢复展开文案', /展开完整分类摘要/.test(more.textContent.trim()), more.textContent.trim());
+    }
+
+    // 点击跳转
+    const jumps = [...doc.querySelectorAll('#briefMain a[data-jump]')];
+    check('有要点/条目带 data-jump 链接', jumps.length > 0, jumps.length + ' 条');
+    if (jumps.length) {
+      const a = jumps[0];
+      const url = a.getAttribute('data-jump');
+      const target = [...doc.querySelectorAll('.news-item')].find(e => e.getAttribute('data-url') === url);
+      if (target) {
+        a.dispatchEvent(new win.MouseEvent('click', { bubbles: true, cancelable: true }));
+        check('点击简报条目 → 对应新闻卡片高亮', target.classList.contains('brief-flash'));
+      } else {
+        skip('点击跳转高亮', '该条不在当前页 DOM（' + String(url).slice(0, 56) + '）');
+      }
+    }
+  } catch (e) {
+    fail++;
+    console.log('  FAIL  ② 渲染阶段异常 → ' + (e && e.message));
+  } finally {
+    if (s1) s1.close();
+  }
+
+  try {
+    // ---------- ③ 回退路径（剥掉两个新字段）----------
+    console.log('\n===== ③ 回退：无 highlights/brief_sections 时 =====');
+    const p2 = await loadPage(true); s2 = p2.server;
+    const doc2 = p2.doc;
+    const main2 = doc2.getElementById('briefMain');
+    check('#briefMain 仍有内容（回退渲染成功）', !!main2 && main2.textContent.trim().length > 0);
+    check('回退时不渲染要点层', doc2.querySelectorAll('#briefMain .brief-hl > li').length === 0);
+    check('回退时不渲染结构化完整层', !doc2.querySelector('#briefMain .brief-full'));
+    check('回退时渲染 report 的 markdown 列表', doc2.querySelectorAll('#briefMain > ul > li').length > 0,
+      doc2.querySelectorAll('#briefMain > ul > li').length + ' 条');
+    const sub2 = doc2.getElementById('briefSub');
+    check('回退时副标题为「按分类摘要」', !!sub2 && sub2.textContent.trim() === '按分类摘要',
+      sub2 ? sub2.textContent.trim() : '(无)');
+    const more2 = doc2.getElementById('briefMore');
+    check('回退时走 420px 折叠路径（按钮文案为「展开全部…」或隐藏）',
+      !more2 || more2.hidden === true || /^展开全部/.test(more2.textContent.trim()),
+      more2 ? ('hidden=' + more2.hidden + ' text=' + more2.textContent.trim()) : '(无按钮)');
+  } catch (e) {
+    fail++;
+    console.log('  FAIL  ③ 回退阶段异常 → ' + (e && e.message));
+  } finally {
+    if (s2) s2.close();
+  }
+
+  console.log('\n==== 简报两层回归：' + pass + ' PASS / ' + fail + ' FAIL ====');
+  process.exit(fail ? 1 : 0);
+})();
