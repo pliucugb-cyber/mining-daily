@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260912-1903" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260912-1918" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <link rel="apple-touch-icon" href="icon-192.png" data-page-node-id="DLjDFFiN1I5tejZu5uPLZJ">
@@ -627,7 +627,11 @@ body.dark .qa-net-fail .qa-regenerate{background:var(--danger);color:#fff}
 .qa-net-fail .qa-regenerate:hover{opacity:.9}
 .qa-mic{padding:0;width:38px;height:38px;border-radius:50%}
 .qa-mic.on{background:#e03131;color:#fff;animation:qa-mic-pulse 1s infinite}
-@keyframes qa-mic-pulse{0%{box-shadow:0 0 0 0 rgba(224,49,49,.5)}70%{box-shadow:0 0 0 7px rgba(224,49,49,0)}100%{box-shadow:0 0 0 0 rgba(224,49,49,0)}}
+@keyframes qa-mic-pulse{0%{box-shadow:0 0 0 0 rgba(224,49,49,.5)}70%{box-shadow:0 0 0 7px rgba(224,49,49,0)}100%{box-shadow:0 0 0 0 rgba(224,49,49,0)}}
+.qa-voice-meter{position:absolute;left:var(--s3);right:var(--s3);bottom:calc(100% + 4px);height:7px;display:flex;align-items:flex-end;gap:2px;opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;pointer-events:none;z-index:5}
+.qa-voice-meter.active{opacity:1;visibility:visible}
+.qa-voice-meter i{flex:1 1 0;min-width:2px;height:10%;background:var(--tag-strategy);border-radius:2px;transform-origin:bottom}
+body.dark .qa-voice-meter i{background:var(--tag-strategy)}
 .qa-float-tip{font-size: var(--fs-nano);color:var(--ink-300);padding:var(--s2) var(--s3) var(--s3);background:var(--surface);border-top:1px solid #f1f4f7;line-height:1.4;user-select:none}
 body.dark .qa-float{background:var(--surface);border-color:var(--line-1)}
 body.dark .qa-float-body{background:var(--bg)}
@@ -2426,7 +2430,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=40a91489" defer></script>
 <script src="lme-data.js?v=3a6b0f23" defer></script>
 <script src="price-history.js?v=47409181" defer></script>
-<script src="app.js?v=0c3c4432" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=f5b607f8" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
@@ -2475,7 +2479,8 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
     </div>
   </div>
   <div class="qa-float-body" id="qaFloatBody" data-page-node-id="nd0EyI5kVl0DOVnIlIBaWb"></div>
-  <div class="qa-float-foot" data-page-node-id="ClSV4Aqm5KW0LZGGVEAZMx">
+  <div class="qa-float-foot" data-page-node-id="ClSV4Aqm5KW0LZGGVEAZMx">
+    <div class="qa-voice-meter" id="qaVoiceMeter" hidden></div>
     <textarea class="qa-float-input" id="qaFloatInput" placeholder="输入关键词或问题…" aria-label="输入关键词检索或问题" autocomplete="off" rows="1" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX"></textarea>
     <button class="qa-float-btn qa-mic" id="qaFloatMic" type="button" title="语音输入（点击开始，再点结束）" aria-label="语音输入"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:auto"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M12 18v3"></path><path d="M5 10v2a7 7 0 0 0 14 0v-2"></path></svg></button>
     <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词" onclick="window.qaFloatSearch&&window.qaFloatSearch()" data-page-node-id="DcqZEFlU8VgjnfLfZc4l82">检索</button>

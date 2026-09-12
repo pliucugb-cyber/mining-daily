@@ -4265,6 +4265,57 @@ function qaExportHistory(btn){
 var QA_REC=null;
 var QA_MIC_ICON='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:auto"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M12 18v3"></path><path d="M5 10v2a7 7 0 0 0 14 0v-2"></path></svg>';
 function qaGetRec(){return (typeof window!=='undefined')?(window.SpeechRecognition||window.webkitSpeechRecognition||null):null;}
+var QA_VOICE_METER=null, QA_VOICE_RAF=0, QA_VOICE_CTX=null, QA_VOICE_STREAM=null, QA_SPEECH_BASE='';
+function qaBrowserMicGuide(){
+  var ua=(typeof navigator!=='undefined'&&navigator.userAgent)||'';
+  if(/Edg\//.test(ua))return '（Edge：点地址栏左侧的锁/调音台图标，把「麦克风」设为允许后重试）';
+  if(/Chrome\//.test(ua)&&!/Edg\//.test(ua))return '（Chrome：点地址栏左侧的锁/调音台图标，把「麦克风」设为允许后重试）';
+  if(/Firefox\//.test(ua))return '（Firefox：点地址栏左侧的权限盾牌图标，把「麦克风」设为允许后重试）';
+  if(/Safari\//.test(ua)&&/Version\//.test(ua))return '（Safari：菜单「设置→网站→麦克风」，把本站点设为允许后重试）';
+  return '（请在浏览器地址栏左侧的站点权限中允许麦克风后重试）';
+}
+function qaAppendPiece(base,piece){
+  piece=(piece||'').trim();
+  if(!piece)return base;
+  if(base&&!/[，。！？、）】」』.!?]$/.test(base)&&!/^[，。！？、）】」』]/.test(piece))base=base+' ';
+  if(!/[。！？.!?]/.test(piece.slice(-1)))piece=piece+'。';
+  return base+piece;
+}
+function qaShowVoiceMeter(stream){
+  var meter=document.getElementById('qaVoiceMeter');
+  if(!meter||!stream)return;
+  var N=14,bars=[];
+  meter.innerHTML='';
+  for(var i=0;i<N;i++){var b=document.createElement('i');meter.appendChild(b);bars.push(b);}
+  meter.classList.add('active');meter.hidden=false;
+  try{
+    var Ctx=(window.AudioContext||window.webkitAudioContext);
+    if(!Ctx)return;
+    var ctx=new Ctx();QA_VOICE_CTX=ctx;
+    if(ctx.resume)ctx.resume();
+    var src=ctx.createMediaStreamSource(stream);
+    var an=ctx.createAnalyser();an.fftSize=256;src.connect(an);
+    var buf=new Uint8Array(an.frequencyBinCount);
+    function tick(){
+      an.getByteFrequencyData(buf);
+      var sum=0;for(var i=0;i<buf.length;i++)sum+=buf[i];
+      var lvl=buf.length?sum/buf.length/255:0;
+      for(var k=0;k<bars.length;k++){
+        var h=6+Math.round(Math.abs(Math.sin((k/bars.length)*Math.PI*2+performance.now()/140))*lvl*94);
+        bars[k].style.height=h+'%';
+      }
+      QA_VOICE_RAF=requestAnimationFrame(tick);
+    }
+    tick();
+  }catch(e){}
+}
+function qaHideVoiceMeter(){
+  if(QA_VOICE_RAF){cancelAnimationFrame(QA_VOICE_RAF);QA_VOICE_RAF=0;}
+  if(QA_VOICE_CTX){try{QA_VOICE_CTX.close();}catch(e){}QA_VOICE_CTX=null;}
+  if(QA_VOICE_STREAM){try{QA_VOICE_STREAM.getTracks().forEach(function(t){t.stop();});}catch(e){}QA_VOICE_STREAM=null;}
+  var meter=document.getElementById('qaVoiceMeter');
+  if(meter){meter.classList.remove('active');meter.hidden=true;meter.innerHTML='';}
+}
 function qaInitMic(){
   var btn=document.getElementById('qaFloatMic');
   if(!btn)return;
@@ -4277,12 +4328,14 @@ function qaStopMic(btn){
   if(btn){btn.classList.remove('on');btn.innerHTML=QA_MIC_ICON;btn.title='语音输入（点击开始，再点结束）';}
   var rec=QA_REC;QA_REC=null;
   if(rec){try{rec.stop();}catch(e){} try{rec.abort();}catch(e){}}
+  qaHideVoiceMeter();
 }
 function qaMicFail(msg){
   var btn=document.getElementById('qaFloatMic');
   if(btn){btn.classList.remove('on');btn.innerHTML=QA_MIC_ICON;btn.title='语音输入（点击开始，再点结束）';}
   QA_REC=null;
-  if(msg)qaFloatAdd('ai','🎤 '+msg+'。请检查浏览器麦克风权限，或直接在输入框键入。','',{md:false});
+  qaHideVoiceMeter();
+  if(msg)qaFloatAdd('ai','🎤 '+msg+'。'+qaBrowserMicGuide(),'',{md:false});
 }
 function qaToggleMic(){
   var btn=document.getElementById('qaFloatMic'),inp=document.getElementById('qaFloatInput');
@@ -4290,14 +4343,19 @@ function qaToggleMic(){
   if(!SR){if(btn)btn.style.display='none';return;}
   // 正在识别 -> 立即停止
   if(btn&&btn.classList.contains('on')){qaStopMic(btn);return;}
-  function doStart(){
+  function doStart(stream){
+    QA_SPEECH_BASE=(inp&&inp.value||'').trim();
     var rec;
     try{rec=new SR();}catch(e){qaMicFail('创建语音识别失败');return;}
     QA_REC=rec;rec.lang='zh-CN';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
     rec.onresult=function(ev){
-      var txt='';
-      for(var i=0;i<ev.results.length;i++){txt+=ev.results[i][0].transcript;}
-      if(inp)inp.value=txt;
+      var interim='';
+      for(var i=ev.resultIndex;i<ev.results.length;i++){
+        var t=ev.results[i][0].transcript;
+        if(ev.results[i].isFinal){QA_SPEECH_BASE=qaAppendPiece(QA_SPEECH_BASE,t);}
+        else{interim+=t;}
+      }
+      if(inp){inp.value=(QA_SPEECH_BASE?QA_SPEECH_BASE+' ':'')+interim;inp.scrollTop=inp.scrollHeight;try{inp.setSelectionRange(inp.value.length,inp.value.length);}catch(e){}}
     };
     rec.onerror=function(e){
       qaStopMic(btn);
@@ -4305,11 +4363,11 @@ function qaToggleMic(){
       qaMicFail('语音识别失败（'+msg+'）');
     };
     rec.onend=function(){qaStopMic(btn);};
-    try{rec.start();qaStartMic(btn);}catch(e){qaMicFail('启动语音识别失败');}
+    try{rec.start();qaStartMic(btn);if(stream)qaShowVoiceMeter(stream);}catch(e){qaMicFail('启动语音识别失败');}
   }
   // 先请求麦克风权限，避免网页版 SpeechRecognition 静默失败
   if(typeof navigator!=='undefined'&&navigator.mediaDevices&&typeof navigator.mediaDevices.getUserMedia==='function'){
-    navigator.mediaDevices.getUserMedia({audio:true}).then(doStart).catch(function(err){
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){QA_VOICE_STREAM=stream;doStart(stream);}).catch(function(err){
       var msg='无法获取麦克风';
       if(err&&err.name==='NotAllowedError')msg='麦克风权限被拒绝';
       else if(err&&err.name==='NotFoundError')msg='未找到麦克风设备';
