@@ -226,7 +226,7 @@ check('排障文案点名真实卡点（Google 服务）',
 def _card_user_text(src):
     parts = []
     for fn in ('mdPwaShortcutTable', 'mdPwaShortcutGeneric', 'mdPwaCurrentShortcut',
-               'mdPwaShortcutStep', 'mdPwaShortcutPlain', 'mdPwaHelpHTML',
+               'mdPwaShortcutStep', 'mdPwaShortcutPlain', 'mdPwaHeroHTML', 'mdPwaHelpHTML',
                'mdRenderInstallCard'):
         m = re.search(r'function %s\(\)\{.*?\n\}' % fn, src, re.S)
         if m:
@@ -273,6 +273,27 @@ check('浏览器入口收敛成一张对照表（折叠态与展开态同源，�
       and 'function mdPwaCurrentShortcut(){' in app_js
       and 'function mdPwaShortcutGeneric(){' in app_js,
       '原先每个浏览器一行 if-return，展开态要再抄一遍 → 必然「改一处漏一处」')
+# —— 2026-09-12 用户第三轮反馈：自动识别浏览器只给一条 + 删表内标记 + 修 EdgA 漏判 ——
+check('手机 Edge 的 UA（EdgA/）能被识别',
+      'Edg[AE]?' in app_js,
+      '用户实测：手机 Edge 的 UA 是 EdgA/（Edg/ 只在桌面版）；漏判后会落到 Chrome/ 分支，'
+      '把指引和标记统统打到「安卓 Chrome」那条上')
+check('「安卓 Chrome」判定排除国产厂商与 WebView（它们的 UA 同样含 Chrome/）',
+      'MD_PWA_NOT_CHROME_RE' in app_js and 'mdPwaLooksLikePlainChrome' in app_js,
+      'vivo / OPPO / 夸克 / 百度 / 搜狗 / 360 的 UA 都含 Chrome/，只判 Chrome 会给出错误的菜单方向')
+check('对照表里不再给当前浏览器打标记（用户要求删除）',
+      '你现在用的浏览器' not in _card_text and '你现在用的浏览器' not in app_js,
+      '该标记实测会打在错的那条上 → 改为顶部 hero 只给一条')
+check('帮助正文顶部只给一条「你该怎么做」（识别到浏览器就给那一条）',
+      'function mdPwaHeroHTML(){' in app_js and '>检测到：' in app_js,
+      '用户要求：自动识别浏览器，只出现对应浏览器的操作提醒')
+check('对照表与常见问题收进折叠、不再一屏平铺（用户反馈文字太多）',
+      app_js.count('<details class="pwa-fold"') >= 2 and 'class="pwa-list"' in app_js,
+      '次要信息默认收起；行距与配色由 index.html 的 .pwa-* 规则提供')
+check('安装帮助新增样式规则齐全（行动卡 / 折叠 / 行式对照表）',
+      all(k in index_html for k in ('.pwa-hero', '.pwa-fold', '.pwa-row-name')),
+      '样式缺失会让「颜色区分 + 折叠」在真机上失效')
+
 check('「点外面关闭我的」改用事件派发时的路径判断（就地重渲染不再被误判成外部点击）',
       'e.composedPath()' in app_js and 'mdPath.indexOf(sheet)>=0' in app_js,
       '2026-09-12 用户实测：点「装不上？点这里」会把面板关掉、弹回首页')

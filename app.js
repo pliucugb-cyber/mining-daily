@@ -3117,17 +3117,26 @@ function mdPwaFlag(k,v){
     localStorage.setItem(k,v); return v;
   }catch(e){ return null; }
 }
+// 「安卓 Chrome」是表里最容易误判的一条：vivo / OPPO / 夸克 / 百度 / 搜狗 / 360 等国产浏览器的
+//   UA 里**同样含 "Chrome/"**，只判 /Chrome\// 会把它们统统认成 Chrome，再给出错误的菜单方向
+//   （它们在右下角，Chrome 在右上角）→ 宁可回落通用句，也不要报错名字。
+//   出现任一厂商标识、或安卓 WebView 标记（; wv)）→ 不认 Chrome。
+var MD_PWA_NOT_CHROME_RE=/(?:MiuiBrowser|HuaweiBrowser|UCBrowser|QQBrowser|SamsungBrowser|VivoBrowser|HeyTapBrowser|OppoBrowser|Quark|baidubrowser|BIDUBrowser|SogouMobileBrowser|QihooBrowser|360browser|MZBrowser|LenovoBrowser|Firefox|Edg[AE]?\/|; wv\))/i;
+function mdPwaLooksLikePlainChrome(){
+  var ua=navigator.userAgent;
+  return /Chrome\//.test(ua) && !MD_PWA_NOT_CHROME_RE.test(ua);
+}
 function mdPwaBrowserName(){
   var ua=navigator.userAgent;
   if(/MicroMessenger/i.test(ua)) return '微信内置浏览器';
-  if(/Edg\//.test(ua)) return 'Edge';
+  if(/Edg[AE]?\//i.test(ua)) return 'Edge';
   if(/QQBrowser/i.test(ua)) return 'QQ 浏览器';
   if(/UCBrowser/i.test(ua)) return 'UC 浏览器';
   if(/HuaweiBrowser/i.test(ua)) return '华为浏览器';
   if(/MiuiBrowser/i.test(ua)) return '小米浏览器';
   if(/SamsungBrowser/i.test(ua)) return '三星浏览器';
   if(IS_IOS) return 'Safari';
-  if(/Chrome\//.test(ua)) return 'Chrome';
+  if(mdPwaLooksLikePlainChrome()) return 'Chrome';
   if(/Firefox\//.test(ua)) return 'Firefox';
   return '未知浏览器';
 }
@@ -3138,30 +3147,30 @@ function mdPwaPlatformName(){
   return '桌面';
 }
 function mdPwaIsWeChat(){ return /MicroMessenger/i.test(navigator.userAgent); }
-// 「添加到主屏幕」的菜单项名称各浏览器不同：收敛成**一张对照表**（单一数据源）——
-//   折叠态只取「当前浏览器」那一条（最短路径），展开排障给**全部**：
-//   用户常常不知道自己用的是哪个浏览器，而且**很多人手机上根本没装 Chrome**
-//   （2026-09-12 用户明确要求「并不是每个人手机上都会安装 Chrome 浏览器」→ 必须逐个给）。
-//   表顺序即判定优先级：安卓各家自带浏览器的 UA 里都含 "Chrome"，必须先判它们、最后才判 Chrome。
+// 「添加到主屏幕」的菜单项名称各浏览器不同：收敛成**一张对照表**（单一数据源）。
+//   表顺序即判定优先级：安卓各家自带浏览器的 UA 里都含 "Chrome"，必须先判厂商、最后才判 Chrome。
+//   ⚠️ Edge 安卓版 UA 是 `EdgA/`（`Edg/` 只在桌面版）—— 只写 `Edg\/` 会漏判，漏判后继续往下走
+//      就命中 `Chrome/`，**误报成「安卓 Chrome」**（2026-09-12 用户拿手机 Edge 实测撞到）。
+//   菜单符号包 <code>（做成小药丸）、动作词用 <b>（主题色）—— 样式见 index.html 的 .pwa-* 规则。
 function mdPwaShortcutTable(){
   function hit(re){ return function(){ return re.test(navigator.userAgent); }; }
   return [
-    {k:'ios',    n:'iPhone / iPad（Safari）', t:'点底部「<b>分享 □↑</b>」（Safari 浏览器）→ 上滑找到「<b>添加到主屏幕</b>」→ 点「添加」', hit:function(){ return IS_IOS; }},
-    {k:'miui',   n:'小米浏览器',              t:'点右下角「<b>☰</b>」→「<b>添加到桌面</b>」',                       hit:hit(/MiuiBrowser/i)},
-    {k:'huawei', n:'华为浏览器',              t:'点底部「<b>☰</b>」→「<b>添加到桌面</b>」',                         hit:hit(/HuaweiBrowser/i)},
-    {k:'uc',     n:'UC 浏览器',               t:'点底部「<b>≡</b>」→「<b>添加到桌面</b>」',                         hit:hit(/UCBrowser/i)},
-    {k:'qq',     n:'QQ 浏览器',               t:'点底部「<b>≡</b>」→「<b>添加到桌面</b>」',                         hit:hit(/QQBrowser/i)},
-    {k:'samsung',n:'三星浏览器',              t:'点右下角「<b>≡</b>」→「<b>添加页面到</b>」→「<b>主屏幕</b>」',         hit:hit(/SamsungBrowser/i)},
-    {k:'edge',   n:'Edge',                    t:'点底部「<b>⋯</b>」→「<b>添加到手机</b>」（或「添加到主屏幕」）',   hit:hit(/Edg\//)},
-    {k:'firefox',n:'Firefox',                 t:'点「<b>⋮</b>」→「<b>安装</b>」或「<b>添加到主屏幕</b>」',             hit:hit(/Firefox\//)},
-    {k:'chrome', n:'安卓 Chrome',              t:'点右上角「<b>⋮</b>」→「<b>添加到主屏幕</b>」→ 确认',               hit:hit(/Chrome\//)}
+    {k:'ios',    n:'iPhone / iPad（Safari）', t:'点底部「<code>分享 □↑</code>」→ 上滑找到「<b>添加到主屏幕</b>」→ 点「添加」', hit:function(){ return IS_IOS; }},
+    {k:'miui',   n:'小米浏览器',              t:'点右下角「<code>☰</code>」→「<b>添加到桌面</b>」',                  hit:hit(/MiuiBrowser/i)},
+    {k:'huawei', n:'华为浏览器',              t:'点底部「<code>☰</code>」→「<b>添加到桌面</b>」',                    hit:hit(/HuaweiBrowser/i)},
+    {k:'uc',     n:'UC 浏览器',               t:'点底部「<code>≡</code>」→「<b>添加到桌面</b>」',                    hit:hit(/UCBrowser/i)},
+    {k:'qq',     n:'QQ 浏览器',               t:'点底部「<code>≡</code>」→「<b>添加到桌面</b>」',                    hit:hit(/QQBrowser/i)},
+    {k:'samsung',n:'三星浏览器',              t:'点右下角「<code>≡</code>」→「<b>添加页面到</b>」→「<b>主屏幕</b>」',   hit:hit(/SamsungBrowser/i)},
+    {k:'edge',   n:'Edge',                    t:'点底部「<code>⋯</code>」→「<b>添加到手机</b>」', hit:hit(/Edg[AE]?\//i)},
+    {k:'firefox',n:'Firefox',                 t:'点「<code>⋮</code>」→「<b>添加到主屏幕</b>」',     hit:hit(/Firefox\//)},
+    {k:'chrome', n:'安卓 Chrome',             t:'点右上角「<code>⋮</code>」→「<b>添加到主屏幕</b>」',          hit:mdPwaLooksLikePlainChrome}
   ];
 }
 function mdPwaShortcutGeneric(){
-  return '点浏览器菜单（一般在<b>右上角 ⋮</b>，或<b>右下角 ☰ / ≡ / ⋯</b>）→ 找「<b>添加到主屏幕</b>」或「<b>添加到桌面</b>」→ 确认。';
+  return '点浏览器菜单（一般在<b>右上角</b>，或<b>右下角</b>）→ 找「<b>添加到主屏幕</b>」或「<b>添加到桌面</b>」→ 确认。';
 }
-// 当前浏览器 = 表里第一条命中的。
-// 微信里点开的是它自己的 WebView，「在浏览器打开」之后用户会用哪个浏览器并不知道 → 返回 null 走通用句。
+// 当前浏览器 = 表里第一条命中的。微信里点开的是它自己的壳，「在浏览器打开」之后用户用哪个
+//   浏览器并不知道 → 返回 null（走通用句，也不谎报浏览器名）。
 function mdPwaCurrentShortcut(){
   if(mdPwaIsWeChat()) return null;
   var rows=mdPwaShortcutTable();
@@ -3172,38 +3181,54 @@ function mdPwaShortcutStep(){
   var r=mdPwaCurrentShortcut();
   return r ? r.t+'。' : mdPwaShortcutGeneric();
 }
-// alert() 只能放纯文本（不能带 <b>）→ 复用同一份对照表，别再手写第二份（那必然只认 Chrome）
+// alert() 只能放纯文本（不能带标签）→ 复用同一份对照表，别再手写第二份（那必然只认 Chrome）
 function mdPwaShortcutPlain(){ return mdPwaShortcutStep().replace(/<[^>]+>/g,''); }
-// 手机端安装引导正文。两条硬约定（2026-09-12 用户定夺）：
-//   ① **只讲手机** —— 电脑版在浏览器里点一下就能装，不该占用手机引导的篇幅；
-//   ② **按浏览器逐个给** —— 用户手机上装的不一定是 Chrome，泛泛一句「添加到主屏幕」等于没说。
-// 顺序也是刻意的：先给「照着做就行」的步骤（① 通用 → ② 对号入座 → ③ 微信 → ④ 点不动怎么办），
-//   把「为什么安装会失败」放到后面（⑤⑥）—— 一上来讲原理会把只想装个图标的用户挡住。
-function mdPwaHelpHTML(){
+// 帮助正文（2026-09-12 深夜排版重做，用户反馈「文字太多、读起来压力大」）。四条约定：
+//   ① 顶部**只给一条**「你现在该怎么做」：识别到浏览器就给那一条（用户原话：「能不能自动识别出
+//      用的浏览器，然后只出现对应浏览器的操作提醒」），识别不到才给通用句；
+//   ② 对照表与常见问题**收进 <details> 折叠**，默认不开 —— 需要的人再点，不给所有人一屏灰字；
+//   ③ 区分靠样式而非长句：动作词 <b> 走主题色、菜单符号 <code> 做成小药丸；
+//   ④ **不再**在对照表里给「当前浏览器」那条打标记（用户 2026-09-12 明确要求删除）：
+//      实测判定一旦落空，标记就会打在错的那条上、反而误导（用户用手机 Edge 实测撞到）。
+//      识别结果只从顶部 hero 呈现，表里一视同仁。
+function mdPwaHeroHTML(){
   var cur=mdPwaCurrentShortcut();
+  var sub='<div class="pwa-hero-sub">菜单里找不到？换个叫法试：找「<b>添加</b>」开头的项（在<b>右上角</b>或<b>右下角</b>的菜单里）。</div>';
+  if(mdPwaIsWeChat()){
+    return '<div class="pwa-hero warn"><div class="pwa-hero-tag">你在微信里打开</div>'
+      +'<div class="pwa-hero-body">第 1 步：先切到浏览器 —— 点右上角「<code>⋯</code>」→「<b>在浏览器打开</b>」；'
+      +'第 2 步：在浏览器里照下面那一行做。</div></div>';
+  }
+  if(cur){
+    return '<div class="pwa-hero"><div class="pwa-hero-tag">检测到：'+cur.n+'</div>'
+      +'<div class="pwa-hero-body">'+cur.t+'</div>'+sub+'</div>';
+  }
+  return '<div class="pwa-hero"><div class="pwa-hero-tag">最省事的办法（任何浏览器都能用）</div>'
+    +'<div class="pwa-hero-body">'+mdPwaShortcutGeneric()+'</div></div>';
+}
+function mdPwaHelpHTML(){
+  var cur=mdPwaCurrentShortcut(), wechat=mdPwaIsWeChat();
   var rows=mdPwaShortcutTable().map(function(r){
-    var on=!!(cur&&cur.k===r.k);
-    return '<li'+(on?' class="on"':'')+'><b>'+r.n+'</b>：'+r.t
-      +(on?'<span class="tag">← 你现在用的浏览器</span>':'')+'</li>';
+    return '<li class="pwa-row"><span class="pwa-row-name">'+r.n+'</span>'+r.t+'</li>';
   }).join('');
   return '<div class="mine-install-helpbody">'
-    +'<p class="h">① 最省事的办法（任何手机、任何浏览器都能用）</p>'
-    +'<p>'+mdPwaShortcutGeneric()+'</p>'
-    +'<p class="h">② 按你手机上的浏览器对号入座</p>'
-    +'<ul class="pwa-list">'+rows+'</ul>'
-    +'<p class="h">③ 如果你是在微信里打开这个链接</p>'
-    +'<p>微信自己没有「添加到桌面」入口，得先用浏览器打开：点右上角「<b>⋯</b>」→「<b>在浏览器打开</b>」，再照 ② 里你那一条做。</p>'
-    +'<p class="h">④ 点了菜单却没有任何反应？（小米 / 红米最常见）</p>'
-    +'<p>先去 <b>设置 → 应用设置 → 应用管理 → Chrome（或你正在用的浏览器）→ 权限管理</b>，把「<b>桌面快捷方式</b>」设为允许，再回来添加一次（实测可行）。</p>'
-    +'<p class="h">⑤ 为什么点「安装」多半会失败？</p>'
-    +'<p>手机浏览器里的「安装」不是做个快捷方式，而是要调用手机里的 <b>Google 服务</b>现场生成应用包。'
-    +'国内绝大多数手机没有 Google 服务，于是会出现<b>点了没反应</b>、或者<b>提示在安装但桌面始终没有图标</b>——'
-    +'它不报错，也不代表日报有问题。用「添加到主屏幕」就绕开了这一步。</p>'
-    +'<p class="h">⑥ 这样装出来的图标，点开会带一层浏览器外框</p>'
-    +'<p>因为它是快捷方式、不是独立应用；但<b>功能和离线缓存完全一样</b>，断网也能看（日报已缓存到本机）。'
-    +'想要「没有地址栏」的原生样子，只有能连 Google 服务的手机才做得到（用上面那个「安装为独立应用」）；'
-    +'连不上就是做不到，不必反复试。</p>'
-    +'</div>';
+    + mdPwaHeroHTML()
+    + '<details class="pwa-fold"'+(cur||wechat?'':' open')+'>'
+      + '<summary>'+(cur?'我用的不是 '+cur.n+' →':'按你的浏览器对号入座 →')+'</summary>'
+      + '<ul class="pwa-list">'+rows+'</ul>'
+    + '</details>'
+    + '<details class="pwa-fold">'
+      + '<summary>点了没反应 / 为什么安装会失败 →</summary>'
+      + '<div class="pwa-faq">'
+        + '<p class="h">点了菜单却没有任何反应？（小米 / 红米最常见）</p>'
+        + '<p>先去 <b>设置 → 应用设置 → 应用管理 → 浏览器 → 权限管理</b>，把「<b>桌面快捷方式</b>」设为允许，再回来添加一次（实测可行）。</p>'
+        + '<p class="h">为什么点「安装」多半会失败？</p>'
+        + '<p>手机上的「安装」不是做个快捷方式，要靠手机里的 <b>Google 服务</b>现场生成应用包；国内多数手机没有，于是点了没反应、或提示在装却始终没有图标（它不报错）。<b>用「添加到主屏幕」就绕开了这一步。</b></p>'
+        + '<p class="h">这样装出来的图标，点开会带一层浏览器外框</p>'
+        + '<p>它是快捷方式、不是独立应用，但<b>功能和离线缓存完全一样</b>，断网也能看。没有地址栏的原生样子只有能连 Google 服务的手机才做得到，连不上就不必反复试。</p>'
+      + '</div>'
+    + '</details>'
+    + '</div>';
 }
 function mdPwaDiagHTML(){
   var sw='不可用';

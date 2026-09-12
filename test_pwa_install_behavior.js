@@ -14,6 +14,7 @@
  *   ① 初始化后（未收到安装事件）→ 文字指引，无按钮
  *   ② 派发 beforeinstallprompt → 卡片自动出现「立即安装」按钮   ← 本轮修复的核心
  *   ③ 点「装不上？点这里」→ 展开排障正文 + 体检数据
+ *   ③b 自动识别浏览器：顶部只给对应那一条；手机 Edge（EdgA/）不得误报成安卓 Chrome
  *   ④ 点「立即安装」→ 真的调用浏览器 prompt()，并记下「点过安装」
  *   ⑤ 预置失败记忆 → 卡片出现 ⚠️ 排障提示
  *   ⑥ 已安装（display-mode:standalone）→ 显示已安装、无安装入口
@@ -134,11 +135,21 @@ const cardText = doc => { const c = cardEl(doc); return c ? (c.textContent || ''
   const hitB = BROWSERS.filter(n => t3.indexOf(n) >= 0);
   check('按浏览器逐个给出入口（覆盖 >=6 种，不只讲 Chrome）', hitB.length >= 6,
     '命中 ' + hitB.length + '/' + BROWSERS.length + '：' + hitB.join('/'));
-  check('标出「你现在用的浏览器」是哪一条', t3.indexOf('你现在用的浏览器') >= 0,
-    '给出 8 条对照却不标当前那条，用户不知道该看哪条');
-  check('给出微信里打开时的走法（⋯ → 在浏览器打开）', t3.indexOf('在浏览器打开') >= 0);
-  check('手机引导按 ①②③④ 分步排版（不是一整段糊在一起）',
-    ['①', '②', '③', '④'].every(m => t3.indexOf(m) >= 0));
+  // 2026-09-12 用户第三轮反馈：表里那条「← 你现在用的浏览器」标记必须删掉 —— 实测手机 Edge
+  //   未被识别，标记落在了「安卓 Chrome」那条上；判定一旦落空，标记就是误导。改为顶部只给一条。
+  check('顶部单独给出「你该怎么做」的行动卡（hero）',
+    t3.indexOf('检测到：') >= 0 || t3.indexOf('最省事的办法') >= 0,
+    '用户要求：自动识别浏览器，只出现对应浏览器的操作提醒');
+  check('对照表里不再打当前浏览器标记（用户要求删除）',
+    t3.indexOf('你现在用的浏览器') < 0);
+  check('对照表与常见问题收进折叠（details），不再一屏灰字',
+    p1.doc.querySelectorAll('#mineInstallCard details').length >= 2,
+    '实际 details 数=' + p1.doc.querySelectorAll('#mineInstallCard details').length);
+  // 「在微信里打开」这条走法已移进顶部 hero —— **只在微信内出现**（用户要的就是「只出现对应的」），
+  //   所以非微信场景不再断言它；微信场景由 ⑧ 段覆盖。
+  check('帮助正文分三层：行动卡 → 对照表 → 常见问题',
+    t3.indexOf('检测到：') >= 0
+    && t3.indexOf('我用的不是') >= 0 && t3.indexOf('点了没反应') >= 0);
   // 用户 2026-09-12 实测：MIUI/HyperOS 上 Chrome 的「添加到主屏幕」需要系统「桌面快捷方式」权限
   check('展开后给出小米「桌面快捷方式」权限这条实测可行路径',
     t3.indexOf('桌面快捷方式') >= 0 && t3.indexOf('权限管理') >= 0,
@@ -147,6 +158,39 @@ const cardText = doc => { const c = cardEl(doc); return c ? (c.textContent || ''
   check('体检数据反映「安装提示已就绪」', t3.indexOf('安装提示：已就绪') >= 0,
     '实际：' + (t3.match(/安装提示：[^ ]*/) || ['(无)'])[0]);
   check('体检数据含浏览器识别', /环境：.*Chrome/.test(t3));
+
+  // ==================== ③b 自动识别浏览器 → 顶部只给对应那一条 ====================
+  console.log('\n===== ③b 自动识别浏览器 → 顶部只给对应那一条 =====');
+  // 2026-09-12 用户实测：手机 Edge 的 UA 是 EdgA/（Edg/ 只在桌面版）→ 只写 Edg\/ 会漏判，
+  //   漏判后继续往下走就命中 Chrome/，指引落到「安卓 Chrome」那条上（用户看到的就是这个）。
+  const EDGE_UA = 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 ' +
+    '(KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36 EdgA/120.0.2210.85';
+  const pEdge = boot({ ua: EDGE_UA }); doms.push(pEdge.dom);
+  await sleep(300);
+  const tEdgeFold = cardText(pEdge.doc);
+  check('手机 Edge 被认成 Edge，没落到「安卓 Chrome」',
+    tEdgeFold.indexOf('添加到手机') >= 0 && tEdgeFold.indexOf('点右上角') < 0,
+    '折叠态实际：' + tEdgeFold.slice(0, 70));
+  const helpEdge = pEdge.doc.querySelector('#mineInstallCard [data-pwa="help"]');
+  if (helpEdge) helpEdge.click();
+  const tEdge = cardText(pEdge.doc);
+  check('展开后行动卡点名「检测到：Edge」', tEdge.indexOf('检测到：Edge') >= 0,
+    '实际片段：' + (tEdge.match(/检测到：[^。]*/) || ['(无)'])[0]);
+  check('识别到时对照表默认收起（只给对应那一条）',
+    !pEdge.doc.querySelector('#mineInstallCard details[open]'));
+  // 未列名的国产浏览器（vivo / OPPO / 夸克…）UA 里**同样含 Chrome/** → 宁可回落通用句，也不能谎报
+  const VIVO_UA = 'Mozilla/5.0 (Linux; Android 13; V2118A) AppleWebKit/537.36 ' +
+    '(KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36 VivoBrowser/19.0';
+  const pVivo = boot({ ua: VIVO_UA }); doms.push(pVivo.dom);
+  await sleep(300);
+  const tVivoFold = cardText(pVivo.doc);
+  check('vivo 自带浏览器不谎报成 Chrome（回落通用句）',
+    tVivoFold.indexOf('浏览器菜单') >= 0 && tVivoFold.indexOf('点右上角') < 0,
+    '折叠态实际：' + tVivoFold.slice(0, 70));
+  const helpVivo = pVivo.doc.querySelector('#mineInstallCard [data-pwa="help"]');
+  if (helpVivo) helpVivo.click();
+  check('识别不到时对照表默认展开（用户能自己找那一行）',
+    !!pVivo.doc.querySelector('#mineInstallCard details[open]'));
 
   // ==================== ④ 点击安装 ====================
   console.log('\n===== ④ 点「立即安装」→ 调用浏览器 prompt() =====');
@@ -190,8 +234,10 @@ const cardText = doc => { const c = cardEl(doc); return c ? (c.textContent || ''
   const p4 = boot({ ua: IPHONE_UA }); doms.push(p4.dom);
   await sleep(300);
   const t7 = cardText(p4.doc);
-  check('显示 Safari 分享添加指引', t7.indexOf('Safari') >= 0 && t7.indexOf('添加到主屏幕') >= 0,
-    '实际片段：' + t7.slice(0, 40));
+  // 折叠态不再写死「Safari 字样」—— iOS 上用户也可能用 Chrome / Edge，写死反而错；
+  //   但「分享 → 添加到主屏幕」这条路径必须给到（展开后 hero 仍会点名 iPhone / iPad）。
+  check('显示 iOS 的分享添加指引', t7.indexOf('分享') >= 0 && t7.indexOf('添加到主屏幕') >= 0,
+    '实际片段：' + t7.slice(0, 60));
   check('iOS 不显示安卓式的「立即安装」按钮（beforeinstallprompt 在 iOS 不存在）',
     !p4.doc.querySelector('#mineInstallCard [data-pwa="install"]'));
 

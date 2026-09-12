@@ -1619,6 +1619,12 @@ new = re.sub(r'<title>[^<]*</title>', lambda _m: '<title>%s</title>' % want, src
 | ③ 发布期**自愈** | `deploy_pages.sync_site_title()` | **不依赖脚本/prompt 的自觉**，上线前强制规范 |
 | ④ 前置闸门 | `preflight_check.check_site_title()` | 漂移即报错（06:00 自动化真正会跑的一步） |
 
+> **2026-09-13 补正（午夜后补丁实测）**：③ 的职责收敛为「**补站名 / 纠格式**」——
+> **优先保留标题里已有的日期**，只有在标题里压根没有日期时才用 `build-version` 兜底。
+> 因为站点标题日期 = **日报内容的日期**，而 `build-version` = **构建时刻**；午夜之后打补丁时
+> 二者必然差 1 天，若仍按 build 强制派生，会把标题推到次日、而内容还是前一天的日报。
+> **「标题是不是停在昨天」由 ④ 把关**（同日，或午夜后补丁：+1 天且 build 时间 < 01:00）。
+
 测试 `python test_site_title.py`（30 项）：③④ 两处的函数是**实跑**的（不只查字符串存在），
 避免写出「永远返回 True」的假守卫；⑤ 段动态取**文件名日期最大**的 `generate_*.py` 校验其写法，
 故每天新增的生成脚本会被自动纳入检查。
@@ -1649,7 +1655,7 @@ new = re.sub(r'<title>[^<]*</title>', lambda _m: '<title>%s</title>' % want, src
 本轮**没有改写这两条 prompt**：它们单条近万字，整段重发有引入误差的风险，
 而收益（让生成出的源码当场就正确）已被下面几条覆盖——③④ 判「生成脚本怎么写」根本不重要：
 
-- ③ `sync_site_title()` 在**每次部署前**按 build-version 强制规范 → 线上标题**不可能**错；
+- ③ `sync_site_title()` 在**每次部署前**强制规范标题的**站名与格式**（日期优先保留标题里已有的那一个 → 纯日期标题只补站名、日期不动，见 §39.4 的 2026-09-13 补正）→ 线上标题的**站名**不可能丢；
 - ④ `preflight_check.check_site_title()` 漂移即报错；
 - ② `generate_20260912.py` 的标题代码是**日期无关**的（`% REPORT`），
   且上方注释写明了 09-07 回退史并指向本节 → 明日脚本按惯例「抄上一日再改数据」时会原样继承。
@@ -1955,6 +1961,53 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 **教训（已写进 §42.8 回退指纹）**：查 SW / 刷新 / 缓存类代码**必须同时扫 `index.html` 内联脚本**。
 本轮我先只改了 `app.js`，复测仍是 2 次导航 —— 因为**内联那条才是元凶**；只 grep `*.js` 会整条漏掉。
 
+### 41.10 第四轮改版（2026-09-13 凌晨，build `20260913-0031`）：排版重做 + 自动识别浏览器
+
+**用户反馈（附图 + 三条要求）**
+
+1. 排版压力大：「文字内容太多了，读起来压力还是挺大的；行间距可以再宽一点，是不是也可以用不同的
+   颜色字体作为区分」；
+2. 要求删掉表里的「← 你现在用的浏览器」：「我用 edge 测试了一下，你也没有把这个变到 edge 浏览器的
+   操作上」；
+3. 「能不能自动识别出用的浏览器，然后只出现对应浏览器的操作提醒。如果太复杂的话，就算了」。
+
+**第 2 条的根因是真 bug，不是标记设计问题**
+
+手机 Edge 的 UA 是 `EdgA/120.0.2210.85`（`Edg/` 只在桌面版），而表里 edge 行写的是 `hit(/Edg\//)`
+→ **漏判** → 继续往下走命中 `Chrome/` → 落到「安卓 Chrome」那条，标记与指引都打错了。
+修法：`/Edg[AE]?\//i`（覆盖 `Edg/` `EdgA/` `Edge/`）。`mdPwaBrowserName()` 同一处漏判一并修。
+
+顺带堵同类隐患：「安卓 Chrome」是表里最容易误判的一条 —— vivo / OPPO / 夸克 / 百度 / 搜狗 / 360
+的 UA 同样含 `Chrome/`，只判 `Chrome/` 会把它们统统认成 Chrome，再给出**错误方向**的菜单指引
+（它们在右下角，Chrome 在右上角）。新增 `MD_PWA_NOT_CHROME_RE` + `mdPwaLooksLikePlainChrome()`。
+
+**第 1+3 条的改法**
+
+- 新增 `mdPwaHeroHTML()`：顶部只给一条「你该怎么做」（识别到 → `检测到：<浏览器>` + 步骤；未识别 →
+  通用句；微信 → 警示样式两步）；
+- `mdPwaHelpHTML()` = hero + 两个 `<details>`（对照表 / 常见问题）；识别到或微信内默认收起、
+  识别不到默认展开；
+- 删除表内 `.on` 标记与 `li.on` / `.tag` 样式；
+- 样式：行高 1.6 → **1.9**，`<b>` 主题色、`<code>` 药丸，行动卡左边 3px 色条（不用底色）；
+- 文案精简：Edge 去掉多余括号、Firefox 主推项由「安装」改为可靠的「添加到主屏幕」、Chrome 去掉
+  多余的「→ 确认」、微信 hero 去掉与外层提示重复的解释。
+
+**验证**
+
+- `test_pwa_install.py` **45 → 51 PASS / 0 FAIL**；`test_pwa_install_behavior.js` **37 → 43 PASS / 0 FAIL**
+  （新增 ③b 段：Edge（`EdgA/`）与 vivo 两个 UA 的行为断言）。
+- **反向验证**：把 edge 判定改回 `Edg\//` 复跑 → 3 条 FAIL（「手机 Edge 被认成 Edge」「hero 点名
+  检测到：Edge」「识别到时对照表默认收起」），还原后 43/0 —— 守卫是真的会拦。
+- **真 Chrome 四场景出图**（Chrome / Edge(`EdgA`) / vivo / 微信）：16/16 通过，含计算样式断言
+  （行高 24.7px ÷ 字号 13px ≈ 1.9、色条 3px、药丸 1px 边框、`<b>` 非默认黑、折叠符 `▸`）。
+- 全量闸门 21 node + 9 python 全绿。
+- `preflight_check.py::check_site_title` 新增**午夜后补丁**放行：build 比标题晚 1 天 **且 build 时间
+  < 01:00** 才合法（06:00 生成侧漏改标题时 build 是 06:xx → 仍被拦，守卫没有放松）。
+- 配套：`preflight_check.py::check_site_title` 放行**午夜后补丁**（build 比标题晚 1 天且 build 时间
+  < 01:00；06:00 生成侧漏改标题时 build 是 06:xx → 仍被拦）；`deploy_pages.sync_site_title()` 改为
+  **优先保留标题已有日期**（纯日期标题只补站名、日期不变）；`test_site_title.py` 同日加入该配比判定，
+  **30 PASS / 0 FAIL**。这条链上路后，跨午夜补丁不再需要把 build 日期硬凑成前一天。
+
 ## §42 全站形态契约与复核清单（生成侧必留 · 复核侧回退指纹）
 
 > **用途**：本节是**全站形态的唯一权威清单**，被两条自动化直接引用 ——
@@ -2051,7 +2104,23 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - 卡片正文**只讲手机**：**不得出现「电脑」**（电脑版在浏览器里点一下就能装，不占手机引导的篇幅）。app.js 里其余「电脑」只允许出现在**注释**中。
 - 正文必须是**分步排版**（`p.h` 小标题 + `ul.pwa-list > li`），一坨密集文字视为回退；节奏固定为：① 通用办法 → ② 按浏览器对号入座 → ③ 微信里打开 → ④ 点了没反应（小米权限）→ ⑤ 为什么「安装」多半失败 → ⑥ 快捷方式的观感与离线能力。
 - **浏览器对照表 `mdPwaShortcutTable()` 是唯一数据源**（9 行：iOS / 小米 / 华为 / UC / QQ / 三星 / Edge / Firefox / Chrome），**判定顺序即表序**——各家自带浏览器 UA 都含 `Chrome`，必须先判它们、最后才判 Chrome。泛用兜底 `mdPwaShortcutGeneric()`；去标签纯文本 `mdPwaShortcutPlain()`（`alert` 用，**不得再手写第二份**）。
-- 折叠态只给**当前浏览器**那一条（`mdPwaCurrentShortcut()`）；展开态给**全部 9 条**，命中项加 `.on` + 「← 你现在用的浏览器」。**理由**：很多手机没装 Chrome（用户 2026-09-12 明确要求），泛泛一句「添加到主屏幕」等于没说。
+- **正文结构（第三轮定稿）**：顶部 **hero 行动卡**（`mdPwaHeroHTML()`）只给**一条**「你该怎么做」——
+  识别到浏览器就给那一条（小标签 `检测到：<浏览器>` + 该条具体步骤），识别不到给 `mdPwaShortcutGeneric()`
+  通用句，微信内给警示样式（第 1 步先切到浏览器 / 第 2 步照下面那一行做）。对照表与常见问题**收进
+  `<details class="pwa-fold">`**：识别到或微信内默认收起，识别不到默认展开（让用户能自己找那一行）。
+  **理由**：用户 2026-09-13 反馈「文字内容太多了，读起来压力大」，并明确要求「自动识别出用的浏览器，
+  然后只出现对应浏览器的操作提醒」。9 行对照表（iOS / 小米 / 华为 / UC / QQ / 三星 / Edge / Firefox /
+  Chrome）仍是唯一数据源，折叠态取 `mdPwaCurrentShortcut()` 命中项、展开态给全部 9 条。
+- ⚠️ **严禁**再在对照表里给当前浏览器打标记（旧版那句「← 你现在用的浏览器」已按用户要求删除）：
+  实测判定一旦落空，标记就会打在**错的**那条上 → 反而误导。识别结果**只从 hero 呈现**。
+- ⚠️ **UA 判定两个坑（第三轮实测）**：① 手机 Edge 的 UA 是 **`EdgA/`**（`Edg/` 只在桌面版）——
+  只写 `Edg\/` 会漏判，漏判后继续往下走就命中 `Chrome/`、**误报成「安卓 Chrome」**（用户拿手机 Edge
+  实测撞到）；② vivo / OPPO / 夸克 / 百度 / 搜狗 / 360 的 UA **同样含 `Chrome/`** →
+  `MD_PWA_NOT_CHROME_RE` 排除它们与 `; wv)`（WebView），命中则回落通用句，**宁可不说，也不谎报浏览器名**。
+  体检数据里的 `mdPwaBrowserName()` 走同一套判定（`mdPwaLooksLikePlainChrome()`）。
+- **排版（第三轮）**：正文行高 **1.9**（原 1.6）；动作词 `<b>` 走主题色 `--brand-ink`、菜单符号
+  `<code>` 做成小药丸；行动卡左侧 3px 色条分区（**刻意不用底色** —— 暗色主题下卡片本身就是
+  `--surface-3`，叠同色底会看不见）；对照表每条「名字独占一行 + 步骤次行 + 虚线分隔」。
 - 移动端浮条文案：`#mobileInstallText` = 「添加到移动端桌面…」实际值 **「添加到手机桌面，离线也能看日报」**；`#mobileInstallBtn` = **「怎么加」**（原「安装」）。
 
 ### 42.8 前端信标 · 日期唯一来源 · 文案 · 行情口径
@@ -2079,8 +2148,8 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `node test_smoke_0908.js` | **74** | 全站冒烟（含矿权双视图 8 + 列表排序 9） |
 | `node test_mobile_ux_batch.js` | **172** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6 |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
-| `PY test_pwa_install.py` | **45 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
-| `node test_pwa_install_behavior.js` | **37 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板） |
+| `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
+| `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
 | `PY test_price_history_unclosed.py` | **0 失败** | 走势图末点确有已收盘数据 |
 | `node test_data_integrity.js` | 锁卡片值/方向 == `lme_data.json` | 行情口径 |
 | `%TEMP%\md_rvprobe.py` | **11 用例 / 76 断言** | 真机（真实 Chrome）响应式与形态探针 |

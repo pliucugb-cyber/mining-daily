@@ -288,12 +288,20 @@ def sync_site_title():
     if not m:
         raise RuntimeError('index.html 的 build-version 形状异常（应形如 20260912-2205），'
                            '无法派生站点标题（拒绝部署）')
-    want = '%s · %s-%s-%s' % (SITE_NAME, m.group(1), m.group(2), m.group(3))
     ct = len(re.findall(r'<title>', src))
     if ct == 0:
         raise RuntimeError('index.html 中找不到 <title>，无法规范化站点标题（拒绝部署）')
     # 取第一个：head 里的真标题永远在 <style> 之前（源文件里就在第 18 行）
     pat = re.compile(r'<title>[^<]*</title>')
+    # 2026-09-13（午夜后补丁实测）：**优先保留标题里已有的日期**，只有在标题里压根没有日期时
+    #   才用 build-version 兜底。理由：标题日期 = 日报**内容**的日期，build-version = **构建时刻**，
+    #   午夜后打补丁时二者必然差 1 天 —— 若无条件按 build 派生，会把标题推到次日（内容却还是
+    #   前一天的日报）→ 误导读者。「标题是不是停在昨天」由 preflight_check.check_site_title()
+    #   把关（那才是管日期的地方）；本函数的职责收敛为「补站名 / 纠格式」。
+    _mt = pat.search(src)
+    _md = re.search(r'\d{4}-\d{2}-\d{2}', _mt.group(0)) if _mt else None
+    _day = _md.group(0) if _md else '%s-%s-%s' % (m.group(1), m.group(2), m.group(3))
+    want = '%s · %s' % (SITE_NAME, _day)
     new = pat.sub(lambda _m: '<title>%s</title>' % want, src, count=1)
     if new == src:
         log('[deploy_pages] 站点标题已规范：%s' % want)

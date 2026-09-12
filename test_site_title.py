@@ -78,9 +78,26 @@ check('标题仍含完整日期（app.js qaReportDate 的兜底依赖 document.t
 
 mb = re.search(r'<meta name="build-version" content="(\d{8})-(\d{4})"', index_html)
 check('build-version 存在且形状合法', bool(mb), '形如 20260912-2221')
+def _title_matches_build(td, bd, hh):
+    """标题日期与 build 是否合法配比：同日，或**午夜后补丁**（+1 天且 build 时间 < 01:00）。
+
+    2026-09-13 00:3x 实测需要：站点标题日期 = 日报**内容**日期，build-version = **构建时刻**，
+    午夜后打补丁时二者必然差 1 天（内容仍是前一天的日报）。仅放行 00:00–00:59 这一段 ——
+    06:00 生成侧若漏改标题（build 06:xx）仍会被拦，守卫没有放松。
+    """
+    import datetime as _dt
+    try:
+        t = _dt.date(*[int(x) for x in td.split('-')])
+        b = _dt.date(int(bd[:4]), int(bd[4:6]), int(bd[6:8]))
+    except ValueError:
+        return False
+    d = (b - t).days
+    return d == 0 or (d == 1 and int(str(hh)[:2]) < 1)   # hh 可能是 '0031'（HHMM）
+
 if m and mb:
-    check('标题日期与 build-version 同日', m.group(1).replace('-', '') == mb.group(1),
-          '标题 %s / build-version %s' % (m.group(1), mb.group(1)))
+    check('标题日期与 build-version 同日（或午夜后补丁：+1 天且 build 时间 < 01:00）',
+          _title_matches_build(m.group(1), mb.group(1), mb.group(2)),
+          '标题 %s / build-version %s-%s' % (m.group(1), mb.group(1), mb.group(2)))
 
 # ==================== ② manifest.json 与页面一致 ====================
 print('\n===== ② manifest.json（安装到主屏的名字与配色）=====')

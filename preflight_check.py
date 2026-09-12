@@ -16,6 +16,7 @@ preflight_check.py — 矿业日报自动化前置/回归健康检查。
      ——2026-09-10 事故新增。此前没有任何门禁真正解析过 sw.js，一行语法错误
      （`const P260910-1900';`）直接上线，导致 SW 无法更新、页面区块永久停在「加载中…」。
   8. 站点标题（浏览器标签页）必须是「矿业新闻日报 · YYYY-MM-DD」，且日期与 build-version 同日
+     （例外：午夜后补丁 —— 见 check_site_title 内的注释，仅放行 build 时间 < 01:00 的 +1 天）
      ——2026-09-12 用户反馈「标签页只有一个光秃秃的日期」后固化。09-07 起生成脚本把
      <title> 从「矿业新闻日报 2026-09-04」写成了纯日期，站名丢失且无人察觉。
      约定见 REFERENCE.md §39；deploy_pages.sync_site_title() 是同一约定的自愈兜底。
@@ -31,6 +32,7 @@ preflight_check.py — 矿业日报自动化前置/回归健康检查。
 写入 .preflight_status.json（供自动化读取；注意：该文件不应被 git 提交，
 加进 deploy_pages 的 git-add 排除名单）。
 """
+import datetime
 import json
 import re
 import shutil
@@ -243,9 +245,27 @@ def check_site_title(text):
         if m2.group(1).replace('-', '') == mb.group(1):
             findings.append('✅ 标题日期与 build-version 同日（%s）' % m2.group(1))
         else:
-            findings.append('❌ 标题日期 %s 与 build-version %s 不同日——生成时漏改标题'
-                            % (m2.group(1), mb.group(1)))
-            return False, findings
+            # 跨午夜补丁（2026-09-13 00:3x 首次需要）：站点标题日期 = **日报内容的日期**，
+            #   而 build-version = **构建时刻**。午夜之后打补丁时，二者必然差 1 天。
+            #   只放行「build 比标题晚 1 天 **且 build 时间在 00:00–00:59**」这一种情形：
+            #   06:00 生成侧若漏改标题（标题=昨天、build=今天 06:xx），时间部分 > 01:00 → 仍被拦，
+            #   这条守卫防的「标题退回纯日期 / 漏改标题」依然有效。
+            mh = re.search(r'<meta name="build-version" content="(\d{8})-(\d{2})(\d{2})"', text)
+            midnight_patch = False
+            if mh:
+                try:
+                    t = datetime.date(int(m2.group(1)[:4]), int(m2.group(1)[5:7]), int(m2.group(1)[8:10]))
+                    b = datetime.date(int(mh.group(1)[:4]), int(mh.group(1)[4:6]), int(mh.group(1)[6:8]))
+                    midnight_patch = ((b - t).days == 1) and int(mh.group(2)) < 1
+                except ValueError:
+                    midnight_patch = False
+            if midnight_patch:
+                findings.append('✅ 标题日期 %s，build %s-…（午夜后补丁，允许差 1 天）'
+                                % (m2.group(1), mb.group(1)))
+            else:
+                findings.append('❌ 标题日期 %s 与 build-version %s 不同日——生成时漏改标题'
+                                % (m2.group(1), mb.group(1)))
+                return False, findings
     return True, findings
 
 
