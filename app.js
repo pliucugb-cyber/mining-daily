@@ -3919,6 +3919,53 @@ function qaFloatStopResize(ev){
 function qaFloatScroll(){
   var b=document.getElementById('qaFloatBody');if(b)b.scrollTop=b.scrollHeight;
 }
+// ===== 2026-09-12：检索/提问后的滚动落点 =====
+// 用户反馈「每次搜完界面都跳到回答的最后面，还要往前翻，翻到问的问题」（手机/电脑都一样）。
+// 旧行为是一律 scrollTop=scrollHeight；命中 100 条时答案高约 1.2 万 px，人就被甩在
+// 离问题 1.2 万 px 的底下。现改为：把「刚发出的问题」钉在可视区顶部，读者从问题往下顺着读。
+function qaFloatNearBottom(b,tol){
+  if(!b)return false;
+  return (b.scrollHeight-b.clientHeight-b.scrollTop)<=(tol||80);
+}
+// 只在「用户本来就贴着底部」时才跟随到底——他正读到中间时别把他拽走
+function qaFloatFollow(){
+  var b=document.getElementById('qaFloatBody');if(!b)return;
+  if(qaFloatNearBottom(b,80))b.scrollTop=b.scrollHeight;
+}
+// 把某条消息钉到滚动容器顶部（用 rect 差值算，避开 offsetParent 不确定的问题）
+function qaFloatAnchorTop(el){
+  var b=document.getElementById('qaFloatBody');if(!b||!el)return;
+  try{
+    if(!b.clientHeight)return;   // 面板尚未布局（极端情况）时不硬算
+    var rb=b.getBoundingClientRect(),re=el.getBoundingClientRect();
+    var t=b.scrollTop+(re.top-rb.top)-10;
+    var max=b.scrollHeight-b.clientHeight;
+    if(t<0)t=0;
+    if(t>max)t=max;
+    b.scrollTop=t;
+  }catch(e){}
+}
+// 恢复本地历史后，把最后一条提问钉在顶部——与「刚检索完」的落点保持一致
+function qaFloatAnchorLastQuestion(){
+  var b=document.getElementById('qaFloatBody');if(!b)return;
+  var qs=b.querySelectorAll('.qa-msg.user');
+  if(qs.length)qaFloatAnchorTop(qs[qs.length-1]);
+}
+// 收尾落点（每轮答完/检索完调用）：
+//   第一轮——欢迎语很短，问题本来就落在可视区上半部 → 不动，用户原地往下读；
+//   第二轮起——上一轮的长答案会把新问题顶到屏幕下半部，这时若不处理，屏幕上只剩问题、
+//   答案全在屏幕外，照样读不下去 → 把问题提到顶部。
+//   用户若已自己滚到别处（问题已不在可视区）→ 一律不动，不打断他当前的阅读位置。
+function qaFloatSettle(){
+  var b=document.getElementById('qaFloatBody');if(!b)return;
+  var qs=b.querySelectorAll('.qa-msg.user');if(!qs.length)return;
+  var q=qs[qs.length-1];
+  try{
+    var rb=b.getBoundingClientRect(),rq=q.getBoundingClientRect();
+    var off=rq.top-rb.top,h=b.clientHeight;
+    if(off>h*0.4 && off<h)qaFloatAnchorTop(q);
+  }catch(e){}
+}
 // 轻量 Markdown → HTML（仅支持回答常见格式：加粗、列表、标题、代码、引用、链接）
 // ===== 2026-09-11：Markdown 表格渲染 =====
 // 此前 qaMdRender 完全不认识竖线字符：模型按提示词输出的表格会被渲染成裸竖线
@@ -4047,7 +4094,12 @@ function qaFloatAdd(role,html,meta,opts){
   if(opts.q)d.dataset.q=opts.q;
   if(opts.ctx)d.dataset.ctx=JSON.stringify(opts.ctx||[]);
   if(opts.ts)d.dataset.ts=String(opts.ts);
-  body.appendChild(d);qaFloatScroll();return d;
+  body.appendChild(d);
+  // 2026-09-12：默认只在用户贴底时跟到底（别中断他正在读的位置）。
+  // anchorTop＝「用户刚发出的问题」，钉到可视区顶部；keepScroll＝后续紧跟的答案，保持不动。
+  if(opts.anchorTop)qaFloatAnchorTop(d);
+  else if(!opts.keepScroll)qaFloatFollow();
+  return d;
 }
 function qaExportHistory(btn){
   try{
@@ -4155,7 +4207,7 @@ function qaFloatSearch(){
   var mineral=(document.getElementById('qaFloatMineral')||{}).value||'';
   var topic=(document.getElementById('qaFloatTopic')||{}).value||'';
   var range=parseInt((document.getElementById('qaFloatRange')||{}).value,10)||0;
-  if(q){qaFloatAdd('user',q,'',{md:false});inp.value='';}
+  if(q){qaFloatAdd('user',q,'',{md:false,anchorTop:true});inp.value='';}
   if(!q&&!mineral&&!topic&&!range){
     // 未输入条件时不弹提示词式消息，静默返回即可
     return;
@@ -4195,7 +4247,8 @@ function qaFloatSearch(){
     }
     if(hits.length>lim)html+='<div style="margin-top:4px;color:#6b7a89">为防列表过长，仅显示前 '+lim+' 条；共 '+hits.length+' 条命中，请缩小关键词 / 矿种 / 时间范围查看其余。</div>';
   }
-  qaFloatAdd('ai',html,'全库 '+QA_ROWS.length+' 条 · 检索于本地，不经任何服务',{html:true});
+  qaFloatAdd('ai',html,'全库 '+QA_ROWS.length+' 条 · 检索于本地，不经任何服务',{html:true,keepScroll:true});
+  try{qaFloatSettle();}catch(e){}
   qaSaveHistory();
 }
 // 0 结果时的兜底建议：推荐与 query 字符相近的矿种/主题，点击直接套用筛选重搜
@@ -4265,7 +4318,7 @@ function qaFloatAsk(retryMode,ctxOverride){
   if(!q){qaFloatAdd('ai','请先输入问题，例如「最近有哪些稀土政策」「锂价为什么大跌」。','',{md:false});return;}
   QA_FLOAT_BUSY=true;
   if(btn){btn.disabled=true;btn.textContent='思考中…';}
-  if(!retryMode){qaFloatAdd('user',q,'',{md:false,ts:Date.now()});qaSaveHistory();}
+  if(!retryMode){qaFloatAdd('user',q,'',{md:false,ts:Date.now(),anchorTop:true});qaSaveHistory();}
   if(inp)inp.value='';
   var _ctx=ctxOverride;
   var _dateIntent=qaDetectDateIntent(q);
@@ -4304,7 +4357,7 @@ function qaFloatAsk(retryMode,ctxOverride){
   if(_qaCacheKey && !retryMode){
     var _hit=qaCacheGet(_qaCacheKey);
     if(_hit){
-      var msg=qaFloatAdd('ai','（命中本地答案缓存，正在渲染…）','答案缓存命中',{md:false,actions:false,ts:Date.now()});
+      var msg=qaFloatAdd('ai','（命中本地答案缓存，正在渲染…）','答案缓存命中',{md:false,actions:false,ts:Date.now(),keepScroll:true});
       _qaPath='缓存';_qaModel='deepseek-chat';_qaT0=Date.now();
       qaFinishAnswer(_hit.text,msg.querySelector('.qa-msg-bubble'),msg,q,_hit.ctx||_ctx,_hit.dateIntent||_dateIntent);
       QA_FLOAT_BUSY=false; if(btn){btn.disabled=false;btn.textContent='✨ AI 回答';}
@@ -4313,7 +4366,7 @@ function qaFloatAsk(retryMode,ctxOverride){
   }
   _qaCacheKey=_qaCacheKey||qaCacheKey(q,_minSel||_min,_topSel||_top,_from,_rg,_dateIntent);
   var meta='正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候…';
-  var msg=qaFloatAdd('ai','正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now()});
+  var msg=qaFloatAdd('ai','正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now(),keepScroll:true});
   qaDeepseekCall(q,_ctx,msg,btn,_conv,_broad,_dateIntent,_rangeIntent);
   return;
 }
@@ -4542,7 +4595,7 @@ function qaFinishAnswer(text,bubble,msg,q,ctx,ok,dateIntent){
     }
   }
   if(ok && _qaCacheKey){ qaCachePut(_qaCacheKey,{text:text,ctx:ctx||[],dateIntent:dateIntent,u:QA_UPDATED||''}); }
-  qaFloatScroll();qaSaveHistory();
+  qaFloatSettle();qaSaveHistory();
 }
 // 代理模式下：优先尝试 SSE 流式；若边缘函数尚未启用流式（返回 JSON），自动回退 JSON 解析
 function qaTryStreamOrJson(url,headers,body,bubble,msg,q,ctx,dateIntent,ac,to,btn){
@@ -4738,6 +4791,8 @@ function qaLoadHistory(){
       else if(it.role==='ai')qaFloatAdd('ai',it.html,it.meta||'',Object.assign({canRetry:it.canRetry!==false,actions:it.canRetry!==false,q:it.q||'',ctx:it.ctx||[]},ropts));
       else if(it.role==='search')qaFloatAdd('ai',it.html,it.meta||'',{html:true,ts:it.ts});
     });
+    // 2026-09-12：打开面板时也停在「最后一条提问」，与刚检索完的落点一致
+    qaFloatAnchorLastQuestion();
   }catch(e){}
 }
 function qaSaveHistory(){
@@ -4839,6 +4894,12 @@ function qaSugQuery(el){
   qaFloatSearch();
 }
 window.qaFloatRenderSuggest=qaFloatRenderSuggest;
+// 2026-09-12：滚动落点三函数导出（供 test_mobile_ux_batch 契约守护）
+window.qaFloatNearBottom=qaFloatNearBottom;
+window.qaFloatFollow=qaFloatFollow;
+window.qaFloatAnchorTop=qaFloatAnchorTop;
+window.qaFloatAnchorLastQuestion=qaFloatAnchorLastQuestion;
+window.qaFloatSettle=qaFloatSettle;
 window.qaSugQuery=qaSugQuery;
 function qaCopyAi(btn){
   var msg=btn.closest('.qa-msg');if(!msg)return;
