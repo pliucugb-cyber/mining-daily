@@ -1378,14 +1378,14 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 ### 32.5 红线
 - 底栏 tab 仅激活态高亮品牌色；AI 搜 非激活必须中性灰，不得回退为恒亮。
 - 左边缘右滑返回需与「‹ 返回」点击行为一致（从我的进入→回我的面板）。
-
-### §33 2026-09-12 build 20260912-2037：桌面端收藏/浏览记录沉浸式视图统一单栏布局
-
-- 问题：1440px+ 下 `body[data-filter-mode="history"] .news-grid` 仍保留 `320px` 右栏列宽，但 `.col-rail` 已被隐藏，导致「浏览记录」右侧出现 320px 空白；「我的收藏」已强制单栏。
-- 修复：`@media(min-width:1440px)` 内把 fav/history 统一为 `grid-template-columns:minmax(0,1fr)`，并同步更新 1101px 媒体查询注释，避免误导「保留右侧热榜/会展」。
-- 原则：收藏与浏览记录共用同一套 `renderFavHistoryAggregate()` 聚合视图，布局必须完全一致。
-- 回归：`test_mobile_ux_batch.js` 新增 CSS 断言「history 与 fav 在 1440px+ 共用单栏布局（无 320px 隐藏右栏）」；总断言 194→195，0 失败。
-- 延伸建议（待排期）：若仍觉垂直间距大，可把 `#archFavList .news-item` 的 `gap/margin-bottom/padding` 再收紧一档；归档 history 卡片可补摘要；按时间分组；桌面端左侧目录在沉浸式视图下也可隐藏。
+
+### §33 2026-09-12 build 20260912-2037：桌面端收藏/浏览记录沉浸式视图统一单栏布局
+
+- 问题：1440px+ 下 `body[data-filter-mode="history"] .news-grid` 仍保留 `320px` 右栏列宽，但 `.col-rail` 已被隐藏，导致「浏览记录」右侧出现 320px 空白；「我的收藏」已强制单栏。
+- 修复：`@media(min-width:1440px)` 内把 fav/history 统一为 `grid-template-columns:minmax(0,1fr)`，并同步更新 1101px 媒体查询注释，避免误导「保留右侧热榜/会展」。
+- 原则：收藏与浏览记录共用同一套 `renderFavHistoryAggregate()` 聚合视图，布局必须完全一致。
+- 回归：`test_mobile_ux_batch.js` 新增 CSS 断言「history 与 fav 在 1440px+ 共用单栏布局（无 320px 隐藏右栏）」；总断言 194→195，0 失败。
+- 延伸建议（待排期）：若仍觉垂直间距大，可把 `#archFavList .news-item` 的 `gap/margin-bottom/padding` 再收紧一档；归档 history 卡片可补摘要；按时间分组；桌面端左侧目录在沉浸式视图下也可隐藏。
 
 ### §34 2026-09-12 build 20260912-2107：收藏/浏览记录沉浸式视图六项增强（建议①②③④⑤⑥）
 - 建议① 间距收紧：沉浸式 `.news-grid` gap 由 --s5 → --s4；`#archFavList .news-item` margin-bottom --s3→--s2、padding --s4/--s5→--s3/--s4，一屏多看 1-2 条。
@@ -1528,3 +1528,35 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - jsdom 对 `<style>` 里 CSS 的应用能力有限，故本轮守卫用**静态断言**（选择器 / 属性）而非计算样式；
   「折叠后卡片真的消失」目前只能靠真机肉眼确认。
 
+
+## §38 2026-09-12 今日简报折叠状态持久化（永久记住 + 首帧前恢复，build `20260912-2205`）
+
+**背景**：§37 待办里挂着「折叠状态未持久化（刷新即恢复展开）」。用户裁定：**永久记住**，且**要一并解决首帧闪动**。
+
+**做法（两处必须成对存在，只做一处就出问题）**
+
+1. `app.js`（`DOMContentLoaded` 内 `#briefToggle` 绑定处）
+   - 新增 `BRIEF_COLLAPSE_KEY='mdBriefCollapsed'`（对齐 `mdRightsView` / `md_last_tab` 命名习惯）。
+   - 初始化：先读开关 → 为 `'1'` 就给 `#briefStrip` 补 `brief-collapsed` 类，并同步 `#briefToggle` 的 `aria-expanded='false'`。
+   - 点击：`classList.toggle('brief-collapsed')` → **紧接着** `setAttribute('aria-expanded',…)` → 最后才 `setItem`。
+     **顺序不能动**：④ 的守卫是 `classList.toggle('brief-collapsed')[\s\S]{0,140}aria-expanded`，
+     在两者之间插语句会把距离推过 140 字符而失配（§36.6 同类坑）。
+2. `index.html`（紧跟 `#briefStrip` 之后的一段 pre-paint 内联脚本）
+   - 为什么只改 `app.js` 不够：`.brief-card` 是**静态 HTML**（内含「简报加载中…」占位），而 `app.js` 是 `defer` 外部脚本，
+     首帧可能早于 app.js 执行 ⇒ 折叠态要到首帧之后才生效，肉眼看到「卡片冒出又收起」。
+   - 内联脚本在 `#briefStrip` 之后的解析点执行（解析器阻塞），此时元素已在 DOM 中 ⇒ 直接补类，
+     **无需新增 CSS**（复用 §37 修好的 `.brief-strip.brief-collapsed`），首帧即收起。
+   - 位置红线：**不得**放到 `#briefStrip` 之前（那时元素还不存在）。
+
+**测试**：`test_brief_layers.js` ④ 新增 6 条守卫（含两处 key 的漂移守卫：`BRIEF_COLLAPSE_KEY` 在 app.js 只定义 1 次、`mdBriefCollapsed` 字面量在 index.html 只出现 1 次）。
+
+**已确认（不会被次日生成覆盖）**：每日生成器 `generate_YYYYMMDD.py` 只做定点替换（`priceCards*` / `<title>` / build-version / toc 计数 / 今日-往期区），
+`brief` 关键字在生成器里 0 命中；`<style>`、`<head>` 亦不在其改写范围。
+
+**红线（不得回退）**
+- 两处 key 必须一致；不一致 = 「记住了但首帧闪」或「不闪但没记住」。
+- 恢复折叠态时**必须**同时同步 `aria-expanded`，否则箭头图标与真实状态不符。
+
+**待办**
+- 折叠态是**全局一份**（手机/电脑共用），未按端区分；也未按天重置（用户选的是「永久记住」）。
+- 同区另一个开关「展开全部（N 条）」的高度裁剪态未持久化——那是另一层开关（内容裁剪 vs 整块收起），按需再说。

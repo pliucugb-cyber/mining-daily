@@ -287,6 +287,21 @@ async function loadPage(stripSections) {
       /<button id="briefToggle"[^>]*aria-expanded="true"/.test(html));
     check('JS 折叠时同步 aria-expanded',
       /classList\.toggle\('brief-collapsed'\)[\s\S]{0,140}aria-expanded/.test(appjs));
+    // 2026-09-12：折叠状态持久化（永久记住 + 首帧前恢复）。两处 key 必须一致，故加漂移守卫。
+    const BKEY = 'mdBriefCollapsed';
+    check('app.js 用常量保存折叠 key',
+      appjs.includes("var BRIEF_COLLAPSE_KEY='" + BKEY + "'"));
+    check('app.js 读折叠状态（getItem）', /getItem\(BRIEF_COLLAPSE_KEY\)/.test(appjs));
+    check('app.js 写折叠状态（setItem）', /setItem\(BRIEF_COLLAPSE_KEY\b/.test(appjs));
+    check('index.html 有绘制前恢复折叠态的内联脚本',
+      new RegExp("<script>try\\{if\\(localStorage\\.getItem\\('" + BKEY + "'\\)==='1'\\)").test(html));
+    check('内联脚本恢复时同步 aria-expanded',
+      /classList\.add\('brief-collapsed'\)[\s\S]{0,120}aria-expanded/.test(html));
+    check('key 无硬编码漂移（app.js 定义 1 次 / html 字面量 1 次）',
+      (appjs.match(/BRIEF_COLLAPSE_KEY\s*=/g) || []).length === 1 &&
+      (html.match(new RegExp(BKEY, 'g')) || []).length === 1,
+      'app.js x' + (appjs.match(/BRIEF_COLLAPSE_KEY\s*=/g) || []).length +
+      ' / html x' + (html.match(new RegExp(BKEY, 'g')) || []).length);
 
     // 通用守卫：CSS 里不得出现「与页面某个 id 同名」的 camelCase 类选择器
     //   （本工程约定：class 用 kebab-case、id 用 camelCase；撞名基本就是写错了）
@@ -294,6 +309,45 @@ async function loadPage(stripSections) {
     const cls = new Set((css.match(/\.[A-Za-z_][A-Za-z0-9_-]*/g) || []).map(s => s.slice(1)));
     const collide = [...cls].filter(c => ids.has(c) && /[a-z][A-Z]/.test(c));
     check('CSS 无「id 名当类名」的死选择器', collide.length === 0, collide.join(', ') || '无');
+  }
+
+  // ---------- ⑤ 折叠态持久化行为验证 ----------
+  // 2026-09-12：④ 那 6 条是静态断言（只证明「代码在」）。这里真解析一遍 DOM，证明「代码在用」。
+  //   关键：只开 runScripts、不开 resources ⇒ 外链 app.js 不会被加载，
+  //   于是这里看到的 DOM 状态只可能来自 index.html 里那段 pre-paint 内联脚本 ——
+  //   正是「首帧就是收起的，不依赖 app.js」这一主张的直接证据。
+  console.log('\n===== ⑤ 折叠态持久化行为（预置存储 → 解析后立即生效） =====');
+  {
+    const rawHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+    const mkDom = (val) => new JSDOM(rawHtml, {
+      runScripts: 'dangerously',
+      url: 'https://example.org/',
+      beforeParse(window) {
+        if (val !== null) window.localStorage.setItem('mdBriefCollapsed', val);
+      }
+    });
+
+    const d1 = mkDom('1');
+    const s1 = d1.window.document.getElementById('briefStrip');
+    const t1 = d1.window.document.getElementById('briefToggle');
+    check('存储=1 → 解析后 #briefStrip 已带 brief-collapsed（app.js 未加载）',
+      !!s1 && s1.classList.contains('brief-collapsed'));
+    check('存储=1 → 按钮 aria-expanded 同步为 false',
+      !!t1 && t1.getAttribute('aria-expanded') === 'false');
+    d1.window.close();
+
+    const d2 = mkDom('0');
+    const s2b = d2.window.document.getElementById('briefStrip');
+    const t2b = d2.window.document.getElementById('briefToggle');
+    check('存储=0 → 解析后不带 brief-collapsed', !!s2b && !s2b.classList.contains('brief-collapsed'));
+    check('存储=0 → 按钮 aria-expanded=true',
+      !!t2b && t2b.getAttribute('aria-expanded') === 'true');
+    d2.window.close();
+
+    const d3 = mkDom(null);
+    const s3 = d3.window.document.getElementById('briefStrip');
+    check('从未折叠过（无存储）→ 默认展开', !!s3 && !s3.classList.contains('brief-collapsed'));
+    d3.window.close();
   }
 
   console.log('\n==== 简报渲染回归：' + pass + ' PASS / ' + fail + ' FAIL ====');

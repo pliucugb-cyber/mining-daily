@@ -3198,8 +3198,21 @@ window.addEventListener('DOMContentLoaded',function(){
   // P1-4 / P1-5 / P1-6：上次看到分隔线、简报折叠、无网络空态
   mdRecordLastSeen();
   mdInitOfflineBanner();
-  var bt=document.getElementById('briefToggle');
-  if(bt)bt.addEventListener('click',function(){ var s=document.getElementById('briefStrip'); if(!s)return; var on=s.classList.toggle('brief-collapsed'); bt.setAttribute('aria-expanded',on?'false':'true'); });
+  // 2026-09-12：折叠状态持久化（用户确认「永久记住」）。
+  //   两处 key 必须一致：这里 + index.html 中紧跟 #briefStrip 的 pre-paint 内联脚本。
+  //   那句点之间的顺序也不能动——aria-expanded 必须紧跟 toggle，见 test_brief_layers ④ 的 140 字符守卫。
+  var BRIEF_COLLAPSE_KEY='mdBriefCollapsed';
+  var bs=document.getElementById('briefStrip'), bt=document.getElementById('briefToggle');
+  if(bs&&bt){
+    var _bcl=false; try{ _bcl=localStorage.getItem(BRIEF_COLLAPSE_KEY)==='1'; }catch(e){}
+    if(_bcl) bs.classList.add('brief-collapsed');
+    bt.setAttribute('aria-expanded', _bcl?'false':'true');
+    bt.addEventListener('click',function(){
+      var on=bs.classList.toggle('brief-collapsed');
+      bt.setAttribute('aria-expanded',on?'false':'true');
+      try{ localStorage.setItem(BRIEF_COLLAPSE_KEY, on?'1':'0'); }catch(e){}
+    });
+  }
   mdInsertLastSeen(); setTimeout(mdInsertLastSeen, 400);
   if(IS_STANDALONE){ hidePwaInstallPrompt(); mdHideInstallIfStandalone(); return; }
   // iOS / 桌面未触发 beforeinstallprompt 时，延迟到用户首次交互（滚动/点击/按键）或停留 ≥8s 再提示，降低首屏打扰
