@@ -2120,32 +2120,62 @@ function renderBrief(d){
   // 「今日5件事」卡已移除（与下方「今日要闻」重复）；top_news 仍参与简报区显隐判断
   strip.hidden=false;
 }
-// 简报展开/折叠。
-// 2026-09-12 二次修订：要点层移除后恢复为单一模式——内容超过 420px 判定为需折叠，
-//   折叠后只露 380px（CSS .brief-md.brief-clamp 的 max-height）。
+// 简报展开/折叠。这里有**两个独立开关**，不要混为一谈：
+//   层 A（整块收起）：#briefToggle 给 #briefStrip 加 .brief-collapsed → 整张卡片 display:none。
+//                     状态存 BRIEF_COLLAPSE_KEY，由 index.html 的 pre-paint 内联脚本恢复。
+//   层 B（高度裁剪）：#briefMore 给 #briefMain 加 .brief-clamp → 只露 380px（CSS max-height）。
+//                     状态存 BRIEF_MORE_KEY，**只**在 app.js 里恢复（见下方说明）。
+// 2026-09-12 二次修订：要点层移除后恢复为单一模式——内容超过 420px 判定为需折叠。
 //   按钮「展开全部（N 条）」↔「收起」。N 取简报内全部条目数（含各节）。
+// 层 B 持久化 key。层 A 的 key 是 BRIEF_COLLAPSE_KEY（定义在下方 DOMContentLoaded 里），
+//   两者不可互换。本 key **刻意不**出现在 index.html（层 B 无内联恢复脚本，见下）。
+var BRIEF_MORE_KEY='mdBriefMoreOpen';
+// setupBriefClamp() 把内部 apply 挂到这里。#briefToggle 展开整块后必须补调一次——
+//   因为整块收起时 #briefMain 在 display:none 下 scrollHeight=0，会误判成「内容很短」。
+var briefClampReapply=null;
 function setupBriefClamp(){
   var main=document.getElementById('briefMain'),btn=document.getElementById('briefMore');
-  if(!main||!btn)return;
+  if(!main||!btn){briefClampReapply=null;return;}
+  var strip=document.getElementById('briefStrip');
   main.classList.remove('brief-clamp');
   btn.hidden=true;
   var LIMIT=420;
-  var apply=function(){
-    if(main.scrollHeight>LIMIT){
-      main.classList.add('brief-clamp');
-      btn.hidden=false;
-      var n=main.querySelectorAll('li').length;
-      btn.textContent='展开全部'+(n?('（'+n+' 条）'):'');
-      btn.dataset.open='0';
-    }else{btn.hidden=true;main.classList.remove('brief-clamp');}
+  // 为什么层 B 不需要 pre-paint 内联脚本（与层 A 的区别）：
+  //   层 A 的 .brief-card 是**静态 HTML**（含「简报加载中…」占位），首帧可能早于 defer 的 app.js
+  //   → 不在解析期贴类就会「先展开再收起」闪一下，故必须内联。
+  //   层 B 的正文由 renderBrief() 用 JS 填，而判定/clamp 与填充在**同一同步执行块**内完成
+  //   （setupBriefClamp 紧跟在 main.innerHTML=html 之后被调用），浏览器不会在中间绘制 → 无闪动。
+  var wantOpen=function(){ try{ return localStorage.getItem(BRIEF_MORE_KEY)==='1'; }catch(e){ return false; } };
+  var setOpen=function(open){
+    var n=main.querySelectorAll('li').length;
+    if(open){main.classList.remove('brief-clamp');btn.dataset.open='1';btn.textContent='收起';}
+    else{main.classList.add('brief-clamp');btn.dataset.open='0';btn.textContent='展开全部'+(n?('（'+n+' 条）'):'');}
+    btn.setAttribute('aria-expanded', open?'true':'false');
   };
+  var apply=function(){
+    // 整块收起时 #briefMain 不可见（scrollHeight=0），此刻**不得改判**，否则会把用户
+    //   「已展开」的选择清成折叠。留待 #briefToggle 展开整块时由 briefClampReapply() 补判。
+    if(strip&&strip.classList.contains('brief-collapsed'))return;
+    if(main.scrollHeight>LIMIT){
+      btn.hidden=false;
+      // 恢复用户上次的选择；没存过 → 默认折叠（与既有行为一致）
+      setOpen(wantOpen());
+    }else{
+      btn.hidden=true;
+      btn.setAttribute('aria-expanded','false');
+      main.classList.remove('brief-clamp');
+      btn.dataset.open='0';
+    }
+  };
+  briefClampReapply=apply;
   apply();
-  // 字体/宽度变化后重新判定一次，避免小屏折叠阈值算错
+  // 字体/宽度变化后重新判定一次，避免小屏折叠阈值算错。
+  // 注意：这里也走 wantOpen()，所以不会把用户刚点开的展开态又收起（旧实现会）。
   setTimeout(apply,300);
   btn.onclick=function(){
     var open=btn.dataset.open==='1';
-    if(open){main.classList.add('brief-clamp');btn.dataset.open='0';btn.textContent='展开全部'+(main.querySelectorAll('li').length?('（'+main.querySelectorAll('li').length+' 条）'):'');}
-    else{main.classList.remove('brief-clamp');btn.dataset.open='1';btn.textContent='收起';}
+    setOpen(!open);
+    try{ localStorage.setItem(BRIEF_MORE_KEY, (!open)?'1':'0'); }catch(e){}
   };
 }
 
@@ -3211,6 +3241,8 @@ window.addEventListener('DOMContentLoaded',function(){
       var on=bs.classList.toggle('brief-collapsed');
       bt.setAttribute('aria-expanded',on?'false':'true');
       try{ localStorage.setItem(BRIEF_COLLAPSE_KEY, on?'1':'0'); }catch(e){}
+      // 展开整块后补判层 B：收起时量不到高度（scrollHeight=0），只能这时补。
+      if(!on&&briefClampReapply)briefClampReapply();
     });
   }
   mdInsertLastSeen(); setTimeout(mdInsertLastSeen, 400);
