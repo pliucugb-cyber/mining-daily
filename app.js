@@ -6129,6 +6129,7 @@ function toggleTheme(){
   var IDS=['priceCardsShfe','priceCardsLme'];
   var origOrder={};
   var sortMode='default';
+  var hmView='card';
 
   function cards(id){
     var w=document.getElementById(id);
@@ -6261,16 +6262,150 @@ function toggleTheme(){
     ensureToolbar().appendChild(bar);
   }
 
+  /* 涨跌热力图（2026-09-13）
+     纯前端派生：读 .price-card 的 .pc-chg 百分比 → 色块网格，色深 = |pct| / 归一化基准。
+     视图状态持久化到 localStorage.md_price_view（card|heat）。 */
+  var PV_KEY='md_price_view';
+  function lsGetView(){
+    try{ var v=localStorage.getItem(PV_KEY); return (v==='heat'||v==='card')?v:'card'; }catch(e){ return 'card'; }
+  }
+  function lsSetView(v){ try{ localStorage.setItem(PV_KEY,v); }catch(e){} }
+  hmView=lsGetView();
+
+  /* 色阶：红(涨) / 绿(跌)，alpha 随 |pct| 增大。强度高时文字转白保证对比度。 */
+  function hmColor(pct,mx){
+    var d = mx>0 ? Math.min(1,Math.abs(pct)/mx) : 0;
+    var a = 0.10 + d*0.72;
+    var rgb = pct>0 ? [217,58,43] : [14,122,82];
+    return { bg:'rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+','+a.toFixed(3)+')',
+             fg:(d>0.55?'#ffffff':'') };
+  }
+
+  function hmGroup(id,label,cls,unit){
+    var cs=cards(id);
+    if(!cs.length)return null;
+    var items=[];
+    cs.forEach(function(card){
+      var valEl=card.querySelector('.pc-value');
+      items.push({
+        n:nameOf(card),
+        p:pctOf(card),
+        v:valEl?(valEl.textContent||'').trim():'',
+        slug:card.getAttribute('data-slug')||''
+      });
+    });
+    return { label:label, cls:cls, unit:unit, items:items };
+  }
+
+  function hmRender(){
+    var box=document.getElementById('priceHeatmap');
+    if(!box)return;
+    var groups=[
+      hmGroup('priceCardsShfe','国内盘','shfe','人民币/吨'),
+      hmGroup('priceCardsLme','LME 外盘','lme','美元/吨')
+    ].filter(Boolean);
+    if(!groups.length){ box.innerHTML=''; return; }
+
+    /* 归一化基准：全样本 |pct| 最大值，下限 1% 防止小波动被放大成满色 */
+    var mx=0;
+    groups.forEach(function(g){
+      g.items.forEach(function(it){
+        if(it.p!==null)mx=Math.max(mx,Math.abs(it.p));
+      });
+    });
+    mx=Math.max(mx,1);
+
+    var html=groups.map(function(g){
+      var cells=g.items.map(function(it){
+        if(it.p===null){
+          return '<button type="button" class="hm-cell hm-flat" disabled title="无当日涨跌数据">'
+               + '<span class="hm-name">'+esc(it.n)+'</span>'
+               + '<span class="hm-pct" style="font-size:var(--fs-meta)">—</span>'
+               + '<span class="hm-val">'+esc(it.v)+'</span></button>';
+        }
+        var c=hmColor(it.p,mx);
+        var sign=(it.p>0?'+':'');
+        var sty='background:'+c.bg+';'+(c.fg?'color:'+c.fg+';':'');
+        return '<button type="button" class="hm-cell" data-slug="'+esc(it.slug)+'" style="'+sty+'"'
+             + ' title="'+esc(it.n)+' '+sign+it.p.toFixed(2)+'%">'
+             + '<span class="hm-name">'+esc(it.n)+'</span>'
+             + '<span class="hm-pct">'+sign+it.p.toFixed(2)+'%</span>'
+             + '<span class="hm-val">'+esc(it.v)+'</span></button>';
+      }).join('');
+      return '<div class="hm-group">'
+           + '<div class="hm-group-head">'
+           + '<span class="hm-group-name '+g.cls+'">'+esc(g.label)+'</span>'
+           + '<span class="hm-group-unit">'+esc(g.unit)+'</span></div>'
+           + '<div class="hm-grid">'+cells+'</div></div>';
+    }).join('');
+
+    html+='<div class="hm-legend"><span>跌幅</span><span class="hm-scale">'
+        + '<i style="background:rgba(14,122,82,.82)"></i>'
+        + '<i style="background:rgba(14,122,82,.48)"></i>'
+        + '<i style="background:rgba(14,122,82,.16)"></i>'
+        + '<i style="background:var(--surface-3);border:1px solid var(--line-1)"></i>'
+        + '<i style="background:rgba(217,58,43,.16)"></i>'
+        + '<i style="background:rgba(217,58,43,.48)"></i>'
+        + '<i style="background:rgba(217,58,43,.82)"></i>'
+        + '</span><span>涨幅</span>'
+        + '<span style="margin-left:auto">色深 = 涨跌幅绝对值 · 点击色块看走势</span></div>';
+    box.innerHTML=html;
+  }
+
+  /* 视图切换器：卡片 / 热力图 */
+  function viewBar(){
+    if(document.getElementById('priceViewBar'))return;
+    var strip=document.getElementById('priceStrip');
+    if(!strip)return;
+    var bar=document.createElement('div');
+    bar.id='priceViewBar';
+    bar.className='price-views';
+    bar.innerHTML='<button type="button" class="pv-btn on" data-view="card">卡片</button>'
+                 + '<button type="button" class="pv-btn" data-view="heat">热力图</button>';
+    bar.addEventListener('click',function(e){
+      var b=e.target&&e.target.closest?e.target.closest('.pv-btn'):null;
+      if(!b)return;
+      setView(b.getAttribute('data-view'));
+    });
+    ensureToolbar().appendChild(bar);
+  }
+
+  function setView(v){
+    hmView=(v==='heat')?'heat':'card';
+    lsSetView(hmView);
+    var strip=document.getElementById('priceStrip');
+    if(strip)strip.classList.toggle('hm-on',hmView==='heat');
+    var bar=document.getElementById('priceViewBar');
+    if(bar)bar.querySelectorAll('.pv-btn').forEach(function(b){
+      var on=b.getAttribute('data-view')===hmView;
+      b.classList.toggle('on',on);
+      b.setAttribute('aria-pressed',on?'true':'false');
+    });
+    if(hmView==='heat')hmRender();
+  }
+
+  /* 色块点击 → 复用走势图弹窗（与卡片视图同一交互） */
+  document.addEventListener('click',function(e){
+    var cell=e.target&&e.target.closest?e.target.closest('.hm-cell'):null;
+    if(!cell||cell.disabled)return;
+    var slug=cell.getAttribute('data-slug');
+    if(slug&&typeof pcChartOpen==='function')pcChartOpen(slug);
+  });
+
   function run(){
     try{
       snapshot(false);
       staleMark();
       topMovers();
       sortBar();
+      viewBar();
+      if(hmView!=='card')setView(hmView);          // 恢复持久化视图
+      hmRender();
       if(sortMode!=='default')setSort(sortMode);   // 价格异步刷新后保持当前排序
     }catch(err){ console.warn('priceEnhance:',err); }
   }
   window.__mdPriceEnhance=run;
+  window.__mdPriceHeatmap={ render:hmRender, setView:setView, getView:function(){return hmView;}, KEY:PV_KEY };
   run();
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);
   setTimeout(run,1200);

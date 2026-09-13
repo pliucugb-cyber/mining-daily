@@ -2044,7 +2044,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 ### 42.2 布局与功能（生成侧必留）
 
-- **必留**：桌面双栏 `.news-grid` → `col-main` + `col-rail`（含 `#hotListSection` **无序号** + `#hotRefreshBtn` + `#expoMini`）、搜索 + 标签筛选、CSV / PDF 导出、防 CDN 横跳、三 HTML marker、`injectRightsResultSummary()`、会展 IIFE、矿权双视图与排序条（见 42.3）。
+- **必留**：桌面双栏 `.news-grid` → `col-main` + `col-rail`（含 `#hotListSection` **无序号** + `#hotRefreshBtn` + `#expoMini`）、搜索 + 标签筛选、CSV / PDF 导出、防 CDN 横跳、三 HTML marker、`injectRightsResultSummary()`、会展 IIFE、矿权双视图与排序条（见 42.3）、**价格区卡片/热力图双视图**（`#priceViewBar` + `#priceHeatmap` + pre-paint 脚本 + `localStorage.md_price_view`，见 42.14）。
 - **会展**：须为右栏 `#expoMini` / `#expoMiniList`（匿名 IIFE，关键词 `EXPO_WORDS` / `EXPO_SKIP` / `🎪近期会展` / `expoMini` / `window.__expoIsExpo`），全量 + 限高 300px 滚动；不占今日名额 / 不进热榜。纯广告招商不收。
 - **不得存在**：`marketPulse`、`#expoSection`（主区已删，勿建回）、`#specialSection`（「找矿专项」已取消；找矿类留原位，重要条目由前端 `initSpecial()` 打 ⭐ 战略徽章·靛蓝）。
 - **其他**：`rightsSection` 主列表**不得**出现 `ky.mnr.gov.cn` 矿权条（只进 `#rightsCards`）；💰 子分类存在链 `cninfo`；外链 `target="_blank"`。
@@ -2102,6 +2102,28 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **闸门**：`preflight_check.check_price_unit_dedup()`（扫 index.html，不看 app.js）核对四项 —— 同单位数 8/6、异单位两个快照仍在且未加类、标题含 `人民币/吨`。生成脚本若被改回输出裸 `pc-unit`，preflight 直接红。
 - **测试**：`node test_price_unit_dedup.js`（静态契约 + jsdom 运行时，17 条）。含反向用例：去掉 class / 把异单位也隐藏 / 标题退回无单位，三者均须 FAIL。
 - **回退指纹**：① 每行价格后面又出现「元/吨」「美元/吨」；② 上海金 / 白银的单位消失（被误加 `.pc-unit-same`）；③ 分组标题退回 `国内盘 · 人民币`（无单位）；④ 生成侧删掉单位文本（CSV 单位列变空）。
+
+### 42.14 价格区「热力图」视图（2026-09-13）
+
+价格区新增**卡片 / 热力图**两态切换。热力图**纯前端派生**自既有 `.price-card` DOM —— 不新增数据文件、不改抓取链路、不改生成脚本。
+
+- **容器与顺序**：`#priceStrip` 内依次为 `#priceViewBar`（切换器）→ `#priceHeatmap`（热力图）→ **pre-paint 内联脚本** → `#priceCardsShfe` → `#priceCardsLme`。`#priceHeatmap` 必须在卡片组**之前**、pre-paint 脚本必须在 `#priceHeatmap` **之后**且紧邻卡片组之前。
+- **两态切换**：`#priceViewBar` 内两个 `.pv-btn[data-view="card"|"heat"]`（默认 `card`）。切热力图时 `#priceStrip` 加 `.hm-on`：
+  - `.price-strip.hm-on .price-cards{display:none}`、`.price-strip.hm-on .sortbar{display:none}`、`.price-strip.hm-on .heatmap{display:block}`。
+  - **不删 DOM**：只 CSS 隐藏卡片组，导出 CSV / 价格预警仍读得到原卡片。
+- **分组**：两组，标题取既有 `::before` 口径 —— `国内盘 · 人民币/吨`、`LME 外盘 · 美元/吨`；每组一个 `.hm-group`（含 `.hm-group-name` + `.hm-grid`）。
+- **色块**：`.hm-cell`（**`<button>`**，键盘可达）含 `.hm-name` / `.hm-pct` / `.hm-val`，带 `data-slug`。点击委托到 `pcChartOpen(slug)` 开走势图（与点卡片同一条路）。
+- **配色**（严格复用既有 token，不得自造色）：涨 `--up` = `rgb(217,58,43)`、跌 `--down` = `rgb(14,122,82)`。**红涨绿跌（中国口径）**，与 `.pc-chg` 方向必须一致。
+- **色深算法**：`hmColor(pct,mx)` —— `d = min(1, |pct|/max(mx,1))`，alpha = `0.10 + d*0.72`（**1% 地板**避免 0% 侧和最大值都糊成一片）；`d>0.55` 时前景转 `#ffffff` 保证对比度。
+- **缺数据**：`.hm-cell.hm-flat`（背景 `--surface-3`），显示 `—` 而非 0%，**不得**把缺数据渲染成 0% 涨跌。
+- **图例**：`.hm-legend` + `.hm-scale i`（>=7 档），与 alpha 梯度同源。
+- **持久化**：`localStorage['md_price_view']` = `'card'` | `'heat'`，由 `app.js` 的 `lsGetView()`/`lsSetView()` 读写，`PV_KEY` 常量是唯一 key 来源（pre-paint 脚本里是同一个字面量，改一处必须两处同改）。
+- **防闪（FOUC）**：`#priceHeatmap` 之后紧邻一段 pre-paint 内联 `<script>`，读 `localStorage` 命中 `heat` 就给 `#priceStrip` 加 `.hm-on` —— 必须**绘制前**生效，否则会「先卡片后热力图」闪一下（同 §38/§40 的折叠态套路）。
+- **生命周期**：`run()` 末尾统一接线 —— `topMovers()` → `sortBar()` → `viewBar()` → 恢复持久化视图 → `hmRender()` → 恢复当前排序。价格异步刷新后靠这套顺序保持视图与排序不丢。
+- **对外句柄**：`window.__mdPriceHeatmap = { render, setView, getView, KEY }`。
+- **移动端**：`#priceStrip` 在 <=768px 本就 `display:none`（**站点既有设计，勿改**）。故窄屏下热力图**继承同样的隐藏语义**；`@media` 里的 `.hm-grid`（`minmax(72px,1fr)` @768、`minmax(64px,1fr)`+`min-height:56px` @360）是为「若将来放开窄屏显示」预留，**当前不产生可见效果**。测试不得对窄屏色块几何（`getBoundingClientRect().height`）下断言 —— 容器隐藏时恒为 0，属必然假 FAIL。
+- **闸门**：`node test_price_heatmap.js`（静态契约 + jsdom 运行时 + 反向用例）。
+- **回退指纹**：① 价格区看不到「卡片 / 热力图」切换器；② 切到热力图后卡片组仍显示（`.hm-on` 未生效或规则被删）；③ 色块恒为同一种深浅（alpha 未按 |涨跌| 分层）；④ 出现**绿涨红跌**（配色口径被改反）；⑤ 刷新后视图记忆丢失、或先卡片闪一下再变热力图（pre-paint 脚本被挪到卡片组之后 / 被删）；⑥ 缺数据的品种被渲染成 `0.00%%` 而非 `—`；⑦ `#priceHeatmap` 被生成侧重建抹掉、或 `#priceViewBar` 丢失。
 
 ### 42.7 PWA 安装引导（§41，2026-09-12 两轮修复后定稿）
 
@@ -2165,12 +2187,13 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 | 命令 | 期望 | 覆盖 |
 |---|---|---|
-| `node test_brief_layers.js` | **47** | 简报分层渲染（jsdom） |
-| `node test_smoke_0908.js` | **74** | 全站冒烟（含矿权双视图 8 + 列表排序 9） |
+| `node test_brief_layers.js` | **91** | 简报分层渲染（jsdom；含裁剪态持久化 §40） |
+| `node test_smoke_0908.js` | **76** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2） |
 | `node test_mobile_ux_batch.js` | **206** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13） |
 | `node test_qa_features.js` | **61** | AI 搜核心函数 / 流式接线 / 语音（含「音量条已删、调节柄已换」） |
 | `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |
 | `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
+| `node test_price_heatmap.js` | **65** | 价格区热力图：静态契约（容器顺序 / pre-paint 位置 / 选择器）+ jsdom 运行时（16 色块、方向与 `.pc-chg` 一致、alpha 单调、红涨绿跌、2 分组、图例 >=7、点击开走势图、视图持久化）+ 反向用例（§42.14） |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
@@ -2180,6 +2203,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 - **涉及 `app.js` / `index.html` 的 AI 搜面板、「我的」面板、收藏·浏览记录、简报** → 必跑前三项 + 探针。
 - **涉及价格区渲染 / `pc-unit` / 分组标题 / 生成脚本的价格段** → 必跑 `node test_price_unit_dedup.js` + `PY preflight_check.py`（含 `check_price_unit_dedup`）。
+- **涉及价格区视图切换 / 热力图 / `#priceViewBar` / `#priceHeatmap` / `md_price_view`** → 必跑 `node test_price_heatmap.js`，并补**真实 Chrome** 探针（改过 `@media` 与 grid 断点）。
 - **涉及安装引导 / `manifest.json` / head 声明** → 必跑两个 PWA 测试。
 - **改过 CSS 断点或 `@media`** → 必须用**真实 Chrome**（jsdom 不评估 `@media`）。
 - 全量闸门（如有）＝21 个 node + 9 个 python 闸门。
