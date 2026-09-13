@@ -46,6 +46,7 @@ import sys
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from logutil import get_logger  # noqa: E402
@@ -541,6 +542,7 @@ def http_get(url, timeout=TIMEOUT, retries=2):
         except Exception as e:
             last = str(e)
             if i < retries:
+                time.sleep(1.5 ** i)  # 指数退避：限流/504 时立即重试必然再失败
                 continue
     return "__ERR__" + last
 
@@ -578,6 +580,7 @@ def http_post(url, data, timeout=TIMEOUT, retries=2, referer=""):
         except Exception as e:
             last = str(e)
             if i < retries:
+                time.sleep(1.5 ** i)  # 指数退避：限流/504 时立即重试必然再失败
                 continue
     return "__ERR__" + last
 
@@ -818,6 +821,9 @@ def parse_szse(cfg, report_date, days):
             "pageSize": 30, "pageNum": 1, "searchKey": [kw],
         }).encode("utf-8")
         txt = _post_json(cfg["list_url"], payload, referer=referer)
+        if txt.startswith("__ERR__"):
+            log.info("  ⚠️ szse 关键词「%s」请求失败：%s" % (kw, txt[7:][:60]))
+            continue
         if not txt:
             continue
         try:
@@ -851,7 +857,8 @@ def parse_szse(cfg, report_date, days):
 
 
 def _post_json(url, payload, referer="", timeout=TIMEOUT, retries=1):
-    """application/json POST（深交所接口专用）。失败返回 ''。"""
+    """application/json POST（深交所接口专用）。失败返回 '__ERR__...'。"""
+    last = ""
     for _ in range(retries + 1):
         try:
             headers = {
@@ -870,9 +877,10 @@ def _post_json(url, payload, referer="", timeout=TIMEOUT, retries=1):
                     except Exception:
                         pass
                 return raw.decode("utf-8", "ignore")
-        except Exception:
+        except Exception as e:
+            last = str(e)
             continue
-    return ""
+    return "__ERR__" + last
 
 
 # ============================================================================
@@ -1146,6 +1154,99 @@ def merge_into_month(items, report_date):
     return path, added, data["count"]
 
 
+# ============================================================================
+# 抓取健康度：产出基线 → 疑似失败自动重抓 → 健康报告（供 08:00 复验环节告警）
+#
+# 背景（2026-09-13 实证）：抓取失败曾被静默吞掉（_post_json 失败返回空串、
+# http_get 重试无退避），导致当天候选池残缺约 77 条却无任何报错、status 仍显示 ok。
+# 本机制改用「历史产出基线」兜底识别异常，不依赖各源自身的返回值契约，
+# 因此对所有源（含 cninfo/smm/szse 等 POST 接口源）通用。
+# ============================================================================
+BASELINE_PATH = os.path.join(DATA_DIR, "fetch_baseline.json")
+MIN_BASELINE = 4      # 基线中位数低于此值的源不参与异常判定（本身产出就不稳定）
+DROP_RATIO = 0.3      # 产出低于基线中位数 30% 视为疑似失败
+KEEP_SAMPLES = 10     # 每个源保留最近 10 次产出样本
+
+
+def _median(xs):
+    if not xs:
+        return 0.0
+    s = sorted(xs)
+    m = len(s) // 2
+    return float(s[m]) if len(s) % 2 else (s[m - 1] + s[m]) / 2.0
+
+
+def _load_baseline():
+    try:
+        with open(BASELINE_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def _save_baseline(bl):
+    try:
+        os.makedirs(DATA_DIR, exist_ok=True)
+        with open(BASELINE_PATH, "w", encoding="utf-8") as f:
+            json.dump(bl, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
+
+def check_health(report, targets, all_items, run_source_fn, args):
+    """逐源对比产出基线；疑似失败者自动重抓一轮。
+
+    返回 (health 明细, 更新后的 report)。
+    health 写入 data/fetch_health_YYYY-MM-DD.json，供 08:00 复验环节读取并告警。
+    """
+    bl = _load_baseline()
+    orig = {k: c for k, _n, c, _s in report}
+    orig_status = {k: s for k, _n, _c, s in report}
+    health, new_report = [], []
+
+    for cfg in targets:
+        key, name = cfg["key"], cfg["name"]
+        n = orig.get(key, 0)
+        samples = bl.get(key) or []
+        med = _median(samples)
+
+        status, note = "ok", ""
+        if samples and med >= MIN_BASELINE and n < med * DROP_RATIO:
+            # 疑似失败：自动重抓一轮（限流/瞬时故障往往重试一次即可恢复）
+            items2, _st = run_source_fn(cfg, args.report_date, args.days,
+                                        args.fetch_detail)
+            if len(items2) > n:
+                all_items.extend(items2)
+                note = "疑似失败，自动重抓后恢复：%d → %d 条" % (n, len(items2))
+                n = len(items2)
+                status = "recovered"
+            else:
+                status = "suspect"
+                note = ("产出 %d 条，基线中位数 %.0f 条；自动重抓仍仅 %d 条，"
+                        "疑似源故障或被限流，需人工确认" % (n, med, len(items2)))
+
+        health.append({"key": key, "name": name, "count": n,
+                       "baseline_median": med, "status": status, "note": note})
+
+        base_st = orig_status.get(key, "")
+        if status == "recovered":
+            disp = "%s | 重抓恢复" % base_st
+        elif status == "suspect":
+            disp = "%s | ⚠️疑似失败" % base_st
+        else:
+            disp = base_st
+        new_report.append((key, name, n, disp))
+
+        # 滚动维护基线样本
+        s = bl.setdefault(key, [])
+        s.append(n)
+        bl[key] = s[-KEEP_SAMPLES:]
+
+    if not getattr(args, "dry_run", False):
+        _save_baseline(bl)   # dry-run 不污染基线（手动测试用）
+    return health, new_report
+
+
 def main():
     ap = argparse.ArgumentParser(description="有色金属行业新闻自动爬虫（零依赖）")
     ap.add_argument("--report-date", default=datetime.date.today().isoformat(),
@@ -1185,6 +1286,9 @@ def main():
         report.append((cfg["key"], cfg["name"], len(items), status))
         all_items.extend(items)
 
+    # 抓取健康度：产出基线对比 → 疑似失败自动重抓一轮 → 健康报告（供 08:00 复验告警）
+    health, report = check_health(report, targets, all_items, run_source, args)
+
     total_cand = len(all_items)
     foreign_cand = sum(1 for i in all_items if i.get("foreign"))
 
@@ -1200,6 +1304,21 @@ def main():
             if str(s).startswith("fetch-fail"):
                 log.info("⚠️ 源 %s 抓取失败：%s" % (k, s))
     log.info("候选合计：%d 条（境外 %d 条）" % (total_cand, foreign_cand))
+
+    suspicious = [h for h in health if h["status"] == "suspect"]
+    if suspicious:
+        log.info("")
+        log.info("⚠️ %d 个源产出异常偏低（已自动重抓一轮仍偏低）：" % len(suspicious))
+        for h in suspicious:
+            log.info("   - %s（%s）：%s" % (h["name"], h["key"], h["note"]))
+    if not args.dry_run:
+        os.makedirs(DATA_DIR, exist_ok=True)
+        hp = os.path.join(DATA_DIR, "fetch_health_%s.json" % args.report_date)
+        with open(hp, "w", encoding="utf-8") as f:
+            json.dump({"report_date": args.report_date, "sources": health,
+                       "suspicious": [h["key"] for h in suspicious]}, f,
+                      ensure_ascii=False, indent=2)
+        log.info("健康报告已写入：%s" % hp)
 
     if args.dry_run or not all_items:
         if not args.quiet:
