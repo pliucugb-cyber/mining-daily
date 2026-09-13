@@ -704,13 +704,14 @@ function renderFavHistoryAggregate(mode){
   });
   // 2026-09-12：按时间分组（今天/昨天/更早），保持组内倒序
   const frag=document.createDocumentFragment();
-  let curBucket=null;
+  let curBucket=null, gIdx=0;
   items.forEach(function(it){
     const bucket=_dayBucketOf(it);
     if(bucket!==curBucket){
       curBucket=bucket;
       const gh=document.createElement('div');
       gh.className='agg-group-title';
+      gh.id='aggG'+(gIdx++);
       gh.textContent=bucket;
       frag.appendChild(gh);
     }
@@ -733,6 +734,8 @@ function renderFavHistoryAggregate(mode){
   if(countEl)countEl.textContent=items.length+'条';
   var subEl=document.getElementById('favViewSub');
   if(subEl) subEl.textContent=(mode==='fav'?'共 '+items.length+' 条 · 倒序排列':'共 '+items.length+' 条 · 按浏览时间倒序');
+  // 列表已进 DOM，此时收集时间分组作为左侧目录锚点
+  mdRenderFavToc(mode);
   // 2026-09-12：少条时底部置底 CTA（空态已有插画 CTA）
   if(items.length>0 && items.length<=3){
     const foot=document.createElement('div');
@@ -1025,6 +1028,9 @@ function setFilter(mode,noScroll){
   applyFilter();
   mdSyncFavViewBar(mode);
   syncTocActive(mode);
+  // ⚠️ 必须排在 syncTocActive 之后：后者会遍历清空所有 .toc-main-item 的 active，
+  //    先渲染就会被清掉（本轮踩过，测试当场 FAIL）。
+  mdRenderFavToc(mode);
   if(!noScroll)keepViewportAfterFilter(_y,mode);
 }
 // 目录里的「我的收藏 / 浏览记录」与工具条按钮同步高亮
@@ -1032,6 +1038,7 @@ function syncTocActive(mode){
   var map={fav:'tocFavItem',history:'tocHistoryItem'};
   document.querySelectorAll('.toc-main-item').forEach(function(it){
     if(it.id==='tocFavItem'||it.id==='tocHistoryItem')return;
+    if(it.closest&&it.closest('#favToc'))return;   // 收藏视图左侧目录自带高亮，别被这里清掉
     it.classList.remove('active');
   });
   ['tocFavItem','tocHistoryItem'].forEach(function(id){
@@ -1048,6 +1055,56 @@ function mdSyncFavViewBar(mode){
   if(title)title.textContent=(mode==='history')?'浏览记录':'我的收藏';
   var clr=bar.querySelector('.favview-clear');
   if(clr)clr.style.display=(mode==='history')?'':'none';
+}
+// ===== 2026-09-13：收藏 / 浏览记录视图的左侧目录导航 =====
+// 为什么要它：body 在 ≥1101px 有 padding-left:200px，是给首页左侧固定目录 .toc-sidebar 让位的。
+// 而 fav/history 沉浸式视图把 .toc-sidebar 藏了（§42.7 的沉浸式约定），那 200px 就成了纯空白
+//   —— 实测 1200/1440 视口里卡片从 x=216 起、左边 200px 全空（右侧只 16px），既不美观也浪费。
+// 这里把这块位置交给该视图自己的目录：① 收藏/记录互切（带条数）② 本页时间分组锚点 ③ 回到顶部/返回首页。
+// ≤1100px 由 CSS 隐藏（那时 body 没有左内边距，也没有空间放它）。
+function mdRenderFavToc(mode){
+  var box=document.getElementById('favToc');
+  if(!box)return;
+  if(mode!=='fav'&&mode!=='history'){ box.innerHTML=''; return; }
+  if(!box.dataset.bound){
+    box.dataset.bound='1';
+    box.addEventListener('click',function(ev){
+      var t=ev.target&&ev.target.closest?ev.target.closest('[data-favtoc]'):null;
+      if(!t||!box.contains(t))return;
+      var act=t.getAttribute('data-favtoc');
+      if(act==='fav'||act==='history'){
+        if(document.body.getAttribute('data-filter-mode')===act)return;
+        try{clearView();}catch(e){}
+        setFilter(act);
+      }else if(act==='home'){
+        try{clearView();}catch(e){}
+        setFilter('none');
+        try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}
+      }else if(act==='top'){
+        try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}
+      }else if(act.indexOf('g:')===0){
+        var el=document.getElementById(act.slice(2));
+        if(el&&el.scrollIntoView)el.scrollIntoView({block:'start',behavior:'smooth'});
+      }
+    });
+  }
+  var favN=0,hisN=0;
+  try{favN=getFavs().length;}catch(e){}
+  try{hisN=getHistory().length;}catch(e){}
+  var html='<div class="toc-title">收 藏 与 记 录</div>'
+    +'<div class="toc-main-item'+(mode==='fav'?' active':'')+'" data-favtoc="fav" role="button" tabindex="0">★ 我的收藏 <span class="toc-count">'+favN+'</span></div>'
+    +'<div class="toc-main-item'+(mode==='history'?' active':'')+'" data-favtoc="history" role="button" tabindex="0">📋 浏览记录 <span class="toc-count">'+hisN+'</span></div>'
+    +'<div class="fav-toc-sep"></div><div class="toc-title">本 页 目 录</div>';
+  var groups=document.querySelectorAll('#archFavList .agg-group-title'), n=0;
+  Array.prototype.forEach.call(groups,function(g){
+    if(!g.id)g.id='aggG'+n;
+    html+='<div class="fav-toc-group" data-favtoc="g:'+g.id+'" role="button" tabindex="0">'+g.textContent+'</div>';
+    n++;
+  });
+  if(!n)html+='<div class="fav-toc-empty">（本页暂无分组）</div>';
+  html+='<div class="toc-back-top" data-favtoc="top" role="button" tabindex="0">↑ 回到顶部</div>'
+    +'<div class="toc-back-top fav-toc-back2" data-favtoc="home" role="button" tabindex="0">⌂ 返回首页</div>';
+  box.innerHTML=html;
 }
 
 // 自身 + 所有祖先都没有 display:none / visibility:hidden 才算真可见。
@@ -4127,7 +4184,7 @@ function qaFloatToggle(){
   if(!p)return;
   var open=p.classList.toggle('open');
   if(b)b.classList.toggle('on',open);
-  if(open){var i=document.getElementById('qaFloatInput');if(i&&window.innerWidth>768)setTimeout(function(){i.focus();},80);qaStopBreathe();try{qaHeadMenuClose();}catch(e){}}
+  if(open){var i=document.getElementById('qaFloatInput');if(i&&window.innerWidth>768)setTimeout(function(){i.focus();},80);qaStopBreathe();try{qaHeadMenuClose();}catch(e){}setTimeout(function(){try{qaInputGripPos();}catch(e){}},0);}
 }
 function qaFloatClose(){
   var p=document.getElementById('qaFloat');if(p)p.classList.remove('open');
@@ -4314,7 +4371,7 @@ function qaStopBreathe(){
 // 拖拽把手=整个面板任意非交互位置（头部/边框/结果空白区均可拖）；
 // 输入框/筛选/按钮/链接/关闭键/趋势图/右下角原生缩放柄 不触发拖拽。
 var QA_DRAGGING=null;
-var QA_DRAG_EXCLUDE='input,select,button,a,textarea,[contenteditable],.qa-fsel,.qa-fchip,.pchart-close,.qa-trend,.qa-src,.qa-msg-bubble,.qa-float-body,.qa-float-foot,.qa-float-btn,.qa-resize-handle';
+var QA_DRAG_EXCLUDE='input,select,button,a,textarea,[contenteditable],.qa-fsel,.qa-fchip,.pchart-close,.qa-trend,.qa-src,.qa-msg-bubble,.qa-float-body,.qa-float-foot,.qa-float-btn,.qa-resize-handle,.qa-input-grip';
 function qaFloatStartDrag(ev){
   if(window.innerWidth && window.innerWidth<=768) return;
   var p=document.getElementById('qaFloat'); if(!p||!p.classList.contains('open'))return;
@@ -4375,7 +4432,7 @@ function qaFloatClearInlineLayout(){
 function qaFloatSyncViewport(){
   try{
     if(qaFloatIsMobile()){ qaFloatClearInlineLayout(); }
-    else { qaFloatRestoreSize(); qaFloatRestorePos(); }
+    else { qaFloatRestoreSize(); qaFloatRestorePos(); qaInputGripPos(); }
   }catch(e){}
 }
 function qaFloatSavePos(){
@@ -4423,6 +4480,82 @@ function qaFloatRestoreSize(){
     var sz=JSON.parse(raw), p=document.getElementById('qaFloat'); if(!p||!sz.width||!sz.height)return;
     p.style.width=sz.width+'px'; p.style.height=sz.height+'px';
   }catch(e){}
+}
+// ===== 2026-09-13：输入框高度调节柄（从右下角原生手柄挪到输入框上边缘）=====
+// 旧做法是 textarea[resize:vertical]，原生柄画在右下角 —— 那里正被 mic/检索/AI 三个按钮挤着，
+// 又小又难点（用户反馈「调节窗口放右下角不方便」）。改成输入框上边缘的一枚小胶囊：
+// 抓住它上下拖，即可把输入框调高/调矮（往上拖=变高）。
+// 拖动时会加 .qa-h-fixed 关掉 field-sizing:content 的自动增高，改成手动高度。
+var QA_INPUT_RESIZE=null;
+function qaInputGripPos(){
+  var p=document.getElementById('qaFloat'),g=document.getElementById('qaInputGrip'),inp=document.getElementById('qaFloatInput');
+  if(!p||!g||!inp)return;
+  if(qaFloatIsMobile()){ g.style.left=''; g.style.top=''; return; }
+  var ir=inp.getBoundingClientRect(), pr=p.getBoundingClientRect();
+  var w=g.offsetWidth||72, left=ir.left-pr.left+ir.width/2-w/2;
+  g.style.left=Math.round(Math.min(Math.max(left,6),Math.max(pr.width-w-6,6)))+'px';
+  g.style.top=Math.round(inp.offsetTop-12)+'px';
+}
+function qaInputAddGrip(){
+  // 柄由 index.html 静态声明（#qaInputGrip），这里只负责绑事件 + 兜底补建。
+  // 为什么不用 createElement 一把造出来：面板初始化 IIFE 在 jsdom 下并不完整执行
+  //   （同段的缩放柄也挂不上，实测 .qa-resize-handle 数为 0），纯 JS 造的元素在测试里
+  //   查不到，断言就会假 FAIL；静态声明后测试能直接守到它。
+  var g=document.getElementById('qaInputGrip');
+  if(!g){
+    var foot=document.querySelector('#qaFloat .qa-float-foot');
+    if(!foot)return;
+    g=document.createElement('div');
+    g.className='qa-input-grip'; g.id='qaInputGrip';
+    g.setAttribute('role','separator');
+    g.setAttribute('aria-label','上下拖动可调整输入框高度');
+    g.title='按住上下拖动，调整输入框高度';
+    foot.appendChild(g);
+  }
+  if(g.dataset.bound)return;
+  g.dataset.bound='1';
+  g.addEventListener('mousedown',qaInputStartResize);
+  g.addEventListener('touchstart',qaInputStartResize,{passive:false});
+}
+function qaInputStartResize(ev){
+  if(qaFloatIsMobile())return;
+  var inp=document.getElementById('qaFloatInput'),g=document.getElementById('qaInputGrip');
+  if(!inp)return;
+  var isTouch=!!ev.type&&ev.type.indexOf('touch')===0;
+  if(isTouch&&ev.touches.length!==1)return;
+  var pt=isTouch?ev.touches[0]:ev;
+  QA_INPUT_RESIZE={startY:pt.clientY,startH:inp.offsetHeight,el:inp};
+  inp.classList.add('qa-h-fixed');
+  if(g)g.classList.add('dragging');
+  if(isTouch){
+    document.addEventListener('touchmove',qaInputResize,{passive:false});
+    document.addEventListener('touchend',qaInputStopResize,{passive:false});
+    document.addEventListener('touchcancel',qaInputStopResize,{passive:false});
+  }else{
+    document.addEventListener('mousemove',qaInputResize);
+    document.addEventListener('mouseup',qaInputStopResize);
+  }
+  if(ev.cancelable)ev.preventDefault();
+  ev.stopPropagation();   // 调高度优先，别让面板拖拽抢走
+}
+function qaInputResize(ev){
+  if(!QA_INPUT_RESIZE)return;
+  var pt=ev.touches?ev.touches[0]:ev, o=QA_INPUT_RESIZE;
+  // 柄在输入框上边缘：往上拖 = 变高
+  var h=Math.round(Math.min(Math.max(o.startH+(o.startY-pt.clientY),38),220));
+  o.el.style.height=h+'px'; o.el.style.maxHeight=h+'px';
+  qaInputGripPos();
+  if(ev.cancelable)ev.preventDefault();
+}
+function qaInputStopResize(){
+  if(!QA_INPUT_RESIZE)return;
+  document.removeEventListener('mousemove',qaInputResize);
+  document.removeEventListener('mouseup',qaInputStopResize);
+  document.removeEventListener('touchmove',qaInputResize,{passive:false});
+  document.removeEventListener('touchend',qaInputStopResize,{passive:false});
+  document.removeEventListener('touchcancel',qaInputStopResize,{passive:false});
+  var g=document.getElementById('qaInputGrip'); if(g)g.classList.remove('dragging');
+  QA_INPUT_RESIZE=null;
 }
 // ===== 面板四边四角自定义缩放 =====
 var QA_RESIZING=null;
@@ -4683,7 +4816,9 @@ function qaExportHistory(btn){
 var QA_REC=null;
 var QA_MIC_ICON='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:auto"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M12 18v3"></path><path d="M5 10v2a7 7 0 0 0 14 0v-2"></path></svg>';
 function qaGetRec(){return (typeof window!=='undefined')?(window.SpeechRecognition||window.webkitSpeechRecognition||null):null;}
-var QA_VOICE_METER=null, QA_VOICE_RAF=0, QA_VOICE_CTX=null, QA_VOICE_STREAM=null, QA_SPEECH_BASE='';
+// 2026-09-13：删掉录音音量条（用户反馈「点录音后输入框上方多出一条蓝线」）。
+// 录音中的反馈由 mic 按钮自身承担：变红 + 脉冲动画 + 图标切成 ⏹（.qa-mic.on）。
+var QA_VOICE_STREAM=null, QA_SPEECH_BASE='';
 function qaBrowserMicGuide(){
   var ua=(typeof navigator!=='undefined'&&navigator.userAgent)||'';
   if(/Edg\//.test(ua))return '（Edge：点地址栏左侧的锁/调音台图标，把「麦克风」设为允许后重试）';
@@ -4699,40 +4834,8 @@ function qaAppendPiece(base,piece){
   if(!/[。！？.!?]/.test(piece.slice(-1)))piece=piece+'。';
   return base+piece;
 }
-function qaShowVoiceMeter(stream){
-  var meter=document.getElementById('qaVoiceMeter');
-  if(!meter||!stream)return;
-  var N=14,bars=[];
-  meter.innerHTML='';
-  for(var i=0;i<N;i++){var b=document.createElement('i');meter.appendChild(b);bars.push(b);}
-  meter.classList.add('active');meter.hidden=false;
-  try{
-    var Ctx=(window.AudioContext||window.webkitAudioContext);
-    if(!Ctx)return;
-    var ctx=new Ctx();QA_VOICE_CTX=ctx;
-    if(ctx.resume)ctx.resume();
-    var src=ctx.createMediaStreamSource(stream);
-    var an=ctx.createAnalyser();an.fftSize=256;src.connect(an);
-    var buf=new Uint8Array(an.frequencyBinCount);
-    function tick(){
-      an.getByteFrequencyData(buf);
-      var sum=0;for(var i=0;i<buf.length;i++)sum+=buf[i];
-      var lvl=buf.length?sum/buf.length/255:0;
-      for(var k=0;k<bars.length;k++){
-        var h=6+Math.round(Math.abs(Math.sin((k/bars.length)*Math.PI*2+performance.now()/140))*lvl*94);
-        bars[k].style.height=h+'%';
-      }
-      QA_VOICE_RAF=requestAnimationFrame(tick);
-    }
-    tick();
-  }catch(e){}
-}
-function qaHideVoiceMeter(){
-  if(QA_VOICE_RAF){cancelAnimationFrame(QA_VOICE_RAF);QA_VOICE_RAF=0;}
-  if(QA_VOICE_CTX){try{QA_VOICE_CTX.close();}catch(e){}QA_VOICE_CTX=null;}
+function qaReleaseMicStream(){
   if(QA_VOICE_STREAM){try{QA_VOICE_STREAM.getTracks().forEach(function(t){t.stop();});}catch(e){}QA_VOICE_STREAM=null;}
-  var meter=document.getElementById('qaVoiceMeter');
-  if(meter){meter.classList.remove('active');meter.hidden=true;meter.innerHTML='';}
 }
 function qaInitMic(){
   var btn=document.getElementById('qaFloatMic');
@@ -4746,13 +4849,13 @@ function qaStopMic(btn){
   if(btn){btn.classList.remove('on');btn.innerHTML=QA_MIC_ICON;btn.title='语音输入（点击开始，再点结束）';}
   var rec=QA_REC;QA_REC=null;
   if(rec){try{rec.stop();}catch(e){} try{rec.abort();}catch(e){}}
-  qaHideVoiceMeter();
+  qaReleaseMicStream();
 }
 function qaMicFail(msg){
   var btn=document.getElementById('qaFloatMic');
   if(btn){btn.classList.remove('on');btn.innerHTML=QA_MIC_ICON;btn.title='语音输入（点击开始，再点结束）';}
   QA_REC=null;
-  qaHideVoiceMeter();
+  qaReleaseMicStream();
   if(msg)qaFloatAdd('ai','🎤 '+msg+'。'+qaBrowserMicGuide(),'',{md:false});
 }
 function qaToggleMic(){
@@ -4781,7 +4884,7 @@ function qaToggleMic(){
       qaMicFail('语音识别失败（'+msg+'）');
     };
     rec.onend=function(){qaStopMic(btn);};
-    try{rec.start();qaStartMic(btn);if(stream)qaShowVoiceMeter(stream);}catch(e){qaMicFail('启动语音识别失败');}
+    try{rec.start();qaStartMic(btn);}catch(e){qaMicFail('启动语音识别失败');}
   }
   // 先请求麦克风权限，避免网页版 SpeechRecognition 静默失败
   if(typeof navigator!=='undefined'&&navigator.mediaDevices&&typeof navigator.mediaDevices.getUserMedia==='function'){
@@ -5962,6 +6065,7 @@ function toggleTheme(){
   var _panel=document.getElementById('qaFloat');
   if(_panel){
     qaFloatAddResizeHandles();
+    qaInputAddGrip();
     // 缩放把手优先；拖拽把手=整个面板除交互元素/缩放柄
     _panel.addEventListener('mousedown',qaFloatStartResize);
     _panel.addEventListener('mousedown',qaFloatStartDrag);

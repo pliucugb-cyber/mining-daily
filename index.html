@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260913-0608" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260913-0819" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -142,6 +142,23 @@ body[data-filter-mode="history"] .toc-sidebar{display:none!important}
 body[data-filter-mode="fav"] .news-grid,
 body[data-filter-mode="history"] .news-grid{grid-template-columns:minmax(0,1fr);gap:var(--s4)}
 }
+/* 2026-09-13：收藏 / 浏览记录沉浸式视图的左侧目录导航。
+   ★ 为什么必须有：body 在 ≥1101px 有 padding-left:200px（给首页左侧固定目录 .toc-sidebar 让位）。
+     fav / history 视图把 .toc-sidebar 藏了，那 200px 就白白空在左边 —— 实测 1200/1440 视口里
+     卡片从 x=216 起、左 200px 全空。这里把这块位置交给该视图自己的目录，既补上空白又给到真实导航。
+   ≤1100px 不显示（那时 body 没有左内边距，也没有空间）。 */
+.fav-toc{display:none}
+@media(min-width:1101px){
+body[data-filter-mode="fav"] .fav-toc,
+body[data-filter-mode="history"] .fav-toc{display:block;position:fixed;left:18px;top:88px;width:168px;background:var(--surface);border-radius:var(--r-lg);padding:var(--s4) var(--s3);box-shadow:var(--shadow-md);z-index:99;max-height:calc(100vh - 120px);overflow-y:auto}
+}
+body.dark .fav-toc{background:var(--bg);border:1px solid var(--line-1);box-shadow:var(--shadow-md)}
+.fav-toc-sep{height:1px;background:var(--line-1);margin:var(--s3) 0}
+.fav-toc-group{display:flex;align-items:center;gap:var(--s2);font-size:var(--fs-meta);color:var(--ink-500);padding:var(--s2) var(--s3);border-radius:var(--r-md);cursor:pointer;transition:background .15s,color .15s}
+.fav-toc-group:hover{background:var(--surface-2);color:var(--ink-900)}
+.fav-toc-group::before{content:'';width:3px;height:12px;border-radius:2px;background:var(--brand);flex:0 0 auto}
+.fav-toc-empty{font-size:var(--fs-meta);color:var(--ink-300);padding:var(--s2) var(--s3)}
+.fav-toc-back2{border-top:none;margin-top:0;padding-top:var(--s2)}
 body[data-filter-mode="fav"] #archivedFavSection,
 body[data-filter-mode="history"] #archivedFavSection{display:block!important;background:transparent;border:none;box-shadow:none;padding-top:var(--s4);scroll-margin-top:0}
 body[data-filter-mode="fav"] #archivedFavSection .section-title,
@@ -162,7 +179,7 @@ body[data-filter-mode="history"] #archFavList .aggregate-clone .news-tags{displa
 .aggregate-empty .empty-cta:hover{filter:brightness(1.06)}
 body.dark .aggregate-empty .empty-cta{background:#38bdf8;color:#0b1220}
 /* 2026-09-12：按时间分组标题 + 少条置底 CTA（建议④③） */
-.agg-group-title{display:flex;align-items:center;gap:var(--s2);margin:var(--s4) 0 var(--s2);padding-left:2px;font-size:var(--fs-meta);font-weight:600;color:var(--ink-500);letter-spacing:.5px}
+.agg-group-title{display:flex;align-items:center;gap:var(--s2);margin:var(--s4) 0 var(--s2);padding-left:2px;font-size:var(--fs-meta);font-weight:600;color:var(--ink-500);letter-spacing:.5px;scroll-margin-top:76px}
 .agg-group-title::before{content:'';width:3px;height:14px;background:var(--brand);border-radius:2px;display:inline-block}
 .aggregate-foot{text-align:center;padding:var(--s5) 0 var(--s1)}
 .aggregate-foot .empty-cta{display:inline-flex;align-items:center;gap:var(--s2);margin-top:var(--s1);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:#0e7490;border:0;border-radius:10px;cursor:pointer}
@@ -653,7 +670,7 @@ body.dark .qa-head-menu-list button:hover{background:var(--surface-3)}
    改：输入框 min-width:0 允许收缩；按钮 flex:0 0 auto + white-space:nowrap 永不折行；
    四件控件统一 38px 高 + 胶囊圆角 + 垂直居中。 */
 .qa-float-foot{position:relative;z-index:3;display:flex;align-items:center;gap:var(--s2);padding:var(--s3);border-top:1px solid var(--line-1);background:var(--surface)}
-.qa-float-input{position:relative;z-index:4;flex:1 1 auto;min-width:0;height:38px;min-height:38px;max-height:140px;border:1px solid #dbe2ea;border-radius:19px;padding:8px var(--s3);font-size:var(--fs-body);line-height:1.35;color:var(--ink-900);outline:none;resize:vertical;overflow:auto;field-sizing:content}
+.qa-float-input{position:relative;z-index:4;flex:1 1 auto;min-width:0;height:38px;min-height:38px;max-height:140px;border:1px solid #dbe2ea;border-radius:19px;padding:8px var(--s3);font-size:var(--fs-body);line-height:1.35;color:var(--ink-900);outline:none;resize:none;overflow:auto;field-sizing:content}
 .qa-float-input::placeholder{color:var(--ink-300)}
 .qa-float-input:focus{border-color:var(--tag-strategy)}
 .qa-float-btn{position:relative;z-index:4;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;height:38px;white-space:nowrap;border:none;border-radius:19px;padding:0 var(--s3);font-size:var(--fs-meta);font-weight:600;cursor:pointer;background:var(--surface-3);color:var(--ink-900)}
@@ -674,10 +691,18 @@ body.dark .qa-net-fail .qa-regenerate{background:var(--danger);color:#fff}
 .qa-mic{padding:0;width:38px;height:38px;border-radius:50%}
 .qa-mic.on{background:#e03131;color:#fff;animation:qa-mic-pulse 1s infinite}
 @keyframes qa-mic-pulse{0%{box-shadow:0 0 0 0 rgba(224,49,49,.5)}70%{box-shadow:0 0 0 7px rgba(224,49,49,0)}100%{box-shadow:0 0 0 0 rgba(224,49,49,0)}}
-.qa-voice-meter{position:absolute;left:var(--s3);right:var(--s3);bottom:calc(100% + 4px);height:7px;display:flex;align-items:flex-end;gap:2px;opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s;pointer-events:none;z-index:5}
-.qa-voice-meter.active{opacity:1;visibility:visible}
-.qa-voice-meter i{flex:1 1 0;min-width:2px;height:10%;background:var(--tag-strategy);border-radius:2px;transform-origin:bottom}
-body.dark .qa-voice-meter i{background:var(--tag-strategy)}
+/* 2026-09-13：输入框高度调节柄 —— 从「右下角原生 resize 手柄」挪到「输入框上边缘中部」。 */
+/* 旧的原生柄画在右下角，那里正被 mic/检索/AI 三个按钮挤着，又小又难点（用户反馈）。 */
+/* 位置（left/top）由 JS 对准输入框中心线算，这里只管外观。 */
+.qa-input-grip{position:absolute;left:0;top:1px;width:72px;height:12px;z-index:6;display:none;align-items:center;justify-content:center;cursor:ns-resize;touch-action:none}
+.qa-float.open .qa-input-grip{display:flex}
+.qa-input-grip::before{content:'';width:38px;height:4px;border-radius:2px;background:var(--ink-300);opacity:.7;transition:background .15s,width .15s,opacity .15s}
+.qa-input-grip:hover::before,.qa-input-grip.dragging::before{background:var(--brand);width:52px;opacity:1}
+body.dark .qa-input-grip::before{background:rgba(255,255,255,.3);opacity:.85}
+body.dark .qa-input-grip:hover::before,body.dark .qa-input-grip.dragging::before{background:var(--brand)}
+/* 拖动中关掉 field-sizing:content 的自动增高，改为手动高度 */
+.qa-float-input.qa-h-fixed{field-sizing:fixed}
+@media(max-width:768px){.qa-input-grip{display:none!important}}
 .qa-float-tip{font-size: var(--fs-nano);color:var(--ink-300);padding:var(--s2) var(--s3) var(--s3);background:var(--surface);border-top:1px solid #f1f4f7;line-height:1.4;user-select:none}
 body.dark .qa-float{background:var(--surface);border-color:var(--line-1)}
 body.dark .qa-float-body{background:var(--bg)}
@@ -2492,6 +2517,8 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <div class="guide-tip" data-page-node-id="GDorOKlc7ACoX0I5B7SFKP">💡 <b data-page-node-id="07crUI3yeEjsFFsRcvfwFw">安装后卸载：</b>手机长按图标删除；电脑 Edge/Chrome「设置」→「应用」→ 找"矿业新闻日报"卸载。收藏版在书签管理器中删除。</div>
 </div>
 </div>
+<!-- 2026-09-13：收藏/浏览记录沉浸式视图的左侧目录（≥1101px 显示，补上 body padding-left 留出的空间） -->
+<aside class="fav-toc" id="favToc" aria-label="收藏与浏览记录导航"></aside>
 <!-- ==================== 已归档收藏 ==================== -->
 <div class="section" id="archivedFavSection" style="display:none" data-page-node-id="TasvMnm8dhzmi0x8329aJO">
 <div class="favview-bar" id="favViewBar"><button class="favview-back" type="button" data-act="fav-back" aria-label="返回">‹ 返回</button><span class="favview-title" id="favViewTitle">我的收藏</span><button class="favview-clear" type="button" data-act="clear-history" style="display:none" title="清空后 8 秒内可撤销（再点一次确认）" aria-label="清空浏览记录">清空</button></div>
@@ -2538,7 +2565,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=97bcfa35" defer></script>
 <script src="lme-data.js?v=255864bc" defer></script>
 <script src="price-history.js?v=e24ff7b4" defer></script>
-<script src="app.js?v=8b0561a7" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=35105cde" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
@@ -2588,7 +2615,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
   </div>
   <div class="qa-float-body" id="qaFloatBody" data-page-node-id="nd0EyI5kVl0DOVnIlIBaWb"></div>
   <div class="qa-float-foot" data-page-node-id="ClSV4Aqm5KW0LZGGVEAZMx">
-    <div class="qa-voice-meter" id="qaVoiceMeter" hidden></div>
+    <div class="qa-input-grip" id="qaInputGrip" role="separator" aria-label="上下拖动可调整输入框高度" title="按住上下拖动，调整输入框高度"></div>
     <textarea class="qa-float-input" id="qaFloatInput" placeholder="输入关键词或问题…" aria-label="输入关键词检索或问题" autocomplete="off" rows="1" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX"></textarea>
     <button class="qa-float-btn qa-mic" id="qaFloatMic" type="button" title="语音输入（点击开始，再点结束）" aria-label="语音输入"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:auto"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M12 18v3"></path><path d="M5 10v2a7 7 0 0 0 14 0v-2"></path></svg></button>
     <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词" onclick="window.qaFloatSearch&&window.qaFloatSearch()" data-page-node-id="DcqZEFlU8VgjnfLfZc4l82">检索</button>
