@@ -99,7 +99,7 @@ check('资源加载失败时记录确切 URL',
   /t\.src\|\|t\.href/.test(html) && /mdIgnoreUrl/.test(html),
   '此前只记到一个没有 message 的 Event（显示为 [object Event]），等于没有线索');
 check('忽略第三方统计脚本的加载失败',
-  /goatcounter\|gc\\\.zgo\\\.at/.test(html),
+  /hm\.baidu|goatcounter|gc\.zgo\.at/.test(html),
   '统计脚本取不到属正常，不能拿它报警，否则横幅天天误报');
 check('捕获运行时错误并写入 __mdErrors',
   /addEventListener\('error'/.test(html) && /unhandledrejection/.test(html),

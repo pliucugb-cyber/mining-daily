@@ -121,7 +121,7 @@ function loadPage() {
     await new Promise(r => setTimeout(r, 5000));
     const doc = w.document;
     const errs = [].concat(w.__mdErrors || [], jsdomErrors).map(String)
-      .filter(x => !/goatcounter/.test(x));
+      .filter(x => !/goatcounter|hm\.baidu/.test(x));
 
     check('app.js 求值到底（__mdAppEvaluated === true）',
       w.__mdAppEvaluated === true,

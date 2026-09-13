@@ -153,7 +153,7 @@ setTimeout(() => {
     (missing.length ? ' 例：' + missing.slice(0, 3).join(' / ') : ''));
 
   console.log('\n===== JS 运行时错误 =====');
-  const real = errors.filter(e => !/goatcounter|gc\.zgo\.at|favicon|net::ERR|Not implemented/i.test(e));
+  const real = errors.filter(e => !/goatcounter|gc\.zgo\.at|hm\.baidu|favicon|net::ERR|Not implemented/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));
 
   console.log('\n===== 数据完整性汇总 =====');

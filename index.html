@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260913-2010" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260913-2047" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -1398,21 +1398,16 @@ body.dark .nf-export-btn{background:#1b2733;color:var(--ink-700);border-color:#2
 /* 设计系统审计（2026-09-09）：补全键盘焦点可见性 —— 页面有 5 处 outline:none 且无替代焦点态，键盘用户会失去定位 */
 :where(a,button,input,select,textarea,[onclick],[tabindex]):focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 </style>
-<!-- GoatCounter 访问统计 -->
-<script data-goatcounter="https://mining-daily.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<!-- 百度统计（2026-09-13 由 GoatCounter 迁移；访问量在 tongji.baidu.com 后台查看） -->
 <script>
-// 2026-09-08 深夜：goatcounter 后台未开通（接口实测 403），计数永远取不到。
-// 与其常驻一行「累计访问 - 次」的死文案，不如默认隐藏、真取到数字再显示。
-window.gcTotal=function(data){
-  var el=document.getElementById('gc-total');
-  if(!el)return;
-  if(!(data && typeof data.count==='number'))return;
-  el.textContent=data.count.toLocaleString('zh-CN');
-  var line=document.getElementById('gcStatLine');
-  if(line)line.style.display='';
-};
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?89ca069c57313b66a3dafc669b4cf581";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
 </script>
-<script async src="https://mining-daily.goatcounter.com/count.json?path=/&start=2020-01-01&callback=gcTotal"></script>
 <style>
 /* ===== 组件统一层（2026-09-08 step3 / 依 DESIGN.md 第 4 章） ===== */
 /* 区块头：统一浅底 + 3px 品牌左竖条；变体仅改底色与竖条色 */
@@ -2095,7 +2090,7 @@ body:not(.ec-on) #eventCalendar{display:none}
   // 真正卡住的区块仍会被标出。
   window.__mdRegionGrace=false;
   setTimeout(function(){ window.__mdRegionGrace=true; }, 10000);
-  // 第三方统计（GoatCounter 等）取不到属正常，不能拿它报警，否则横幅天天误报。
+  // 第三方统计（百度统计等）取不到属正常，不能拿它报警，否则横幅天天误报。
   function mdIgnoreUrl(u){
     return !u || /goatcounter|gc\.zgo\.at|google-analytics|doubleclick|hm\.baidu|cnzz/.test(String(u));
   }
@@ -2670,7 +2665,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <p data-page-node-id="S3kQ9mZxTpV2LwNc7RbHyJ">国际来源：LME · ICSG（铜）· ILZSG（铅锌）· INSG（镍）· 国际铝业协会 · MINING.COM · Kitco · 世界黄金协会 · SMM 国际站（metal.com）</p>
 <p data-page-node-id="VpxX6mvPzRxFtHA7l0zT1b">聚焦有色金属：铜镍铅锌铝金银稀土钨钼锡锑锂钴 | 能源与黑色（煤炭·石油·天然气·钢铁）不收；铁矿仅保留全球供需与价格类重要动态</p>
 <p data-page-node-id="DpiH4NmjwKVCZxEHRMcrUl">数据更新时间：<span id="dataUpdatedAt" data-page-node-id="DpiH4NmjwKVCZxEHRMcrU2">2026-09-08 09:26</span> · 已读状态仅存于本机浏览器</p>
-<p class="gc-stat" id="gcStatLine" style="display:none" data-page-node-id="gcStatLine">📊 累计访问 <span id="gc-total" data-page-node-id="gcTotalNum">-</span> 次 · <a href="https://mining-daily.goatcounter.com/" target="_blank" rel="noopener" data-page-node-id="gcStatLink">查看统计后台</a></p>
+<p class="stat-note" id="baiduStatNote" data-page-node-id="baiduStatNote">📊 访客行为统计由百度统计提供</p>
 <div style="border-top:1px solid #d5dde5;margin:14px 0 10px;padding-top:12px;text-align:left" data-page-node-id="s0XEjKAes6jbtPiPwsmIlv">
 <p style="font-size: var(--fs-meta);color:#5b6b7a;line-height:1.8" data-page-node-id="NzrZzWa8Mi46Kl9BCkweAB"><b style="color:#3a4a5a" data-page-node-id="s97lWbmba5lXx3mEzsWFWz">版权与免责声明</b><br data-page-node-id="OijJLIrhaTC7EHNx1MblBW">
 本页面信息均来源于互联网公开渠道，包括但不限于中国政府机构、行业协会、权威媒体的官方网站及公开新闻报道。所有著作权及其他权利归原机构 / 原媒体所有。<br data-page-node-id="PA1FzhH4lqRe38kHVnTkkH">
