@@ -3520,6 +3520,10 @@ function mdInitOfflineBanner(){
 //       与 #expoMini（侧栏会展迷你卡，不按日期）口径分离，不重复会展条目。
 // 重建边界：#eventCalendar 为 index.html 静态容器（在 #rightsSection 之后、生成脚本只替换各 section 内部，兄弟节点安全）；
 //           本模块只运行时填充 .ec-body，不在生成侧写任何日历 DOM。
+// ⚠️ 开关（唯一入口）：事件·数据日历是否显示。
+// 2026-09-13 二期：刘三评估后决定**先隐藏**（一期形态信息量有限）。
+// 恢复显示＝只把下面这行改成 true（CSS 侧 body.ec-on 由 mdRenderEventCalendar 自动加，无需改别处）。
+var EC_ENABLED = false;
 var MANUAL_EVENTS = [
   // 维护者在此追加关键日期（已知会议/数据发布/申报截止/标准实施等，新闻未覆盖或需固化）：
   //   { date:'YYYY-MM-DD', title:'…', type:'会议'|'数据'|'政策'|'截止'|'其他', url:'' }
@@ -3566,7 +3570,11 @@ function mdRenderEventCalendar(){
   try{
     var sec = document.getElementById('eventCalendar'); if(!sec) return;
     var body = document.getElementById('ecBody'); if(!body) return;
-    sec.style.display='';  // 2026-09-13：日历是独立信息区块，须常显；否则会被 refreshSectionVisibility 的「无 .news-item 即隐藏」判空干掉（线上实测 display:none）
+    // 2026-09-13 二期：默认隐藏（EC_ENABLED=false）→ 立即返回、整块不显示，且不加 body.ec-on
+    // （index.html 里的静态兑底 body:not(.ec-on) #eventCalendar{display:none} 保证首帧即不可见、不闪）。
+    if(!EC_ENABLED){ sec.style.display='none'; try{ document.body.classList.remove('ec-on'); }catch(e){} return; }
+    sec.style.display='';  // 开启态须显式常显；否则会被 refreshSectionVisibility 的「无 .news-item 即隐藏」判空干掉（2026-09-13 一期线上事故）
+    try{ document.body.classList.add('ec-on'); }catch(e){}
     if(!window.NEWS_DATA || !window.NEWS_DATA.news){ body.innerHTML = '<div class="ec-loading">日历加载中…</div>'; return; }
     var base = mdEventBaseline();
     var events = mdEventFromNews();
@@ -3605,6 +3613,7 @@ function mdRenderEventCalendar(){
   }catch(e){}
 }
 function mdInitEventCalendar(){
+  if(!EC_ENABLED){ mdRenderEventCalendar(); return; }   // 二期默认隐藏：直接落隐藏态，不做无谓轮询
   if(window.NEWS_DATA && window.NEWS_DATA.news){ mdRenderEventCalendar(); return; }
   // 数据晚到（news-data.js 异步）：轮询重试，最多约 6s
   var n = 0, iv = setInterval(function(){
@@ -3612,7 +3621,10 @@ function mdInitEventCalendar(){
     if((window.NEWS_DATA && window.NEWS_DATA.news) || n > 20){ clearInterval(iv); mdRenderEventCalendar(); }
   }, 300);
 }
-window.__mdEventCalendar = { render:mdRenderEventCalendar, init:mdInitEventCalendar, extract:mdExtractEventDate, fromNews:mdEventFromNews, MANUAL_EVENTS:MANUAL_EVENTS };
+window.__mdEventCalendar = { render:mdRenderEventCalendar, init:mdInitEventCalendar, extract:mdExtractEventDate, fromNews:mdEventFromNews, MANUAL_EVENTS:MANUAL_EVENTS,
+  // 开关读写口：写 enabled 会立即重渲染（测试与将来「再打开」都走这里）
+  get enabled(){ return EC_ENABLED; },
+  set enabled(v){ EC_ENABLED = !!v; try{ mdRenderEventCalendar(); }catch(e){} } };
 // 页面加载后再判断一次（处理 iOS 等不触发 beforeinstallprompt 的场景）
 window.addEventListener('DOMContentLoaded',function(){
   // 刷新/重载后强制回到顶部（配合 <head> 里的 history.scrollRestoration='manual'）

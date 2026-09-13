@@ -2,12 +2,15 @@
  * 2026-09-13 事件·数据日历（轻量版）前端渲染契约测试（jsdom）。
  *
  * 验证：
+ *  - 【二期】默认**隐藏**：开关 `EC_ENABLED=false` → `#eventCalendar` 内联 display:none、<body> 无 .ec-on、不渲染事件行；
+ *  - 【二期】打开开关（`__mdEventCalendar.enabled = true`）后可见，关回去后再次隐藏（往返）；
  *  - #eventCalendar 为 index.html 静态容器（重建边界：兄弟节点，不被生成脚本抹掉）；
  *  - 从新闻标题派生事件（事件词 + 可解析日期），无日期的标题不进日历；
  *  - 未来项 .ec-upcoming（≤90 天带「即将」）、过去项 .ec-past 淡化；
  *  - 按日期组织：未来升序在前、过去降序在后；
  *  - 类型标签（会议/政策/数据/截止）、外链、来源渲染正确；
- *  - 空数据 → 占位「暂无已收录的近期事件」（不用「今日暂无」，避免与简报口径打架）。
+ *  - 空数据 → 占位「暂无已收录的近期事件」（不用「今日暂无」，避免与简报口径打架）；
+ *  - 打开态下不被 `refreshSectionVisibility()` 的「无 .news-item 即判空」隐藏（2026-09-13 一期线上事故防回归）。
  * 不依赖网络：自定义 NEWS_DATA 注入。
  */
 const fs = require('fs');
@@ -75,8 +78,21 @@ function check(name, cond, detail) {
 setTimeout(() => {
   console.log('===== 事件·数据日历（轻量版）渲染 =====');
 
+  // 0. 【二期】默认隐藏（开关 EC_ENABLED=false；用户 2026-09-13 决定先隐藏）
+  const sec = doc.getElementById('eventCalendar');
+  const ecApi = window.__mdEventCalendar;
+  check('开关可读且默认为 false', ecApi && ecApi.enabled === false, 'enabled=' + (ecApi && ecApi.enabled));
+  check('默认隐藏：#eventCalendar 内联 display:none', sec.style.display === 'none', 'display=' + JSON.stringify(sec.style.display));
+  check('默认隐藏：<body> 无 .ec-on（静态兜底 CSS 生效）', !doc.body.classList.contains('ec-on'));
+  check('默认隐藏：未渲染事件行', doc.querySelectorAll('#ecBody .ec-row').length === 0, 'rows=' + doc.querySelectorAll('#ecBody .ec-row').length);
+
+  // 0b. 打开开关（这就是"恢复显示"的路径：EC_ENABLED → true，app.js 自动加 body.ec-on）
+  ecApi.enabled = true;
+  check('打开开关后 <body> 带 .ec-on', doc.body.classList.contains('ec-on'));
+  check('打开开关后 #eventCalendar 不再内联隐藏', sec.style.display !== 'none', 'display=' + JSON.stringify(sec.style.display));
+
   // 1. 静态容器存在（重建边界）
-  check('index.html 含静态容器 #eventCalendar', !!doc.getElementById('eventCalendar'));
+  check('index.html 含静态容器 #eventCalendar', !!sec);
   check('含 .ec-body 填充槽', !!doc.getElementById('ecBody'));
 
   const rows = doc.querySelectorAll('#ecBody .ec-row');
@@ -123,16 +139,24 @@ setTimeout(() => {
     check('空数据占位不含「今日暂无」（避免与简报口径打架）', empty && empty.textContent.indexOf('今日暂无') < 0);
   } catch (e) { check('空数据占位渲染', false, e.message); }
 
-  // 10. 防回归（2026-09-13 线上事故）：#eventCalendar 是独立信息区块，必须被 refreshSectionVisibility 的静态区白名单跳过；
+  // 10. 防回归（2026-09-13 一期线上事故）：打开态下 #eventCalendar 必须被 refreshSectionVisibility 的静态区白名单跳过；
   //     否则会被「无 .news-item 即 display:none」判空，整块在页面上消失（线上实测 invisible）。
   try {
     window.NEWS_DATA.news = MY_DATA.news;   // 恢复数据，回到有事件状态
     window.__mdEventCalendar.render();
     if (typeof window.mdRefreshSections === 'function') window.mdRefreshSections();
-    const sec = doc.getElementById('eventCalendar');
-    check('refreshSectionVisibility 后 #eventCalendar 未被隐藏', sec.style.display !== 'none', 'display=' + JSON.stringify(sec.style.display));
+    const s10 = doc.getElementById('eventCalendar');
+    check('refreshSectionVisibility 后（打开态）#eventCalendar 未被隐藏', s10.style.display !== 'none', 'display=' + JSON.stringify(s10.style.display));
     check('防回归后日历行仍为 3 条', doc.querySelectorAll('#ecBody .ec-row').length === 3);
   } catch (e) { check('防隐藏回归用例', false, e.message); }
+
+  // 11. 【二期】关回隐藏（开关往返）：置 false 后必须重新不可见
+  try {
+    window.__mdEventCalendar.enabled = false;
+    const s11 = doc.getElementById('eventCalendar');
+    check('关回开关后 #eventCalendar 再次内联隐藏', s11.style.display === 'none', 'display=' + JSON.stringify(s11.style.display));
+    check('关回开关后 <body> 的 .ec-on 被移除', !doc.body.classList.contains('ec-on'));
+  } catch (e) { check('开关往返用例', false, e.message); }
 
   if (errors.length) console.log('  [info] 非日历相关 console 错误 ' + errors.length + ' 条：' + errors.slice(0, 3).join(' | '));
 

@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260913-1905" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260913-1930" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -1918,6 +1918,10 @@ body.dark .mtab{color:var(--ink-300)}
 .ec-soon{flex:0 0 auto;font-size:11px;color:#fff;background:var(--brand);border-radius:var(--r-pill);padding:1px 8px;align-self:center;white-space:nowrap}
 .ec-empty{padding:var(--s4);color:var(--ink-500);text-align:center}
 body.dark #eventCalendar .ec-row.ec-upcoming{background:rgba(14,116,144,.2)}
+/* 2026-09-13 二期：日历**默认隐藏**（开关＝app.js `EC_ENABLED`，当前 false）。
+   写成「未加 .ec-on 即隐藏」是刻意的：静态 CSS 兑底 → 首帧就不闪，且 app.js 没跑起来时同样隐藏。
+   恢复显示只需把 EC_ENABLED 置 true，app.js 会给 <body> 加 .ec-on，本规则自动失效。 */
+body:not(.ec-on) #eventCalendar{display:none}
 </style>
 <!-- ========================================================================
      2026-09-11 事故二次加固：SW/缓存自愈引信（内联，独立于 app.js）
