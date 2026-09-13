@@ -6262,12 +6262,129 @@ function toggleTheme(){
     ensureToolbar().appendChild(bar);
   }
 
+  /* 价格区间榜（2026-09-13）
+     数据源：window.PRICE_HISTORY.series（price-history.js，由 fetch_price_history.py 每日更新）。
+     两档：周榜 = 近 RANK_W 个交易日；月榜 = 全窗口（现有多少数据用多少）。
+     档位标签里的天数从数据实时算出（近 N 日），不写死——避免与真实跨度不符。
+     形态：固定「涨幅榜 / 跌幅榜」两栏，各取前 RANK_TOP 名；某栏为空时出占位文案。 */
+  var RANK_W=5;        /* 周榜窗口：近 5 个交易日 */
+  var RANK_TOP=8;      /* 每栏取前 8 名 */
+  var rankRange='week';/* week | month */
+
+  /* 取某品种在某档的区间涨跌幅：返回 {pct, from, to, days} 或 null */
+  function rankOf(s, range){
+    var pts=(s&&s.points)||[];
+    if(pts.length<2)return null;
+    var use = (range==='week') ? pts.slice(-Math.min(RANK_W,pts.length)) : pts;
+    if(use.length<2)return null;
+    var a=use[0][1], b=use[use.length-1][1];
+    if(typeof a!=='number'||typeof b!=='number'||!a)return null;
+    return { pct:(b-a)/a*100, from:use[0][0], to:use[use.length-1][0], days:use.length };
+  }
+
+  /* 全样本最大 |pct|，下限 1% —— 与热力图同款归一化，条长可比 */
+  function rankMx(rows){
+    var mx=0;
+    rows.forEach(function(r){ if(r.pct!==null)mx=Math.max(mx,Math.abs(r.pct)); });
+    return Math.max(mx,1);
+  }
+
+  function rankRows(range){
+    var H=window.PRICE_HISTORY;
+    if(!H||!H.series)return null;
+    var out=[];
+    Object.keys(H.series).forEach(function(slug){
+      var s=H.series[slug], r=rankOf(s,range);
+      if(!r)return;
+      out.push({ slug:slug, n:s.name||slug, unit:s.unit||'', pct:r.pct,
+                 from:r.from, to:r.to, days:r.days });
+    });
+    return out.length?out:null;
+  }
+
+  /* 单栏：标题 + 条列。bar 用背景宽度表达 |pct|/mx，颜色红涨绿跌。 */
+  function rankCol(title,rows,mx,cls){
+    if(!rows.length){
+      return '<div class="rk-col '+cls+'">'
+           + '<div class="rk-col-head"><span class="rk-col-name">'+esc(title)+'</span></div>'
+           + '<div class="rk-empty">本期无'+(cls==='rk-up'?'上涨':'下跌')+'品种</div></div>';
+    }
+    var li=rows.map(function(r,i){
+      var sign=r.pct>0?'+':'';
+      var w=mx>0?Math.min(100,Math.abs(r.pct)/mx*100):0;
+      var rgb=r.pct>0?'217,58,43':'14,122,82';
+      return '<button type="button" class="rk-row" data-slug="'+esc(r.slug)+'" title="'+esc(r.n)+' '+sign+r.pct.toFixed(2)+'%  '+esc(r.from)+' → '+esc(r.to)+'">'
+           + '<span class="rk-idx">'+(i+1)+'</span>'
+           + '<span class="rk-nm">'+esc(r.n)+'</span>'
+           + '<span class="rk-bar"><i style="width:'+w.toFixed(1)+'%;background:rgba('+rgb+',.72)"></i></span>'
+           + '<span class="rk-pct" style="color:'+(r.pct>0?'var(--up)':'var(--down)')+'">'+sign+r.pct.toFixed(2)+'%</span>'
+           + '</button>';
+    }).join('');
+    return '<div class="rk-col '+cls+'">'
+         + '<div class="rk-col-head"><span class="rk-col-name">'+esc(title)+'</span>'
+         + '<span class="rk-col-n">'+rows.length+' 项</span></div>'
+         + '<div class="rk-list">'+li+'</div></div>';
+  }
+
+  function rankRender(){
+    var box=document.getElementById('priceRank');
+    if(!box)return;
+    var rows=rankRows(rankRange);
+    if(!rows){ box.innerHTML='<div class="rk-empty">暂无连续日K数据，无法生成区间榜。</div>'; return; }
+
+    var mx=rankMx(rows);
+    var up=rows.filter(function(r){return r.pct>0;}).sort(function(a,b){return b.pct-a.pct;}).slice(0,RANK_TOP);
+    var dn=rows.filter(function(r){return r.pct<=0;}).sort(function(a,b){return a.pct-b.pct;}).slice(0,RANK_TOP);
+
+    /* 档位标签里的天数必须按「该档自己的窗口」算，不能只取当前 rows 的天数——
+       否则切到周榜时月榜标签也会显示「近 5 日」（2026-09-13 实测踩到）。
+       周榜 = RANK_W（若历史不足则取实际点数）；月榜 = 全窗口最长历史点数。 */
+    var wDays, mDays, spanFrom, spanTo;
+    var mRows=rankRows('month'), wRows=rankRows('week');
+    mDays = mRows ? Math.max.apply(null,mRows.map(function(r){return r.days;})) : rows[0].days;
+    wDays = wRows ? Math.max.apply(null,wRows.map(function(r){return r.days;})) : Math.min(RANK_W,rows[0].days);
+    if(rankRange==='month'){
+      spanFrom=mRows?mRows[0].from:rows[0].from; spanTo=mRows?mRows[0].to:rows[0].to;
+    }else{
+      spanFrom=wRows?wRows[0].from:rows[0].from; spanTo=wRows?wRows[0].to:rows[0].to;
+    }
+    var days=Math.max(wDays,mDays);
+
+    var tabs='<div class="rk-tabs">'
+      + '<button type="button" class="rk-tab'+(rankRange==='week'?' on':'')+'" data-range="week">周榜（近 '+wDays+' 日）</button>'
+      + '<button type="button" class="rk-tab'+(rankRange==='month'?' on':'')+'" data-range="month">月榜（近 '+mDays+' 日）</button>'
+      + '</div>';
+
+    box.innerHTML = '<div class="rk-head">'
+      + '<div class="rk-title">价格区间榜</div>'
+      + '<div class="rk-meta">'+esc(spanFrom)+' → '+esc(spanTo)+'　共 '+(rankRange==='week'?wDays:mDays)+' 个交易日</div>'
+      + '</div>' + tabs
+      + '<div class="rk-cols">'+rankCol('涨幅榜',up,mx,'rk-up')+rankCol('跌幅榜',dn,mx,'rk-dn')+'</div>'
+      + '<div class="rk-note">区间涨跌幅，红涨绿跌 · 点击任一行看走势图 · 数据覆盖 '+mDays+' 个交易日</div>';
+  }
+
+  /* 榜单交互：档位切换 + 行点击开走势图（事件委托，重绘后依然有效） */
+  document.addEventListener('click',function(e){
+    var t=e.target;
+    if(!t||!t.closest)return;
+    var tab=t.closest('.rk-tab');
+    if(tab){
+      var r=tab.getAttribute('data-range');
+      if(r&&r!==rankRange){ rankRange=r; rankRender(); }
+      return;
+    }
+    var row=t.closest('.rk-row');
+    if(row){
+      var slug=row.getAttribute('data-slug');
+      if(slug&&typeof pcChartOpen==='function')pcChartOpen(slug);
+    }
+  });
   /* 涨跌热力图（2026-09-13）
      纯前端派生：读 .price-card 的 .pc-chg 百分比 → 色块网格，色深 = |pct| / 归一化基准。
      视图状态持久化到 localStorage.md_price_view（card|heat）。 */
   var PV_KEY='md_price_view';
   function lsGetView(){
-    try{ var v=localStorage.getItem(PV_KEY); return (v==='heat'||v==='card')?v:'card'; }catch(e){ return 'card'; }
+    try{ var v=localStorage.getItem(PV_KEY); return (v==='heat'||v==='rank'||v==='card')?v:'card'; }catch(e){ return 'card'; }
   }
   function lsSetView(v){ try{ localStorage.setItem(PV_KEY,v); }catch(e){} }
   hmView=lsGetView();
@@ -6361,7 +6478,8 @@ function toggleTheme(){
     bar.id='priceViewBar';
     bar.className='price-views';
     bar.innerHTML='<button type="button" class="pv-btn on" data-view="card">卡片</button>'
-                 + '<button type="button" class="pv-btn" data-view="heat">热力图</button>';
+                 + '<button type="button" class="pv-btn" data-view="heat">热力图</button>'
+                 + '<button type="button" class="pv-btn" data-view="rank">排行</button>';
     bar.addEventListener('click',function(e){
       var b=e.target&&e.target.closest?e.target.closest('.pv-btn'):null;
       if(!b)return;
@@ -6371,10 +6489,13 @@ function toggleTheme(){
   }
 
   function setView(v){
-    hmView=(v==='heat')?'heat':'card';
+    hmView=(v==='heat'||v==='rank')?v:'card';
     lsSetView(hmView);
     var strip=document.getElementById('priceStrip');
-    if(strip)strip.classList.toggle('hm-on',hmView==='heat');
+    if(strip){
+      strip.classList.toggle('hm-on',hmView==='heat');
+      strip.classList.toggle('rank-on',hmView==='rank');
+    }
     var bar=document.getElementById('priceViewBar');
     if(bar)bar.querySelectorAll('.pv-btn').forEach(function(b){
       var on=b.getAttribute('data-view')===hmView;
@@ -6382,6 +6503,7 @@ function toggleTheme(){
       b.setAttribute('aria-pressed',on?'true':'false');
     });
     if(hmView==='heat')hmRender();
+    if(hmView==='rank')rankRender();
   }
 
   /* 色块点击 → 复用走势图弹窗（与卡片视图同一交互） */
@@ -6401,11 +6523,13 @@ function toggleTheme(){
       viewBar();
       if(hmView!=='card')setView(hmView);          // 恢复持久化视图
       hmRender();
+      rankRender();
       if(sortMode!=='default')setSort(sortMode);   // 价格异步刷新后保持当前排序
     }catch(err){ console.warn('priceEnhance:',err); }
   }
   window.__mdPriceEnhance=run;
   window.__mdPriceHeatmap={ render:hmRender, setView:setView, getView:function(){return hmView;}, KEY:PV_KEY };
+  window.__mdPriceRank={ render:rankRender, setRange:function(r){rankRange=(r==='week')?'week':'month';rankRender();}, getRange:function(){return rankRange;}, TOP:RANK_TOP, W:RANK_W };
   run();
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);
   setTimeout(run,1200);
