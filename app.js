@@ -3514,6 +3514,104 @@ function mdInitOfflineBanner(){
     window.addEventListener('online', upd); window.addEventListener('offline', upd); upd();
   }catch(e){}
 }
+// ===== 事件·数据日历（轻量版，2026-09-13）=====
+// 来源：① 新闻标题含「事件词 + 可解析日期」→ 从新闻派生；② MANUAL_EVENTS → 维护者补的关键日。
+// 形态：按日期组织的事件列表区块（非第三视图），未来项高亮（即将）、过去项淡化；
+//       与 #expoMini（侧栏会展迷你卡，不按日期）口径分离，不重复会展条目。
+// 重建边界：#eventCalendar 为 index.html 静态容器（在 #rightsSection 之后、生成脚本只替换各 section 内部，兄弟节点安全）；
+//           本模块只运行时填充 .ec-body，不在生成侧写任何日历 DOM。
+var MANUAL_EVENTS = [
+  // 维护者在此追加关键日期（已知会议/数据发布/申报截止/标准实施等，新闻未覆盖或需固化）：
+  //   { date:'YYYY-MM-DD', title:'…', type:'会议'|'数据'|'政策'|'截止'|'其他', url:'' }
+  // 例：{ date:'2026-10-15', title:'XX 行业数据季度发布', type:'数据', url:'' },
+];
+function mdEventBaseline(){
+  try{
+    var rd = (window.NEWS_DATA && window.NEWS_DATA.meta && window.NEWS_DATA.meta.report_date) || '';
+    if(/^\d{4}-\d{2}-\d{2}$/.test(rd)) return new Date(rd + 'T00:00:00');
+  }catch(e){}
+  return new Date();
+}
+function mdExtractEventDate(t){
+  if(!t) return null;
+  var m = t.match(/(20\d{2})年(\d{1,2})月(\d{1,2})日/);
+  if(m) return { y:+m[1], m:+m[2], d:+m[3] };
+  m = t.match(/(20\d{2})-(\d{1,2})-(\d{1,2})/);
+  if(m) return { y:+m[1], m:+m[2], d:+m[3] };
+  m = t.match(/(\d{1,2})月(\d{1,2})日/);
+  if(m) return { y: mdEventBaseline().getFullYear(), m:+m[1], d:+m[2] };
+  return null;
+}
+var MD_EVENT_WORDS = /(召开|举办|开幕|落幕|闭幕|实施|起实施|截止|报名|将于|发布|预告|上线|披露|到期|评审|备案|出让|挂牌|开标|举行)/;
+function mdEventTypeOf(t){
+  if(/标准|实施|条例|办法|规定|政策/.test(t)) return '政策';
+  if(/截止|到期|报名|挂牌|出让|开标|申报|征/.test(t)) return '截止';
+  if(/发布|披露|数据|季报|月报|进出口|统计/.test(t)) return '数据';
+  return '会议';
+}
+function mdEventFromNews(){
+  var out = [], seen = {}, rows = (window.NEWS_DATA && window.NEWS_DATA.news) || [];
+  for(var i=0;i<rows.length;i++){
+    var r = rows[i], t = String(r.t || r.title || '').trim();
+    if(!t || !MD_EVENT_WORDS.test(t)) continue;
+    var dt = mdExtractEventDate(t); if(!dt) continue;
+    var key = t + '|' + dt.y + '-' + dt.m + '-' + dt.d;
+    if(seen[key]) continue; seen[key] = 1;
+    out.push({ y:dt.y, m:dt.m, d:dt.d, title:t, url:String(r.u || r.url || ''), src:String(r.s || r.source || ''), type:mdEventTypeOf(t), from:'news' });
+  }
+  return out;
+}
+function mdPad2(n){ return (n<10?'0':'') + n; }
+function mdRenderEventCalendar(){
+  try{
+    var sec = document.getElementById('eventCalendar'); if(!sec) return;
+    var body = document.getElementById('ecBody'); if(!body) return;
+    if(!window.NEWS_DATA || !window.NEWS_DATA.news){ body.innerHTML = '<div class="ec-loading">日历加载中…</div>'; return; }
+    var base = mdEventBaseline();
+    var events = mdEventFromNews();
+    for(var i=0;i<MANUAL_EVENTS.length;i++){
+      var e = MANUAL_EVENTS[i], dm = /^(\d{4})-(\d{2})-(\d{2})$/.exec(e.date || '');
+      if(!dm) continue;
+      events.push({ y:+dm[1], m:+dm[2], d:+dm[3], title:e.title || '', url:e.url || '', src:'', type:e.type || '其他', from:'manual' });
+    }
+    if(!events.length){ body.innerHTML = '<div class="ec-empty">暂无已收录的近期事件</div>'; var c0 = document.getElementById('ecCount'); if(c0) c0.textContent = '0条'; return; }
+    var up = [], past = [];
+    for(var j=0;j<events.length;j++){
+      var ev = events[j];
+      var ds = ev.y + '-' + mdPad2(ev.m) + '-' + mdPad2(ev.d);
+      var dtObj = new Date(ds + 'T00:00:00');
+      var diff = Math.round((dtObj - base) / 86400000);
+      ev._ds = ds; ev._up = diff >= 0; ev._soon = ev._up && diff <= 90;
+      (ev._up ? up : past).push(ev);
+    }
+    up.sort(function(a,b){ return a.y-b.y || a.m-b.m || a.d-b.d; });
+    past.sort(function(a,b){ return b.y-a.y || b.m-a.m || b.d-a.d; });
+    var html = '';
+    up.concat(past).forEach(function(ev){
+      var cls = 'ec-row ' + (ev._up ? 'ec-upcoming' : 'ec-past');
+      var tagcls = 'ec-tag t-' + (ev.type === '会议' ? 'meeting' : ev.type === '数据' ? 'data' : ev.type === '政策' ? 'policy' : ev.type === '截止' ? 'deadline' : 'other');
+      var titleHtml = ev.url ? '<a href="' + safeHref(ev.url) + '" target="_blank" rel="noopener">' + esc(ev.title) + '</a>' : esc(ev.title);
+      var soon = ev._soon ? '<span class="ec-soon">即将</span>' : '';
+      html += '<div class="' + cls + '">'
+        + '<span class="ec-date" data-iso="' + ev._ds + '">' + esc(ev.m + '月' + ev.d + '日') + '</span>'
+        + '<div class="ec-main"><div class="ec-title">' + titleHtml + '</div>'
+        + '<div class="ec-meta"><span class="' + tagcls + '">' + esc(ev.type) + '</span>'
+        + (ev.src ? '<span class="ec-src">' + esc(ev.src) + '</span>' : '') + '</div></div>'
+        + soon + '</div>';
+    });
+    body.innerHTML = html;
+    var cnt = document.getElementById('ecCount'); if(cnt) cnt.textContent = events.length + '条';
+  }catch(e){}
+}
+function mdInitEventCalendar(){
+  if(window.NEWS_DATA && window.NEWS_DATA.news){ mdRenderEventCalendar(); return; }
+  // 数据晚到（news-data.js 异步）：轮询重试，最多约 6s
+  var n = 0, iv = setInterval(function(){
+    n++;
+    if((window.NEWS_DATA && window.NEWS_DATA.news) || n > 20){ clearInterval(iv); mdRenderEventCalendar(); }
+  }, 300);
+}
+window.__mdEventCalendar = { render:mdRenderEventCalendar, init:mdInitEventCalendar, extract:mdExtractEventDate, fromNews:mdEventFromNews, MANUAL_EVENTS:MANUAL_EVENTS };
 // 页面加载后再判断一次（处理 iOS 等不触发 beforeinstallprompt 的场景）
 window.addEventListener('DOMContentLoaded',function(){
   // 刷新/重载后强制回到顶部（配合 <head> 里的 history.scrollRestoration='manual'）
@@ -3525,6 +3623,8 @@ window.addEventListener('DOMContentLoaded',function(){
   // ⑨ 会议会展区块注入；⑥ 移动端问答头部返回箭头
   mdInitMeetingSection();
   mdQaMobileBackArrow();
+  // 事件·数据日历（轻量版）：填充 #eventCalendar（数据晚到时内部轮询重试）
+  mdInitEventCalendar();
   // 数据看门狗：9s 内仍未拿到 NEWS_DATA 时把「加载中…」占位改成明确提示 + 重试
   mdDataWatchdog();
   // P1-4 / P1-5 / P1-6：上次看到分隔线、简报折叠、无网络空态
