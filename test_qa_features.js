@@ -84,10 +84,17 @@ setTimeout(() => {
   check('qaToggleMic 已定义', typeof window.qaToggleMic === 'function');
   const _voiceInp = window.document.getElementById('qaFloatInput');
   check('qaFloatInput 为 textarea（支持多行语音结果与高度调节）', !!_voiceInp && _voiceInp.tagName === 'TEXTAREA');
-  check('qaFloatInput 支持垂直 resize', !!_voiceInp && window.getComputedStyle(_voiceInp).resize === 'vertical');
+  // 2026-09-13：改为上方自绘调节柄，原生 resize 关闭
+  // （本文件没有全局 document，一律用 window.document，否则 ReferenceError 直接崩）
+  check('qaFloatInput 已改用上方自绘调节柄（原生 resize 关闭）',
+        !!_voiceInp && window.getComputedStyle(_voiceInp).resize === 'none'
+        && !!window.document.getElementById('qaInputGrip'));
   check('语音：qaBrowserMicGuide 返回含「允许」的浏览器指引', (function(){try{return /允许/.test(window.qaBrowserMicGuide());}catch(e){return false;}})());
   check('语音：qaAppendPiece 给句末自动补「。」且不重复', (function(){try{return window.qaAppendPiece('','铜价上涨')==='铜价上涨。' && window.qaAppendPiece('铜价上涨。','铝价下跌')==='铜价上涨。铝价下跌。';}catch(e){return false;}})());
-  check('语音：qaShowVoiceMeter / qaHideVoiceMeter 已定义', typeof window.qaShowVoiceMeter === 'function' && typeof window.qaHideVoiceMeter === 'function');
+  // 2026-09-13：音量条已整条删除（用户反馈录音时那条蓝线多余），改由 mic 按钮脉冲反馈
+  check('语音：音量条已删除、改为 qaReleaseMicStream',
+        typeof window.qaReleaseMicStream === 'function'
+        && typeof window.qaShowVoiceMeter === 'undefined' && typeof window.qaHideVoiceMeter === 'undefined');
 
   console.log('\n===== 渲染工具 =====');
   let md = '';

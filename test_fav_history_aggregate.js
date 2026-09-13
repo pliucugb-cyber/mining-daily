@@ -121,6 +121,31 @@ setTimeout(() => {
     check('history 空态提示存在', !!emptyH);
     check('history 空态文案含浏览引导', !!emptyH && emptyH.textContent.indexOf('还没有浏览记录') >= 0, emptyH && emptyH.textContent);
 
+    // 4b) 左侧目录导航（2026-09-13）：fav/history 视图把首页目录藏了，
+    //     而 body 在 ≥1101px 有 padding-left:200px 给它让位 → 左侧 200px 成了纯空白。
+    //     现在把这块位置交给该视图自己的目录（切换 + 分组锚点 + 返回）。
+    window.localStorage.setItem('mining_daily_favorites',
+      JSON.stringify([{ url: 'https://example.com/toc-a', title: '目录用例', date: '2026-09-13', src: '测试' }]));
+    window.setFilter('fav', true);
+    const _toc = document.querySelector('#favToc');
+    check('左侧目录 #favToc 已就位', !!_toc);
+    check('左侧目录含「我的收藏 / 浏览记录」两项切换',
+      !!_toc && _toc.querySelectorAll('[data-favtoc="fav"]').length === 1
+      && _toc.querySelectorAll('[data-favtoc="history"]').length === 1);
+    check('左侧目录含「返回首页」入口',
+      !!_toc && _toc.querySelectorAll('[data-favtoc="home"]').length === 1);
+    const _grp = document.querySelectorAll('#archFavList .agg-group-title');
+    const _anch = _toc ? _toc.querySelectorAll('.fav-toc-group').length : -1;
+    check('目录锚点数 = 页面时间分组数',
+      _grp.length > 0 && _anch === _grp.length, '分组=' + _grp.length + ' 锚点=' + _anch);
+    check('时间分组标题已带 id（锚点可定位）', _grp.length > 0 && !!_grp[0].id);
+    // 切到浏览记录：目录高亮项跟着变（同一套目录复用）
+    window.setFilter('history', true);
+    check('切到浏览记录后目录高亮随之切换',
+      !!(document.querySelector('#favToc [data-favtoc="history"].active')));
+    window.setFilter('none', true);
+    check('退出视图后左侧目录内容已清空', !document.querySelector('#favToc') || document.querySelector('#favToc').innerHTML === '');
+
     // 5) 退出筛选后 data-filter-mode 清除
     window.setFilter('none', true);
     check('退出筛选后 body 无 data-filter-mode', !document.body.dataset.filterMode);

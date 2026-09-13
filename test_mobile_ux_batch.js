@@ -484,7 +484,7 @@ setTimeout(() => {
   check('输入区：foot 垂直居中（align-items:center）',
         /\.qa-float-foot\{position:relative;z-index:3;display:flex;align-items:center;gap:var\(--s2\);padding:var\(--s3\);/.test(html));
   check('输入区：输入框允许收缩 + 固定 38px + 胶囊圆角',
-        /\.qa-float-input\{position:relative;z-index:4;flex:1 1 auto;min-width:0;height:38px;min-height:38px;max-height:140px;border:1px solid #dbe2ea;border-radius:19px;padding:8px var\(--s3\);font-size:var\(--fs-body\);line-height:1.35;color:var\(--ink-900\);outline:none;resize:vertical;overflow:auto;field-sizing:content\}/.test(html));
+        /\.qa-float-input\{position:relative;z-index:4;flex:1 1 auto;min-width:0;height:38px;min-height:38px;max-height:140px;border:1px solid #dbe2ea;border-radius:19px;padding:8px var\(--s3\);font-size:var\(--fs-body\);line-height:1.35;color:var\(--ink-900\);outline:none;resize:none;overflow:auto;field-sizing:content\}/.test(html));
   check('输入区：按钮 flex:0 0 auto + nowrap + 38px（永不折成两行）',
         /\.qa-float-btn\{position:relative;z-index:4;flex:0 0 auto;[^}]*height:38px;white-space:nowrap;/.test(html));
   check('输入区：麦克风 38px 圆形（原 34px 方角）',
@@ -497,18 +497,30 @@ setTimeout(() => {
         String(_qInp2 && _qInp2.getAttribute('placeholder')));
   check('输入区：仍保留 aria-label（可访问性不回退）',
         !!_qInp2 && !!_qInp2.getAttribute('aria-label'));
-  check('输入区：输入框改为 textarea（支持多行与拖拽调节高度）',
+  check('输入区：输入框改为 textarea（支持多行）',
         !!_qInp2 && _qInp2.tagName === 'TEXTAREA');
-  check('输入区：textarea 支持垂直 resize',
-        !!_qInp2 && window.getComputedStyle(_qInp2).resize === 'vertical');
-  check('语音：音量条容器 #qaVoiceMeter 已就位（识别时显示实时音量）',
-        !!doc.getElementById('qaVoiceMeter'));
+  // 2026-09-13：原生 resize 手柄在右下角、被 mic/检索/AI 三键挤着不好点（用户反馈），
+  // 已改为输入框上边缘的自绘调节柄 #qaInputGrip。故这里改判 resize:none + 柄已挂载。
+  check('输入区：已关闭右下角原生 resize 手柄（resize:none）',
+        !!_qInp2 && window.getComputedStyle(_qInp2).resize === 'none',
+        _qInp2 && window.getComputedStyle(_qInp2).resize);
+  check('输入区：新增输入框上方调节柄 #qaInputGrip',
+        !!doc.getElementById('qaInputGrip'));
+  check('输入区：调节柄贴在输入框上边缘（top:1px 起始，不再是右下角）',
+        /\.qa-input-grip\{position:absolute;[^}]*top:1px/.test(html)
+        && /\.qa-float\.open \.qa-input-grip\{display:flex\}/.test(html));
+  // 2026-09-13：用户反馈「点录音后输入框上方多出一条蓝线」—— 那就是音量条，已整条删除。
+  check('语音：音量条 DOM 已删除（录音不再有那条蓝线）',
+        !doc.getElementById('qaVoiceMeter'));
+  check('语音：音量条 CSS 已删除', !/\.qa-voice-meter/.test(html));
   check('语音：qaBrowserMicGuide 已定义（失败给出浏览器具体指引）',
         typeof window.qaBrowserMicGuide === 'function');
   check('语音：qaAppendPiece 已定义（结果追加而非覆盖 + 句末补标点）',
         typeof window.qaAppendPiece === 'function');
-  check('语音：qaShowVoiceMeter / qaHideVoiceMeter 已定义（接入麦克风分析音量）',
-        typeof window.qaShowVoiceMeter === 'function' && typeof window.qaHideVoiceMeter === 'function');
+  check('语音：录音反馈改由 mic 按钮脉冲承担（qaReleaseMicStream 已定义）',
+        typeof window.qaReleaseMicStream === 'function'
+        && typeof window.qaShowVoiceMeter === 'undefined'
+        && typeof window.qaHideVoiceMeter === 'undefined');
   check('筛选行：竖向 padding 收紧为 --s2（103px -> 95px）',
         /\.qa-float-filters\{display:flex;flex-wrap:wrap;gap:var\(--s2\);padding:var\(--s2\) var\(--s3\);/.test(html));
 

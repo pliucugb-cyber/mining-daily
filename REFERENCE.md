@@ -2067,6 +2067,8 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **空态推荐词** `.qa-sug-cards` / `.qa-sug-tip` / `.qa-sug` **只在完全空态**渲染（3–5 个）。
 - **滚动落点契约**：函数 `qaFloatNearBottom` / `qaFloatFollow` / `qaFloatAnchorTop` / `qaFloatAnchorLastQuestion` / `qaFloatSettle` 全在；刚发出 / 刚恢复的问题传 `{anchorTop:true}` 钉顶、其后答案与「思考中」占位传 `{keepScroll:true}`、答完 `qaFloatSettle()` 仅在「最后一条问题落在下半屏」时提回顶部、`qaFloatFollow()` 只在距底 ≤80px 跟随；`qaFloatScroll()` 调用点**恰好 2 处**（函数定义 + 空态引导）；旧行为「一律 `scrollTop=scrollHeight` 甩到底」是 bug，**不得还原**。
 - **手机体验（§23 / §24）**：首开**不自动 focus 弹键盘**；AI 忙时按钮变可点「取消」红底，取消后保留已流式内容 +「重新生成」；窄屏「‹ 返回」回到打开前的内容 tab 并恢复顶栏品牌与分类栏；从「我的」进入后返回须**重新打开「我的」**（`mdQaReturn`）；窄屏顶栏下拉手势（`mdQaBindSwipe`）可关闭；桌面 Esc（`mdQaBindKeys`）关闭并把焦点归位 `#qaFab`；网络失败须出现 `.qa-net-fail` 明确提示条，**不得静默回退本地兜底**；取消按钮 `aria-label` 切换。
+- **输入框高度调节（2026-09-13）**：调节柄是**输入框上边缘**的自绘胶囊 `#qaInputGrip`（`position:absolute`、`cursor:ns-resize`，`left/top` 由 `qaInputGripPos()` 对准输入框中心线与上边线），**不再用** `textarea[resize:vertical]` 的右下角原生手柄 —— 那里被 mic / 检索 / AI 三键挤住，又小又难点（用户反馈）。拖拽时给输入框挂 `.qa-h-fixed` 停用 `field-sizing:content`，高度夹在 38–220px；≤768px 不显示（窄屏恒全屏、靠内容自动增高）。`#qaInputGrip` **必须由 `index.html` 静态声明**（理由见 §42.10 的 jsdom 坑），`app.js` 只绑事件。
+- **录音不得有音量条（2026-09-13）**：`#qaVoiceMeter` / `.qa-voice-meter` 已**整条删除**（用户反馈「点录音后输入框上方多出一条蓝线」）。录音中的反馈只由 `#qaFloatMic` 承担：`.qa-mic.on` 变红 + `qa-mic-pulse` 脉冲 + 图标切 ⏹；停下时 `qaReleaseMicStream()` 停 track。恢复音量条属回退。
 
 ### 42.5 「我的」面板（§22 / §27 / §31）
 
@@ -2081,6 +2083,9 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - 顶部 `.favview-bar` 返回条：「‹ 返回」`data-act="fav-back"`（回进入前 tab）、标题 `#favViewTitle` 随模式切换。
 - **收藏视图不得显示「清空」**（清空仅针对浏览记录，且点完就地重渲染、不跳走）。
 - 空态须为插画化 `.empty-art` SVG（§26），**不得退回纯 emoji `.empty-icon`**。
+- **≥1101px 须有左侧目录 `#favToc`（2026-09-13）**：`body{padding-left:200px}` 是**全局**给首页左侧固定目录让位的（≥1101px 生效）。fav / history 把 `.toc-sidebar` 藏了，这 200px 就成了纯空白 —— 实测 1200 / 1440 视口卡片从 x=216 起、左边 200px 全空。故这两个视图须由 `#favToc`（同款 fixed 左栏：`left:18px` / `width:168px` / `top:88px`）接管这块位置，内含**收藏·记录两项互切**（带条数、当前项 `.active`）、**本页时间分组锚点**（`.fav-toc-group` ↔ `#archFavList .agg-group-title` 的 `aggG<N>` id）、**回到顶部 / 返回首页**。桌面单列宽度不变（卡片仍在 x=216），`.toc-sidebar` 与 `.col-rail` **仍须隐藏**。
+- ⚠️ `mdRenderFavToc(mode)` 由 `setFilter()` 调用，**必须排在 `syncTocActive()` 之后** —— 后者会遍历清空所有 `.toc-main-item` 的 `active`，先渲染会被当场清掉（本轮踩过，测试当场 FAIL）；`syncTocActive()` 里另有 `it.closest('#favToc')` 跳过保护。
+- 回退指纹：① ≥1101px 进 fav/history 左侧 200px 又是空白；② `#favToc` 内容为空、或锚点数与 `.agg-group-title` 数量对不上；③ 分组标题没有 `aggG<N>` id；④ 目录高亮项与当前视图不符；⑤ 点「浏览记录」切换项没换视图 / 没换标题；⑥ **为填空白去取消 `body{padding-left}`**（会把首页左栏压掉，禁止）。
 
 ### 42.7 PWA 安装引导（§41，2026-09-12 两轮修复后定稿）
 
@@ -2146,7 +2151,9 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 |---|---|---|
 | `node test_brief_layers.js` | **47** | 简报分层渲染（jsdom） |
 | `node test_smoke_0908.js` | **74** | 全站冒烟（含矿权双视图 8 + 列表排序 9） |
-| `node test_mobile_ux_batch.js` | **172** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6 |
+| `node test_mobile_ux_batch.js` | **206** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13） |
+| `node test_qa_features.js` | **61** | AI 搜核心函数 / 流式接线 / 语音（含「音量条已删、调节柄已换」） |
+| `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
@@ -2178,6 +2185,10 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 **C. 判定测试失败是否为本次引入**：把 HEAD 导到临时目录（`git archive HEAD` 用 `tarfile` 解包）跑同一测试对比退出码，别凭记忆争论。
 
 **D. 判「改回归」前先分清是产品 bug 还是测试自身缺陷**：本轮已两次遇到**测试自己的守卫写错**（守卫扫整个 `app.js` → 注释命中 → 恒判 FAIL；行为测试期望值过期 → 假 FAIL）。修的是测试，不是产品。
+
+- ⚠️ 坑：**jsdom 不执行全部面板初始化**。`app.js` 里 `var _panel=document.getElementById('qaFloat'); if(_panel){...}` 那段在 jsdom 下没跑完 —— 实测 `.qa-resize-handle` 数为 **0**（缩放柄同样挂不上）。因此**靠 JS `createElement` 造出来的元素，jsdom 测试里查不到**，用它做断言必假 FAIL；需要被测试守住的元素一律在 `index.html` **静态声明**（2026-09-13 的 `#qaInputGrip` 正是因此改的）。
+- ⚠️ 坑：**`syncTocActive()` 会清掉所有 `.toc-main-item.active`**。任何新增的 `.toc-main-item`（如收藏视图左侧目录）若在其**之前**渲染，高亮会当场被清掉 → 渲染顺序必须排在它之后（或在其中显式跳过）。
+- ⚠️ 坑：**改 `document.*` 前先看该测试文件有没有全局 `document`**。`test_qa_features.js` 只有 `window.document`，写成 `document.getElementById(...)` 会抛 ReferenceError 让整个测试崩掉（本轮踩过）。
 
 ### 42.11 怎么用（两句话）
 
