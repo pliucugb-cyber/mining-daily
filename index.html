@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260913-1040" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260913-1205" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -1503,6 +1503,50 @@ body.dark .top-movers{background:rgba(255,255,255,.04)}
 .price-strip.hm-on .sortbar{display:none}
 .heatmap{display:none;margin:0 0 var(--s3)}
 .price-strip.hm-on .heatmap{display:block}
+
+/* 价格区间榜（2026-09-13）——复用热力图那轮已定义的 .price-views/.pv-btn，此处只加榜单态。
+   .price-strip.rank-on 时：卡片 / 排序条 / 热力图全部让位，只显示 #priceRank。 */
+.price-strip.rank-on .price-cards{display:none}
+.price-strip.rank-on .sortbar{display:none}
+.price-strip.rank-on .heatmap{display:none}
+.price-rank{display:none}
+.price-strip.rank-on .price-rank{display:block}
+.rk-head{display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s2)}
+.rk-title{font-size:var(--fs-h3);font-weight:500;color:var(--ink-700)}
+.rk-meta{font-size:var(--fs-meta);color:var(--ink-500)}
+.rk-tabs{display:flex;gap:6px;margin-bottom:var(--s3);flex-wrap:wrap}
+.rk-tab{font-family:inherit;font-size:var(--fs-meta);border:1px solid var(--line-2);background:var(--surface);color:var(--ink-700);border-radius:999px;padding:3px 12px;cursor:pointer;white-space:nowrap}
+.rk-tab:hover{border-color:var(--brand);color:var(--brand)}
+.rk-tab.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.rk-cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.rk-col-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s2);padding:0 2px var(--s2)}
+.rk-col-name{font-size:var(--fs-meta);font-weight:500;color:var(--ink-700)}
+.rk-up .rk-col-name{color:var(--up)}
+.rk-dn .rk-col-name{color:var(--down)}
+.rk-col-n{font-size:var(--fs-nano);color:var(--ink-500)}
+.rk-list{display:flex;flex-direction:column;gap:4px}
+.rk-row{display:grid;grid-template-columns:16px minmax(52px,auto) 1fr auto;align-items:center;gap:var(--s2);width:100%;text-align:left;font-family:inherit;background:var(--surface-2);border:1px solid transparent;border-radius:var(--r-sm);padding:6px 8px;cursor:pointer}
+.rk-row:hover{border-color:var(--line-2);background:var(--surface-3)}
+.rk-row:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+.rk-idx{font-size:var(--fs-nano);color:var(--ink-500);text-align:right;font-variant-numeric:tabular-nums}
+.rk-nm{font-size:var(--fs-meta);color:var(--ink-700);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-bar{display:block;height:8px;background:var(--surface-3);border-radius:3px;overflow:hidden}
+.rk-bar i{display:block;height:100%;border-radius:3px}
+.rk-pct{font-size:var(--fs-meta);font-weight:500;font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.rk-empty{font-size:var(--fs-meta);color:var(--ink-500);padding:var(--s3);text-align:center;background:var(--surface-2);border-radius:var(--r-sm)}
+.rk-note{margin-top:var(--s3);font-size:var(--fs-nano);color:var(--ink-500)}
+body.dark .rk-row{background:#1a222c;border-color:#232c38}
+body.dark .rk-row:hover{background:#202a36;border-color:#2e3a48}
+body.dark .rk-tab{background:#1a222c;border-color:#232c38;color:#8296a8}
+body.dark .rk-bar{background:#232c38}
+@media(max-width:768px){
+  .rk-cols{grid-template-columns:1fr;gap:var(--s2)}
+  .rk-row{padding:7px 8px}
+}
+@media(max-width:360px){
+  .rk-row{grid-template-columns:14px minmax(44px,auto) 1fr auto;gap:6px;padding:6px}
+  .rk-pct{min-width:46px}
+}
 .hm-group{margin:0 0 var(--s3)}
 .hm-group:last-child{margin-bottom:0}
 .hm-group-head{display:flex;align-items:baseline;gap:var(--s2);margin:0 0 var(--s2);flex-wrap:wrap}
@@ -2423,10 +2467,11 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <span class="price-strip-note" id="priceStripNote">2026-09-13 更新 · 点击卡片看走势</span>
 </div>
 <div class="heatmap" id="priceHeatmap"></div>
-<!-- 2026-09-13：价格区视图（卡片/热力图）持久化——绘制前贴好类，避免先卡片后热力图闪一下。
+<div class="price-rank" id="priceRank"></div>
+<!-- 2026-09-13：价格区视图（卡片/热力图/排行）持久化——绘制前贴好类，避免先卡片后热力图闪一下。
      位置必须在 #priceStrip 内、卡片组之前；key 与 app.js 的 PV_KEY 共用，
      改一处必须两处同改（test_price_heatmap.js 有唯一性守卫）。 -->
-<script>try{if(localStorage.getItem('md_price_view')==='heat'){var _ps=document.getElementById('priceStrip');if(_ps)_ps.classList.add('hm-on');}}catch(e){}</script>
+<script>try{var _v=localStorage.getItem('md_price_view');if(_v==='heat'||_v==='rank'){var _ps=document.getElementById('priceStrip');if(_ps)_ps.classList.add(_v==='heat'?'hm-on':'rank-on');}}catch(e){}</script>
 <div class="price-cards" id="priceCardsShfe"><div data-slug="cum" class="price-card down"><div class="pc-name">沪铜 <span class="pc-tag">SHFE</span></div><div class="pc-value">108,990</div><div class="pc-unit pc-unit-same">元/吨</div><div class="pc-chg">&#9660; -3,210 (-2.86%)</div></div><div data-slug="alm" class="price-card down"><div class="pc-name">沪铝 <span class="pc-tag">SHFE</span></div><div class="pc-value">24,235</div><div class="pc-unit pc-unit-same">元/吨</div><div class="pc-chg">&#9660; -255 (-1.04%)</div></div><div data-slug="pbm" class="price-card down"><div class="pc-name">沪铅 <span class="pc-tag">SHFE</span></div><div class="pc-value">16,135</div><div class="pc-unit pc-unit-same">元/吨</div><div class="pc-chg">&#9660; -35 (-0.22%)</div></div><div data-slug="znm" class="price-card down"><div class="pc-name">沪锌 <span class="pc-tag">SHFE</span></div><div class="pc-value">26,805</div><div class="pc-unit pc-unit-same">元/吨</div><div class="pc-chg">&#9660; -670 (-2.44%)</div></div><div data-slug="snm" class="price-card down"><div class="pc-name">沪锡 <span class="pc-tag">SHFE</span></div><div class="pc-value">410,290</div><div class="pc-unit pc-unit-same">元/吨</div><div class="pc-chg">&#9660; -15,480 (-3.64%)</div></div><div data-slug="nim" class="price-card down"><div class="pc-name">沪镍 <span class="pc-tag">SHFE</span></div><div class="pc-value">126,080</div><div class="pc-unit pc-unit-same">元/吨</div><div class="pc-chg">&#9660; -2,190 (-1.71%)</div></div><div data-slug="au9999" class="price-card down"><div class="pc-name">上海金 <span class="pc-tag">Au99.99</span></div><div class="pc-value">944.94</div><div class="pc-unit">元/克</div><div class="pc-chg">&#9660; -12.24 (-1.28%)</div></div><div data-slug="agtd" class="price-card down"><div class="pc-name">白银 <span class="pc-tag">Ag(T+D)</span></div><div class="pc-value">15,586</div><div class="pc-unit">元/千克</div><div class="pc-chg">&#9660; -832 (-5.07%)</div></div><div data-slug="lcm" class="price-card down"><div class="pc-name">碳酸锂 <span class="pc-tag">主力连续</span></div><div class="pc-value">134,820</div><div class="pc-unit pc-unit-same">元/吨</div><div class="pc-chg">&#9660; -6,480 (-4.59%)</div></div><div class="price-card "><div class="pc-name">电解钴 <span class="pc-tag">SMM 09-09</span></div><div class="pc-value">304,940</div><div class="pc-unit pc-unit-same">元/吨</div><div class="pc-chg">上日 304,940（SMM 未更新）</div></div></div>
 <div class="price-cards price-cards-lme" id="priceCardsLme"><div data-slug="lcpt" class="price-card up"><div class="pc-name">LME 铜 <span class="pc-tag">LME</span></div><div class="pc-value">14,226.00</div><div class="pc-unit pc-unit-same">美元/吨</div><div class="pc-chg">&#9650; +43.50 (+0.31%)</div></div><div data-slug="lalt" class="price-card down"><div class="pc-name">LME 铝 <span class="pc-tag">LME</span></div><div class="pc-value">3,256.50</div><div class="pc-unit pc-unit-same">美元/吨</div><div class="pc-chg">&#9660; -18.00 (-0.55%)</div></div><div data-slug="lznt" class="price-card up"><div class="pc-name">LME 锌 <span class="pc-tag">LME</span></div><div class="pc-value">3,863.50</div><div class="pc-unit pc-unit-same">美元/吨</div><div class="pc-chg">&#9650; +8.50 (+0.22%)</div></div><div data-slug="lldt" class="price-card down"><div class="pc-name">LME 铅 <span class="pc-tag">LME</span></div><div class="pc-value">1,892.50</div><div class="pc-unit pc-unit-same">美元/吨</div><div class="pc-chg">&#9660; -8.00 (-0.42%)</div></div><div data-slug="lnkt" class="price-card down"><div class="pc-name">LME 镍 <span class="pc-tag">LME</span></div><div class="pc-value">16,525.00</div><div class="pc-unit pc-unit-same">美元/吨</div><div class="pc-chg">&#9660; -100.00 (-0.60%)</div></div><div data-slug="ltnt" class="price-card down"><div class="pc-name">LME 锡 <span class="pc-tag">LME</span></div><div class="pc-value">53,200.00</div><div class="pc-unit pc-unit-same">美元/吨</div><div class="pc-chg">&#9660; -915.00 (-1.69%)</div></div></div>
 </div>

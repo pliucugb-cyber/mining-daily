@@ -36,7 +36,10 @@ ok(!/\.hm-cell[^{]*\{[^}]*gradient/i.test(html), '热力图无渐变（遵守站
 
 section('静态契约 · pre-paint 视图恢复（防 FOUC）');
 ok(html.includes("localStorage.getItem('md_price_view')"), 'index.html 有 pre-paint 读 md_price_view');
-ok(/_ps\.classList\.add\('hm-on'\)/.test(html), 'pre-paint 直接贴 hm-on（首帧即热力图）');
+// 2026-09-13：新增排行态后，pre-paint 改为三元表达式（heat→hm-on / rank→rank-on），
+// 断言同步放宽为「能贴 hm-on」，并新增 rank-on 分支检查（见下方榜单组）。
+ok(/_ps\.classList\.add\([^)]*'hm-on'/.test(html), 'pre-paint 能贴 hm-on（首帧即热力图）');
+ok(/_ps\.classList\.add\([^)]*'rank-on'/.test(html), 'pre-paint 能贴 rank-on（首帧即排行）');
 {
   const iHm = html.indexOf('class="heatmap" id="priceHeatmap"');
   const iPre = html.indexOf("localStorage.getItem('md_price_view')");
@@ -69,6 +72,9 @@ const dataScripts = LOCAL_SRC
   .filter(p => fs.existsSync(p))
   .map(p => fs.readFileSync(p, 'utf-8'));
 
+// 主 jsdom 实例提升到文件级，供后续榜单运行时块复用（块级 const 在外层不可见）
+let domLive = null;
+
 if (!JSDOM) {
   section('运行时 · jsdom');
   console.log('  SKIP  jsdom 未安装，跳过运行时断言');
@@ -79,11 +85,12 @@ if (!JSDOM) {
   // 测出来的就是测试脚手架的缺陷而不是产品缺陷（曾踩过）。
   console.log('    装载本地数据脚本：' + LOCAL_SRC.filter(f => fs.existsSync(path.join(ROOT, f))).join(', '));
 
-  const dom = new JSDOM(html.replace(/<script[^>]+src=[^>]*><\/script>/g, ''), {
+  domLive = new JSDOM(html.replace(/<script[^>]+src=[^>]*><\/script>/g, ''), {
     runScripts: 'outside-only',
     pretendToBeVisual: true,
     url: 'https://example.com/mining-daily/'
   });
+  const dom = domLive;
   const { window } = dom;
   const doc = window.document;
 
@@ -124,7 +131,7 @@ if (!JSDOM) {
   ok(!!strip, '#priceStrip 存在');
   ok(!!box, '#priceHeatmap 容器存在');
   ok(!!bar, '视图切换器 #priceViewBar 已被 app.js 创建');
-  ok(!!bar && bar.querySelectorAll('.pv-btn').length === 2, '切换器有 2 个按钮（卡片/热力图）');
+  ok(!!bar && bar.querySelectorAll('.pv-btn').length === 3, '切换器有 3 个按钮（卡片/热力图/排行）', '实际 ' + (bar ? bar.querySelectorAll('.pv-btn').length : 0));
 
   // —— 默认视图：卡片 ——
   ok(!strip.classList.contains('hm-on'), '默认不启用 hm-on（卡片视图）');
@@ -245,7 +252,205 @@ if (!JSDOM) {
 
   // —— 无阻塞性 JS 错误 ——
   ok(true, '（运行时）未出现阻塞性错误');
+
+  /* ---------- 价格区间榜（§42.15，2026-09-13 新增）---------- */
+  section('运行时 · 榜单（jsdom）');
+  const hm2 = window.__mdPriceHeatmap;   // 与上方 hm 同源，重新取引用便于阅读
+  const rank = window.__mdPriceRank;
+  const rbox = doc.getElementById('priceRank');
+  ok(!!rank, '__mdPriceRank 已挂到 window');
+  ok(!!rbox, '#priceRank 容器存在');
+
+  ok(rank && rank.getRange() === 'week', 'getRange() 默认为 week（周榜）');
+
+  // —— 切到排行 ——
+  if (hm2) hm2.setView('rank');
+  ok(strip.classList.contains('rank-on'), 'setView("rank") 后 .price-strip 挂上 rank-on');
+  ok(!strip.classList.contains('hm-on'), 'rank 态下 hm-on 已摘除（三态互斥）');
+  ok(hm2 && hm2.getView() === 'rank', 'getView() 变为 rank');
+  ok(window.localStorage.getItem('md_price_view') === 'rank', 'rank 态已写入 localStorage');
+
+  // —— 结构：两栏 ——
+  const cols = rbox.querySelectorAll('.rk-col');
+  ok(cols.length === 2, '固定两栏（涨幅榜 / 跌幅榜）', '实际 ' + cols.length);
+  ok(rbox.textContent.includes('涨幅榜') && rbox.textContent.includes('跌幅榜'), '两栏标题正确');
+
+  const rowsUp = rbox.querySelectorAll('.rk-up .rk-row');
+  const rowsDn = rbox.querySelectorAll('.rk-dn .rk-row');
+  console.log('    周榜：涨 ' + rowsUp.length + ' 行 / 跌 ' + rowsDn.length + ' 行');
+  ok(rowsUp.length + rowsDn.length > 0, '榜单至少渲染出若干行');
+
+  // —— 空栏占位：本期无上涨品种时必须出占位文案，不能整栏消失 ——
+  const upEmpty = rbox.querySelector('.rk-up .rk-empty');
+  const dnEmpty = rbox.querySelector('.rk-dn .rk-empty');
+  if (rowsUp.length === 0) {
+    ok(!!upEmpty && /本期无上涨品种/.test(upEmpty.textContent), '涨榜为空时出「本期无上涨品种」占位');
+  } else {
+    ok(rowsUp.length > 0, '涨榜有数据时不显示空占位');
+  }
+  if (rowsDn.length === 0) {
+    ok(!!dnEmpty && /本期无下跌品种/.test(dnEmpty.textContent), '跌榜为空时出「本期无下跌品种」占位');
+  } else {
+    ok(rowsDn.length > 0, '跌榜有数据时不显示空占位');
+  }
+
+  // —— 排序正确性：涨榜降序、跌榜升序 ——
+  function pctsOf(sel) {
+    return [...rbox.querySelectorAll(sel + ' .rk-row .rk-pct')]
+      .map(el => parseFloat((el.textContent || '').replace(/[+%]/g, '')));
+  }
+  const pu = pctsOf('.rk-up'), pd = pctsOf('.rk-dn');
+  ok(pu.every(v => v > 0), '涨榜每一行都 > 0', JSON.stringify(pu));
+  ok(pd.every(v => v <= 0), '跌榜每一行都 <= 0', JSON.stringify(pd));
+  ok(pu.every((v, i) => i === 0 || pu[i - 1] >= v), '涨榜按降序排列', JSON.stringify(pu));
+  ok(pd.every((v, i) => i === 0 || pd[i - 1] <= v), '跌榜按升序排列', JSON.stringify(pd));
+
+  // —— 涨红跌绿 ——
+  let colorBad = 0;
+  rbox.querySelectorAll('.rk-row').forEach(row => {
+    const p = parseFloat((row.querySelector('.rk-pct').textContent || '').replace(/[+%]/g, ''));
+    const st = (row.querySelector('.rk-pct').getAttribute('style') || '');
+    if (p > 0 && !/var\(--up\)/.test(st)) colorBad++;
+    if (p <= 0 && !/var\(--down\)/.test(st)) colorBad++;
+  });
+  ok(colorBad === 0, '红涨绿跌：涨用 var(--up)，跌用 var(--down)', '异常 ' + colorBad + ' 行');
+
+  // —— 行宽归一化：|pct| 最大者的条宽 = 100% ——
+  {
+    const widths = [...rbox.querySelectorAll('.rk-row')].map(row => {
+      const p = Math.abs(parseFloat((row.querySelector('.rk-pct').textContent || '').replace(/[+%]/g, '')));
+      const w = ((row.querySelector('.rk-bar i') || {}).getAttribute
+        ? (row.querySelector('.rk-bar i').getAttribute('style') || '').match(/width:([\d.]+)%/)
+        : null);
+      return { p: p, w: w ? parseFloat(w[1]) : null };
+    }).filter(x => x.w !== null);
+    const mxRow = widths.reduce((a, b) => (b.p > a.p ? b : a), widths[0]);
+    ok(Math.abs(mxRow.w - 100) < 0.6, '|涨跌幅| 最大者的条宽为 100%（归一化基准）', '最大 p=' + mxRow.p + ' w=' + mxRow.w);
+    ok(widths.every(x => x.w >= 0 && x.w <= 100.5), '所有条宽在 0–100% 之间');
+  }
+
+  // —— 档位切换：周榜 → 月榜，天数应 ≥ 周榜 ——
+  {
+    const daysOf = t => {
+      const m = (t || '').match(/近\s*(\d+)\s*日/);
+      return m ? parseInt(m[1], 10) : null;
+    };
+    const wTab = rbox.querySelector('.rk-tab[data-range="week"]');
+    const mTab = rbox.querySelector('.rk-tab[data-range="month"]');
+    ok(!!wTab && !!mTab, '两档按钮均在（周榜 / 月榜）');
+    const wDays = daysOf(wTab && wTab.textContent);
+    ok(wDays === 5, '周榜标签显示「近 5 日」', '实际 ' + wDays);
+
+    // 关键回归锁（2026-09-13 实测踩过）：月榜标签的天数必须按「全窗口」算，
+    // 不能跟着当前档位的 rows 走 —— 否则切到周榜时月榜标签会被算成 5，两档显示同一个天数。
+    const mDaysIdle = daysOf(mTab && mTab.textContent);
+    ok(mDaysIdle !== null && mDaysIdle !== wDays,
+      '周榜态下月榜标签仍为全窗口天数（≠ 周榜天数）', '周 ' + wDays + ' vs 月 ' + mDaysIdle);
+
+    if (mTab) mTab.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+    ok(rank.getRange() === 'month', '点击月榜后 range 变为 month');
+    const mDays = daysOf(rbox.querySelector('.rk-tab[data-range="month"]').textContent);
+    ok(mDays !== null && mDays >= 2, '月榜标签含实际跨度「近 N 日」', '实际 ' + mDays);
+    // 月榜 = 全窗口，跨度必然 ≥ 周榜窗口（同一批数据下）
+    ok(mDays >= wDays, '月榜跨度 >= 周榜跨度（全窗口不小于近 5 日）', mDays + ' vs ' + wDays);
+    // 与数据源实际点数交叉验证：月榜天数应等于 PRICE_HISTORY 中最长的 points 长度
+    {
+      const H2 = window.PRICE_HISTORY;
+      let maxPts = 0;
+      if (H2 && H2.series) Object.keys(H2.series).forEach(k => {
+        const pp = H2.series[k].points || [];
+        if (pp.length > maxPts) maxPts = pp.length;
+      });
+      ok(maxPts > 0 && mDays === maxPts, '月榜天数 == 数据源最长历史点数（全窗口口径）', mDays + ' vs ' + maxPts);
+    }
+
+    // 月榜行数应不少于周榜（更长窗口 → 单调性可能不同，但行数上限一致，此处只要求非空）
+    const mRows = rbox.querySelectorAll('.rk-row').length;
+    ok(mRows > 0, '月榜渲染出若干行', '实际 ' + mRows);
+
+    // 切回周榜
+    rbox.querySelector('.rk-tab[data-range="week"]').dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+    ok(rank.getRange() === 'week', '切回周榜后 range 回到 week');
+  }
+
+  // —— 点击行开走势图（复用 pcChartOpen）——
+  {
+    const r0 = rbox.querySelector('.rk-row');
+    ok(!!r0 && !!r0.getAttribute('data-slug'), '榜单行带 data-slug');
+    r0.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+    const mask = doc.getElementById('pchartMask');
+    ok(!mask || mask.classList.contains('open'), '点击行能开走势图弹窗（或该品种无历史数据时优雅降级）');
+  }
+
+  // —— 与价格历史数据一致：抽样比对 ——
+  // 注意：榜单只显示各栏前 RANK_TOP 名，所以必须挑一个「必然上榜」的品种来抽样，
+  // 否则会因正常截断而误报（曾用沪铜抽样：周榜 −0.38% 排第 14，被截断，属于测试选样错误）。
+  {
+    const H = window.PRICE_HISTORY;
+    ok(!!H && !!H.series, 'PRICE_HISTORY 数据已装载');
+    if (H && H.series) {
+      // 用与产品同款算法挑出「周榜跌幅第一」（跌幅榜必然包含它）
+      let top = null;
+      Object.keys(H.series).forEach(slug => {
+        const s = H.series[slug];
+        const p = (s && s.points) || [];
+        if (p.length < 5) return;
+        const u = p.slice(-5);
+        const pct = (u[4][1] - u[0][1]) / u[0][1] * 100;
+        if (!top || pct < top.pct) top = { slug, pct, name: s.name };
+      });
+      ok(!!top, '能算出周榜跌幅第一的品种');
+      if (top) {
+        const row = rbox.querySelector('.rk-row[data-slug="' + top.slug + '"]');
+        ok(!!row, '周榜跌幅第一（' + top.name + '）必然出现在榜上', 'slug=' + top.slug);
+        if (row) {
+          const got = parseFloat((row.querySelector('.rk-pct').textContent || '').replace(/[+%]/g, ''));
+          ok(Math.abs(got - top.pct) < 0.02,
+            '该品种涨跌幅与 PRICE_HISTORY 原始数据一致（界面 ' + got + ' vs 计算 ' + top.pct.toFixed(2) + '）');
+          const idx = rbox.querySelector('.rk-dn .rk-row').getAttribute('data-slug');
+          ok(idx === top.slug, '跌幅榜第一行就是跌幅最大者（排序正确）', idx + ' vs ' + top.slug);
+        }
+      }
+    }
+  }
+
 }
+
+/* ============ 二·B、价格区间榜（§42.15，2026-09-13 新增） ============ */
+section('静态契约 · 榜单');
+
+ok(html.includes('id="priceRank"'), '榜单容器 #priceRank 存在');
+ok(html.includes('.price-rank{display:none}'), '.price-rank 默认隐藏');
+ok(html.includes('.price-strip.rank-on .price-rank{display:block}'), 'rank-on 时榜单显示');
+ok(html.includes('.price-strip.rank-on .price-cards{display:none}'), 'rank-on 时卡片组隐藏（互斥）');
+ok(html.includes('.price-strip.rank-on .heatmap{display:none}'), 'rank-on 时热力图隐藏（三态互斥）');
+ok(html.includes('.price-strip.rank-on .sortbar{display:none}'), 'rank-on 时排序条隐藏');
+ok(/\.rk-cols\{[^}]*grid-template-columns:1fr 1fr/.test(html), '.rk-cols 桌面两栏（涨幅/跌幅）');
+ok(/@media\(max-width:768px\)\{[^}]*\.rk-cols\{grid-template-columns:1fr\}/.test(html.replace(/\s+/g, ' ')) || /\.rk-cols\{grid-template-columns:1fr;gap:var\(--s2\)\}/.test(html), '≤768px 榜单降为单栏');
+ok(!/\.rk-(row|bar|tab)[^{]*\{[^}]*gradient/i.test(html), '榜单无渐变（遵守站点扁平约定）');
+// 容器顺序：必须在 #priceCardsShfe 之前（生成器只 _replace_block 卡片组，前缀区静态物免费存活）
+{
+  const iHeat = html.indexOf('id="priceHeatmap"');
+  const iRank = html.indexOf('id="priceRank"');
+  const iCards = html.indexOf('class="price-cards" id="priceCardsShfe"');
+  ok(iHeat > 0 && iRank > iHeat && iCards > iRank,
+    '榜单容器在 #priceHeatmap 之后、#priceCardsShfe 之前（重建可存活）',
+    'heat=' + iHeat + ' rank=' + iRank + ' cards=' + iCards);
+}
+
+section('静态契约 · 榜单 app.js');
+ok(appjs.includes('function rankRender('), 'rankRender 渲染函数存在');
+ok(appjs.includes('function rankRows('), 'rankRows 取数函数存在');
+ok(appjs.includes('function rankCol('), 'rankCol 单栏渲染函数存在');
+ok(appjs.includes('function rankOf('), 'rankOf 区间涨跌计算函数存在');
+ok(appjs.includes('window.__mdPriceRank'), '对外暴露 __mdPriceRank（可测）');
+ok(/var RANK_W=5;/.test(appjs), '周榜窗口 RANK_W=5（近 5 个交易日）');
+ok((appjs.match(/var RANK_W=/g) || []).length === 1, 'RANK_W 声明唯一');
+ok((appjs.match(/var rankRange=/g) || []).length === 1, 'rankRange 声明唯一');
+ok(appjs.includes('var rankRange='), 'rankRange 状态变量存在');
+ok(/hmView=\(v==='heat'\|\|v==='rank'\)\?v:'card';/.test(appjs), 'setView 支持 rank 态');
+ok(/\(v==='heat'\|\|v==='rank'\|\|v==='card'\)\?v:'card'/.test(appjs), 'lsGetView 接受 rank 并持久化');
+ok(appjs.includes("classList.toggle('rank-on'"), 'setView 切换 rank-on 类');
 
 /* ============ 三、反向用例 ============ */
 section('反向用例 · 必须能抓出退化');
@@ -291,6 +496,32 @@ if (JSDOM) {
 {
   const dup = appjs + "\nvar hmView='card';\n";
   ok((dup.match(/var hmView='card';/g) || []).length !== 1, '反向：重复声明 hmView 会被唯一性检查抓到');
+}
+
+// 反例 5：榜单三态互斥规则被删 —— 静态检查应能抓到（否则 rank 态会给卡片组留缝）
+{
+  const broken = html.replace('.price-strip.rank-on .price-cards{display:none}', '');
+  ok(!broken.includes('.price-strip.rank-on .price-cards{display:none}'),
+    '反向：删掉榜单互斥规则后，静态契约检查会 FAIL（校验有效）');
+}
+
+// 反例 6：榜单容器被挪到卡片组之后 —— 重建会丢（生成器只替换卡片组块）
+{
+  const iCards = html.indexOf('class="price-cards" id="priceCardsShfe"');
+  // 先移除原容器，再插到卡片组之后 —— 否则 indexOf 命中的仍是原位置（曾因此误判为「校验无效」）
+  const removed = html.replace('<div class="price-rank" id="priceRank"></div>', '');
+  const moved = removed.slice(0, iCards) + '<div class="price-rank" id="priceRank"></div>' + removed.slice(iCards);
+  const iRank2 = moved.indexOf('id="priceRank"');
+  // 顺序断言要求 rank 在 cards 之前；挪到之后应使该条件为假
+  ok(!(iRank2 > 0 && iRank2 < iCards),
+    '反向：榜单容器若被挪到 #priceCardsShfe 之后，顺序断言会 FAIL（重建存活保护有效）');
+}
+
+// 反例 7：排序倒置 —— 涨榜升序时必须被抓到
+{
+  const pu = [1, 3, 5];
+  const sortedDesc = pu.every((v, i) => i === 0 || pu[i - 1] >= v);
+  ok(sortedDesc === false, '反向：涨榜若升序排列，降序检查会 FAIL（校验有效）');
 }
 
 /* ============ 汇总 ============ */
