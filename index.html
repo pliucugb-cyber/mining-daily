@@ -599,7 +599,7 @@ body.dark .qa-head-menu-list button:hover{background:var(--surface-3)}
 /* 2026-09-12：空态推荐检索词容器（chip 复用已有的 .qa-sug） */
 .qa-sug-cards{margin-top:var(--s2);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .qa-sug-tip{width:100%;font-size:var(--fs-meta);color:var(--ink-500)}
-.qa-float-body{flex:1;overflow-y:auto;padding:var(--s3);background:#f7f9fb;touch-action:pan-y;-webkit-overflow-scrolling:touch}
+.qa-float-body{flex:1;overflow-y:auto;padding:var(--s3);background:#f7f9fb;touch-action:pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .qa-msg{margin-bottom:var(--s3);max-width:100%}
 .qa-msg.user{margin-left:auto;max-width:85%}
 .qa-msg-bubble{padding:var(--s3) var(--s4);border-radius: var(--r-lg);font-size: var(--fs-h3);line-height:1.75;word-break:break-word;user-select:text;-webkit-user-select:text;-moz-user-select:text}

@@ -997,6 +997,17 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
   `questionTopInBody`，多轮场景必然误导（第一轮那条本就被顶到上方）。
   对策：增加 `lastQuestionTopInBody` 与 `questionCount`，断言一律看**最后一条**问题。
 
+### 21.7 滚动边界：阻止对话框滚动链穿透（2026-09-13）
+
+问题：`.qa-float-body` 滚动到顶/底后继续滚，事件会穿透到背后页面，导致整页翻动。
+修复两层：
+
+- **CSS 层**：`.qa-float-body` 加 `overscroll-behavior:contain;`，阻断滚动链。
+- **JS 兜底**：DOM 就绪后给 `#qaFloatBody` 绑 `wheel` / `touchmove`：
+  - `wheel` 只在纯垂直滚动且到达内容边界时 `preventDefault()`；
+  - 保留 `Ctrl/Meta/Shift/Alt` 与水平滚动，避免误伤代码块横向滚动；
+  - `touchmove` 仅在内容不可滚动（`scrollHeight<=clientHeight`）时阻止默认。
+
 ### 21.6 红线补充（08:00 复核不得判为回退）
 
 - 顶栏 **44px**、输入区四件控件 **统一 38px 不折行**、`placeholder` 的存在，
