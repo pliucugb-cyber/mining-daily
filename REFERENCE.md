@@ -2057,6 +2057,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **不得存在**：`#rightsTable` 系列 / `.rights-view-btn` / `.rights-card`（2026-09-08 删掉的表格视图，禁令不变）。
 - **回退指纹**：① 排序条或 `.rr-amount` 缺失；② chip 不是 3 个 / 激活态与箭头不同步；③ 存在 `mdRightsSort` 键（**排序必须不持久化**，刷新即回默认紧迫度）；④ 重新引入 `rightsSort.key==="mineral"` 分支或 `var mineralHtml=`（09-12 已删的死代码）；⑤ 卡片态或 ≤768px 能看到 `.rights-cols` / `.rr-amount`；⑥ 点 chip 未重渲染（误用「只改类名」的视图切换路径）。
 - 保留 `injectRightsResultSummary()` 结果聚合兜底；重建须用当日 `generate_YYYYMMDD.py`（`gen_today.py` 已废弃），内置 `strip_rights_html()` 剥离主列表矿权条。
+- **登记结果分支（2026-09-13 新增，源 kyreg_tk / kyreg_ck）**：同站 `ky.mnr.gov.cn/dj/tk/`、`/dj/ck/` 结构化表格（与出让/转让/结果互补，详见 fetch_news.py 的 `parse_table` / `fetch_table_pages`）。`parseRights` 识别标题 `【探矿权·|【采矿权·` → `rightsType="register"`、`method="登记"`；从摘要按「面积 X.XXXXX」「有效期 …」「探矿权人/采矿权人 …」「发证机关 …」提取 `area`/`validity`/`holder`/`authority`，矿种取标题末尾括号。`renderRightsSection` 的 grid4 走独立分支：展示 **矿种 / 面积 / 有效期 / 权利人**，底部 `.rc-extra` 显示 **发证机关**，**不渲染价格/截标日/紧迫度徽标**（登记无截止日）。金额列（`.rr-amount`）对登记恒为「—」（无交易价，仍满足「条数 == 行数」契约）；按价格/到期日排序时恒沉底。筛选器「出让方式」新增 **登记结果** 选项可单独隔离；矿种筛选对登记按 `r.mineral` 子串命中。回退指纹：① 登记条目被误判为 `other` 导致卡片满屏「—」；② 删掉「登记结果」筛选选项；③ 登记卡片错显「起始价/截标日」等交易字段。
 
 ### 42.4 AI 搜面板（§20 / §21 / §23 / §24）
 
@@ -2277,6 +2278,8 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
+| `PY test_kyregister.py` | **31 PASS** | 矿权登记结果源解析（kyreg_tk / kyreg_ck）：数据表定位、列映射、标题/摘要格式、公告日期、NONMETALLIC_KW 排除、源配置（无网络，靠 fixtures） |
+| `node test_rights_register.js` | **11 PASS** | 矿权登记结果前端渲染（jsdom）：register 分支展示 矿种/面积/有效期/权利人 + 发证机关（非满屏「—」）、与交易卡片共存、金额 pill 条数==行数、method=登记 筛选、矿种子串命中 |
 | `PY test_price_history_unclosed.py` | **0 失败** | 走势图末点确有已收盘数据 |
 | `node test_data_integrity.js` | 锁卡片值/方向 == `lme_data.json` | 行情口径 |
 | `%TEMP%\md_rvprobe.py` | **11 用例 / 76 断言** | 真机（真实 Chrome）响应式与形态探针 |
@@ -2286,7 +2289,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **涉及价格区视图切换 / 热力图 / 排行 / `#priceViewBar` / `#priceHeatmap` / `#priceRank` / `rank-on` / `__mdPriceRank` / `md_price_view`** → 必跑 `node test_price_heatmap.js`，并补**真实 Chrome** 探针（改过 `@media` 与 grid 断点）。
 - **涉及安装引导 / `manifest.json` / head 声明** → 必跑两个 PWA 测试。
 - **改过 CSS 断点或 `@media`** → 必须用**真实 Chrome**（jsdom 不评估 `@media`）。
-- 全量闸门（如有）＝根目录全部 `test_*.js` + `test_*.py`（**不写死条数**，以实际文件为准；2026-09-13 盘点为 23 个 node / 8 个 python —— 原「21 + 9」已随新增测试漂移）。
+- 全量闸门（如有）＝根目录全部 `test_*.js` + `test_*.py`（**不写死条数**，以实际文件为准；2026-09-13 盘点为 24 个 node / 9 个 python —— 原「21 + 9」已随新增测试漂移）。
 
 ### 42.10 验证方法与已知的「假 FAIL」坑（从两条 prompt 的节流规则迁入）
 

@@ -77,6 +77,7 @@ NONMETALLIC_KW = [
     "粘土", "黏土", "高岭土", "膨润土", "硅藻土", "珍珠岩", "沸石", "蛭石",
     "玉石", "饰面", "水泥用", "熔剂用", "玻璃用", "陶瓷用", "砖瓦用",
     "磷矿", "石膏", "滑石", "重晶石", "方解石", "萤石", "盐矿", "硫铁",
+    "煤层气",   # 2026-09-13：煤系气属非金能源，金属日报口径下视作非矿剔除
 ]
 
 # ---------------------------------------------------------------------------
@@ -314,6 +315,60 @@ SOURCES = [
         "extra_exclude": NONMETALLIC_KW,
         "note": "产出归 rightsSection（gen_today.strip_rights_html 会从主列表剥离 ky 链接）；"
                 "首页约 7 成是砂石土/地热，靠 NONMETALLIC_KW 剔除",
+    },
+    # -------------------------------------------------------------------
+    # 2026-09-13 新增：矿权交易数据源扩充（同站结构化表格，权威且与 miningrights 互补）
+    #   kyreg_tk  → 探矿权登记结果信息（首次/变更/转移/注销/保留登记）
+    #   kyreg_ck  → 采矿权登记结果信息
+    #   两个子栏目都在 ky.mnr.gov.cn 站内（与 miningrights 同域），自带「公告日期」列，
+    #   按 14 天窗口过滤即可；与 miningrights 的「出让/转让/结果公示」形成「出让前+登记后」互补。
+    #   静态分页：首页 list_url，其后 index_1.htm … index_N.htm（实测共 8 页、每页 15 条）。
+    # -------------------------------------------------------------------
+    {
+        "key": "kyreg_tk",
+        "name": "探矿权登记结果（自然资源部）",
+        "list_url": "https://ky.mnr.gov.cn/dj/tk/",
+        "kind": "table",
+        "page_base": "https://ky.mnr.gov.cn/dj/tk",
+        "table_cols": ["许可证号", "项目名称", "项目类型", "探矿权人", "勘查单位",
+                       "勘查矿种", "有效期", "极值坐标", "面积(k㎡)", "地理位置",
+                       "发证机关", "公告日期"],
+        "name_idx": 1, "type_idx": 2, "mineral_idx": 5,
+        "type_label": "探矿权",
+        "category": "矿权市场",
+        "source": "矿业权市场·登记结果",
+        "foreign": False,
+        "enabled": True,
+        "max_items": 80,
+        "max_pages": 8,
+        "lookback": 14,
+        "use_raw_date": True,
+        "extra_exclude": NONMETALLIC_KW,
+        "note": "登记表直采：标题=[探矿权·项目类型]项目名称(矿种)；矿种入标题以便 NONMETALLIC_KW 剔除；"
+                "公告日期列直接采用，无需进详情页",
+    },
+    {
+        "key": "kyreg_ck",
+        "name": "采矿权登记结果（自然资源部）",
+        "list_url": "https://ky.mnr.gov.cn/dj/ck/",
+        "kind": "table",
+        "page_base": "https://ky.mnr.gov.cn/dj/ck",
+        "table_cols": ["许可证号", "采矿权人", "矿山名称", "项目类型", "开采主矿种",
+                       "开采方式", "设计生产规模", "面积(km²)", "有效期", "发证机关",
+                       "公告日期"],
+        "name_idx": 2, "type_idx": 3, "mineral_idx": 4,
+        "type_label": "采矿权",
+        "category": "矿权市场",
+        "source": "矿业权市场·登记结果",
+        "foreign": False,
+        "enabled": True,
+        "max_items": 80,
+        "max_pages": 8,
+        "lookback": 14,
+        "use_raw_date": True,
+        "extra_exclude": NONMETALLIC_KW,
+        "note": "登记表直采：标题=[采矿权·项目类型]矿山名称(矿种)；矿种入标题以便 NONMETALLIC_KW 剔除；"
+                "公告日期列直接采用，无需进详情页",
     },
     # -------------------------------------------------------------------
     # 2026-09-08 P1：长江有色（ccmn.cn）+ 深交所公告直连（szse.cn）
@@ -599,6 +654,93 @@ def parse_html(html_text, cfg):
             url = urllib.parse.urljoin(base, url)
         out.append({"title": title, "url": url, "date": "", "summary": ""})
     return out
+
+
+def parse_table(html_text, cfg):
+    """解析矿业权登记结果的结构化表格（kind='table'）。
+
+    与 miningrights 不同：登记结果信息是**自带全部字段的表格**（含「公告日期」列），
+    不需要进详情页。顶部有一个搜索表单 table（表头带冒号，如「许可证号：」），
+    真正的**数据表**表头首列是精确的「许可证号」且含「公告日期」，据此区分。
+    列位置由 cfg["table_cols"] 固定映射（探矿权 12 列 / 采矿权 11 列）。
+    """
+    cols = cfg["table_cols"]
+    lic_idx = cols.index("许可证号")
+    date_idx = cols.index("公告日期")
+    name_idx = cfg["name_idx"]
+    type_idx = cfg["type_idx"]
+    mineral_idx = cfg["mineral_idx"]
+    type_label = cfg["type_label"]
+    tables = re.findall(r"<table[^>]*>.*?</table>", html_text, re.S | re.I)
+    data_tbl = None
+    for tbl in tables:
+        hdr = [clean_text(c) for c in
+               re.findall(r"<t[hd][^>]*>(.*?)</t[hd]>", tbl, re.S | re.I)[:len(cols)]]
+        if hdr and hdr[0] == "许可证号" and "公告日期" in hdr:
+            data_tbl = tbl
+            break
+    if not data_tbl:
+        return []
+    rows = re.findall(r"<tr[^>]*>(.*?)</tr>", data_tbl, re.S | re.I)
+    out = []
+    for r in rows[1:]:                       # 跳过表头
+        cells = [clean_text(c) for c in
+                 re.findall(r"<t[hd][^>]*>(.*?)</t[hd]>", r, re.S | re.I)]
+        if len(cells) < len(cols):
+            continue
+        lic = cells[lic_idx]
+        if not lic or lic == "null":
+            continue
+        date = cells[date_idx]
+        if not re.match(r"20\d{2}-\d{2}-\d{2}", date):
+            continue
+        name = cells[name_idx] or ""
+        mineral = cells[mineral_idx] or ""
+        ptype = cells[type_idx] or ""
+        title = "【%s·%s】%s（%s）" % (type_label, ptype, name, mineral)
+        # 顺序刻意把「许可证号/权利人/面积/有效期/发证机关」放在前、地理位置压到最后：
+        # 前端 summary 在导出时会被截断（见 export_news_json.py 的 [:160]），而登记卡片
+        # 只取前几个字段；地理位置最长且最不重要，让它去被截断，不影响卡片字段解析。
+        parts = ["许可证号 " + lic]
+        for c in ("探矿权人", "矿业权人", "采矿权人", "面积(k㎡)",
+                  "面积(km²)", "有效期", "发证机关", "地理位置"):
+            if c in cols:
+                v = cells[cols.index(c)]
+                if v and v != "null":
+                    label = "面积" if c.startswith("面积") else c
+                    parts.append("%s %s" % (label, v))
+        summary = "｜".join(parts)
+        # URL 用列表页 + ?lic= 许可证号：① 唯一（去重靠 url 的 base），② 仍属白名单域，
+        # ③ 点击落到登记列表页而非 404（登记表无独立详情页）。
+        url = "%s/?lic=%s" % (cfg["page_base"].rstrip("/"), lic)
+        out.append({"title": title, "url": url, "date": date, "summary": summary})
+    return out
+
+
+def fetch_table_pages(cfg, report_date, days):
+    """kind='table' 的多页抓取：首页 list_url，其后 index_1.htm … index_N.htm。
+
+    表格按公告日期倒序，一旦某页最小日期已早于窗口即停止翻页（实测共 8 页、
+    每页 15 条，14 天窗口通常只占前 2~3 页）。
+    """
+    base = cfg["list_url"].rstrip("/")
+    cutoff = (datetime.date.fromisoformat(report_date)
+              - datetime.timedelta(days=max(0, days - 1))).isoformat()
+    raw = []
+    for page in range(0, int(cfg.get("max_pages", 10))):
+        url = base if page == 0 else "%s/index_%d.htm" % (base, page)
+        h = http_get(url, timeout=20, retries=1)
+        if h.startswith("__ERR__"):
+            if page == 0:
+                return raw, "fetch-fail: " + h[7:][:60]
+            break                                   # 后续页缺失，静默停止
+        rows = parse_table(h, cfg)
+        if not rows:
+            break
+        raw.extend(rows)
+        if min(r["date"] for r in rows) < cutoff:
+            break                                   # 整页都已超窗口，无需继续
+    return raw, "ok(%d rows)" % len(raw)
 
 
 def parse_cninfo(cfg, report_date, days):
@@ -887,6 +1029,10 @@ def run_source(cfg, report_date, days, use_detail):
         raw = parse_cninfo(cfg, report_date, days)
     elif cfg["kind"] == "szse":
         raw = parse_szse(cfg, report_date, days)
+    elif cfg["kind"] == "table":
+        raw, st = fetch_table_pages(cfg, report_date, days)
+        if st.startswith("fetch-fail"):
+            return [], st
     else:
         html_text = http_get(cfg["list_url"])
         if html_text.startswith("__ERR__"):
@@ -930,7 +1076,9 @@ def run_source(cfg, report_date, days, use_detail):
         # 以 09/16 开头时会被 extract_date 误读成 09-09 / 09-16 这类**未来日期**，
         # 所以该源必须强制回查详情页，不能信 URL。
         d = ""
-        if not cfg.get("force_date_from_detail"):
+        if cfg.get("use_raw_date") and r.get("date"):
+            d = r["date"]                # 登记表自带「公告日期」列，权威直接采用
+        elif not cfg.get("force_date_from_detail"):
             d = extract_date(url, r.get("date", ""), "", title)
         if (not d or cfg.get("force_date_from_detail")) and cfg.get("date_from_detail"):
             d = _date_from_detail(url) or d
@@ -938,6 +1086,8 @@ def run_source(cfg, report_date, days, use_detail):
             d = report_date
         if cfg.get("force_date_from_detail") and d > report_date:
             continue        # 未来日期必是 URL 误读，宁可丢也不收
+        if cfg.get("use_raw_date") and d > report_date:
+            continue        # 登记表公告日期若晚于报告日，属数据异常，不入
         if d < cutoff:
             continue
         summary = r.get("summary") or ""

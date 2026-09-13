@@ -403,7 +403,7 @@ def write_news_data_js(data_dir, out_path):
         'u': r.get('url', ''),
         'g': r.get('tags', []),
         'c': r.get('category', ''),
-        'm': (r.get('summary', '') or '')[:120],
+        'm': (r.get('summary', '') or '')[:160],   # 2026-09-13：放宽到 160，矿权登记摘要含「许可证号/权利人/面积/有效期/发证机关」须完整进入前端解析
         'n': r.get('first_seen', ''),   # 收录日期（今日要闻条用 n==report_date 识别当日新增）
     } for r in rows]
     payload = {'updated': datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),

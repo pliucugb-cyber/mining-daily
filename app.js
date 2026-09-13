@@ -82,23 +82,30 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
     else if(/拍卖出让公告/.test(t)) rightsType="auction";
     else if(/挂牌出让公告/.test(t)) rightsType="listing";
     else if(/协议出让/.test(t)) rightsType="listing"; // 协议公示字段与挂牌公告相近
-    var methodMap={result:"结果",transfer:"转让",auction:"拍卖",listing:"挂牌",other:"其他"};
+    else if(/【探矿权·|【采矿权·/.test(t)) rightsType="register"; // 2026-09-13：登记结果（同站 ky.mnr.gov.cn 结构化表格，与出让/转让互补）
+    var methodMap={result:"结果",transfer:"转让",auction:"拍卖",listing:"挂牌",register:"登记",other:"其他"};
     var method=methodMap[rightsType]||"其他";
     var mineral="";
-    var mm=m.match(/勘查矿种([一-龥]{1,4})矿/);
-    if(mm) mineral=mm[1];
-    else {
-      var order=["金","银","铜","铅","锌","镍","锡","锂","稀土","磷","铁","钨","钼","铌","钽","铝"];
-      // 2026-09-08 晚：组合矿种规则表（标题优先匹配，避免"广西铝土矿""宁远方解石矿"落到「—」）。
-      // 顺序即优先级；后续新矿种在此追加一行即可，勿再散落多处。
-      var combo=[[/钽铌|铌钽/,"铌钽"],[/铝土/,"铝土"],[/方解石/,"方解石"],[/石灰岩|灰岩/,"石灰岩"],[/萤石/,"萤石"],[/石墨/,"石墨"],[/重晶石/,"重晶石"],[/高岭土/,"高岭土"],[/钾盐|岩盐|盐矿/,"盐矿"],[/石膏/,"石膏"],[/石英/,"石英"],[/长石/,"长石"],[/硅石/,"硅石"],[/芒硝/,"芒硝"],[/膨润土/,"膨润土"],[/耐火粘土|耐火黏土/,"耐火粘土"]];
-      var mineral="";
-      for(var ci=0;ci<combo.length;ci++){ if(combo[ci][0].test(t)){mineral=combo[ci][1];break;} }
-      if(!mineral) mineral=g.filter(function(x){return order.indexOf(x)>=0;})[0]||"";
-      if(!mineral && /铅锌/.test(t)) mineral="铅锌";
-      if(!mineral && /钨钼/.test(t)) mineral="钨钼";
-      if(!mineral && /多金属/.test(t)) mineral="多金属";
-      if(!mineral && g.some(function(x){return /金属/.test(x);})) mineral="多金属";
+    if(rightsType==="register"){
+      // 登记结果标题形如「【探矿权·变更登记】项目名称（铅矿）」，矿种在末尾括号
+      var regM=t.match(/（([^（）]+)）\s*$/);
+      if(regM) mineral=regM[1];
+    }else{
+      var mm=m.match(/勘查矿种([一-龥]{1,4})矿/);
+      if(mm) mineral=mm[1];
+      else {
+        var order=["金","银","铜","铅","锌","镍","锡","锂","稀土","磷","铁","钨","钼","铌","钽","铝"];
+        // 2026-09-08 晚：组合矿种规则表（标题优先匹配，避免"广西铝土矿""宁远方解石矿"落到「—」）。
+        // 顺序即优先级；后续新矿种在此追加一行即可，勿再散落多处。
+        var combo=[[/钽铌|铌钽/,"铌钽"],[/铝土/,"铝土"],[/方解石/,"方解石"],[/石灰岩|灰岩/,"石灰岩"],[/萤石/,"萤石"],[/石墨/,"石墨"],[/重晶石/,"重晶石"],[/高岭土/,"高岭土"],[/钾盐|岩盐|盐矿/,"盐矿"],[/石膏/,"石膏"],[/石英/,"石英"],[/长石/,"长石"],[/硅石/,"硅石"],[/芒硝/,"芒硝"],[/膨润土/,"膨润土"],[/耐火粘土|耐火黏土/,"耐火粘土"]];
+        var mineral="";
+        for(var ci=0;ci<combo.length;ci++){ if(combo[ci][0].test(t)){mineral=combo[ci][1];break;} }
+        if(!mineral) mineral=g.filter(function(x){return order.indexOf(x)>=0;})[0]||"";
+        if(!mineral && /铅锌/.test(t)) mineral="铅锌";
+        if(!mineral && /钨钼/.test(t)) mineral="钨钼";
+        if(!mineral && /多金属/.test(t)) mineral="多金属";
+        if(!mineral && g.some(function(x){return /金属/.test(x);})) mineral="多金属";
+      }
     }
     // 价格：结果公示优先成交价；挂牌/拍卖用起始价
     var startPrice=null, dealPrice=null, price=null;
@@ -109,7 +116,9 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
     if(rightsType==="result") price=dealPrice!=null?dealPrice:startPrice;
     else price=startPrice;
     var dm=m.match(/(?:竞买保证金|保证金)([\d.]+)万元/); var deposit=dm?parseFloat(dm[1]):null;
-    var am=m.match(/面积([\d.]+)平方千米/); var area=am?parseFloat(am[1]):null;
+    var am=m.match(/面积([\d.]+)平方千米/);
+    if(!am) am=m.match(/面积\s*([\d.]+)/);   // 2026-09-13：登记结果摘要为「面积 0.57530」
+    var area=am?parseFloat(am[1]):null;
     // 日期字段：挂牌/拍卖取截标/拍卖日；结果/转让取公示期
     var deadline=null, pubStart=null, pubEnd=null;
     // 1) 挂牌期/竞价期/报价期 "2026年X月X日至2026年X月X日"
@@ -145,12 +154,21 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
     if(bm) bidder=bm[1].trim();
     var rg=t.match(/([一-龥]{2,}(?:省|市|县|区|旗|自治州|盟|新区))/);
     var region=rg?rg[1]:"";
+    // 2026-09-13：登记结果字段（摘要格式「许可证号 …｜探矿权人/采矿权人 …｜面积 …｜有效期 …｜发证机关 …」）
+    var holder="", validity="", authority="";
+    var hm=m.match(/(?:探矿权人|矿业权人|采矿权人)\s*([^｜]+)/);
+    if(hm) holder=hm[1].trim();
+    var vm=m.match(/有效期\s*([^｜]+)/);
+    if(vm) validity=vm[1].trim();
+    var authm=m.match(/发证机关\s*([^｜]+)/);
+    if(authm) authority=authm[1].trim();
     return {
       rightsType: rightsType, method: method, mineral: mineral,
       price: price, startPrice: startPrice, dealPrice: dealPrice, deposit: deposit, area: area,
       deadline: deadline, pubStart: pubStart, pubEnd: pubEnd,
       transferor: transferor, transferee: transferee, bidder: bidder,
-      region: region, it: it
+      region: region, holder: holder, validity: validity, authority: authority,
+      it: it
     };
   }
   function refDate(){
@@ -270,6 +288,7 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
     if(r.rightsType==="result") return "结果公示";
     if(r.rightsType==="transfer") return "转让公示";
     if(r.rightsType==="auction") return "拍卖出让";
+    if(r.rightsType==="register") return "登记结果";
     return r.method||"出让";
   }
   function renderRightsSection(){
@@ -295,8 +314,8 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
       if(fmin){
         if(fmin==="铅锌"){ if(r.it.g.indexOf("铅")<0 && r.it.g.indexOf("锌")<0) return false; }
         else if(fmin==="钨钼"){ if(r.it.g.indexOf("钨")<0 && r.it.g.indexOf("钼")<0) return false; }
-        else if(fmin==="多金属"){ if(r.mineral!=="多金属") return false; }
-        else { if(r.mineral!==fmin && r.it.g.indexOf(fmin)<0) return false; }
+        else if(fmin==="多金属"){ if(r.mineral!=="多金属" && (r.mineral||"").indexOf("多金属")<0) return false; }
+        else { if(r.mineral!==fmin && r.it.g.indexOf(fmin)<0 && (r.mineral||"").indexOf(fmin)<0) return false; }
       }
       if(fwin!=="all"){
         var w=parseInt(fwin,10);
@@ -366,6 +385,12 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
              +'<div class="rr-field"><span>受让人</span><b class="'+(r.transferee?'':'na')+'">'+(r.transferee||'—')+'</b></div>'
              +'<div class="rr-field"><span>面积</span><b class="'+(r.area==null?'na':'')+'">'+fmtArea(r.area)+'</b></div>'
              +'<div class="rr-field"><span>公示期</span><b class="'+(r.deadline?'':'na')+'">'+fmtDeadline(r.deadline)+'</b></div>';
+      }else if(r.rightsType==="register"){
+        // 登记结果：无价格/截标日，展示矿种/面积/有效期/权利人 + 底部发证机关
+        grid4='<div class="rr-field"><span>矿种</span><b class="'+(r.mineral?'':'na')+'">'+esc(r.mineral||'—')+'</b></div>'
+             +'<div class="rr-field"><span>面积</span><b class="'+(r.area==null?'na':'')+'">'+fmtArea(r.area)+'</b></div>'
+             +'<div class="rr-field"><span>有效期</span><b class="'+(r.validity?'':'na')+'">'+(r.validity||'—')+'</b></div>'
+             +'<div class="rr-field"><span>权利人</span><b class="'+(r.holder?'':'na')+'">'+esc(r.holder||'—')+'</b></div>';
       }else{
         grid4='<div class="rr-field"><span>起始价</span><b class="'+(r.price==null?'na':'')+'">'+fmtMoney(r.price)+'</b></div>'
              +'<div class="rr-field"><span>保证金</span><b class="'+(r.deposit==null?'na':'')+'">'+fmtMoney(r.deposit)+'</b></div>'
@@ -375,6 +400,7 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
       var extra='';
       if(r.rightsType==="result" && r.bidder) extra='<div class="rc-extra">竞得人：'+esc(r.bidder)+'</div>';
       else if(r.rightsType==="transfer" && (r.transferor || r.transferee)) extra='<div class="rc-extra">'+esc(r.transferor||'—')+' → '+esc(r.transferee||'—')+'</div>';
+      else if(r.rightsType==="register" && r.authority) extra='<div class="rc-extra">发证机关：'+esc(r.authority)+'</div>';
       // 2026-09-12：金额列（仅桌面列表态显示）。用 r.price——它与「按成交价排序」的取值完全同源，
       // 避免出现「列里显示一个数、排序按另一个数」；卡片态已在 .rr-grid 给出成交价/起始价，不重复渲染。
       var amtTxt=(r.price==null?"—":r.price.toLocaleString("zh-CN")+" 万元");
