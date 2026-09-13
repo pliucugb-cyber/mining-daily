@@ -21,6 +21,7 @@ from generate_common import (
     _lib_item as _lib_item_raw,
     _reclassify_ma as _reclassify_ma_raw,
     dedup_same_event, item_title, same_event,
+    unit_class, UNIT_SHFE_GROUP, UNIT_LME_GROUP,
 )
 from functools import partial
 
@@ -82,12 +83,15 @@ for slug, name, tag, unit, nd in SHFE_DEFS:
     arrow = UP if chg >= 0 else DOWN
     sign = '+' if chg >= 0 else ''
     chgtxt = '%s %s%s (%s%.2f%%)' % (arrow, sign, format(chg, ',.%df' % nd), sign, pct)
-    shfe_cards.append(card(slug, name, tag, val, unit, chgtxt, 'up' if chg >= 0 else 'down'))
+    shfe_cards.append(card(slug, name, tag, val, unit, chgtxt, 'up' if chg >= 0 else 'down',
+                           group_unit=UNIT_SHFE_GROUP))
 shfe_html = ''.join(shfe_cards)
 # 电解钴：无当日源，保留上日 SMM 值并标注
+# 单位同为「元/吨」= 国内盘分组单位 -> 走 unit_class 隐藏重复单位（2026-09-13 契约）
 shfe_html += ('<div class="price-card "><div class="pc-name">电解钴 <span class="pc-tag">SMM %s</span></div>'
-              '<div class="pc-value">304,940</div><div class="pc-unit">元/吨</div>'
-              '<div class="pc-chg">上日 304,940（SMM 未更新）</div></div>' % DATA_ASOF)
+              '<div class="pc-value">304,940</div><div class="%s">元/吨</div>'
+              '<div class="pc-chg">上日 304,940（SMM 未更新）</div></div>'
+              % (DATA_ASOF, unit_class('元/吨', UNIT_SHFE_GROUP)))
 
 _lme = json.load(open('lme_data.json', encoding='utf-8'))['metals']
 _lme_map = {m['slug']: m for m in _lme}
@@ -106,7 +110,7 @@ for slug, name in LME_DEFS:
     sign = '+' if m['chg'] >= 0 else ''
     chg = '%s %s (%s%.2f%%)' % (arrow, sign + format(m['chg'], ',.2f'), sign, m['chg_pct'])
     lme_list.append((slug, name, 'LME', val, '美元/吨', chg, 'up' if m['chg'] >= 0 else 'down'))
-lme_html = ''.join(card(*c) for c in lme_list)
+lme_html = ''.join(card(*c, group_unit=UNIT_LME_GROUP) for c in lme_list)
 
 html = _replace_block(html, '<div class="price-cards" id="priceCardsShfe">', shfe_html)
 html = _replace_block(html, '<div class="price-cards price-cards-lme" id="priceCardsLme">', lme_html)

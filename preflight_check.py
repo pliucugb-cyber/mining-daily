@@ -121,6 +121,54 @@ def check_containers(text):
     return ok, findings
 
 
+# 价格单位去重契约（2026-09-13）：分组标题已声明单位，同单位卡片不重复写。
+# 见 REFERENCE.md §42.11。生成侧由 generate_common.unit_class() 产出该 class。
+SAME_UNIT_CLASS = 'pc-unit-same'
+SHFE_SAME_UNIT_N = 8      # 国内盘 元/吨：沪铜铝铅锌锡镍 + 碳酸锂 + 电解钴
+LME_SAME_UNIT_N = 6       # LME 全部 6 个 = 美元/吨
+# 与分组单位不同的品种必须保留可见单位，否则会被误读成 /吨
+KEEP_UNIT_SNIPPETS = [
+    '<div class="pc-unit">元/克</div>',      # 上海金 Au99.99
+    '<div class="pc-unit">元/千克</div>',    # 白银 Ag(T+D)
+]
+
+
+def check_price_unit_dedup(text):
+    """价格区单位去重契约：同单位隐藏、异单位保留、标题声明单位。
+
+    背景：用户反馈「分组标题已写人民币/吨、美元/吨，每行再写一遍单位是重复」。
+    防漂移：生成脚本若被改回不输出 class，或把异单位也隐藏，这里拦住。
+    """
+    findings = []
+    ok = True
+
+    n_shfe = text.count(f'<div class="pc-unit {SAME_UNIT_CLASS}">元/吨</div>')
+    n_lme = text.count(f'<div class="pc-unit {SAME_UNIT_CLASS}">美元/吨</div>')
+    if n_shfe == SHFE_SAME_UNIT_N and n_lme == LME_SAME_UNIT_N:
+        findings.append(f'✅ 同单位已去重（国内 {n_shfe} + LME {n_lme} 张卡隐藏重复单位）')
+    else:
+        findings.append(
+            f'❌ 同单位去重数量异常：国内 {n_shfe}/{SHFE_SAME_UNIT_N}、LME {n_lme}/{LME_SAME_UNIT_N}'
+            f' — 生成脚本可能被改回输出裸 pc-unit（契约见 REFERENCE.md §42.11）')
+        ok = False
+
+    kept_missing = [s for s in KEEP_UNIT_SNIPPETS if s not in text]
+    if kept_missing:
+        findings.append(f'❌ 异单位被误隐藏或改写：{kept_missing} — 上海金/白银单位必须可见（否则被误读成 /吨）')
+        ok = False
+    else:
+        findings.append('✅ 异单位保留可见（元/克、元/千克）')
+
+    if "content:'国内盘 · 人民币/吨'" in text:
+        findings.append('✅ 国内盘分组标题已声明单位（人民币/吨）')
+    else:
+        findings.append("❌ 国内盘分组标题未声明单位（应含 content:'国内盘 · 人民币/吨'）")
+        ok = False
+
+    return ok, findings
+
+
+
 def check_build_version(text):
     findings = []
     m = re.search(r'name="build-version"\s+content="([^"]+)"', text)
@@ -298,6 +346,7 @@ def main():
         ('已删功能守护', check_no_marketpulse(text)),
         ('关键功能', check_functions(text)),
         ('关键容器', check_containers(text)),
+        ('价格单位去重', check_price_unit_dedup(html_text)),   # 只扫 index.html，避免 app.js 干扰计数
         ('build-version', check_build_version(text)),
         ('站点标题', check_site_title(html_text)),
         ('sw.js 语法', check_sw_js(text)),

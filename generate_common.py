@@ -124,10 +124,37 @@ def ni(url, src, date, title, summary, embed='ok', orig_title=''):
             % (ot, url, embed, url, title, src, date, summary))
 
 
-def card(slug, name, tag, value, unit, chg_text, cls):
+# ---- 价格卡分组单位（2026-09-13 新增）----
+# 分组标题已声明单位（「国内盘 · 人民币/吨」「LME 外盘 · 美元/吨」），
+# 与之同单位的卡片不再逐行重复写单位，只由标题声明一次。
+# 与分组不同的单位（上海金 元/克、白银 元/千克）必须照常显示 —— 否则会被误读成 /吨。
+# 实现方式：同单位的 .pc-unit 加 .pc-unit-same（CSS display:none 隐藏），
+# 但 DOM 文本保留，价格 CSV 导出与预警解析仍读 .pc-unit，不受影响。
+# 契约见 REFERENCE.md §42.11。
+UNIT_SHFE_GROUP = '元/吨'      # 国内盘分组单位
+UNIT_LME_GROUP = '美元/吨'     # LME 分组单位
+
+
+def unit_class(unit, group_unit):
+    """单位与分组标题一致 -> 加 .pc-unit-same（CSS 隐藏，避免重复）。
+
+    绝不改 unit 文本本身：CSV 导出 (exportPriceCsv) 与走势图副标题都读
+    .pc-unit 的 textContent，只是视觉上隐藏。
+    """
+    return 'pc-unit pc-unit-same' if unit == group_unit else 'pc-unit'
+
+
+def card(slug, name, tag, value, unit, chg_text, cls, group_unit=None):
+    """渲染单张价格卡。
+
+    group_unit：该卡所属分组的单位（国内盘 UNIT_SHFE_GROUP / LME UNIT_LME_GROUP）。
+    传入时，与分组同单位的卡片自动隐藏重复单位；不传则单位照常显示（向后兼容旧调用）。
+    """
+    ucls = unit_class(unit, group_unit) if group_unit else 'pc-unit'
     return ('<div data-slug="%s" class="price-card %s"><div class="pc-name">%s <span class="pc-tag">%s</span></div>'
-            '<div class="pc-value">%s</div><div class="pc-unit">%s</div><div class="pc-chg">%s</div></div>'
-            % (slug, cls, name, tag, value, unit, chg_text))
+            '<div class="pc-value">%s</div><div class="%s">%s</div><div class="pc-chg">%s</div></div>'
+            % (slug, cls, name, tag, value, ucls, unit, chg_text))
+
 
 
 def _replace_block(h, tag, inner_html):

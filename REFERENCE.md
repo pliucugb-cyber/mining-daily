@@ -2087,6 +2087,22 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - ⚠️ `mdRenderFavToc(mode)` 由 `setFilter()` 调用，**必须排在 `syncTocActive()` 之后** —— 后者会遍历清空所有 `.toc-main-item` 的 `active`，先渲染会被当场清掉（本轮踩过，测试当场 FAIL）；`syncTocActive()` 里另有 `it.closest('#favToc')` 跳过保护。
 - 回退指纹：① ≥1101px 进 fav/history 左侧 200px 又是空白；② `#favToc` 内容为空、或锚点数与 `.agg-group-title` 数量对不上；③ 分组标题没有 `aggG<N>` id；④ 目录高亮项与当前视图不符；⑤ 点「浏览记录」切换项没换视图 / 没换标题；⑥ **为填空白去取消 `body{padding-left}`**（会把首页左栏压掉，禁止）。
 
+### 42.13 价格区「单位只声明一次」（2026-09-13）
+
+**用户裁定**：分组标题已经写了单位，每个具体价格后面再跟一遍就是重复。
+
+- **两组标题**：`#priceCardsShfe::before` = `国内盘 · 人民币/吨`；`#priceCardsLme::before` = `LME 外盘 · 美元/吨`。**两行格式对齐、都带单位**（国内行原本缺 `/吨`，2026-09-13 补齐）。
+- **同单位隐藏**：与分组单位一致的卡片，其 `.pc-unit` 加 `.pc-unit-same` → CSS `display:none`。
+  - 国内盘固定 **8 张**：沪铜/铝/铅/锌/锡/镍、碳酸锂、电解钴（全 `元/吨`）。
+  - LME 固定 **6 张**：全 `美元/吨`。
+- **异单位必须保留可见**：`上海金 · 元/克`、`白银 · 元/千克` —— 与分组单位不同，**不得**加 `.pc-unit-same`，否则会被误读成「944 元/吨」。这是本条最容易改错的地方。
+- **只隐藏、不删文本**：DOM 里 `.pc-unit` 的 `textContent` 原样保留 —— `exportPriceCsv()` 与价格预警解析都读它，删掉会导致导出的「单位」列空掉。故一律走 CSS `display:none`，**禁止**在生成侧不输出单位文本。
+- **生成侧唯一出口**：`generate_common.unit_class(unit, group_unit)` + `card(..., group_unit=...)`；常量 `UNIT_SHFE_GROUP='元/吨'` / `UNIT_LME_GROUP='美元/吨'`。调用示例：`card(*c, group_unit=UNIT_LME_GROUP)`、国内盘逐张传 `group_unit=UNIT_SHFE_GROUP`。电解钴等手写卡用 `unit_class('元/吨', UNIT_SHFE_GROUP)` 拼 class。`gen_today.py` 内联同语义的 `_unit_cls()`（老脚本不反向依赖）。
+- **列收窄**：`.price-card:has(.pc-unit-same){grid-template-columns:minmax(72px,1fr) auto 0 1fr}`（≤768px 对应 `minmax(48px,1fr)`），把空出来的那列宽度让给数值与涨跌列。`:has()` 需 Chrome 105+ / Safari 15.4+ / Firefox 121+，本站目标环境满足。
+- **闸门**：`preflight_check.check_price_unit_dedup()`（扫 index.html，不看 app.js）核对四项 —— 同单位数 8/6、异单位两个快照仍在且未加类、标题含 `人民币/吨`。生成脚本若被改回输出裸 `pc-unit`，preflight 直接红。
+- **测试**：`node test_price_unit_dedup.js`（静态契约 + jsdom 运行时，17 条）。含反向用例：去掉 class / 把异单位也隐藏 / 标题退回无单位，三者均须 FAIL。
+- **回退指纹**：① 每行价格后面又出现「元/吨」「美元/吨」；② 上海金 / 白银的单位消失（被误加 `.pc-unit-same`）；③ 分组标题退回 `国内盘 · 人民币`（无单位）；④ 生成侧删掉单位文本（CSV 单位列变空）。
+
 ### 42.7 PWA 安装引导（§41，2026-09-12 两轮修复后定稿）
 
 **结构与声明（第一轮）**
@@ -2154,6 +2170,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `node test_mobile_ux_batch.js` | **206** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13） |
 | `node test_qa_features.js` | **61** | AI 搜核心函数 / 流式接线 / 语音（含「音量条已删、调节柄已换」） |
 | `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |
+| `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
@@ -2162,6 +2179,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `%TEMP%\md_rvprobe.py` | **11 用例 / 76 断言** | 真机（真实 Chrome）响应式与形态探针 |
 
 - **涉及 `app.js` / `index.html` 的 AI 搜面板、「我的」面板、收藏·浏览记录、简报** → 必跑前三项 + 探针。
+- **涉及价格区渲染 / `pc-unit` / 分组标题 / 生成脚本的价格段** → 必跑 `node test_price_unit_dedup.js` + `PY preflight_check.py`（含 `check_price_unit_dedup`）。
 - **涉及安装引导 / `manifest.json` / head 声明** → 必跑两个 PWA 测试。
 - **改过 CSS 断点或 `@media`** → 必须用**真实 Chrome**（jsdom 不评估 `@media`）。
 - 全量闸门（如有）＝21 个 node + 9 个 python 闸门。

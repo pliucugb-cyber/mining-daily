@@ -127,12 +127,18 @@ html = html.replace('2026-09-02 更新', '2026-09-03 更新')
 # 每行容器在 index.html 里各占一行（以行尾 </div>\n 结束），非贪婪匹配不会越过 priceStrip 边界
 old_price_pattern = (r'<div class="price-cards[^"]*" id="priceCardsShfe">.*?</div>\n'
                      r'<div class="price-cards[^"]*" id="priceCardsLme">.*?</div>\n')
-def _card(slug,cls,name,tag,val,unit,chg):
+# 2026-09-13：分组标题已声明单位，与分组同单位的卡片隐藏重复单位（契约见 REFERENCE.md §42.11，
+#   通过 generate_common.unit_class 统一判定，此处内联同语义以免本脚本反向依赖）。
+_UNIT_SHFE_GROUP = '元/吨'
+_UNIT_LME_GROUP = '美元/吨'
+def _unit_cls(unit, group):
+    return 'pc-unit pc-unit-same' if unit == group else 'pc-unit'
+def _card(slug,cls,name,tag,val,unit,chg,group=_UNIT_SHFE_GROUP):
     d=f' data-slug="{slug}"' if slug else ''
     return (f'<div{d} class="price-card {cls}"><div class="pc-name">{name} <span class="pc-tag">{tag}</span></div>'
-            f'<div class="pc-value">{val}</div><div class="pc-unit">{unit}</div><div class="pc-chg">{chg}</div></div>')
+            f'<div class="pc-value">{val}</div><div class="{_unit_cls(unit,group)}">{unit}</div><div class="pc-chg">{chg}</div></div>')
 def _lme(slug,name):
-    return _card(slug,' ',f'LME {name}','LME','--','美元/吨','检测中…')
+    return _card(slug,' ',f'LME {name}','LME','--','美元/吨','检测中…',group=_UNIT_LME_GROUP)
 new_price_html = (
     '<div class="price-cards" id="priceCardsShfe">'
     +_card('cum','up','沪铜','SHFE','108,570','元/吨','&#9650; +460 (+0.43%)')
