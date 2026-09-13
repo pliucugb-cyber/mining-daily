@@ -6120,6 +6120,24 @@ function toggleTheme(){
     }
   }
 
+  // 2026-09-13：阻止对话框滚动链穿透（scroll chaining）到底/顶后继续滚动导致背后页面翻动
+  (function trapDialogScroll(){
+    var el=document.getElementById('qaFloatBody');
+    if(!el)return;
+    el.addEventListener('wheel',function(e){
+      if(e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;
+      // 主要防垂直滚动链；水平滚动让 <pre>/代码块 自己处理
+      if(Math.abs(e.deltaX)>=Math.abs(e.deltaY))return;
+      var st=el.scrollTop,sh=el.scrollHeight,ch=el.clientHeight;
+      if(sh<=ch){e.preventDefault();return;}
+      var down=e.deltaY>0;
+      if((down&&st+ch>=sh-1)||(!down&&st<=0))e.preventDefault();
+    },{passive:false});
+    el.addEventListener('touchmove',function(e){
+      if(el.scrollHeight<=el.clientHeight)e.preventDefault();
+    },{passive:false});
+  })();
+
   // 输入框快捷键与按钮事件
   var inp=document.getElementById('qaFloatInput');
   if(inp){
