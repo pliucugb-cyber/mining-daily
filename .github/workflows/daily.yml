@@ -1,0 +1,133 @@
+# 矿业日报 — GitHub Actions 定时抓取
+#
+# 阶段一（当前）：只跑「抓取」，产出候选池 + 行情数据，推到 draft 分支。
+#   → 不生成页面、不部署、不碰 gh-pages、不碰 main。
+#   → 目的：先验证脚本在 Linux 环境下能否跑通（唯一的未知数）。
+#
+# 手动触发：GitHub → Actions → 本 workflow → Run workflow
+# 定时触发：暂未开启（先手动验证稳定后再取消注释 schedule）
+#
+# 依赖说明：所有脚本均为纯 Python 标准库，无需 pip install。
+
+name: 矿业日报·抓取（阶段一）
+
+on:
+  # 手动触发（阶段二验证用）
+  workflow_dispatch:
+    inputs:
+      report_date:
+        description: '报告日期 YYYY-MM-DD（留空 = 今天）'
+        required: false
+        default: ''
+  # 定时触发 —— 阶段一先关闭，验证通过后再启用
+  # schedule:
+  #   - cron: '0 22 * * *'   # UTC 22:00 = 北京时间 06:00（次日）
+
+# 只读仓库内容；写权限仅用于推 draft 分支
+permissions:
+  contents: write
+
+# 同一时间只允许一个抓取实例，避免并发写 draft 打架
+concurrency:
+  group: mining-daily-fetch
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    env:
+      # LME 行情 token：来自仓库 Secrets，切勿写死在文件里
+      # 配置位置：仓库 Settings → Secrets and variables → Actions → New repository secret
+      # 名称必须是 LME_TOKEN，值从本机 lme_token.txt 取
+      LME_TOKEN: ${{ secrets.LME_TOKEN }}
+      # 统一时区，保证日期判定与本地一致（北京时间）
+      TZ: Asia/Shanghai
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 确认 Python 环境
+        run: |
+          python3 --version
+          echo "--- 工作目录 ---"
+          pwd
+          ls -1 *.py | head -20
+
+      - name: 确定报告日期
+        id: date
+        run: |
+          if [ -n "${{ github.event.inputs.report_date }}" ]; then
+            D="${{ github.event.inputs.report_date }}"
+          else
+            D="$(date +%Y-%m-%d)"
+          fi
+          echo "report_date=$D" >> "$GITHUB_OUTPUT"
+          echo "报告日期：$D"
+
+      - name: 前置健康检查（不中断，仅记录）
+        continue-on-error: true
+        run: |
+          python3 preflight_check.py --no-fail || true
+
+      - name: 抓取行情数据（LME）
+        continue-on-error: true
+        run: |
+          python3 fetch_lme.py
+          echo "--- lme_data.json 头部 ---"
+          head -c 400 lme_data.json || echo "(未生成)"
+
+      - name: 抓取新闻候选池
+        run: |
+          python3 fetch_news.py --report-date "${{ steps.date.outputs.report_date }}" --quiet
+
+      - name: 汇总本轮产物
+        run: |
+          echo "=== 本轮产出文件 ==="
+          ls -lh data/news_candidates_*.json 2>/dev/null || echo "(无候选池)"
+          ls -lh lme_data.json 2>/dev/null || echo "(无行情数据)"
+          echo ""
+          echo "=== 候选池条数 ==="
+          python3 - <<'PY'
+          import json, glob, os
+          files = sorted(glob.glob('data/news_candidates_*.json'))
+          if not files:
+              print('无候选池文件'); raise SystemExit(0)
+          p = files[-1]
+          d = json.load(open(p, encoding='utf-8'))
+          news = d.get('news', [])
+          foreign = sum(1 for i in news if i.get('foreign'))
+          print(f'{os.path.basename(p)}：候选 {len(news)} 条（境外 {foreign} 条）')
+          PY
+
+      - name: 推送到 draft 分支
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "mining-daily-bot"
+
+          D="${{ steps.date.outputs.report_date }}"
+
+          # 阶段一的范围刻意收得很窄：只留痕候选池。
+          # - data/news_candidates_*.json：被 .gitignore 忽略（防止误入线上部署），
+          #   用 -f 强制添加，让产物留痕在独立的 draft/fetch 分支上，两者不冲突。
+          # - 刻意不提交 lme_data.json / lme-data.js / data/news_YYYY-MM.json：
+          #   这些是业务数据，改写属生成环节的职责，阶段一只验证「抓取能否跑通」，
+          #   不碰任何会影响线上的文件（即使 draft 分支已与线上隔离，仍保持最小面）。
+          git add -f data/news_candidates_*.json 2>/dev/null || true
+
+          if git diff --cached --quiet; then
+            echo "无新增内容，跳过提交"
+            exit 0
+          fi
+
+          git commit -m "chore(fetch): $D 候选池（阶段一·自动）"
+
+          # 推到一个专职的 draft 分支：与 main / gh-pages 完全隔离
+          git push origin HEAD:refs/heads/draft/fetch --force
+
+          echo "✅ 已推送到 draft/fetch 分支"
