@@ -1,27 +1,28 @@
 # 矿业日报 — GitHub Actions 定时抓取
 #
-# 阶段一（当前）：只跑「抓取」，产出候选池 + 行情数据，推到 draft 分支。
+# 阶段一（当前）：只跑「抓取」，产出候选池，推到 draft/fetch 分支。
 #   → 不生成页面、不部署、不碰 gh-pages、不碰 main。
-#   → 目的：先验证脚本在 Linux 环境下能否跑通（唯一的未知数）。
+#   → 目的：积累数日运行数据，观察稳定性（尤其国内信源在境外服务器上的可达性）。
 #
 # 手动触发：GitHub → Actions → 本 workflow → Run workflow
-# 定时触发：暂未开启（先手动验证稳定后再取消注释 schedule）
+# 定时触发：每天北京时间 06:15（= UTC 22:15 前一天）
+#   ⚠️ 刻意与 WorkBuddy 旧任务的 06:00 错开 15 分钟，避免两条链路同时打对方服务器。
 #
 # 依赖说明：所有脚本均为纯 Python 标准库，无需 pip install。
 
 name: 矿业日报·抓取（阶段一）
 
 on:
-  # 手动触发（阶段二验证用）
+  # 手动触发（随时可补跑 / 复验）
   workflow_dispatch:
     inputs:
       report_date:
         description: '报告日期 YYYY-MM-DD（留空 = 今天）'
         required: false
         default: ''
-  # 定时触发 —— 阶段一先关闭，验证通过后再启用
-  # schedule:
-  #   - cron: '0 22 * * *'   # UTC 22:00 = 北京时间 06:00（次日）
+  # 定时触发：每天北京时间 06:15
+  schedule:
+    - cron: '15 22 * * *'   # UTC 22:15 = 北京时间 06:15（次日）
 
 # 只读仓库内容；写权限仅用于推 draft 分支
 permissions:
@@ -103,6 +104,60 @@ jobs:
           news = d.get('news', [])
           foreign = sum(1 for i in news if i.get('foreign'))
           print(f'{os.path.basename(p)}：候选 {len(news)} 条（境外 {foreign} 条）')
+          PY
+
+      - name: 信源产出报告
+        run: |
+          # 目的：识别在 GitHub（境外）服务器上哑掉的信源。
+          # 连续多日零产出的源很可能是被墙 / 反爬 / 地域限流，而非「当天确实无内容」。
+          # 源清单动态从 fetch_news.py 读取，不硬编码，避免源变更后报告失效。
+          python3 - <<'PY'
+          import json, glob, os, importlib.util
+
+          # 1) 取启用中的源清单
+          spec = importlib.util.spec_from_file_location('fn', 'fetch_news.py')
+          m = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(m)
+          all_src = {c['key']: c for c in m.SOURCES}
+          enabled = {k: c for k, c in all_src.items() if c.get('enabled')}
+
+          # 2) 统计本轮候选池
+          files = sorted(glob.glob('data/news_candidates_*.json'))
+          if not files:
+              print('无候选池，无法统计'); raise SystemExit(0)
+          pool = json.load(open(files[-1], encoding='utf-8'))
+          news = pool.get('news', [])
+
+          got = {}
+          for i in news:
+              k = i.get('fetch_src', '?')
+              got[k] = got.get(k, 0) + 1
+
+          print()
+          print('=== 本轮各信源产出 ===')
+          print(f"{'KEY':<14}{'名称':<24}{'条数':>5}  {'境外':<4}")
+          print('-' * 56)
+          silent = []
+          for k, c in sorted(enabled.items(), key=lambda x: -got.get(x[0], 0)):
+              n = got.get(k, 0)
+              flag = '是' if c.get('foreign') else ''
+              mark = '' if n else '   ← 零产出'
+              print(f"{k:<14}{c['name']:<24}{n:>5}  {flag:<4}{mark}")
+              if n == 0:
+                  silent.append((k, c['name']))
+
+          print('-' * 56)
+          print(f"启用源 {len(enabled)} 个 | 有产出 {len(enabled) - len(silent)} 个 "
+                f"| 零产出 {len(silent)} 个")
+
+          if silent:
+              print()
+              print('⚠️ 本轮零产出的源（需连续观察；若连续多日为 0，多半是境外服务器可达性问题）：')
+              for k, name in silent:
+                  print(f'   - {k}（{name}）')
+          else:
+              print()
+              print('✅ 全部启用源均有产出')
           PY
 
       - name: 推送到 draft 分支
