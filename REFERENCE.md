@@ -2272,6 +2272,14 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
   `--surface-3`，叠同色底会看不见）；对照表每条「名字独占一行 + 步骤次行 + 虚线分隔」。
 - 移动端浮条文案：`#mobileInstallText` = 「添加到移动端桌面…」实际值 **「添加到手机桌面，离线也能看日报」**；`#mobileInstallBtn` = **「怎么加」**（原「安装」）。
 
+**页脚入口（第三期，2026-09-13 按用户要求删除）**
+
+- ⚠️ 页脚 `.footer` 内**不得再出现指向 `installGuideSection` 的文字链**。被删原文（节点 `data-page-node-id="CbHPZGigo3bSeq2LYmfY5V"`）：
+  `<p …><a …onclick="…scrollToSection('installGuideSection',null)"…>💻 添加到桌面 / 📱 安装到主屏幕</a> · 像 App 一样使用 · 离线也能看</p>`。
+  **理由（用户 2026-09-13 看过上线效果后判定重复）**：电脑端已有右上角 `#pwaHeaderBtn`、手机端已有底部浮条 `#mobileInstallBar`、「我的」面板已有 `#mineInstallCard`，页脚这条是**第四个冗余入口**。
+- **删的是「入口」，不是「指引区」**：`#installGuideSection` 容器、`@media ≤768px` 隐藏规则、`body[data-view="install"]` 视图分支、`switchView()` 里的 `install:'installGuideSection'` 映射、`updateActiveSection` 的区块列表**全部保留**——默认视图下该区块本就静态渲染可见，删页脚链接不会让它消失或变得不可达。
+- **回退指纹**：`.footer` 内重新出现该 `<p>`（或任何「添加到桌面 / 安装到主屏幕」文字链指向 `installGuideSection`，节点 id `CbHPZGigo3bSeq2LYmfY5V`）⇒ 删净即可。前置闸门 `preflight_check.check_no_footer_install_entry` 已锁（只扫 `index.html`；`app.js` 里「添加到桌面」是安装引导的合法文案，不得一并拦）。
+
 ### 42.8 前端信标 · 日期唯一来源 · 文案 · 行情口径
 
 - **自愈信标**：保留内联引信 `#mdBootWarn` + `window.mdHardReset()` + 2.5s 兜底。

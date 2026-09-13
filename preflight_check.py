@@ -83,6 +83,31 @@ def check_no_marketpulse(text):
     return ok, findings
 
 
+def check_no_footer_install_entry(text):
+    """页脚不得再出现「💻 添加到桌面 / 📱 安装到主屏幕」入口（2026-09-13 三期按用户要求删除）。
+
+    背景：该文字链指向 #installGuideSection，与电脑端右上角 #pwaHeaderBtn、手机端底部
+    浮条 #mobileInstallBar、「我的」面板 #mineInstallCard 重复，用户判定无意义（见 §42.7）。
+    **删的是「页脚入口」**——指引区容器、@media 隐藏规则、data-view=install 视图分支
+    与 switchView 映射全部保留，默认视图下该区块本就静态可见。
+
+    注意：本检查只喂 index.html（`html_text`）——app.js 里的「添加到桌面 / 添加到主屏幕」
+    是安装引导正文与对照表的合法文案，与页脚入口无关，不得一并拦。
+    """
+    findings = []
+    hits = []
+    if FOOTER_INSTALL_NODE_ID in text:
+        hits.append('节点 %s' % FOOTER_INSTALL_NODE_ID)
+    if FOOTER_INSTALL_PHRASE in text:
+        hits.append('文案「%s」' % FOOTER_INSTALL_PHRASE)
+    if hits:
+        findings.append('❌ 页脚安装入口回归：%s — 2026-09-13 已按用户要求删除（见 REFERENCE.md §42.7），不得加回'
+                        % ' / '.join(hits))
+    else:
+        findings.append('✅ 页脚安装入口未回归（「💻 添加到桌面 / 📱 安装到主屏幕」已删除）')
+    return not hits, findings
+
+
 def check_functions(text):
     findings = []
     required = [
@@ -123,6 +148,11 @@ def check_containers(text):
 
 # 价格单位去重契约（2026-09-13）：分组标题已声明单位，同单位卡片不重复写。
 # 见 REFERENCE.md §42.11。生成侧由 generate_common.unit_class() 产出该 class。
+# 页脚安装入口契约（2026-09-13 三期按用户要求删除）——见 REFERENCE.md §42.7。
+# 只对 index.html 生效；app.js 里同名文案属安装引导正文，不得一并拦。
+FOOTER_INSTALL_NODE_ID = 'CbHPZGigo3bSeq2LYmfY5V'
+FOOTER_INSTALL_PHRASE = '添加到桌面 / \U0001f4f1 安装到主屏幕'
+
 SAME_UNIT_CLASS = 'pc-unit-same'
 SHFE_SAME_UNIT_N = 8      # 国内盘 元/吨：沪铜铝铅锌锡镍 + 碳酸锂 + 电解钴
 LME_SAME_UNIT_N = 6       # LME 全部 6 个 = 美元/吨
@@ -344,6 +374,7 @@ def main():
     sections = [
         ('生成 marker', check_markers(text)),
         ('已删功能守护', check_no_marketpulse(text)),
+        ('已删入口守护', check_no_footer_install_entry(html_text)),
         ('关键功能', check_functions(text)),
         ('关键容器', check_containers(text)),
         ('价格单位去重', check_price_unit_dedup(html_text)),   # 只扫 index.html，避免 app.js 干扰计数
