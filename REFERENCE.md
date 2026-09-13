@@ -2286,7 +2286,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **涉及价格区视图切换 / 热力图 / 排行 / `#priceViewBar` / `#priceHeatmap` / `#priceRank` / `rank-on` / `__mdPriceRank` / `md_price_view`** → 必跑 `node test_price_heatmap.js`，并补**真实 Chrome** 探针（改过 `@media` 与 grid 断点）。
 - **涉及安装引导 / `manifest.json` / head 声明** → 必跑两个 PWA 测试。
 - **改过 CSS 断点或 `@media`** → 必须用**真实 Chrome**（jsdom 不评估 `@media`）。
-- 全量闸门（如有）＝21 个 node + 9 个 python 闸门。
+- 全量闸门（如有）＝根目录全部 `test_*.js` + `test_*.py`（**不写死条数**，以实际文件为准；2026-09-13 盘点为 23 个 node / 8 个 python —— 原「21 + 9」已随新增测试漂移）。
 
 ### 42.10 验证方法与已知的「假 FAIL」坑（从两条 prompt 的节流规则迁入）
 

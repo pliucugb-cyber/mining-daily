@@ -179,8 +179,12 @@ finally:
 
 # ==================== ⑤ 生成脚本模板（动态取最新一份） ====================
 print('\n===== ⑤ 最新一份 generate_*.py 的标题写法 =====')
+# 2026-09-13：一次性脚本已归档到 archive/generators/，模板守护须同时看归档目录，
+# 否则根目录无当日脚本时不仅报红，还会静默跳过下面 5 条写法检查。
 gens = sorted(glob.glob(os.path.join(ROOT, 'generate_2026*.py')))
-check('存在 generate_2026*.py', bool(gens))
+if not gens:
+    gens = sorted(glob.glob(os.path.join(ROOT, 'archive', 'generators', 'generate_2026*.py')))
+check('存在 generate_2026*.py（根目录或 archive/generators/）', bool(gens))
 if gens:
     newest = os.path.basename(gens[-1])
     g = read(gens[-1])
