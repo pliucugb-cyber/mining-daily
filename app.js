@@ -1482,7 +1482,7 @@ function refreshSectionVisibility(){
   if(fm==='fav'||fm==='history')return;
   document.querySelectorAll('.section').forEach(sec=>{
     // 静态说明区：跳过新闻数判断常显
-    if(sec.id==='installGuideSection'||sec.id==='archivedFavSection'||sec.id==='rightsSection')return;
+    if(sec.id==='installGuideSection'||sec.id==='archivedFavSection'||sec.id==='rightsSection'||sec.id==='eventCalendar')return;
     var vis;
     if(sec.id==='hotListSection'){
       vis=sec.querySelectorAll('li.hot-item').length;          // 热榜用 li.hot-item
@@ -3566,6 +3566,7 @@ function mdRenderEventCalendar(){
   try{
     var sec = document.getElementById('eventCalendar'); if(!sec) return;
     var body = document.getElementById('ecBody'); if(!body) return;
+    sec.style.display='';  // 2026-09-13：日历是独立信息区块，须常显；否则会被 refreshSectionVisibility 的「无 .news-item 即隐藏」判空干掉（线上实测 display:none）
     if(!window.NEWS_DATA || !window.NEWS_DATA.news){ body.innerHTML = '<div class="ec-loading">日历加载中…</div>'; return; }
     var base = mdEventBaseline();
     var events = mdEventFromNews();

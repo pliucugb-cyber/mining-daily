@@ -123,6 +123,17 @@ setTimeout(() => {
     check('空数据占位不含「今日暂无」（避免与简报口径打架）', empty && empty.textContent.indexOf('今日暂无') < 0);
   } catch (e) { check('空数据占位渲染', false, e.message); }
 
+  // 10. 防回归（2026-09-13 线上事故）：#eventCalendar 是独立信息区块，必须被 refreshSectionVisibility 的静态区白名单跳过；
+  //     否则会被「无 .news-item 即 display:none」判空，整块在页面上消失（线上实测 invisible）。
+  try {
+    window.NEWS_DATA.news = MY_DATA.news;   // 恢复数据，回到有事件状态
+    window.__mdEventCalendar.render();
+    if (typeof window.mdRefreshSections === 'function') window.mdRefreshSections();
+    const sec = doc.getElementById('eventCalendar');
+    check('refreshSectionVisibility 后 #eventCalendar 未被隐藏', sec.style.display !== 'none', 'display=' + JSON.stringify(sec.style.display));
+    check('防回归后日历行仍为 3 条', doc.querySelectorAll('#ecBody .ec-row').length === 3);
+  } catch (e) { check('防隐藏回归用例', false, e.message); }
+
   if (errors.length) console.log('  [info] 非日历相关 console 错误 ' + errors.length + ' 条：' + errors.slice(0, 3).join(' | '));
 
   console.log('-'.repeat(40));

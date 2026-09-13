@@ -2222,14 +2222,14 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 主区独立**区块**（非第三视图），从新闻派生 + 少量手动关键日，按日期组织事件列表；做成区块、与现有「会议会展 / 侧栏会展迷你卡」口径分离。
 
 - **形态**：`#eventCalendar`（置于 `#rightsSection` 之后、`#installGuideSection` 之前），标题「📆 事件·数据日历」+ `news-count`（`#ecCount`，N条）。`.ec-body` 内为事件行：日期芯片（`M月D日`）+ 标题（外链 `target="_blank"`）+ 类型标签（会议/数据/政策/截止/其他）+ 来源；**未来项 `.ec-upcoming`**（左侧 `--brand` 竖条 + 淡底，≤90 天带「即将」徽标）、**过去项 `.ec-past`**（整体 `opacity:.62` 淡化）。空数据 → `.ec-empty`「暂无已收录的近期事件」（**不得**写「今日暂无」，避免与简报口径打架）。
-- **必留（生成侧）**：① index.html 静态容器 `#eventCalendar`（含 `#ecTitle`/`#ecCount`/`#ecBody`）；② `<style id="eventCalendarStyle">`（主 `<style>` 块内，复用全局 token，双主题适配）；③ app.js 模块 `MANUAL_EVENTS` / `mdExtractEventDate` / `mdEventFromNews` / `mdRenderEventCalendar` / `mdInitEventCalendar` / `window.__mdEventCalendar`；`mdInitEventCalendar` 在 `DOMContentLoaded` 接线（数据晚到时内部 `setInterval` 300ms 轮询重试，≤6s）。
+- **必留（生成侧）**：① index.html 静态容器 `#eventCalendar`（含 `#ecTitle`/`#ecCount`/`#ecBody`）；② `<style id="eventCalendarStyle">`（主 `<style>` 块内，复用全局 token，双主题适配）；③ app.js 模块 `MANUAL_EVENTS` / `mdExtractEventDate` / `mdEventFromNews` / `mdRenderEventCalendar` / `mdInitEventCalendar` / `window.__mdEventCalendar`；`mdInitEventCalendar` 在 `DOMContentLoaded` 接线（数据晚到时内部 `setInterval` 300ms 轮询重试，≤6s）；④ **显隐白名单（2026-09-13 事故根因）**：app.js `refreshSectionVisibility()`（约第 1485 行）的「静态说明区跳过」白名单**必须含 `eventCalendar`**，且 `mdRenderEventCalendar()` 开头设 `sec.style.display=''`——否则该区块会被「无 `.news-item` 即 `display:none`」判空隐藏、整块在页面上消失。
 - **来源（两层）**：① 从新闻派生 —— 遍历 `NEWS_DATA.news`，标题**同时含事件词 + 可解析日期**才入选（`r.t`/`r.u`/`r.s` 短字段，与 `mdRenderMeetingSection` 同口径）；② `MANUAL_EVENTS`（app.js 顶部 `var`，维护者追加 `{date:'YYYY-MM-DD', title, type, url}` 关键日，如已知会议/数据发布/申报截止/标准实施）。
 - **抽取口径（最易改错）**：事件词 `MD_EVENT_WORDS` = 召开/举办/开幕/落幕/闭幕/实施/起实施/截止/报名/将于/发布/预告/上线/披露/到期/评审/备案/出让/挂牌/开标/举行；日期 `mdExtractEventDate` = `YYYY年M月D日` / `YYYY-M-D` / `M月D日`（无年份取 `report_date` 所属年，**不滚动到下一年**）。标题无日期 或 无事件词 → **不进日历**。类型标签 `mdEventTypeOf`：政策（标准/条例/办法/规定/政策）/ 截止（截止/报名/挂牌/出让/开标/申报/征）/ 数据（发布/披露/进出口/统计）/ 会议（默认）。
 - **基线报告日** = `NEWS_DATA.meta.report_date`（缺则 `new Date()`）；未来 = 事件日 `>=` 基线；「即将」= 未来且相差 `<=90` 天。排序：未来升序在前、过去降序在后（`up.concat(past)`）。
 - **与 `#expoMini`（侧栏会展迷你卡）口径分离**：会展迷你卡全量会展、不按日期；日历只列「带可解析日期」的事件，二者共存不冲突；**禁止**把日历改成「再列一遍会展」（会与 `#expoMini` 重复、口径打架）。
-- **重建边界**：`#eventCalendar` 是 `#rightsSection` 之后的**兄弟节点**，生成脚本 `_replace_block` 只替换各 section **内部**（保留开标签之前与闭标签之后一切），兄弟节点天然抗重建；app.js 只运行时填充 `.ec-body`，生成侧从不写日历 DOM（与 §42.14/§42.15 前缀区静态物套路一致）。
-- **回退指纹**：① `#eventCalendar` 静态容器缺失（被重建抹掉）；② 无日期的会展/事件标题混进日历；③ 过去项未 `.ec-past` 淡化 / 未来项未 `.ec-upcoming` 高亮；④ 「即将」出现在 `>90` 天的项；⑤ 空数据渲染成「今日暂无…」（须「暂无已收录的近期事件」）；⑥ 日历与 `#expoMini` 重复同一条会展（口径打架）；⑦ MANUAL_EVENTS 路径被删（手动关键日无法补充）。
-- **闸门**：`node test_event_calendar.js`（**19 PASS**）：静态容器存活 + 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签 + 外链 `target=_blank` + 空占位「暂无已收录的近期事件」。
+- **重建边界**：`#eventCalendar` 是 `#rightsSection` 之后的**兄弟节点**，生成脚本 `_replace_block` 只替换各 section **内部**（保留开标签之前与闭标签之后一切），兄弟节点天然抗重建；app.js 只运行时填充 `.ec-body`，生成侧从不写日历 DOM（与 §42.14/§42.15 前缀区静态物套路一致）。**但**：运行时还有一道全部 `.section` 的显隐闸门 `refreshSectionVisibility()`——它按 `.news-item` 计数判空，日历须加入其白名单（见「必留④」），否则兄弟节点位置对、仍会被隐藏。
+- **回退指纹**：① `#eventCalendar` 静态容器缺失（被重建抹掉）；② 无日期的会展/事件标题混进日历；③ 过去项未 `.ec-past` 淡化 / 未来项未 `.ec-upcoming` 高亮；④ 「即将」出现在 `>90` 天的项；⑤ 空数据渲染成「今日暂无…」（须「暂无已收录的近期事件」）；⑥ 日历与 `#expoMini` 重复同一条会展（口径打架）；⑦ MANUAL_EVENTS 路径被删（手动关键日无法补充）；⑧ **`#eventCalendar` 在页面上不可见（计算 `display:none`）**——因 `refreshSectionVisibility()` 白名单漏了它、被「无 `.news-item` 即判空」隐藏（2026-09-13 线上事故；真 Chrome 探针 `visible:false` 即复现）。
+- **闸门**：`node test_event_calendar.js`（**21 PASS**，含 2 条「未被 `refreshSectionVisibility` 隐藏」防回归断言）：静态容器存活 + 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签 + 外链 `target=_blank` + 空占位「暂无已收录的近期事件」。
 
 ### 42.7 PWA 安装引导（§41，2026-09-12 两轮修复后定稿）
 
@@ -2300,7 +2300,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |
 | `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
 | `node test_price_heatmap.js` | **126** | 价格区热力图：静态契约（容器顺序 / pre-paint 位置 / 选择器）+ jsdom 运行时（16 色块、方向与 `.pc-chg` 一致、alpha 单调、红涨绿跌、2 分组、图例 >=7、点击开走势图、视图持久化）+ 反向用例；**价格区间榜**：三态互斥 / 两栏固定 / 空栏占位 / 红涨绿跌 / 条形归一 / 跨度日数回归锁 / `__mdPriceRank` 等（§42.14 / §42.15） |
-| `node test_event_calendar.js` | **19 PASS** | 事件·数据日历：静态容器 `#eventCalendar` 存活（重建边界）+ 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签（会议/政策/数据/截止）+ 外链 `target=_blank` + 空占位「暂无已收录的近期事件」（§42.16） |
+| `node test_event_calendar.js` | **21 PASS** | 事件·数据日历：静态容器 `#eventCalendar` 存活（重建边界）+ 未被 `refreshSectionVisibility` 隐藏（防回归）+ 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签（会议/政策/数据/截止）+ 外链 `target=_blank` + 空占位「暂无已收录的近期事件」（§42.16） |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
