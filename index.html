@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260913-1621" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260913-1645" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -1897,6 +1897,27 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
 .nf-toggle{display:none}
 /* 深色模式：底部导航非激活态用浅灰（浅色模式用 --ink-700，过 AA） */
 body.dark .mtab{color:var(--ink-300)}
+/* ==================== 事件·数据日历（轻量版，2026-09-13） ==================== */
+#eventCalendar .ec-body{padding:var(--s2) var(--s4) var(--s4);display:flex;flex-direction:column;gap:2px}
+.ec-row{display:flex;align-items:flex-start;gap:var(--s3);padding:var(--s3) var(--s4);border-radius:var(--r-md);border-left:3px solid var(--line-2);background:var(--surface-2);transition:background .15s}
+.ec-row:hover{background:var(--surface-3)}
+.ec-row.ec-upcoming{border-left-color:var(--brand);background:rgba(14,116,144,.08)}
+.ec-row.ec-past{opacity:.62}
+.ec-date{flex:0 0 auto;font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink-700);font-size:var(--fs-body);min-width:84px;line-height:1.5}
+.ec-row.ec-upcoming .ec-date{color:var(--brand)}
+.ec-main{flex:1 1 auto;min-width:0}
+.ec-title{font-size:var(--fs-body);color:var(--ink-900);line-height:1.5}
+.ec-title a{color:inherit;text-decoration:none}
+.ec-title a:hover{text-decoration:underline}
+.ec-meta{margin-top:3px;display:flex;gap:var(--s2);align-items:center;font-size:12px;color:var(--ink-500)}
+.ec-tag{padding:1px 8px;border-radius:var(--r-pill);background:var(--surface-3);color:var(--ink-500);border:1px solid var(--line-2);white-space:nowrap}
+.ec-tag.t-meeting{color:var(--brand);border-color:rgba(14,116,144,.4)}
+.ec-tag.t-data{color:rgb(217,58,43)}
+.ec-tag.t-policy{color:rgb(14,122,82)}
+.ec-tag.t-deadline{color:#b45309}
+.ec-soon{flex:0 0 auto;font-size:11px;color:#fff;background:var(--brand);border-radius:var(--r-pill);padding:1px 8px;align-self:center;white-space:nowrap}
+.ec-empty{padding:var(--s4);color:var(--ink-500);text-align:center}
+body.dark #eventCalendar .ec-row.ec-upcoming{background:rgba(14,116,144,.2)}
 </style>
 <!-- ========================================================================
      2026-09-11 事故二次加固：SW/缓存自愈引信（内联，独立于 app.js）
@@ -2572,6 +2593,11 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <div class="rights-list rv-cards" id="rightsCards" data-page-node-id="rGS2SHy4RJt4h8Y1cR2Y9p"></div>
 <div class="rights-empty" id="rightsEmpty" hidden data-page-node-id="rH62SHy4RJt4h8Y1cR2Y9D">当前筛选条件下无矿权交易条目。</div>
 </div>
+<!-- ==================== 事件·数据日历（轻量版，2026-09-13） ==================== -->
+<div class="section" id="eventCalendar">
+<div class="section-title ec" id="ecTitle"><span class="icon">📆</span> 事件·数据日历<span class="news-count" id="ecCount"></span></div>
+<div class="ec-body" id="ecBody"><div class="ec-loading">日历加载中…</div></div>
+</div>
 <!-- ==================== 详细安装指引 ==================== -->
 <div class="section" id="installGuideSection" data-page-node-id="xug9J6NcRDRhX5NU7KA4a3">
 <div class="section-title guide" data-page-node-id="IzfDkP7rosF4k0xGHC0qu1"><span class="icon" data-page-node-id="UR0jECt8gqOafSfHZNmU3A">📲</span> 安装到桌面 <span class="news-count" style="background:#cffafe;color:#0e7490" data-page-node-id="PnKh23mAjokBG4lU1OglOx">备用指引</span><button class="guide-toggle" id="guideToggle" onclick="window.toggleInstallGuide&&window.toggleInstallGuide()" type="button" data-page-node-id="phZjOhZ7oUUCL26Onygjuv">展开 ▼</button></div>
@@ -2655,7 +2681,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=97bcfa35" defer></script>
 <script src="lme-data.js?v=255864bc" defer></script>
 <script src="price-history.js?v=e24ff7b4" defer></script>
-<script src="app.js?v=9624d8ab" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=3f19b206" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
