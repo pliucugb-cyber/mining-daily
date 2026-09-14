@@ -87,13 +87,51 @@ def pick(items, per_day):
     return picked
 
 
+def _resolve_days(args):
+    """--days 显式优先；不传则用 --last N 自动取「今天往前 N 天」（含今天）——供每周自检 cron 使用。"""
+    if args.days:
+        return [d.strip() for d in args.days.split(',') if d.strip()]
+    n = max(1, int(args.last or 1))
+    t = datetime.date.today()
+    return [(t - datetime.timedelta(days=i)).isoformat() for i in range(n - 1, -1, -1)]
+
+
+def _append_history(path, summary):
+    """把本次核心指标追加进趋势账本（跨周累积），返回最近记录列表（旧->新）。"""
+    hist = []
+    try:
+        if path and os.path.exists(path):
+            hist = json.load(open(path, encoding='utf-8'))
+            if not isinstance(hist, list):
+                hist = []
+    except Exception as ex:
+        print('[tuning] 读趋势账本失败（将重建）: %s' % ex, file=sys.stderr)
+        hist = []
+    keep = ('date', 'days', 'total', 'foreign', 'with_source', 'no_source',
+            'initial_pass', 'initial_fail', 'initial_pass_rate',
+            'auto', 'review', 'dropped', 'repaired_to_auto', 'avg_summary_len')
+    hist.append({k: summary.get(k) for k in keep})
+    hist = hist[-60:]
+    try:
+        d = os.path.dirname(path)
+        if d:
+            os.makedirs(d, exist_ok=True)
+        json.dump(hist, open(path, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    except Exception as ex:
+        print('[tuning] 写趋势账本失败: %s' % ex, file=sys.stderr)
+    return hist
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--days', default='2026-09-12,2026-09-13,2026-09-14')
+    ap.add_argument('--days', default=None, help='逗号分隔日期；不传则按 --last 自动推算')
+    ap.add_argument('--last', type=int, default=3, help='自动取最近 N 天（含今天）')
     ap.add_argument('--per-day', type=int, default=12)
     ap.add_argument('--limit', type=int, default=3000, help='抓正文的最大字符数')
+    ap.add_argument('--history-file', default=os.path.join(DATA, 'qa_tuning_history.json'),
+                    help='质量趋势账本路径；传空串则不写')
     args = ap.parse_args()
-    days = [d.strip() for d in args.days.split(',') if d.strip()]
+    days = _resolve_days(args)
     today = datetime.date.today().isoformat()
     os.makedirs(OUT, exist_ok=True)
 
@@ -183,7 +221,9 @@ def main():
     json.dump({'summary': summary, 'rows': rows}, open(json_path, 'w', encoding='utf-8'),
               ensure_ascii=False, indent=2)
 
-    md = build_report(summary, rows)
+    # 趋势账本（跨周累积；每周自检据此判断质量是否漂移）
+    trend = _append_history(args.history_file, summary) if args.history_file else []
+    md = build_report(summary, rows, trend)
     md_path = os.path.join(OUT, 'tuning_report_%s.md' % today)
     open(md_path, 'w', encoding='utf-8').write(md)
 
@@ -193,7 +233,7 @@ def main():
     return 0
 
 
-def build_report(s, rows):
+def build_report(s, rows, trend=None):
     L = []
     L.append('# B\' 质量调优报告（%s）' % s['date'])
     L.append('')
@@ -248,6 +288,39 @@ def build_report(s, rows):
              % (round(100.0 * s['dropped'] / max(1, s['total']), 1), s['dropped'], s['total']))
     L.append('- 建议：**auto 自动发布；dropped 丢弃并留档；无基准条目归 review（早间点一眼）**。')
     L.append('')
+
+    # 五、趋势（跨周累积；每周自检的主价值就在这一节）
+    if trend:
+        L.append('## 五、质量趋势（最近 %d 次自检，旧 → 新）' % len(trend))
+        L.append('')
+        L.append('| 日期 | 样本 | 正文基准 | 初检通过率 | auto | review | dropped | 平均长度 |')
+        L.append('|---|---|---|---|---|---|---|---|')
+        for h in trend[-10:]:
+            L.append('| %s | %s | %s | %s%% | %s | %s | %s | %s |'
+                     % (h.get('date'), h.get('total'), h.get('with_source'),
+                        h.get('initial_pass_rate'), h.get('auto'), h.get('review'),
+                        h.get('dropped'), h.get('avg_summary_len')))
+        L.append('')
+        if len(trend) >= 2:
+            prev, cur = trend[-2], trend[-1]
+            try:
+                d = float(cur.get('initial_pass_rate') or 0) - float(prev.get('initial_pass_rate') or 0)
+                if d <= -10:
+                    L.append('- ⚠️ 初检通过率较上次下降 %s 个百分点：优先排查生成 prompt / 源站改版 / 校验规则。'
+                             % round(d, 1))
+                elif d >= 10:
+                    L.append('- 初检通过率较上次上升 %s 个百分点。' % round(d, 1))
+                else:
+                    L.append('- 初检通过率与上次基本持平（%s 个百分点）。' % round(d, 1))
+            except Exception:
+                pass
+            try:
+                dq = float(cur.get('dropped') or 0) - float(prev.get('dropped') or 0)
+                if dq >= 2:
+                    L.append('- ⚠️ dropped 较上次增加 %d 条：可能有真错数，抽查明细。' % int(dq))
+            except Exception:
+                pass
+        L.append('')
     return '\n'.join(L)
 
 
