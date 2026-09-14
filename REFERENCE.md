@@ -2022,7 +2022,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 ## §42 全站形态契约与复核清单（生成侧必留 · 复核侧回退指纹）
 
 > **用途**：本节是**全站形态的唯一权威清单**，被两条自动化直接引用 ——
-> - **生成侧（06:00 重建）**：按 §42.1–§42.8 的「必留指纹」逐项保留，**缺任一即回退**；
+> - **生成侧（06:00 重建）**：按 §42.1–§42.8（**+ §42.17 卡片 sparkline**）的「必留指纹」逐项保留，**缺任一即回退**；
 > - **复核侧（08:00 复验）**：按 §42.1–§42.10 逐项核对，命中任一「回退指纹」即就地修复。
 >
 > 各部件**为什么这样设计**仍以对应专题节（§16 / §17 / §19–§34 / §38 / §40 / §41）为准；
@@ -2231,6 +2231,24 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **回退指纹**：① `#eventCalendar` 静态容器缺失（被重建抹掉）；② 无日期的会展/事件标题混进日历；③ 过去项未 `.ec-past` 淡化 / 未来项未 `.ec-upcoming` 高亮；④ 「即将」出现在 `>90` 天的项；⑤ 空数据渲染成「今日暂无…」（须「暂无已收录的近期事件」）；⑥ 日历与 `#expoMini` 重复同一条会展（口径打架）；⑦ MANUAL_EVENTS 路径被删（手动关键日无法补充）；⑧ **`EC_ENABLED=false`（当前默认）时 `#eventCalendar` 仍然可见**——`body.ec-on` 被误加 / 静态兑底 CSS 被删 / 有人把 `sec.style.display=''` 改成无条件执行，任一命中即「隐藏开关失效、日历又冒出来」（2026-09-13 二期：用户明确要求先隐藏）；⑨ **开了开关（`EC_ENABLED=true`）却仍不可见**——`refreshSectionVisibility()` 白名单漏了 `eventCalendar`、被「无 `.news-item` 即判空」隐藏（2026-09-13 一期线上事故；真 Chrome 探针 `visible:false` 即复现）。
 - **闸门**：`node test_event_calendar.js`（**29 PASS**，含「默认隐藏态」「开关往返」「未被 `refreshSectionVisibility` 隐藏」三组防回归断言）：静态容器存活 + 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签 + 外链 `target=_blank` + 空占位「暂无已收录的近期事件」。
 
+### 42.17 价格卡「迷你走势线 + 近5日」（方案A，2026-09-14）
+
+桌面端**卡片视图**下每张矿种卡信息密度低（多数卡只有品种名 + 价格与涨跌）。本节给每张卡补一条 **15 日迷你走势线** + **「5日 ±x.x%」**标签，**纯前端派生**自 `window.PRICE_HISTORY` —— 不新增数据文件、不改抓取链路、**不改生成脚本**（与 §42.14/§42.15 同形态）。
+
+- **用户裁定（2026-09-14）**：走「方案A 走势线 + 近5日」。「5日」涨跌幅**复用 `rankOf(s,'week')`**（`RANK_W=5`，与「排行」视图**周榜口径同源**）—— 不得另写一套算法，否则与周榜打架。
+- **注入形态**：`app.js` `cardSpark()` 给每张 `.price-card` **末尾**追加一个 `.pc-spark`（**作末子元素**）：
+  - `.pc-spark` 内为 `<svg>`（`viewBox="0 0 100 28"`、`preserveAspectRatio="none"`，含面积 `path` + 折线 `polyline` + 末点 `circle`）+ `.pc-5d`（文本「5日 +1.23%」/ 缺数据「5日 —」）。
+  - 折线点 = `pcSeries(slug).points.slice(-15)` 的值（近 15 个交易日收盘）；颜色按 `rankOf(s,'week').pct` 方向染：涨 `rgb(217,58,43)`、跌 `rgb(14,122,82)`（**红涨绿跌**）；面积 fill 用同色 `alpha .10`。
+- **⚠️ 不得污染 `.pc-chg`**：`.pc-spark` 与 `.pc-5d` 都**独立于** `.pc-chg`；`exportPriceCsv()` 与价格预警解析只读 `.pc-name`/`.pc-value`/`.pc-unit`/`.pc-chg` 四个的 `textContent` —— **严禁**把 5日文本塞进 `.pc-chg`（否则 CSV 与预警全乱）。
+- **降级（静默跳过，不得报错、不得占位）**：`slug` 为空（如电解钴 SMM 现货无日K）或 `pcSeries` 无 `points` 或有效点数 `<2` → 该卡**不加** `.pc-spark`，卡片保持原样。
+- **点击**：`.pc-spark` 绑 document 级委托 → `pcChartOpen(slug)`（与点卡片/热力图色块**同一条走势图路径**）。
+- **重建边界（关键）**：生成脚本 `_replace_block()` 只重写 `#priceCardsShfe`/`#priceCardsLme` **内部块**，且**不碰 `<style>`** —— 故 ① 主 `<style>` 内的 `.pc-spark`/`.pc-5d` 规则、② 运行时由 `cardSpark()` 注入的 DOM，均在每日 regen 后**存活/重挂**。`run()` 末尾须在 `rankRender()` **之后**调 `cardSpark()`（价格异步刷新后重挂）。
+- **网格改动**：卡片网格由 4 轨扩到 5 轨容纳 sparkline —— 默认卡 `grid-template-columns:minmax(72px,1fr) auto auto 1fr 66px`；同单位卡 `:has(.pc-unit-same)` 为 `minmax(72px,1fr) auto 1fr 66px`。`.pc-name` 补 `text-overflow:ellipsis`（宽名可收缩）。
+- **移动端（≤768px）**：`.pc-spark` 落 **row2 整行**（`grid-column:1/-1`、横向布局：线在左、`5日`在右），上方一条 `1px dashed var(--line-1)` 分隔。⚠️ 真机探针取证前**必须先 `document.body.removeAttribute('data-md-cat')`**（§42.15 同坑：移动分类过滤会整段藏 `#priceStrip`，几何恒 0 = 必然假 FAIL）。
+- **防闪/状态**：本模块**无**独立持久化键（不切视图，始终长在卡上），不进 `md_price_view`。
+- **闸门**：`node test_price_heatmap.js`（**126 PASS**）+ `test_price_unit_dedup.js`（17）+ `test_smoke_0908.js`（75）；改过 `@media`/grid 断点 → 仍须补**真实 Chrome** 探针（桌面 1280 与移动 390 各跑，断言：每张真卡 `.pc-spark` 存在、`polyline` 点数、卡内不溢出、`.pc-chg` 仍可见、5日文本与 `PRICE_HISTORY` 5日% 一致、电解钴**无** spark）。
+- **回退指纹**：① 桌面卡片视图下看不到走势线；② 5日百分比与「排行」周榜对不上（另算了一套）；③ 5日文本被塞进 `.pc-chg`（CSV「涨跌幅」列 / 预警解析被污染）；④ 电解钴等无日K品种出现空 spark 或报错；⑤ sparkline 溢出卡片右缘 / 顶到 `.pc-chg`；⑥ 移动端 sparkline 未落 row2（挤在第 1 行导致换行错乱）；⑦ `cardSpark()` 调用被挪到 `rankRender()` 之前或删掉（价格异步刷新后 spark 消失）；⑧ 窄屏探针在 `body[data-md-cat]` 未清除时报假 FAIL。
+
 ### 42.7 PWA 安装引导（§41，2026-09-12 两轮修复后定稿）
 
 **结构与声明（第一轮）**
@@ -2355,7 +2373,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 ### 42.11 怎么用（两句话）
 
-- **生成侧（06:00）**：重建完成后，按 §42.1–§42.8 的「必留指纹」逐项自检，缺任一即视为回退；形态类改动**先 Grep §42 再动手**，不要靠记忆。
+- **生成侧（06:00）**：重建完成后，按 §42.1–§42.8（**+ §42.17 卡片 sparkline**）的「必留指纹」逐项自检，缺任一即视为回退；形态类改动**先 Grep §42 再动手**，不要靠记忆。
 - **复核侧（08:00）**：按 §42.1–§42.10 逐项核对，命中任一「回退指纹」→ 就地修复 + bump build-version + 重跑 preflight；汇报时按 §42 的分组逐组给一句话结论 + §42.9 的测试通过数。
 
 ## §43 2026-09-13 矿权登记源扩充 + AI 搜滚动边界修复（build `20260913-1205`）

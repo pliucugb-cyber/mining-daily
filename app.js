@@ -6670,6 +6670,64 @@ function toggleTheme(){
     var slug=cell.getAttribute('data-slug');
     if(slug&&typeof pcChartOpen==='function')pcChartOpen(slug);
   });
+  /* 价格卡走势线点击 → 复用同一走势图弹窗 */
+  document.addEventListener('click',function(e){
+    var sp=e.target&&e.target.closest?e.target.closest('.pc-spark'):null;
+    if(!sp)return;
+    var slug=sp.getAttribute('data-slug');
+    if(slug&&typeof pcChartOpen==='function')pcChartOpen(slug);
+  });
+
+  /* 价格卡迷你走势线 + 近5日（方案A，2026-09-14）
+     纯前端派生：读 window.PRICE_HISTORY.series[slug].points 画近 15 日收盘折线；
+     「5日 \u00b1x.x%」复用 rankOf(s,'week')（与周榜口径同源，不另算）。
+     注入为 .price-card 的末子元素 .pc-spark（含 <svg> 与 .pc-5d 文本），
+     独立于 .pc-chg，CSV 导出 / 价格预警解析读到的 .pc-chg 文本不受影响。
+     缺日K（电解钴 slug 为空 / 无 series）或点数<2 -> 静默跳过，不污染卡片。 */
+  function cardSpark(){
+    IDS.forEach(function(id){
+      cards(id).forEach(function(card){
+        var prev=card.querySelector('.pc-spark');
+        if(prev)prev.parentNode.removeChild(prev);
+        var slug=card.getAttribute('data-slug')||'';
+        var s=pcSeries(slug);
+        if(!s||!s.points||s.points.length<2)return;
+        var pts=s.points.slice(-15).map(function(p){return Number(p[1]);}).filter(function(v){return typeof v==='number'&&!isNaN(v);});
+        if(pts.length<2)return;
+        var r5=rankOf(s,'week');
+        var up = r5 ? r5.pct>=0 : true;
+        var rgb = up ? '217,58,43' : '14,122,82';
+        var W=100, Hh=28, pad=3;
+        var mn=Math.min.apply(null,pts), mx=Math.max.apply(null,pts);
+        var span=(mx-mn)||1, n=pts.length;
+        var coords=pts.map(function(v,i){
+          var x = n>1 ? (i/(n-1))*W : W/2;
+          var y = Hh - pad - (v-mn)/span*(Hh-2*pad);
+          return x.toFixed(1)+','+y.toFixed(1);
+        }).join(' ');
+        var last=coords.split(' ').pop().split(',');
+        var lx=last[0], ly=last[1];
+        var area='M0,'+Hh+' L'+coords.split(' ').join(' L')+' L'+W+','+Hh+' Z';
+        var svg='<svg viewBox="0 0 '+W+' '+Hh+'" preserveAspectRatio="none" aria-hidden="true">'
+              + '<path d="'+area+'" fill="rgba('+rgb+',.10)" stroke="none"></path>'
+              + '<polyline points="'+coords+'" fill="none" stroke="rgb('+rgb+')" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></polyline>'
+              + '<circle cx="'+lx+'" cy="'+ly+'" r="1.8" fill="rgb('+rgb+')"></circle>'
+              + '</svg>';
+        var txt = r5 ? ('5\u65e5 '+(r5.pct>0?'+':'')+r5.pct.toFixed(2)+'%') : '5\u65e5 \u2014';
+        var cls = r5 ? (r5.pct>=0?'up':'down') : '';
+        var el=document.createElement('div');
+        el.className='pc-spark';
+        el.setAttribute('data-slug',slug);
+        el.setAttribute('title',(s.name||slug)+' \u8fd1'+pts.length+' \u65e5\u6536\u76d8 \u00b7 '+txt);
+        el.innerHTML=svg;
+        var lab=document.createElement('span');
+        lab.className='pc-5d'+(cls?' '+cls:'');
+        lab.textContent=txt;
+        el.appendChild(lab);
+        card.appendChild(el);
+      });
+    });
+  }
 
   function run(){
     try{
@@ -6681,6 +6739,7 @@ function toggleTheme(){
       if(hmView!=='card')setView(hmView);          // 恢复持久化视图
       hmRender();
       rankRender();
+      cardSpark();
       if(sortMode!=='default')setSort(sortMode);   // 价格异步刷新后保持当前排序
     }catch(err){ console.warn('priceEnhance:',err); }
   }
