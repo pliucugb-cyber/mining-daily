@@ -32,7 +32,7 @@ window.DIGEST_N=window.DIGEST_N||4;
 // 其后所有顶层语句都不执行 —— 包括 2285 行的初始化链（fetchHotNews/loadBrief/refresh）
 // 以及 2139/2793 行的 DIGEST_SRC / QA_MINERALS 等 var 赋值。
 // 表现就是用户看到的：静态内容（生成器写死的价格卡/新闻条目）都在，
-// 而要靠 JS 现算的今日要闻 / 热榜 / AI 检索全空、下拉框没有选项。
+// 而要靠 JS 现算的本期要闻 / 热榜 / AI 检索全空、下拉框没有选项。
 // 修法：① 声明提到文件最前，任何时点读到的都是合法初值（消除 TDZ）；
 //       ② 那个 IIFE 的即时分支改为 setTimeout 0（见该处注释），不再在求值期跑业务逻辑。
 let filterMode='none';
@@ -2127,7 +2127,7 @@ function briefMd(md){
 }
 // ---- 简报分节渲染 ----
 // 数据契约（morning_report.json）：brief_sections[] = 五节结构化（name/count/items[{t,u,s}]，空节不收录）。
-// 2026-09-12 二次修订：首版的「要点层 highlights + 高异动前置行」与下方「今日要闻」内容重复，
+// 2026-09-12 二次修订：首版的「要点层 highlights + 高异动前置行」与下方「本期要闻」内容重复，
 //   用户要求移除 → 前端不再渲染要点层（highlights 字段生成端仍产出，留待将来复用）。
 // brief_sections 缺失时回退到 report 的 markdown 渲染（历史 JSON / 老 SW 缓存仍可用）。
 function briefSectionsHtml(sections){
@@ -2173,7 +2173,7 @@ function renderBrief(d){
   if(sEl){
     // 2026-09-11 用户反馈：「今日收录 N 条」与侧栏「今日新增」口径不同（收录含移入会议专区
     //   与降级补录的旧闻），并列会让读者以为数据打架，故副标题不出总数。
-    // 2026-09-12 二次修订：要点层已移除（与「今日要闻」重复），副标题固定为「按分类摘要」。
+    // 2026-09-12 二次修订：要点层已移除（与「本期要闻」重复），副标题固定为「按分类摘要」。
     sEl.textContent='按分类摘要';
   }
   var main=document.getElementById('briefMain');
@@ -2182,7 +2182,7 @@ function renderBrief(d){
     var ri=body.indexOf('**风险提示：**');
     if(ri>=0)body=body.slice(0,ri).trim();
     var html='';
-    // 2026-09-12 二次修订：高异动前置行与要点层已移除（与下方「今日要闻」重复）。
+    // 2026-09-12 二次修订：高异动前置行与要点层已移除（与下方「本期要闻」重复）。
     //   有 brief_sections 走五节结构化渲染（节标题带条数、条目可点击）；否则回退 report 的 markdown。
     if(bsec.length){
       html+=briefSectionsHtml(bsec);
@@ -2200,7 +2200,7 @@ function renderBrief(d){
     }
   }
   setupBriefClamp();
-  // 「今日5件事」卡已移除（与下方「今日要闻」重复）；top_news 仍参与简报区显隐判断
+  // 「今日5件事」卡已移除（与下方「本期要闻」重复）；top_news 仍参与简报区显隐判断
   strip.hidden=false;
 }
 // 简报展开/折叠。这里有**两个独立开关**，不要混为一谈：
@@ -2385,7 +2385,7 @@ function renderHotNews(d){
   var body=document.getElementById('hotListBody');
   if(!body)return;
   var arr=(d&&Array.isArray(d.hot))?d.hot:[];
-  // 热榜与「今日要闻」互斥（同一条不重复出现）+ 跨源同事件去重；不再提前截断，整池保留供换一换轮换。
+  // 热榜与「本期要闻」互斥（同一条不重复出现）+ 跨源同事件去重；不再提前截断，整池保留供换一换轮换。
   if(arr.length){
     try{
       var dp=(typeof computeDigestPicks==='function')?(computeDigestPicks()||[]):[];
@@ -2539,7 +2539,7 @@ function fetchHotNews(){
       if(body)body.innerHTML='<li class="hotlist-empty">热榜加载失败，请稍后刷新</li>';
     });
 }
-// ===== 今日要闻摘要条（9-04 新增，纯前端：从全库挑当日关键信息，按来源权威×关键信息词打分）=====
+// ===== 本期要闻摘要条（9-04 新增，纯前端：从全库挑当日关键信息，按来源权威×关键信息词打分）=====
 // 2026-09-08 改造：
 //   ① 跨源同事件去重——同一新闻被多家网站报道（URL 不同、标题几乎一样）时只留分数最高的一条；
 //   ② 优先"当日发布"，不足再用"今日收录"补，并对非当日条目标注日期，
@@ -2551,7 +2551,7 @@ function mdHotCount(){ return (window.innerWidth<=768)?10:5; }
 (function(){
   var _t; window.addEventListener('resize',function(){ clearTimeout(_t); _t=setTimeout(function(){ if(__hotPool&&__hotPool.length){ renderHotPage(); } },200); });
 })();
-var DIGEST_N=4;   // 今日要闻条数
+var DIGEST_N=4;   // 本期要闻条数
 window.__digestPicks=null;   // 缓存要闻选中项，供热榜排除（两栏互斥不重复）
 
 // 标题归一化：只保留中英文与数字，去掉标点/空格/书名号，便于相似比较
@@ -6076,7 +6076,7 @@ else { setupNewsFilterBar(); setupExportButtons(); }
       });
       if(!picked.length) return;
       // 跨源去重：同一场会议常被多家媒体报道，标题高度相似只留最早一条
-      // （与今日要闻 mdPickDistinct 同一套相似度，复用 window.mdTitleSim）
+      // （与本期要闻 mdPickDistinct 同一套相似度，复用 window.mdTitleSim）
       var sim=(typeof window.mdTitleSim==='function')?window.mdTitleSim:null;
       if(sim){
         var uniq=[];
