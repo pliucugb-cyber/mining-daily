@@ -2,7 +2,7 @@
   "id": "/mining-daily/",
   "name": "矿业资讯速览",
   "short_name": "矿业资讯",
-  "description": "每日矿业新闻与价格摘要，离线也能看。",
+  "description": "每日矿业资讯与价格摘要，离线也能看。",
   "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",
