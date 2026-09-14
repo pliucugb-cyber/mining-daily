@@ -1,0 +1,22 @@
+[
+  {
+    "date": "2026-09-14",
+    "days": [
+      "2026-09-12",
+      "2026-09-13",
+      "2026-09-14"
+    ],
+    "total": 36,
+    "foreign": 5,
+    "with_source": 31,
+    "no_source": 5,
+    "initial_pass": 31,
+    "initial_fail": 0,
+    "initial_pass_rate": 100.0,
+    "auto": 31,
+    "review": 5,
+    "dropped": 0,
+    "repaired_to_auto": 0,
+    "avg_summary_len": 239.9
+  }
+]
