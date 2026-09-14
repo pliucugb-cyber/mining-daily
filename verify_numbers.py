@@ -43,7 +43,7 @@ _UNIT_LIST = [
     '万吨/年', '万吨', '吨', '千克', '公斤', '克', '公里', '千米', '万盎司', '盎司', '米', '吨/年',
     '条', '项', '种', '个', '倍', '周', '年', '月', '日',
     '％', '%', '万', '亿', '十万', '百万',
-    'Billion', 'billion', 'Million', 'million', 'B', 'm',
+    'Billion', 'billion', 'Million', 'million', 'B', 'M', 'm',
 ]
 _UNIT_ALT = '|'.join(sorted(set(_UNIT_LIST), key=len, reverse=True))
 _NUM_RE = re.compile(r'([$£€]?\d[\d,]*(?:\.\d+)?)\s*(%s)?' % _UNIT_ALT)
@@ -67,7 +67,7 @@ def extract_numbers(text):
 _FACTOR = {
     '十亿': 10, 'Billion': 10, 'billion': 10, 'B': 10,
     '亿': 1,
-    '百万': 0.01, 'Million': 0.01, 'million': 0.01,
+    '百万': 0.01, 'Million': 0.01, 'million': 0.01, 'M': 0.01,
     '万': 0.0001,
 }
 
@@ -167,14 +167,14 @@ def load_source_map(report, data_dir='data'):
 
 
 # ---------- 5. 入口：被 generate_*.py 调用 ----------
-def verify_new_items(new_items, report, data_dir='data', strict=False):
+def verify_new_items(new_items, report, data_dir='data', strict=False, src_map_override=None):
     """
     new_items: [(cat, it_html), ...]（与 generate_*.py 中结构一致）
     返回 [(url, [未落地原始串...]), ...]；无基准的条目不产生条目（只打印 skip）。
     strict=True 且存在未落地 -> 抛 AssertionError（生产守门）。
     """
     from generate_common import item_url  # 复用，避免重复实现
-    src_map = load_source_map(report, data_dir)
+    src_map = src_map_override if src_map_override is not None else load_source_map(report, data_dir)
     issues = []
     skipped = 0
     for _cat, it in new_items:
