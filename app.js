@@ -3001,7 +3001,7 @@ function mdMobileTopTabs(){
   var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期'],['meeting','会议']];
   // 2026-09-12 检索统一（用户定夺）：顶栏不再注入搜索按钮 —— 原 #mdSearchBtn 恒不可见（见上方 mdOpenSearch 注释），
   //   是死控件。检索能力统一收进底部「AI 搜」tab 打开的面板，顶栏保持「品牌名 + 日期」的干净两栏。
-  var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业新闻日报</span><span class="md-date">'+dateTxt+'</span></div>'
+  var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业资讯速览</span><span class="md-date">'+dateTxt+'</span></div>'
     +'<button type="button" class="md-search-pill" aria-label="搜索矿种、新闻、AI 问答"><span class="sp-ico">🔍</span><span>搜索矿种、新闻、AI 问答</span></button>'
     +'<div class="md-cat-bar" role="tablist" aria-label="内容分类">';
   for(var i=0;i<cats.length;i++){ html+='<button class="mctab" role="tab" data-cat="'+cats[i][0]+'">'+cats[i][1]+'</button>'; }
@@ -3068,7 +3068,7 @@ function mdQaBack(){ try{ qaFloatClose(); }catch(e){} var _t=mdQaReturn||mdLastC
 window.qaFloatBack=mdQaBack;
   window.mdActivateTab=activateTab;
   // 2026-09-11 优化③：非首页隐藏分类栏时，品牌行显示当前 tab 名给位置感
-  var MD_BRAND_NAMES={'home':'⛏️ 矿业新闻日报','price':'价格','rights':'矿权','qa':'AI 搜','mine':'我的'};
+  var MD_BRAND_NAMES={'home':'⛏️ 矿业资讯速览','price':'价格','rights':'矿权','qa':'AI 搜','mine':'我的'};
   function mdSetBrandForTab(go){ var brand=document.querySelector('#mdTop .md-brand'); if(brand) brand.textContent=MD_BRAND_NAMES[go]||MD_BRAND_NAMES.home; }
   // 统一 tab 切换逻辑（点击 / 初始化恢复共用）；autoOpen 控制问/我的浮层是否在「恢复」时自动展开
   function activateTab(go, autoOpen){
@@ -4937,7 +4937,7 @@ function qaExportHistory(btn){
   try{
     var body=document.getElementById('qaFloatBody');if(!body)return;
     var msgs=body.querySelectorAll('.qa-msg');
-    var lines=['=== 矿业新闻日报 · 问答导出 ===','时间：'+new Date().toLocaleString('zh-CN'),''];
+    var lines=['=== 矿业资讯速览 · 问答导出 ===','时间：'+new Date().toLocaleString('zh-CN'),''];
     msgs.forEach(function(el){
       var role=el.classList.contains('user')?'【问】':'【答】';
       var raw=el.dataset.raw||'';
@@ -5617,7 +5617,7 @@ function qaDeepseekCall(q,ctxRaw,msg,btn,conv,broad,dateIntent,rangeIntent){
   // 2026-09-11：把「本次条目实际日期范围」明确交给模型，禁止它自己编时间窗
   var _dsDates=(ctx||[]).map(function(c){return c&&c.d;}).filter(Boolean).sort();
   var _dsWin=_dsDates.length?(_dsDates[0]+' 至 '+_dsDates[_dsDates.length-1]):'';
-  var system=('你是资深矿业行业分析师，服务于「矿业新闻日报」产品。'
+  var system=('你是资深矿业行业分析师，服务于「矿业资讯速览」产品。'
     +'回答用中文、简洁专业、结构化呈现（优先用要点列表或小标题，避免一大段文字）。'
     +'若提供了相关新闻条目，请先对这些条目进行系统整理和归纳，再按主题/维度给出综合性回答；不要简单逐条复述每条新闻的标题或全文。'
     +'请严格只基于这些条目作答；不要引用、不要列出任何与问题无直接关联的条目；若条目与问题关联度不足，直接忽略即可，不要在回答正文中以"补充说明""其余条目""其他新闻"等形式解释为何无关。'
@@ -5978,7 +5978,7 @@ function exportPriceCsv(){
       rows.push([market, variety, tag, val, unit, chg]);
     });
   });
-  downloadCsv('矿业日报_金属价格_'+csvDate()+'.csv', rows);
+  downloadCsv('矿业资讯_金属价格_'+csvDate()+'.csv', rows);
 }
 function exportRightsCsv(){
   // 2026-09-08 修正：原实现从 DOM 表格逐行读，而表格受 RIGHTS_COLLAPSE_AT 折叠限制
@@ -6004,7 +6004,7 @@ function exportRightsCsv(){
     alert('矿权数据未加载，请刷新页面后重试');
   }
   if(rows.length<=1){ alert('当前筛选条件下没有可导出的矿权数据'); return; }
-  downloadCsv('矿业日报_矿权出让_'+csvDate()+'.csv', rows);
+  downloadCsv('矿业资讯_矿权出让_'+csvDate()+'.csv', rows);
 }
 function setupExportButtons(){
   var head=document.querySelector('.price-strip-head');
