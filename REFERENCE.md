@@ -2276,7 +2276,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **网格改动**：卡片网格由 4 轨扩到 5 轨容纳 sparkline —— 默认卡 `grid-template-columns:minmax(72px,1fr) auto auto 1fr 66px`；同单位卡 `:has(.pc-unit-same)` 为 `minmax(72px,1fr) auto 1fr 66px`。`.pc-name` 补 `text-overflow:ellipsis`（宽名可收缩）。
 - **移动端（≤768px）**：`.pc-spark` 落 **row2 整行**（`grid-column:1/-1`、横向布局：线在左、`5日`在右），上方一条 `1px dashed var(--line-1)` 分隔。⚠️ 真机探针取证前**必须先 `document.body.removeAttribute('data-md-cat')`**（§42.15 同坑：移动分类过滤会整段藏 `#priceStrip`，几何恒 0 = 必然假 FAIL）。
 - **防闪/状态**：本模块**无**独立持久化键（不切视图，始终长在卡上），不进 `md_price_view`。
-- **闸门**：`node test_price_heatmap.js`（**126 PASS**）+ `test_price_unit_dedup.js`（17）+ `test_smoke_0908.js`（75）；改过 `@media`/grid 断点 → 仍须补**真实 Chrome** 探针（桌面 1280 与移动 390 各跑，断言：每张真卡 `.pc-spark` 存在、`polyline` 点数、卡内不溢出、`.pc-chg` 仍可见、5日文本与 `PRICE_HISTORY` 5日% 一致、电解钴**无** spark）。
+- **闸门**：`node test_price_heatmap.js`（**126 PASS**）+ `test_price_unit_dedup.js`（17）+ `test_smoke_0908.js`（76，以 §42.9 为准）；改过 `@media`/grid 断点 → 仍须补**真实 Chrome** 探针（桌面 1280 与移动 390 各跑，断言：每张真卡 `.pc-spark` 存在、`polyline` 点数、卡内不溢出、`.pc-chg` 仍可见、5日文本与 `PRICE_HISTORY` 5日% 一致、电解钴**无** spark）。
 - **回退指纹**：① 桌面卡片视图下看不到走势线；② 5日百分比与「排行」周榜对不上（另算了一套）；③ 5日文本被塞进 `.pc-chg`（CSV「涨跌幅」列 / 预警解析被污染）；④ 电解钴等无日K品种出现空 spark 或报错；⑤ sparkline 溢出卡片右缘 / 顶到 `.pc-chg`；⑥ 移动端 sparkline 未落 row2（挤在第 1 行导致换行错乱）；⑦ `cardSpark()` 调用被挪到 `rankRender()` 之前或删掉（价格异步刷新后 spark 消失）；⑧ 窄屏探针在 `body[data-md-cat]` 未清除时报假 FAIL。
 
 ### 42.18 版本回探自愈（内联，2026-09-14）
@@ -2365,7 +2365,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
   - **禁止**改叫「重点要闻 / 精选要闻」：会与右侧「矿业热榜」抢"重要性"语义 —— 要闻判据是**来源权威**（`DIGEST_SRC`：自然资源部 30 / 新华社 26 / 工信部 24…），热榜判据是**热词热度**（`HOT_KW`：突破 / 重大 / 战略 / 首次），两者关键词表本就高度重叠，标题再都喊"重要"读者无法区分。两栏**条目**已由 `renderHotNews` 调 `computeDigestPicks()` **强制互斥**（同一条不重复出现），改的是"名字"不是"内容"。
   - **回退指纹**：`.digest-badge` 文本为「今日」、或 `MD_REGION_LABEL.renderDigest` 为「今日要闻」 ⇒ 回退（改名后 bump build-version 重跑 preflight）。前置闸门 `preflight_check.check_digest_badge_wording`（只喂 `index.html`）已锁。
 - **站点标题**须为「矿业资讯速览 · YYYY-MM-DD」（§39；`deploy_pages.py` 会自动规范化，但生成脚本不得改回纯日期）。
-- **其他文案**：头部无副标题；往期标题「滚动保留最近30天」；底部两行数据来源 / 国际来源照旧；口径句「能源与黑色不收；铁矿仅留全球供需与价格」；「数据更新时间」由前端 `applyDataUpdatedAt()` 读 `NEWS_DATA.updated`（**勿写死**）；访客统计已迁百度统计（tongji.baidu.com 后台查看，页脚仅 `baiduStatNote` 一行接入说明、不回显实时数字）；标注精简（只 NEW / 战略 / 重大，`tag-chip` ≤2）。
+- **其他文案**：头部无副标题；往期标题「滚动保留最近30天」；底部两行数据来源 / 国际来源照旧；口径句「能源与黑色不收；铁矿仅留全球供需与价格」；「数据更新时间」由前端 `applyDataUpdatedAt()` 读 `NEWS_DATA.updated`（**勿写死**）；访客统计已迁百度统计（tongji.baidu.com 后台查看，页脚仅 `baiduStatNote` 一行接入说明、不回显实时数字）；**站点 ID ＝ `d28d60ab8b38f6641816d109448723ff`**（2026-09-14 修正：此前误装 `89ca069c57313b66a3dafc669b4cf581`——那是另一站点条目的 ID，导致 tongji 后台「首页代码状态＝代码安装错误」且实时访客恒 0，而站内 hm.js 200 / 信标 200 全部正常。换 ID 必须同步改三处：`index.html` 埋点、`preflight_check.BAIDU_SITE_ID`、`test_smoke_0908.js` 断言）；标注精简（只 NEW / 战略 / 重大，`tag-chip` ≤2）。
 - **行情口径**：价格两行 ＝ `priceCardsShfe`（国内 10 卡）+ `priceCardsLme`（LME 6 卡，slug `lcpt` / `lalt` / `lldt` / `lznt` / `lnkt` / `ltnt`，美元/吨），**严禁同列矩阵**；数值**唯一来源** `lme_data.json` / `lme-data.js`（严禁手抄；某品种 null → 该卡 `value="--"` `chg="暂无数据"` `class="price-card flat"`）；前端 `renderLmePrices()` 只读 `LME_DATA` 不做跨源覆盖；⚠️**走势图末点＝昨天（最近已收盘日）是正确的**，禁手改 `price_history_detail.json` / `price-history.js`、禁回填盘中价。
 
 ### 42.9 测试基线与期望通过数
@@ -2375,7 +2375,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | 命令 | 期望 | 覆盖 |
 |---|---|---|
 | `node test_brief_layers.js` | **91** | 简报分层渲染（jsdom；含裁剪态持久化 §40） |
-| `node test_smoke_0908.js` | **75** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1） |
+| `node test_smoke_0908.js` | **76** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1；**2026-09-14 新增「百度统计 ID 与后台逐字一致」+1**） |
 | `node test_mobile_ux_batch.js` | **206** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13） |
 | `node test_qa_features.js` | **61** | AI 搜核心函数 / 流式接线 / 语音（含「音量条已删、调节柄已换」） |
 | `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |

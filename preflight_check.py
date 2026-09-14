@@ -21,6 +21,10 @@ preflight_check.py — 矿业资讯速览自动化前置/回归健康检查。
      <title> 从「矿业新闻日报 2026-09-04」写成了纯日期，站名丢失且无人察觉。
      约定见 REFERENCE.md §39；deploy_pages.sync_site_title() 是同一约定的自愈兜底。
 
+  9. 百度统计站点 ID 必须与 tongji 后台「代码获取」给出的 32 位 ID 逐字一致
+     ——2026-09-14 事故：页面装的是另一站点条目的 ID，后台「代码安装错误」且数据恒 0；
+     可站内一切正常（hm.js 200 / 信标 200 均真机实测通过），极难自查。约定见 REFERENCE.md §42.8。
+
 退出码（2026-09 改）：
   **默认** 任一检查失败 → exit 1。旧行为是「默认只报告、exit 0」，
   失败也返回 0 会让自动化「看起来通过」，属于静默失败，已修正。
@@ -48,6 +52,11 @@ log = get_logger('preflight')
 ROOT = Path(__file__).parent
 HTML = ROOT / 'index.html'
 SITE_NAME = '矿业资讯速览'   # 站点名（浏览器标签页标题）——约定见 REFERENCE.md §39
+# 百度统计站点 ID（tongji.baidu.com → 使用设置 → 网站列表 → 代码获取）。
+# 2026-09-14 事故：页面里装的是另一站点条目的 ID，导致后台「代码安装错误」+ 恒 0 数据。
+# 换 ID 必须同步改：index.html 埋点、本常量、test_smoke_0908.js 断言（三处）。
+BAIDU_SITE_ID = 'd28d60ab8b38f6641816d109448723ff'
+
 STATUS = ROOT / '.preflight_status.json'
 
 
@@ -283,6 +292,33 @@ def _find_node():
     return None
 
 
+def check_baidu_stat_id(text):
+    """百度统计站点 ID 必须与 tongji 后台「代码获取」给出的 ID 逐字一致。
+
+    2026-09-14 定因：页面里装的是 89ca069c…（另一个站点条目的 ID），而本账号
+    下 pliucugb-cyber.github.io 的 ID 是 7d2d850a… —— tongji 后台「首页代码状态」
+    显示「代码安装错误」、实时访客恒为 0，可页面侧一切正常（hm.js 200、信标
+    hm.gif 200 均已真机实测通过）。正是百度官方排障文档所说的「装错了代码」。
+    这里做成硬闸门，防止再次写错 ID 而无人察觉。
+
+    只扫 index.html（app.js 内没有埋点）。
+    """
+    findings = []
+    m = re.search(r'hm\.baidu\.com/hm\.js\?([0-9a-f]{32})', text)
+    if not m:
+        findings.append('❌ 找不到百度统计代码（hm.baidu.com/hm.js?<32位ID>）'
+                        '——页脚计数已迁百度统计，缺失即等于无法计量访问')
+        return False, findings
+    got = m.group(1)
+    if got != BAIDU_SITE_ID:
+        findings.append('❌ 百度统计 ID 不符：页面=%s 后台应为=%s'
+                        '（装错代码 ⇒ 后台恒 0 数据 + 显示「代码安装错误」，'
+                        '见 REFERENCE.md §42.8）' % (got, BAIDU_SITE_ID))
+        return False, findings
+    findings.append('✅ 百度统计 ID 正常：%s' % got)
+    return True, findings
+
+
 def check_sw_js(text):
     """sw.js 语法校验 + CACHE_NAME 与 build-version 一致性（2026-09-10 事故新增）。
 
@@ -413,6 +449,7 @@ def main():
         ('价格单位去重', check_price_unit_dedup(html_text)),   # 只扫 index.html，避免 app.js 干扰计数
         ('build-version', check_build_version(text)),
         ('站点标题', check_site_title(html_text)),
+        ('百度统计 ID', check_baidu_stat_id(html_text)),
         ('sw.js 语法', check_sw_js(text)),
         ('div 收支', check_div_balance(html_text)),
     ]

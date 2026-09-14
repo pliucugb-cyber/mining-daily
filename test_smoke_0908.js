@@ -349,6 +349,7 @@ setTimeout(() => {
   } catch (e) { check('⑩ 区块标题条数 = 今日区实际条数', false, e.message); }
   // 百度统计接入（2026-09-13 由 GoatCounter 迁移）：数字在 tongji.baidu.com 后台看，页脚不回显实时数字
   check('⑩ 已接入百度统计（hm.baidu.com/hm.js 存在于源码）', /hm\.baidu\.com\/hm\.js/.test(html));
+  check('⑩ 百度统计站点 ID 与 tongji 后台逐字一致（防装错代码）', /hm\.baidu\.com\/hm\.js\?d28d60ab8b38f6641816d109448723ff/.test(html));
   check('⑩ 旧 GoatCounter 脚本已清除（无 gc.zgo.at / goatcounter.com）', !/gc\.zgo\.at|goatcounter\.com/.test(html));
   check('⑩ 矿权区标题不再自称「结构化卡片」', !/结构化卡片/.test((doc.getElementById('rightsSection') || {}).textContent || ''));
 
