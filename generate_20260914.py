@@ -295,6 +295,19 @@ new_items = unique_new
 
 merge_seq = [x for x in merge_seq if item_url(x[1]) not in new_seen_url]
 merge_seq = dedup_same_event(merge_seq)
+
+# ============ 3.6 数字落地校验（2026-09-14 新增，复用 verify_numbers） ============
+# 每条摘要的数字须能在源文（候选池/月库）找到，防 LLM 抄错数字（如 113米看成别的）。
+# 候选池未落盘或未开 --fetch-detail 时源文基准为空 -> 自动 skip（不阻断生成）。
+# 生产守门：置 VERIFY_NUMBERS_STRICT=1 时未落地即抛异常（CI / 上线前卡点）。
+try:
+    from verify_numbers import verify_new_items
+    _num_issues = verify_new_items(new_items, REPORT,
+                                   strict=os.environ.get('VERIFY_NUMBERS_STRICT') == '1')
+    if _num_issues:
+        print('[num-warn] 共 %d 条摘要存在数字未在源文找到，请人工核对' % len(_num_issues))
+except Exception as _e:
+    print('[verify_numbers] 跳过: %s' % _e)
 _new_titles = [item_title(it) for _c, it in new_items]
 if _new_titles:
     merge_seq = [x for x in merge_seq
