@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260914-1130" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260914-1500" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -1452,19 +1452,31 @@ body.dark #priceCardsLme{background:rgba(255,255,255,.04)}
    与分组不同的单位（上海金 元/克、白银 元/千克）必须保留，否则会被误读成 /吨。
    注意：只 CSS 隐藏，DOM 文本保留 —— 价格 CSV 导出与预警解析仍读 .pc-unit。 */
 .pc-unit-same{display:none}
-/* 单位隐藏后腾出的那一列收窄，把宽度让给数值与涨跌列 */
-.price-card:has(.pc-unit-same){grid-template-columns:minmax(72px,1fr) auto 0 1fr}
-@media(max-width:768px){.price-card:has(.pc-unit-same){grid-template-columns:minmax(48px,1fr) auto 0 1fr}}
-.price-card{display:grid;grid-template-columns:minmax(72px,1fr) auto auto 1fr;align-items:baseline;gap:0 var(--s2);min-width:0;padding:var(--s2) var(--s2) var(--s2) var(--s3);background:transparent;border:0;border-bottom:1px solid var(--line-1);border-radius:0;position:relative}
+/* 2026-09-14 修复（严重缺陷）：display:none 的元素不参与网格自动排列，
+   单位被隐藏后只剩 name/value/chg 三个框；原 `auto 0 1fr` 里那条 0px 的列
+   会把 .pc-chg 吞进去 —— 涨跌幅文字在 DOM 里、宽度却是 0（overflow:hidden），
+   于是 16 张卡里 14 张的涨跌幅看不见（沪铜 108,990 后大片空白）。
+   现改为 **3 轨**（隐藏的单位不占轨）。异单位卡（上海金 元/克、白银 元/千克）
+   不匹配 :has()，仍走默认 4 列 —— 这两张原本就是唯一能看见涨跌的卡。 */
+.price-card:has(.pc-unit-same){grid-template-columns:minmax(72px,1fr) auto 1fr 66px}
+@media(max-width:768px){.price-card:has(.pc-unit-same){grid-template-columns:minmax(48px,1fr) auto 1fr}}
+.price-card{display:grid;grid-template-columns:minmax(72px,1fr) auto auto 1fr 66px;align-items:baseline;gap:0 var(--s2);min-width:0;padding:var(--s2) var(--s2) var(--s2) var(--s3);background:transparent;border:0;border-bottom:1px solid var(--line-1);border-radius:0;position:relative}
 /* 涨跌标识：顶部 3px 横条 -> 左侧 3px 竖条 */
 .price-card::before{content:'';position:absolute;top:2px;left:0;right:auto;bottom:2px;width:3px;height:auto;background:var(--ink-300);border-radius:2px}
 .price-card.up::before{background:var(--up)}
 .price-card.down::before{background:var(--down)}
-.pc-name{display:flex;align-items:baseline;gap:var(--s1);justify-content:flex-start;font-weight:var(--fw-medium);white-space:nowrap;overflow:hidden;min-width:0}
+.pc-name{display:flex;align-items:baseline;gap:var(--s1);justify-content:flex-start;font-weight:var(--fw-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .pc-name .pc-tag{margin-left:0;flex-shrink:0}
 .pc-value{margin-top:0;font-size: var(--fs-h3);font-weight:var(--fw-semibold);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .pc-unit{margin-top:0;white-space:nowrap}
 .pc-chg{margin-top:0;text-align:right;font-weight:var(--fw-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+/* 价格卡迷你走势线 + 近5日（方案A，2026-09-14）：纯前端派生，独立于 .pc-chg，
+   不污染 CSV 导出 / 价格预警解析；缺日K（电解钴）静默跳过。 */
+.pc-spark{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;align-self:center;min-width:0;cursor:pointer}
+.pc-spark svg{display:block;width:100%;height:28px;overflow:visible}
+.pc-5d{font-size:10px;font-weight:var(--fw-medium);white-space:nowrap;line-height:1.1;color:var(--ink-500);font-variant-numeric:tabular-nums}
+.pc-5d.up{color:var(--up)}
+.pc-5d.down{color:var(--down)}
 /* 紧凑行内不做抬升与浮层，改用底色反馈 */
 .price-card[data-slug]:hover,.price-card[data-slug]:focus-visible{background:var(--surface-2);transform:none;box-shadow:none;border-color:transparent}
 .price-card[data-slug]:hover::after{display:none}
@@ -1474,6 +1486,10 @@ body.dark .price-card[data-slug]:hover{background:var(--surface-2)}
   .price-strip{padding:var(--s3) var(--s3) var(--s2)}
   .price-cards{grid-template-columns:1fr;gap:0}
   .price-card{grid-template-columns:minmax(48px,1fr) auto auto 1fr;gap:0 var(--s1);padding:var(--s2) 0 var(--s2) var(--s3)}
+  .price-card:has(.pc-unit-same){grid-template-columns:minmax(48px,1fr) auto 1fr}
+  .pc-spark{grid-column:1/-1;flex-direction:row;align-items:center;gap:var(--s2);margin-top:var(--s1);padding-top:var(--s1);border-top:1px dashed var(--line-1)}
+  .pc-spark svg{flex:1 1 auto;width:auto;height:26px}
+  .pc-5d{font-size:11px}
 }
 /* ===== 价格区增强（2026-09-08）：异动排行条 / 昨数据角标 / 按涨跌排序 / 热榜热度条 =====
    角标与名次均用 CSS 伪元素 + 属性渲染，不进 textContent，避免污染价格 CSV 导出与预警解析。 */
@@ -2679,7 +2695,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <script src="news-data.js?v=0456d8c8" defer></script>
 <script src="lme-data.js?v=a68ce1b3" defer></script>
 <script src="price-history.js?v=5ae8ef0f" defer></script>
-<script src="app.js?v=b2fd3978" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=f13fbc04" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
