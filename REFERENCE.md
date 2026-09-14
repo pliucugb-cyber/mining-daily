@@ -2302,7 +2302,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | 命令 | 期望 | 覆盖 |
 |---|---|---|
 | `node test_brief_layers.js` | **91** | 简报分层渲染（jsdom；含裁剪态持久化 §40） |
-| `node test_smoke_0908.js` | **76** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2） |
+| `node test_smoke_0908.js` | **75** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1） |
 | `node test_mobile_ux_batch.js` | **206** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13） |
 | `node test_qa_features.js` | **61** | AI 搜核心函数 / 流式接线 / 语音（含「音量条已删、调节柄已换」） |
 | `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |
@@ -2316,7 +2316,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `node test_rights_register.js` | **11 PASS** | 矿权登记结果前端渲染（jsdom）：register 分支展示 矿种/面积/有效期/权利人 + 发证机关（非满屏「—」）、与交易卡片共存、金额 pill 条数==行数、method=登记 筛选、矿种子串命中 |
 | `PY test_price_history_unclosed.py` | **0 失败** | 走势图末点确有已收盘数据 |
 | `node test_data_integrity.js` | 锁卡片值/方向 == `lme_data.json` | 行情口径 |
-| `%TEMP%\md_rvprobe.py` | **11 用例 / 76 断言** | 真机（真实 Chrome）响应式与形态探针 |
+| `%TEMP%\md_rvprobe.py` | **11 用例 / 83 断言** | 真机（真实 Chrome）响应式与形态探针 |
 
 - **涉及 `app.js` / `index.html` 的 AI 搜面板、「我的」面板、收藏·浏览记录、简报** → 必跑前三项 + 探针。
 - **涉及价格区渲染 / `pc-unit` / 分组标题 / 生成脚本的价格段** → 必跑 `node test_price_unit_dedup.js` + `PY preflight_check.py`（含 `check_price_unit_dedup`）。
