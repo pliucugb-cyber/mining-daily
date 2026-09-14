@@ -16,7 +16,7 @@ import urllib.error
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from bprime import config
 
-_SYSTEM = ("你是矿业新闻日报的中文编辑。读取给定信源原文，撰写 100-200 字中文摘要："
+_SYSTEM = ("你是矿业资讯速览的中文编辑。读取给定信源原文，撰写 100-200 字中文摘要："
            "只陈述事实、保留关键数字与单位、不编造、不添加原文没有的信息。"
            "境外源须中文意译、保留英文原题、注明币种。输出纯摘要文本，不要解释、不要标题。")
 

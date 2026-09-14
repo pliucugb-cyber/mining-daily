@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-aliyun-fc/index.py —— 矿业新闻日报 · 轻后端（仅 /api/qa + /api/health）
+aliyun-fc/index.py —— 矿业资讯速览 · 轻后端（仅 /api/qa + /api/health）
 部署目标：阿里云函数计算 FC（Python 3.10 HTTP 触发器）
 
 设计目标：
@@ -90,7 +90,7 @@ def keyword_fallback(q):
 
 # ── 调用 DeepSeek 生成答案（标准库 urllib，无第三方依赖）──
 def ask_deepseek(api_key, question, context):
-    system = ('你是资深矿业行业分析师，服务于「矿业新闻日报」产品。'
+    system = ('你是资深矿业行业分析师，服务于「矿业资讯速览」产品。'
               '回答要简洁专业、不啰嗦、用中文。'
               '如果提供了相关新闻条目，请自然引用并注明来源与日期；'
               '若没有相关新闻，请明确说明这是基于通用知识的回答，并建议用户查证官方信息。'

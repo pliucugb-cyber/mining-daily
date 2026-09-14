@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-生成 2026-09-14 矿业新闻日报 index.html
+生成 2026-09-14 矿业资讯速览 index.html
 - 09-13 的「今日新增」滚入「往期内容」（去 NEW 标记、按同类目合并）
 - 30 天窗口（ARCHIVE_DAYS=30，cutoff=2026-08-16）回补历史条目
 - 换入 09-14 抓取的最新条目（is-new + NEW），更新计数
@@ -26,7 +26,7 @@ from generate_common import (
 from functools import partial
 
 
-SITE_NAME = '矿业新闻日报'   # 站点名（浏览器标签页标题）——约定见 REFERENCE.md §39
+SITE_NAME = '矿业资讯速览'   # 站点名（浏览器标签页标题）——约定见 REFERENCE.md §39
 SRC = 'index.html'
 with open(SRC, encoding='utf-8') as f:
     html = f.read()
@@ -40,7 +40,7 @@ item_after_cutoff = partial(_item_after_cutoff, report_dt=REPORT_DT, cutoff_dt=C
 DATA_ASOF = '09-09'   # 电解钴：SMM 无连续日K，保留最近一次人工值
 
 # ============ 1. 标题 / 日期 / build-version ============
-# 站点名固定「矿业新闻日报」，标题统一写成「矿业新闻日报 · YYYY-MM-DD」。
+# 站点名固定「矿业资讯速览」，标题统一写成「矿业资讯速览 · YYYY-MM-DD」。
 # 用宽松匹配吃掉落点前的任意旧标题，可覆盖三种历史写法：
 #   纯日期（2026-09-07~09-12，站名丢失）／「站名 日期」（09-04~09-06）／「站名 · 日期」。
 # 2026-09-12 修复：此前 09-07 起写成纯日期，浏览器标签页只剩一个光秃秃的日期，看不出是什么站。

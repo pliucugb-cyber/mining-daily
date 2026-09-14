@@ -14,7 +14,7 @@
 此后每天生成都沿用这个写法，没人察觉。
 
 所以本轮不只是把标题改回来，而是把它做成**有约束的约定**（REFERENCE.md §39）：
-  ① index.html 静态标题 = 「矿业新闻日报 · YYYY-MM-DD」；
+  ① index.html 静态标题 = 「矿业资讯速览 · YYYY-MM-DD」；
   ② deploy_pages.sync_site_title() 在每次部署前按 build-version **自动派生**标题
      （与 sw.js 的 CACHE_NAME 同源）。这是关键：生成脚本每天新写、写什么标题不可控，
      只有落点和 build-version 绑定的自愈才不依赖任何脚本/prompt 的自觉；
@@ -40,7 +40,7 @@ sys.path.insert(0, ROOT)
 import deploy_pages as dp          # noqa: E402
 import preflight_check as pf       # noqa: E402
 
-SITE = '矿业新闻日报'
+SITE = '矿业资讯速览'
 PASS = 0
 FAIL = 0
 

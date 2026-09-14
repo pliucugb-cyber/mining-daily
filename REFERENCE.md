@@ -1,4 +1,4 @@
-# REFERENCE.md — 矿业日报自动化 查阅类规则外置
+# REFERENCE.md — 矿业资讯速览自动化 查阅类规则外置
 
 > 用途：三套自动化 prompt 已瘦身为「只保留红线 + 指向本文件」。agent 在涉及**白名单核验 / 7 桶分类 / 低价值公告剔除 / 境外信源硬门槛**时，用 Grep 查本文件对应节，不靠记忆。
 > 红线（互斥锁协议、LME 口径、矿权双视图、前端自愈引信）**不在此文件**，仍在各自动化 prompt 内，须逐字遵守。
@@ -1572,7 +1572,7 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 - 折叠态是**全局一份**（手机/电脑共用），未按端区分；也未按天重置（用户选的是「永久记住」）。
 - 同区另一个开关「展开全部（N 条）」的高度裁剪态未持久化——那是另一层开关（内容裁剪 vs 整块收起），按需再说。
 
-## §39 2026-09-12 站点标题（浏览器标签页）定为「矿业新闻日报 · YYYY-MM-DD」
+## §39 2026-09-12 站点标题（浏览器标签页）定为「矿业资讯速览 · YYYY-MM-DD」（2026-09-14 站名变更，见 39.11）
 
 ### 39.1 起因
 
@@ -1590,9 +1590,9 @@ qadesktop rect 440x560 handles=8 head=44 foot=63     （桌面仍是可拖拽卡
 
 ### 39.3 现行约定（**硬约定，不得回退**）
 
-标签页标题恒为「**矿业新闻日报 · YYYY-MM-DD**」（站名 + 中点 + 日报日期）：
+标签页标题恒为「**矿业资讯速览 · YYYY-MM-DD**」（站名 + 中点 + 内容日期）：
 
-- 站名 `SITE_NAME` = `矿业新闻日报`，**不带 ⛏️**（标签页/书签更干净；页面内标题仍留 ⛏️）。
+- 站名 `SITE_NAME` = `矿业资讯速览`（2026-09-14 起；此前 `矿业新闻日报`，见 39.11），**不带 ⛏️**（标签页/书签更干净；页面内标题仍留 ⛏️）。
 - 全页只允许一个 `<title>`，即 `index.html` 里静态那一个（`app.js` 图表模板里的
   `<title>` 是 SVG tooltip，与标签页无关）。
 - 日期取**日报日期**，与 `build-version`、头部 `.date-badge` 同源，**不是本地当前日期**。
@@ -1642,10 +1642,10 @@ new = re.sub(r'<title>[^<]*</title>', lambda _m: '<title>%s</title>' % want, src
 
 ### 39.6 红线（08:00 复核不得判为回退）
 
-- `<title>` 必须是「矿业新闻日报 · <当天日期>」；**只剩纯日期即 09-07 的回退**，
+- `<title>` 必须是「矿业资讯速览 · <当天日期>」；**只剩纯日期即 09-07 的回退**，
   须修当日 generate 脚本 + bump build-version 后重跑 preflight。
 - 标题日期必须与 `build-version` 同日（`preflight_check` 会拦）。
-- 不得给站名加 ⛏️；不得改成「矿业日报」（简称只用于 `manifest.short_name`）。
+- 不得给站名加 ⛏️；不得改成简称「矿业资讯」（简称只用于 `manifest.short_name`，见 39.11）。
 
 ### 39.7 顺带修掉的两处不一致
 
@@ -1699,6 +1699,16 @@ new = re.sub(r'<title>[^<]*</title>', lambda _m: '<title>%s</title>' % want, src
 - 验收线上不能只看 `HTTP 200`：本轮轮询第 1 次（22:25:54）拿到的仍是旧版
   （build 2205 + 纯日期），第 2 次（22:26:24）才变成新版。GitHub Pages 构建有 1~2 分钟延迟，
   必须轮询到 `build-version` 真的变成新值再下结论。
+
+### 39.11 2026-09-14 站名变更：矿业新闻日报 → **矿业资讯速览**
+
+**起因**：领导口径——对外不得出现「新闻」「日报」（不符合宣传定位）。用户 2026-09-14 选定新名 **矿业资讯速览**（简称 **矿业资讯**）。
+
+- **作用范围＝仅站名**（用户 2026-09-14 明确拍板）：页面正文里作**普通名词**的「日报」/「新闻」措辞（如「离线也能看日报」「导出当日日报为 PDF」「新闻检索」）**本次一律未动**。
+- **同步落点**：① `index.html` `<title>` / 页头 `<h1>` / `apple-mobile-web-app-title`；② `manifest.json` `name`=矿业资讯速览、`short_name`=矿业资讯；③ `app.js` 移动端品牌行 `md-brand`、`MD_BRAND_NAMES.home`、问答导出表头、AI 系统提示、CSV 文件名前缀；④ 迁移页 `404.html` / `server.py` / `redirect_server.py` / `old-link-notice/` / `legacy-redirect/` / `mobile-preview.html`；⑤ 后端 AI 身份 `scf` / `aliyun-fc` / `huawei-fg` / `worker` / `bprime/llm.py` / `netlify/edge-functions/qa.js`；⑥ 四层防线 `generate_20260914.py`/`deploy_pages.py`/`preflight_check.py` 的 `SITE_NAME` 与 `test_site_title.py` 的 `SITE`；⑦ `test_mobile_ux_batch.js` 品牌行断言。
+- **未动**：内部标识 `mining-daily*`（SW 缓存名 / `manifest.id` / 仓库名）——改了会打断已安装 PWA 的更新，且对外不可见；历史记录（`audit_*.md`、`archive/`、`index.html.bak-*`、以及本节 39.2 / 39.7 和本文件 L135/L167 的项目卡记录）。⚠️ **39.2 / 39.7 里的旧名字面写法是历史、不代表当前值**，一律以 39.3 / 39.6 / 本节为准。
+- **遗留（不在「仅改站名」范围，宣传口若要连正文一起管需另行处理）**：`manifest.json` 的 `description`（「每日矿业新闻与价格摘要」）仍含「新闻」；页面正文与 AI 面板文案里的「日报」「新闻」措辞未清；两条自动化 prompt 未改（**它们只引用 §39/§42.8、不硬编码站名，改本节即自动继承**）；自动化**显示名**（「矿业日报 06:00/08:00 …」）与通知文案「矿业日报06:00」属内部标签，未动。
+- **闸门**：`test_site_title.py`（`SITE` 常量已同步新名）+ `preflight_check.check_site_title`（随 `SITE_NAME` 自动生效）；`python test_site_title.py` 须全绿。
 
 ## §40 2026-09-12 简报「展开全部（N 条）」裁剪态持久化（层 B）
 
@@ -2313,7 +2323,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
   - 理由：日报每日 06:00 收**前一天**新闻，且要闻池是「当日发布优先 → 今日收录补齐 → 全库最新」（`app.js` `computeDigestPicks`）**跨日**取数；区块内非当日条目本就由 `.digest-dtag` 标着日期 —— 曾同时出现「今日」徽标与「09-06」条目，**自相矛盾**。且「今日」已被侧栏「今日新增」（**实时未读**口径，`app.js:1794-1822` 按 DOM 剩余 `.is-new` 计数）占用。
   - **禁止**改叫「重点要闻 / 精选要闻」：会与右侧「矿业热榜」抢"重要性"语义 —— 要闻判据是**来源权威**（`DIGEST_SRC`：自然资源部 30 / 新华社 26 / 工信部 24…），热榜判据是**热词热度**（`HOT_KW`：突破 / 重大 / 战略 / 首次），两者关键词表本就高度重叠，标题再都喊"重要"读者无法区分。两栏**条目**已由 `renderHotNews` 调 `computeDigestPicks()` **强制互斥**（同一条不重复出现），改的是"名字"不是"内容"。
   - **回退指纹**：`.digest-badge` 文本为「今日」、或 `MD_REGION_LABEL.renderDigest` 为「今日要闻」 ⇒ 回退（改名后 bump build-version 重跑 preflight）。前置闸门 `preflight_check.check_digest_badge_wording`（只喂 `index.html`）已锁。
-- **站点标题**须为「矿业新闻日报 · YYYY-MM-DD」（§39；`deploy_pages.py` 会自动规范化，但生成脚本不得改回纯日期）。
+- **站点标题**须为「矿业资讯速览 · YYYY-MM-DD」（§39；`deploy_pages.py` 会自动规范化，但生成脚本不得改回纯日期）。
 - **其他文案**：头部无副标题；往期标题「滚动保留最近30天」；底部两行数据来源 / 国际来源照旧；口径句「能源与黑色不收；铁矿仅留全球供需与价格」；「数据更新时间」由前端 `applyDataUpdatedAt()` 读 `NEWS_DATA.updated`（**勿写死**）；访客统计已迁百度统计（tongji.baidu.com 后台查看，页脚仅 `baiduStatNote` 一行接入说明、不回显实时数字）；标注精简（只 NEW / 战略 / 重大，`tag-chip` ≤2）。
 - **行情口径**：价格两行 ＝ `priceCardsShfe`（国内 10 卡）+ `priceCardsLme`（LME 6 卡，slug `lcpt` / `lalt` / `lldt` / `lznt` / `lnkt` / `ltnt`，美元/吨），**严禁同列矩阵**；数值**唯一来源** `lme_data.json` / `lme-data.js`（严禁手抄；某品种 null → 该卡 `value="--"` `chg="暂无数据"` `class="price-card flat"`）；前端 `renderLmePrices()` 只读 `LME_DATA` 不做跨源覆盖；⚠️**走势图末点＝昨天（最近已收盘日）是正确的**，禁手改 `price_history_detail.json` / `price-history.js`、禁回填盘中价。
 

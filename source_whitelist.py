@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-矿业新闻日报信源白名单校验工具。
+矿业资讯速览信源白名单校验工具。
 
 约定信源（memory 2026-09-07 固化，2026-09-07 晚扩展 4 个）：
 - ky.mnr.gov.cn          全国矿业权市场网（矿权出让/转让/结果）
@@ -165,7 +165,7 @@ def check_file(path: str) -> dict:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="矿业日报信源白名单校验")
+    parser = argparse.ArgumentParser(description="矿业资讯信源白名单校验")
     parser.add_argument("--check-url", help="校验单个 URL")
     parser.add_argument("--check-file", help="校验文件内所有 URL")
     parser.add_argument("--list", action="store_true", help="列出白名单")

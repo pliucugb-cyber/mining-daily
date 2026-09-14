@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """极简静态服务：把本目录的 index.html（旧链接停用通知 + 跳转页）返回给所有请求。
-用于 WorkBuddy 部署到「矿业新闻日报」旧应用，使其从完整日报变为一个停用提醒页。
+用于 WorkBuddy 部署到「矿业资讯速览」旧应用，使其从完整日报变为一个停用提醒页。
 """
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer

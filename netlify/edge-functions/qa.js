@@ -1,5 +1,5 @@
 /**
- * qa.js —— 矿业新闻日报 · AI 问答边缘代理（Netlify Edge Functions / Deno runtime）
+ * qa.js —— 矿业资讯速览 · AI 问答边缘代理（Netlify Edge Functions / Deno runtime）
  *
  * 为什么需要它：
  *   站点是 GitHub Pages 公开静态页，任何写进 index.html 的 Key 都等于公开（curl 即得，

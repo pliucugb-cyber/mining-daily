@@ -286,7 +286,7 @@ setTimeout(() => {
   clickGo('rights');
   check('③ 点矿权 → 品牌行显示「矿权」', brandText()==='矿权', '实际「'+brandText()+'」');
   clickGo('home');
-  check('③ 回首页 → 品牌行恢复含「矿业新闻日报」', brandText().indexOf('矿业新闻日报')>=0, '实际「'+brandText()+'」');
+  check('③ 回首页 → 品牌行恢复含「矿业资讯速览」', brandText().indexOf('矿业资讯速览')>=0, '实际「'+brandText()+'」');
   check('① 回首页 → md_last_tab=home', lsGet('md_last_tab')==='home');
   check('② 顶栏搜索按钮已从 DOM 移除', !doc.getElementById('mdSearchBtn'));
   check('② 未残留 md-search-open 生效规则', !/^[ \t]*body\.md-search-open\b/m.test(html));

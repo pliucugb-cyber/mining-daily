@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-preflight_check.py — 矿业日报自动化前置/回归健康检查。
+preflight_check.py — 矿业资讯速览自动化前置/回归健康检查。
 
 目的：把散落在 automation prompt 里的"页面规范检查"收敛到代码，
 防止再次出现「prompt 与页面代码脱节 → 自动化把页面往旧规范拉 → 卡死」的问题。
@@ -15,7 +15,7 @@ preflight_check.py — 矿业日报自动化前置/回归健康检查。
   7. sw.js 可解析（node --check）且 CACHE_NAME 与 build-version 一致
      ——2026-09-10 事故新增。此前没有任何门禁真正解析过 sw.js，一行语法错误
      （`const P260910-1900';`）直接上线，导致 SW 无法更新、页面区块永久停在「加载中…」。
-  8. 站点标题（浏览器标签页）必须是「矿业新闻日报 · YYYY-MM-DD」，且日期与 build-version 同日
+  8. 站点标题（浏览器标签页）必须是「矿业资讯速览 · YYYY-MM-DD」，且日期与 build-version 同日
      （例外：午夜后补丁 —— 见 check_site_title 内的注释，仅放行 build 时间 < 01:00 的 +1 天）
      ——2026-09-12 用户反馈「标签页只有一个光秃秃的日期」后固化。09-07 起生成脚本把
      <title> 从「矿业新闻日报 2026-09-04」写成了纯日期，站名丢失且无人察觉。
@@ -47,7 +47,7 @@ log = get_logger('preflight')
 
 ROOT = Path(__file__).parent
 HTML = ROOT / 'index.html'
-SITE_NAME = '矿业新闻日报'   # 站点名（浏览器标签页标题）——约定见 REFERENCE.md §39
+SITE_NAME = '矿业资讯速览'   # 站点名（浏览器标签页标题）——约定见 REFERENCE.md §39
 STATUS = ROOT / '.preflight_status.json'
 
 
@@ -328,7 +328,7 @@ def check_sw_js(text):
 
 
 def check_site_title(text):
-    """站点标题（浏览器标签页）必须是「矿业新闻日报 · YYYY-MM-DD」，且日期与 build-version 同日。
+    """站点标题（浏览器标签页）必须是「矿业资讯速览 · YYYY-MM-DD」，且日期与 build-version 同日。
 
     2026-09-12 用户反馈后固化：标签页上只剩一个光秃秃的日期，看不出是什么站。
     根因是 09-07 的生成脚本把 <title> 从「矿业新闻日报 2026-09-04」改成了纯日期

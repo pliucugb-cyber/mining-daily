@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-矿业新闻日报 - 后端服务（2026-09-04 重建版）
+矿业资讯速览 - 后端服务（2026-09-04 重建版）
 恢复 9/3 32/32 PASS 部署的全部端点 + 矿业热榜 Top 10 算法。
 端点：
   静态        GET /<path>
@@ -100,7 +100,7 @@ _LEGACY_HTML = r"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#6c5ce7">
 <meta name="robots" content="noindex,nofollow">
-<title>矿业新闻日报 · 已迁移至新地址</title>
+<title>矿业资讯速览 · 已迁移至新地址</title>
 <style>
   :root{
     --p1:#6c5ce7; --p2:#8b5cf6; --p3:#a78bfa;
@@ -169,11 +169,11 @@ _LEGACY_HTML = r"""<!DOCTYPE html>
 <div class="card" role="alert" aria-live="polite">
   <div class="hero">
     <div class="badge">⚠️ 旧地址内容已停用</div>
-    <h1>矿业新闻日报 · 已迁移至新地址</h1>
+    <h1>矿业资讯速览 · 已迁移至新地址</h1>
   </div>
   <div class="body">
     <p>您访问的是 <b>旧地址</b>。该地址上的<b>旧版新闻内容已停止维护、不再更新，也不再展示</b>。</p>
-    <p>最新、完整的矿业新闻日报，请前往 <b>新地址</b> 查看：</p>
+    <p>最新、完整的矿业资讯速览，请前往 <b>新地址</b> 查看：</p>
     <a class="cta" id="goBtn" href="__NEW_URL__" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
       前往新版（GitHub Pages）
@@ -786,7 +786,7 @@ def main():
     host = os.environ.get('HOST') or ('0.0.0.0' if os.environ.get('PORT') else '127.0.0.1')
     n = len(load_news())
     print('========================================================')
-    print('  矿业日报服务已启动（2026-09-05 安全加固版）')
+    print('  矿业资讯服务已启动（2026-09-05 安全加固版）')
     print('  监听      %s:%d' % (host, port))
     if host == '0.0.0.0':
         print('  ⚠ 当前监听所有网卡，局域网内任何人可访问')

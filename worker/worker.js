@@ -1,5 +1,5 @@
 /**
- * worker.js —— 矿业新闻日报 · 轻后端（仅 /api/qa + /api/health）
+ * worker.js —— 矿业资讯速览 · 轻后端（仅 /api/qa + /api/health）
  *
  * 设计目标（与用户约定）：
  *  - 无状态：不读任何数据文件，前端把"问题 + 本地已检索到的相关新闻"一起 POST 过来，
@@ -69,7 +69,7 @@ function keywordFallback(q) {
 
 // ── 调用 DeepSeek 生成答案 ──
 async function askDeepSeek(apiKey, question, context) {
-  const system = ('你是资深矿业行业分析师，服务于「矿业新闻日报」产品。' +
+  const system = ('你是资深矿业行业分析师，服务于「矿业资讯速览」产品。' +
     '回答要简洁专业、不啰嗦、用中文。' +
     '如果提供了相关新闻条目，请自然引用并注明来源与日期；' +
     '若没有相关新闻，请明确说明这是基于通用知识的回答，并建议用户查证官方信息。' +

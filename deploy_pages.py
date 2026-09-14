@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-deploy_pages.py —— 把矿业日报的静态站点同步到 GitHub Pages（gh-pages 分支）
+deploy_pages.py —— 把矿业资讯速览的静态站点同步到 GitHub Pages（gh-pages 分支）
 
 背景
 ----
@@ -20,7 +20,7 @@ WorkBuddy 的「发布为应用」链接绑定的是**本机目录绝对路径**
 说明
 ----
 - 部署前会按 build-version 自动派生两个值：sw.js 的 CACHE_NAME、index.html 的
-  <title>（「矿业新闻日报 · YYYY-MM-DD」，约定见 REFERENCE.md §39）；
+  <title>（「矿业资讯速览 · YYYY-MM-DD」，约定见 REFERENCE.md §39）；
 - 只包含前端真正用到的文件（页面、数据 js、图标、manifest、sw），
   不含 Python 脚本、data/ 抓取缓存、__pycache__ 等。
 - 遵循「未编造、可溯源」：只搬运已有文件，不生成任何内容。
@@ -51,7 +51,7 @@ def log(msg):
     msg 里若含 % 也不会被误格式化：logging 只在传 args 时才做 % 替换。
     """
     _log.info(msg)
-SITE_NAME = '矿业新闻日报'   # 站点名（浏览器标签页标题）——约定见 REFERENCE.md §39
+SITE_NAME = '矿业资讯速览'   # 站点名（浏览器标签页标题）——约定见 REFERENCE.md §39
 WORK = os.path.join(ROOT, 'tmp', 'ghpages')
 REMOTE = 'git@github.com:pliucugb-cyber/mining-daily.git'
 BRANCH = 'gh-pages'
@@ -273,7 +273,7 @@ def sync_site_title():
     此后每天的标签页都只剩日期。
 
     做法与 sync_sw_cache_name() 完全同源：build-version 已经是事实上的版本源
-    （形如 20260912-2205），直接从中取日期拼出规范标题「矿业新闻日报 · 2026-09-12」。
+    （形如 20260912-2205），直接从中取日期拼出规范标题「矿业资讯速览 · 2026-09-12」。
     这样**无论当日生成脚本怎么写标题，推上线的标题都一致**——不依赖生成脚本或
     automation prompt 的自觉（生成脚本每天新写，写什么标题不可控）。
 

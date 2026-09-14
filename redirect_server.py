@@ -5,7 +5,7 @@ redirect_server.py —— 旧链接的「搬迁告示」服务
 
 背景
 ----
-矿业日报的内容已迁至 GitHub Pages（地址固定，不随电脑变化）：
+矿业资讯的内容已迁至 GitHub Pages（地址固定，不随电脑变化）：
     https://pliucugb-cyber.github.io/mining-daily/
 
 旧链接 https://48e362fedb334509b4517cef02f125a8.app.workbuddy.link 有两个先天限制：
@@ -37,7 +37,7 @@ PAGE = u"""<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>站点已迁移 · 矿业新闻日报</title>
+<title>站点已迁移 · 矿业资讯速览</title>
 <style>
   *{box-sizing:border-box}
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -63,7 +63,7 @@ PAGE = u"""<!DOCTYPE html>
 <body>
   <div class="card">
     <div class="badge">通知</div>
-    <h1>矿业新闻日报已换新地址</h1>
+    <h1>矿业资讯速览已换新地址</h1>
     <p>为方便长期使用，日报已迁移到固定地址，<br>今后换电脑、换人维护都不会变。</p>
     <p>这个旧地址已停止更新，看到的内容是迁移前的旧数据，<br>请勿再据此判断行情。</p>
 
@@ -152,7 +152,7 @@ def main():
     # 与 server.py 保持同一约定：云端注入 PORT 时监听 0.0.0.0，本地只听本机
     host = os.environ.get('HOST') or ('0.0.0.0' if os.environ.get('PORT') else '127.0.0.1')
     print('========================================================')
-    print('  矿业日报 · 旧链接迁移提示服务')
+    print('  矿业资讯 · 旧链接迁移提示服务')
     print('  监听      %s:%d' % (host, port))
     print('  跳转目标  %s' % NEW_SITE)
     print('  说明      任何路径都返回搬迁提示页，不再承载日报内容')
