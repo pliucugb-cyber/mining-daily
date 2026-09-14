@@ -11,7 +11,9 @@ from bprime import config, llm
 
 
 def _prompt_for(meta, source_text):
-    foreign = '（境外源，须中文意译、保留英文原题、注明币种）' if meta.get('foreign') else ''
+    # 候选池 foreign 是字符串 'True'/'False'，'False' 也是真值——必须显式转 bool，否则全部被当境外源
+    is_foreign = str(meta.get('foreign')).lower() == 'true'
+    foreign = '（境外源，须中文意译、保留英文原题、注明币种）' if is_foreign else ''
     return ('请为以下矿业新闻撰写摘要%s：\n标题：%s\n来源：%s\n原文：%s'
             % (foreign, meta.get('title', ''), meta.get('source', ''), source_text[:1500]))
 

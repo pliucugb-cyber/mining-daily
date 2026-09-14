@@ -39,11 +39,11 @@ import argparse
 # 数值：可选货币符号 + 阿拉伯数字（允许千分位逗号、小数）
 # 单位：已知单位词表「最长匹配」，避免 "公里" 被拆成 "公"+"里"、或 "公告" 的"公"被误吞
 _UNIT_LIST = [
-    '亿美元', '万美元', '美元/吨', '美元', '元/吨', '元/克', '元/千克', '克/吨',
+    '万亿美元', '亿美元', '万美元', '美元/吨', '美元', '元/吨', '元/克', '元/千克', '克/吨',
     '万吨/年', '万吨', '吨', '千克', '公斤', '克', '公里', '千米', '万盎司', '盎司', '米', '吨/年',
     '条', '项', '种', '个', '倍', '周', '年', '月', '日',
     '％', '%', '万', '亿', '十万', '百万',
-    'Billion', 'billion', 'Million', 'million', 'B', 'M', 'm',
+    'Trillion', 'trillion', 'Billion', 'billion', 'Million', 'million', 'B', 'M', 'm',
 ]
 _UNIT_ALT = '|'.join(sorted(set(_UNIT_LIST), key=len, reverse=True))
 _NUM_RE = re.compile(r'([$£€]?\d[\d,]*(?:\.\d+)?)\s*(%s)?' % _UNIT_ALT)
@@ -62,34 +62,54 @@ def extract_numbers(text):
     return out
 
 
-# ---------- 2. 数值落地判定（含货币跨单位归一化） ----------
-# 货币量级 -> 折算到「亿」的系数（仅用于美元/亿元等跨境金额互认）
-_FACTOR = {
-    '十亿': 10, 'Billion': 10, 'billion': 10, 'B': 10,
-    '亿': 1,
-    '百万': 0.01, 'Million': 0.01, 'million': 0.01, 'M': 0.01,
-    '万': 0.0001,
-}
+# ---------- 2. 数值落地判定（数值按量级归一 + 单位按类别兼容） ----------
+# 量级后缀 -> 倍数（中英文互认：59万 <-> 590,000；3,000美元 <-> $3,000）
+_MAG_LIST = [('万亿', 1e12), ('Trillion', 1e12), ('trillion', 1e12),
+             ('十亿', 1e9), ('Billion', 1e9), ('billion', 1e9), ('B', 1e9),
+             ('亿', 1e8), ('百万', 1e6), ('Million', 1e6), ('million', 1e6), ('M', 1e6),
+             ('万', 1e4), ('千', 1e3), ('K', 1e3)]
 
 
-def _to_yi(n, u):
-    for k, f in _FACTOR.items():
-        if k in u:
-            return n * f
-    return None
+def _core_cat(norm, unit):
+    """把 (数值, 单位串) 归一为 (核心数值, 单位类别)。
+
+    核心数值 = 数值 × 量级系数（万/亿/百万/十亿/B/M/千），用于跨语言量级互认：
+        中文「59万」 <-> 英文「590,000」；「3,000美元」 <-> 「$3,000」。
+    单位类别（money/mass/len/pct）用于避免「3000 米」误配「3000 吨」；
+    空类别（纯数字、或未识别单位）兼容任意类别。
+    类别 'date'（月/日/年/周）不参与校验——跨语言日期翻译（September 4 <-> 9月4日）
+    属正常意译而非抄错，强行校验会大量误报（2026-09-14 实测）。"""
+    mult = 1.0
+    for k, m in _MAG_LIST:
+        if k in unit:
+            mult = m
+            break
+    core = norm * mult
+    cat = ''
+    if any(c in unit for c in ('美元', 'RMB', 'rmb', 'USD', 'usd', '元')):
+        cat = 'money'
+    elif any(c in unit for c in ('吨', '千克', '公斤', '克', '盎司')):
+        cat = 'mass'
+    elif any(c in unit for c in ('米', '公里', '千米')):
+        cat = 'len'
+    elif any(c in unit for c in ('%', '％')):
+        cat = 'pct'
+    elif any(c in unit for c in ('月', '日', '年', '周')):
+        cat = 'date'
+    return core, cat
 
 
 def number_in_source(n, u, sn, su):
-    """摘要数字 (n,u) 是否落到源文数字 (sn,su)。"""
-    # 精确同单位匹配（去逗号后数值相等、单位串一致）
-    if abs(n - sn) < 1e-9 and u == su:
-        return True
-    # 货币跨单位归一化：如 45亿 <-> $4.5 Billion、5亿 <-> $500 Million
-    cy, csy = _to_yi(n, u), _to_yi(sn, su)
-    if cy is not None and csy is not None:
-        if abs(cy - csy) <= max(0.01 * cy, 0.01):
-            return True
-    return False
+    """摘要数字 (n,u) 是否落到源文数字 (sn,su)。数值按量级归一，单位按类别兼容。"""
+    c1, k1 = _core_cat(n, u)
+    if k1 == 'date':
+        return True  # 摘要里的日期不校验（跨语言不可比，属正常意译）
+    c2, k2 = _core_cat(sn, su)
+    if k2 == 'date':
+        return False  # 源文该数字是日期，与摘要的非日期数字不同类（防「源文有年份就全部放行」）
+    if k1 and k2 and k1 != k2:
+        return False  # 类别冲突（如 米 vs 吨），即便数值巧合相等也不算落地
+    return abs(c1 - c2) <= max(0.01 * abs(c1), 0.01)
 
 
 def verify_summary(summary, source):
@@ -99,6 +119,10 @@ def verify_summary(summary, source):
     src_nums = extract_numbers(source)
     issues = []
     for n, u, raw in extract_numbers(summary):
+        if _core_cat(n, u)[1] == 'date':
+            continue  # 日期不校验：跨语言不可比；且源文无数字时也不能因此误报（2026-09-14 实测）
+        if not u and 1900 <= n <= 2100 and float(n).is_integer():
+            continue  # 裸年份（如 "2026" 未带「年」字）不校验，避免年份误报
         if not any(number_in_source(n, u, sn, su) for sn, su, _ in src_nums):
             issues.append((raw, u))
     return issues
@@ -129,16 +153,24 @@ def _norm_url(u):
     return (u or '').strip()
 
 
-def load_source_map(report, data_dir='data'):
-    """返回 {url: 源文文本}。优先级：候选池 content > 候选池 summary > 月库 content/ai_summary/summary。"""
+def load_source_map(report, data_dir='data', level_out=None):
+    """返回 {url: 源文文本}。优先级：候选池 content > 候选池 summary > 月库 content/ai_summary/summary。
+
+    level_out（可选 dict）：写入每个 url 的基准强度——
+      'content' = 正文级（强基准，数字校验可信，可用于阻塞守门）；
+      'summary' = RSS 摘要级（弱基准，摘要常≈标题，校验易误报，仅提示不阻塞）。
+    2026-09-14 实测：弱基准下"未落地"多为误报（摘要数字不在短短几字的 RSS 摘要里）。
+    """
     src_map = {}
 
-    def _put(url, text):
+    def _put(url, text, level):
         url = _norm_url(url)
         if not url or not text:
             return
         if url not in src_map:  # 先到先得（候选池优先于月库）
             src_map[url] = text
+            if level_out is not None:
+                level_out[url] = level
 
     # 候选池
     cand = os.path.join(data_dir, 'news_candidates_%s.json' % report)
@@ -149,7 +181,8 @@ def load_source_map(report, data_dir='data'):
             for e in pool:
                 if not isinstance(e, dict):
                     continue
-                _put(e.get('url'), e.get('content') or e.get('summary') or '')
+                _put(e.get('url'), e.get('content'), 'content')
+                _put(e.get('url'), e.get('summary'), 'summary')
         except Exception as ex:
             print('[verify_numbers] 读候选池失败: %s' % ex, file=sys.stderr)
 
@@ -160,7 +193,9 @@ def load_source_map(report, data_dir='data'):
             for e in (lib.get('news') if isinstance(lib, dict) else lib):
                 if not isinstance(e, dict):
                     continue
-                _put(e.get('url'), e.get('content') or e.get('ai_summary') or e.get('summary') or '')
+                _put(e.get('url'), e.get('content'), 'content')
+                _put(e.get('url'), e.get('ai_summary'), 'summary')
+                _put(e.get('url'), e.get('summary'), 'summary')
         except Exception:
             continue
     return src_map
@@ -170,12 +205,17 @@ def load_source_map(report, data_dir='data'):
 def verify_new_items(new_items, report, data_dir='data', strict=False, src_map_override=None):
     """
     new_items: [(cat, it_html), ...]（与 generate_*.py 中结构一致）
-    返回 [(url, [未落地原始串...]), ...]；无基准的条目不产生条目（只打印 skip）。
-    strict=True 且存在未落地 -> 抛 AssertionError（生产守门）。
+    返回 [(url, [未落地原始串...]), ...]（仅正文级基准的未落地；弱基准只提示不返回）。
+    无基准的条目不产生条目（只打印 skip）。
+    分级（2026-09-14 实测确立）：
+      - 正文级基准（content）：未落地 -> 阻塞（strict 时抛异常）；
+      - RSS 摘要级（summary）弱基准：未落地 -> 仅提示，绝不阻塞（弱基准过短必误报）。
+    src_map_override 提供时视为正文级（调优注入真实正文）。
     """
     from generate_common import item_url  # 复用，避免重复实现
-    src_map = src_map_override if src_map_override is not None else load_source_map(report, data_dir)
-    issues = []
+    levels = {}
+    src_map = src_map_override if src_map_override is not None else load_source_map(report, data_dir, levels)
+    hard, weak = [], []
     skipped = 0
     for _cat, it in new_items:
         url = _norm_url(item_url(it))
@@ -184,20 +224,26 @@ def verify_new_items(new_items, report, data_dir='data', strict=False, src_map_o
         if not source:
             skipped += 1
             continue
+        lvl = 'content' if src_map_override is not None else levels.get(url, 'summary')
         miss = verify_summary(summary, source)
         if miss:
-            issues.append((url, [m[0] for m in miss]))
+            (hard if lvl == 'content' else weak).append((url, [m[0] for m in miss]))
     if skipped:
         print('[verify_numbers] %d 条无源文基准（候选池/月库未覆盖），跳过数字比对' % skipped)
-    if issues:
-        print('[verify_numbers] %d 条摘要存在数字未在源文落地：' % len(issues))
-        for url, miss in issues:
+    if weak:
+        print('[verify_numbers] %d 条弱基准（RSS 摘要级）数字未落地，仅提示不阻塞：' % len(weak))
+        for url, miss in weak[:20]:
+            print('   ~ %s : %s' % (url, '、'.join(miss)))
+    if hard:
+        print('[verify_numbers] %d 条正文级摘要存在数字未在源文落地：' % len(hard))
+        for url, miss in hard:
             print('   - %s : %s' % (url, '、'.join(miss)))
         if strict:
-            raise AssertionError('数字落地校验未通过：%d 条' % len(issues))
+            raise AssertionError('数字落地校验未通过：%d 条' % len(hard))
     else:
-        print('[verify_numbers] 数字落地校验通过（已比对 %d 条）' % (len(new_items) - skipped))
-    return issues
+        print('[verify_numbers] 数字落地校验通过（正文级已比对 %d 条；弱基准提示 %d 条）'
+              % (len(new_items) - skipped - len(weak), len(weak)))
+    return hard
 
 
 # ---------- 6. CLI ----------
@@ -225,24 +271,31 @@ def main():
         return 0
 
     report = args.date or os.environ.get('REPORT_DATE') or _today()
-    src_map = load_source_map(report, args.data_dir)
+    levels = {}
+    src_map = load_source_map(report, args.data_dir, levels)
     total_checked = 0
-    issues = []
+    hard, weak = [], []
     for url, summary in items:
-        source = src_map.get(_norm_url(url), '')
+        nu = _norm_url(url)
+        source = src_map.get(nu, '')
         if not source:
             continue
         total_checked += 1
         miss = verify_summary(summary, source)
         if miss:
-            issues.append((url, [m[0] for m in miss]))
+            lvl = levels.get(nu, 'summary')
+            (hard if lvl == 'content' else weak).append((url, [m[0] for m in miss]))
     print('[verify_numbers] 已比对 %d 条（其余无源文基准跳过）' % total_checked)
-    for url, miss in issues:
+    if weak:
+        print('[verify_numbers] 弱基准（RSS 摘要级）%d 条未落地，仅提示不阻塞：' % len(weak))
+        for url, miss in weak[:20]:
+            print('  ~ %s : %s' % (url, '、'.join(miss)))
+    for url, miss in hard:
         print('  - %s : %s' % (url, '、'.join(miss)))
-    if issues:
-        print('[verify_numbers] 共 %d 条未通过' % len(issues))
+    if hard:
+        print('[verify_numbers] 正文级共 %d 条未通过' % len(hard))
         return 1 if args.strict else 0
-    print('[verify_numbers] 全部通过')
+    print('[verify_numbers] 正文级全部通过')
     return 0
 
 

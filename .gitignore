@@ -18,6 +18,7 @@ _test_*.js
 
 # ===== 含密钥，禁止提交（DeepSeek API key 在 qa_config.json 里）=====
 qa_config.json
+.env
 
 # ===== 部署/运行时产生的缓存（按日期、机器相关，非源码）=====
 # 注：data/ai_analysis_*.json 与 data/hot_news.json 是「静态站点预生成数据」，
