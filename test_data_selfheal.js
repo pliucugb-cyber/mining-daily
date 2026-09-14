@@ -2,7 +2,7 @@
 // 2026-09-11 第三轮事故的**行为级**回归测试（不是静态断言，是真跑页面）。
 //
 // 复现的用户现象：
-//   今日简报能出来，但今日要闻 / 热榜 / AI 检索全部空白，强制清缓存也没用。
+//   今日简报能出来，但本期要闻 / 热榜 / AI 检索全部空白，强制清缓存也没用。
 //
 // 机制：news-data.js 是一个 <script>，它提供 window.NEWS_DATA。
 //   它只要没落地，读它的渲染函数就全部 `if(!window.NEWS_DATA) return` 静默返回；
@@ -115,7 +115,7 @@ function regionText(doc, sel) {
       '热榜文本=' + hot.replace(/\s+/g, ' ').trim().slice(0, 60));
 
     const digest = regionText(doc, '#digestStrip');
-    check('今日要闻已渲染（不再是「要闻提取中…」）',
+    check('本期要闻已渲染（不再是「要闻提取中…」）',
       digest.trim().length > 0 && digest.indexOf('提取中') < 0 && digest.indexOf('获取中') < 0,
       '要闻文本=' + digest.replace(/\s+/g, ' ').trim().slice(0, 60));
 

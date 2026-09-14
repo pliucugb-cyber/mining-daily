@@ -67,7 +67,7 @@ setTimeout(() => {
   const spList = doc.querySelectorAll('.sp-list').length;
   check('专项子类容器 sp-list 已清空', spList === 0, 'sp-list 数=' + spList);
 
-  console.log('\n===== ② 今日要闻：跨源去重 + 日期标注 =====');
+  console.log('\n===== ② 本期要闻：跨源去重 + 日期标注 =====');
   const digest = doc.querySelectorAll('#digestList li');
   check('要闻条数 1~4', digest.length >= 1 && digest.length <= 4, '实际 ' + digest.length + ' 条');
   const titles = [...digest].map(li => (li.querySelector('.digest-link') || {}).textContent || '');

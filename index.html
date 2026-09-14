@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260914-0812" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260914-1130" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -407,7 +407,7 @@ body.dark .hotlist-list li.hot-item{border-bottom-color:var(--line-1)}
 body.dark .hotlist-list li.hot-item:hover{background:var(--surface-3)}
 body.dark .hot-title{color:var(--brand-ink)}
 body.dark .hot-title:hover{color:#ff7a7a}
-/* ==================== 今日要闻摘要条（9-04 新增，仿早报要闻样式）==================== */
+/* ==================== 本期要闻摘要条（9-04 新增，仿早报要闻样式）==================== */
 .digest-strip{background:var(--surface);border:1px solid var(--line-1);border-radius: var(--r-lg);padding:var(--s3) var(--s4) var(--s3);margin-bottom:var(--s3);box-shadow: var(--shadow-sm)}
 .digest-head{display:flex;align-items:baseline;gap:var(--s3);margin-bottom:var(--s2)}
 .digest-badge{background:var(--up);color:#fff;font-size: var(--fs-body);font-weight:600;padding:2px var(--s3);border-radius: var(--r-md);letter-spacing:1px;flex-shrink:0}
@@ -481,7 +481,7 @@ body.dark .brief-sec::after{background:var(--line-1)}
 
 /* ==================== 简报五节结构化渲染（2026-09-12，二次修订）==================== */
 /* 2026-09-12 首版曾做「要点层 highlights + 高异动前置行 + 完整层」两层，用户反馈要点层
-   与下方「今日要闻」内容重复 → 已连同其中样式一并删除。
+   与下方「本期要闻」内容重复 → 已连同其中样式一并删除。
    现为单一形态：五节结构化摘要（.brief-full 容器）+ 高度折叠（判定阈值 420px，
    折叠后 380px，见 .brief-md.brief-clamp），内容一条不减。
    缺 brief_sections 时 app.js 回退 report 的 markdown 渲染。 */
@@ -1080,7 +1080,7 @@ body.dark .news-item.is-special{background:var(--surface-2)}
 body.dark .section-title.hotlist{background:var(--surface-2)}
 body.dark .hot-meta{color:var(--ink-500)}
 body.dark .hotlist-loading,body.dark .hotlist-empty{color:var(--ink-500)}
-/* ---- 今日要闻 ---- */
+/* ---- 本期要闻 ---- */
 body.dark .digest-badge{background:#c0392b;color:#fff}
 body.dark .digest-empty{color:var(--ink-500)}
 /* ---- 价格走势弹层 ---- */
@@ -2113,7 +2113,7 @@ body:not(.ec-on) #eventCalendar{display:none}
 
   // ① 数据自愈（2026-09-11 第三次加固）——「静态内容全在、动态内容全不出来」的根因修复。
   //    机制：news-data.js / lme-data.js / price-history.js 是三个 <script>，分别提供
-  //          window.NEWS_DATA / LME_DATA / PRICE_HISTORY。热榜、今日要闻、AI 检索、
+  //          window.NEWS_DATA / LME_DATA / PRICE_HISTORY。热榜、本期要闻、AI 检索、
   //          价格卡增强全都读它们；而这些渲染函数开头都是 `if(!window.NEWS_DATA) return`
   //          ——**静默返回**。所以只要其中一个脚本没落地，对应区块就永久停在初始占位，
   //          页面却像「只是慢」。而 <script> 只要被 SW 回了一个「空的 200」，
@@ -2165,7 +2165,7 @@ body:not(.ec-on) #eventCalendar{display:none}
   // UX 建议④：单组件降级 vs 整页降级分离。整页级（app.js 未执行 / 核心数据缺失）才报红；
   // 仅单个区块未渲染属「组件级」，标注该组件即可，不挂全屏红条。
   var MD_REGION_EL={fetchHotNews:'hotListBody', loadBrief:'briefMain', renderDigest:'digestStrip'};
-  var MD_REGION_LABEL={qaInitData:'AI 检索', fetchHotNews:'热榜', loadBrief:'简报', renderDigest:'今日要闻'};
+  var MD_REGION_LABEL={qaInitData:'AI 检索', fetchHotNews:'热榜', loadBrief:'简报', renderDigest:'本期要闻'};
   function mdStuckRegions(){
     try{
       if(!window.__mdAppEvaluated) return [];
@@ -2471,10 +2471,10 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
      位置必须在 #briefStrip 之后（那时元素才在 DOM 里）；key 与 app.js 的 BRIEF_COLLAPSE_KEY 共用，
      改一处必须两处同改（test_brief_layers ④ 有漂移守卫）。 -->
 <script>try{if(localStorage.getItem('mdBriefCollapsed')==='1'){var _bcs=document.getElementById('briefStrip');if(_bcs){_bcs.classList.add('brief-collapsed');var _bct=document.getElementById('briefToggle');if(_bct)_bct.setAttribute('aria-expanded','false');}}}catch(e){}</script>
-<!-- ==================== 今日要闻（9-04 新增，每日自动提取 3~5 条关键信息）==================== -->
+<!-- ==================== 本期要闻（9-04 新增，每日自动提取 3~5 条关键信息）==================== -->
 <div class="digest-strip" id="digestStrip" data-page-node-id="FJwnxoUlMQmkEFXOTb8Ajz">
   <div class="digest-head" data-page-node-id="SHylSejGak9rsOaXN7y5vI">
-    <span class="digest-badge" data-page-node-id="Va39fTyp8mMQbMYK2EaifG">今日</span>
+    <span class="digest-badge" data-page-node-id="Va39fTyp8mMQbMYK2EaifG">本期</span>
     <span class="digest-title" data-page-node-id="MykiQYHTJFq6rmvJdHX8aO">要闻</span>
   </div>
   <ul class="digest-list" id="digestList" data-page-node-id="6yhHgAbBXmUiGzB6gzY8F5">

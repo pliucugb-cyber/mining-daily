@@ -108,6 +108,32 @@ def check_no_footer_install_entry(text):
     return not hits, findings
 
 
+def check_digest_badge_wording(text):
+    """要闻区徽标文案须为「本期」，不得回退为「今日」（2026-09-14，见 §42.8）。
+
+    背景：该条由 renderDigest 渲染，取数是「当日发布优先 → 今日收录补齐 → 全库最新」
+    （app.js computeDigestPicks），跨日；区块内非当日条目本就由 .digest-dtag 标着日期
+    —— 曾同时出现「今日」徽标与「09-06」条目，自相矛盾。用户 2026-09-14 判定改为「本期」。
+
+    注意：只喂 index.html（html_text）；app.js 侧注释已同步改名，不在此拦。
+    """
+    findings = []
+    m = re.search(r'<span class="digest-badge"[^>]*>([^<]*)</span>', text)
+    if not m:
+        findings.append('❌ 找不到 .digest-badge 徽标（要闻区标题结构被改动，见 REFERENCE.md §42.8）')
+        return False, findings
+    word = m.group(1).strip()
+    if word == DIGEST_BADGE_BAD:
+        findings.append('❌ 要闻徽标回退为「%s」——2026-09-14 已按用户要求改为「%s」（见 §42.8）'
+                        % (DIGEST_BADGE_BAD, DIGEST_BADGE_OK))
+        return False, findings
+    if word != DIGEST_BADGE_OK:
+        findings.append('❌ 要闻徽标为「%s」，契约值应为「%s」（见 §42.8）' % (word, DIGEST_BADGE_OK))
+        return False, findings
+    findings.append('✅ 要闻徽标文案正确（「%s」，非「%s」）' % (DIGEST_BADGE_OK, DIGEST_BADGE_BAD))
+    return True, findings
+
+
 def check_functions(text):
     findings = []
     required = [
@@ -152,6 +178,12 @@ def check_containers(text):
 # 只对 index.html 生效；app.js 里同名文案属安装引导正文，不得一并拦。
 FOOTER_INSTALL_NODE_ID = 'CbHPZGigo3bSeq2LYmfY5V'
 FOOTER_INSTALL_PHRASE = '添加到桌面 / \U0001f4f1 安装到主屏幕'
+# 要闻区标题契约（2026-09-14 按用户要求改定）——见 REFERENCE.md §42.8。
+# 徽标须为「本期」：日报每日 06:00 收「前一天」新闻，且要闻池含跨日补齐条目，
+# 「今日」在事实上错（区块内非当日条目本就由 .digest-dtag 标着日期），
+# 又与侧栏「今日新增」（实时未读口径）撞车。只对 index.html 生效。
+DIGEST_BADGE_OK = '本期'
+DIGEST_BADGE_BAD = '今日'
 
 SAME_UNIT_CLASS = 'pc-unit-same'
 SHFE_SAME_UNIT_N = 8      # 国内盘 元/吨：沪铜铝铅锌锡镍 + 碳酸锂 + 电解钴
@@ -375,6 +407,7 @@ def main():
         ('生成 marker', check_markers(text)),
         ('已删功能守护', check_no_marketpulse(text)),
         ('已删入口守护', check_no_footer_install_entry(html_text)),
+        ('要闻文案守护', check_digest_badge_wording(html_text)),   # 只扫 index.html
         ('关键功能', check_functions(text)),
         ('关键容器', check_containers(text)),
         ('价格单位去重', check_price_unit_dedup(html_text)),   # 只扫 index.html，避免 app.js 干扰计数

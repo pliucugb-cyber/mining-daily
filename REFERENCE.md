@@ -2291,6 +2291,10 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
   - 回退指纹：任一守卫缺失、或挪到该段 `location.reload()` 之后 ⇒ 首次访客会在 SW 装好后白刷一次；弱网手机上 install 要预缓存约 1MB（且 `cache:'reload'` 绕过 HTTP 缓存），表现为「看了一会儿页面自己跳一下」。
   - ⚠️ **查 SW / 刷新 / 缓存类代码必须同时扫 `index.html` 内联脚本** —— 本轮真元凶就是内联那条 `controllerchange`，只 `grep *.js` 会整条漏掉（曾据此错误地以为改完 app.js 就修好了）。
 - **日期唯一来源 ＝ 头部红底 `.date-badge`**：`#briefDate`（09-11 删）与 `#digestDate`（09-12 删）**均不得再输出**——它们与头部 `.date-badge` 是同一天的重复日期，出现即为回退（删掉 + bump build-version 后重跑 preflight）；要闻条非当日发布由 `.digest-dtag` 标注。
+- **要闻区标题 ＝ 徽标「本期」+ 标题「要闻」**（2026-09-14 用户拍板改定，原名「今日要闻」）：`.digest-badge` 文案**须为「本期」**，**不得为「今日」**。
+  - 理由：日报每日 06:00 收**前一天**新闻，且要闻池是「当日发布优先 → 今日收录补齐 → 全库最新」（`app.js` `computeDigestPicks`）**跨日**取数；区块内非当日条目本就由 `.digest-dtag` 标着日期 —— 曾同时出现「今日」徽标与「09-06」条目，**自相矛盾**。且「今日」已被侧栏「今日新增」（**实时未读**口径，`app.js:1794-1822` 按 DOM 剩余 `.is-new` 计数）占用。
+  - **禁止**改叫「重点要闻 / 精选要闻」：会与右侧「矿业热榜」抢"重要性"语义 —— 要闻判据是**来源权威**（`DIGEST_SRC`：自然资源部 30 / 新华社 26 / 工信部 24…），热榜判据是**热词热度**（`HOT_KW`：突破 / 重大 / 战略 / 首次），两者关键词表本就高度重叠，标题再都喊"重要"读者无法区分。两栏**条目**已由 `renderHotNews` 调 `computeDigestPicks()` **强制互斥**（同一条不重复出现），改的是"名字"不是"内容"。
+  - **回退指纹**：`.digest-badge` 文本为「今日」、或 `MD_REGION_LABEL.renderDigest` 为「今日要闻」 ⇒ 回退（改名后 bump build-version 重跑 preflight）。前置闸门 `preflight_check.check_digest_badge_wording`（只喂 `index.html`）已锁。
 - **站点标题**须为「矿业新闻日报 · YYYY-MM-DD」（§39；`deploy_pages.py` 会自动规范化，但生成脚本不得改回纯日期）。
 - **其他文案**：头部无副标题；往期标题「滚动保留最近30天」；底部两行数据来源 / 国际来源照旧；口径句「能源与黑色不收；铁矿仅留全球供需与价格」；「数据更新时间」由前端 `applyDataUpdatedAt()` 读 `NEWS_DATA.updated`（**勿写死**）；访客统计已迁百度统计（tongji.baidu.com 后台查看，页脚仅 `baiduStatNote` 一行接入说明、不回显实时数字）；标注精简（只 NEW / 战略 / 重大，`tag-chip` ≤2）。
 - **行情口径**：价格两行 ＝ `priceCardsShfe`（国内 10 卡）+ `priceCardsLme`（LME 6 卡，slug `lcpt` / `lalt` / `lldt` / `lznt` / `lnkt` / `ltnt`，美元/吨），**严禁同列矩阵**；数值**唯一来源** `lme_data.json` / `lme-data.js`（严禁手抄；某品种 null → 该卡 `value="--"` `chg="暂无数据"` `class="price-card flat"`）；前端 `renderLmePrices()` 只读 `LME_DATA` 不做跨源覆盖；⚠️**走势图末点＝昨天（最近已收盘日）是正确的**，禁手改 `price_history_detail.json` / `price-history.js`、禁回填盘中价。

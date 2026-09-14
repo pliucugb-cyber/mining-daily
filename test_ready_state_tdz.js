@@ -1,7 +1,7 @@
 // test_ready_state_tdz.js
 // 2026-09-11 事故（第三轮，真正根因）回归测试 —— **defer 脚本的 readyState 语义**
 //
-// 用户现象：今日要闻 / 热榜 / AI 检索全空（简报正常），强制清缓存无效。
+// 用户现象：本期要闻 / 热榜 / AI 检索全空（简报正常），强制清缓存无效。
 // 用户给出的诊断：
 //   [脚本错误] Uncaught ReferenceError: Cannot access 'newsSearchText' before initialization
 //   [补渲染失败] qaReinit → Cannot read properties of undefined (reading 'forEach')
@@ -135,7 +135,7 @@ function loadPage() {
       + '（中断时这两处会停在占位空数组）');
 
     const digest = (doc.getElementById('digestStrip') || {}).textContent || '';
-    check('今日要闻已渲染（不再是「要闻提取中…」）',
+    check('本期要闻已渲染（不再是「要闻提取中…」）',
       digest.trim().length > 0 && digest.indexOf('提取中') < 0,
       '要闻文本=' + digest.replace(/\s+/g, ' ').trim().slice(0, 50));
     const hot = (doc.getElementById('hotListBody') || {}).textContent || '';
