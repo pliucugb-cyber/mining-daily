@@ -172,7 +172,7 @@ _LEGACY_HTML = r"""<!DOCTYPE html>
     <h1>矿业资讯速览 · 已迁移至新地址</h1>
   </div>
   <div class="body">
-    <p>您访问的是 <b>旧地址</b>。该地址上的<b>旧版新闻内容已停止维护、不再更新，也不再展示</b>。</p>
+    <p>您访问的是 <b>旧地址</b>。该地址上的<b>旧版内容已停止维护、不再更新，也不再展示</b>。</p>
     <p>最新、完整的矿业资讯速览，请前往 <b>新地址</b> 查看：</p>
     <a class="cta" id="goBtn" href="__NEW_URL__" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>

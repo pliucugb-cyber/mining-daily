@@ -1710,6 +1710,26 @@ new = re.sub(r'<title>[^<]*</title>', lambda _m: '<title>%s</title>' % want, src
 - **遗留（不在「仅改站名」范围，宣传口若要连正文一起管需另行处理）**：`manifest.json` 的 `description`（「每日矿业新闻与价格摘要」）仍含「新闻」；页面正文与 AI 面板文案里的「日报」「新闻」措辞未清；两条自动化 prompt 未改（**它们只引用 §39/§42.8、不硬编码站名，改本节即自动继承**）；自动化**显示名**（「矿业日报 06:00/08:00 …」）与通知文案「矿业日报06:00」属内部标签，未动。
 - **闸门**：`test_site_title.py`（`SITE` 常量已同步新名）+ `preflight_check.check_site_title`（随 `SITE_NAME` 自动生效）；`python test_site_title.py` 须全绿。
 
+### 39.12 2026-09-14 第二批：正文「日报/新闻」措辞清理 + 横幅文案温和化
+
+**起因**：用户就 39.11 的遗留项追问「现在要不要一并清」→ 拍板 **一并清**（与 §42.18 同版发布，build `20260914-1600`）。
+
+**清除范围（仅用户可见文案）**
+- 页面：`index.html` + `app.js` —— PDF 按钮 title、手机端安装引导（`把日报添加到桌面`→`把站点添加到桌面`、`离线也能看日报`→`离线也能看`）、悬浮球 `搜新闻 / 问 AI`→`搜资讯 / 问 AI`、归档收藏标题、页脚来源声明「公开新闻报道」→「公开报道」、热榜/简报/AI 面板空态、AI 回答前言与失败提示、欢迎语「本地新闻库共 N 条」→「本地资讯库共 N 条」。
+- 元数据 / 附属页：`manifest.json` `description`；搬迁提示页（`404.html`、`legacy-redirect/`、`old-link-notice/`、`server.py`、`redirect_server.py`）；`mobile-preview.html`；`netlify/public/index.html`。
+- 测试：`test_smoke_0908.js` 欢迎语断言 → `/本地资讯库共 \d+ 条/`。
+
+**刻意保留（不得顺手改）**
+- **功能正则与停用词**：`app.js` 里识别用户提问的 `(新闻|消息|动态|资讯|报道|…)` 与 `QA_STOPWORDS`（含「新闻」）—— 用户仍会用「新闻」提问，删了直接掉识别率。
+- **AI system/user prompt**（发给模型的技术指令，用户不可见）与**代码注释 / docstring / 启动日志**。
+- **信源专名**：「人民日报」等媒体名。
+- **历史文档**：`audit_*.md`、`archive/` 等记录。
+
+**横幅文案**：「ℹ️ 已记录 N 条非致命报错」→「ℹ️ 有 N 条非致命提示」；诊断行 `错误N条` → `提示N条`。
+起因：用户把这条良性提示误当成故障。它本是设计内的 **info 黄条（9 秒自动消失、不阻塞，见 §42.10）**。
+
+**闸门**：`preflight_check.py` 全绿；**全部 34 个测试**通过；真机探针 `errorCount=0`、`banner` 不显示。
+
 ## §40 2026-09-12 简报「展开全部（N 条）」裁剪态持久化（层 B）
 
 ### 40.1 起因与裁定
@@ -2032,7 +2052,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 ## §42 全站形态契约与复核清单（生成侧必留 · 复核侧回退指纹）
 
 > **用途**：本节是**全站形态的唯一权威清单**，被两条自动化直接引用 ——
-> - **生成侧（06:00 重建）**：按 §42.1–§42.8（**+ §42.17 卡片 sparkline**）的「必留指纹」逐项保留，**缺任一即回退**；
+> - **生成侧（06:00 重建）**：按 §42.1–§42.8（**+ §42.17 卡片 sparkline + §42.18 版本回探自愈**）的「必留指纹」逐项保留，**缺任一即回退**；
 > - **复核侧（08:00 复验）**：按 §42.1–§42.10 逐项核对，命中任一「回退指纹」即就地修复。
 >
 > 各部件**为什么这样设计**仍以对应专题节（§16 / §17 / §19–§34 / §38 / §40 / §41）为准；
@@ -2259,6 +2279,27 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **闸门**：`node test_price_heatmap.js`（**126 PASS**）+ `test_price_unit_dedup.js`（17）+ `test_smoke_0908.js`（75）；改过 `@media`/grid 断点 → 仍须补**真实 Chrome** 探针（桌面 1280 与移动 390 各跑，断言：每张真卡 `.pc-spark` 存在、`polyline` 点数、卡内不溢出、`.pc-chg` 仍可见、5日文本与 `PRICE_HISTORY` 5日% 一致、电解钴**无** spark）。
 - **回退指纹**：① 桌面卡片视图下看不到走势线；② 5日百分比与「排行」周榜对不上（另算了一套）；③ 5日文本被塞进 `.pc-chg`（CSV「涨跌幅」列 / 预警解析被污染）；④ 电解钴等无日K品种出现空 spark 或报错；⑤ sparkline 溢出卡片右缘 / 顶到 `.pc-chg`；⑥ 移动端 sparkline 未落 row2（挤在第 1 行导致换行错乱）；⑦ `cardSpark()` 调用被挪到 `rankRender()` 之前或删掉（价格异步刷新后 spark 消失）；⑧ 窄屏探针在 `body[data-md-cat]` 未清除时报假 FAIL。
 
+### 42.18 版本回探自愈（内联，2026-09-14）
+
+**定位（必留）**：`index.html` 内联自愈块，紧随 `window.mdHardReset=hardReset;` 之后的 `mdVersionProbe()`。
+
+**为什么需要**：客户端可能被 **Service Worker / CDN / 企业网代理**喂**旧 HTML**（2026-09-14 实况：用户卡在当天 11:43 那版 —— 站名还是旧的、价格卡没有 sparkline）。旧 HTML 里的自愈代码只能自救到它自己那一版；本机制让页面**主动发现线上已发布新版本**并自行清缓存重载，用户无需知道「要清缓存」这件事。
+
+**原理（关键，勿改）**：`fetch('sw.js?probe='+Date.now(),{cache:'no-store'})` 带**唯一 query**，而 SW 的 `caches.match` 默认 `ignoreSearch:false` ⇒ 必然匹配不到缓存、**穿透到网络**。这是它绕开「缓存中毒」的**唯一支点**（`sw.js` 既不在 `urlsToCache` 也不在 `DATA_FILES`，落 SWR 分支）。取回后解析 `CACHE_NAME = 'mining-daily-<YYYYMMDD-HHMM>'`，与页面 `<meta name="build-version">` 做**数字比较**。
+
+**三道安全闸（缺一即可能造成循环刷新）**
+1. 仅 `mdVerNum(remote) > mdVerNum(cur)` 时动作 —— 版本回退绝不误刷；
+2. `localStorage['md_ver_probe'] === remote` 即跳过 —— **同一个线上版本只触发一次，跨会话也生效**；
+3. 复用 `hardReset` 的 `sessionStorage['md_sw_hardreset']` + `navigator.onLine !== false` 守卫。
+
+**调度**：`load` 之后延迟 **4000ms**（不与首屏抢网络、不拖慢 TTI）。
+
+**重建边界**：本块位于 `<head>` 前缀区；生成脚本只做定点 `re.sub`（title/日期/计数）+ `_replace_block`（两个价格卡块），**不碰 `<head>`** → 天然存活（已用重建模拟实证）。
+
+**回退指纹**：① `mdVersionProbe` 定义或调度消失；② 探测 URL 丢掉唯一 query（改回 `'sw.js'` 会命中缓存 → 机制静默失效）；③ 比较改成 `!==`（版本回退也会刷）；④ 缺 `localStorage['md_ver_probe']` 守卫（跨会话反复刷新）。Grep 这四个串即可判定。
+
+**验证脚本**：`%TEMP%\md_probe_verprobe.js`（真机三组：基线不触发 / 本地落后触发 / 本地领先不触发）。
+
 ### 42.7 PWA 安装引导（§41，2026-09-12 两轮修复后定稿）
 
 **结构与声明（第一轮）**
@@ -2383,7 +2424,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 ### 42.11 怎么用（两句话）
 
-- **生成侧（06:00）**：重建完成后，按 §42.1–§42.8（**+ §42.17 卡片 sparkline**）的「必留指纹」逐项自检，缺任一即视为回退；形态类改动**先 Grep §42 再动手**，不要靠记忆。
+- **生成侧（06:00）**：重建完成后，按 §42.1–§42.8（**+ §42.17 卡片 sparkline + §42.18 版本回探自愈**）的「必留指纹」逐项自检，缺任一即视为回退；形态类改动**先 Grep §42 再动手**，不要靠记忆。
 - **复核侧（08:00）**：按 §42.1–§42.10 逐项核对，命中任一「回退指纹」→ 就地修复 + bump build-version + 重跑 preflight；汇报时按 §42 的分组逐组给一句话结论 + §42.9 的测试通过数。
 
 ## §43 2026-09-13 矿权登记源扩充 + AI 搜滚动边界修复（build `20260913-1205`）

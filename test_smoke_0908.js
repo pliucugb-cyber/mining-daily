@@ -225,7 +225,7 @@ setTimeout(() => {
   const qaBody = doc.getElementById('qaFloatBody');
   const firstMsg = qaBody ? qaBody.querySelector('.qa-msg.ai .qa-msg-bubble') : null;
   const welcome = firstMsg ? firstMsg.textContent : '';
-  check('⑦ 欢迎语含库条数', /本地新闻库共 \d+ 条/.test(welcome), welcome.slice(0, 40));
+  check('⑦ 欢迎语含库条数', /本地资讯库共 \d+ 条/.test(welcome), welcome.slice(0, 40));
   check('⑦ 欢迎语含检索/AI 引导', welcome.includes('检索') && welcome.includes('AI'));
   const qaAiBtn = doc.getElementById('qaFloatAi');
   check('⑦ AI 按钮不误标「AI 本地」（代理可用）', !!qaAiBtn && qaAiBtn.textContent !== '✨ AI 本地', qaAiBtn ? qaAiBtn.textContent : '无按钮');

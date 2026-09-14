@@ -2278,7 +2278,7 @@ function loadBrief(){
   var _briefTimer=setTimeout(function(){
     var m=document.getElementById('briefMain');
     if(m&&(m.querySelector('.skeleton')||/加载中/.test(m.textContent||''))){
-      m.innerHTML='<div class="brief-empty">简报加载较慢，可稍后刷新；不影响下方新闻与价格。</div>';
+      m.innerHTML='<div class="brief-empty">简报加载较慢，可稍后刷新；不影响下方内容与价格。</div>';
     }
   },8000);
   fetch('morning_report.json',{cache:'reload'})
@@ -2415,7 +2415,7 @@ function renderHotPage(){
   if(!body)return;
   var cnt=document.getElementById('hotListCount');
   if(!__hotPool.length){
-    body.innerHTML='<li class="hotlist-empty">今日热榜暂无数据（新闻源未更新）</li>';
+    body.innerHTML='<li class="hotlist-empty">今日热榜暂无数据（信源未更新）</li>';
     if(cnt)cnt.textContent='0条';
     var b0=document.getElementById('hotRefreshBtn');
     if(b0)b0.style.display='none';
@@ -2660,7 +2660,7 @@ function renderAiAnalyze(d){
   }
   var items=Array.isArray(d.items)?d.items:[];
   if(!items.length){
-    body.innerHTML='<div class="ai-empty">今日暂无 AI 解析（可能是新闻源未更新或配额已用完）</div>';
+    body.innerHTML='<div class="ai-empty">今日暂无 AI 解析（可能是信源未更新或配额已用完）</div>';
     if(cnt)cnt.textContent='0条';
     return;
   }
@@ -2706,7 +2706,7 @@ function localAiSummary(){
     return n===today || d===today;
   });
   if(!todays.length){
-    body.innerHTML='<div class="ai-empty">本地检索：今日暂无新增新闻（纯静态托管，未接入 AI 服务端）。行情、热榜与问答均为本地计算。</div>';
+    body.innerHTML='<div class="ai-empty">本地检索：今日暂无新增条目（纯静态托管，未接入 AI 服务端）。行情、热榜与问答均为本地计算。</div>';
     if(cnt)cnt.textContent='本地';
     return;
   }
@@ -2827,7 +2827,7 @@ function showPwaInstallPrompt(){
       btn.textContent='如何添加';
       btn.onclick=function(){ alert('添加到主屏幕：\n① 点 Safari 底部「分享 □↑」\n② 上滑找到「添加到主屏幕」\n③ 点「添加」'); };
     }else{
-      txt.textContent='添加到手机桌面，离线也能看日报';
+      txt.textContent='添加到手机桌面，离线也能看';
       // 按钮文案跟着真实能力走：只有浏览器确实给了安装事件（能连 Google 服务的机型）才叫「安装」，
       //   否则叫「怎么加」并给菜单路径 —— 按钮写「安装」点了却毫无反应，正是用户踩过的那一脚。
       btn.textContent=window.__deferredPrompt?'安装':'怎么加';
@@ -3002,7 +3002,7 @@ function mdMobileTopTabs(){
   // 2026-09-12 检索统一（用户定夺）：顶栏不再注入搜索按钮 —— 原 #mdSearchBtn 恒不可见（见上方 mdOpenSearch 注释），
   //   是死控件。检索能力统一收进底部「AI 搜」tab 打开的面板，顶栏保持「品牌名 + 日期」的干净两栏。
   var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业资讯速览</span><span class="md-date">'+dateTxt+'</span></div>'
-    +'<button type="button" class="md-search-pill" aria-label="搜索矿种、新闻、AI 问答"><span class="sp-ico">🔍</span><span>搜索矿种、新闻、AI 问答</span></button>'
+    +'<button type="button" class="md-search-pill" aria-label="搜索矿种、资讯、AI 问答"><span class="sp-ico">🔍</span><span>搜索矿种、资讯、AI 问答</span></button>'
     +'<div class="md-cat-bar" role="tablist" aria-label="内容分类">';
   for(var i=0;i<cats.length;i++){ html+='<button class="mctab" role="tab" data-cat="'+cats[i][0]+'">'+cats[i][1]+'</button>'; }
   html+='</div>';
@@ -3046,7 +3046,7 @@ function mdMobileTabBar(){
   bar.id='mobileTabBar'; bar.setAttribute('aria-label','移动端主导航');
   bar.innerHTML='<button class="mtab" data-go="home"><span class="mi">'+SVG_HOME+'</span><span>首页</span></button>'
     +'<button class="mtab" data-go="price"><span class="mi">'+SVG_PRICE+'</span><span>价格</span></button>'
-    +'<button class="mtab" data-go="qa" aria-label="AI 搜：新闻检索与问答"><span class="mi">'+SVG_QA+'</span><span>AI 搜</span></button>'
+    +'<button class="mtab" data-go="qa" aria-label="AI 搜：资讯检索与问答"><span class="mi">'+SVG_QA+'</span><span>AI 搜</span></button>'
     +'<button class="mtab" data-go="rights"><span class="mi">'+SVG_RIGHTS+'</span><span>矿权</span></button>'
     +'<button class="mtab" data-go="mine"><span class="mi">'+SVG_USER+'</span><span>我的</span></button>';
   var sheet=document.createElement('div'); sheet.id='mineSheet'; sheet.hidden=true;
@@ -3351,7 +3351,7 @@ function mdRenderInstallCard(){
   var stalled=mdPwaFlag(MD_PWA_STALL_KEY)==='1';
   var html;
   if(IS_STANDALONE){
-    html='<div class="mine-install-title">✅ 已安装到主屏幕</div><div class="mine-install-note">日报已作为独立应用运行，可随时从主屏图标进入。</div>';
+    html='<div class="mine-install-title">✅ 已安装到主屏幕</div><div class="mine-install-note">本站已作为独立应用运行，可随时从主屏图标进入。</div>';
   }else{
     // 默认主推「通用路径」：任何品牌手机、任何浏览器都能用，不依赖 Google 服务。
     html='<div class="mine-install-title">📲 装到手机桌面</div>';
@@ -3374,7 +3374,7 @@ function mdRenderInstallCard(){
   }
   if(!IS_STANDALONE && tried && stalled){
     html+='<div class="mine-install-warn">⚠️ 上次点了「安装」但桌面没出现图标 —— '
-      +'这不是日报的问题：手机上的「安装」要靠 <b>Google 服务</b>生成应用包，'
+      +'这不是本站的问题：手机上的「安装」要靠 <b>Google 服务</b>生成应用包，'
       +'国内多数手机够不到，所以走到一半就静默结束了（不报错）。'
       +'<br>👉 <b>改用上面的「添加到主屏幕 / 添加到桌面」</b>，一定能成，功能和离线一样不少。</div>';
   }
@@ -3417,7 +3417,7 @@ function mdRenderMeetingSection(){
     items.push(r);
   }
   var cnt=document.getElementById('meetingCount'); if(cnt) cnt.textContent=items.length+'条';
-  if(!items.length){ body.innerHTML='<div class="meeting-empty">暂无会议会展相关新闻</div>'; return; }
+  if(!items.length){ body.innerHTML='<div class="meeting-empty">暂无会议会展相关资讯</div>'; return; }
   body.innerHTML=items.map(function(r){
     var t=esc(String(r.t||'')); var u=safeHref(String(r.u||'#')); var s=esc(String(r.s||'')); var d=String(r.d||'');
     return '<div class="news-item" data-url="'+u+'"><div class="news-head"><span class="dot"></span><a class="news-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a></div><div class="news-meta"><span class="src">'+s+'</span> · '+(d?d.slice(5):'')+'</div></div>';
@@ -3508,7 +3508,7 @@ function mdRecordLastSeen(){
 function mdInitOfflineBanner(){
   try{
     var ob=document.createElement('div'); ob.id='mdOffline';
-    ob.innerHTML='📡 网络已断开，正在显示已缓存的日报内容';
+    ob.innerHTML='📡 网络已断开，正在显示已缓存的内容';
     document.body.appendChild(ob);
     function upd(){ ob.classList.toggle('show', !navigator.onLine); }
     window.addEventListener('online', upd); window.addEventListener('offline', upd); upd();
@@ -4462,7 +4462,7 @@ function qaFabApplyTuck(){
   b.classList.toggle('tucked',QA_FAB_TUCKED);
   b.classList.toggle('tuck-left',QA_FAB_SIDE==='left');
   b.classList.toggle('tuck-right',QA_FAB_SIDE==='right');
-  b.title=QA_FAB_TUCKED?'已收起 · 点击唤出悬浮球（拖到屏幕边缘可再次收起）':'新闻检索 / AI 问答（可拖动；拖出屏幕边缘即收起）';
+  b.title=QA_FAB_TUCKED?'已收起 · 点击唤出悬浮球（拖到屏幕边缘可再次收起）':'资讯检索 / AI 问答（可拖动；拖出屏幕边缘即收起）';
 }
 function qaFabSaveTuck(){
   try{if(window.localStorage)lsSet('qaFabTuck',JSON.stringify({t:QA_FAB_TUCKED,s:QA_FAB_SIDE}));}catch(e){}
@@ -5108,7 +5108,7 @@ function qaFloatSearch(){
   var html='';
   if(!hits.length){
     var sugg=qaSuggestChips(words);
-    html='<div>全库未检索到匹配内容。<b>这不等于「没有发生」</b>——本库由日报每日追加，存在抓取缺口。</div>';
+    html='<div>全库未检索到匹配内容。<b>这不等于「没有发生」</b>——本库每日追加，存在抓取缺口。</div>';
     if(sugg)html+='<div class="qa-sug-row">建议减少关键词，或试试：'+sugg+'</div>';
   }else{
     var cond=[];
@@ -5118,7 +5118,7 @@ function qaFloatSearch(){
     if(from)cond.push(from+' 起');
     // 按相关度重排（仅当用户输入了关键词；仅有筛选条件时保持原顺序）
     if(q)hits=qaRankByRelevance(q,hits);
-    html='<div>找到 <b>'+hits.length+'</b> 条相关新闻'+(cond.length?' · '+cond.join(' · '):'')+(q?'（按相关度排序）':'')+'：</div>';
+    html='<div>找到 <b>'+hits.length+'</b> 条相关资讯'+(cond.length?' · '+cond.join(' · '):'')+(q?'（按相关度排序）':'')+'：</div>';
     if(QA_TREND)html+='<div class="qa-trend">'+qaEsc(qaTrendText(hits))+'</div>';
     // 渲染全部命中结果（qa-float-body 可滚动）；设 100 条安全上限防止极端关键词
     var lim=Math.min(hits.length,100);
@@ -5178,7 +5178,7 @@ function qaAiLocalAnswer(q,ctx){
   // 1) 若有相关新闻，基于新闻生成摘要
   if(ctx&&ctx.length){
     var byDate=ctx.slice(0,5);
-    text='根据本地新闻库中 '+ctx.length+' 条相关条目，整理要点如下：\n\n';
+    text='根据本地资讯库中 '+ctx.length+' 条相关条目，整理要点如下：\n\n';
     var pts=[];
     byDate.forEach(function(r,i){
       pts.push((i+1)+'. ['+(r.d||'')+'] '+(r.t||'')+(r.s?'（'+r.s+'）':''));
@@ -5274,8 +5274,8 @@ function qaFloatAsk(retryMode,ctxOverride){
     }
   }
   _qaCacheKey=_qaCacheKey||qaCacheKey(q,_minSel||_min,_topSel||_top,_from,_rg,_dateIntent);
-  var meta='正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候…';
-  var msg=qaFloatAdd('ai','正在从全库 '+QA_ROWS.length+' 条新闻中检索相关条目并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now(),keepScroll:true});
+  var meta='正在从全库 '+QA_ROWS.length+' 条资讯中检索相关条目并组织答案，请稍候…';
+  var msg=qaFloatAdd('ai','正在从全库 '+QA_ROWS.length+' 条资讯中检索相关条目并组织答案，请稍候（通常 10~30 秒）…',meta,{md:false,actions:false,ts:Date.now(),keepScroll:true});
   QA_FLOAT_MSG=msg;
   qaDeepseekCall(q,_ctx,msg,btn,_conv,_broad,_dateIntent,_rangeIntent);
   return;
@@ -5480,7 +5480,7 @@ function qaFollowUps(q,ctx){
   var t=QA_TOPICS.filter(function(x){return q.indexOf(x)>=0;})[0];
   if(m){ups.push(m+'最新价格走势');ups.push(m+'近期重大并购');ups.push(m+'勘查突破进展');}
   if(t)ups.push(t+'相关政策梳理');
-  ups.push('今日新增了哪些矿业新闻');
+  ups.push('今日新增了哪些矿业资讯');
   ups.push('最近一周矿业热点');
   var seen={},out=[];
   ups.forEach(function(u){if(!seen[u]){seen[u]=1;out.push(u);}});
@@ -5507,7 +5507,7 @@ function qaFinishAnswer(text,bubble,msg,q,ctx,ok,dateIntent){
   if(msg){
     var _ms=_qaT0?((Date.now()-_qaT0)/1000).toFixed(1):'';
     var meta=ok
-      ? ('DeepSeek · 通路='+(_qaPath||'代理')+' · 模型='+(_qaModel||'deepseek-chat')+(_ms?(' · 用时 '+_ms+'s'):'')+' · 已参考 '+(ctx?ctx.length:0)+' 条'+(dateIntent?(' '+dateIntent+' 本地新闻'):' 相关本地新闻'))
+      ? ('DeepSeek · 通路='+(_qaPath||'代理')+' · 模型='+(_qaModel||'deepseek-chat')+(_ms?(' · 用时 '+_ms+'s'):'')+' · 已参考 '+(ctx?ctx.length:0)+' 条'+(dateIntent?(' '+dateIntent+' 本地资讯'):' 相关本地新闻'))
       : ('本地知识库兜底 · 通路='+(_qaPath||'本地兜底')+(_ms?(' · 用时 '+_ms+'s'):'')+' · 全库 '+QA_ROWS.length+' 条');
     var mm=msg.querySelector('.qa-msg-meta');if(mm)mm.textContent=meta;
     msg.dataset.raw=text;msg.dataset.md='1';msg.dataset.fmt='md';msg.dataset.q=q;msg.dataset.ctx=JSON.stringify(ctx||[]);qaAppendFollowUps(msg,qaFollowUps(q,ctx));
@@ -5556,9 +5556,9 @@ function qaApplyJson(res,bubble,msg,q,ctx,dateIntent){
   if(!res.ok){
     var em=(d&&d.error&&d.error.message)||'请求失败，请稍后重试。';
     if(res.status===401||/authentication|invalid.*key|api key/i.test(em)){
-      text='⚠️ **API Key 已失效或被吊销**，AI 暂时无法回答。\n\n请联系网页维护者更新 DeepSeek API Key 后重试；你也可以切换到「检索」面板直接查看本地新闻。';
+      text='⚠️ **API Key 已失效或被吊销**，AI 暂时无法回答。\n\n请联系网页维护者更新 DeepSeek API Key 后重试；你也可以切换到「检索」面板直接查看本地资讯。';
     }else{
-      text='DeepSeek 调用失败：'+em+'\n\n可点「🔄 重新生成」重试，或切换到「检索」面板查看本地新闻。';
+      text='DeepSeek 调用失败：'+em+'\n\n可点「🔄 重新生成」重试，或切换到「检索」面板查看本地资讯。';
     }
   }else{
     var content=((((d.choices||[])[0]||{}).message||{}).content||'').trim();
@@ -5773,8 +5773,8 @@ function qaCachePut(k,v){
 // 欢迎语（2026-09-08 晚：原「本地新闻库 N 条。」信息量为零，改为说明面板能力）
 function qaWelcomeText(){
   var up=QA_UPDATED?('（更新于 '+QA_UPDATED+'）'):'';
-  return '👋 本地新闻库共 '+QA_ROWS.length+' 条'+up+'。'
-    +'\n\n输入关键词点「检索」全库查找原文；点「AI」让 AI 读完相关新闻后作答；'
+  return '👋 本地资讯库共 '+QA_ROWS.length+' 条'+up+'。'
+    +'\n\n输入关键词点「检索」全库查找原文；点「AI」让 AI 读完相关资讯后作答；'
     +'也可先用上方矿种 / 主题 / 时间筛选缩小范围。';
 }
 function qaClearHistory(){

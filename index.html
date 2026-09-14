@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260914-1530" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260914-1600" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -1977,6 +1977,39 @@ body:not(.ec-on) #eventCalendar{display:none}
     });
   }
   window.mdHardReset=hardReset;
+  // ④ 版本回探自愈（2026-09-14 新增）：即使 Service Worker / CDN / 代理把**旧 HTML** 喂给页面，
+  //    也能发现线上已发布新版本并自行爬出来（用户无需知道「要清缓存」这件事）。
+  //    原理：探测请求带**唯一 query**，而 SW 的 caches.match 默认不忽略 search ⇒ 必然匹配不到缓存、
+  //          穿透到网络 —— 这正是普通刷新拿不到、它却能拿到线上真实版本的原因。
+  //    三道安全闸：① 只在「线上版本 > 本地版本」时动作（版本回退绝不误刷）；
+  //                ② 同一个线上版本只触发一次（localStorage 记住，跨会话也生效）；
+  //                ③ 复用 hardReset 的 sessionStorage 标志 + 离线跳过，杜绝循环刷新。
+  function mdVerNum(v){ return String(v||'').replace(/[^0-9]/g,''); }
+  function mdVersionProbe(){
+    try{
+      if(navigator.onLine===false)return;
+      try{ if(sessionStorage.getItem(RESET_FLAG)==='1')return; }catch(e){}
+      var cur='';
+      try{ var vm=document.querySelector('meta[name="build-version"]'); cur=vm?vm.getAttribute('content'):''; }catch(e){}
+      if(!cur)return;
+      fetch('sw.js?probe='+Date.now(),{cache:'no-store'}).then(function(r){ return r.text(); }).then(function(txt){
+        var mm=/CACHE_NAME\s*=\s*['"]mining-daily-([0-9]{8}-[0-9]{4})['"]/.exec(txt||'');
+        if(!mm)return;
+        var remote=mm[1];
+        if(!(mdVerNum(remote)>mdVerNum(cur)))return;
+        try{ if(localStorage.getItem('md_ver_probe')===remote)return; }catch(e){}
+        try{ localStorage.setItem('md_ver_probe',remote); }catch(e){}
+        try{ console.info('[md] 线上已有新版本 '+remote+'（本地 '+cur+'），清缓存后重载'); }catch(e){}
+        hardReset();
+      }).catch(function(){});
+    }catch(e){}
+  }
+  window.mdVersionProbe=mdVersionProbe;
+  // 首屏优先：load 之后再延迟 4s 探测，不与首屏渲染抢网络。
+  try{
+    if(document.readyState==='complete') setTimeout(mdVersionProbe,4000);
+    else window.addEventListener('load',function(){ setTimeout(mdVersionProbe,4000); });
+  }catch(e){}
 
   function showBootWarn(name){
     var el=document.getElementById('mdBootWarn');
@@ -2020,7 +2053,7 @@ body:not(.ec-on) #eventCalendar{display:none}
     mdSetBannerMode(el,'info');
     var lead=el.querySelector('.md-boot-lead'), tail=el.querySelector('.md-boot-tail');
     var d=el.querySelector('.md-boot-detail'), g=el.querySelector('.md-boot-diag');
-    if(lead)lead.textContent=leadText||('ℹ️ 已记录 '+n+' 条非致命报错');
+    if(lead)lead.textContent=leadText||('ℹ️ 有 '+n+' 条非致命提示');
     if(tail)tail.textContent='（不影响当前浏览，可忽略）';
     if(d)d.textContent=''; if(g){ try{ g.textContent=mdDiagLine(); }catch(e){ g.textContent=''; } }
     el.style.display='flex';
@@ -2260,7 +2293,7 @@ body:not(.ec-on) #eventCalendar{display:none}
       +' · 数据 news='+(d.data.news==='缺失'?'缺失':d.data.news+'条')
       +' lme='+(d.data.lme?'有':'无')+' 历史='+(d.data.priceHistory?'有':'无')
       +' · 区块 热榜'+(d.regions.hot?'OK':'空')+' 简报'+(d.regions.brief?'OK':'空')+' 要闻'+(d.regions.digest?'OK':'空')
-      +' · 错误'+(d.errors.length)+'条';
+      +' · 提示'+(d.errors.length)+'条';
   }
   function mdFallbackCopy(txt,btn){
     try{
@@ -2520,7 +2553,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <div class="stats-actions" data-page-node-id="CPs0HBYiw0DnwCX25prPhR">
 <button class="btn btn-restore" onclick="window.clearAllRead&&window.clearAllRead()" title="一键清除所有已读记录，全部恢复为未读状态" data-page-node-id="G1R8w0s9restore">↻ 全部恢复未读</button>
 <button class="btn btn-allread" onclick="window.markAllRead&&window.markAllRead()" data-page-node-id="OIjMu9jnziI1P66Ap1NaBh">✓ 全部标为已读</button>
-<button class="btn btn-pdf" type="button" onclick="window.exportPdf&&window.exportPdf()" title="导出当日日报为 PDF（调用浏览器打印）" data-page-node-id="mdPdfBtn">📄 PDF</button>
+<button class="btn btn-pdf" type="button" onclick="window.exportPdf&&window.exportPdf()" title="导出当日资讯为 PDF（调用浏览器打印）" data-page-node-id="mdPdfBtn">📄 PDF</button>
 </div>
 </div>
 <!-- ==================== 矿业热榜（2026-09-03 新增，类似今日头条热榜） ==================== -->
@@ -2625,7 +2658,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <div class="guide-cols" data-page-node-id="0hmNcwwE4YiN8UTfRG9cLi">
 <!-- ============== 手机端 ============== -->
 <div class="guide-col mobile" data-page-node-id="dkUFMB0CPoYXfGNhDkfVSs">
-<div class="guide-col-head" data-page-node-id="L7TKXg8Drwc2jvZSTTAU1R">📱 手机端 · 把日报添加到桌面</div>
+<div class="guide-col-head" data-page-node-id="L7TKXg8Drwc2jvZSTTAU1R">📱 手机端 · 把站点添加到桌面</div>
 <div class="guide-col-body" data-page-node-id="X3rZ3CbCy54tfATdDhc9Rd">
 <div class="guide-step gs-mobile" data-page-node-id="MJCVZ22WjKDLA92RMD5o9E"><strong data-page-node-id="DVA9q5XzNRLrRGYETONyC9">① 安卓 Chrome</strong>右上角「⋮」→「<b data-page-node-id="40Dmrozejva93FADoY8Erf">添加到主屏幕</b>」→ 改名称 →「<b data-page-node-id="6tdalqwSq4VO2t3TooClPI">添加</b>」。桌面出图标，点图标直达。</div>
 <div class="guide-step gs-mobile" data-page-node-id="kq6AT86ZAd4uMpIbPZy43D"><strong data-page-node-id="QUhSI3MoOrJ9X7i33qQMsp">② iPhone Safari / iPad</strong>底部「<b data-page-node-id="2hObPbQTUmv8rBIjxdywQe">分享 □↑</b>」→ 上滑找「<b data-page-node-id="Afh5FTWAAbn7qSex5TcajR">添加到主屏幕</b>」→「<b data-page-node-id="bezfJmdndD0wnICubZheor">添加</b>」。iPhone 为桌面图标直达。</div>
@@ -2654,7 +2687,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <div class="section" id="archivedFavSection" style="display:none" data-page-node-id="TasvMnm8dhzmi0x8329aJO">
 <div class="favview-bar" id="favViewBar"><button class="favview-back" type="button" data-act="fav-back" aria-label="返回">‹ 返回</button><span class="favview-title" id="favViewTitle">我的收藏</span><button class="favview-clear" type="button" data-act="clear-history" style="display:none" title="清空后 8 秒内可撤销（再点一次确认）" aria-label="清空浏览记录">清空</button></div>
 <div class="favview-sub" id="favViewSub"></div>
-<div class="section-title" data-page-node-id="MY70tmwCK1HAUzMGVg10cH">🗂️ 已归档收藏（原新闻已滚出页面，收藏记录永久保留）<span class="news-count" id="archFavCount" data-page-node-id="F8kZntuW6QGbm8uv9U8cGB">0条</span></div>
+<div class="section-title" data-page-node-id="MY70tmwCK1HAUzMGVg10cH">🗂️ 已归档收藏（原条目已滚出页面，收藏记录永久保留）<span class="news-count" id="archFavCount" data-page-node-id="F8kZntuW6QGbm8uv9U8cGB">0条</span></div>
 <div id="archFavList" data-page-node-id="X01kqiSgMddXbZ403nODmV"></div>
 </div>
 </div>
@@ -2671,7 +2704,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <!-- 移动端 PWA 安装浮条 -->
 <div class="mobile-install-bar" id="mobileInstallBar" hidden data-page-node-id="cTqBS81GyD0fsjVmr5mIqo">
   <span class="mobile-install-icon" data-page-node-id="guSyGcWWG2BtJUCjd0YUiY">⛏️</span>
-  <span class="mobile-install-text" id="mobileInstallText" data-page-node-id="NKDYU6Qq1d7RZPHPuFAKqL">添加到手机桌面，离线也能看日报</span>
+  <span class="mobile-install-text" id="mobileInstallText" data-page-node-id="NKDYU6Qq1d7RZPHPuFAKqL">添加到手机桌面，离线也能看</span>
   <button class="mobile-install-btn" id="mobileInstallBtn" type="button" data-page-node-id="VFG5WYGs5nUGiIOsTTrxKS">怎么加</button>
   <button class="mobile-install-close" id="mobileInstallClose" type="button" title="我知道了" data-page-node-id="aYGJNx5kFm9mKzBT1vKQp3">✕</button>
 </div>
@@ -2684,7 +2717,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <p class="stat-note" id="baiduStatNote" data-page-node-id="baiduStatNote">📊 访客行为统计由百度统计提供</p>
 <div style="border-top:1px solid #d5dde5;margin:14px 0 10px;padding-top:12px;text-align:left" data-page-node-id="s0XEjKAes6jbtPiPwsmIlv">
 <p style="font-size: var(--fs-meta);color:#5b6b7a;line-height:1.8" data-page-node-id="NzrZzWa8Mi46Kl9BCkweAB"><b style="color:#3a4a5a" data-page-node-id="s97lWbmba5lXx3mEzsWFWz">版权与免责声明</b><br data-page-node-id="OijJLIrhaTC7EHNx1MblBW">
-本页面信息均来源于互联网公开渠道，包括但不限于中国政府机构、行业协会、权威媒体的官方网站及公开新闻报道。所有著作权及其他权利归原机构 / 原媒体所有。<br data-page-node-id="PA1FzhH4lqRe38kHVnTkkH">
+本页面信息均来源于互联网公开渠道，包括但不限于中国政府机构、行业协会、权威媒体的官方网站及公开报道。所有著作权及其他权利归原机构 / 原媒体所有。<br data-page-node-id="PA1FzhH4lqRe38kHVnTkkH">
 本站仅作<b data-page-node-id="P1si3AlNlAthSA1xA7gUVx">信息聚合展示</b>，不存储完整原文，不作任何商业用途；通过标题链接引导读者返回原网站阅读，以尊重原网站访问流量与运营收益。<br data-page-node-id="dfBd33HPvBC39sVIQ8vndU">
 如原权利人认为本站所展示的内容存在侵权，请通过邮箱 <a href="mailto:1642988981@qq.com" style="color:#1a3a5c;text-decoration:underline" data-page-node-id="sqA3ynxUuyXHTOb9SJKOvG">1642988981@qq.com</a> 联系我们，并提供：① 权利人身份证明；② 涉嫌侵权内容的页面链接；③ 要求删除的具体说明。我们将在收到通知后 <b data-page-node-id="P4mEEnHZqxWFOwZ3OhuKXO">3 个工作日内</b>核实并处理。<br data-page-node-id="CFvQ6AO4lfy3BZEjDEhtUD">
 本站不对所聚合信息的及时性、准确性、完整性作担保；如因信息源变更导致链接失效，概与本站无关。</p>
@@ -2713,7 +2746,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
   </div>
 </div>
 <!-- ==================== 左下角问答悬浮球 + 面板（移出 container，确保在所有层叠上下文之上）==================== -->
-<button class="qa-fab" id="qaFab" title="新闻检索 / AI 问答（可拖动调整位置）" onclick="window.qaFabClick&&window.qaFabClick(event)" data-page-node-id="6Ka2v8zIKmQZIq48X3DFwp"><span class="qa-fab-ico" data-page-node-id="Et1ekOfJsPy8fqbimfa1ah">🔍</span><span class="qa-fab-txt" data-page-node-id="t3eWIwkTXUsYQt2aqAjCUZ">搜新闻 / 问 AI</span></button>
+<button class="qa-fab" id="qaFab" title="资讯检索 / AI 问答（可拖动调整位置）" onclick="window.qaFabClick&&window.qaFabClick(event)" data-page-node-id="6Ka2v8zIKmQZIq48X3DFwp"><span class="qa-fab-ico" data-page-node-id="Et1ekOfJsPy8fqbimfa1ah">🔍</span><span class="qa-fab-txt" data-page-node-id="t3eWIwkTXUsYQt2aqAjCUZ">搜资讯 / 问 AI</span></button>
 <div class="qa-float" id="qaFloat" data-page-node-id="SMuRhS8iqMPtiN769pZUaE">
   <div class="qa-float-head" data-page-node-id="Fw0aW0hTkzilozIGAlJLAj">
     <button class="qa-back" type="button" onclick="window.qaFloatBack&&window.qaFloatBack()" aria-label="返回" data-page-node-id="qaBackBtn">‹</button>
@@ -2748,8 +2781,8 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
     <div class="qa-input-grip" id="qaInputGrip" role="separator" aria-label="上下拖动可调整输入框高度" title="按住上下拖动，调整输入框高度"></div>
     <textarea class="qa-float-input" id="qaFloatInput" placeholder="输入关键词或问题…" aria-label="输入关键词检索或问题" autocomplete="off" rows="1" data-page-node-id="Blu0K8f8VaE0wTCmtVkFxX"></textarea>
     <button class="qa-float-btn qa-mic" id="qaFloatMic" type="button" title="语音输入（点击开始，再点结束）" aria-label="语音输入"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:auto"><rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M12 18v3"></path><path d="M5 10v2a7 7 0 0 0 14 0v-2"></path></svg></button>
-    <button class="qa-float-btn" id="qaFloatSearch" title="在全库新闻中检索关键词" onclick="window.qaFloatSearch&&window.qaFloatSearch()" data-page-node-id="DcqZEFlU8VgjnfLfZc4l82">检索</button>
-    <button class="qa-float-btn primary" id="qaFloatAi" type="button" title="AI 读完相关新闻后作答" aria-label="AI 回答" onclick="window.qaFloatAsk&&window.qaFloatAsk()" data-page-node-id="qJ4h2ouUiWwBV8nMhyMoNF">AI</button>
+    <button class="qa-float-btn" id="qaFloatSearch" title="在全库资讯中检索关键词" onclick="window.qaFloatSearch&&window.qaFloatSearch()" data-page-node-id="DcqZEFlU8VgjnfLfZc4l82">检索</button>
+    <button class="qa-float-btn primary" id="qaFloatAi" type="button" title="AI 读完相关资讯后作答" aria-label="AI 回答" onclick="window.qaFloatAsk&&window.qaFloatAsk()" data-page-node-id="qJ4h2ouUiWwBV8nMhyMoNF">AI</button>
   </div>
   <div class="qa-float-tip" data-page-node-id="IPv0ocqpX9nxwxqSsIOHLK">💡 问答历史仅存在本机浏览器，换设备 / 清缓存会丢失；长期留存请点「📤 导出」</div>
 </div>
