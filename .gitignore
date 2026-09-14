@@ -9,6 +9,10 @@ data/news_candidates_*.json
 # ===== 漏稿回溯报告（backcheck.py，本地人工核实用，逐日累积不入仓库）=====
 data/backcheck_*.md
 
+# ===== 抓取健康度快照/基线（fetch_news.py 运行期产物，按日累积，非源码）=====
+data/fetch_health_*.json
+data/fetch_baseline.json
+
 # ===== 前端临时测试脚本（jsdom 冒烟，用完即弃）=====
 _test_*.js
 

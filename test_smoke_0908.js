@@ -333,6 +333,10 @@ setTimeout(() => {
     let sum = 0;
     doc.querySelectorAll('#todaySection .sub-cat').forEach(c => {
       const t = (c.querySelector('.sub-count') || {}).textContent || '';
+      // 2026-09-14：只累加「N条新增」的子分类。旧闻被 demoteStaleNew() 降级为「补录」后，
+      // syncSubCounts() 会把该子类文案从「N条新增」改写成「N条」（无“新增”二字）；
+      // 若无差别取数，会把这些已降级子类的条数也计进来，出现 12 != 4 的假失败。
+      if (!/新增/.test(t)) return;
       const m = t.match(/(\d+)/);
       if (m) sum += parseInt(m[1], 10);
     });

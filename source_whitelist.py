@@ -99,6 +99,7 @@ FOREIGN_SPONSORED_PATTERNS = [
 # 非新闻来源的功能/统计/API 链接，校验时跳过
 SKIP_PATTERNS = [
     re.compile(r"mining-daily\.goatcounter\.com", re.I),
+    re.compile(r"hm\.baidu\.com", re.I),          # 百度统计 JS（2026-09-13 接入，站内统计接入，非新闻）
     re.compile(r"pliucugb-cyber\.github\.io", re.I),
     re.compile(r"api\.deepseek\.com", re.I),
     re.compile(r"mining-daily-qa\.netlify\.app", re.I),
