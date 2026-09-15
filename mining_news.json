@@ -1,11 +1,11 @@
 {
   "meta": {
     "report_date": "2026-09-15",
-    "generated_at": "2026-09-15T06:05:30+08:00",
-    "total": 233,
+    "generated_at": "2026-09-15T08:36:05+08:00",
+    "total": 232,
     "new_today": 18,
-    "archive": 215,
-    "page_total": 233,
+    "archive": 214,
+    "page_total": 232,
     "page_new_count": 18,
     "sources": [
       "MINING.COM",
@@ -2532,23 +2532,6 @@
         "钛",
         "市场",
         "国际"
-      ]
-    },
-    {
-      "id": "c85417de7dc3",
-      "title": "SMM 分析：美国 PPI 超预期推升加息押注 镍价本周明显承压",
-      "url": "https://news.metal.com/en/newscontent/104111096-smm-analysis-us-ppi-beat-expectations-fueling-rate-hike-bets-nickel-prices-under-heavy-pressure-this-week",
-      "source": "SMM 国际站",
-      "orig_date": "09-11",
-      "orig_date_full": "2026-09-11",
-      "report_date": "2026-09-15",
-      "category": "市场与价格",
-      "is_new": false,
-      "summary": "美国 8 月生产者价格指数（PPI）超市场预期，进一步推升市场对美联储加息的押注，美元走强压制有色金属估值；SMM 分析认为镍价本周明显承压运行，后续需关注宏观情绪变化以及不锈钢、新能源等下游需求的边际改善情况。（原题：[SMM Analysis] US PPI Beat Expectations, Fueling Rate Hike Bets, Nickel Prices Under Heavy Pressure This Week）",
-      "embed": "ok",
-      "tags": [
-        "镍",
-        "市场"
       ]
     },
     {
