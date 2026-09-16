@@ -1,8 +1,17 @@
 {
- "date": "2026-09-15",
+ "date": "2026-09-16",
  "has_history": true,
- "history_days": 15,
- "alerts": [],
- "summary": "15 个品种单日涨跌幅均未超过 3%，无显著异动。",
- "max_severity": "none"
+ "history_days": 14,
+ "alerts": [
+  {
+   "commodity": "镍",
+   "market": "LME 03",
+   "move": "-3.04%",
+   "severity": "medium",
+   "detail": "LME 镍（LME 03）最新收报 15,940.00 美元/吨，单日 -3.04%（数据日期 09-15）。",
+   "type": "price"
+  }
+ ],
+ "summary": "今日异动 1 项：镍 -3.04%（LME 03）。",
+ "max_severity": "medium"
 }
