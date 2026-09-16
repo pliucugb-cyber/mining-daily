@@ -1,8 +1,25 @@
 {
   "month": "2026-09",
-  "updated_at": "2026-09-15T06:05:26+08:00",
-  "count": 21,
+  "updated_at": "2026-09-17T06:07:02+08:00",
+  "count": 22,
   "news": [
+    {
+      "id": "686bf25b3063",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-17/1225569050.PDF",
+      "title": "科达制造股份有限公司关于受让控股子公司部分股权的公告",
+      "source": "巨潮资讯网·科达制造",
+      "orig_date": "09-17",
+      "orig_date_full": "2026-09-17",
+      "report_date": "2026-09-17",
+      "category": "并购与投资",
+      "company": "科达制造",
+      "sec_code": "600499",
+      "ma_type": "股权转让",
+      "summary": "科达制造（600499）披露《科达制造股份有限公司关于受让控股子公司部分股权的公告》，涉及股权转让。",
+      "tags": [
+        "并购"
+      ]
+    },
     {
       "id": "5e69064bb4d0",
       "url": "https://static.cninfo.com.cn/finalpage/2026-09-15/1225562534.PDF",
