@@ -1,8 +1,17 @@
 {
- "date": "2026-09-17",
+ "date": "2026-09-18",
  "has_history": true,
  "history_days": 15,
- "alerts": [],
- "summary": "15 个品种单日涨跌幅均未超过 3%，无显著异动。",
- "max_severity": "none"
+ "alerts": [
+  {
+   "commodity": "碳酸锂",
+   "market": "GFEX 主连",
+   "move": "+4.26%",
+   "severity": "medium",
+   "detail": "碳酸锂（GFEX 主连）最新收报 131,180.00，单日 +4.26%（数据日期 2026-09-17）。",
+   "type": "price"
+  }
+ ],
+ "summary": "今日异动 1 项：碳酸锂 +4.26%（GFEX 主连）。",
+ "max_severity": "medium"
 }
