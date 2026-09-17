@@ -1,8 +1,25 @@
 {
   "month": "2026-09",
-  "updated_at": "2026-09-17T06:07:02+08:00",
-  "count": 22,
+  "updated_at": "2026-09-18T06:07:24+08:00",
+  "count": 23,
   "news": [
+    {
+      "id": "01b1bd9f87c3",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-18/1225570881.PDF",
+      "title": "关于对外投资设立控股公司及收购Kanga Potash 92%股权的公告",
+      "source": "巨潮资讯网·藏格矿业",
+      "orig_date": "09-18",
+      "orig_date_full": "2026-09-18",
+      "report_date": "2026-09-18",
+      "category": "并购与投资",
+      "company": "藏格矿业",
+      "sec_code": "000408",
+      "ma_type": "股权/资产收购",
+      "summary": "藏格矿业（000408）披露《关于对外投资设立控股公司及收购Kanga Potash 92%股权的公告》，涉及股权/资产收购。",
+      "tags": [
+        "并购"
+      ]
+    },
     {
       "id": "686bf25b3063",
       "url": "https://static.cninfo.com.cn/finalpage/2026-09-17/1225569050.PDF",
