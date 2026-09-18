@@ -743,7 +743,7 @@ function renderFavHistoryAggregate(mode){
     }
     if(it.type==='page'){
       const clone=it.el.cloneNode(true);
-      clone.classList.remove('hidden');
+      clone.classList.remove('hidden','old-folded');
       clone.classList.add('aggregate-clone');
       frag.appendChild(clone);
     } else {
