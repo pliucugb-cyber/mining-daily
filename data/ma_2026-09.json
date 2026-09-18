@@ -1,8 +1,46 @@
 {
   "month": "2026-09",
-  "updated_at": "2026-09-18T06:07:24+08:00",
-  "count": 23,
+  "updated_at": "2026-09-19T06:06:03+08:00",
+  "count": 25,
   "news": [
+    {
+      "id": "cdd8af9faf56",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-19/1225571312.PDF",
+      "title": "广西华锡有色金属股份有限公司要约收购报告书摘要",
+      "source": "巨潮资讯网·华锡有色",
+      "orig_date": "09-19",
+      "orig_date_full": "2026-09-19",
+      "report_date": "2026-09-19",
+      "category": "并购与投资",
+      "company": "华锡有色",
+      "sec_code": "600301",
+      "ma_type": "股权/资产收购",
+      "summary": "华锡有色（600301）披露《广西华锡有色金属股份有限公司要约收购报告书摘要》，涉及股权/资产收购。",
+      "tags": [
+        "并购",
+        "金",
+        "锡"
+      ]
+    },
+    {
+      "id": "c45e2cffcf17",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-19/1225571331.PDF",
+      "title": "广西华锡有色金属股份有限公司关于收到要约收购报告书摘要的提示性公告",
+      "source": "巨潮资讯网·华锡有色",
+      "orig_date": "09-19",
+      "orig_date_full": "2026-09-19",
+      "report_date": "2026-09-19",
+      "category": "并购与投资",
+      "company": "华锡有色",
+      "sec_code": "600301",
+      "ma_type": "股权/资产收购",
+      "summary": "华锡有色（600301）披露《广西华锡有色金属股份有限公司关于收到要约收购报告书摘要的提示性公告》，涉及股权/资产收购。",
+      "tags": [
+        "并购",
+        "金",
+        "锡"
+      ]
+    },
     {
       "id": "01b1bd9f87c3",
       "url": "https://static.cninfo.com.cn/finalpage/2026-09-18/1225570881.PDF",
