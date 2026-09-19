@@ -744,6 +744,9 @@ function renderFavHistoryAggregate(mode){
     if(it.type==='page'){
       const clone=it.el.cloneNode(true);
       clone.classList.remove('hidden','old-folded');
+      // 2026-09-19 08:00 复核：条目若在折叠的往期日组里，克隆体会带内联 display:none，
+      // 仅删 class 不足以让它显示（老收藏仍不出现，且筛选后不滚动）。这里一并清掉内联样式。
+      clone.style.display='';
       clone.classList.add('aggregate-clone');
       frag.appendChild(clone);
     } else {

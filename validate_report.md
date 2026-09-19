@@ -1,28 +1,64 @@
 # URL 校验报告
 
-校验时间: 2026-09-18 08:07:52
+校验时间: 2026-09-19 08:07:22
 扫描文件: C:\Users\中铝矿业投并部\mining-daily\index.html
 
 ## 汇总
 
-- 总计: **283** 条
-- ✅ 正常: **186** 条
+- 总计: **302** 条
+- ✅ 正常: **196** 条
 - ⚠️ 警告: **15** 条
-- ❌ 失效: **82** 条
+- ❌ 失效: **91** 条
 
 ## ❌ 失效清单（必须修复）
 
-### SMM 日评：美元下跌金属涨跌互现 沪铅锡镍涨逾 1%
-- URL: `https://news.smm.cn/news/104120543`
-- 来源: 上海有色网 · 09-17
-- 关键词: ['SMM', '日评', '美元', '元下', '下跌', '跌金', '金属', '属涨']
-- ❌ 标题关键词 0/8 命中（['SMM', '日评', '美元']…）——可能错挂源或 URL 错配
+### 广期所调整碳酸锂期货最小开仓下单量与手续费标准
+- URL: `https://news.smm.cn/news/104123436`
+- 来源: 上海有色网 · 09-19
+- 关键词: ['广期', '期所', '所调', '调整', '整碳', '碳酸', '酸锂', '锂期']
+- ❌ 标题关键词 0/8 命中（['广期', '期所', '所调']…）——可能错挂源或 URL 错配
 
-### 韩国锌业温山冶炼厂焙烧系统发生致命事故 产量影响待观察
-- URL: `https://news.metal.com/en/newscontent/104120869-fatal-accident-at-korea-zincs-onsan-smelter-involved-the-roasting-system-area-output-impact-remains-to-be-seen`
-- 来源: SMM 国际站 · 09-17
-- 关键词: ['韩国', '国锌', '锌业', '业温', '温山', '山冶', '冶炼', '炼厂']
-- ❌ 标题关键词 0/8 命中（['韩国', '国锌', '锌业']…）——可能错挂源或 URL 错配
+### Lithium Africa 科特迪瓦 Agboville 项目见 1.98% 氧化锂
+- URL: `https://news.metal.com/en/newscontent/104123591-smm-news-lithium-africa-samples-198-lithium-oxide-at-agbovilles-kanien-trend`
+- 来源: SMM 国际站 · 09-19
+- 关键词: ['Lithium', 'Africa', '科特', '特迪', '迪瓦', 'Agboville', '项目', '目见']
+- ❌ 标题关键词 0/8 命中（['Lithium', 'Africa', '科特']…）——可能错挂源或 URL 错配
+
+### 赣锋锂业 1.8 亿美元战略投资 Lithium Argentina 完成交割
+- URL: `https://news.metal.com/en/newscontent/104123584-smm-news-lithium-argentina-closes-180m-strategic-investment-from-ganfeng-lithium`
+- 来源: SMM 国际站 · 09-19
+- 关键词: ['赣锋', '锋锂', '锂业', '亿美', '美元', '元战', '战略', '略投']
+- ❌ 标题关键词 0/8 命中（['赣锋', '锋锂', '锂业']…）——可能错挂源或 URL 错配
+
+### Critical Metals 8.35 亿美元收购欧洲锂业进入表决阶段
+- URL: `https://news.metal.com/en/newscontent/104123586-smm-news-critical-metals-confirms-european-lithium-merger-can-proceed-to-vote-closing-expected-in-november`
+- 来源: SMM 国际站 · 09-19
+- 关键词: ['Critical', 'Metals', '亿美', '美元', '元收', '收购', '购欧', '欧洲']
+- ❌ 标题关键词 0/8 命中（['Critical', 'Metals', '亿美']…）——可能错挂源或 URL 错配
+
+### 中国稀土集团洽购盛和资源 或间接持有 MP Materials 权益
+- URL: `https://www.mining.com/china-rare-earth-eyes-indirect-stake-in-mp-materials`
+- 来源: MINING.COM · 09-18
+- 关键词: ['中国', '国稀', '稀土', '土集', '集团', '团洽', '洽购', '购盛']
+- ❌ 标题关键词 0/8 命中（['中国', '国稀', '稀土']…）——可能错挂源或 URL 错配
+
+### SMM 日评：基本金属普涨 沪铅领涨 2.03% 沪银涨近 4%
+- URL: `https://news.smm.cn/news/104123021`
+- 来源: 上海有色网 · 09-19
+- 关键词: ['SMM', '日评', '基本', '本金', '金属', '属普', '普涨', '沪铅']
+- ❌ 标题关键词 0/8 命中（['SMM', '日评', '基本']…）——可能错挂源或 URL 错配
+
+### 本周钴系产品报价继续承压 氯化钴单周跌 7.32%
+- URL: `https://news.smm.cn/news/104123213`
+- 来源: 上海有色网 · 09-19
+- 关键词: ['本周', '周钴', '钴系', '系产', '产品', '品报', '报价', '价继']
+- ❌ 标题关键词 0/8 命中（['本周', '周钴', '钴系']…）——可能错挂源或 URL 错配
+
+### 加拿大 15 个金矿项目受困审批 年潜在收入约 110 亿美元
+- URL: `https://www.mining.com/gold-is-tariff-proof-canada-has-11-billion-a-year-of-it-stuck-in-permitting`
+- 来源: MINING.COM · 09-19
+- 关键词: ['加拿', '拿大', '个金', '金矿', '矿项', '项目', '目受', '受困']
+- ❌ 标题关键词 0/8 命中（['加拿', '拿大', '个金']…）——可能错挂源或 URL 错配
 
 ### 上期所调整锡品种套期保值持仓额度自动转化标准
 - URL: `https://news.smm.cn/news/104118375`
@@ -167,6 +203,12 @@
 - 来源: SMM 国际站 · 09-08
 - 关键词: ['艾芬', '芬豪', '豪将', '将刚', '刚果', '西部', '部前', '前沿']
 - ❌ 标题关键词 0/8 命中（['艾芬', '芬豪', '豪将']…）——可能错挂源或 URL 错配
+
+### SMM 日评：美元下跌金属涨跌互现 沪铅锡镍涨逾 1%
+- URL: `https://news.smm.cn/news/104120543`
+- 来源: 上海有色网 · 09-17
+- 关键词: ['SMM', '日评', '美元', '元下', '下跌', '跌金', '金属', '属涨']
+- ❌ 标题关键词 0/8 命中（['SMM', '日评', '美元']…）——可能错挂源或 URL 错配
 
 ### SMM 日评：金属近全线下跌 沪锡跌 2.67% 领跌 碳酸锂跌逾 3%
 - URL: `https://news.smm.cn/news/104115891`
@@ -360,65 +402,11 @@
 - 关键词: ['江苏', '苏连', '连云', '云港', '港破', '破获', '获涉', '涉案']
 - ❌ 标题关键词 0/8 命中（['江苏', '苏连', '连云']…）——可能错挂源或 URL 错配
 
-### 欧盟对五矿资源收购英美资源镍业务提出异议
-- URL: `https://www.mining.com/eu-objects-to-mmgs-anglo-american-nickel-deal`
-- 来源: MINING.COM · 09-16
-- 关键词: ['欧盟', '盟对', '对五', '五矿', '矿资', '资源', '源收', '收购']
-- ❌ 标题关键词 0/8 命中（['欧盟', '盟对', '对五']…）——可能错挂源或 URL 错配
-
-### 美国国防部 4.5 亿美元投资钨供应链 1.5 亿定向内华达项目
-- URL: `https://www.mining.com/us-department-of-war-commits-450-million-to-tungsten-supply-chain`
-- 来源: MINING.COM · 09-14
-- 关键词: ['美国', '国国', '国防', '防部', '亿美', '美元', '元投', '投资']
-- ❌ 标题关键词 0/8 命中（['美国', '国国', '国防']…）——可能错挂源或 URL 错配
-
-### 澳洲富豪莱因哈特旗下 Hancock 入股加拿大努纳武特铜矿勘查公司
-- URL: `https://www.mining.com/billionaire-rineharts-hancock-takes-stake-in-nunavut-copper-explorer`
-- 来源: MINING.COM · 09-15
-- 关键词: ['澳洲', '洲富', '富豪', '豪莱', '莱因', '因哈', '哈特', '特旗']
-- ❌ 标题关键词 0/8 命中（['澳洲', '洲富', '富豪']…）——可能错挂源或 URL 错配
-
-### 美国政府以 3560 万美元入股 Trilogy Metals 获 10% 股权
-- URL: `https://www.mining.com/us-government-secures-10-stake-in-trilogy-metals`
-- 来源: MINING.COM · 09-14
-- 关键词: ['美国', '国政', '政府', '府以', '3560', '万美', '美元', '元入']
-- ❌ 标题关键词 0/8 命中（['美国', '国政', '政府']…）——可能错挂源或 URL 错配
-
-### 几内亚与嘉能可洽谈氧化铝及能源投资 铝土矿包销协议已落地
-- URL: `https://news.smm.cn/news/104113791`
-- 来源: 上海有色网 · 09-14
-- 关键词: ['几内', '内亚', '亚与', '与嘉', '嘉能', '能可', '可洽', '洽谈']
-- ❌ 标题关键词 0/8 命中（['几内', '内亚', '亚与']…）——可能错挂源或 URL 错配
-
-### 欧盟或正式反对五矿 5 亿美元收购英美资源巴西镍资产
-- URL: `https://news.metal.com/en/newscontent/104111575-smm-flash-news-eu-may-formally-object-to-mmgs-500-million-acquisition-of-anglo-americans-brazilian-nickel-assets`
-- 来源: SMM 国际站 · 09-12
-- 关键词: ['欧盟', '盟或', '或正', '正式', '式反', '反对', '对五', '五矿']
-- ❌ 标题关键词 0/8 命中（['欧盟', '盟或', '或正']…）——可能错挂源或 URL 错配
-
-### 加拿大总理万亿加元引资清单中矿业占 63 项居首
-- URL: `https://www.mining.com/mining-leads-canadian-prime-ministers-c1t-investor-pitchbook`
-- 来源: MINING.COM · 09-11
-- 关键词: ['加拿', '拿大', '大总', '总理', '理万', '万亿', '亿加', '加元']
-- ❌ 标题关键词 0/8 命中（['加拿', '拿大', '大总']…）——可能错挂源或 URL 错配
-
-### 嘉能可与摩科瑞竞逐委内瑞拉最大铝厂 Venalum 交易
-- URL: `https://www.mining.com/glencore-mercuria-compete-for-venezuela-aluminum-smelter-deal`
-- 来源: MINING.COM · 09-12
-- 关键词: ['嘉能', '能可', '可与', '与摩', '摩科', '科瑞', '瑞竞', '竞逐']
-- ❌ 标题关键词 0/8 命中（['嘉能', '能可', '可与']…）——可能错挂源或 URL 错配
-
-### 印度 KABIL 瞄准哥伦比亚关键矿产机会 供应链多元化再扩围
-- URL: `https://news.metal.com/en/newscontent/104106368-indias-kabil-eyes-colombian-critical-minerals-opportunities-as-supply-diversification-expands`
-- 来源: SMM 国际站 · 09-10
-- 关键词: ['印度', 'KABIL', '瞄准', '准哥', '哥伦', '伦比', '比亚', '亚关']
-- ❌ 标题关键词 0/8 命中（['印度', 'KABIL', '瞄准']…）——可能错挂源或 URL 错配
-
-### 五矿资源 Dugald River 签署2027—2028年锌精矿销售协议
-- URL: `https://news.metal.com/en/newscontent/104101668-mmg-dugald-river-signs-2027`
-- 来源: SMM 国际站 · 09-07
-- 关键词: ['五矿', '矿资', '资源', 'Dugald', 'River', '签署', '2027', '2028']
-- ❌ 标题关键词 0/8 命中（['五矿', '矿资', '资源']…）——可能错挂源或 URL 错配
+### 韩国锌业温山冶炼厂焙烧系统发生致命事故 产量影响待观察
+- URL: `https://news.metal.com/en/newscontent/104120869-fatal-accident-at-korea-zincs-onsan-smelter-involved-the-roasting-system-area-output-impact-remains-to-be-seen`
+- 来源: SMM 国际站 · 09-17
+- 关键词: ['韩国', '国锌', '锌业', '业温', '温山', '山冶', '冶炼', '炼厂']
+- ❌ 标题关键词 0/8 命中（['韩国', '国锌', '锌业']…）——可能错挂源或 URL 错配
 
 ### Alba 恢复 80% 铝产能 改由沙特通道出口
 - URL: `https://news.metal.com/en/newscontent/104118420-alba-restores-80-of-pre-war-aluminium-productio`
@@ -498,13 +486,89 @@
 - 关键词: ['Core', 'Lithium', 'Finniss', '锂项', '项目', '目重', '重启', '启达']
 - ❌ 标题关键词 0/8 命中（['Core', 'Lithium', 'Finniss']…）——可能错挂源或 URL 错配
 
-### 格陵兰萨法托克铌稀土矿获勘查许可
-- URL: `https://geoglobal.mnr.gov.cn/zx/kcykf/ztjz/202608/t20260824_10297598.htm`
-- 来源: 全球矿产资源 · 08-24
-- 关键词: ['格陵', '陵兰', '兰萨', '萨法', '法托', '托克', '克铌', '铌稀']
+### Luca Mining 以 6000 万美元收购 Agnico 墨西哥金银铜项目
+- URL: `https://www.mining.com/luca-adds-3rd-mexican-property-in-60m-agnico-deal`
+- 来源: MINING.COM · 09-17
+- 关键词: ['Luca', 'Mining', '6000', '万美', '美元', '元收', '收购', 'Agnico']
 - ❌ 网络错误/超时（无法访问）
 
+### 欧盟对五矿资源收购英美资源镍业务提出异议
+- URL: `https://www.mining.com/eu-objects-to-mmgs-anglo-american-nickel-deal`
+- 来源: MINING.COM · 09-16
+- 关键词: ['欧盟', '盟对', '对五', '五矿', '矿资', '资源', '源收', '收购']
+- ❌ 标题关键词 0/8 命中（['欧盟', '盟对', '对五']…）——可能错挂源或 URL 错配
+
+### 美国国防部 4.5 亿美元投资钨供应链 1.5 亿定向内华达项目
+- URL: `https://www.mining.com/us-department-of-war-commits-450-million-to-tungsten-supply-chain`
+- 来源: MINING.COM · 09-14
+- 关键词: ['美国', '国国', '国防', '防部', '亿美', '美元', '元投', '投资']
+- ❌ 标题关键词 0/8 命中（['美国', '国国', '国防']…）——可能错挂源或 URL 错配
+
+### 澳洲富豪莱因哈特旗下 Hancock 入股加拿大努纳武特铜矿勘查公司
+- URL: `https://www.mining.com/billionaire-rineharts-hancock-takes-stake-in-nunavut-copper-explorer`
+- 来源: MINING.COM · 09-15
+- 关键词: ['澳洲', '洲富', '富豪', '豪莱', '莱因', '因哈', '哈特', '特旗']
+- ❌ 标题关键词 0/8 命中（['澳洲', '洲富', '富豪']…）——可能错挂源或 URL 错配
+
+### 美国政府以 3560 万美元入股 Trilogy Metals 获 10% 股权
+- URL: `https://www.mining.com/us-government-secures-10-stake-in-trilogy-metals`
+- 来源: MINING.COM · 09-14
+- 关键词: ['美国', '国政', '政府', '府以', '3560', '万美', '美元', '元入']
+- ❌ 标题关键词 0/8 命中（['美国', '国政', '政府']…）——可能错挂源或 URL 错配
+
+### 几内亚与嘉能可洽谈氧化铝及能源投资 铝土矿包销协议已落地
+- URL: `https://news.smm.cn/news/104113791`
+- 来源: 上海有色网 · 09-14
+- 关键词: ['几内', '内亚', '亚与', '与嘉', '嘉能', '能可', '可洽', '洽谈']
+- ❌ 标题关键词 0/8 命中（['几内', '内亚', '亚与']…）——可能错挂源或 URL 错配
+
+### 欧盟或正式反对五矿 5 亿美元收购英美资源巴西镍资产
+- URL: `https://news.metal.com/en/newscontent/104111575-smm-flash-news-eu-may-formally-object-to-mmgs-500-million-acquisition-of-anglo-americans-brazilian-nickel-assets`
+- 来源: SMM 国际站 · 09-12
+- 关键词: ['欧盟', '盟或', '或正', '正式', '式反', '反对', '对五', '五矿']
+- ❌ 标题关键词 0/8 命中（['欧盟', '盟或', '或正']…）——可能错挂源或 URL 错配
+
+### 加拿大总理万亿加元引资清单中矿业占 63 项居首
+- URL: `https://www.mining.com/mining-leads-canadian-prime-ministers-c1t-investor-pitchbook`
+- 来源: MINING.COM · 09-11
+- 关键词: ['加拿', '拿大', '大总', '总理', '理万', '万亿', '亿加', '加元']
+- ❌ 标题关键词 0/8 命中（['加拿', '拿大', '大总']…）——可能错挂源或 URL 错配
+
+### 嘉能可与摩科瑞竞逐委内瑞拉最大铝厂 Venalum 交易
+- URL: `https://www.mining.com/glencore-mercuria-compete-for-venezuela-aluminum-smelter-deal`
+- 来源: MINING.COM · 09-12
+- 关键词: ['嘉能', '能可', '可与', '与摩', '摩科', '科瑞', '瑞竞', '竞逐']
+- ❌ 标题关键词 0/8 命中（['嘉能', '能可', '可与']…）——可能错挂源或 URL 错配
+
+### 印度 KABIL 瞄准哥伦比亚关键矿产机会 供应链多元化再扩围
+- URL: `https://news.metal.com/en/newscontent/104106368-indias-kabil-eyes-colombian-critical-minerals-opportunities-as-supply-diversification-expands`
+- 来源: SMM 国际站 · 09-10
+- 关键词: ['印度', 'KABIL', '瞄准', '准哥', '哥伦', '伦比', '比亚', '亚关']
+- ❌ 标题关键词 0/8 命中（['印度', 'KABIL', '瞄准']…）——可能错挂源或 URL 错配
+
+### ACG Metals 逾700万美元收购土耳其 Keşkek 金矿项目
+- URL: `https://www.mining.com/acg-metals-to-acquire-keskek-gold-project`
+- 来源: MINING.COM · 09-08
+- 关键词: ['ACG', 'Metals', '700', '万美', '美元', '元收', '收购', '购土']
+- ❌ 网络错误/超时（无法访问）
+
+### 五矿资源 Dugald River 签署2027—2028年锌精矿销售协议
+- URL: `https://news.metal.com/en/newscontent/104101668-mmg-dugald-river-signs-2027`
+- 来源: SMM 国际站 · 09-07
+- 关键词: ['五矿', '矿资', '资源', 'Dugald', 'River', '签署', '2027', '2028']
+- ❌ 标题关键词 0/8 命中（['五矿', '矿资', '资源']…）——可能错挂源或 URL 错配
+
 ## ⚠️ 警告清单（建议核查）
+
+### Aya 摩洛哥 Zgounder 银矿坑边与深部均见高品位矿化
+- URL: `https://www.mining.com/aya-logs-high-grade-shallow-silver-in-morocco`
+- 来源: MINING.COM · 09-18
+- ⚠️ 标题关键词只命中 2/8（['Aya', '摩洛', '洛哥', 'Zgounder', '银矿', '矿坑', '坑边', '边与']）——疑似错挂
+
+### Sprott：全球铜矿产量或出现 2017 年以来首次下降
+- URL: `https://www.mining.com/copper-mine-supply-risks-first-decline-since-2017-sprott`
+- 来源: MINING.COM · 09-19
+- ⚠️ 标题关键词只命中 1/8（['Sprott', '全球', '球铜', '铜矿', '矿产', '产量', '量或', '或出']）——疑似错挂
 
 ### Newcore 加纳 Enchi 项目见 69 米厚矿段 金品位 2.59 克/吨
 - URL: `https://www.mining.com/newcores-wide-gold-hit-boosts-enchi-plan-in-ghana`
@@ -515,21 +579,6 @@
 - URL: `https://www.mining.com/critical-metals-says-it-has-cracked-eudialyte-hurdle-plans-2-2b-a-year-refinery-in-romania`
 - 来源: MINING.COM · 09-16
 - ⚠️ 标题关键词只命中 2/8（['Critical', 'Metals', '破解', '解异', '异性', '性石', '石冶', '冶炼']）——疑似错挂
-
-### Almonty 将从西班牙尾矿向山特维克供应钨
-- URL: `https://www.mining.com/almonty-to-supply-sandvik-tungsten-from-spanish-mine-tailings`
-- 来源: MINING.COM · 09-17
-- ⚠️ 标题关键词只命中 1/8（['Almonty', '将从', '从西', '西班', '班牙', '牙尾', '尾矿', '矿向']）——疑似错挂
-
-### Luca Mining 以 6000 万美元收购 Agnico 墨西哥金银铜项目
-- URL: `https://www.mining.com/luca-adds-3rd-mexican-property-in-60m-agnico-deal`
-- 来源: MINING.COM · 09-17
-- ⚠️ 标题关键词只命中 3/8（['Luca', 'Mining', '6000', '万美', '美元', '元收', '收购', 'Agnico']）——疑似错挂
-
-### 赞比亚 KCM 与中国恩菲签 4.98 亿美元铜尾矿回收厂协议
-- URL: `https://www.mining.com/web/kcm-signs-498-million-deal-with-chinese-firm-for-copper-recovery-plant/`
-- 来源: MINING.COM · 09-17
-- ⚠️ 标题关键词只命中 1/8（['赞比', '比亚', 'KCM', '中国', '国恩', '恩菲', '菲签', '亿美']）——疑似错挂
 
 ### Osisko 加斯佩铜矿钻探见矿 257 米，其中 28.5 米铜品位 4.74%
 - URL: `https://www.mining.com/osisko-hits-4-7-copper-beneath-gaspe-workings`
@@ -551,20 +600,15 @@
 - 来源: MINING.COM · 09-11
 - ⚠️ 标题关键词只命中 1/8（['BMI', '下调', '调铂', '铂钯', '钯价', '价格', '格预', '预测']）——疑似错挂
 
-### Galantas 以 500 万美元交易退出爱尔兰 Omagh 金矿项目
-- URL: `https://www.mining.com/galantas-exits-omagh-gold-project-in-5m-deal`
-- 来源: MINING.COM · 09-10
-- ⚠️ 标题关键词只命中 2/8（['Galantas', '500', '万美', '美元', '元交', '交易', '易退', '退出']）——疑似错挂
+### Almonty 将从西班牙尾矿向山特维克供应钨
+- URL: `https://www.mining.com/almonty-to-supply-sandvik-tungsten-from-spanish-mine-tailings`
+- 来源: MINING.COM · 09-17
+- ⚠️ 标题关键词只命中 1/8（['Almonty', '将从', '从西', '西班', '班牙', '牙尾', '尾矿', '矿向']）——疑似错挂
 
-### ACG Metals 逾700万美元收购土耳其 Keşkek 金矿项目
-- URL: `https://www.mining.com/acg-metals-to-acquire-keskek-gold-project`
-- 来源: MINING.COM · 09-08
-- ⚠️ 标题关键词只命中 3/8（['ACG', 'Metals', '700', '万美', '美元', '元收', '收购', '购土']）——疑似错挂
-
-### 力拓收购嘉能可/三菱 Aurukun 铝土矿项目
-- URL: `https://www.mining.com/rio-tinto-acquires-aurukun-bauxite-project-from-glencore-mitsubishi`
-- 来源: MINING.COM · 09-09
-- ⚠️ 标题关键词只命中 1/8（['力拓', '拓收', '收购', '购嘉', '嘉能', '能可', '三菱', 'Aurukun']）——疑似错挂
+### 赞比亚 KCM 与中国恩菲签 4.98 亿美元铜尾矿回收厂协议
+- URL: `https://www.mining.com/web/kcm-signs-498-million-deal-with-chinese-firm-for-copper-recovery-plant/`
+- 来源: MINING.COM · 09-17
+- ⚠️ 标题关键词只命中 1/8（['赞比', '比亚', 'KCM', '中国', '国恩', '恩菲', '菲签', '亿美']）——疑似错挂
 
 ### Cyclic Materials 在亚利桑那投运商业规模稀土磁材回收厂
 - URL: `https://www.mining.com/site-visit-cyclic-materials-opens-commercial-scale-rare-earth-recycling-plant-in-arizona`
@@ -580,3 +624,13 @@
 - URL: `https://www.mining.com/eldorados-skouries-turns-years-of-setbacks-into-copper`
 - 来源: MINING.COM · 09-09
 - ⚠️ 标题关键词只命中 2/8（['Eldorado', 'Skouries', '铜金', '金项', '项目', '目多', '多年', '年波']）——疑似错挂
+
+### Galantas 以 500 万美元交易退出爱尔兰 Omagh 金矿项目
+- URL: `https://www.mining.com/galantas-exits-omagh-gold-project-in-5m-deal`
+- 来源: MINING.COM · 09-10
+- ⚠️ 标题关键词只命中 2/8（['Galantas', '500', '万美', '美元', '元交', '交易', '易退', '退出']）——疑似错挂
+
+### 力拓收购嘉能可/三菱 Aurukun 铝土矿项目
+- URL: `https://www.mining.com/rio-tinto-acquires-aurukun-bauxite-project-from-glencore-mitsubishi`
+- 来源: MINING.COM · 09-09
+- ⚠️ 标题关键词只命中 1/8（['力拓', '拓收', '收购', '购嘉', '嘉能', '能可', '三菱', 'Aurukun']）——疑似错挂
