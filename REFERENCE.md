@@ -6,7 +6,7 @@
 
 ---
 
-## §1 信源白名单（23 域，严禁引入白名单外域）
+## §1 信源白名单（27 域，严禁引入白名单外域）
 
 白名单由 `source_whitelist.py` 强制校验；自动化只需运行 `PY source_whitelist.py --check-file index.html --fail-on-error`，**勿手工维护域列表**。下列供分类/排障时核对。
 
@@ -25,7 +25,7 @@
 - ccmn.cn（长江有色；**mall./ad. 子域已拉黑，勿收**）
 - szse.cn（深交所公告，巨潮备份链路）
 
-**境外（9）**
+**境外（13）**
 - metal.com（含 news.metal.com，SMM 国际站）
 - icsg.org / ilzsg.org / insg.org（铜/铅锌/镍 研究组）
 - world-aluminium.org
@@ -33,6 +33,11 @@
 - mining.com（排除 /sponsored-content/、/joint-venture/、servedbyadbutler）
 - kitco.com
 - gold.org
+- **监管披露系统（矿业公司情报板块专用，2026-09-21 批准 §1 红线扩充）**：
+  - sec.gov（含 data./www./edgar. 子域；美国 SEC EDGAR，覆盖美/加矿企 10-K/10-Q/20-F/8-K/6-K）
+  - hkexnews.hk（含 www/www1/www3 子域；香港交易所披露易，覆盖港股 + 中资 H 股海外披露）
+  - asx.com.au（澳大利亚交易所，BHP/Rio/Fortescue/South32/Lynas/Pilbara；旧公告 API 已废，须解析 HTML）
+  - investegate.co.uk（英国 RNS 监管披露，Anglo American/Glencore；备选 londonstockexchange.com）
 
 **已禁（被墙/反爬/付费墙/不可达，勿收）**
 reuters、bloomberg、usgs、mining-journal、fastmarkets、cochilco

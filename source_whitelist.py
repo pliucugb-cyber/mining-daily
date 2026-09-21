@@ -32,6 +32,13 @@
 - kitco.com              贵金属行情与矿业新闻（金银铂钯）
 - gold.org               世界黄金协会
 
+监管披露系统（2026-09-21 批准 §1 红线扩充，矿业公司情报板块专用——抓「各国版巨潮」，
+与国内 cninfo 对等思路；均经真机探针实测可达）：
+- sec.gov               美国 SEC EDGAR（含 data./www./edgar. 子域）；覆盖美/加矿企 10-K/10-Q/20-F/8-K/6-K
+- hkexnews.hk           香港交易所披露易（含 www/www1/www3 子域）；港股 + 中资 H 股海外披露
+- asx.com.au            澳大利亚交易所；BHP/Rio/Fortescue/South32/Lynas/Pilbara（旧公告 API 已废，须解析 HTML）
+- investegate.co.uk     英国 RNS 监管披露；Anglo American/Glencore（备选 londonstockexchange.com）
+
 已被实测否决、禁止引入的境外源（勿重复提议）：
 - reuters.com / bloomberg.com  → 国内不可达（HTTP 000，对照组百度/腾讯 200 正常）
 - usgs.gov / minerals.usgs.gov → 反爬拦截，正文返回 0 字节
@@ -79,6 +86,11 @@ ALLOWED_DOMAINS = [
     # ===== 2026-09-08 覆盖度核查 P1 新增 =====
     "ccmn.cn",               # 长江有色网（现货视角资讯，与 SMM 互补）
     "szse.cn",               # 深圳证券交易所（公告直连，巨潮备份链路；含 disc.szse.cn）
+    # ===== 2026-09-21 批准 §1 红线扩充：监管披露系统（矿业公司情报板块，抓「各国版巨潮」） =====
+    "sec.gov",               # 美国 SEC EDGAR（含 data./www./edgar. 子域；美/加矿企 10-K/10-Q/20-F/8-K/6-K）
+    "hkexnews.hk",           # 香港交易所披露易（含 www/www1/www3；港股 + 中资 H 股海外披露）
+    "asx.com.au",            # 澳大利亚交易所（BHP/Rio/Fortescue 等；旧公告 API 已废须解析 HTML）
+    "investegate.co.uk",     # 英国 RNS 监管披露（Anglo/Glencore；备选 londonstockexchange.com）
 ]
 
 # 白名单子域默认放行，但少数子域是营销/广告页而非新闻，必须显式否决。
