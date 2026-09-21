@@ -18,7 +18,7 @@
 //    2026-09-10 事故——本行被改写成 `const P260910-1900';`（语法错误），
 //    导致 sw.js 无法解析 → SW 永远无法更新 → 用户卡在旧的/不完整缓存里，页面区块一直停在「加载中…」。
 //    现 deploy_pages.py 与 preflight_check.py 都会对 sw.js 做语法校验，写坏即拒绝部署。
-const CACHE_NAME = 'mining-daily-20260921-0607';
+const CACHE_NAME = 'mining-daily-20260921-1800';
 
 // 以 SW 自身位置推导站点基路径：
 //   /sw.js              → BASE = '/'
@@ -46,6 +46,7 @@ const DATA_FILES = [
   BASE + 'lme-data.js',
   BASE + 'price-history.js',
   BASE + 'morning_report.json',  // 2026-09-10 P1：晨报每日更新，此前只在 urlsToCache 里缓存一份，SWR 会一直喂昨天的
+  BASE + 'company_news.json',    // 2026-09-21：矿业公司情报数据，每日刷新，必须 network-first
   BASE + 'app.js'                // 2026-09-11：每次发版都变，必须 network-first，否则旧逻辑常驻
 ];
 
