@@ -1,380 +1,582 @@
 # -*- coding: utf-8 -*-
 """
-fetch_company.py — 矿业公司情报板块数据采集（v1：cninfo 国内 25 + SEC 北美 8）
+fetch_company.py — 矿业公司动态板块数据采集（v2：官网新闻，非公告）
 
-数据来源（均落在信源白名单 §1 27 域内）：
-  - 国内 25 家 A股矿业龙头：巨潮资讯网 cninfo（topSearch 取 code+orgId → hisAnnouncement 定向检索）
-  - 北美 8 家上市矿企：美国 SEC EDGAR（company_tickers.json 按 ticker 精确取 CIK → submissions API）
+数据来源：32 家矿业龙头「官方网站新闻栏目」（非 cninfo/SEC 公告）。
+  - 国内 25 家 A股：各公司官网新闻列表页
+  - 海外 7 家（纽蒙特/巴里克/自由港/南方铜业/泰克/阿格尼科/雅保）：官网 News/IR 栏目，英文标题经 MyMemory 译中
 
-输出：data/company_news.json
-  {
-    "updated_at": "YYYY-MM-DD",
-    "companies": [
-      {"name","code"/"ticker","sector","region":"CN"|"NA","exchange","total","kept","items":[
-         {"t","d","c","lv","u","form?"}
-      ]}, ...
-    ]
-  }
+采集策略：
+  - 静态 HTML 站点：Python urllib 走本机 http 代理（http/https 均可用）抓取后正则抽取新闻条目
+  - JS 渲染站点：headless Chrome --dump-dom 渲染后再抽取（method='chrome'；其余站点静态抓取若 <3 条自动回退 Chrome）
+  - 海外英文标题：MyMemory 免费接口译中（langpair=en|zh-CN），失败回退原文
+  - 容错：某站点抓取失败（网络/Chrome 不可用）时，复用 company_news.json 中该公司上一次成功的数据并标 stale，避免每日重建把整块清空
 
-噪声过滤 + 事件分类分级复用自原型 md_company_collect3.py；SEC 标题由 filing 的
-form + items + primaryDocDescription 合成可读中文，避免「FORM 8-K」这种无意义标题。
+缓存：原始 HTML/DOM 落盘到 tmp/co_cache/<slug>.html，24h 内且非 --force 时直接复用，避免每天重复 Chrome 渲染。
 
-运行：python fetch_company.py
+用法：
+  python fetch_company.py                 # 全量采集
+  python fetch_company.py --only 铜陵有色,西部矿业   # 仅重采指定公司（合并进现有 JSON）
+  python fetch_company.py --force         # 忽略缓存全量重采
 """
-import os
-import re
-import json
-import time
-import ssl
-import urllib.request
-import urllib.parse
+import os, re, json, time, ssl, html, socket, shutil, urllib.request, urllib.parse, subprocess, sys
 
-ctx = ssl.create_default_context()
-ctx.check_hostname = False
-ctx.verify_mode = ssl.CERT_NONE
+# 控制台为 GBK 时，标题里的 U+00A0 等字符会让 print 直接抛 UnicodeEncodeError 崩进程。
+# 重配置 stdout 为 utf-8 + 替换，打印永不因编码中断（数据写文件本就是 utf-8，无影响）。
+try:
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+except Exception:
+    pass
 
-UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-      '(KHTML, like Gecko) Chrome/126.0 Safari/537.36')
-# SEC 要求带 UA，否则 403；必须用「research <contact>」格式，纯产品型 UA 会被拒。
-SEC_UA = 'research mining-daily contact@example.com'
+def clean_ws(s):
+    """把 NBSP/U+00A0 等非断空格统一成普通空格，并压扁连续空白。"""
+    if not s:
+        return ''
+    s = s.replace('\xa0', ' ').replace('\u2007', ' ').replace('\u202f', ' ')
+    return re.sub(r'\s+', ' ', s).strip()
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-# 输出到仓库根目录（与 morning_report.json 等运行时 JSON 同位），由 deploy_pages 随站点发布。
 OUT = os.path.join(HERE, 'company_news.json')
+CACHE = os.path.join(HERE, 'tmp', 'co_cache')
+os.makedirs(CACHE, exist_ok=True)
 
-# ============================ 1. 公司花名册 ============================
-# 国内 25 家 A股矿业龙头（按矿种归类）
-DOMESTIC = [
-    ('紫金矿业', '601899', '铜'), ('江西铜业', '600362', '铜'),
-    ('铜陵有色', '000630', '铜'), ('云南铜业', '000878', '铜'),
-    ('西部矿业', '601168', '铜'), ('洛阳钼业', '603993', '钼'),
-    ('中国铝业', '601600', '铝'), ('南山铝业', '600219', '铝'),
-    ('云铝股份', '000807', '铝'), ('神火股份', '000933', '铝'),
-    ('天山铝业', '002532', '铝'),
-    ('山东黄金', '600547', '黄金'), ('中金黄金', '600489', '黄金'),
-    ('赤峰黄金', '600988', '黄金'), ('湖南黄金', '002155', '黄金'),
-    ('天齐锂业', '002466', '锂'), ('赣锋锂业', '002460', '锂'),
-    ('华友钴业', '603799', '钴'), ('藏格矿业', '000408', '锂'),
-    ('北方稀土', '600111', '稀土'), ('中国稀土', '000831', '稀土'),
-    ('驰宏锌锗', '600497', '铅锌'), ('中金岭南', '000060', '铅锌'),
-    ('锡业股份', '000960', '锡'), ('厦门钨业', '600549', '钨'),
-]
+# ============================ 0. 网络 ============================
+ctx = ssl.create_default_context(); ctx.check_hostname = False; ctx.verify_mode = ssl.CERT_NONE
+UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+      '(KHTML, like Gecko) Chrome/126.0 Safari/537.36')
+PROXY = os.environ.get('HTTP_PROXY') or os.environ.get('HTTPS_PROXY') or 'http://127.0.0.1:55483'
+CHROME = (os.environ.get('CHROME_BIN')
+          or r'C:/Program Files/Google/Chrome/Application/chrome.exe'
+          or r'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe')
 
-# 北美 7 家（SEC EDGAR 覆盖；含加拿大 Barrick 补齐）。
-# 注：First Quantum（FM）无 SEC 注册（仅在 TSX 上市），SEC 无备案 → 已剔除，留待 Phase 2 加拿大 SEDAR 源。
-# cik 为回退值；运行时优先用 company_tickers.json 按 ticker 精确解析（避免 Gold.com 误判 Barrick）。
-SEC_COMPANIES = [
-    ('Newmont',         'NEM', '黄金', 1164727),
-    ('Albemarle',       'ALB', '锂',   915913),
-    ('Southern Copper',  'SCCO','铜',   1001838),
-    ('Agnico Eagle',    'AEM', '黄金', 2809),
-    ('Freeport-McMoRan','FCX', '铜',   831259),
-    ('Teck Resources',  'TECK','铅锌', 886986),
-    ('Barrick',         'B',   '黄金', 756894),    # 2025 更名 Barrick Mining Corp
-]
-
-# ============================ 2. 噪声 + 分类（cninfo 国内） ============================
-NOISE = [
-    "独立董事", "独立非执行董事", "候选人声明", "提名人声明", "征集投票权",
-    "股东大会", "股东会", "会议通知", "法律意见书", "公司章程", "章程修订",
-    "募集资金", "闲置募集资金", "理财产品", "定期报告", "季度报告",
-    "半年度报告", "年度报告摘要", "业绩说明会", "投资者关系活动记录",
-    "接待日", "网上集体接待", "内幕信息", "知情人登记", "监事会", "职工代表",
-    "辞职", "聘任", "审计机构", "会计师事务所", "变更证券简称", "股票交易异常",
-    "异动", "停牌", "复牌公告", "权益分派", "限售股", "解禁",
-    "问询函回复", "更正公告", "延期回复", "风险提示公告",
-    "董事会决议", "监事会决议", "董事会会议", "会议决议", "董事离任", "补选董事",
-    "募集说明书", "保荐书", "上市公告书", "发行公告", "发行结果", "配股",
-    "可转债赎回", "跟踪评级", "评级报告", "审计报告",
-    "持续督导意见", "持续督导总结报告", "持续督导现场核查", "持续督导年度报告",
-    "券商核查意见", "保荐机构核查", "独立财务顾问",
-    "翌日披露报表", "证券变动月报表", "月报表", "H股市场公告",
-    "薪酬方案", "薪酬管理制度", "捐赠", "报废", "风险持续评估", "风险评估报告",
-    "商品房", "尾盘", "商业用地", "地块", "置业", "物业服务",
-    "续聘", "内部控制", "自查报告", "专项核查",
-    "简式权益变动报告书", "详式权益变动报告书",
-    "回购注销", "限制性股票", "股票期权",
-]
-
-FIN_INSTR = ['中期票据', '公司债', '超短融', '融资券', '可转债', '债券', '资产支持']
-M_ACQ  = ['收购', '并购', '重组', '要约', '资产购买', '股权转让', '受让', '竞得',
-          '摘牌', '资产置换', '吸收合并', '借壳']
-M_CAP  = ['投产', '扩产', '达产', '试生产', '复产', '停产', '扩建', '新建项目',
-          '生产线', '技改', '项目开工', '复工复产']
-M_RES  = ['储量', '增储', '资源量', '探矿权', '采矿权', '矿业权', '探明', '勘查',
-          '矿区', '品位', '竞拍取得']
-M_ORD  = ['中标', '供货合同', '销售合同', '采购合同', '战略合作', '框架协议',
-          '长期协议', '订单']
-M_INV  = ['对外投资', '共同投资', '增资', '设立控股', '合资', '产业基金', '认购']
-M_SHR  = ['增持', '减持', '控制权', '实际控制人', '举牌', '股份转让', '解除质押',
-          '质押']
-M_PERF = ['产量', '销量', '营业收入', '净利润', '业绩快报', '预增', '预盈',
-          '扭亏', '经营数据', '生产经营', '生产情况']
-M_BUY  = ['回购', '股权激励', '员工持股']
-M_FIN  = ['担保', '财务资助', '融资', '借款', '保理', '信用证', '信托', '授信']
-
-def classify(t):
-    """国内公告分类：融资/担保优先判低优先级，再按经营维度分级。"""
-    if any(k in t for k in FIN_INSTR):
-        return '融资发行', 'low'
-    if any(k in t for k in M_FIN):
-        return '融资担保', 'low'
-    if any(k in t for k in M_ACQ):
-        return '并购重组', 'high'
-    if any(k in t for k in M_CAP):
-        return '产能项目', 'high'
-    if any(k in t for k in M_RES):
-        return '资源储量', 'high'
-    if any(k in t for k in M_ORD):
-        return '合同订单', 'high'
-    if any(k in t for k in M_INV):
-        return '对外投资', 'mid'
-    if any(k in t for k in M_SHR):
-        return '股东变动', 'mid'
-    if any(k in t for k in M_PERF):
-        return '经营业绩', 'mid'
-    if any(k in t for k in M_BUY):
-        return '股份回购', 'low'
-    return '其他', 'low'
-
-# ============================ 3. cninfo 采集 ============================
-def post(url, data, referer='http://www.cninfo.com.cn/', timeout=25, retries=2):
-    for i in range(retries + 1):
-        try:
-            body = urllib.parse.urlencode(data).encode('utf-8')
-            req = urllib.request.Request(url, data=body, headers={
-                'User-Agent': UA, 'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest', 'Referer': referer})
-            return urllib.request.urlopen(req, timeout=timeout, context=ctx).read().decode('utf-8', 'replace')
-        except Exception:
-            if i == retries:
-                return '__ERR__'
-            time.sleep(1.2)
-    return '__ERR__'
-
-def clean(s):
-    return re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', s or '')).strip()
-
-def top_search(kw):
-    t = post('http://www.cninfo.com.cn/new/information/topSearch/query',
-             {'keyWord': kw, 'maxNum': 10})
-    if t.startswith('__ERR__'):
-        return None
+# 本机代理（企业网）时通时断：启动时探测端口是否存活，活着优先走代理，否则直连兜底。
+def _probe_proxy():
     try:
-        j = json.loads(t)
+        s = socket.create_connection(('127.0.0.1', 55483), timeout=2)
+        s.close()
+        return True
     except Exception:
+        return False
+PROXY_OK = _probe_proxy()
+
+DATE_RE = re.compile(r'(20\d{2})[-/.年](1[0-2]|0?[1-9])[-/.月](3[01]|[12]\d|0?[1-9])日?')
+DATE_RE2 = re.compile(r'(20\d{2})\.(\d{1,2})\.(\d{1,2})')
+ANCHOR_RE = re.compile(r'<a\b[^>]*\bhref=["\']([^"\']+)["\'][^>]*>(.*?)</a>', re.I | re.S)
+NAV_WORDS = set('首页 主页 关于我们 公司简介 联系我们 联系方式 加入我们 招贤纳士 招聘 投资者关系 '
+                'English 中文 隐私政策 法律声明 网站地图 设为首页 收藏 登录 注册 搜索 新闻中心 媒体中心 '
+                '更多 更多>> 详细 详情 查看 返回 上一页 下一页 首页 末页'.split())
+
+# 栏目/板块/功能性页面（非新闻），作为标题出现时直接丢弃。命中整词或强特征子串。
+GENERIC_TITLES = set('董事长致辞 总经理致辞 总裁致辞 公司简介 企业简介 关于我们 关于集团 '
+    '联系我们 联系方式 人才招聘 招贤纳士 诚聘英才 加入我们 招聘 投资者关系 '
+    '企业文化 发展历程 组织架构 领导班子 荣誉资质 社会责任 产品与服务 产品中心 '
+    '业务领域 业务板块 我们的宗旨 我们的价值观 使命愿景 新闻中心 媒体中心 网站地图 '
+    '首页 更多 详情 查看更多'.split())
+def is_generic_title(title):
+    t = title.strip()
+    if t in GENERIC_TITLES:
+        return True
+    for kw in ('致辞', '招聘', '简介', '联系我们', '合规建议', '新思想', '宗旨', '价值观',
+              '企业文化', '发展历程', '组织架构', '社会责任', '产品与服务', '产品中心',
+              '业务领域', '业务板块', '新闻中心', '媒体中心', '网站地图'):
+        if kw in t:
+            return True
+    return False
+ASSET_EXT = ('.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.pdf',
+             '.zip', '.doc', '.docx', '.xls', '.xlsx', '.mp4', '.mp3', '.rar', '.exe')
+NAV_HREF = ('index', 'about', 'contact', 'login', 'search', 'sitemap', 'privacy',
+            'english', 'home', 'column', 'category', 'channel', 'list', 'menu',
+            'wechat', 'weibo', 'app', 'join', 'job', 'recruit')
+
+CACHE_TTL = 24 * 3600  # 秒
+
+def http_get(url, timeout=8, retries=0):
+    # 代理优先（PROXY_OK 时），否则/失败后直连兜底；自动适配"代理与直连来回切换"的网络。
+    openers = []
+    if PROXY_OK and PROXY:
+        openers.append(urllib.request.ProxyHandler({'http': PROXY, 'https': PROXY}))
+    openers.append(urllib.request.ProxyHandler({}))  # 直连
+    last = None
+    for ph in openers:
+        op = urllib.request.build_opener(ph)
+        try:
+            req = urllib.request.Request(url, headers={'User-Agent': UA,
+                  'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8'})
+            r = op.open(req, timeout=timeout)
+            data = r.read()
+            return r.status, data
+        except Exception as e:
+            last = e
+    return None, last
+
+def _flip(url):
+    if url.startswith('https://'):
+        return url.replace('https://', 'http://', 1)
+    if url.startswith('http://'):
+        return url.replace('http://', 'https://', 1)
+    return url
+
+# 代理/网关劫持错误页 与 Chrome 无法访问页 特征
+_BLOCK_RE = re.compile(
+    r'检查代理服务器|Windows 网络诊断|DrcomServer|Dr\.COM|navigate to the billing|认证网关|'
+    r'proxy server isn|proxy server is not|无法访问此网站|ERR_|net::ERR|refused to connect|'
+    r'took too long|connection (was reset|refused)|502 Bad Gateway|504 Gateway|'
+    r'故障排除|此站点无法|找不到该网页', re.I)
+def is_blocked(txt):
+    if not txt or len(txt) < 200:
+        return True
+    return bool(_BLOCK_RE.search(txt))
+
+def fetch_html(url, timeout=25):
+    """尝试给定 url，被代理错误页劫持则翻转 http/https 方案再试一次。"""
+    cands = [url]
+    fl = _flip(url)
+    if fl != url:
+        cands.append(fl)
+    for u in cands:
+        st, data = http_get(u, timeout)
+        if st == 200 and data and len(data) > 300:
+            txt = data.decode('utf-8', 'replace')
+            if not is_blocked(txt):
+                return txt
+    return ''
+
+def chrome_dump(url, timeout=20, budget=4000):
+    if not os.path.exists(CHROME):
+        return ''
+    # 每次独立 profile，避免被杀遗留的孤儿 Chrome 占锁导致后续启动卡死
+    prof = os.path.join(CACHE, 'cp_%d_%d' % (os.getpid(), int(time.time() * 1000)))
+    dom_path = os.path.join(CACHE, 'dom_%d_%d.html' % (os.getpid(), int(time.time() * 1000)))
+    cands = [url]
+    fl = _flip(url)
+    if fl != url:
+        cands.append(fl)
+    # 代理活着：先代理后直连；代理死了：只直连
+    proxy_opts = (['--proxy-server=' + PROXY, '--no-proxy-server']
+                  if (PROXY_OK and PROXY) else ['--no-proxy-server'])
+    out = ''
+    try:
+        for u in cands:
+            for po in proxy_opts:
+                # 关键：Chrome 输出重定向到文件而非 PIPE。否则页面永不加载完时，
+                # Chrome 子进程会攥住 stdout 管道导致 read 永久阻塞、进程卡死。
+                try:
+                    with open(dom_path, 'wb') as domf:
+                        p = subprocess.Popen([CHROME, '--headless', '--no-sandbox', '--disable-gpu',
+                                              '--user-data-dir=' + prof, po,
+                                              '--virtual-time-budget=' + str(budget), '--dump-dom', u],
+                                             stdout=domf, stderr=subprocess.DEVNULL, cwd=CACHE)
+                        try:
+                            p.wait(timeout=timeout)
+                        except subprocess.TimeoutExpired:
+                            p.kill()
+                            try:
+                                p.wait(timeout=5)
+                            except Exception:
+                                pass
+                except Exception:
+                    pass
+                try:
+                    with open(dom_path, 'r', encoding='utf-8', errors='replace') as f:
+                        out = f.read()
+                except Exception:
+                    out = ''
+                if out and not is_blocked(out):
+                    return out
+    finally:
+        try:
+            shutil.rmtree(prof, ignore_errors=True)
+        except Exception:
+            pass
+        try:
+            os.remove(dom_path)
+        except Exception:
+            pass
+    return ''
+
+def slug_of(name):
+    return re.sub(r'[^0-9A-Za-z\u4e00-\u9fff]+', '_', name)
+
+def cache_path(name):
+    return os.path.join(CACHE, slug_of(name) + '.html')
+
+def cache_get(name, force):
+    if force:
         return None
-    for it in (j if isinstance(j, list) else []):
-        return it.get('code'), it.get('orgId')
+    p = cache_path(name)
+    if os.path.exists(p) and (time.time() - os.path.getmtime(p)) < CACHE_TTL:
+        try:
+            with open(p, encoding='utf-8') as f:
+                return f.read()
+        except Exception:
+            return None
     return None
 
-def query_ann(code, org, days=45):
-    col = 'sse' if code.startswith('6') else 'szse'
-    plate = 'sh' if code.startswith('6') else 'sz'
-    end = time.strftime('%Y-%m-%d')
-    start = time.strftime('%Y-%m-%d', time.localtime(time.time() - days * 86400))
-    t = post('http://www.cninfo.com.cn/new/hisAnnouncement/query', {
-        'pageNum': 1, 'pageSize': 60, 'column': col, 'tabName': 'fulltext',
-        'plate': plate, 'stock': code + ',' + org, 'searchkey': '', 'secid': '',
-        'category': '', 'trade': '', 'seDate': start + '~' + end,
-        'sortName': '', 'sortType': '', 'isHLtitle': 'true'})
+def cache_put(name, raw):
     try:
-        return (json.loads(t).get('announcements') or [])
-    except Exception:
-        return []
-
-def run_domestic(days=45):
-    out = []
-    for name, code, sector in DOMESTIC:
-        r = top_search(name)
-        if not r:
-            print('  [skip] %s 未检索到 code/orgId' % name)
-            continue
-        rcode, org = r
-        anns = query_ann(rcode, org, days)
-        kept, dropped = [], 0
-        for a in anns:
-            title = clean(a.get('announcementTitle'))
-            if not title:
-                continue
-            if any(k in title for k in NOISE):
-                dropped += 1
-                continue
-            try:
-                dt = time.strftime('%Y-%m-%d', time.localtime(int(a.get('announcementTime')) / 1000))
-            except Exception:
-                dt = ''
-            adj = (a.get('adjunctUrl') or '').lstrip('/')
-            cat, lv = classify(title)
-            kept.append({'t': title, 'd': dt, 'c': cat, 'lv': lv, 'co': name, 'code': rcode,
-                         'sector': sector, 'u': ('http://static.cninfo.com.cn/' + adj) if adj else ''})
-        kept.sort(key=lambda x: x['d'], reverse=True)
-        out.append({'name': name, 'code': rcode, 'sector': sector, 'region': 'CN',
-                    'exchange': 'A股', 'total': len(anns), 'kept': len(kept),
-                    'dropped': dropped, 'items': kept[:12]})
-        print('  %-8s %-7s 公告%-4d 留%-3d 剔%-3d %s'
-              % (name, rcode, len(anns), len(kept), dropped,
-                 (kept[0]['t'][:28] if kept else '—')))
-        time.sleep(0.35)
-    return out
-
-# ============================ 4. SEC 采集 ============================
-SEC_ITEM_ZH = {
-    '1.01': '订立重大协议', '1.02': '终止重大协议', '1.03': '破产或接管',
-    '1.04': '矿山安全通报', '2.01': '完成资产收购/处置', '2.02': '经营业绩与财务状况',
-    '2.03': '重大财务债务', '2.05': '私下谈判交易', '2.06': '重大资产减值',
-    '3.01': '上市状态变更', '4.01': '审计师变更', '5.01': '控制权变更',
-    '5.02': '董事/高管变动', '5.03': '章程修订', '5.07': '股东投票结果',
-    '7.01': 'FD规则披露', '8.01': '其他重大事项', '9.01': '财务报表及附件',
-}
-SEC_FORM_ZH = {
-    '10-K': '年度报告', '10-Q': '季度报告', '10-K/A': '年度报告（修订）', '10-Q/A': '季度报告（修订）',
-    '20-F': '年度报告（境外）', '40-F': '年度报告（加拿大）', '6-K': '当期报告', '8-K': '重大事件报告',
-    'S-4': '并购/重组登记', 'F-4': '并购登记（境外）', '425': '招股/要约声明', 'SC TO': '收购要约声明',
-    'DEF 14A': '委托投票书', 'DEFA14A': '附加委托投票书',
-}
-# 保留的经营相关 form（剔除纯证券/持股/基金类流程件）
-SEC_KEEP_FORMS = {
-    '10-K', '10-Q', '10-K/A', '10-Q/A', '20-F', '40-F', '6-K', '8-K',
-    'S-4', 'F-4', '425', 'SC TO', 'DEF 14A', 'DEFA14A',
-}
-
-def sec_get(url, timeout=30):
-    try:
-        req = urllib.request.Request(url, headers={'User-Agent': SEC_UA, 'Accept': 'application/json'})
-        return urllib.request.urlopen(req, timeout=timeout, context=ctx).read().decode('utf-8', 'replace')
-    except Exception as e:
-        return ''
-
-def load_ticker_map():
-    raw = sec_get('https://www.sec.gov/files/company_tickers.json')
-    m = {}
-    if not raw:
-        return m
-    try:
-        d = json.loads(raw)
-        for v in d.values():
-            m[str(v.get('ticker', '')).upper()] = int(v['cik_str'])
+        with open(cache_path(name), 'w', encoding='utf-8') as f:
+            f.write(raw)
     except Exception:
         pass
-    return m
 
-def resolve_cik(ticker, fallback, tmap):
-    if fallback:
-        return int(fallback)
-    return tmap.get(ticker.upper())
+# ============================ 1. 条目抽取 ============================
+def strip_tags(s):
+    s = re.sub(r'<[^>]+>', ' ', s or '')
+    return html.unescape(clean_ws(s))
 
-def sec_classify(form, items):
-    """由 form + items 推导分类与级别。"""
-    f = (form or '').upper()
-    codes = [x.strip() for x in (items or '').replace(' ', '').split(',') if x.strip()]
-    if f in ('S-4', 'F-4', '425', 'SC TO'):
-        return '并购重组', 'high'
-    if f in ('10-K', '10-Q', '10-K/A', '10-Q/A', '20-F', '40-F'):
-        return '经营业绩', 'mid'
-    # 8-K / 6-K 按 items
-    for c in codes:
-        if c in ('1.01', '1.02', '2.01', '2.05', '2.06'):
-            return '并购重组/产能项目', 'high'
-        if c == '2.02':
-            return '经营业绩', 'mid'
-        if c in ('5.01', '5.02', '5.03'):
-            return '股东变动', 'mid'
-        if c in ('7.01', '8.01', '9.01'):
-            return '其他', 'low'
-        if c == '3.01':
-            return '其他', 'low'
-    return '其他', 'low'
+def host_of(u):
+    try:
+        return urllib.parse.urlparse(u).netloc.lower()
+    except Exception:
+        return ''
 
-def sec_title(co, form, items, desc):
-    f = (form or '').upper()
-    codes = [x.strip() for x in (items or '').replace(' ', '').split(',') if x.strip()]
-    labels = [SEC_ITEM_ZH.get(c, c) for c in codes if c in SEC_ITEM_ZH]
-    if labels:
-        return '%s %s：%s' % (co, f, '/'.join(labels[:2]))
-    zh = SEC_FORM_ZH.get(f, f)
-    return '%s 提交 %s（%s）' % (co, f, zh)
+def same_host(h, base):
+    if not h or not base:
+        return False
+    return h == base or h.endswith('.' + base) or base.endswith('.' + h)
 
-def run_sec(tmap, days=180):
-    out = []
-    cutoff = time.strftime('%Y-%m-%d', time.localtime(time.time() - days * 86400))
-    for name, ticker, sector, fcik in SEC_COMPANIES:
-        cik = resolve_cik(ticker, fcik, tmap)
-        if not cik:
-            print('  [skip] %s (%s) 未解析到 CIK' % (name, ticker))
+def norm_date(m):
+    y, mo, d = m.group(1), m.group(2), m.group(3)
+    try:
+        return '%04d-%02d-%02d' % (int(y), int(mo), int(d))
+    except Exception:
+        return ''
+
+def find_date(raw, pos_start, pos_end):
+    # 在锚点前后各 1500 字符（覆盖同列表项/单元格内的独立日期 span）内找日期
+    fwd = raw[pos_end:pos_end + 1500]
+    bwd = raw[max(0, pos_start - 1500):pos_start]
+    for seg in (fwd, bwd):
+        m = DATE_RE.search(seg) or DATE_RE2.search(seg)
+        if m:
+            nd = norm_date(m)
+            if nd:
+                return nd
+    return ''
+
+def looks_like_news(title):
+    """过滤导航/按钮/纯 URL/CSS 类名/过短标题。"""
+    if not title:
+        return False
+    low_t = title.lower()
+    if ('http://' in low_t or 'https://' in low_t or low_t.startswith('www.')
+            or title.startswith('//') or '@' in title):
+        return False
+    # 过滤 CSS / 内联样式 / SVG class 之类非文本（如 ".cls-1{fill:#140700;}"）
+    if '{' in title or '}' in title or title.startswith('.') or 'cls-' in low_t \
+            or 'style=' in low_t or low_t.startswith('svg') or low_t.startswith('path'):
+        return False
+    if is_generic_title(title):
+        return False
+    if title in NAV_WORDS or low_t in NAV_WORDS:
+        return False
+    cjk = len(re.findall(r'[\u4e00-\u9fff]', title))
+    if cjk == 0 and len(title) < 12:
+        return False
+    if cjk > 0 and len(title) < 5:
+        return False
+    return True
+
+def extract_items(raw, base_url, max_items=18, require_date=True):
+    if not raw:
+        return []
+    base_host = host_of(base_url)
+    items = []
+    seen = set()
+    for m in ANCHOR_RE.finditer(raw):
+        href = m.group(1).strip()
+        if not href or href.startswith(('#', 'javascript:', 'mailto:', 'tel:', 'data:', '//')):
             continue
-        url = 'https://data.sec.gov/submissions/CIK%010d.json' % cik
-        raw = sec_get(url)
-        if not raw:
-            print('  [skip] %s (%s) submissions 获取失败' % (name, ticker))
+        low = href.lower()
+        if low.endswith(ASSET_EXT):
             continue
-        try:
-            j = json.loads(raw)
-        except Exception:
-            print('  [skip] %s (%s) JSON 解析失败' % (name, ticker))
+        if any(k in low for k in NAV_HREF) and len(strip_tags(m.group(2))) < 20:
             continue
-        rec = (j.get('filings') or {}).get('recent') or {}
-        forms = rec.get('form') or []
-        dates = rec.get('filingDate') or []
-        accs = rec.get('accessionNumber') or []
-        docs = rec.get('primaryDocument') or []
-        descs = rec.get('primaryDocDescription') or []
-        itemss = rec.get('items') or []
-        n = min(len(forms), len(dates))
-        kept, total = [], 0
-        for i in range(n):
-            f = (forms[i] or '').upper().strip()
-            if f not in SEC_KEEP_FORMS:
-                continue
-            total += 1
-            d = dates[i] or ''
-            if d < cutoff:
-                continue
-            acc = (accs[i] or '').replace('-', '')
-            doc = docs[i] or ''
-            desc = descs[i] or ''
-            items = itemss[i] if i < len(itemss) else ''
-            u = ('https://www.sec.gov/Archives/edgar/data/%d/%s/%s'
-                 % (cik, acc, doc)) if acc and doc else ''
-            cat, lv = sec_classify(f, items)
-            kept.append({'t': sec_title(name, f, items, desc), 'd': d, 'c': cat, 'lv': lv,
-                         'co': name, 'ticker': ticker, 'sector': sector,
-                         'form': f, 'u': u})
-        kept.sort(key=lambda x: x['d'], reverse=True)
-        out.append({'name': name, 'ticker': ticker, 'sector': sector, 'region': 'NA',
-                    'exchange': 'SEC', 'total': total, 'kept': len(kept),
-                    'dropped': 0, 'items': kept[:12]})
-        print('  %-16s %-5s 命中%-3d 留%-3d %s'
-              % (name, ticker, total, len(kept),
-                 (kept[0]['t'][:30] if kept else '—')))
-        time.sleep(0.4)
-    return out
+        absurl = urllib.parse.urljoin(base_url, href)
+        if not same_host(host_of(absurl), base_host):
+            continue
+        title = strip_tags(m.group(2))
+        if not looks_like_news(title):
+            continue
+        if absurl in seen:
+            continue
+        d = find_date(raw, m.start(), m.end())
+        if require_date and not d:
+            continue
+        # 摘要：</a> 之后到下一个列表项边界之间的文本（尽力）
+        s = ''
+        tail = raw[m.end():m.end() + 700]
+        cut = re.search(r'</?(li|ul|ol|div|p|tr|td|h\d)\b', tail)
+        seg = tail[:cut.start()] if cut else tail
+        seg = strip_tags(seg)
+        if 14 <= len(seg) <= 240 and seg != title:
+            s = seg[:150]
+        seen.add(absurl)
+        items.append({'t': title, 'd': d or '', 'u': absurl, 's': s})
+    # 有日期在前，无日期在后；各自按日期倒序
+    items.sort(key=lambda x: (x['d'] == '', x['d']), reverse=True)
+    return items[:max_items]
+
+# ============================ 2. 翻译 ============================
+TRANS_CACHE_PATH = os.path.join(CACHE, 'co_trans.json')
+def _load_trans_cache():
+    try:
+        if os.path.exists(TRANS_CACHE_PATH):
+            return json.load(open(TRANS_CACHE_PATH, encoding='utf-8')) or {}
+    except Exception:
+        pass
+    return {}
+_trans_cache = _load_trans_cache()
+def translate(text):
+    if not text:
+        return text
+    if text in _trans_cache:
+        return _trans_cache[text]
+    u = ('https://api.mymemory.translated.net/get?q=%s&langpair=en|zh-CN'
+         % urllib.parse.quote(text[:300]))
+    try:
+        st, data = http_get(u, timeout=8)
+        if st == 200 and data:
+            j = json.loads(data.decode('utf-8', 'replace'))
+            t = (j.get('responseData') or {}).get('translatedText') or ''
+            if t and t.lower() != text.lower():
+                _trans_cache[text] = t
+                return t
+    except Exception:
+        pass
+    _trans_cache[text] = text
+    return text
+def _save_trans_cache():
+    try:
+        with open(TRANS_CACHE_PATH, 'w', encoding='utf-8') as f:
+            json.dump(_trans_cache, f, ensure_ascii=False)
+    except Exception:
+        pass
+
+# ============================ 3. 公司花名册 + 新闻源 ============================
+# method: 'html' 静态优先（不足 3 条自动回退 chrome）；'chrome' 直接渲染
+SITES = [
+    # —— 铜 ——
+    {'name':'紫金矿业','code':'601899','sector':'铜','region':'CN','exchange':'A股',
+     'url':'https://www.zjky.cn/news/news_list.jsp','method':'html'},
+    {'name':'江西铜业','code':'600362','sector':'铜','region':'CN','exchange':'A股',
+     'url':'https://www.jxcc.com/news.html','method':'chrome'},
+    {'name':'铜陵有色','code':'000630','sector':'铜','region':'CN','exchange':'A股',
+     'url':'http://www.tlys.cn/news.aspx?cid=383','method':'html'},
+    {'name':'云南铜业','code':'000878','sector':'铜','region':'CN','exchange':'A股',
+     'url':'https://www.ynfc.com.cn/','method':'html'},
+    {'name':'西部矿业','code':'601168','sector':'铜','region':'CN','exchange':'A股',
+     'url':'https://www.westmining.com/mtzx/xkxw/','method':'html'},
+    # —— 钼 ——
+    {'name':'洛阳钼业','code':'603993','sector':'钼','region':'CN','exchange':'A股',
+     'url':'https://www.cmoc.com/html/Media/','method':'chrome'},
+    # —— 铝 ——
+    {'name':'中国铝业','code':'601600','sector':'铝','region':'CN','exchange':'A股',
+     'url':'https://www.chalco.com.cn/','method':'chrome'},
+    {'name':'南山铝业','code':'600219','sector':'铝','region':'CN','exchange':'A股',
+     'url':'https://www.nanshan.com.cn/news.html','method':'html'},
+    {'name':'云铝股份','code':'000807','sector':'铝','region':'CN','exchange':'A股',
+     'url':'http://www.ylgf.com.cn/','method':'html'},
+    {'name':'神火股份','code':'000933','sector':'铝','region':'CN','exchange':'A股',
+     'url':'http://www.shenhuo.com/home/newslist/newslist?categoryId=3','method':'html'},
+    {'name':'天山铝业','code':'002532','sector':'铝','region':'CN','exchange':'A股',
+     'url':'http://www.tslyjt.com/node/48','method':'html'},
+    # —— 黄金 ——
+    {'name':'山东黄金','code':'600547','sector':'黄金','region':'CN','exchange':'A股',
+     'url':'https://www.sd-gold.com/column/81/','method':'chrome'},
+    {'name':'中金黄金','code':'600489','sector':'黄金','region':'CN','exchange':'A股',
+     'url':'http://www.zjgold.com.cn/','method':'chrome'},
+    {'name':'赤峰黄金','code':'600988','sector':'黄金','region':'CN','exchange':'A股',
+     'url':'https://www.cfgold.com/col36/list','method':'html'},
+    {'name':'湖南黄金','code':'002155','sector':'黄金','region':'CN','exchange':'A股',
+     'url':'https://www.hngold.com.cn/','method':'html'},
+    # —— 锂 ——
+    {'name':'天齐锂业','code':'002466','sector':'锂','region':'CN','exchange':'A股',
+     'url':'https://www.tianqilithium.com/news.aspx?t=27','method':'html'},
+    {'name':'赣锋锂业','code':'002460','sector':'锂','region':'CN','exchange':'A股',
+     'url':'https://www.ganfenglithium.com/news.html','method':'chrome'},
+    {'name':'华友钴业','code':'603799','sector':'钴','region':'CN','exchange':'A股',
+     'url':'https://www.huayou.com/news/corporate-news','method':'html'},
+    {'name':'藏格矿业','code':'000408','sector':'锂','region':'CN','exchange':'A股',
+     'url':'http://www.zanggekuangye.com/news/cropnews/index.html','method':'html'},
+    # —— 稀土 ——
+    {'name':'北方稀土','code':'600111','sector':'稀土','region':'CN','exchange':'A股',
+     'url':'https://www.reht.com/','method':'html'},
+    {'name':'中国稀土','code':'000831','sector':'稀土','region':'CN','exchange':'A股',
+     'url':'https://www.regcc.cn/zgxtjt/jtnew/list_9.shtml','method':'html'},
+    # —— 铅锌 ——
+    {'name':'驰宏锌锗','code':'600497','sector':'铅锌','region':'CN','exchange':'A股',
+     'url':'http://www.chxz.com/xwzx/zhxw/','method':'html'},
+    {'name':'中金岭南','code':'000060','sector':'铅锌','region':'CN','exchange':'A股',
+     'url':'https://www.nonfemet.com/channel/74','method':'html'},
+    # —— 锡 / 钨 ——
+    {'name':'锡业股份','code':'000960','sector':'锡','region':'CN','exchange':'A股',
+     'url':'https://www.ytc.cn/xwdt1/gsxw.htm','method':'html'},
+    {'name':'厦门钨业','code':'600549','sector':'钨','region':'CN','exchange':'A股',
+     'url':'https://www.cxtc.com/News.aspx','method':'chrome'},
+    # —— 海外 7 家（JS 重站，统一走 chrome；http 方案重试由 chrome_dump 处理）——
+    {'name':'Newmont','code':'NEM','sector':'黄金','region':'NA','exchange':'NYSE',
+     'url':'https://www.newmont.com/news/','method':'chrome'},
+    {'name':'Barrick','code':'B','sector':'黄金','region':'NA','exchange':'NYSE',
+     'url':'https://www.barrick.com/English/News/default.aspx','method':'chrome'},
+    {'name':'Freeport-McMoRan','code':'FCX','sector':'铜','region':'NA','exchange':'NYSE',
+     'url':'https://www.fcx.com/news','method':'chrome'},
+    {'name':'Southern Copper','code':'SCCO','sector':'铜','region':'NA','exchange':'NYSE',
+     'url':'https://www.southerncopper.com/','method':'chrome'},
+    {'name':'Teck Resources','code':'TECK','sector':'铅锌','region':'NA','exchange':'TSX',
+     'url':'https://www.teck.com/news/','method':'chrome'},
+    {'name':'Agnico Eagle','code':'AEM','sector':'黄金','region':'NA','exchange':'TSX',
+     'url':'https://www.agnicoeagle.com/English/news/default.aspx','method':'chrome'},
+    {'name':'Albemarle','code':'ALB','sector':'锂','region':'NA','exchange':'NYSE',
+     'url':'https://www.albemarle.com/news','method':'chrome'},
+]
+
+INDEX = {s['name']: s for s in SITES}
+
+# ============================ 4. 单公司采集 ============================
+def fetch_one(site, force=False):
+    name = site['name']
+    url = site['url']
+    method = site.get('method', 'html')
+    raw = cache_get(name, force)
+    cached = raw is not None
+    used_method = method
+    if raw is None:
+        if method == 'chrome':
+            raw = chrome_dump(url)
+            used_method = 'chrome'
+            if not raw:
+                raw = fetch_html(url)  # 回退静态
+                if raw:
+                    used_method = 'html'
+        else:
+            raw = fetch_html(url)
+            used_method = 'html'
+            # 静态站不再回退 Chrome（省时）；方法标错或真 JS 站由 method='chrome' 处理
+        if raw:
+            cache_put(name, raw)
+    items = extract_items(raw, url, require_date=False) if raw else []
+    # 海外译中
+    if site.get('region') == 'NA':
+        for it in items:
+            en = it['t']
+            zh = translate(en)
+            it['t_en'] = clean_ws(en)
+            it['t'] = clean_ws(zh)
+    return items, used_method, cached
 
 # ============================ 5. 主流程 ============================
-def main():
-    print('===== 国内 25 家（cninfo） =====')
-    domestic = run_domestic()
-    print('\n===== 北美 8 家（SEC EDGAR） =====')
-    tmap = load_ticker_map()
-    print('  ticker→CIK 映射载入 %d 条' % len(tmap))
-    foreign = run_sec(tmap)
-    companies = domestic + foreign
+def load_old():
+    old = {}
+    if os.path.exists(OUT):
+        try:
+            od = json.load(open(OUT, encoding='utf-8'))
+            for c in (od.get('companies') or []):
+                old[c.get('name')] = c
+        except Exception:
+            pass
+    return old
+
+def is_v2(items):
+    return bool(items) and all(('lv' not in it) and ('c' not in it) for it in items)
+
+def collect(site, old, force):
+    name = site['name']
+    try:
+        items, used, cached = fetch_one(site, force)
+    except Exception as e:
+        items, used, cached = [], 'err', False
+        print('  [ERR] %s %s' % (name, repr(e)[:80]))
+    # 不再回退旧 company_news.json（旧数据是 v1 公告，属污染源）。
+    # 只信本次真实抓取（或同次运行内的 raw-HTML 缓存）；抓不到就诚实标空。
+    stale = False
+    reuse = False
+    return {
+        'name': name, 'code': site['code'], 'sector': site['sector'],
+        'region': site['region'], 'exchange': site['exchange'],
+        'home': site['url'], 'news_url': site['url'], 'method': used,
+        'stale': stale, 'items': items,
+    }, items, stale, reuse, cached
+
+def _write_json(companies):
+    domestic = [c for c in companies if c['region'] == 'CN']
+    foreign = [c for c in companies if c['region'] == 'NA']
+    real_total = sum(len(c['items']) for c in companies)
     data = {
         'updated_at': time.strftime('%Y-%m-%d'),
         'companies': companies,
         'counts': {
             'domestic': len(domestic), 'foreign': len(foreign),
-            'total': len(companies),
-            'items': sum(len(c['items']) for c in companies),
+            'total': len(companies), 'items': real_total,
         },
     }
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=1)
-    print('\n国内 %d / 北美 %d / 合计 %d 家，条目 %d'
-          % (len(domestic), len(foreign), len(companies),
-             data['counts']['items']))
+    return real_total
+
+def main():
+    only = None
+    force = False
+    for a in sys.argv[1:]:
+        if a.startswith('--only='):
+            only = [x.strip() for x in a.split('=', 1)[1].split(',') if x.strip()]
+        elif a == '--force':
+            force = True
+    old = load_old()
+    if only:
+        targets = [INDEX[n] for n in only if n in INDEX]
+        print('[--only] 重采 %d 家：%s' % (len(targets), '、'.join(only)))
+    else:
+        targets = SITES
+    companies = []
+    for site in targets:
+        c, items, stale, reuse, cached = collect(site, old, force)
+        companies.append(c)
+        src = 'cache' if cached else 'net'
+        if items:
+            sample = items[0]['t'][:34]
+        elif reuse:
+            sample = '（沿用旧官网新闻）'
+        else:
+            sample = '（官网暂不可达）'
+        print('  %-16s %-5s %-3s 条 %-7s %-5s %s' % (c['name'], site['code'], len(items), c['method'], src, sample))
+        time.sleep(0.15)
+        # 增量落盘：每采一家写一次，进程被杀也不丢已采集结果（旧公告数据不会回填）
+        try:
+            _write_json(companies)
+        except Exception:
+            pass
+    # --only：未重采的公司保留旧 JSON 中的对应条目（旧数据干净时才安全）
+    if only:
+        for s in SITES:
+            if not any(c['name'] == s['name'] for c in companies):
+                companies.append(old.get(s['name']) or {
+                    'name': s['name'], 'code': s['code'], 'sector': s['sector'],
+                    'region': s['region'], 'exchange': s['exchange'],
+                    'home': s['url'], 'news_url': s['url'], 'method': '',
+                    'stale': False, 'items': []})
+    real_total = _write_json(companies)
+    _save_trans_cache()
+    domestic = [c for c in companies if c['region'] == 'CN']
+    foreign = [c for c in companies if c['region'] == 'NA']
+    print('\n国内 %d / 海外 %d / 合计 %d 家，条目 %d'
+          % (len(domestic), len(foreign), len(companies), real_total))
     print('saved', OUT)
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception:
+        import traceback
+        cl = os.path.join(CACHE, 'crash.log')
+        with open(cl, 'a', encoding='utf-8') as f:
+            f.write('\n=== crash %s ===\n' % time.strftime('%Y-%m-%d %H:%M:%S'))
+            f.write(traceback.format_exc())
+        # 崩溃前若已部分采集，仍尝试落盘，避免整块清空
+        try:
+            _save_trans_cache()
+        except Exception:
+            pass
+        print('CRASH -> see', cl)
+        raise

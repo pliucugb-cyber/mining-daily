@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260921-1800" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260921-2200" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2497,7 +2497,7 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <div class="toc-main-item" data-target="todaySection" onclick="window.switchView&&window.switchView('today',this)" data-page-node-id="EFrXr8SMUaesjIaDEYAhDR">🔥 今日新增 <span class="toc-count toc-count-fresh" id="tocTodayCount">20</span></div>
 <div class="toc-main-item" data-target="archiveSection" onclick="window.switchView&&window.switchView('archive',this)" data-page-node-id="kZhrPyaLViooxwagRVlb3V">📰 往期内容</div>
 <div class="toc-main-item" data-target="rightsSection" onclick="window.switchView&&window.switchView('rights',this)" style="color:#0e7490" data-page-node-id="rGTZSHy4RJt4h8Y1cR2Y9C">💼 矿权交易</div>
-<div class="toc-main-item" data-target="companySection" onclick="window.switchView&&window.switchView('company',this)" style="color:#7c3aed">🏢 矿业公司</div>
+<div class="toc-main-item" data-target="companySection" onclick="window.switchView&&window.switchView('company',this)" style="color:#4f46e5">🏢 矿业公司</div>
 <div class="toc-main-item" id="tocFavItem" onclick="window.toggleFavFilter&&window.toggleFavFilter()" style="color:#f39c12" title="只看收藏的条目，并自动定位到第一条" data-page-node-id="kyAqcKLd1iRl6XZMtlywZd">★ 我的收藏 <span class="toc-count" id="tocFavCount" style="background:#fef5e7;color:#f39c12" data-page-node-id="YBTLfP4pD40Hgivw8pelFf">0</span></div>
 <div class="toc-main-item" id="tocHistoryItem" onclick="window.toggleHistoryFilter&&window.toggleHistoryFilter()" style="color:#8e44ad" title="只看浏览过的条目，并自动定位到第一条" data-page-node-id="6dUH92GfoZMNsVzAwwPxOF">📋 浏览记录 <span class="toc-count" id="tocHistoryCount" style="background:#f5eef8;color:#8e44ad" data-page-node-id="LxKSXJpSOxmQP4aisnmhW1">0</span></div>
 
@@ -2654,43 +2654,43 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <div class="rights-list rv-cards" id="rightsCards" data-page-node-id="rGS2SHy4RJt4h8Y1cR2Y9p"></div>
 <div class="rights-empty" id="rightsEmpty" hidden data-page-node-id="rH62SHy4RJt4h8Y1cR2Y9D">当前筛选条件下无矿权交易条目。</div>
 </div>
-<!-- ==================== 矿业公司情报（2026-09-21，运行时渲染，位置在 TAG_RIGHTS 块之外，抗每日 regenerate 重建） ==================== -->
+<!-- ==================== 矿业公司动态（官网新闻流，2026-09-14 重写：去掉 cninfo/SEC 公告，改抓官网新闻；运行时渲染，位置在 TAG_RIGHTS 块之外，抗每日 regenerate 重建） ==================== -->
 <div class="section" id="companySection">
 <style>
-/* 矿业公司情报（2026-09-21）：运行时渲染，样式随区块一起常驻，抗 regenerate 重建 */
-.section-title.co{background:var(--surface-2);border-left-color:#7c3aed}
-.co-note{font-size:var(--fs-meta);color:#5b6b7a;line-height:1.65;padding:2px var(--s1) var(--s4)}
+/* 矿业公司动态（官网新闻流）：复用站点 .news-item 视觉语言，独立 .co-* 类，不继承新闻已读/收藏态 */
+.section-title.co{background:var(--brand-soft);border-left-color:#4f46e5}
+.co-note{font-size:var(--fs-meta);color:#5b6b7a;line-height:1.65;padding:2px var(--s5) var(--s3)}
 body.dark .co-note{color:var(--ink-500)}
-.co-summary{display:flex;flex-wrap:wrap;gap:var(--s2);padding:0 var(--s1) var(--s4)}
+.co-filters{display:flex;flex-wrap:wrap;gap:var(--s2);padding:var(--s3) var(--s5);border-bottom:1px solid var(--line-1)}
+.co-fchip{font-size:var(--fs-meta);font-weight:600;color:var(--ink-700);background:var(--surface-2);border:1px solid var(--line-1);border-radius:999px;padding:4px var(--s3);cursor:pointer;transition:.15s;user-select:none}
+.co-fchip:hover{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+.co-fchip.on{background:#4f46e5;color:#fff;border-color:#4f46e5}
+.co-summary{display:flex;flex-wrap:wrap;gap:var(--s2);padding:var(--s3) var(--s5)}
 .co-chip{font-size:var(--fs-meta);font-weight:600;color:var(--ink-700);background:var(--surface-2);border:1px solid var(--line-1);border-radius:999px;padding:3px var(--s3)}
-.co-chip.co-update{color:#7c3aed;border-color:#d6bcfa}
-.co-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:var(--s4);padding:0 var(--s1) var(--s6)}
-.co-card{border:1px solid var(--line-1);border-radius:var(--r-lg);background:var(--surface);padding:var(--s4);display:flex;flex-direction:column;gap:var(--s2);transition:.2s}
-.co-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);border-color:#cbb6f0}
-.co-head{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
-.co-name{font-size:var(--fs-h3);font-weight:700;color:var(--ink-900)}
-.co-badge{font-size:var(--fs-meta);font-weight:600;padding:2px var(--s2);border-radius:999px;background:var(--brand-soft);color:var(--brand)}
-.co-badge.co-ex{background:#eef2ff;color:#4338ca}
-body.dark .co-badge.co-ex{background:#312e81;color:#c7d2fe}
-.co-meta{font-size:var(--fs-meta);color:#5b6b7a}
-.co-items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--s1);border-top:1px dashed var(--line-1);padding-top:var(--s2)}
-.co-item{display:grid;grid-template-columns:auto auto auto 1fr;gap:var(--s2);align-items:baseline;font-size:var(--fs-meta);line-height:1.5}
-.co-date{color:#7b8794;font-variant-numeric:tabular-nums;white-space:nowrap}
-.co-cat{color:var(--ink-700);background:var(--surface-2);border:1px solid var(--line-1);border-radius:6px;padding:0 var(--s2);white-space:nowrap}
-.co-lv{font-size:var(--fs-caption);font-weight:700;border-radius:6px;padding:0 5px;white-space:nowrap}
-.co-lv.co-hi{color:#b42318;background:#fee4e2}
-.co-lv.co-mid{color:#b54708;background:#ffead3}
-.co-lv.co-lo{color:#475467;background:#eaecf0}
-.co-link{color:var(--brand);text-decoration:none;word-break:break-word}
-.co-link:hover{text-decoration:underline}
-.co-empty,.co-loading,.co-err{font-size:var(--fs-meta);color:#5b6b7a;padding:var(--s2) 0}
+.co-chip.co-update{color:#4f46e5;border-color:#c7d2fe}
+.co-item{padding:var(--s4) var(--s5);border-bottom:1px solid #f4f6f8;position:relative}
+.co-item:last-child{border-bottom:none}
+.co-item:hover{background:var(--surface-2)}
+.co-head{display:flex;align-items:flex-start;gap:var(--s2)}
+.co-dot{width:9px;height:9px;border-radius:50%;background:#4f46e5;flex-shrink:0;margin-top:6px;transition:background .2s}
+.co-title{color:var(--ink-900);text-decoration:none;font-weight:var(--fw-medium);font-size:var(--fs-h3);line-height:1.5}
+.co-title:hover{text-decoration:underline}
+.co-cat{font-size:var(--fs-meta);font-weight:600;padding:1px var(--s2);border-radius:var(--r-sm);background:var(--brand-soft);color:var(--brand-ink);margin-left:var(--s2);white-space:nowrap;flex-shrink:0}
+body.dark .co-cat{background:#312e81;color:#c7d2fe}
+.co-meta{font-size:var(--fs-meta);color:var(--ink-500);margin:var(--s1) 0 var(--s1) var(--s5)}
+.co-meta .co-src{color:#4f46e5;font-weight:var(--fw-semibold)}
+.co-meta .co-ex{color:var(--ink-500);border:1px solid var(--line-2);border-radius:999px;padding:0 var(--s2);margin-left:var(--s2);font-size:var(--fs-caption)}
+.co-meta .co-stale{color:var(--ink-500);margin-left:var(--s2);font-size:var(--fs-caption)}
+.co-summary{font-size:var(--fs-body);color:var(--ink-700);margin:2px 0 var(--s2) var(--s5);line-height:1.6}
+.co-empty,.co-loading,.co-err{font-size:var(--fs-meta);color:#5b6b7a;padding:var(--s4) var(--s5)}
 .co-err{color:#b42318}
-@media(max-width:768px){.co-grid{grid-template-columns:1fr}.co-item{grid-template-columns:auto auto 1fr}.co-cat{display:none}}
+@media(max-width:768px){.co-filters{padding:var(--s3) var(--s4)}.co-item{padding:var(--s3) var(--s4)}.co-cat{display:none}.co-summary{margin-left:var(--s4)}.co-meta{margin-left:var(--s4)}}
 </style>
-  <div class="section-title co" id="coTitle"><span class="icon">🏢</span> 矿业公司情报<span class="news-count" id="coCount"></span></div>
-  <div class="co-note">全球矿业龙头与国内核心上市矿企官方披露追踪：A 股 25 家（巨潮 cninfo）+ 北美 7 家（SEC EDGAR）。采集脚本每日刷新，纯前端运行时渲染。港股（MMG 等）由白名单内 mining.com 动态覆盖，待 Phase 2 接入 HKEX / SEDAR。</div>
-  <div class="co-summary" id="coSummary"><div class="co-loading">公司情报加载中…</div></div>
-  <div class="co-grid" id="companyList"></div>
+  <div class="section-title co" id="coTitle"><span class="icon">🏢</span> 矿业公司动态<span class="news-count" id="coCount"></span></div>
+  <div class="co-note" id="coNote">全球矿业龙头与国内核心上市矿企官方网站新闻追踪（非公告）。国内 25 家官网新闻 + 海外 7 家英文新闻译中。采集脚本每日刷新，纯前端运行时渲染；个别官网暂时不可达时该栏留空，次日自动重试。</div>
+  <div class="co-filters" id="coFilters"></div>
+  <div class="co-summary" id="coSummary"><div class="co-loading">公司动态加载中…</div></div>
+  <div class="co-feed" id="companyList"></div>
 </div>
 <!-- ==================== 事件·数据日历（轻量版，2026-09-13） ==================== -->
 <div class="section" id="eventCalendar">

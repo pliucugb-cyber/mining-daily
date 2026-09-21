@@ -2305,27 +2305,27 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **验证脚本**：`%TEMP%\md_probe_verprobe.js`（真机三组：基线不触发 / 本地落后触发 / 本地领先不触发）。
 
-### 42.19 矿业公司情报板块（2026-09-21，运行时渲染，v1 = cninfo + SEC）
+### 42.19 矿业公司动态（官网新闻流，2026-09-14 重写：去掉 cninfo/SEC 公告，改抓官网新闻）
 
-**定位（必留）**：全站新增独立主区块 `#companySection`（左侧目录「🏢 矿业公司」入口，`data-target="companySection"`），追踪国内 A 股 25 家（巨潮 cninfo）+ 北美 7 家（SEC EDGAR）核心上市矿企的官方披露。数据来自根目录 `company_news.json`，**纯前端运行时 `fetch` 渲染**（app.js `renderCompanySection()`），**不引入生成侧 `TAG_COMPANY`**——与 §42.14/§42.15/§42.16/§42.17「前缀区静态物 + 运行时渲染、抗每日 regenerate 重建」套路一致。
+**定位（必留）**：全站新增独立主区块 `#companySection`（左侧目录「🏢 矿业公司」入口，`data-target="companySection"`），**按用户口径改为「各公司官网新闻一条条排下来」的扁平新闻流**，追踪国内 A 股 25 家 + 北美 7 家核心上市矿企的**官方网站新闻栏目**（非 cninfo/SEC 公告）。数据来自根目录 `company_news.json`，**纯前端运行时 `fetch` 渲染**（app.js `renderCompanySection()`），**不引入生成侧 `TAG_COMPANY`**——与 §42.14/§42.15/§42.16/§42.17「前缀区静态物 + 运行时渲染、抗每日 regenerate 重建」套路一致。视觉语言复用全站 `.news-item`（独立 `.co-*` 类，**不继承**新闻已读/收藏态）。
 
-**v1 范围裁定（用户拍板）**：HKEX 抓指定矿企不可靠 → 港股（MMG 等）暂由白名单内 mining.com 动态覆盖，留 Phase 2；加拿大 SEDAR（First Quantum 等纯 TSX 上市、无 EDGAR CIK）同步留 Phase 2。采集层 `fetch_company.py` 产出 `company_news.json`（根目录），SEC 用 `company_tickers.json` 按 ticker 精确取 CIK + `submissions` API，UA 必须 `research <contact>`（否则 403）；cninfo 用 `topSearch/query` → `hisAnnouncement/query` 定向查。白名单 27 域已含 `sec.gov`/`cninfo.com.cn`（子域自动放行）。
+**v2 采集裁定（用户拍板 2026-09-14）**：① 数据来源 = 各公司**官网新闻栏目**（如紫金 `zjky.cn/news/news_list.jsp`、江铜 `jxcc.com/news.html`），**彻底去掉** cninfo/SEC 公告；② 覆盖范围 = 32 家尽量抓（国内 25 + 海外 7）；③ 海外 7 家英文标题经 MyMemory 译中（保留 `t_en` 原文）；④ 矿种主题先全保留，后续再优化。采集层 `fetch_company.py` v2 产出 `company_news.json`（根目录）：静态站走本机 http 代理（http/https 均通，`HTTPS_PROXY=http://127.0.0.1:55483`）urllib 抓取；JS 渲染站（江铜/洛钼/山金/厦钨/赣锋/中金黄金/中国铝业等）headless Chrome `--dump-dom` 渲染后再抽；日期探测窗口锚点前后各 1500 字符（覆盖同列表项内独立日期 span/td）；无日期邻近的新闻条目仍保留（`d:''`，UI 显示「—」，排序置底）；抓取失败且旧数据为 v2 形态（无 `lv`/`c` 公告字段）时沿用并标 `stale`（避免每日重建把整块清空；严防把 v1 公告数据回填）。原始 HTML/DOM 落盘 `tmp/co_cache/` 24h 复用，支持 `--only 名1,名2` 单家重采与 `--force` 强刷。
 
 **容器与顺序（生成侧必留）**：`#companySection` 置于 `#rightsSection` **之后**（其 `</div>` 之后）、`#eventCalendar` 注释之前 —— 与 §42.16 同为 `#rightsSection` 的**兄弟节点**，`_replace_block` 只替换各 section **内部**，兄弟节点天然抗重建。区块内含**内联 `<style>`**（`.section-title.co` + `.co-*` 全套，复用全局 token + 双主题适配），样式随区块一起常驻，不依赖主 `<style>` 块。
 
-**数据契约（`company_news.json`）**：`{updated_at, companies:[{name, code, sector, region("CN"|"NA"), exchange("A股"|"SEC"), total, kept, dropped, items:[{t,d,c,lv("low"|"mid"|"high"),co,code,sector,u}]}], counts:{domestic,foreign,total,items}}`。`lv` 为**重要性**分级（high/mid/low），前端用橙红/琥珀/灰三色点，**不可**挪用「红涨绿跌」的涨跌色（避免与价格区口径打架）。
+**数据契约（`company_news.json`）**：`{updated_at, companies:[{name, code, sector, region("CN"|"NA"), exchange, home, news_url, method("html"|"chrome"|"err"), stale:bool, items:[{t(中), t_en?(英原文), d("YYYY-MM-DD" 或 ""), u, s?(摘要)}]}], counts:{domestic,foreign,total,items}}`。**无** `lv` 重要性分级（v1 已废）、无 `total/kept/dropped`。UI 用 `.co-cat` 显示矿种（非重要性色），**不可**挪用红涨绿跌色。
 
-**前端句柄（app.js）**：`window.renderCompanySection`（IIFE 内，加载即调 + `DOMContentLoaded` + `setTimeout 1500` 兜底）；`fetch('company_news.json',{cache:'reload'})` → 渲染 `#coSummary`（国内/海外/合计 chips + 更新日）与 `#companyList`（每张 `.co-card`：公司名 + 矿种/交易所 badge + meta 行 + `.co-items` 条目列表，条目含日期/重要性点/分类/外链）；`#coCount` 显示「N 家」。排序：CN 在前、按 kept 倒序。
+**前端句柄（app.js）**：`window.renderCompanySection`（IIFE 内，加载即调 + `DOMContentLoaded` + `setTimeout 1500` 兜底）；`fetch('company_news.json',{cache:'reload'})` → 渲染 `#coSummary`（国内/海外/合计 chips + 更新日）、`#coFilters`（按矿种 `sector` 生成的 `.co-fchip` 过滤 chips，含「全部」）、`#companyList`（扁平 `.co-item` 新闻流：`.co-dot` + `.co-title` 外链 + `.co-cat` 矿种 + `.co-meta`（`.co-src` 公司名 · 日期 · `海外`/`数据暂缓` 标记）+ `.co-summary` 摘要）；`#coCount` 显示「N 家」。排序：全量按日期 `d` 倒序（`#companySection` 已无逐公司卡片）。
 
 **豁免（关键）**：`refreshSectionVisibility()`（约 §42.8 行）的「静态说明区跳过」白名单**必须含 `companySection`**——否则该区块会被「无 `.news-item` 即 `display:none`」判空隐藏（同 §42.16 一期事故根因；公司条目类是 `.co-item` 而非 `.news-item`）。`switchView` 的 `targetId` 映射与 `updateActiveSection` 的 `sections` 列表**都必须含 `companySection`**（视图切换 + 滚动高亮）。
 
 **部署必留**：① `deploy_pages.py` 的 `OPTIONAL` 列表**必须含 `company_news.json`**（deploy 只发顶层 REQUIRED+OPTIONAL，不递归 data/）；② `sw.js` 的 `DATA_FILES` 列表**必须含 `BASE+'company_news.json'`**（每日刷新数据须 network-first）；③ `sw.js` `CACHE_NAME` 与 `index.html` `build-version` 须同步 bump。
 
-**回退指纹**：① `#companySection` 静态容器缺失（被重建抹掉）；② 左侧目录无「🏢 矿业公司」入口；③ 公司条目用的是 `.news-item` 而非 `.co-item`（会被显隐闸门误隐藏）；④ `refreshSectionVisibility` 白名单漏 `companySection` → 默认视图下整块不可见；⑤ `fetch` 路径不是 `'company_news.json'`（部署位置错，线上 404）；⑥ `deploy_pages.py` 的 `OPTIONAL` 漏 `company_news.json` 或 `sw.js` 的 `DATA_FILES` 漏它 → 线上数据不发布 / 被缓存中毒；⑦ **绿涨红跌色被挪用**到重要性点；⑧ 港股/SEDAR 在 v1 误上（违背范围裁定）。
+**回退指纹**：① `#companySection` 静态容器缺失（被重建抹掉）；② 左侧目录无「🏢 矿业公司」入口；③ 公司条目用的是 `.news-item` 而非 `.co-item`（会被显隐闸门误隐藏）；④ `refreshSectionVisibility` 白名单漏 `companySection` → 默认视图下整块不可见；⑤ `fetch` 路径不是 `'company_news.json'`（部署位置错，线上 404）；⑥ `deploy_pages.py` 的 `OPTIONAL` 漏 `company_news.json` 或 `sw.js` 的 `DATA_FILES` 漏它 → 线上数据不发布 / 被缓存中毒；⑦ **绿涨红跌色被挪用**到矿种/重要性标记；⑧ 仍出现 cninfo/SEC 公告条目（违背 v2 采集裁定，数据层 `lv`/`c` 字段回流）；⑨ 逐公司 `.co-card` 卡片网格再现（v2 已改为扁平 `.co-item` 新闻流）。
 
-**闸门**：`node test_company_section.js`（jsdom 运行时，**20 PASS**：32 卡渲染 + chips + 外链 + 豁免显隐 + `switchView('company')` 视图隔离 + 目录 active + 无 JS 错误）。改过 `@media`/网格断点 → 仍须补**真实 Chrome** 探针（jsdom 不评估 `@media`）。
+**闸门**：`node test_company_section.js`（jsdom 运行时，须覆盖 v2 扁平新闻流：32 家公司条目渲染 + 矿种过滤 chips + 摘要 + 外链 + 豁免显隐 + `switchView('company')` 视图隔离 + 目录 active + 无 JS 错误）。改过 `@media`/网格断点 → 仍须补**真实 Chrome** 探针（jsdom 不评估 `@media`）。
 
-**同步两条 prompt**：06:00（重建）与 08:00（复验）的 prompt 须在 §42 索引与必留清单处增补本节的「必留①②③ + 豁免白名单 + 回退指纹⑦⑧」，否则次日重建/复验不会保护本模块。
+**同步两条 prompt**：06:00（重建）与 08:00（复验）的 prompt 须在 §42 索引与必留清单处增补本节的「必留①②③ + 豁免白名单 + 回退指纹⑦⑧⑨」，否则次日重建/复验不会保护本模块。
 
 ### 42.7 PWA 安装引导（§41，2026-09-12 两轮修复后定稿）
 
