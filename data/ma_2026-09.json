@@ -1,8 +1,95 @@
 {
   "month": "2026-09",
-  "updated_at": "2026-09-19T06:06:03+08:00",
-  "count": 25,
+  "updated_at": "2026-09-22T06:08:19+08:00",
+  "count": 30,
   "news": [
+    {
+      "id": "ef67aad79eb9",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-22/1225575158.PDF",
+      "title": "关于对外投资设立控股公司及收购Kanga Potash92%股权的进展公告",
+      "source": "巨潮资讯网·藏格矿业",
+      "orig_date": "09-22",
+      "orig_date_full": "2026-09-22",
+      "report_date": "2026-09-22",
+      "category": "并购与投资",
+      "company": "藏格矿业",
+      "sec_code": "000408",
+      "ma_type": "股权/资产收购",
+      "summary": "藏格矿业（000408）披露《关于对外投资设立控股公司及收购Kanga Potash92%股权的进展公告》，涉及股权/资产收购。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "defb241e0cdb",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-22/1225574351.PDF",
+      "title": "关于向特定对象发行股票上市公告书披露的提示性公告",
+      "source": "巨潮资讯网·翔鹭钨业",
+      "orig_date": "09-22",
+      "orig_date_full": "2026-09-22",
+      "report_date": "2026-09-22",
+      "category": "并购与投资",
+      "company": "翔鹭钨业",
+      "sec_code": "002842",
+      "ma_type": "投资/资本运作",
+      "summary": "翔鹭钨业（002842）披露《关于向特定对象发行股票上市公告书披露的提示性公告》，涉及投资/资本运作。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "abb693d38fe1",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-22/1225574348.PDF",
+      "title": "广东翔鹭钨业股份有限公司向特定对象发行股票上市公告书",
+      "source": "巨潮资讯网·翔鹭钨业",
+      "orig_date": "09-22",
+      "orig_date_full": "2026-09-22",
+      "report_date": "2026-09-22",
+      "category": "并购与投资",
+      "company": "翔鹭钨业",
+      "sec_code": "002842",
+      "ma_type": "投资/资本运作",
+      "summary": "翔鹭钨业（002842）披露《广东翔鹭钨业股份有限公司向特定对象发行股票上市公告书》，涉及投资/资本运作。",
+      "tags": [
+        "并购",
+        "钨"
+      ]
+    },
+    {
+      "id": "30b266db92c2",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-22/1225574349.PDF",
+      "title": "国盛证券股份有限公司关于广东翔鹭钨业股份有限公司2023年度向特定对象发行A股股票之上市保荐书",
+      "source": "巨潮资讯网·翔鹭钨业",
+      "orig_date": "09-22",
+      "orig_date_full": "2026-09-22",
+      "report_date": "2026-09-22",
+      "category": "并购与投资",
+      "company": "翔鹭钨业",
+      "sec_code": "002842",
+      "ma_type": "投资/资本运作",
+      "summary": "翔鹭钨业（002842）披露《国盛证券股份有限公司关于广东翔鹭钨业股份有限公司2023年度向特定对象发行A股股票之上市保荐书》，涉及投资/资本运作。",
+      "tags": [
+        "并购",
+        "钨"
+      ]
+    },
+    {
+      "id": "24b8a9719ee6",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-22/1225575032.PDF",
+      "title": "科达制造股份有限公司关于对外投资的公告",
+      "source": "巨潮资讯网·科达制造",
+      "orig_date": "09-22",
+      "orig_date_full": "2026-09-22",
+      "report_date": "2026-09-22",
+      "category": "并购与投资",
+      "company": "科达制造",
+      "sec_code": "600499",
+      "ma_type": "对外投资",
+      "summary": "科达制造（600499）披露《科达制造股份有限公司关于对外投资的公告》，涉及对外投资。",
+      "tags": [
+        "并购"
+      ]
+    },
     {
       "id": "cdd8af9faf56",
       "url": "https://static.cninfo.com.cn/finalpage/2026-09-19/1225571312.PDF",
