@@ -80,6 +80,7 @@ OPTIONAL = [
     'morning_report.json',
     'alerts.json',
     'knowledge.json',
+    'company_news.json',      # 矿业公司情报板块数据（2026-09-21 新增，运行时渲染）
     'mobile-preview.html',   # 手机调试预览页（2026-09-07 曾被白名单漏掉导致线上 404）
 ]
 

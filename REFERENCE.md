@@ -2057,7 +2057,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 ## §42 全站形态契约与复核清单（生成侧必留 · 复核侧回退指纹）
 
 > **用途**：本节是**全站形态的唯一权威清单**，被两条自动化直接引用 ——
-> - **生成侧（06:00 重建）**：按 §42.1–§42.8（**+ §42.17 卡片 sparkline + §42.18 版本回探自愈**）的「必留指纹」逐项保留，**缺任一即回退**；
+> - **生成侧（06:00 重建）**：按 §42.1–§42.8（**+ §42.17 卡片 sparkline + §42.18 版本回探自愈 + §42.19 矿业公司情报板块**）的「必留指纹」逐项保留，**缺任一即回退**；
 > - **复核侧（08:00 复验）**：按 §42.1–§42.10 逐项核对，命中任一「回退指纹」即就地修复。
 >
 > 各部件**为什么这样设计**仍以对应专题节（§16 / §17 / §19–§34 / §38 / §40 / §41）为准；
@@ -2305,6 +2305,28 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **验证脚本**：`%TEMP%\md_probe_verprobe.js`（真机三组：基线不触发 / 本地落后触发 / 本地领先不触发）。
 
+### 42.19 矿业公司情报板块（2026-09-21，运行时渲染，v1 = cninfo + SEC）
+
+**定位（必留）**：全站新增独立主区块 `#companySection`（左侧目录「🏢 矿业公司」入口，`data-target="companySection"`），追踪国内 A 股 25 家（巨潮 cninfo）+ 北美 7 家（SEC EDGAR）核心上市矿企的官方披露。数据来自根目录 `company_news.json`，**纯前端运行时 `fetch` 渲染**（app.js `renderCompanySection()`），**不引入生成侧 `TAG_COMPANY`**——与 §42.14/§42.15/§42.16/§42.17「前缀区静态物 + 运行时渲染、抗每日 regenerate 重建」套路一致。
+
+**v1 范围裁定（用户拍板）**：HKEX 抓指定矿企不可靠 → 港股（MMG 等）暂由白名单内 mining.com 动态覆盖，留 Phase 2；加拿大 SEDAR（First Quantum 等纯 TSX 上市、无 EDGAR CIK）同步留 Phase 2。采集层 `fetch_company.py` 产出 `company_news.json`（根目录），SEC 用 `company_tickers.json` 按 ticker 精确取 CIK + `submissions` API，UA 必须 `research <contact>`（否则 403）；cninfo 用 `topSearch/query` → `hisAnnouncement/query` 定向查。白名单 27 域已含 `sec.gov`/`cninfo.com.cn`（子域自动放行）。
+
+**容器与顺序（生成侧必留）**：`#companySection` 置于 `#rightsSection` **之后**（其 `</div>` 之后）、`#eventCalendar` 注释之前 —— 与 §42.16 同为 `#rightsSection` 的**兄弟节点**，`_replace_block` 只替换各 section **内部**，兄弟节点天然抗重建。区块内含**内联 `<style>`**（`.section-title.co` + `.co-*` 全套，复用全局 token + 双主题适配），样式随区块一起常驻，不依赖主 `<style>` 块。
+
+**数据契约（`company_news.json`）**：`{updated_at, companies:[{name, code, sector, region("CN"|"NA"), exchange("A股"|"SEC"), total, kept, dropped, items:[{t,d,c,lv("low"|"mid"|"high"),co,code,sector,u}]}], counts:{domestic,foreign,total,items}}`。`lv` 为**重要性**分级（high/mid/low），前端用橙红/琥珀/灰三色点，**不可**挪用「红涨绿跌」的涨跌色（避免与价格区口径打架）。
+
+**前端句柄（app.js）**：`window.renderCompanySection`（IIFE 内，加载即调 + `DOMContentLoaded` + `setTimeout 1500` 兜底）；`fetch('company_news.json',{cache:'reload'})` → 渲染 `#coSummary`（国内/海外/合计 chips + 更新日）与 `#companyList`（每张 `.co-card`：公司名 + 矿种/交易所 badge + meta 行 + `.co-items` 条目列表，条目含日期/重要性点/分类/外链）；`#coCount` 显示「N 家」。排序：CN 在前、按 kept 倒序。
+
+**豁免（关键）**：`refreshSectionVisibility()`（约 §42.8 行）的「静态说明区跳过」白名单**必须含 `companySection`**——否则该区块会被「无 `.news-item` 即 `display:none`」判空隐藏（同 §42.16 一期事故根因；公司条目类是 `.co-item` 而非 `.news-item`）。`switchView` 的 `targetId` 映射与 `updateActiveSection` 的 `sections` 列表**都必须含 `companySection`**（视图切换 + 滚动高亮）。
+
+**部署必留**：① `deploy_pages.py` 的 `OPTIONAL` 列表**必须含 `company_news.json`**（deploy 只发顶层 REQUIRED+OPTIONAL，不递归 data/）；② `sw.js` 的 `DATA_FILES` 列表**必须含 `BASE+'company_news.json'`**（每日刷新数据须 network-first）；③ `sw.js` `CACHE_NAME` 与 `index.html` `build-version` 须同步 bump。
+
+**回退指纹**：① `#companySection` 静态容器缺失（被重建抹掉）；② 左侧目录无「🏢 矿业公司」入口；③ 公司条目用的是 `.news-item` 而非 `.co-item`（会被显隐闸门误隐藏）；④ `refreshSectionVisibility` 白名单漏 `companySection` → 默认视图下整块不可见；⑤ `fetch` 路径不是 `'company_news.json'`（部署位置错，线上 404）；⑥ `deploy_pages.py` 的 `OPTIONAL` 漏 `company_news.json` 或 `sw.js` 的 `DATA_FILES` 漏它 → 线上数据不发布 / 被缓存中毒；⑦ **绿涨红跌色被挪用**到重要性点；⑧ 港股/SEDAR 在 v1 误上（违背范围裁定）。
+
+**闸门**：`node test_company_section.js`（jsdom 运行时，**20 PASS**：32 卡渲染 + chips + 外链 + 豁免显隐 + `switchView('company')` 视图隔离 + 目录 active + 无 JS 错误）。改过 `@media`/网格断点 → 仍须补**真实 Chrome** 探针（jsdom 不评估 `@media`）。
+
+**同步两条 prompt**：06:00（重建）与 08:00（复验）的 prompt 须在 §42 索引与必留清单处增补本节的「必留①②③ + 豁免白名单 + 回退指纹⑦⑧」，否则次日重建/复验不会保护本模块。
+
 ### 42.7 PWA 安装引导（§41，2026-09-12 两轮修复后定稿）
 
 **结构与声明（第一轮）**
@@ -2387,6 +2409,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
 | `node test_price_heatmap.js` | **126** | 价格区热力图：静态契约（容器顺序 / pre-paint 位置 / 选择器）+ jsdom 运行时（16 色块、方向与 `.pc-chg` 一致、alpha 单调、红涨绿跌、2 分组、图例 >=7、点击开走势图、视图持久化）+ 反向用例；**价格区间榜**：三态互斥 / 两栏固定 / 空栏占位 / 红涨绿跌 / 条形归一 / 跨度日数回归锁 / `__mdPriceRank` 等（§42.14 / §42.15） |
 | `node test_event_calendar.js` | **29 PASS** | 事件·数据日历：默认隐藏态（开关 `EC_ENABLED=false`）+ 开关往返恢复隐藏 + 静态容器 `#eventCalendar` 存活（重建边界）+ 未被 `refreshSectionVisibility` 隐藏（防回归）+ 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签（会议/政策/数据/截止）+ 外链 `target=_blank` + 空占位「暂无已收录的近期事件」（§42.16） |
+| `node test_company_section.js` | **20 PASS** | 矿业公司情报板块：32 张公司卡渲染 + 概要 chips + 外链 + 豁免显隐（默认视图不隐藏）+ `switchView('company')` 视图隔离 + 目录 active + 无 JS 错误（§42.19） |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
