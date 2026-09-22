@@ -462,6 +462,9 @@ if (JSDOM) {
   });
   const w2 = dom2.window;
   w2.matchMedia = w2.matchMedia || (() => ({ matches: false, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {} }));
+  // 反例容器缺失时 app.js 仍会跑 renderCompanySection → 需要与主用例同样的 fetch shim，
+  // 否则 jsdom 下抛 ReferenceError: fetch is not defined，把「优雅降级」判成假 FAIL。
+  w2.fetch = w2.fetch || (() => Promise.reject(new Error('no network')));
   if (!w2.localStorage) { const s2 = {}; Object.defineProperty(w2, 'localStorage', { value: { getItem: k => (k in s2 ? s2[k] : null), setItem: (k, v) => { s2[k] = String(v); }, removeItem: k => { delete s2[k]; }, clear() {} }, configurable: true }); }
   let e2 = null;
   try {

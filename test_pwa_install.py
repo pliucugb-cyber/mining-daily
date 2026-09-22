@@ -208,7 +208,9 @@ check('appinstalled 后重渲染卡片并清掉失败记忆',
       bool(ainst) and 'mdRenderInstallCard()' in ainst.group(0)
       and 'MD_PWA_STALL_KEY,null' in ainst.group(0))
 
-mine_branch = re.search(r"else if\(go==='mine'\)\{\n\s*if\(autoOpen\)\{([^\n]*)", app_js)
+# 行尾容错：read() 用 newline='' 保留 \r\n，而工作区文件在 core.autocrlf=true 下是 CRLF，
+# 只写 \n 会匹配不上 → 断言假 FAIL（产品侧 mdRenderInstallCard() 其实就在这一行里）。
+mine_branch = re.search(r"else if\(go==='mine'\)\{\r?\n\s*if\(autoOpen\)\{([^\n]*)", app_js)
 check('进入「我的」面板时重渲染卡片',
       bool(mine_branch) and 'mdRenderInstallCard()' in mine_branch.group(1),
       '否则用户打开面板看到的仍是初始化那一刻的旧卡片')
