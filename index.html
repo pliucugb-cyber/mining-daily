@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260923-0608" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260923-2200" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2658,40 +2658,78 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 <!-- ==================== 矿业公司动态（官网新闻流，2026-09-14 重写：去掉 cninfo/SEC 公告，改抓官网新闻；运行时渲染，位置在 TAG_RIGHTS 块之外，抗每日 regenerate 重建） ==================== -->
 <div class="section" id="companySection">
 <style>
-/* 矿业公司动态（官网新闻流）：复用站点 .news-item 视觉语言，独立 .co-* 类，不继承新闻已读/收藏态 */
+/* 矿业公司动态 v3（2026-09-23）：左公司导航 + 右新闻流；独立 .co-* 类，不继承新闻已读/收藏态 */
 .section-title.co{background:var(--brand-soft);border-left-color:#4f46e5}
 .co-note{font-size:var(--fs-meta);color:#5b6b7a;line-height:1.65;padding:2px var(--s5) var(--s3)}
 body.dark .co-note{color:var(--ink-500)}
-.co-filters{display:flex;flex-wrap:wrap;gap:var(--s2);padding:var(--s3) var(--s5);border-bottom:1px solid var(--line-1)}
+.co-bar{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center;padding:var(--s3) var(--s5);border-top:1px solid var(--line-1);border-bottom:1px solid var(--line-1)}
+.co-filters{display:flex;flex-wrap:wrap;gap:var(--s2)}
 .co-fchip{font-size:var(--fs-meta);font-weight:600;color:var(--ink-700);background:var(--surface-2);border:1px solid var(--line-1);border-radius:999px;padding:4px var(--s3);cursor:pointer;transition:.15s;user-select:none}
 .co-fchip:hover{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
 .co-fchip.on{background:#4f46e5;color:#fff;border-color:#4f46e5}
-.co-summary{display:flex;flex-wrap:wrap;gap:var(--s2);padding:var(--s3) var(--s5)}
-.co-chip{font-size:var(--fs-meta);font-weight:600;color:var(--ink-700);background:var(--surface-2);border:1px solid var(--line-1);border-radius:999px;padding:3px var(--s3)}
-.co-chip.co-update{color:#4f46e5;border-color:#c7d2fe}
+.co-search{flex:1 1 140px;min-width:120px;max-width:240px;font-size:var(--fs-meta);padding:5px var(--s3);border:1px solid var(--line-2);border-radius:999px;background:var(--surface-1);color:var(--ink-800)}
+.co-stat{margin-left:auto;font-size:var(--fs-meta);color:var(--ink-500);white-space:nowrap}
+.co-navsel{display:none;width:calc(100% - var(--s5) - var(--s5));margin:var(--s3) var(--s5) 0;font-size:var(--fs-body);padding:7px var(--s3);border:1px solid var(--line-2);border-radius:var(--r-sm);background:var(--surface-1);color:var(--ink-800)}
+.co-panes{display:grid;grid-template-columns:238px minmax(0,1fr);align-items:start}
+.co-nav{border-right:1px solid var(--line-1);background:var(--surface-2);max-height:560px;overflow:auto;padding-bottom:var(--s2)}
+.co-nav-all{display:flex;justify-content:space-between;gap:var(--s2);padding:8px var(--s4);cursor:pointer;font-size:var(--fs-body);font-weight:600;color:var(--ink-800);border-left:3px solid transparent}
+.co-nav-all:hover{background:var(--brand-soft)}
+.co-nav-all.on{background:var(--brand-soft);border-left-color:#4f46e5;color:#4f46e5}
+.co-nav-group{padding:var(--s3) var(--s4) 2px;font-size:var(--fs-caption);color:var(--ink-500);font-weight:600;letter-spacing:.02em}
+.co-nav-item{display:flex;justify-content:space-between;gap:var(--s2);padding:5px var(--s4);cursor:pointer;font-size:var(--fs-meta);color:var(--ink-800);border-left:3px solid transparent;line-height:1.5}
+.co-nav-item:hover{background:var(--brand-soft)}
+.co-nav-item.on{background:var(--brand-soft);border-left-color:#4f46e5;color:#4f46e5;font-weight:600}
+.co-nav-item .co-n{font-size:var(--fs-caption);color:var(--ink-500);flex-shrink:0}
+.co-nav-item.empty{color:var(--ink-500);opacity:.55;cursor:default}
+.co-nav-item.empty:hover{background:transparent}
+.co-feed-head{display:flex;align-items:center;gap:var(--s2);padding:var(--s3) var(--s5);border-bottom:1px solid var(--line-1);background:var(--surface-1)}
+.co-feed-name{font-size:var(--fs-h3);font-weight:600;color:var(--ink-900)}
+.co-feed-sub{font-size:var(--fs-meta);color:var(--ink-500)}
+.co-feed-link{margin-left:auto;font-size:var(--fs-meta);color:#4f46e5;text-decoration:none;white-space:nowrap}
+.co-feed-link:hover{text-decoration:underline}
 .co-item{padding:var(--s4) var(--s5);border-bottom:1px solid #f4f6f8;position:relative}
 .co-item:last-child{border-bottom:none}
 .co-item:hover{background:var(--surface-2)}
 .co-head{display:flex;align-items:flex-start;gap:var(--s2)}
-.co-dot{width:9px;height:9px;border-radius:50%;background:#4f46e5;flex-shrink:0;margin-top:6px;transition:background .2s}
+.co-dot{width:9px;height:9px;border-radius:50%;background:#4f46e5;flex-shrink:0;margin-top:6px}
 .co-title{color:var(--ink-900);text-decoration:none;font-weight:var(--fw-medium);font-size:var(--fs-h3);line-height:1.5}
 .co-title:hover{text-decoration:underline}
 .co-cat{font-size:var(--fs-meta);font-weight:600;padding:1px var(--s2);border-radius:var(--r-sm);background:var(--brand-soft);color:var(--brand-ink);margin-left:var(--s2);white-space:nowrap;flex-shrink:0}
 body.dark .co-cat{background:#312e81;color:#c7d2fe}
 .co-meta{font-size:var(--fs-meta);color:var(--ink-500);margin:var(--s1) 0 var(--s1) var(--s5)}
-.co-meta .co-src{color:#4f46e5;font-weight:var(--fw-semibold)}
+.co-meta .co-src{color:#4f46e5;font-weight:600;cursor:pointer}
+.co-meta .co-src:hover{text-decoration:underline}
 .co-meta .co-ex{color:var(--ink-500);border:1px solid var(--line-2);border-radius:999px;padding:0 var(--s2);margin-left:var(--s2);font-size:var(--fs-caption)}
-.co-meta .co-stale{color:var(--ink-500);margin-left:var(--s2);font-size:var(--fs-caption)}
-.co-summary{font-size:var(--fs-body);color:var(--ink-700);margin:2px 0 var(--s2) var(--s5);line-height:1.6}
-.co-empty,.co-loading,.co-err{font-size:var(--fs-meta);color:#5b6b7a;padding:var(--s4) var(--s5)}
+.co-item .co-summary{font-size:var(--fs-body);color:var(--ink-700);margin:2px 0 var(--s2) var(--s5);line-height:1.6}
+.co-empty,.co-loading,.co-err{font-size:var(--fs-meta);color:#5b6b7a;padding:var(--s5)}
 .co-err{color:#b42318}
-@media(max-width:768px){.co-filters{padding:var(--s3) var(--s4)}.co-item{padding:var(--s3) var(--s4)}.co-cat{display:none}.co-summary{margin-left:var(--s4)}.co-meta{margin-left:var(--s4)}}
+@media(max-width:768px){
+  .co-panes{grid-template-columns:minmax(0,1fr)}
+  .co-nav{display:none}
+  .co-navsel{display:block}
+  .co-feed-head{padding:var(--s3) var(--s4)}
+  .co-item{padding:var(--s3) var(--s4)}
+  .co-cat{display:none}
+  .co-item .co-summary{margin-left:var(--s4)}
+  .co-meta{margin-left:var(--s4)}
+  .co-stat{display:none}
+}
 </style>
   <div class="section-title co" id="coTitle"><span class="icon">🏢</span> 矿业公司动态<span class="news-count" id="coCount"></span></div>
-  <div class="co-note" id="coNote">全球矿业龙头与国内核心上市矿企官方网站新闻追踪（非公告）。国内 25 家官网新闻 + 海外 7 家英文新闻译中。采集脚本每日刷新，纯前端运行时渲染；个别官网暂时不可达时该栏留空，次日自动重试。</div>
-  <div class="co-filters" id="coFilters"></div>
-  <div class="co-summary" id="coSummary"><div class="co-loading">公司动态加载中…</div></div>
-  <div class="co-feed" id="companyList"></div>
+  <div class="co-note" id="coNote">全球矿业龙头与国内核心上市矿企官方网站新闻追踪（非公告）。左侧按矿种选择公司、右侧看该公司新闻，默认「全部公司」为全站最新动态。采集脚本每日刷新，纯前端运行时渲染；官网暂不可达时该栏留空、次日自动重试。</div>
+  <div class="co-bar">
+    <div class="co-filters" id="coFilters"></div>
+    <input class="co-search" id="coSearch" type="search" placeholder="搜公司 / 标题…" aria-label="搜索公司或标题">
+    <span class="co-stat" id="coStat"></span>
+  </div>
+  <select class="co-navsel" id="coNavSel" aria-label="选择公司"></select>
+  <div class="co-panes">
+    <div class="co-nav" id="coNav"></div>
+    <div class="co-feed">
+      <div class="co-feed-head" id="coFeedHead"></div>
+      <div id="companyList"><div class="co-loading">公司动态加载中…</div></div>
+    </div>
+  </div>
 </div>
 <!-- ==================== 事件·数据日历（轻量版，2026-09-13） ==================== -->
 <div class="section" id="eventCalendar">
