@@ -6930,21 +6930,21 @@ function toggleTheme(){
     var tb=splitTB(it.t);
     var url=dec(it.u||'').trim();
     var primary=url||searchUrl((it.name||'')+' '+(tb.head||''));
-    var host=url?hostOf(url):'';
     var ex=it.region==='NA'?'<i class="co-ex">海外</i>':'';
     var stale=it.stale?'<i class="co-ex">数据暂缓</i>':'';
-    var body=tb.body
-      ? '<div class="co-body">'+esc(tb.body)+'</div>'+
-        '<button type="button" class="co-exp" aria-expanded="false">展开全文</button>'
-      : '';
+    // v6：每条加一句内容摘要（仿新闻端，读 it.s）；有摘要则用它，否则退回「长标题续写」折叠
+    var summ=it.s
+      ? '<div class="co-summary">'+esc(it.s)+'</div>'
+      : (tb.body
+          ? '<div class="co-body">'+esc(tb.body)+'</div>'+
+            '<button type="button" class="co-exp" aria-expanded="false">展开全文</button>'
+          : '');
     return '<div class="co-item">'+
       '<div class="co-head"><span class="co-dot"></span>'+
       '<a class="co-title" href="'+esc(primary)+'" target="_blank" rel="noopener noreferrer"'+
         (url?'':' title="原文链接缺失：点击将前往搜索引擎"')+'>'+esc(tb.head||'(无标题)')+'</a></div>'+
       '<div class="co-meta"><button type="button" class="co-src" data-name="'+esc(it.name)+'">'+esc(it.name)+'</button>'+
-      '<span>'+esc(it.d||'')+'</span>'+
-      (host?'<span class="co-host" title="原文：'+esc(primary)+'">'+esc(host)+'</span>':'')+
-      ex+stale+'</div>'+body+'</div>';
+      '<span>'+esc(it.d||'')+'</span>'+ex+stale+'</div>'+summ+'</div>';
   }
   function renderFeed(){
     var list=document.getElementById('companyList');
@@ -7014,32 +7014,51 @@ function toggleTheme(){
     }
   }
 
-  // ---------- 右：搜索 + 公司导航（不按矿种分组） ----------
-  // 排序：条数降序（有内容的公司先出现）→ 公司名。
+  // ---------- 右：搜索 + 公司导航（国内 / 海外 分两组，组内按市值·知名度 rank 升序） ----------
+  function byRank(a,b){
+    var ra=(a.rank==null?99:a.rank), rb=(b.rank==null?99:b.rank);
+    if(ra!==rb) return ra-rb;
+    var d=itemCount(b)-itemCount(a); if(d) return d;
+    try{ return String(a.name).localeCompare(String(b.name),'zh-Hans-CN'); }catch(e){ return 0; }
+  }
   function sortedCompanies(){
-    return COS.slice().sort(function(a,b){
-      var d=itemCount(b)-itemCount(a);
-      if(d) return d;
-      try{ return String(a.name).localeCompare(String(b.name),'zh-Hans-CN'); }catch(e){ return 0; }
-    });
+    return COS.slice().sort(byRank);
+  }
+  function navGroup(label, arr){
+    if(!arr.length) return '';
+    var h='<div class="co-nav-g-h">'+esc(label)+'（'+arr.length+'）</div>';
+    h+=arr.map(function(o){
+      return '<button type="button" class="co-nav-item'+(o.name===activeCompany?' on':'')+'" data-name="'+esc(o.name)+'">'+
+        '<span>'+esc(o.name)+'</span><span class="co-n">'+itemCount(o)+'</span></button>';
+    }).join('');
+    return h;
+  }
+  function optFor(o){
+    return '<option value="'+esc(o.name)+'"'+(o.name===activeCompany?' selected':'')+'>'+
+      esc(o.name)+(itemCount(o)?'（'+itemCount(o)+' 条）':'')+'</option>';
   }
   function renderNav(){
     var nav=document.getElementById('coNav'); if(!nav) return;
-    var list=sortedCompanies();
+    var list=COS.slice();
+    // 国内/海外两组只列「有内容」公司，空壳公司统一收进「暂未收录」折叠组（避免重复出现）
+    var dom=list.filter(function(o){ return o.region==='CN' && itemCount(o)>0; }).sort(byRank);
+    var frn=list.filter(function(o){ return o.region==='NA' && itemCount(o)>0; }).sort(byRank);
     var live=list.filter(function(o){ return itemCount(o)>0; });
     var empties=list.filter(function(o){ return !itemCount(o); });
 
     var h=document.getElementById('coNavH');
     if(h) h.innerHTML='公司导航<span>'+live.length+' 家有内容 · '+ALL.length+' 条</span>';
 
-    // 移动端：扁平 <select>（矿种分组已移除，仅「暂未收录」单独成组）
+    // 移动端：国内 / 海外 / 暂未收录 三组
     var sel=document.getElementById('coNavSel');
     if(sel){
       var opts=['<option value="__all__">全部公司（'+ALL.length+' 条）</option>'];
-      live.forEach(function(o){
-        opts.push('<option value="'+esc(o.name)+'"'+(o.name===activeCompany?' selected':'')+'>'+
-          esc(o.name)+'（'+itemCount(o)+' 条）</option>');
-      });
+      opts.push('<optgroup label="国内公司（'+dom.length+'）">');
+      dom.forEach(function(o){ opts.push(optFor(o)); });
+      opts.push('</optgroup>');
+      opts.push('<optgroup label="海外公司（'+frn.length+'）">');
+      frn.forEach(function(o){ opts.push(optFor(o)); });
+      opts.push('</optgroup>');
       if(empties.length){
         opts.push('<optgroup label="暂未收录（'+empties.length+' 家）">');
         empties.forEach(function(o){ opts.push('<option value="'+esc(o.name)+'">'+esc(o.name)+'</option>'); });
@@ -7049,13 +7068,11 @@ function toggleTheme(){
       sel.onchange=function(){ selectCompany(sel.value); };
     }
 
-    // 桌面：全部公司 + 有内容公司（按条数降序，无矿种分组）+ 「暂未收录」折叠组
+    // 桌面：全部公司 + 国内 + 海外 + 暂未收录（折叠组）
     var html='<button type="button" class="co-nav-all'+(activeCompany==='__all__'?' on':'')+'" data-name="__all__">'+
       '<span>全部公司（最新动态）</span><span class="co-n">'+ALL.length+'</span></button>';
-    live.forEach(function(o){
-      html+='<button type="button" class="co-nav-item'+(o.name===activeCompany?' on':'')+'" data-name="'+esc(o.name)+'">'+
-        '<span>'+esc(o.name)+'</span><span class="co-n">'+itemCount(o)+'</span></button>';
-    });
+    html+=navGroup('国内公司 · 按市值/知名度', dom);
+    html+=navGroup('海外公司 · 按市值/知名度', frn);
     if(empties.length){
       html+='<button type="button" class="co-nav-empty-t" id="coEmptyToggle">暂未收录 '+empties.length+' 家'+
         '<span>'+(emptyOpen?'收起 ▴':'展开 ▾')+'</span></button>'+
