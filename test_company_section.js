@@ -1,20 +1,15 @@
 /**
- * 2026-09-23 矿业公司动态（v4：跨列区块 = 左新闻流 + 右 sticky 侧栏）运行时渲染回归（jsdom）
- * 覆盖：① 区块跨满 news-grid 两列（companySection / installGuideSection 移出 .col-main，col-rail 显式回第一行第二列）
- *       ② 右侧栏：搜索框 / 矿种 chips / 公司导航全部收进 .co-side（旧 .co-bar 已移除）
- *       ③ 新闻流：默认「近90天」+ 日期分组 + 分页 60；切「全部」+ 连续「加载更多」可渲染出全部条目
- *       ④ 左导航列出全部公司（含矿种分组）；未收录公司折进可展开分组，点击直达官网
- *       ⑤ 点击公司 / 点来源名 / hash=#co=公司 → 新闻流收敛到该公司
- *       ⑥ 搜索框按标题/公司名过滤；移动端 <select> 用 <optgroup> 按矿种分组、选项数 = 公司数 + 1
- *       ⑦ switchView('company') 视图隔离（隐藏其它主区块、右栏）
- *       ⑧ 无阻塞 JS 错误
+ * 2026-09-23 矿业公司动态（v5）运行时渲染回归（jsdom）
+ * v5 = v4 布局（跨列区块：左新闻流 + 右 sticky 公司导航）+ 四项体验修正：
+ *   ① 卡片长度统一：源 t 字段 4 字 ↔ 1055 字悬殊 → 按句读切「标题 + 正文」，标题 2 行、正文 2 行折叠 + 「展开全文」
+ *   ② 去矿种维度：矿种 chip 筛选 / 导航矿种分组 / 移动端 sector optgroup / 卡片矿种标签 全部移除
+ *   ③ 链接可用：数据自带 HTML 实体（&amp;）先解码再转义（否则二次转义成 &amp;amp; 打不开）；外链 rel=noreferrer；显示目标域名
+ *   ④ 导航：按条数降序 + 计数徽标 + 「暂未收录」折叠组；面板内独立滚动
  * 运行：node test_company_section.js
  */
 const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
-
-const ROOT = 'C:/Users/中铝矿业投并部/.workbuddy/binaries/node/workspace/node_modules';
 
 let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
 ['app.js', 'news-data.js', 'lme-data.js', 'price-history.js'].forEach(f => {
@@ -29,6 +24,8 @@ const companyData = JSON.parse(fs.readFileSync(path.join(__dirname, 'company_new
 const totalItems = (companyData.counts && companyData.counts.items) || 0;
 const nCompanies = (companyData.companies || []).length;
 const nEmptyCompanies = (companyData.companies || []).filter(c => !((c.items || []).length)).length;
+const allFlat = [];
+(companyData.companies || []).forEach(c => (c.items || []).forEach(it => allFlat.push({ ...it, _co: c.name })));
 
 // 期望值：按 updated_at 为基准日，统计近 90 天内（有日期）的条目数 —— 与 app.js passRange() 同口径
 function toTs(s) {
@@ -45,7 +42,24 @@ let inRange90 = 0, noDateCount = 0;
   if (n >= 0 && n <= 90) inRange90++;
 }));
 const PAGE = 60;
+const HEAD_MAX = 64;               // 与 app.js 一致
 const expectDefaultRendered = Math.min(PAGE, inRange90);
+
+// 某公司在近 90 天内的条目数（与 app.js passRange 同口径）—— 用于断言「范围外自动放宽」
+function in90Count(name) {
+  let n = 0;
+  (companyData.companies || []).forEach(c => {
+    if (c.name !== name) return;
+    (c.items || []).forEach(it => {
+      if (!it.d) return;
+      const a = toTs(it.d);
+      if (isNaN(a) || isNaN(baseTs)) return;
+      const dd = Math.round((baseTs - a) / 86400000);
+      if (dd >= 0 && dd <= 90) n++;
+    });
+  });
+  return n;
+}
 
 const errors = [];
 const dom = new JSDOM(html, {
@@ -80,21 +94,23 @@ function disp(id) {
   return window.getComputedStyle(el).display;
 }
 function coState() { return window.__mdCo.state(); }
+const H = () => window.__mdCo.helpers;
 
 setTimeout(() => {
   try {
-    // 0) 入口与容器存在（v4 骨架：跨列区块 + 右侧栏）
+    // ---------- 0) 入口与容器 ----------
     check('目录含 🏢 矿业公司 入口', !!document.querySelector('[data-target="companySection"]'));
     check('companySection 容器存在', !!document.getElementById('companySection'));
     check('companyList 容器存在', !!document.getElementById('companyList'));
-    check('左导航 coNav 存在', !!document.getElementById('coNav'));
+    check('公司导航 coNav 存在', !!document.getElementById('coNav'));
     check('移动端 coNavSel 存在', !!document.getElementById('coNavSel'));
     check('搜索框 coSearch 存在', !!document.getElementById('coSearch'));
     check('统计 coStat 存在', !!document.getElementById('coStat'));
+    check('导航标题 coNavH 存在', !!document.getElementById('coNavH'));
     check('新闻流头部 coFeedHead 存在', !!document.getElementById('coFeedHead'));
     check('加载更多 coMoreWrap / coMore 存在', !!document.getElementById('coMoreWrap') && !!document.getElementById('coMore'));
 
-    // 1) v4 布局：区块跨满 news-grid 两列 + 右侧栏收纳
+    // ---------- 1) 布局（沿用 v4：跨列 + 右侧 sticky 侧栏） ----------
     const ng = document.querySelector('.news-grid');
     check('companySection 是 .news-grid 的直接子元素（跨列）',
           document.getElementById('companySection').parentElement === ng);
@@ -108,22 +124,25 @@ setTimeout(() => {
     const css = coStyle ? coStyle.textContent : '';
     check('CSS：公司区块 grid-column:1/-1', css.indexOf('#companySection{grid-column:1/-1}') >= 0);
     check('CSS：col-rail 显式回到第一行第二列', css.indexOf('.news-grid>.col-rail{grid-column:2;grid-row:1}') >= 0);
-    check('CSS：侧栏 sticky', /\.co-side\{[^}]*position:sticky/.test(css));
+    check('CSS：侧栏 sticky + 内部滚动', /\.co-side\{[^}]*position:sticky/.test(css) && /\.co-nav\{[^}]*overflow:auto/.test(css));
     check('CSS：宽屏新闻流两栏网格', css.indexOf('.co-day-items') >= 0 && css.indexOf('min-width:1400px') >= 0);
+    check('CSS：正文 2 行折叠 + 展开解除', /\.co-body\{[^}]*line-clamp:2/.test(css) && /\.co-item\.open \.co-body/.test(css));
     check('搜索框已收进右侧栏 .co-side', !!(document.getElementById('coSearch').closest('.co-side')));
-    check('矿种 chips 已收进右侧栏 .co-side', !!(document.getElementById('coFilters').closest('.co-side')));
     check('公司导航已收进右侧栏 .co-side', !!(document.getElementById('coNav').closest('.co-side')));
     check('旧 .co-bar 已移除', !document.querySelector('.co-bar'));
-    check('区块头部顺序：标题 → 说明 → 侧栏/新闻流',
-          (function () {
-            const h = document.getElementById('companySection');
-            const kids = Array.from(h.children).map(e => e.id || e.className || e.tagName);
-            return kids.indexOf('coNavSel') > kids.indexOf('coNote') && kids.indexOf('coCount') < kids.indexOf('coNote');
-          })());
 
-    // 2) 新闻流默认：近 90 天 + 分页 60 + 日期分组
+    // ---------- 2) 去矿种维度（v5 ②） ----------
+    check('矿种筛选容器 #coFilters 已移除', !document.getElementById('coFilters'));
+    check('矿种 chip 按钮 .co-fchip 已移除', document.querySelectorAll('.co-fchip').length === 0);
+    check('导航矿种分组 .co-nav-group 已移除', document.querySelectorAll('#coNav .co-nav-group').length === 0);
+    check('卡片矿种标签 .co-cat 已移除', document.querySelectorAll('#companyList .co-cat').length === 0);
+    check('CSS 中已无矿种 chip / 分组 / 卡片标签规则',
+          css.indexOf('.co-fchip') < 0 && css.indexOf('.co-nav-group') < 0 && css.indexOf('.co-cat') < 0);
+
+    // ---------- 3) 新闻流默认：近 90 天 + 分页 60 + 日期分组 ----------
     const st0 = coState();
     check('window.__mdCo 状态句柄存在', !!window.__mdCo && typeof st0 === 'object');
+    check('状态句柄不再暴露 activeSector（矿种已移除）', !('activeSector' in st0));
     check('默认时间范围为「近90天」', st0.range === 90, 'range=' + st0.range);
     check('默认分页游标 = 60', st0.shown === PAGE, 'shown=' + st0.shown);
     check('默认渲染条数 = min(60, 近90天条数)',
@@ -138,10 +157,20 @@ setTimeout(() => {
           coState().moreVisible === (inRange90 > PAGE),
           'moreVisible=' + coState().moreVisible + ' in90=' + inRange90);
 
-    // 3) 切「全部」+ 连续加载更多 → 渲染出全部条目
+    // ---------- 4) 卡片长度统一（v5 ①，核心） ----------
+    const titles0 = Array.from(document.querySelectorAll('#companyList .co-title'));
+    const overLong = titles0.filter(t => (t.textContent || '').trim().length > HEAD_MAX + 2);
+    check('默认视图所有标题 ≤ ' + HEAD_MAX + ' 字（不再出现整屏段落）',
+          overLong.length === 0, 'over=' + overLong.length + (overLong[0] ? ' e.g. ' + overLong[0].textContent.slice(0, 40) : ''));
+    check('默认视图存在折叠正文（.co-exp）', document.querySelectorAll('#companyList .co-exp').length >= 1,
+          'collapsed=' + document.querySelectorAll('#companyList .co-exp').length);
+
+    // 切「全部」+ 连续加载更多 → 渲染出全部条目
     const allBtn = document.querySelector('#coFeedHead .co-range button[data-r="0"]');
+    let loadedAll = false;
     if (allBtn) {
       allBtn.click();
+      loadedAll = true;
       check('切「全部」后 range=0', coState().range === 0, 'range=' + coState().range);
       check('切「全部」后仍分页（渲染 = min(60, 全部条数)）',
             coState().rendered === Math.min(PAGE, totalItems),
@@ -159,27 +188,95 @@ setTimeout(() => {
       check('未标注日期条目只在「全部」下出现',
             noDateCount === 0 || coState().rendered > inRange90,
             'noDate=' + noDateCount + ' rendered=' + coState().rendered + ' in90=' + inRange90);
-      // 还原默认范围
-      const defBtn = document.querySelector('#coFeedHead .co-range button[data-r="90"]');
-      if (defBtn) defBtn.click();
     } else {
       check('存在「全部」范围按钮', false);
     }
 
-    // 4) 左侧导航（右侧栏）：全部公司 + 矿种分组 + 未收录折叠
-    const navItems = document.querySelectorAll('#coNav .co-nav-item');
-    check('公司导航列出全部公司（数量≈公司数）',
-          navItems.length >= nCompanies - 1 && navItems.length <= nCompanies + 1,
-          'got ' + navItems.length + ' / companies ' + nCompanies);
-    const fchips = document.querySelectorAll('#coFilters .co-fchip');
-    check('矿种过滤 chips >= 2（含「全部」）', fchips.length >= 2, 'got ' + fchips.length);
+    if (loadedAll) {
+      const titlesAll = Array.from(document.querySelectorAll('#companyList .co-title'));
+      check('全部视图所有标题 ≤ ' + HEAD_MAX + ' 字', titlesAll.every(t => (t.textContent || '').trim().length <= HEAD_MAX + 2),
+            'max=' + Math.max(...titlesAll.map(t => (t.textContent || '').trim().length)));
+      // 期望折叠数 = 清洗后长度 > HEAD_MAX 的条目数（用 app.js 暴露的同款助手算）
+      const expectFold = allFlat.filter(it => H().split(it.t).body).length;
+      const gotFold = document.querySelectorAll('#companyList .co-exp').length;
+      check('折叠正文条数 = 长文条目数（期望 ' + expectFold + '）', gotFold === expectFold, 'got ' + gotFold);
+      check('默认全部折叠（无 .co-item.open）', document.querySelectorAll('#companyList .co-item.open').length === 0);
+      // 交互：展开 / 收起
+      const eb = document.querySelector('#companyList .co-exp');
+      if (eb) {
+        const box = eb.closest('.co-item');
+        eb.click();
+        check('点「展开全文」→ 条目加 .open', box.classList.contains('open'));
+        check('点「展开全文」→ 按钮文案变「收起」', eb.textContent.indexOf('收起') >= 0, eb.textContent);
+        check('展开后 aria-expanded=true', eb.getAttribute('aria-expanded') === 'true');
+        eb.click();
+        check('再点一次 → 收回归档', !box.classList.contains('open') && eb.textContent.indexOf('展开') >= 0, eb.textContent);
+      } else {
+        check('存在可交互的「展开全文」按钮', false);
+      }
+      // 切回默认范围
+      const defBtn = document.querySelector('#coFeedHead .co-range button[data-r="90"]');
+      if (defBtn) defBtn.click();
+    }
+
+    // ---------- 5) 文本清洗与切分助手（v5 ①，用真实数据里的最长条目验证） ----------
+    const cleaned1 = H().clean('25 2026.05 赤峰黄金总裁高波一行到五龙矿业调研指导工作  5月21日，赤峰黄金…  2026/09/17');
+    check('clean() 剥离前导「序号+年月」', cleaned1.indexOf('25 ') !== 0 && cleaned1.indexOf('2026.05') !== 0, cleaned1.slice(0, 30));
+    check('clean() 剥离尾部日期', !/2026\/09\/17\s*$/.test(cleaned1), cleaned1.slice(-20));
+    check('clean() 不误伤「5 万吨…」类标题', H().clean('5 万吨项目投产').indexOf('5 万吨') === 0, H().clean('5 万吨项目投产'));
+    const longest = allFlat.slice().sort((a, b) => (b.t || '').length - (a.t || '').length)[0] || { t: '' };
+    const sp1 = H().split(longest.t);
+    check('split()：真实最长条目（' + (longest.t || '').length + ' 字）拆出标题 + 正文',
+          sp1.head.length > 0 && sp1.body.length > 0 && sp1.head.length <= HEAD_MAX,
+          'head=' + sp1.head.length + ' body=' + sp1.body.length + ' src=' + (longest.t || '').length);
+    const sp2 = H().split('H股公告');
+    check('split()：短文只有标题、无正文', sp2.head === 'H股公告' && sp2.body === '', JSON.stringify(sp2));
+    const sp3 = H().split(longest.t);
+    check('split() 标题+正文拼回 = 清洗后原文（不丢字）',
+          (sp3.head + (sp3.body ? ' ' + sp3.body : '')).replace(/\s+/g, '') === H().clean(longest.t).replace(/\s+/g, ''),
+          'head+body len=' + (sp3.head.length + sp3.body.length) + ' clean len=' + H().clean(longest.t).length);
+
+    // ---------- 6) 链接可用性（v5 ③，核心） ----------
+    check('dec() 解码 &amp;', H().dec('a?x=1&amp;y=2') === 'a?x=1&y=2', H().dec('a?x=1&amp;y=2'));
+    check('dec() 解码数字实体', H().dec('a&#39;b&nbsp;c') === "a'b c", H().dec('a&#39;b&nbsp;c'));
+    check('hostOf() 取域名并去 www', H().host('http://www.tlys.cn/news.aspx?cid=1') === 'tlys.cn', H().host('http://www.tlys.cn/news.aspx?cid=1'));
+    const hrefs = Array.from(document.querySelectorAll('#companyList .co-title')).map(a => a.getAttribute('href') || '');
+    const badHref = hrefs.filter(h => h.indexOf('&amp;') >= 0);
+    check('渲染出的 href 无二次转义残留（&amp;amp;）', badHref.length === 0,
+          'bad=' + badHref.length + (badHref[0] ? ' e.g. ' + badHref[0] : ''));
+    const tlysHref = hrefs.filter(h => h.indexOf('tlys.cn') >= 0);
+    check('带 & 参数的链接还原正确（tlys.cn ?cid=&classid=）',
+          tlysHref.length === 0 || tlysHref.every(h => /[?&]cid=\d+&classid=\d+/.test(h)),
+          tlysHref[0] || 'no tlys link in view');
+    check('所有外链 href 均为 http(s)', hrefs.every(h => /^https?:\/\//.test(h)),
+          hrefs.find(h => !/^https?:\/\//.test(h)) || '');
+    const firstLink = document.querySelector('#companyList .co-title');
+    check('外链 rel 含 noreferrer（规避企业站按 Referer 拒链）',
+          !!firstLink && /noreferrer/.test(firstLink.getAttribute('rel') || ''),
+          firstLink ? firstLink.getAttribute('rel') : 'no link');
+    check('卡片显示目标站点域名（.co-host）',
+          document.querySelectorAll('#companyList .co-host').length >= Math.floor(document.querySelectorAll('#companyList .co-item').length * 0.8),
+          'host=' + document.querySelectorAll('#companyList .co-host').length + ' items=' + document.querySelectorAll('#companyList .co-item').length);
+
+    // ---------- 7) 右侧公司导航（v5 ④） ----------
+    const navItems = document.querySelectorAll('#coNav .co-nav-item:not(.empty)');
+    const liveCount = (companyData.companies || []).filter(c => (c.items || []).length > 0).length;
+    check('公司导航列出全部「有内容」公司（' + liveCount + ' 家）', navItems.length === liveCount,
+          'got ' + navItems.length);
     const navAll = document.querySelector('#coNav .co-nav-all');
     check('公司导航「全部公司」入口存在', !!navAll);
+    // 按条数降序
+    const counts = Array.from(navItems).map(el => parseInt((el.querySelector('.co-n') || {}).textContent || '0', 10));
+    let sortedDesc = true;
+    for (let i = 1; i < counts.length; i++) if (counts[i] > counts[i - 1]) sortedDesc = false;
+    check('导航按条数降序排列', sortedDesc, counts.join(','));
+    check('导航标题显示家数/条数', /家/.test((document.getElementById('coNavH') || {}).textContent || ''),
+          (document.getElementById('coNavH') || {}).textContent);
     const emptyItems = document.querySelectorAll('#coNav .co-nav-item.empty');
     check('未收录公司列入折叠组（数量=' + nEmptyCompanies + '）',
           emptyItems.length === nEmptyCompanies, 'got ' + emptyItems.length);
     const box0 = document.getElementById('coEmptyBox');
-    check('未收录组默认折叠', !!box0 && box0.hasAttribute('hidden'));
+    check('未收录组默认折叠', nEmptyCompanies === 0 || (!!box0 && box0.hasAttribute('hidden')));
     const tog = document.getElementById('coEmptyToggle');
     if (tog) {
       tog.click();
@@ -187,10 +284,10 @@ setTimeout(() => {
       tog.click();
       check('再点一次收回折叠', document.getElementById('coEmptyBox').hasAttribute('hidden'));
     } else {
-      check('「暂未收录」折叠开关存在', false);
+      check('「暂未收录」折叠开关存在（无空公司时豁免）', nEmptyCompanies === 0);
     }
 
-    // 5) 抽查首条：标题 + 公司来源名 + http(s) 外链
+    // ---------- 8) 首条卡片结构 ----------
     const items = document.querySelectorAll('#companyList .co-item');
     const first = items[0];
     check('首条含新闻标题', !!(first && first.querySelector('.co-title') && first.querySelector('.co-title').textContent.trim().length > 0));
@@ -198,11 +295,15 @@ setTimeout(() => {
           !!(first && first.querySelector('.co-src') && first.querySelector('.co-src').textContent.trim().length > 0));
     check('首条标题为 http(s) 外链', !!(first && first.querySelector('.co-title') &&
           /^https?:\/\//.test(first.querySelector('.co-title').getAttribute('href') || '')));
+    check('卡片不再渲染 co-summary（旧字段已废弃）', document.querySelectorAll('#companyList .co-summary').length === 0);
 
-    // 6) 公司选择：点第一个「有数据」的公司项 → 新闻流收敛
-    let selName = '';
+    // ---------- 9) 公司选择（含「范围外自动放宽」）/ hash 路由 / 搜索 ----------
+    let selName = '', selTotal = 0;
     for (const ni of navItems) {
-      if (!ni.classList.contains('empty')) { selName = ni.getAttribute('data-name'); ni.click(); break; }
+      selName = ni.getAttribute('data-name');
+      const cc = (companyData.companies || []).find(c => c.name === selName) || {};
+      selTotal = (cc.items || []).length;
+      ni.click(); break;
     }
     check('存在可点击的有数据公司', !!selName, selName);
     if (selName) {
@@ -214,15 +315,26 @@ setTimeout(() => {
       });
       check('选中公司后新闻流仅含该公司（' + selName + '）', after.length > 0 && allMatch,
             'got ' + after.length + ' match=' + allMatch);
+      const in90 = in90Count(selName);
+      check('公司条目全在范围外时自动放宽到「全部」（' + selName + '：90天内 ' + in90 + ' 条 / 共 ' + selTotal + ' 条）',
+            in90 > 0 ? (!coState().forcedAll && after.length === Math.min(PAGE, in90))
+                     : (coState().forcedAll === true && after.length === Math.min(PAGE, selTotal)),
+            'rendered=' + after.length + ' forcedAll=' + coState().forcedAll + ' range=' + coState().range);
       const headName = (document.querySelector('#coFeedHead .co-feed-name') || {}).textContent || '';
       check('新闻流头部显示公司名', headName.indexOf(selName) >= 0, headName);
       check('公司视图头部含「官网」外链或代码',
             /官网/.test(document.getElementById('coFeedHead').textContent) || !!document.querySelector('#coFeedHead .co-feed-link'));
+      const sub = (document.querySelector('#coFeedHead .co-feed-sub') || {}).textContent || '';
+      check('公司视图头部只显示代码+条数（不再带矿种）', /显示 \d+ \/ \d+ 条/.test(sub), sub);
       check('hash 写入 #co=公司名', /#co=/.test(window.location.hash), window.location.hash);
       if (navAll) navAll.click();
+      check('点「全部公司」回到全站视图',
+            ((document.querySelector('#coFeedHead .co-feed-name') || {}).textContent || '').indexOf('全站') >= 0,
+            (document.querySelector('#coFeedHead .co-feed-name') || {}).textContent);
+      check('回到全站视图自动放宽被清除（forcedAll=false）', coState().forcedAll === false,
+            'forcedAll=' + coState().forcedAll);
     }
 
-    // 7) hash 路由：直接设置 location.hash 定位公司
     const someCo = (companyData.companies.find(c => (c.items || []).length > 0) || {}).name || '';
     if (someCo) {
       window.location.hash = '#co=' + encodeURIComponent(someCo);
@@ -240,7 +352,6 @@ setTimeout(() => {
       check('hash 路由（存在可定位公司）', false, '无数据公司');
     }
 
-    // 8) 搜索框过滤
     const q = document.getElementById('coSearch');
     if (q) {
       const before = document.querySelectorAll('#companyList .co-item').length;
@@ -255,17 +366,18 @@ setTimeout(() => {
       check('搜索框存在', false);
     }
 
-    // 9) 移动端 select：选项 = 公司数 + 1，且按矿种 optgroup 分组
+    // ---------- 10) 移动端 select：扁平（仅「暂未收录」成组） ----------
     const opts = document.querySelectorAll('#coNavSel option');
     check('移动端 select 选项=公司数+1', opts.length === nCompanies + 1, 'got ' + opts.length + ' / ' + (nCompanies + 1));
-    check('移动端 select 用 optgroup 按矿种分组', document.querySelectorAll('#coNavSel optgroup').length >= 2,
-          'got ' + document.querySelectorAll('#coNavSel optgroup').length);
+    const og = document.querySelectorAll('#coNavSel optgroup');
+    check('移动端 select 不再按矿种分组（optgroup ≤ 1，且仅「暂未收录」）',
+          og.length <= 1 && (og.length === 0 || /暂未收录/.test(og[0].getAttribute('label') || '')),
+          'optgroups=' + og.length + (og[0] ? ' label=' + og[0].getAttribute('label') : ''));
+    check('select 首项 = 全部公司', (opts[0] || {}).value === '__all__');
 
-    // 10) 豁免：默认视图下 companySection 不被隐藏
+    // ---------- 11) 豁免与视图切换 ----------
     window.mdRefreshSections && window.mdRefreshSections();
     check('默认视图下 companySection 不被隐藏', disp('companySection') !== 'none', disp('companySection'));
-
-    // 11) 视图切换：switchView('company')
     const coItem = document.querySelector('[data-target="companySection"]');
     if (coItem && typeof window.switchView === 'function') {
       window.switchView('company', coItem);
@@ -281,7 +393,7 @@ setTimeout(() => {
       check('switchView 函数存在且目录入口存在', false, 'missing switchView or entry');
     }
 
-    // 12) 无阻塞 JS 错误
+    // ---------- 12) 无阻塞 JS 错误 ----------
     check('updateActiveSection 函数存在', typeof window.updateActiveSection === 'function');
     check('无阻塞性 JS 错误', errors.length === 0, errors.join(' | '));
 
@@ -289,7 +401,7 @@ setTimeout(() => {
     fail++;
     console.log('  FAIL  测试执行抛错 -> ' + (e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e));
   }
-  console.log('\n===== 矿业公司动态（v4 跨列区块 + 右 sticky 侧栏）汇总 =====');
+  console.log('\n===== 矿业公司动态 v5（长度统一 + 去矿种 + 链接修复 + 导航整理）汇总 =====');
   console.log('  通过 ' + pass + ' / 失败 ' + fail);
   process.exit(fail ? 1 : 0);
 }, 1500);
