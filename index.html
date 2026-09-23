@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260923-2210" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260923-2310" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2682,9 +2682,10 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
         改动后必须同步 test_company_section.js 与 REFERENCE.md §42.19 / §42.9 -->
 <div class="section" id="companySection">
 <style>
-/* 矿业公司动态 v4：跨满 news-grid 两列 —— 左侧新闻流 + 右侧筛选/公司导航（sticky）
+/* 矿业公司动态 v5：跨满 news-grid 两列 —— 左侧新闻流 + 右侧搜索/公司导航（sticky）
    设计要点：① 不再与左侧目录导航叠加成「三重左栏」；② 把热榜列滚出视口后的空白交给公司导航；
-             ③ 日期分组 + 范围筛选，避免旧闻混入「全站最新动态」 */
+             ③ 日期分组 + 范围筛选，避免旧闻混入「全站最新动态」；
+             ④ v5：长文条目切「标题+正文」折叠（卡片等高）、去掉矿种维度、链接实体解码、导航按条数排序 */
 #companySection{grid-column:1/-1}
 /* col-rail 显式回到第一行第二列 —— 跨列区块（本区块）插在 col-main 之后，若靠自动放置会把热榜挤到页面底部 */
 @media(min-width:1101px){.news-grid>.col-rail{grid-column:2;grid-row:1}}
@@ -2692,34 +2693,31 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 .co-note{font-size:var(--fs-meta);color:#5b6b7a;line-height:1.6;padding:2px var(--s5) var(--s3)}
 .co-note b{color:var(--ink-700)}
 body.dark .co-note{color:var(--ink-500)}
-body.dark .co-note b{color:var(--ink-800)}
-.co-navsel{display:none;width:calc(100% - var(--s5) - var(--s5));margin:var(--s3) var(--s5) 0;font-size:var(--fs-body);padding:7px var(--s3);border:1px solid var(--line-2);border-radius:var(--r-sm);background:var(--surface-1);color:var(--ink-800)}
-.co-panes{display:grid;grid-template-columns:minmax(0,1fr) 272px;align-items:start;border-top:1px solid var(--line-1)}
-/* ---------- 右栏：搜索 + 矿种 + 公司导航（sticky 面板，内部滚动） ---------- */
+body.dark .co-note b{color:var(--ink-900)}
+.co-navsel{display:none;width:calc(100% - var(--s5) - var(--s5));margin:var(--s3) var(--s5) 0;font-size:var(--fs-body);padding:7px var(--s3);border:1px solid var(--line-2);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink-900)}
+.co-panes{display:grid;grid-template-columns:minmax(0,1fr) 288px;align-items:start;border-top:1px solid var(--line-1)}
+/* ---------- 右栏：搜索 + 公司导航（sticky 面板，内部滚动，长列表不撑开页面） ---------- */
 .co-side{position:sticky;top:14px;display:flex;flex-direction:column;max-height:calc(100vh - 30px);
   border-left:1px solid var(--line-1);background:var(--surface-2);order:2}
 body.dark .co-side{background:#151d29}
 .co-side-top{flex:0 0 auto;padding:var(--s3) var(--s4);border-bottom:1px solid var(--line-1)}
 .co-search{display:block;width:100%;box-sizing:border-box;font-size:var(--fs-meta);padding:6px var(--s3);
-  border:1px solid var(--line-2);border-radius:999px;background:var(--surface-1);color:var(--ink-800)}
+  border:1px solid var(--line-2);border-radius:999px;background:var(--surface-2);color:var(--ink-900)}
 .co-search:focus{outline:2px solid var(--brand);outline-offset:-1px}
-.co-filters{display:flex;flex-wrap:wrap;gap:5px;margin-top:var(--s2)}
-.co-fchip{font-family:inherit;font-size:var(--fs-caption);font-weight:600;color:var(--ink-700);
-  background:var(--surface-1);border:1px solid var(--line-1);border-radius:999px;padding:3px 9px;cursor:pointer;transition:.15s;user-select:none}
-.co-fchip:hover{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
-.co-fchip.on{background:#4f46e5;color:#fff;border-color:#4f46e5}
-.co-nav{flex:1 1 auto;min-height:0;overflow:auto;padding-bottom:var(--s2)}
+.co-nav-h{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s2);margin-top:var(--s3);
+  font-size:var(--fs-caption);font-weight:700;color:var(--ink-700);letter-spacing:.04em}
+.co-nav-h span{font-weight:600;color:var(--ink-500);letter-spacing:0}
+.co-nav{flex:1 1 auto;min-height:0;overflow:auto;padding-bottom:var(--s2);overscroll-behavior:contain}
 .co-nav::-webkit-scrollbar{width:5px}
 .co-nav::-webkit-scrollbar-thumb{background:#c8d6e5;border-radius:var(--r-sm)}
 .co-nav-all{display:flex;justify-content:space-between;gap:var(--s2);width:100%;text-align:left;font-family:inherit;
   background:none;border:0;border-left:3px solid transparent;padding:8px var(--s4);cursor:pointer;
-  font-size:var(--fs-body);font-weight:600;color:var(--ink-800)}
+  font-size:var(--fs-body);font-weight:600;color:var(--ink-900)}
 .co-nav-all:hover{background:var(--brand-soft)}
 .co-nav-all.on{background:var(--brand-soft);border-left-color:#4f46e5;color:#4f46e5}
-.co-nav-group{padding:var(--s3) var(--s4) 2px;font-size:var(--fs-caption);color:var(--ink-500);font-weight:600;letter-spacing:.02em}
 .co-nav-item{display:flex;justify-content:space-between;gap:var(--s2);width:100%;text-align:left;font-family:inherit;
   background:none;border:0;border-left:3px solid transparent;padding:5px var(--s4);cursor:pointer;
-  font-size:var(--fs-meta);color:var(--ink-800);line-height:1.5}
+  font-size:var(--fs-meta);color:var(--ink-900);line-height:1.5}
 .co-nav-item:hover{background:var(--brand-soft)}
 .co-nav-item.on{background:var(--brand-soft);border-left-color:#4f46e5;color:#4f46e5;font-weight:600}
 .co-nav-item .co-n{font-size:var(--fs-caption);color:var(--ink-500);flex-shrink:0}
@@ -2736,7 +2734,7 @@ body.dark .co-side{background:#151d29}
 /* ---------- 左栏：新闻流 ---------- */
 .co-feed{min-width:0;order:1}
 .co-feed-head{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;padding:var(--s3) var(--s5);
-  border-bottom:1px solid var(--line-1);background:var(--surface-1)}
+  border-bottom:1px solid var(--line-1);background:var(--surface-2)}
 .co-feed-name{font-size:var(--fs-h3);font-weight:600;color:var(--ink-900)}
 .co-feed-sub{font-size:var(--fs-meta);color:var(--ink-500)}
 .co-fh-right{margin-left:auto;display:flex;align-items:center;gap:var(--s2)}
@@ -2755,15 +2753,23 @@ body.dark .co-side{background:#151d29}
 .co-head{display:flex;align-items:flex-start;gap:var(--s2);min-width:0}
 .co-dot{width:6px;height:6px;border-radius:50%;background:#4f46e5;flex-shrink:0;margin-top:7px}
 body.dark .co-dot{background:#818cf8}
-.co-title{font-size:var(--fs-body);color:var(--ink-900);text-decoration:none;line-height:1.55;font-weight:500;min-width:0}
+/* 标题固定 2 行：源数据标题从 4 字到上千字不等，截断后所有卡片默认等高 */
+.co-title{font-size:var(--fs-body);color:var(--ink-900);text-decoration:none;line-height:1.55;font-weight:500;min-width:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .co-title:hover{color:#4f46e5;text-decoration:underline}
-.co-cat{font-size:var(--fs-caption);font-weight:600;padding:1px var(--s2);border-radius:var(--r-sm);background:var(--brand-soft);color:var(--brand-ink);margin-left:var(--s2);white-space:nowrap;flex-shrink:0}
-body.dark .co-cat{background:#312e81;color:#c7d2fe}
 .co-meta{display:flex;align-items:center;gap:var(--s2);margin:3px 0 0 14px;font-size:var(--fs-meta);color:var(--ink-500);flex-wrap:wrap}
 .co-src{font-family:inherit;background:none;border:0;padding:0;color:#4f46e5;font-weight:600;font-size:var(--fs-meta);cursor:pointer}
 .co-src:hover{text-decoration:underline}
+.co-host{font-size:var(--fs-caption);color:var(--ink-500);background:var(--surface-2);
+  border:1px solid var(--line-1);border-radius:999px;padding:0 var(--s2);max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .co-ex{font-style:normal;color:var(--ink-500);border:1px solid var(--line-2);border-radius:999px;padding:0 var(--s2);font-size:var(--fs-caption)}
-.co-item .co-summary{font-size:var(--fs-body);color:var(--ink-700);margin:2px 0 0 14px;line-height:1.6}
+/* 正文默认 2 行折叠，点「展开全文」看完整内容 */
+.co-body{margin:4px 0 0 14px;font-size:var(--fs-meta);color:var(--ink-700);line-height:1.65;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.co-item.open .co-body{display:block;overflow:visible;-webkit-line-clamp:unset}
+.co-exp{margin:4px 0 0 14px;font-family:inherit;font-size:var(--fs-caption);font-weight:600;color:#4f46e5;
+  background:none;border:0;padding:0;cursor:pointer}
+.co-exp:hover{text-decoration:underline}
 .co-empty,.co-loading,.co-err{font-size:var(--fs-meta);color:#5b6b7a;padding:var(--s5)}
 .co-err{color:#b42318}
 .co-more-wrap{display:flex;align-items:center;justify-content:center;gap:var(--s3);padding:var(--s4);border-top:1px solid var(--line-1)}
@@ -2777,7 +2783,7 @@ body.dark .co-cat{background:#312e81;color:#c7d2fe}
   .co-day-items{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--s4)}
   .co-day-items .co-item{padding-left:var(--s5);padding-right:var(--s4)}
 }
-/* 窄屏：单列 —— 侧栏落到新闻流上方（搜索/矿种先出现），公司列表改用下拉 */
+/* 窄屏：单列 —— 侧栏落到新闻流上方（搜索先出现），公司列表改用下拉 */
 @media(max-width:1100px){
   .co-panes{grid-template-columns:minmax(0,1fr)}
   .co-side{position:static;max-height:none;border-left:0;border-top:0;background:transparent;order:1}
@@ -2785,17 +2791,18 @@ body.dark .co-cat{background:#312e81;color:#c7d2fe}
   .co-nav{display:none}
   .co-navsel{display:block}
   .co-side-top{padding:var(--s3) var(--s5) 0;border-bottom:0}
+  .co-nav-h{display:none}
   .co-stat{display:none}
 }
 @media(max-width:768px){
   .co-feed-head{padding:var(--s3) var(--s4)}
   .co-item{padding:var(--s3) var(--s4)}
   .co-day-h{padding:6px var(--s4)}
-  .co-cat{display:none}
+  .co-host{display:none}
 }
 </style>
 <div class="section-title co" id="coTitle"><span class="icon">🏢</span> 矿业公司动态<span class="news-count" id="coCount"></span></div>
-<div class="co-note" id="coNote">全球矿业龙头与国内核心上市矿企<b>官方网站新闻</b>追踪（非公告）。左侧为新闻流、右侧按矿种与公司筛选；「全部公司」＝全站最新动态，默认只看<b>近 90 天</b>，可切「全部」。采集脚本每日刷新，纯前端运行时渲染；官网暂不可达时该栏留空、次日自动重试。</div>
+<div class="co-note" id="coNote">全球矿业龙头与国内核心上市矿企<b>官方网站新闻</b>追踪（非公告）。左侧为新闻流、右侧为搜索与公司导航；「全部公司」＝全站最新动态，默认只看<b>近 90 天</b>，可切「全部」。长文条目自动收成两行、点「<b>展开全文</b>」查看完整内容。采集脚本每日刷新，纯前端运行时渲染；官网暂不可达时该栏留空、次日自动重试。</div>
 <select class="co-navsel" id="coNavSel" aria-label="选择公司"></select>
 <div class="co-panes">
   <div class="co-feed">
@@ -2806,7 +2813,7 @@ body.dark .co-cat{background:#312e81;color:#c7d2fe}
   <div class="co-side">
     <div class="co-side-top">
       <input class="co-search" id="coSearch" type="search" placeholder="搜公司 / 标题…" aria-label="搜索公司或标题">
-      <div class="co-filters" id="coFilters"></div>
+      <div class="co-nav-h" id="coNavH">公司导航</div>
     </div>
     <div class="co-nav" id="coNav"></div>
     <div class="co-stat" id="coStat"></div>
@@ -2886,7 +2893,7 @@ body.dark .co-cat{background:#312e81;color:#c7d2fe}
 <script src="news-data.js?v=94e88eab" defer></script>
 <script src="lme-data.js?v=89a79d5b" defer></script>
 <script src="price-history.js?v=2e011d99" defer></script>
-<script src="app.js?v=ce4f9d4f" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=2e39f7d4" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
