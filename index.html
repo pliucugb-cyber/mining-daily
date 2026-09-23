@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260923-2310" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260923-2200" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2682,18 +2682,14 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
         改动后必须同步 test_company_section.js 与 REFERENCE.md §42.19 / §42.9 -->
 <div class="section" id="companySection">
 <style>
-/* 矿业公司动态 v5：跨满 news-grid 两列 —— 左侧新闻流 + 右侧搜索/公司导航（sticky）
+/* 矿业公司动态 v6：跨满 news-grid 两列 —— 左侧新闻流 + 右侧搜索/公司导航（sticky）
    设计要点：① 不再与左侧目录导航叠加成「三重左栏」；② 把热榜列滚出视口后的空白交给公司导航；
              ③ 日期分组 + 范围筛选，避免旧闻混入「全站最新动态」；
-             ④ v5：长文条目切「标题+正文」折叠（卡片等高）、去掉矿种维度、链接实体解码、导航按条数排序 */
+             ④ v6：长文条目切「标题+正文」折叠、去掉矿种维度、链接实体解码；导航国内/海外分组 + 按市值·知名度排序 + 每条内容摘要 */
 #companySection{grid-column:1/-1}
 /* col-rail 显式回到第一行第二列 —— 跨列区块（本区块）插在 col-main 之后，若靠自动放置会把热榜挤到页面底部 */
 @media(min-width:1101px){.news-grid>.col-rail{grid-column:2;grid-row:1}}
 .section-title.co{background:var(--brand-soft);border-left-color:#4f46e5}
-.co-note{font-size:var(--fs-meta);color:#5b6b7a;line-height:1.6;padding:2px var(--s5) var(--s3)}
-.co-note b{color:var(--ink-700)}
-body.dark .co-note{color:var(--ink-500)}
-body.dark .co-note b{color:var(--ink-900)}
 .co-navsel{display:none;width:calc(100% - var(--s5) - var(--s5));margin:var(--s3) var(--s5) 0;font-size:var(--fs-body);padding:7px var(--s3);border:1px solid var(--line-2);border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink-900)}
 .co-panes{display:grid;grid-template-columns:minmax(0,1fr) 288px;align-items:start;border-top:1px solid var(--line-1)}
 /* ---------- 右栏：搜索 + 公司导航（sticky 面板，内部滚动，长列表不撑开页面） ---------- */
@@ -2707,6 +2703,8 @@ body.dark .co-side{background:#151d29}
 .co-nav-h{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s2);margin-top:var(--s3);
   font-size:var(--fs-caption);font-weight:700;color:var(--ink-700);letter-spacing:.04em}
 .co-nav-h span{font-weight:600;color:var(--ink-500);letter-spacing:0}
+.co-nav-g-h{margin-top:var(--s2);padding:5px var(--s4) 2px;font-size:var(--fs-caption);font-weight:700;
+  color:var(--ink-500);letter-spacing:.03em;border-top:1px solid var(--line-1)}
 .co-nav{flex:1 1 auto;min-height:0;overflow:auto;padding-bottom:var(--s2);overscroll-behavior:contain}
 .co-nav::-webkit-scrollbar{width:5px}
 .co-nav::-webkit-scrollbar-thumb{background:#c8d6e5;border-radius:var(--r-sm)}
@@ -2760,8 +2758,6 @@ body.dark .co-dot{background:#818cf8}
 .co-meta{display:flex;align-items:center;gap:var(--s2);margin:3px 0 0 14px;font-size:var(--fs-meta);color:var(--ink-500);flex-wrap:wrap}
 .co-src{font-family:inherit;background:none;border:0;padding:0;color:#4f46e5;font-weight:600;font-size:var(--fs-meta);cursor:pointer}
 .co-src:hover{text-decoration:underline}
-.co-host{font-size:var(--fs-caption);color:var(--ink-500);background:var(--surface-2);
-  border:1px solid var(--line-1);border-radius:999px;padding:0 var(--s2);max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .co-ex{font-style:normal;color:var(--ink-500);border:1px solid var(--line-2);border-radius:999px;padding:0 var(--s2);font-size:var(--fs-caption)}
 /* 正文默认 2 行折叠，点「展开全文」看完整内容 */
 .co-body{margin:4px 0 0 14px;font-size:var(--fs-meta);color:var(--ink-700);line-height:1.65;
@@ -2770,6 +2766,9 @@ body.dark .co-dot{background:#818cf8}
 .co-exp{margin:4px 0 0 14px;font-family:inherit;font-size:var(--fs-caption);font-weight:600;color:#4f46e5;
   background:none;border:0;padding:0;cursor:pointer}
 .co-exp:hover{text-decoration:underline}
+.co-summary{margin:4px 0 0 14px;font-size:var(--fs-meta);color:var(--ink-700);line-height:1.65;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+body.dark .co-summary{color:var(--ink-500)}
 .co-empty,.co-loading,.co-err{font-size:var(--fs-meta);color:#5b6b7a;padding:var(--s5)}
 .co-err{color:#b42318}
 .co-more-wrap{display:flex;align-items:center;justify-content:center;gap:var(--s3);padding:var(--s4);border-top:1px solid var(--line-1)}
@@ -2798,11 +2797,9 @@ body.dark .co-dot{background:#818cf8}
   .co-feed-head{padding:var(--s3) var(--s4)}
   .co-item{padding:var(--s3) var(--s4)}
   .co-day-h{padding:6px var(--s4)}
-  .co-host{display:none}
 }
 </style>
 <div class="section-title co" id="coTitle"><span class="icon">🏢</span> 矿业公司动态<span class="news-count" id="coCount"></span></div>
-<div class="co-note" id="coNote">全球矿业龙头与国内核心上市矿企<b>官方网站新闻</b>追踪（非公告）。左侧为新闻流、右侧为搜索与公司导航；「全部公司」＝全站最新动态，默认只看<b>近 90 天</b>，可切「全部」。长文条目自动收成两行、点「<b>展开全文</b>」查看完整内容。采集脚本每日刷新，纯前端运行时渲染；官网暂不可达时该栏留空、次日自动重试。</div>
 <select class="co-navsel" id="coNavSel" aria-label="选择公司"></select>
 <div class="co-panes">
   <div class="co-feed">

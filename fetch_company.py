@@ -359,8 +359,17 @@ def cache_put(name, raw):
         pass
 
 # ============================ 1. 条目抽取 ============================
+def strip_comments(s):
+    """剥离 HTML 注释（成对 / 悬空 / 孤立 -->），修华友钴业标题里的注释泄漏。"""
+    s = re.sub(r'<!--.*?-->', ' ', s or '', flags=re.S)
+    s = re.sub(r'<!--.*', ' ', s, flags=re.S)
+    return s.replace('-->', ' ')
+
 def strip_tags(s):
-    s = re.sub(r'<[^>]+>', ' ', s or '')
+    s = re.sub(r'<!--.*?-->', ' ', s or '', flags=re.S)   # 成对注释
+    s = re.sub(r'<!--.*', ' ', s, flags=re.S)              # 悬空 <!--（无闭合）
+    s = s.replace('-->', ' ')
+    s = re.sub(r'<[^>]+>', ' ', s)
     return html.unescape(clean_ws(s))
 
 def host_of(u):
@@ -539,6 +548,275 @@ def extract_items(raw, base_url, max_items=18, require_date=False):
     items.sort(key=lambda x: (x['d'] == '', x['d']), reverse=True)
     return items[:max_items]
 
+# ============================ 1.5 条目清洗 / 摘要（v6, 2026-09-23）============================
+# 列表页常把「导航项 / 栏目名 / 模板文字」混进条目，也常把「标题 + 正文开头 + 日期」粘成一条。
+# 这里统一规整：① 摘出并剥离混进标题的日期；② 拆开「标题 + 正文」；③ 丢弃导航/模板/重复/超旧条目；
+# ④ 给每条抽一句内容（先本地拆出的正文，其次抓文章页 meta/首段），使前端每条不再「光一个标题」。
+
+JUNK_TITLE_EXACT = set("""储量与资源量 紫金blog 紫金全媒体 创新&数字化 新闻发布 最新故事 最新新闻稿
+查看详细 查看更多 更多 详情 下载pdf 首页 网站地图 联系我们 隐私政策 版权所有 版权声明""".split())
+JUNK_TITLE_KW = ('查看详细', '订阅（', '下载pdf', '在新标签页', '在新窗口', 'the eagle博客',
+                 '利益相关方承诺书', '我们使用cookie')
+BOILER_PAT = re.compile(
+    r'(发布人\s*[:：]|发布时间\s*[:：]|当您浏览、阅读或下载本网站|connect with us|'
+    r'follow our social media|find albemarle|learn about teck|we use cookies|accept cookies|'
+    r'版权所有|保留所有权利|订阅（在新标签页中打开）|下载pdf)', re.I)
+
+# 标题里被列表页混入的日期：前缀「2026-02 05」/「2026.09.05」/「05/12 2026」(MM/DD YYYY)，尾缀日期
+_TD_PREFIX      = re.compile(r'^(20\d{2})[.\-/年](\d{1,2})[.\-/月](\d{1,2})日?[\s\u3000]+')
+_TD_PREFIX_YM   = re.compile(r'^(20\d{2})[.\-/年](\d{1,2})[\s\u3000]+(\d{1,2})[\s\u3000]+')
+_TD_PREFIX_MDY  = re.compile(r'^(\d{1,2})[/.](\d{1,2})[\s.]*(20\d{2})[\s\u3000]+')
+_TD_TAIL        = re.compile(r'[\s\u3000]+(20\d{2})[.\-/年](\d{1,2})[.\-/月](\d{1,2})日?\s*$')
+
+def title_date(t):
+    """把列表页混进标题的日期摘出来 → (日期, 去日期标题)。摘不到返回 ('', 原标题)。"""
+    x = clean_ws(t)
+    m = _TD_PREFIX_MDY.match(x)          # 天山铝业式：「05/12 2026 …」（MM/DD YYYY）
+    if m:
+        d = _valid_ymd(m.group(3), m.group(1), m.group(2))
+        if d:
+            return d, x[m.end():].strip()
+    for rx in (_TD_PREFIX, _TD_PREFIX_YM):
+        m = rx.match(x)
+        if m:
+            g = m.groups()
+            d = _valid_ymd(g[0], g[1], g[2])
+            if d:
+                return d, x[m.end():].strip()
+    m = _TD_TAIL.search(x)
+    if m:
+        d = _valid_ymd(m.group(1), m.group(2), m.group(3))
+        if d:
+            return d, x[:m.start()].strip()
+    return '', x
+
+def split_title_body(t, head_max=64):
+    """「标题 + 正文开头」粘成一条时拆开 → (标题, 正文)。与前端 splitTB() 同算法。"""
+    x = clean_ws(t)
+    if len(x) <= head_max:
+        return x, ''
+    cut = -1
+    for i in range(min(len(x), head_max)):
+        if x[i] in '。！？；!?;' and i + 1 >= 14:
+            cut = i + 1
+            break
+    if cut < 0:
+        sp = x.rfind(' ', 0, head_max)
+        if sp < 14:
+            sp = x.rfind('，', 0, head_max)
+        cut = sp if sp >= 14 else head_max
+    head = x[:cut].rstrip('，、, ')
+    body = x[cut:].strip()
+    if body == head:
+        body = ''
+    return (head or x[:head_max]), body
+
+def trim_summary(x, limit=150):
+    """摘要定长：去栏目前缀/尾部「详情」，超长在句读处收口。"""
+    x = clean_ws(x)
+    x = re.sub(r'^(【[^】]{0,14}】|\[[^\]]{0,14}\])\s*', '', x)
+    x = re.sub(r'[\s\u3000]*(详情|查看更多|查看详细|了解|了解更多|more)[\s\u3000]*$', '', x, flags=re.I)
+    if len(x) > limit:
+        cut = -1
+        for i in range(min(len(x), limit)):
+            if x[i] in '。！？；.!?;' and i + 1 >= 40:
+                cut = i + 1
+        x = x[:cut] if cut > 0 else x[:limit] + '…'
+    return x.strip()
+
+def is_junk_item(title, url, date=''):
+    """导航项 / 栏目名 / 模板文字 → 丢弃（这些是旧版「有的只有一个标题」的来源）。"""
+    t = clean_ws(title)
+    if not t:
+        return True
+    low = t.strip().lower()
+    if low in JUNK_TITLE_EXACT:
+        return True
+    for kw in JUNK_TITLE_KW:
+        if kw.lower() in low:
+            return True
+    has_verb = any(v in t for v in NEWS_VERB)
+    if len(t) <= 6 and not re.search(r'[A-Za-z0-9]{3,}', t) and not has_verb:
+        return True
+    if len(t) <= 14 and not NEWS_URL_HINT.search(url or '') and not has_verb:
+        return True
+    return False
+
+# 文章页候选摘要（优先级：meta description → 正文容器首段 → 全文前几段）
+META_PATS = [
+    r'<meta[^>]+(?:name|property)=["\'](?:description|og:description|twitter:description)["\'][^>]*content=["\'](.*?)["\']',
+    r'<meta[^>]+content=["\'](.*?)["\'][^>]*(?:name|property)=["\'](?:description|og:description|twitter:description)["\']',
+]
+PARA_RE = re.compile(r'<p\b[^>]*>(.*?)</p>', re.I | re.S)
+CTN_RE = re.compile(
+    r'<(?:div|section|article)[^>]+(?:class|id)=["\'][^"\']*'
+    r'(?:article|content|detail|newstxt|news_txt|txt|zoom|trs_editor|main)[^"\']*["\'][^>]*>(.*?)</(?:div|section|article)>',
+    re.I | re.S)
+
+def lead_candidates(raw):
+    """从文章页 HTML 里抽候选摘要（已过滤模板文字，去重保序）。"""
+    cands = []
+    for pat in META_PATS:
+        m = re.search(pat, raw, re.I | re.S)
+        if m:
+            t = strip_tags(m.group(1))
+            if 24 <= len(t) <= 400:
+                cands.append(t)
+            break
+    for m in list(CTN_RE.finditer(raw))[:3]:
+        for pm in list(PARA_RE.finditer(m.group(1)))[:3]:
+            t = strip_tags(pm.group(1))
+            if 30 <= len(t) <= 400:
+                cands.append(t)
+    for pm in list(PARA_RE.finditer(raw))[:6]:
+        t = strip_tags(pm.group(1))
+        if 30 <= len(t) <= 400:
+            cands.append(t)
+    out = []
+    for t in cands:
+        if t in out or BOILER_PAT.search(t):
+            continue
+        out.append(t)
+    return out
+
+def _art_cache(url):
+    import hashlib
+    return os.path.join(CACHE, 'art_%s.json' % hashlib.md5(url.encode('utf-8')).hexdigest()[:16])
+
+def lead_of_article(url, timeout=12, ttl=7 * 24 * 3600):
+    """抓文章页取候选摘要（带磁盘缓存）。抓不到返回 []。"""
+    p = _art_cache(url)
+    try:
+        if os.path.exists(p) and (time.time() - os.path.getmtime(p)) < ttl:
+            return json.load(open(p, encoding='utf-8')) or []
+    except Exception:
+        pass
+    cands = []
+    try:
+        raw = fetch_html(url, timeout=timeout)
+        if raw:
+            cands = lead_candidates(raw)
+    except Exception:
+        cands = []
+    try:
+        json.dump(cands, open(p, 'w', encoding='utf-8'), ensure_ascii=False)
+    except Exception:
+        pass
+    return cands
+
+def _age_days(d, base):
+    """条目距基准日的天数；日期缺失返回 None。"""
+    try:
+        import datetime
+        a = datetime.date(*[int(x) for x in d.split('-')[:3]])
+        b = datetime.date(*[int(x) for x in base.split('-')[:3]])
+        return (b - a).days
+    except Exception:
+        return None
+
+def normalize_item(it):
+    """就地规整一条：剥日期前缀 → 拆标题/正文 → 填本地摘要。"""
+    raw = strip_comments(it.get('t') or '')
+    tdate, t1 = title_date(raw)
+    head, body = split_title_body(t1)
+    head = re.sub(r'[\s\u3000]+(详情|查看更多|查看详细|了解|了解更多)$', '', head).strip()
+    it['t'] = head or clean_ws(t1)
+    d = clean_ws(it.get('d') or '')
+    if tdate and (not d or tdate > d):     # 列表页抓到的日期可能落到页脚，标题内的更可信
+        it['d'] = tdate
+    s = clean_ws(it.get('s') or '')
+    if not s and len(body) >= 30:
+        s = trim_summary(body)
+    if s:
+        it['s'] = s
+    return it
+
+def prune_items(items, base):
+    """丢导航/模板/重复/超旧（>2 年）条目，并按日期倒序。"""
+    keep, seen = [], set()
+    for it in items or []:
+        t = it.get('t') or ''
+        u = html.unescape(it.get('u') or '')
+        if is_junk_item(t, u, it.get('d')):
+            continue
+        k = (t, it.get('d') or '')
+        if k in seen:
+            continue
+        seen.add(k)
+        age = _age_days(it.get('d') or '', base)
+        if age is not None and age > 730:
+            continue
+        keep.append(it)
+    keep.sort(key=lambda x: (x.get('d') == '', x.get('d') or ''), reverse=True)
+    return keep
+
+def _mostly_ascii(s):
+    """判断文本是否以 ASCII（英文）为主——用于决定是否译中。"""
+    if not s:
+        return False
+    return sum(1 for ch in s if ord(ch) < 128) / max(1, len(s)) > 0.55
+
+def finalize(companies, base, net=True, workers=4, quiet=False):
+    """统一收尾：规整 + 清洗 + 摘要（含抓文章页）。net=False 时纯本地。"""
+    for c in companies:
+        c['rank'] = RANK.get(c.get('name'), c.get('rank', 99))
+        for it in (c.get('items') or []):
+            normalize_item(it)
+        c['items'] = prune_items(c.get('items') or [], base)
+    if not net:
+        return companies
+    from concurrent.futures import ThreadPoolExecutor
+    todo = []
+    for c in companies:
+        miss = [it for it in (c.get('items') or []) if not clean_ws(it.get('s') or '')]
+        if miss:
+            todo.append((c, miss))
+    if not todo:
+        return companies
+    if not quiet:
+        print('[摘要] 待抓文章页 %d 家 / %d 条' % (len(todo), sum(len(m) for _, m in todo)))
+    def work(pair):
+        c, miss = pair
+        out = []
+        for it in miss:
+            u = html.unescape(it.get('u') or '').strip()
+            out.append(lead_of_article(u) if u.startswith('http') else [])
+        return out
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        got = list(ex.map(work, todo))
+    filled = 0
+    for (c, miss), cands_list in zip(todo, got):
+        freq = {}
+        for cs in cands_list:
+            for t in cs:
+                freq[t] = freq.get(t, 0) + 1
+        for it, cs in zip(miss, cands_list):
+            for t in cs:
+                if freq.get(t, 0) <= 1:      # 同站重复出现的文本 = 站点级模板，丢弃
+                    it['s'] = trim_summary(t)
+                    filled += 1
+                    break
+    if not quiet:
+        print('[摘要] 填充 %d 条' % filled)
+    # 海外公司摘要译中（best-effort，失败/受限保留英文，绝不阻塞整轮）
+    if net:
+        fx = [it for c in companies if c.get('region') == 'NA'
+              for it in (c.get('items') or [])
+              if _mostly_ascii(clean_ws(it.get('s') or ''))]
+        if fx:
+            if not quiet:
+                print('[译中] 海外摘要 %d 条' % len(fx))
+            def _tw(it):
+                try:
+                    z = translate(it.get('s') or '')
+                    if z and z != it.get('s'):
+                        it['s'] = z
+                except Exception:
+                    pass
+            with ThreadPoolExecutor(max_workers=workers) as ex:
+                list(ex.map(_tw, fx))
+    return companies
+
 # ============================ 2. 翻译 ============================
 TRANS_CACHE_PATH = os.path.join(CACHE, 'co_trans.json')
 def _load_trans_cache():
@@ -655,6 +933,30 @@ SITES = [
 
 INDEX = {s['name']: s for s in SITES}
 
+# ============================ 3.5 展示序（前端导航排序，2026-09-23 v6）============================
+# 「市值 + 知名度」综合排序（人工维护，越靠前数值越小）。前端导航按国内 / 海外分两组，
+# 组内按 rank 升序；无 rank 的公司退回「条目数降序」。改排序只改这张表即可。
+# 说明：市值逐日波动，故这里用稳定的「量级 + 行业地位」档位，不写死当日市值数字。
+PROMINENCE = [
+    # —— 国内 A 股 ——
+    '紫金矿业', '中国铝业', '北方稀土', '洛阳钼业', '山东黄金',
+    '江西铜业', '中金黄金', '华友钴业', '天齐锂业', '赣锋锂业',
+    '铜陵有色', '赤峰黄金', '云铝股份', '南山铝业', '神火股份',
+    '西部矿业', '藏格矿业', '锡业股份', '云南铜业', '天山铝业',
+    '驰宏锌锗', '中国稀土', '厦门钨业', '湖南黄金', '中金岭南',
+    # —— 海外 ——
+    'Newmont', 'Freeport-McMoRan', 'Barrick', 'Southern Copper',
+    'Agnico Eagle', 'Teck Resources', 'Albemarle',
+]
+RANK = {n: i + 1 for i, n in enumerate(PROMINENCE)}
+
+def _stub(site):
+    """未采集公司的占位记录（保持全量 32 家花名册）。"""
+    return {'name': site['name'], 'code': site['code'], 'sector': site['sector'],
+            'region': site['region'], 'exchange': site['exchange'],
+            'home': site['url'], 'news_url': site['url'], 'method': '',
+            'stale': False, 'rank': RANK.get(site['name'], 99), 'items': []}
+
 # ============================ 4. 单公司采集 ============================
 def fetch_one(site, force=False):
     name = site['name']
@@ -703,15 +1005,20 @@ def collect(site, old, force):
     except Exception as e:
         items, used, cached = [], 'err', False
         print('  [ERR] %s %s' % (name, repr(e)[:80]))
-    # 不再回退旧 company_news.json（旧数据是 v1 公告，属污染源）。
-    # 只信本次真实抓取（或同次运行内的 raw-HTML 缓存）；抓不到就诚实标空。
-    stale = False
-    reuse = False
+    # v6：本次 0 条时，用上一次 JSON 里同一公司的条目兜底并标 stale=True（前端显示「数据暂缓」）。
+    # 旧数据现在已是「官网新闻」（v2），不再有 v1 公告污染，所以兜底是安全的；
+    # 这样单站偶发抓取失败不会让整块变空——但仍会明确标注数据暂缓，不冒充当日新数据。
+    stale, reuse = False, False
+    if not items:
+        prev = (old or {}).get(name) or {}
+        pitems = prev.get('items') or []
+        if pitems:
+            items, stale, reuse = pitems, True, True
     return {
         'name': name, 'code': site['code'], 'sector': site['sector'],
         'region': site['region'], 'exchange': site['exchange'],
         'home': site['url'], 'news_url': site['url'], 'method': used,
-        'stale': stale, 'items': items,
+        'stale': stale, 'rank': RANK.get(name, 99), 'items': items,
     }, items, stale, reuse, cached
 
 def _full_roster(companies, old):
@@ -721,11 +1028,7 @@ def _full_roster(companies, old):
     out = list(companies)
     for s in SITES:
         if s['name'] not in have:
-            out.append(old.get(s['name']) or {
-                'name': s['name'], 'code': s['code'], 'sector': s['sector'],
-                'region': s['region'], 'exchange': s['exchange'],
-                'home': s['url'], 'news_url': s['url'], 'method': '',
-                'stale': False, 'items': []})
+            out.append(old.get(s['name']) or _stub(s))
     return out
 
 def _write_json(companies):
@@ -747,6 +1050,8 @@ def _write_json(companies):
 def main():
     only = None
     force = False
+    enrich_only = False   # 只对现有 company_news.json 做清洗 + 摘要（不重抓列表页）
+    no_net = False        # 连文章页也不抓（纯本地清洗）
     args = sys.argv[1:]
     i = 0
     while i < len(args):
@@ -759,10 +1064,24 @@ def main():
             only = [x.strip() for x in a.split('=', 1)[1].split(',') if x.strip()]
         elif a == '--force':
             force = True
+        elif a == '--enrich-only':
+            enrich_only = True
+        elif a == '--no-net':
+            no_net = True
         i += 1
     # 注：本机 Chrome 已不可用，cp_*/dom_* 不再生成；历史残留为无害磁盘垃圾，
     # 不在抓取流程内删除（沙箱对 tmp/co_cache 下任何删除都会阻断整轮抓取）。
     old = load_old()
+    if enrich_only:
+        # 只规整 + 抽摘要，绝不重抓列表页（网络差时也不会把已有条目洗掉）
+        base = (json.load(open(OUT, encoding='utf-8')).get('updated_at')
+                if os.path.exists(OUT) else time.strftime('%Y-%m-%d'))
+        order = {s['name']: i for i, s in enumerate(SITES)}
+        companies = sorted(list(old.values()), key=lambda c: order.get(c.get('name'), 999))
+        finalize(companies, base, net=(not no_net))
+        real_total = _write_json(companies)
+        print('[enrich-only] %d 家 / %d 条，saved %s' % (len(companies), real_total, OUT))
+        return
     if only:
         targets = [INDEX[n] for n in only if n in INDEX]
         print('[--only] 重采 %d 家：%s' % (len(targets), '、'.join(only)))
@@ -790,11 +1109,8 @@ def main():
     if only:
         for s in SITES:
             if not any(c['name'] == s['name'] for c in companies):
-                companies.append(old.get(s['name']) or {
-                    'name': s['name'], 'code': s['code'], 'sector': s['sector'],
-                    'region': s['region'], 'exchange': s['exchange'],
-                    'home': s['url'], 'news_url': s['url'], 'method': '',
-                    'stale': False, 'items': []})
+                companies.append(old.get(s['name']) or _stub(s))
+    finalize(companies, time.strftime('%Y-%m-%d'), net=(not no_net))
     real_total = _write_json(companies)
     _save_trans_cache()
     domestic = [c for c in companies if c['region'] == 'CN']

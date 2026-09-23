@@ -1,10 +1,11 @@
 /**
- * 2026-09-23 矿业公司动态（v5）运行时渲染回归（jsdom）
- * v5 = v4 布局（跨列区块：左新闻流 + 右 sticky 公司导航）+ 四项体验修正：
+ * 2026-09-23 矿业公司动态（v6）运行时渲染回归（jsdom）
+ * v6 = v5 布局（跨列区块：左新闻流 + 右 sticky 公司导航）+ 摘要/分组/去域名 修正：
  *   ① 卡片长度统一：源 t 字段 4 字 ↔ 1055 字悬殊 → 按句读切「标题 + 正文」，标题 2 行、正文 2 行折叠 + 「展开全文」
  *   ② 去矿种维度：矿种 chip 筛选 / 导航矿种分组 / 移动端 sector optgroup / 卡片矿种标签 全部移除
  *   ③ 链接可用：数据自带 HTML 实体（&amp;）先解码再转义（否则二次转义成 &amp;amp; 打不开）；外链 rel=noreferrer；显示目标域名
- *   ④ 导航：按条数降序 + 计数徽标 + 「暂未收录」折叠组；面板内独立滚动
+ *   ④ 导航：国内/海外分两组 + 按市值·知名度 rank 升序 + 计数徽标 + 「暂未收录」折叠组；面板内独立滚动
+ *   ⑤ v6：每条卡片加一句内容摘要（仿新闻端，读 it.s）；移除逐条「目标域名」行；顶部说明段移除
  * 运行：node test_company_section.js
  */
 const fs = require('fs');
@@ -162,8 +163,11 @@ setTimeout(() => {
     const overLong = titles0.filter(t => (t.textContent || '').trim().length > HEAD_MAX + 2);
     check('默认视图所有标题 ≤ ' + HEAD_MAX + ' 字（不再出现整屏段落）',
           overLong.length === 0, 'over=' + overLong.length + (overLong[0] ? ' e.g. ' + overLong[0].textContent.slice(0, 40) : ''));
-    check('默认视图存在折叠正文（.co-exp）', document.querySelectorAll('#companyList .co-exp').length >= 1,
-          'collapsed=' + document.querySelectorAll('#companyList .co-exp').length);
+    check('默认视图存在内容摘要（.co-summary）或折叠正文（.co-exp）',
+          document.querySelectorAll('#companyList .co-summary').length >= 1 ||
+          document.querySelectorAll('#companyList .co-exp').length >= 1,
+          'summary=' + document.querySelectorAll('#companyList .co-summary').length +
+          ' exp=' + document.querySelectorAll('#companyList .co-exp').length);
 
     // 切「全部」+ 连续加载更多 → 渲染出全部条目
     const allBtn = document.querySelector('#coFeedHead .co-range button[data-r="0"]');
@@ -196,10 +200,10 @@ setTimeout(() => {
       const titlesAll = Array.from(document.querySelectorAll('#companyList .co-title'));
       check('全部视图所有标题 ≤ ' + HEAD_MAX + ' 字', titlesAll.every(t => (t.textContent || '').trim().length <= HEAD_MAX + 2),
             'max=' + Math.max(...titlesAll.map(t => (t.textContent || '').trim().length)));
-      // 期望折叠数 = 清洗后长度 > HEAD_MAX 的条目数（用 app.js 暴露的同款助手算）
-      const expectFold = allFlat.filter(it => H().split(it.t).body).length;
+      // 期望折叠数 = 既无摘要、清洗后长度又 > HEAD_MAX 的条目数（有摘要的条目由摘要承载，不再折叠续写）
+      const expectFold = allFlat.filter(it => !it.s && H().split(it.t).body).length;
       const gotFold = document.querySelectorAll('#companyList .co-exp').length;
-      check('折叠正文条数 = 长文条目数（期望 ' + expectFold + '）', gotFold === expectFold, 'got ' + gotFold);
+      check('折叠正文条数 = 无摘要长文条目数（期望 ' + expectFold + '）', gotFold === expectFold, 'got ' + gotFold);
       check('默认全部折叠（无 .co-item.open）', document.querySelectorAll('#companyList .co-item.open').length === 0);
       // 交互：展开 / 收起
       const eb = document.querySelector('#companyList .co-exp');
@@ -212,7 +216,8 @@ setTimeout(() => {
         eb.click();
         check('再点一次 → 收回归档', !box.classList.contains('open') && eb.textContent.indexOf('展开') >= 0, eb.textContent);
       } else {
-        check('存在可交互的「展开全文」按钮', false);
+        // v6：标题经清洗后均 ≤ 64 字、且 84% 条目带摘要，无长文折叠需求 → 不需要「展开全文」按钮（内容由摘要承载）
+        check('无长文折叠时不需要「展开全文」按钮（摘要承载内容）', expectFold === 0, 'expectFold=' + expectFold);
       }
       // 切回默认范围
       const defBtn = document.querySelector('#coFeedHead .co-range button[data-r="90"]');
@@ -224,11 +229,18 @@ setTimeout(() => {
     check('clean() 剥离前导「序号+年月」', cleaned1.indexOf('25 ') !== 0 && cleaned1.indexOf('2026.05') !== 0, cleaned1.slice(0, 30));
     check('clean() 剥离尾部日期', !/2026\/09\/17\s*$/.test(cleaned1), cleaned1.slice(-20));
     check('clean() 不误伤「5 万吨…」类标题', H().clean('5 万吨项目投产').indexOf('5 万吨') === 0, H().clean('5 万吨项目投产'));
+    // split() 逻辑验证：喂一段 >HEAD_MAX 且含句号的超长文本，应拆出「标题(≤HEAD_MAX) + 正文」
+    const synth = '公司今日正式宣布完成对澳大利亚某大型锂矿项目的全资收购，交易总金额约十五亿澳元。本次收购将显著增强公司在新能源产业链上游的资源保障能力，并有望在三年内实现产能爬坡与成本优化。';
+    const spS = H().split(synth);
+    check('split()：超长文本（含句号）拆出标题 + 正文',
+          spS.head.length > 0 && spS.body.length > 0 && spS.head.length <= HEAD_MAX,
+          'head=' + spS.head.length + ' body=' + spS.body.length);
+    // 真实最长条目 ≤ HEAD_MAX → 不应折叠（标题即全文，正文为空）—— 与「摘要承载内容」的设计一致
     const longest = allFlat.slice().sort((a, b) => (b.t || '').length - (a.t || '').length)[0] || { t: '' };
-    const sp1 = H().split(longest.t);
-    check('split()：真实最长条目（' + (longest.t || '').length + ' 字）拆出标题 + 正文',
-          sp1.head.length > 0 && sp1.body.length > 0 && sp1.head.length <= HEAD_MAX,
-          'head=' + sp1.head.length + ' body=' + sp1.body.length + ' src=' + (longest.t || '').length);
+    const spR = H().split(longest.t);
+    check('split()：真实最长条目（' + (longest.t || '').length + ' 字）≤ HEAD_MAX → 仅标题、无折叠',
+          spR.head.length === (longest.t || '').length && spR.body === '',
+          'head=' + spR.head.length + ' body=' + spR.body.length + ' src=' + (longest.t || '').length);
     const sp2 = H().split('H股公告');
     check('split()：短文只有标题、无正文', sp2.head === 'H股公告' && sp2.body === '', JSON.stringify(sp2));
     const sp3 = H().split(longest.t);
@@ -254,9 +266,14 @@ setTimeout(() => {
     check('外链 rel 含 noreferrer（规避企业站按 Referer 拒链）',
           !!firstLink && /noreferrer/.test(firstLink.getAttribute('rel') || ''),
           firstLink ? firstLink.getAttribute('rel') : 'no link');
-    check('卡片显示目标站点域名（.co-host）',
-          document.querySelectorAll('#companyList .co-host').length >= Math.floor(document.querySelectorAll('#companyList .co-item').length * 0.8),
-          'host=' + document.querySelectorAll('#companyList .co-host').length + ' items=' + document.querySelectorAll('#companyList .co-item').length);
+    check('卡片不再逐条显示目标域名（.co-host 已移除）',
+          document.querySelectorAll('#companyList .co-host').length === 0,
+          'host=' + document.querySelectorAll('#companyList .co-host').length);
+    const renderedItems = document.querySelectorAll('#companyList .co-item').length;
+    const withSum = document.querySelectorAll('#companyList .co-summary').length;
+    check('渲染条目中绝大多数带内容摘要（≥70%，仿新闻端）',
+          renderedItems > 0 && withSum / renderedItems >= 0.7,
+          (100 * withSum / Math.max(1, renderedItems)).toFixed(0) + '% (' + withSum + '/' + renderedItems + ')');
 
     // ---------- 7) 右侧公司导航（v5 ④） ----------
     const navItems = document.querySelectorAll('#coNav .co-nav-item:not(.empty)');
@@ -265,11 +282,19 @@ setTimeout(() => {
           'got ' + navItems.length);
     const navAll = document.querySelector('#coNav .co-nav-all');
     check('公司导航「全部公司」入口存在', !!navAll);
-    // 按条数降序
-    const counts = Array.from(navItems).map(el => parseInt((el.querySelector('.co-n') || {}).textContent || '0', 10));
-    let sortedDesc = true;
-    for (let i = 1; i < counts.length; i++) if (counts[i] > counts[i - 1]) sortedDesc = false;
-    check('导航按条数降序排列', sortedDesc, counts.join(','));
+    // 国内 / 海外 分两组
+    const gh = document.querySelectorAll('#coNav .co-nav-g-h');
+    check('导航按 国内 / 海外 分两组', gh.length === 2, 'got ' + gh.length);
+    check('分组标题含「国内公司」「海外公司」',
+          Array.from(gh).some(e => /国内公司/.test(e.textContent)) &&
+          Array.from(gh).some(e => /海外公司/.test(e.textContent)));
+    // 组内按市值/知名度 rank 升序（紫金矿业 rank=1 早于 湖南黄金；Newmont 早于 Albemarle）
+    const domOrder = Array.from(document.querySelectorAll('#coNav .co-nav-item:not(.empty)'))
+      .map(el => el.getAttribute('data-name'));
+    const zjIdx = domOrder.indexOf('紫金矿业'), sdIdx = domOrder.indexOf('山东黄金');
+    check('国内组按 rank 升序（紫金矿业 早于 山东黄金）', zjIdx >= 0 && sdIdx >= 0 && zjIdx < sdIdx, zjIdx + '/' + sdIdx);
+    const tkIdx = domOrder.indexOf('Teck Resources'), albIdx = domOrder.indexOf('Albemarle');
+    check('海外组按 rank 升序（Teck Resources 早于 Albemarle）', tkIdx >= 0 && albIdx >= 0 && tkIdx < albIdx, tkIdx + '/' + albIdx);
     check('导航标题显示家数/条数', /家/.test((document.getElementById('coNavH') || {}).textContent || ''),
           (document.getElementById('coNavH') || {}).textContent);
     const emptyItems = document.querySelectorAll('#coNav .co-nav-item.empty');
@@ -295,7 +320,9 @@ setTimeout(() => {
           !!(first && first.querySelector('.co-src') && first.querySelector('.co-src').textContent.trim().length > 0));
     check('首条标题为 http(s) 外链', !!(first && first.querySelector('.co-title') &&
           /^https?:\/\//.test(first.querySelector('.co-title').getAttribute('href') || '')));
-    check('卡片不再渲染 co-summary（旧字段已废弃）', document.querySelectorAll('#companyList .co-summary').length === 0);
+    check('卡片结构完整（标题/来源/可选摘要，无残留旧 co-host）',
+          document.querySelectorAll('#companyList .co-host').length === 0 &&
+          !!(first && first.querySelector('.co-title') && first.querySelector('.co-src')));
 
     // ---------- 9) 公司选择（含「范围外自动放宽」）/ hash 路由 / 搜索 ----------
     let selName = '', selTotal = 0;
@@ -366,13 +393,15 @@ setTimeout(() => {
       check('搜索框存在', false);
     }
 
-    // ---------- 10) 移动端 select：扁平（仅「暂未收录」成组） ----------
+    // ---------- 10) 移动端 select：国内 / 海外 / 暂未收录 三组 ----------
     const opts = document.querySelectorAll('#coNavSel option');
     check('移动端 select 选项=公司数+1', opts.length === nCompanies + 1, 'got ' + opts.length + ' / ' + (nCompanies + 1));
     const og = document.querySelectorAll('#coNavSel optgroup');
-    check('移动端 select 不再按矿种分组（optgroup ≤ 1，且仅「暂未收录」）',
-          og.length <= 1 && (og.length === 0 || /暂未收录/.test(og[0].getAttribute('label') || '')),
-          'optgroups=' + og.length + (og[0] ? ' label=' + og[0].getAttribute('label') : ''));
+    check('移动端 select 按 国内/海外/暂未收录 三组',
+          og.length >= 2 && /国内公司/.test(og[0].getAttribute('label') || '') &&
+          /海外公司/.test(og[1].getAttribute('label') || '') &&
+          (og.length < 3 || /暂未收录/.test(og[2].getAttribute('label') || '')),
+          'optgroups=' + og.length + (og[0] ? ' labels=' + Array.from(og).map(g => g.getAttribute('label')).join('|') : ''));
     check('select 首项 = 全部公司', (opts[0] || {}).value === '__all__');
 
     // ---------- 11) 豁免与视图切换 ----------
@@ -401,7 +430,7 @@ setTimeout(() => {
     fail++;
     console.log('  FAIL  测试执行抛错 -> ' + (e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e));
   }
-  console.log('\n===== 矿业公司动态 v5（长度统一 + 去矿种 + 链接修复 + 导航整理）汇总 =====');
+  console.log('\n===== 矿业公司动态 v6（摘要 + 国内/海外分组 + 域名行移除）汇总 =====');
   console.log('  通过 ' + pass + ' / 失败 ' + fail);
   process.exit(fail ? 1 : 0);
 }, 1500);
