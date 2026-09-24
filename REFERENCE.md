@@ -2511,3 +2511,18 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - 待用户浏览器实测复验：矿权登记卡片展示 + AI 搜滚动边界（线上已部署 `a777f13`，build `20260913-1205`）。
 - 矿权数据源方案 B（信用管理）/ C（有效矿权查询 `xkz.mnr.gov.cn`）**未采用**（用户选 A）；若未来要补，走同站权威 + 金属口径过滤。
 - 价格区热力图/排行（TraeCode 的 §42.14/§42.15）与本对话无关，未动。
+
+### 42.21 平板重排 rail-order 修复（2026-09-24，build `20260924-1630`）
+
+**背景**：`test_p2_20260910.js` 长期 29/1，唯一 FAIL＝「宽屏时还原回原栏位 → parent=news-grid」。根因＝DOM 重构后 `#installGuideSection` 与 `.col-rail` **同属 `.news-grid` 直接子节点**（原始顺序 col-main → installGuideSection → col-rail），而旧 `mdMobileRailOrder` 的守卫 `if(guide.parentNode!==grid)` 因 guide 本就在 grid 内而**永远为假**：窄屏时 guide 根本不会沉底（功能失效），宽屏还原依赖的 `_mdGuideOrigin` 也从未被设置，原断言 `parent!==grid` 在当下结构里**结构上不可能为真**。
+
+**改动（app.js `mdMobileRailOrder`）**：改为**基于前后位置**的重排，不再依赖父节点变化：
+- 窄屏（≤1100px，平板单列）：`guide!==grid.lastElementChild → grid.appendChild(guide)`（沉到 col-rail 之后）；
+- 宽屏：`guide!==rail.previousElementSibling → grid.insertBefore(guide, rail)`（还原到 col-rail 之前原位置）；
+- 幂等，移除 `_mdGuideOrigin`。
+
+**测试（`test_p2_20260910.js`）**：断言改为位置语义——窄屏 `guide===grid.lastElementChild`；宽屏 `guide.nextElementSibling===rail`。现 **30/0**（修复 1 项历史失败）。
+
+**回退指纹 / 红线**：⚠️ 勿把 `mdMobileRailOrder` 改回「父节点变化」式重排（`_mdGuideOrigin` 那套）；⚠️ 勿把测试断言改回 `parent!==grid`（当前 DOM 下恒假）；⚠️ 若日后把 `#installGuideSection` 移出 `.news-grid`，本函数与测试需同步重做。本函数在 app.js 运行时，生成侧不产出，安全。
+
+**测试基线**：p2 由 29/1 → 30/0；其余（smoke 78 / mobile_ux 208 / company 108 / view_switch 22 / p3 33 / ux 41 / p1 29）不变。

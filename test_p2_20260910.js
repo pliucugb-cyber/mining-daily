@@ -100,16 +100,18 @@ setTimeout(() => {
   ok('mdMobileRailOrder 已定义', typeof w.mdMobileRailOrder === 'function');
   const grid = d.querySelector('.news-grid');
   const guide = d.getElementById('installGuideSection');
-  if (grid && guide) {
+  const rail = grid && grid.querySelector('.col-rail');
+  if (grid && guide && rail) {
     w.matchMedia = q => ({ matches: /max-width:\s*1100px/.test(q), media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} });
     w.mdMobileRailOrder();
-    ok('窄屏时安装指引移到栅格末尾（热榜/会展在其之前）', guide.parentNode === grid,
-      'parent=' + (guide.parentNode && guide.parentNode.className));
+    ok('窄屏时安装指引移到栅格末尾（在 col-rail 之后）', guide.parentNode === grid && guide === grid.lastElementChild,
+      'parent=' + (guide.parentNode && guide.parentNode.className) + ',last=' + (guide === grid.lastElementChild));
     w.matchMedia = q => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} });
     w.mdMobileRailOrder();
-    ok('宽屏时还原回原栏位', guide.parentNode !== grid, 'parent=' + (guide.parentNode && guide.parentNode.className));
+    ok('宽屏时还原回原栏位（在 col-rail 之前）', guide.parentNode === grid && guide.nextElementSibling === rail,
+      'next=' + (guide.nextElementSibling && (guide.nextElementSibling.id || guide.nextElementSibling.className)));
   } else {
-    ok('.news-grid / #installGuideSection 存在', false);
+    ok('.news-grid / #installGuideSection / .col-rail 存在', false);
   }
 
   console.log('\n===== ⑥ 筛选态指示与出口 =====');

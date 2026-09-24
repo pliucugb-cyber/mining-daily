@@ -1443,28 +1443,25 @@ function mdUndoToast(msg, undo){
   clearTimeout(_mdToastTimer);
   _mdToastTimer=setTimeout(function(){ if(t.parentNode)t.remove(); }, 8000);
 }
-// P2-6：单列（≤1100px）时右栏沉底，热榜排在安装指引之后、会展还被隐藏。
-// 跨栏重排不能靠 order（父节点不同），改为移动端把安装指引移到栅格末尾：
-// 今日 → 往期 → 矿权 → 热榜 → 会展 → 安装指引。回到桌面宽度再还原。
-var _mdGuideOrigin=null;
+// P2-6：单列（≤1100px，平板）时右栏沉底，安装指引排到栅格末尾（col-rail 之后）；
+// 桌面宽度再还原到 col-rail 之前（原始位置）。注：installGuideSection 与 .col-rail 现同属
+// .news-grid 直接子节点（DOM 重构后），故用「前后位置」重排，不再依赖父节点变化。
 function mdMobileRailOrder(){
   var grid=document.querySelector('.news-grid');
   var guide=document.getElementById('installGuideSection');
   if(!grid||!guide)return;
+  var rail=null;
+  for(var i=0;i<grid.children.length;i++){
+    if(grid.children[i].classList&&grid.children[i].classList.contains('col-rail')){ rail=grid.children[i]; break; }
+  }
   var narrow=false;
   try{ narrow=!!(window.matchMedia&&window.matchMedia('(max-width:1100px)').matches); }catch(e){}
   if(narrow){
-    if(guide.parentNode!==grid){
-      if(!_mdGuideOrigin)_mdGuideOrigin={parent:guide.parentNode,next:guide.nextSibling};
-      grid.appendChild(guide);
-    }
-  }else if(_mdGuideOrigin){
-    if(_mdGuideOrigin.next&&_mdGuideOrigin.next.parentNode===_mdGuideOrigin.parent){
-      _mdGuideOrigin.parent.insertBefore(guide,_mdGuideOrigin.next);
-    }else{
-      _mdGuideOrigin.parent.appendChild(guide);
-    }
-    _mdGuideOrigin=null;
+    if(guide!==grid.lastElementChild) grid.appendChild(guide);
+  }else if(rail){
+    if(guide!==rail.previousElementSibling) grid.insertBefore(guide, rail);
+  }else if(guide!==grid.lastElementChild){
+    grid.appendChild(guide);
   }
 }
 function mdP2Init(){ mdEnhanceKeyboard(); mdA11yLandmarks(); mdMobileRailOrder(); }
