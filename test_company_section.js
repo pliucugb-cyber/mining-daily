@@ -445,6 +445,33 @@ setTimeout(() => {
 
     // ---------- 12) 无阻塞 JS 错误 ----------
     check('updateActiveSection 函数存在', typeof window.updateActiveSection === 'function');
+    // ---------- 13) 公司视图已读态（2026-09-24 新增，独立于新闻流） ----------
+    // #2 用户诉求：点开新闻毫无反馈 → 补「标为已读/未读」+ 已读弱化，且不与新闻流已读串号。
+    const fItem = document.querySelector('#companyList .co-item');
+    check('卡片带 data-url（已读集合键）', !!(fItem && fItem.getAttribute('data-url')));
+    check('卡片含「标为已读 / 标为未读」操作按钮', document.querySelectorAll('#companyList .btn-co-read').length >= 1);
+    const rb = fItem && fItem.querySelector('.btn-co-read');
+    if (rb) {
+      rb.click();
+      check('点「标为已读」→ 条目加 .read（弱化）', fItem.classList.contains('read'));
+      check('点「标为已读」→ 出现「标为未读」按钮', !!fItem.querySelector('.btn-co-unread'));
+      // 已读写入独立 key（不污染新闻流 STORE_KEY）
+      const coKey = window.localStorage && window.localStorage.getItem('mining_daily_read_co_urls');
+      check('公司已读写入独立 localStorage key', !!coKey, 'coKey=' + coKey);
+      const ub = fItem.querySelector('.btn-co-unread');
+      if (ub) { ub.click(); check('点「标为未读」→ 移除 .read', !fItem.classList.contains('read')); }
+    } else {
+      check('标为已读 按钮存在', false);
+    }
+
+    // ---------- 14) 数据洁净：渲染摘要不含电头/地址/征集代理等模板残片（#1/#3 修复回归保护） ----------
+    // #1 删掉「下属公司/机构介绍」；#3 修掉「只有标题、格式错乱」——电头/地址/征集代理绝不能当摘要。
+    const summText = Array.from(document.querySelectorAll('#companyList .co-summary'))
+      .map(e => e.textContent || '').join('\n');
+    const badMark = /TSX\s*[:：]|Suite\s*\d|Burrard|美通社|PRNewswire|Copyright|proxy solicitation|征集代理|Barclays|Vancouver/i.test(summText);
+    check('渲染摘要不含电头/地址/征集代理等模板残片', !badMark, summText.slice(0, 80));
+    // 诚实的「仅标题」体验：暂未提取到摘要时显示占位，而非空白或错乱电头
+    check('存在「暂未提取到正文摘要」占位（.co-summary-empty）', document.querySelectorAll('#companyList .co-summary-empty').length >= 1);
     check('无阻塞性 JS 错误', errors.length === 0, errors.join(' | '));
 
   } catch (e) {

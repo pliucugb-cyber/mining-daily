@@ -519,6 +519,9 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
 
 // ===== 已读/未读 + 收藏 + 浏览记录（localStorage，按访问者本机存储）=====
 const STORE_KEY='mining_daily_read_urls';
+// 公司动态（矿业公司动态）单独一份已读记录：与新闻流分开存放，避免污染新闻流的
+// 「隐藏已读」筛选口径与未读计数（2026-09-24）
+const CO_READ_KEY='mining_daily_read_co_urls';
 const FAV_KEY='mining_daily_favorites';
 const HISTORY_KEY='mining_daily_history';
 
@@ -595,6 +598,36 @@ function markUnread(url){
       setTimeout(()=>{item.style.boxShadow=old},600);
     }
   }
+}
+
+// ===== 公司动态「已读/未读」（2026-09-24 新增）=====
+// 背景：矿业公司动态板块此前完全没有已读状态 —— 点开一条新闻毫无反馈，也没有
+// 「读完变浅」的弱化，与新闻流（标题变灰 + 圆点变空心 + 就地标读）体验割裂。
+// 存储独立于新闻流：公司条目的 key 不与 STORE_KEY 混用。
+let _coReadCache=null;
+function getCoReadSet(){try{return new Set(JSON.parse(localStorage.getItem(CO_READ_KEY)||'[]'))}catch(e){return new Set()}}
+function saveCoReadSet(s){lsSet(CO_READ_KEY,JSON.stringify([...s]))}
+function coReadHas(url){if(!url)return false;return (_coReadCache||(_coReadCache=getCoReadSet())).has(url)}
+// 就地同步「已读」类（不重渲染整个列表，避免丢失滚动位置与「加载更多」进度）
+function syncCoRead(){
+  const s=getCoReadSet();
+  _coReadCache=s;
+  document.querySelectorAll('#companyList .co-item').forEach(el=>{
+    const u=el.getAttribute('data-url');
+    el.classList.toggle('read',!!(u&&s.has(u)));
+  });
+}
+function markCoRead(url){
+  if(!url)return;
+  const s=getCoReadSet();
+  if(!s.has(url)){s.add(url);saveCoReadSet(s);}
+  syncCoRead();
+}
+function markCoUnread(url){
+  if(!url)return;
+  const s=getCoReadSet();
+  if(s.has(url)){s.delete(url);saveCoReadSet(s);}
+  syncCoRead();
 }
 
 // ===== 收藏功能（对象存储：收藏永久保留，即使新闻滚出页面）=====
@@ -1915,6 +1948,27 @@ document.addEventListener('click',e=>{
     const exp=item.classList.toggle('expanded');
     moreBtn.innerHTML=exp?'收起 ▴':'展开全文 ▾';
     return;
+  }
+  // ===== 公司动态：操作行按钮 + 点标题即标已读（2026-09-24）=====
+  const coReadBtn=e.target.closest('.btn-co-read');
+  if(coReadBtn){
+    e.preventDefault();e.stopPropagation();
+    const ci0=coReadBtn.closest('.co-item');
+    if(ci0)markCoRead(ci0.getAttribute('data-url'));
+    return;
+  }
+  const coUnreadBtn=e.target.closest('.btn-co-unread');
+  if(coUnreadBtn){
+    e.preventDefault();e.stopPropagation();
+    const ci1=coUnreadBtn.closest('.co-item');
+    if(ci1)markCoUnread(ci1.getAttribute('data-url'));
+    return;
+  }
+  const coTitleA=e.target.closest('.co-title');
+  if(coTitleA){
+    const ci2=coTitleA.closest('.co-item');
+    if(ci2)markCoRead(ci2.getAttribute('data-url'));
+    return;   // <a target="_blank"> 自带外链行为，无需再走下面的通用分支
   }
   const a=e.target.closest('a[href]');
   if(a){
@@ -7073,13 +7127,20 @@ function toggleTheme(){
       : (tb.body
           ? '<div class="co-body">'+esc(tb.body)+'</div>'+
             '<button type="button" class="co-exp" aria-expanded="false">展开全文</button>'
-          : '');
-    return '<div class="co-item">'+
+          : '<div class="co-summary co-summary-empty">（该条暂未提取到正文摘要，点击标题前往来源查看）</div>');
+    // 2026-09-24：已读态。data-url 作为本地已读集合的键（原文链接缺失时退化为搜索链接，
+    // 仍是稳定键）；已读条目整体弱化，且只显示「标为未读」。
+    var isRead=coReadHas(primary);
+    var acts='<div class="co-actions">'+
+      '<button type="button" class="btn-co-read" title="将本条标记为已读（仅本机，不影响其他条目）">&#10003; 标为已读</button>'+
+      '<button type="button" class="btn-co-unread" title="将本条恢复为未读（仅本机，不影响其他条目）">&#8630; 标为未读</button>'+
+      '</div>';
+    return '<div class="co-item'+(isRead?' read':'')+'" data-url="'+esc(primary)+'">'+
       '<div class="co-head"><span class="co-dot"></span>'+
       '<a class="co-title" href="'+esc(primary)+'" target="_blank" rel="noopener noreferrer"'+
         (url?'':' title="原文链接缺失：点击将前往搜索引擎"')+'>'+esc(tb.head||'(无标题)')+'</a></div>'+
       '<div class="co-meta"><button type="button" class="co-src" data-name="'+esc(it.name)+'">'+esc(it.name)+'</button>'+
-      '<span>'+esc(it.d||'')+'</span>'+ex+stale+'</div>'+summ+'</div>';
+      '<span>'+esc(it.d||'')+'</span>'+ex+stale+'</div>'+summ+acts+'</div>';
   }
   function renderFeed(){
     var list=document.getElementById('companyList');
@@ -7121,6 +7182,7 @@ function toggleTheme(){
         if(!cur||cur.k!==k){ cur={k:k,items:[]}; groups.push(cur); }
         cur.items.push(it);
       });
+      _coReadCache=getCoReadSet();   // 渲染前刷新一次缓存，避免逐条读 localStorage
       list.innerHTML=groups.map(function(g){
         return '<div class="co-day"><div class="co-day-h">'+esc(dayLabel(g.k))+
           '<span class="co-day-n">'+g.items.length+' 条</span></div>'+

@@ -148,7 +148,10 @@ NON_NEWS_HREF = re.compile(
     r'/(program|project|business|product|solution|service|about|company|culture|'
     r'esg|csr|sustainab|investor|contact|job|recruit|career|talent|join|hr|'
     r'guanyu|zoujin|honor|history|certificat|brand|partner|shop|mall|cases|'
-    r'download|feedback|sitemap|privacy|disclaim|zhaopin|rencai|gonggao_?notice)'
+    r'download|feedback|sitemap|privacy|disclaim|zhaopin|rencai|gonggao_?notice|'
+    # 2026-09-24 新增：分支机构 / 下属单位 / 成员企业栏目（中矿资源页脚「分支机构」列表
+    # 里的 fzjg/175.html 之类被误当新闻抓入，摘要变成子公司简介）
+    r'fzjg|fenzhi|branch|subsidiar|member|jigou)'
     r'[\w\-/\.]*', re.I)
 # ② 导航/栏目/介绍类标题（精确整串命中即丢）
 NON_NEWS_TITLE = set('''可持续发展 社会责任 环境社会及管治 子公司介绍 分子公司 销售及服务 产品与服务
@@ -582,10 +585,85 @@ JUNK_TITLE_EXACT = set("""储量与资源量 紫金blog 紫金全媒体 创新&�
 查看详细 查看更多 更多 详情 下载pdf 首页 网站地图 联系我们 隐私政策 版权所有 版权声明""".split())
 JUNK_TITLE_KW = ('查看详细', '订阅（', '下载pdf', '在新标签页', '在新窗口', 'the eagle博客',
                  '利益相关方承诺书', '我们使用cookie')
+# 机构/下属单位后缀（2026-09-24 新增）：真新闻标题几乎不以这些词结尾，且必然带事件动词。
+# 命中「以机构后缀结尾 且 无新闻动词」即判为介绍性条目（如「津巴布韦Bikita矿业有限公司」）。
+ORG_SUFFIX = ('有限公司', '有限责任公司', '股份有限公司', '集团有限公司', '分公司', '子公司',
+              '冶炼厂', '选矿厂', '矿业公司', '项目部', '办事处', '工作组')
 BOILER_PAT = re.compile(
     r'(发布人\s*[:：]|发布时间\s*[:：]|当您浏览、阅读或下载本网站|connect with us|'
     r'follow our social media|find albemarle|learn about teck|we use cookies|accept cookies|'
-    r'版权所有|保留所有权利|订阅（在新标签页中打开）|下载pdf)', re.I)
+    r'版权所有|保留所有权利|copyright|all rights reserved|all rights|订阅（在新标签页中打开）|下载pdf)', re.I)
+
+# 文章页「首段候选」阶段的模板段落特征（2026-09-24 新增，补 BOILER_PAT）。
+# 原抽取器只取全文前 6 个 <p>，而页头/页脚的公司简介与免责声明常排在最前，
+# 会把真实正文（如 Teck 新闻稿第 22 段）挤出候选 → 摘要恒空。
+LEAD_BOIL_PAT = re.compile(
+    r'(forward[- ]looking|前瞻性陈述|免责声明|风险提示|about\s+(teck|us|the\s+company)|'
+    r'investor\s+contact|media\s+contact|投资者联系|媒体联系|扫码关注|扫描二维码|'
+    r'关注我们|订阅我们|未经授权|转载请注明|责任编辑|上一篇|下一篇|'
+    r'同意书征集|征集代理|proxy\s+solicitation|solicitation|'
+    r'演示文稿将通过|网播|webcast|将通过以下链接|持有股票或\s*DRS|电/?(PRNewswire|美通社|新华美通))', re.I)
+
+# 新闻稿「电头 / 署名行」：如「温哥华，不列颠哥伦比亚省 – Teck Resources Limited（TSX: TECK.A…）」，
+# 是稿件的日期+公司署名，不是新闻内容，绝不能当摘要。结构固定：地点 – 公司（交易所代码…）。
+DATELINE_PAT = re.compile(
+    r'^\s*[^。！？；;]{0,40}[-–—]\s*[^。！？；;]{0,55}'
+    r'(TSX|NYSE|LSE|ASX|TSE|HKEX|SHA|SZSE|NASDAQ|多伦多证券交易所|纽约证券交易所|伦敦证券交易所)\b',
+    re.I)
+
+# 摘要里「正文 + 末尾电头残片」粘连：如「…执行主席 ， 2026年 9月 3日/美通社/-- Albemarle Corporation (NYSE: ALB) …」。
+# 真实内容在前，电头残片在后，需从电头处截断，保留前半段真实摘要。
+STRIP_TAIL_PAT = re.compile(
+    r'(?:^|\s)\d{4}\s*年\s*\d{1,2}\s*月\s*\d{1,2}\s*日\s*/?\s*(?:PRNewswire|美通社|新华美通)'
+    r'|电/?(?:PRNewswire|美通社|新华美通)'
+    r'|[-–—]\s*[A-Za-z][A-Za-z\s.]*(?:Resources|Limited|Inc\.?|Corp|Corporation|Company|Ltd|PLC)\b[^。！？；;]{0,6}\(?(?:TSX|NYSE|LSE|ASX|HKEX|SHA|SZSE)\b')
+
+def is_boilerplate_summary(s):
+    """已落库的 `s` 若是电头/署名行/征集代理/网播链接等非内容文本 → True（让 finalize 重抓）。"""
+    if not s:
+        return False
+    if DATELINE_PAT.search(s) or LEAD_BOIL_PAT.search(s) or BOILER_PAT.search(s) or ADDR_PAT.search(s):
+        return True
+    return False
+
+
+# 稿尾「地址 / 联系方式」块：如「Suite 3300, Bentall 5 ... Vancouver, B.C. / t: 604... / @teck.com」，
+# 是页脚联系方式，不是新闻内容，绝不能当摘要。
+ADDR_PAT = re.compile(
+    r'(suite\s*\d|burrard|v6c|t:\s*\d|f:\s*\d|\bstreet\b|\bavenue\b|\bphone\b|邮箱|地址|邮编|'
+    r'media\s+relations|investor\s+relations|@teck\.com|www\.teck|teck\.com)', re.I)
+
+def pick_lead(cands, title='', freq=None):
+    """从候选里挑一条最像「新闻内容摘要」的：排除地址/电头/模板/标题复述，按长度与句式打分。"""
+    freq = freq or {}
+    title_l = clean_ws(title or '').lower()
+    best, best_score = '', -1
+    for t in cands:
+        tt = clean_ws(t)
+        if len(tt) < 40 or len(tt) > 400:
+            continue
+        if ADDR_PAT.search(tt) or DATELINE_PAT.search(tt) or LEAD_BOIL_PAT.search(tt) or BOILER_PAT.search(tt):
+            continue
+        if title_l and tt.lower() == title_l:
+            continue
+        score = 0
+        L = len(tt)
+        if 60 <= L <= 240:
+            score += 3
+        elif 40 <= L < 60 or 240 < L <= 300:
+            score += 1
+        if tt.rstrip().endswith(('。', '.', '！', '!', '？', '?')):
+            score += 2
+        if 'http' in tt or '@' in tt:
+            score -= 5
+        if freq.get(tt, 0) > 1:        # 同站多次出现 = 模板，强烈降权
+            score -= 10
+        if re.search(r'(宣布|报告|签署|达成|收购|投产|增产|减产|派发|任命|发布|建设|提供|支持|推进|discover|report|announce|sign|agree|acquire|produce|appoint|complete|approve|increase|decrease)', tt, re.I):
+            score += 2
+        if score > best_score:
+            best_score, best = score, tt
+    return best
+
 
 # 标题里被列表页混入的日期：前缀「2026-02 05」/「2026.09.05」/「05/12 2026」(MM/DD YYYY)，尾缀日期
 _TD_PREFIX      = re.compile(r'^(20\d{2})[.\-/年](\d{1,2})[.\-/月](\d{1,2})日?[\s\u3000]+')
@@ -665,6 +743,10 @@ def is_junk_item(title, url, date=''):
         return True
     if len(t) <= 14 and not NEWS_URL_HINT.search(url or '') and not has_verb:
         return True
+    # 机构/下属单位介绍（2026-09-24 新增）：官网页脚「分支机构 / 下属企业」列表被误当新闻，
+    # 这类条目只有公司名 + 公司简介，不是「公司发生的新闻」，命中即丢。
+    if not has_verb and t.endswith(ORG_SUFFIX):
+        return True
     return False
 
 # 文章页候选摘要（优先级：meta description → 正文容器首段 → 全文前几段）
@@ -679,8 +761,23 @@ CTN_RE = re.compile(
     re.I | re.S)
 
 def lead_candidates(raw):
-    """从文章页 HTML 里抽候选摘要（已过滤模板文字，去重保序）。"""
+    """从文章页 HTML 里抽候选摘要（已过滤模板文字，去重保序）。
+
+    2026-09-24 重写（原版只取全文前 6 个 <p>，页面头部/页脚模板段落会把真实正文挤出候选）：
+      ① 全文档段落参与候选（不再只取前 6 个）；
+      ② 页内出现 >=2 次的段落判为站点模板，候选阶段即剔除（对 META / 容器 / 全文三类候选统一生效）
+         （原先只在 finalize 里做跨条目去重，对「同一条目自己页内的模板段」无效）；
+      ③ 追加 LEAD_BOIL_PAT 尾部模板词表（前瞻性陈述 / About XX / 联系方式 / cookie 等）。
+    """
+    body = re.sub(r'<(script|style)\b.*?</\1>', ' ', raw, flags=re.I | re.S)
+    # 段落频次：同一页里重复出现的段落必是模板（页头标语、页脚简介…）
+    para = [strip_tags(m.group(1)).strip() for m in PARA_RE.finditer(body)]
+    freq = {}
+    for t in para:
+        if t:
+            freq[t] = freq.get(t, 0) + 1
     cands = []
+    # ① meta description
     for pat in META_PATS:
         m = re.search(pat, raw, re.I | re.S)
         if m:
@@ -688,25 +785,38 @@ def lead_candidates(raw):
             if 24 <= len(t) <= 400:
                 cands.append(t)
             break
+    # ② 正文容器内的段落
     for m in list(CTN_RE.finditer(raw))[:3]:
         for pm in list(PARA_RE.finditer(m.group(1)))[:3]:
             t = strip_tags(pm.group(1))
             if 30 <= len(t) <= 400:
                 cands.append(t)
-    for pm in list(PARA_RE.finditer(raw))[:6]:
-        t = strip_tags(pm.group(1))
-        if 30 <= len(t) <= 400:
+    # ③ 全文档段落（顺序保序，页内重复段落 = 模板先剔除）
+    for t in para[:400]:
+        if 30 <= len(t) <= 400 and freq.get(t, 0) <= 1:
             cands.append(t)
     out = []
     for t in cands:
-        if t in out or BOILER_PAT.search(t):
+        if t in out:
+            continue
+        # 页内重复 = 站点模板。必须对「全部候选」生效（含 META 与容器段落）：
+        #   · Teck：容器里 2 次的「We are a leading Canadian resource company…」曾被当成摘要；
+        #   · 江铜：META 的「江西铜业集团成立于1979年…」正文字段里也重复 2 次 → 同样属公司简介。
+        if freq.get(t, 0) > 1:
+            continue
+        if BOILER_PAT.search(t) or LEAD_BOIL_PAT.search(t) or DATELINE_PAT.search(t):
             continue
         out.append(t)
     return out
 
+
+
+LEAD_CACHE_VER = 'v3'   # 摘要抽取器/词表变更时 bump：避免旧的「空结果」缓存挡住重新抽取
+
 def _art_cache(url):
     import hashlib
-    return os.path.join(CACHE, 'art_%s.json' % hashlib.md5(url.encode('utf-8')).hexdigest()[:16])
+    key = (LEAD_CACHE_VER + url).encode('utf-8')
+    return os.path.join(CACHE, 'art_%s_%s.json' % (LEAD_CACHE_VER, hashlib.md5(key).hexdigest()[:16]))
 
 def lead_of_article(url, timeout=12, ttl=7 * 24 * 3600):
     """抓文章页取候选摘要（带磁盘缓存）。抓不到返回 []。"""
@@ -750,10 +860,16 @@ def normalize_item(it):
     if tdate and (not d or tdate > d):     # 列表页抓到的日期可能落到页脚，标题内的更可信
         it['d'] = tdate
     s = clean_ws(it.get('s') or '')
+    if s:
+        s = STRIP_TAIL_PAT.split(s)[0].strip()   # 剥末尾「日期/美通社/--公司(NYSE)」等电头残片
     if not s and len(body) >= 30:
         s = trim_summary(body)
+    if s and is_boilerplate_summary(s):   # 电头/征集代理/网播链接等非内容文本，清掉让 finalize 重抓
+        s = ''
     if s:
         it['s'] = s
+    else:
+        it['s'] = ''   # 显式清空（否则保留原电头等非内容摘要）
     return it
 
 def prune_items(items, base):
@@ -816,11 +932,10 @@ def finalize(companies, base, net=True, workers=4, quiet=False):
             for t in cs:
                 freq[t] = freq.get(t, 0) + 1
         for it, cs in zip(miss, cands_list):
-            for t in cs:
-                if freq.get(t, 0) <= 1:      # 同站重复出现的文本 = 站点级模板，丢弃
-                    it['s'] = trim_summary(t)
-                    filled += 1
-                    break
+            t = pick_lead(cs, it.get('t'), freq)   # 挑最像内容摘要的候选，而非首条
+            if t:
+                it['s'] = trim_summary(t)
+                filled += 1
     if not quiet:
         print('[摘要] 填充 %d 条' % filled)
     # 海外公司摘要译中（best-effort，失败/受限保留英文，绝不阻塞整轮）

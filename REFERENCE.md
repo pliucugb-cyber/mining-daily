@@ -2441,7 +2441,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
 | `node test_price_heatmap.js` | **126** | 价格区热力图：静态契约（容器顺序 / pre-paint 位置 / 选择器）+ jsdom 运行时（16 色块、方向与 `.pc-chg` 一致、alpha 单调、红涨绿跌、2 分组、图例 >=7、点击开走势图、视图持久化）+ 反向用例；**价格区间榜**：三态互斥 / 两栏固定 / 空栏占位 / 红涨绿跌 / 条形归一 / 跨度日数回归锁 / `__mdPriceRank` 等（§42.14 / §42.15） |
 | `node test_event_calendar.js` | **29 PASS** | 事件·数据日历：默认隐藏态（开关 `EC_ENABLED=false`）+ 开关往返恢复隐藏 + 静态容器 `#eventCalendar` 存活（重建边界）+ 未被 `refreshSectionVisibility` 隐藏（防回归）+ 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签（会议/政策/数据/截止）+ 外链 `target=_blank` + 空占位「暂无已收录的近期事件」（§42.16） |
-| `node test_company_section.js` | **108 PASS** | 矿业公司动态（v7：单栏 + sticky 修复 + 搜新闻兜底）：跨列布局（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**）（companySection/installGuide 为 `.news-grid` 直接子级、col-rail 显式定位）+ 288px 侧栏无矿种维度 + 默认近 90 天 + 分页 60 + 日期分组 + 长 t 拆标题/正文 2 行 clamp + 展开全文 + 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端）+ **无逐条 `.co-host` 域名行** + 切「全部」并连续「加载更多」渲染全量 + 未收录公司折叠组（10 家）+ 点公司收敛 + **forcedAll 自动放宽** + hash 路由 `#co=` 深链 + 搜索过滤 + 移动端 `#coNavSel` 国内/海外/暂未收录 三组 optgroup + 国内/海外分组且组内按 `rank` 升序导航 + 豁免显隐 + `switchView('company')` 视图隔离 + 无 JS 错误（§42.19） |
+| `node test_company_section.js` | **116 PASS** | 矿业公司动态（v7：单栏 + sticky 修复 + 搜新闻兜底 + 已读态回归 + 数据洁净回归）：跨列布局（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**）（companySection/installGuide 为 `.news-grid` 直接子级、col-rail 显式定位）+ 288px 侧栏无矿种维度 + 默认近 90 天 + 分页 60 + 日期分组 + 长 t 拆标题/正文 2 行 clamp + 展开全文 + 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端）+ **无逐条 `.co-host` 域名行** + 切「全部」并连续「加载更多」渲染全量 + 未收录公司折叠组（10 家）+ 点公司收敛 + **forcedAll 自动放宽** + hash 路由 `#co=` 深链 + 搜索过滤 + 移动端 `#coNavSel` 国内/海外/暂未收录 三组 optgroup + 国内/海外分组且组内按 `rank` 升序导航 + 豁免显隐 + `switchView('company')` 视图隔离 + **公司视图已读态（独立 key `mining_daily_read_co_urls` + `.read` 弱化 + 标为已读/未读按钮）+ 数据洁净（摘要无电头/地址/征集代理残片 + 空摘要斜体占位 `.co-summary-empty`）** + 无 JS 错误（§42.19 / §42.26） |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
@@ -2610,3 +2610,37 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 **回退指纹**：`grep -c "news-more" index.html app.js`（应为 3 / 2）、`grep -c "btn-read" index.html app.js`（应为 4 / 2）。
 
 **闸门**：`test_mobile_ux_batch.js` 新增 7 条断言（桌面隐藏 / 移动端放开+去截断 / 注入标为已读 / 仅未读可见 / 注入展开开关 / 点标为已读→已读 / 点展开开关→expanded），基线 215 → **222 通过 / 0 失败**；`test_smoke_0908.js` 78、`test_company_section.js` 108 全过；preflight ✅。
+
+
+### §42.26 公司视图已读态 + 摘要抽取器去污 + 诚实空摘要占位（2026-09-24 · build 20260924-2300）
+
+**背景（回应 2026-09-23 用户三诉求 #2/#3）**：
+- **#2 已读弱化**：§42.25 已覆盖「今日新闻」端的已读弱化（key `mining_daily_read_urls`）。本节点补**公司视图侧的已读态**——用户点开某条公司新闻后，为何公司卡片不显示「已阅」、读完颜色无差异。做法是**与公司端完全隔离的独立 key**，避免两类数据互相污染（公司条目 URL 与新闻条目 URL 不同域、混在一个 key 里会误伤）。
+- **#3 摘要格式**：用户原话「为什么有的公司只显示标题、而不是规定的『用一段话总结内容』」。根因是 `fetch_company.py` 摘要抽取器会把**电头（如 `VANCOUVER, BC -- (TSX: TECK)`）、公司地址页脚（如 `Suite 3300…Burrard Street`）、征集代理/Proxy Solicitation/Webcast 提示、版权行**误当作正文摘要，且同一段电头/重复 META 描述被**多条文章**当成正文（Teck 多篇文章摘要雷同＝同一电头）；旧 `finalize` 取首候选即存，于是「有摘要却是一句电头/地址」比「只有标题」更糟。本节点**彻底清洗**这些模板残片。
+
+**修法（fetch_company.py，生成侧、次日重建安全）**：
+- 新增 **`DATELINE_PAT`**：`^\s*[^。！？；;]{0,40}[-–—]\s*[^。！？；;]{0,55}(TSX|NYSE|LSE|ASX|TSE|HKEX|SHA|SZSE|NASDAQ|多伦多证券交易所|纽约证券交易所|伦敦证券交易所)\b` —— 剥离「城市 — (交易所:代码)」电头行。
+- 新增 **`ADDR_PAT`**：`(suite\s*\d|burrard|v6c|t:\s*\d|f:\s*\d|\bstreet\b|…|@teck\.com|www\.teck|teck\.com)` —— 识别地址页脚 / 联系信息行。
+- 新增 **`STRIP_TAIL_PAT`**：从摘要**末尾**截断「日期 / 美通社 / -- 公司(NYSE)」等电头残片（用于「真实正文 + 末尾电头」粘连场景，如 Albemarle）—— 保留真实前缀、只剥尾巴。
+- 扩展 **`LEAD_BOIL_PAT`**：追加 同意书征集 / 征集代理 / proxy solicitation / solicitation / 演示文稿将通过 / 网播 / webcast / 将通过以下链接 / 持有股票或DRS / 电(PRNewswire|美通社|新华美通)。
+- 扩展 **`BOILER_PAT`**：追加 `copyright|all rights reserved|all rights`。
+- 新增 **`is_boilerplate_summary(s)`**：命中 `DATELINE_PAT | LEAD_BOIL_PAT | BOILER_PAT | ADDR_PAT` 任一即判为非内容摘要。
+- **`normalize_item()` 强化**：先 `STRIP_TAIL_PAT.split(s)[0]` 剥尾 → 若空且 `body>=30` 用 `trim_summary(body)` 兜底 → 若命中 `is_boilerplate_summary` 则**显式清空**（`it['s']=''`）；**原来只 `if s: it['s']=s` 会静默保留已被污染的旧电头**，这是核心 bug，现已改为「命中即清空」。
+- 新增 **`pick_lead(cands, title, freq)`**：跨条目 `freq` 去重后**打分挑最像正文的候选**——排除 ADDR/DATELINE/LEAD_BOIL/BOILER、排除与标题相同、惩罚 `freq>1`（站点模板/重复 META 描述）、对新闻动词/句号结尾加分、对含 `http/@` 减分；`finalize()` 填充循环改用 `pick_lead`。
+- **`LEAD_CACHE_VER` 由 v2 bump 到 v3**：使旧 `art_*.json` 缓存失效、强制重抽（避免「flaky 早轮写的空 `[]` 缓存挡住重抓」再现）。
+- 数据实测：全库 **242 条 / 43 空（17.8%）/ 0 个 boilerplate 残留**。空条目均为硬限制：中国铝业 16（WAF 拦截）、Teck 9（静态页无正文）、驰宏锌锗 5、永兴材料 3、白银有色 3、中金黄金 2、盐湖股份 2、铜陵有色 1、神火股份 1、厦门钨业 1。Teck 真实有正文的条目（idx 3/5/7/8/9/12/14/15）保留真摘要，纯电头/地址那些**诚实置空**而非填假电头。
+
+**前端（app.js + index.html，运行时渲染、零口径风险）**：
+- `cardHtml()` 摘要分支：有 `body` 走「正文 + 展开全文」；**无摘要时不再空白/错乱电头**，改为斜体占位 `<div class="co-summary co-summary-empty">（该条暂未提取到正文摘要，点击标题前往来源查看）</div>`。
+- `index.html` 新增 `.co-summary-empty{color:var(--ink-400,#9aa4b2);font-style:italic;display:block}` + 深色 `.dark` 对应规则。
+- **公司视图已读态**：卡片带 `data-url`（＝已读集合键）；app.js 注入「✓ 标为已读 / ↶ 标为未读」操作按钮，点击「标为已读」→ 加 `.read` 弱化类 + 写入**独立** localStorage key `mining_daily_read_co_urls`；「标为未读」移除 `.read` 并删键。与新闻端 `mining_daily_read_urls` **物理隔离**，互不影响。
+
+**闸门**：`node test_company_section.js` 新增 Section 13（公司视图已读态回归）+ Section 14（数据洁净回归），基线 108 → **116 通过 / 0 失败**；`test_smoke_0908.js` 78、`test_mobile_ux_batch.js` 222 全过；preflight ✅（build 20260924-2300 与 sw.js `CACHE_NAME` 一致）；`app.js node --check` 通过。
+
+**回退指纹**：
+1. 渲染摘要在某条目上仍含 `TSX|Suite|Burrard|美通社|PRNewswire|Copyright|proxy solicitation|征集代理|Barclays|Vancouver` 等模板残片（数据洁净回归失败）—— 重跑 `python fetch_company.py --no-net` 确定性清洗（无需网络）。
+2. 公司卡片点「标为已读」后未加 `.read` / 未写入 `mining_daily_read_co_urls` / 与新闻端 key 混用（隔离失败）。
+3. `.co-summary-empty` 占位缺失（无摘要条目要么空白、要么又冒出电头）。
+4. `LEAD_CACHE_VER` 被回退到 v2（旧污染缓存复活）。
+
+**必留（生成侧）**：`fetch_company.py` 的 `DATELINE_PAT` / `ADDR_PAT` / `STRIP_TAIL_PAT` / `is_boilerplate_summary` / `pick_lead` / `normalize_item` 显式清空分支 / `LEAD_CACHE_VER='v3'`；`app.js` 的 `co-summary-empty` 分支 + 公司已读按钮注入 + `mining_daily_read_co_urls` 读写；`index.html` 的 `.co-summary-empty` 两条规则。
