@@ -2556,3 +2556,30 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 **必留**：上述 `:root` 两处字号变量块与新闻标题/摘要字面量；勿把 `--fs-body` 调回 15、勿把新闻标题调回 17（除非有明确设计意图）。
 
 **闸门 / 验收**：preflight ✅；全套回归全绿（smoke 78 / mobile 208 / company 108 / p1 29 / p2 30 / view_switch 22 / p3 33 / ux 41）。线上验收同 §42.22（git ls-remote + 真实字节核对 build/CACHE）。
+
+### §42.24 注入按钮形态修复（2026-09-24 · build 20260924-2047）
+
+**背景**：§42.22 把 `.news-item` 改为 `flex column + order` 重排层级（元信息移到摘要后）后，
+运行时注入的 `.btn-star` / `.btn-unread` 也变成了 flex item：`order` 默认 `0` → 被顶到条目**最前**；
+`align-self` 继承 `align-items:stretch` → 被拉成**整行横条**。用户反馈「标为未读不像原来的样子」。
+
+**修法**（不撤层级重排，只把按钮钉回原形态）：
+- `app.js::injectStars`：两个按钮先收进 `.ni-actions` 操作行，再挂到条目末尾（幂等键改为 `.ni-actions`）。
+- `index.html`：新增 `.ni-actions{display:flex;align-items:center;order:5;align-self:flex-start}`；
+  `.btn-unread` 的 `margin-left:8px` 改为 `margin:var(--s2) 0 0 8px`（移动端覆盖 `margin:var(--s2) 0 0 6px`）。
+
+**必留指纹**：
+- `index.html`：`.ni-actions{display:flex;align-items:center;order:5;align-self:flex-start}`（桌面）、
+  `.ni-actions{order:5}`（移动端块内）、`.btn-unread` 两条 margin 写法。
+- `app.js`：`acts.className='ni-actions'`、`el.appendChild(acts);`。
+
+**红线（改前必读）**：
+1. **不得**把 `.btn-star` / `.btn-unread` 直接 `appendChild` 到 `.news-item` —— flex item 下会退回「拉伸横条 + 顶到最前」。
+2. **不得**给 `.news-item` 加 `align-items:flex-start` 来"顺手解决" —— 那会把 `.news-head` / `.news-summary` 一起收成内容宽，标题换行与摘要宽度全变形。
+3. 未读条目下 `.ni-actions` 高度为 0（undo `display:none` + 桌面 star `position:absolute`），
+   **不得**给 `.ni-actions` 加 margin/padding —— 否则每条未读新闻底部多出一段空白。
+4. 桌面星标仍是 `position:absolute`（包含块是 `.news-item`，因 `.ni-actions` 为 static）；移动端（≤768px）星标 `position:static`，与未读按钮在操作行内**同行** —— 这是 09-24 之前的设计形态。
+
+**回退指纹**：`grep -c "ni-actions" index.html app.js`（应为 1 / 3）。
+
+**闸门**：`test_mobile_ux_batch.js` 新增 6 条结构断言（`.ni-actions` 规则、桌面/移动 margin、app.js 包裹、操作行计数），基线 208 → **215 通过 / 0 失败**。

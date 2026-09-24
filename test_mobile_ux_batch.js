@@ -643,6 +643,24 @@ setTimeout(() => {
   }catch(e){ _c1=false; _c2=false; }
   check('⑩ 清空二次确认：首点变「确认清空？」+红底强提示且不立即清空', _c1, 't1='+_t1+' cls1='+_cls1+' after1='+_after1);
   check('⑪ 清空二次确认：再次点击才真正清空且退出确认态', _c2, 't2='+_t2+' cls2='+_cls2+' after2='+_after2);
+  check('⑪ 清空二次确认：再次点击才真正清空且退出确认态', _c2, 't2='+_t2+' cls2='+_cls2+' after2='+_after2);
+
+  console.log('\n===== 2026-09-24 注入按钮形态修复 =====');
+  // 缘由：.news-item 自 09-24 起是 flex column（元信息靠 order 重排），
+  // 直接 append 的 .btn-star/.btn-unread 会成为 flex item：order 默认 0 顶到最前、align-self stretch 拉成整行横条。
+  check('2026-09-24 .ni-actions 操作行规则（横向 flex + order:5 + 按内容宽）',
+    /\.ni-actions\{display:flex;align-items:center;order:5;align-self:flex-start\}/.test(html), '');
+  check('2026-09-24 桌面 .btn-unread 回到原形态（左缩进 8px + 上间距）',
+    /\.btn-unread\{[^}]*margin:var\(--s2\) 0 0 8px/.test(html), '');
+  check('2026-09-24 移动端 .ni-actions 复述 order:5',
+    /\.ni-actions\{order:5\}/.test(html), '');
+  check('2026-09-24 移动端 .btn-unread 左缩进 6px（保持原形态）',
+    /\.btn-unread\{display:inline-block;font-size: var\(--fs-meta\);padding:2px var\(--s2\);margin:var\(--s2\) 0 0 6px\}/.test(html), '');
+  check('2026-09-24 app.js injectStars 收进 .ni-actions（不再直挂到条目）',
+    /acts\.className='ni-actions'/.test(html) && /el\.appendChild\(acts\);/.test(html)
+    && !/el\.appendChild\(star\);/.test(html) && !/el\.appendChild\(undo\);/.test(html), '');
+  var _niW = doc.querySelectorAll('.news-item > .ni-actions');
+  check('2026-09-24 每条新闻都有操作行包裹（' + _niW.length + ' 条）', _niW.length > 0, 'n=' + _niW.length);
 
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));

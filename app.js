@@ -1917,25 +1917,29 @@ document.addEventListener('click',e=>{
 
 
 // 为每条新闻注入 ☆ 星标 + ↶ 标为未读 按钮
+// 2026-09-24：两条按钮改为先收进同一个 .ni-actions 操作行，再挂到条目末尾。
+// 缘由：.news-item 自本日起是 flex column（元信息靠 order 重排），
+// 直接 append 的按钮会成为 flex item —— order 默认 0（被顶到条目最前）、
+// align-self 默认 stretch（被拉成整行横条），与原来那个按内容宽的小按钮形态不符。
 function injectStars(){
   document.querySelectorAll('.news-item').forEach(el=>{
-    if(el.querySelector('.btn-star'))return;
-    // 星标按钮（已在原代码中处理）
+    if(el.querySelector('.ni-actions')||el.querySelector('.btn-star'))return;
+    const acts=document.createElement('div');
+    acts.className='ni-actions';
+    // 星标按钮：桌面绝对定位在条目右上；移动端改为行内，与「标为未读」同行
     const star=document.createElement('button');
     star.className='btn-star';
     star.innerHTML='☆';
     star.title='收藏/取消收藏';
-    el.appendChild(star);
-  });
-  document.querySelectorAll('.news-item').forEach(el=>{
-    if(el.querySelector('.btn-unread'))return;
-    // 单条恢复未读按钮：仅「已读」条目显示，追加到条目末尾（2026-09-06：原「查看原文」按钮已删，不再有插入锚点）
+    acts.appendChild(star);
+    // 单条恢复未读按钮：仅「已读」条目显示（未读条目上由 .news-item:not(.read) 的规则隐藏）
     const undo=document.createElement('button');
     undo.type='button';
     undo.className='btn-unread';
     undo.innerHTML='↶ 标为未读';
     undo.title='只将本条恢复为未读（不影响其他新闻）';
-    el.appendChild(undo);
+    acts.appendChild(undo);
+    el.appendChild(acts);
   });
 }
 
