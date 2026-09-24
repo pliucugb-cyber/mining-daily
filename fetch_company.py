@@ -7,8 +7,8 @@ fetch_company.py — 矿业公司动态板块数据采集（v2：官网新闻，
   - 海外 7 家（纽蒙特/巴里克/自由港/南方铜业/泰克/阿格尼科/雅保）：官网 News/IR 栏目，英文标题经 MyMemory 译中
 
 采集策略：
-  - 全站统一 Python urllib 静态抓取（走本机 http 代理取外网、直连兜底），正则抽取新闻条目；
-    本机 Chrome headless 渲染在当前环境会卡死，故已废弃 method='chrome'，统一 method='html'
+  - 国内/海外站：Python urllib 静态抓取（走本机 http 代理取外网、直连兜底），正则抽取新闻条目；
+    个别 SPA 动态站（如中国铝业官网）method='chrome'，用系统 Chrome 无头渲染后再抽，无 Chrome 环境时安全降级静态抓取
   - 海外英文标题：MyMemory 免费接口译中（langpair=en|zh-CN），失败回退原文
   - 容错：某站点抓取失败（网络/Chrome 不可用）时，复用 company_news.json 中该公司上一次成功的数据并标 stale，避免每日重建把整块清空
 
@@ -236,6 +236,31 @@ def fetch_html(url, timeout=25):
             if not is_blocked(txt):
                 return txt
     return ''
+
+def fetch_render(url, wait=3.0, timeout=30):
+    """无头渲染抓取（method='chrome' 真正生效）：用系统 Chrome 打开页面、等 JS 跑完再读 HTML。
+    本机装有 Chrome 时可用；自动化 / 无 Chrome 环境会 ImportError 或路径缺失，返回 '' 由调用方降级静态抓取。"""
+    try:
+        import os as _os
+        _exe = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
+        if not _os.path.exists(_exe):
+            return ''
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as _p:
+            _b = _p.chromium.launch(executable_path=_exe, headless=True,
+                                    args=['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'])
+            _pg = _b.new_page(user_agent=UA)
+            # 不阻塞在 load：部分官网会注入慢速第三方脚本（如 hq.sinajs.cn），
+            # 等到 load 会触发 25s 超时 → 整次渲染失败。domcontentloaded + 固定 settle 更稳。
+            _pg.goto(url, wait_until='domcontentloaded', timeout=timeout * 1000)
+            _pg.wait_for_timeout(int(wait * 1000))
+            _html = _pg.content()
+            _b.close()
+            return _html or ''
+    except Exception:
+        return ''
+
+
 
 def _rm_best_effort(path):
     """尽力删除目录：分小批 os.remove，避开沙箱「单批删除 >50 需确认」的拦截。"""
@@ -860,7 +885,7 @@ SITES = [
     {'name':'紫金矿业','code':'601899','sector':'铜','region':'CN','exchange':'A股',
      'url':'https://www.zjky.cn/news/news_list.jsp','method':'html'},
     {'name':'江西铜业','code':'600362','sector':'铜','region':'CN','exchange':'A股',
-     'url':'https://www.jxcc.com/news.html','method':'chrome'},
+     'url':'https://www.jxcc.com/news.html','method':'html'},
     {'name':'铜陵有色','code':'000630','sector':'铜','region':'CN','exchange':'A股',
      'url':'http://www.tlys.cn/list.aspx?parentclassid=67&classid=383','method':'html'},
     {'name':'云南铜业','code':'000878','sector':'铜','region':'CN','exchange':'A股',
@@ -872,7 +897,7 @@ SITES = [
      'url':'https://www.cmoc.com/html/Media/News/','method':'html'},
     # —— 铝 ——
     {'name':'中国铝业','code':'601600','sector':'铝','region':'CN','exchange':'A股',
-     'url':'https://www.chalco.com.cn/','method':'html','unreach':'spa'},
+     'url':'https://www.chalco.com.cn/','method':'chrome','unreach':'spa'},
     {'name':'南山铝业','code':'600219','sector':'铝','region':'CN','exchange':'A股',
      'url':'https://www.nanshan.com.cn/news.html','method':'html'},
     {'name':'云铝股份','code':'000807','sector':'铝','region':'CN','exchange':'A股',
@@ -883,7 +908,7 @@ SITES = [
      'url':'http://www.tslyjt.com/node/48','method':'html'},
     # —— 黄金 ——
     {'name':'山东黄金','code':'600547','sector':'黄金','region':'CN','exchange':'A股',
-     'url':'https://www.sd-gold.com/column/81/','method':'chrome'},
+     'url':'https://www.sd-gold.com/column/81/','method':'html'},
     {'name':'中金黄金','code':'600489','sector':'黄金','region':'CN','exchange':'A股',
      # v7：上市公司官网域名 zjgold.com.cn 已被域名商挂牌转让（死站），改用集团站 chinagoldgroup.com 兜底采集团新闻
      'url':'https://www.chinagoldgroup.com/','method':'html'},
@@ -895,7 +920,7 @@ SITES = [
     {'name':'天齐锂业','code':'002466','sector':'锂','region':'CN','exchange':'A股',
      'url':'https://www.tianqilithium.com/news.aspx?t=27','method':'html'},
     {'name':'赣锋锂业','code':'002460','sector':'锂','region':'CN','exchange':'A股',
-     'url':'https://www.ganfenglithium.com/news.html','method':'chrome'},
+     'url':'https://www.ganfenglithium.com/news.html','method':'html'},
     {'name':'华友钴业','code':'603799','sector':'钴','region':'CN','exchange':'A股',
      'url':'https://www.huayou.com/news/corporate-news','method':'html'},
     {'name':'藏格矿业','code':'000408','sector':'锂','region':'CN','exchange':'A股',
@@ -916,7 +941,7 @@ SITES = [
     {'name':'锡业股份','code':'000960','sector':'锡','region':'CN','exchange':'A股',
      'url':'https://www.ytc.cn/xwdt1/gsxw.htm','method':'html'},
     {'name':'厦门钨业','code':'600549','sector':'钨','region':'CN','exchange':'A股',
-     'url':'https://www.cxtc.com/News.aspx','method':'chrome'},
+     'url':'https://www.cxtc.com/News.aspx','method':'html'},
     # —— 海外 7 家（本机 Chrome 不可用 → 统一走静态 html 抓取；代理由 effective_proxy 发现）——
     {'name':'Newmont','code':'NEM','sector':'黄金','region':'NA','exchange':'NYSE',
      'url':'https://www.newmont.com/investors/news-release/default.aspx','method':'html','unreach':'spa'},
@@ -962,6 +987,17 @@ SITES = [
      'url':'https://www.angloamerican.com/','method':'html','unreach':'spa'},
     {'name':'第一量子','code':'FM','sector':'铜','region':'NA','exchange':'TSX',
      'url':'https://www.first-quantum.com/','method':'html','unreach':'spa'},
+    # —— v8b：本轮补入（官网经无头浏览器核实 / 新浪个股新闻源）——
+    {'name':'中钨高新','code':'000657','sector':'钨','region':'CN','exchange':'A股',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/000657.phtml','method':'html','unreach':'spa'},
+    {'name':'盛屯矿业','code':'600711','sector':'锌','region':'CN','exchange':'A股',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/600711.phtml','method':'html','unreach':'spa'},
+    {'name':'银泰黄金','code':'000975','sector':'黄金','region':'CN','exchange':'A股',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/000975.phtml','method':'html','unreach':'spa'},
+    {'name':'盛和资源','code':'600392','sector':'稀土','region':'CN','exchange':'A股',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/600392.phtml','method':'html','unreach':'spa'},
+    {'name':'四川黄金','code':'001337','sector':'黄金','region':'CN','exchange':'A股',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/001337.phtml','method':'html','unreach':'spa'},
 ]
 
 INDEX = {s['name']: s for s in SITES}
@@ -1001,13 +1037,19 @@ def fetch_one(site, force=False):
     cached = raw is not None
     used_method = method
     if raw is None:
-        # 本机 Chrome 不可用（headless 渲染会卡死），全部走静态 urllib 抓取；
-        # 海外站经 effective_proxy() 发现的存活代理取外网，国内站直连兜底。
-        raw = fetch_html(url, timeout=to)
-        used_method = 'html'
+        if method == 'chrome':
+            raw = fetch_render(url, wait=4.0, timeout=45)
+            used_method = 'chrome' if raw else 'html'
+            if not raw:
+                raw = fetch_html(url, timeout=to)
+                used_method = 'html'
+        else:
+            # 海外站经 effective_proxy() 发现的存活代理取外网，国内站直连兜底。
+            raw = fetch_html(url, timeout=to)
+            used_method = 'html'
         if raw:
             cache_put(name, raw)
-    items = extract_items(raw, url, require_date=False) if raw else []
+    items = extract_items(raw, url, require_date=(method == 'chrome')) if raw else []
     # 海外译中
     if site.get('region') == 'NA':
         for it in items:

@@ -319,12 +319,15 @@ setTimeout(() => {
     }
 
     // ---------- 7.5) unreach 标注（v8：spa 动态不可抓 / dead 死域名）----------
-    const spaNames = (companyData.companies || []).filter(c => c.unreach === 'spa').map(c => c.name);
+    // unreach:'spa' 仅作「动态站」标记；有数据的 spa 公司走正常 host 展示，
+    // 只有「0 条空壳 spa 公司」才在折叠组显示「动态 ✕」标签（与前端 renderNav 一致）。
+    // 故断言只针对「空壳 spa」，不再要求所有 spa 公司均为空（v9：中国铝业经无头渲染已有数据）。
+    const spaEmptyNames = (companyData.companies || []).filter(c => c.unreach === 'spa' && !((c.items || []).length)).map(c => c.name);
     const spaEls = Array.from(document.querySelectorAll('#coNav .co-nav-item.empty'))
       .filter(el => /动态/.test((el.querySelector('.co-n') || {}).textContent || ''));
-    check('spa 类空壳均显示「动态」标签', spaNames.length > 0 &&
-          spaNames.every(n => spaEls.some(el => el.getAttribute('data-name') === n)),
-          spaEls.length + '/' + spaNames.length);
+    check('spa 类空壳均显示「动态」标签', spaEmptyNames.length === 0 ||
+          spaEmptyNames.every(n => spaEls.some(el => el.getAttribute('data-name') === n)),
+          spaEls.length + '/' + spaEmptyNames.length);
     check('co-empty-note 文案说明动态加载/域名失效',
           /动态加载|域名已失效/.test((document.querySelector('.co-empty-note') || {}).textContent || ''));
 

@@ -2,32 +2,115 @@
  "updated_at": "2026-09-24",
  "companies": [
   {
-   "name": "Southern Copper",
-   "code": "SCCO",
-   "sector": "铜",
-   "region": "NA",
-   "exchange": "NYSE",
-   "home": "https://www.southerncopper.com/",
-   "news_url": "https://www.southerncopper.com/",
-   "method": "html",
+   "name": "中国铝业",
+   "code": "601600",
+   "sector": "铝",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.chalco.com.cn/",
+   "news_url": "https://www.chalco.com.cn/",
+   "method": "chrome",
    "unreach": "spa",
    "stale": false,
-   "rank": 29,
-   "items": []
-  },
-  {
-   "name": "Agnico Eagle",
-   "code": "AEM",
-   "sector": "黄金",
-   "region": "NA",
-   "exchange": "TSX",
-   "home": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
-   "news_url": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
-   "method": "html",
-   "unreach": "spa",
-   "stale": false,
-   "rank": 30,
-   "items": []
+   "rank": 2,
+   "items": [
+    {
+     "t": "中国铝业关于股权激励部分限制性股票回购注销实施公告",
+     "d": "2026-09-11",
+     "u": "https://www.chalco.com.cn/tzzgx/thygg/202609/t20260911_177627.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份荣获第二十六届中国专利优秀奖",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177352.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份镓系列产品亮相首届有色钢铁融合发展论坛",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177351.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份获2026中国信息协会数据要素应用创新大赛...",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177350.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份召开党委（扩大）会议总结树立和践行正确...",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177349.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份两名青年科技人才入选行业人才计划",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177348.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份召开2026年劳动竞赛推进会",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177347.html",
+     "s": ""
+    },
+    {
+     "t": "利润总额同比大增98% 中国铝业中期增速再创历史新高",
+     "d": "2026-08-28",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202608/t20260828_176619.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2026年半年度报告摘要",
+     "d": "2026-08-28",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202608/t20260828_176606.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2026年半年度报告",
+     "d": "2026-08-28",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202608/t20260828_176605.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份5人获聘中铝集团首席技能大师",
+     "d": "2026-08-21",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202608/t20260821_176122.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2025年年度报告（全文）",
+     "d": "2026-03-30",
+     "u": "https://www.chalco.com.cn/tzzgx/thygg/202603/t20260330_166168.html",
+     "s": ""
+    },
+    {
+     "t": "何文建会见攀钢集团有限公司总经理、党...",
+     "d": "2026-01-13",
+     "u": "https://www.chalco.com.cn/xwdt/ggdt/202601/t20260113_162395.html",
+     "s": ""
+    },
+    {
+     "t": "张瑞忠宣讲党的二十届四中全会精神",
+     "d": "2025-12-30",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202512/t20251230_161690.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2025年半年度报告摘要",
+     "d": "2025-08-28",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202508/t20250828_154002.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2024年年度报告全文",
+     "d": "2025-06-09",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/ndbg/202506/t20250609_148836.html",
+     "s": ""
+    }
+   ]
   },
   {
    "name": "紫金矿业",
@@ -346,20 +429,6 @@
      "s": "2026年是全面践行新发展战略、将平台化运营与精细化管理推向纵深的关键之年"
     }
    ]
-  },
-  {
-   "name": "中国铝业",
-   "code": "601600",
-   "sector": "铝",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.chalco.com.cn/",
-   "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
-   "unreach": "spa",
-   "stale": false,
-   "rank": 2,
-   "items": []
   },
   {
    "name": "南山铝业",
@@ -1430,6 +1499,20 @@
    "items": []
   },
   {
+   "name": "Southern Copper",
+   "code": "SCCO",
+   "sector": "铜",
+   "region": "NA",
+   "exchange": "NYSE",
+   "home": "https://www.southerncopper.com/",
+   "news_url": "https://www.southerncopper.com/",
+   "method": "html",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 29,
+   "items": []
+  },
+  {
    "name": "Teck Resources",
    "code": "TECK",
    "sector": "铅锌",
@@ -1568,6 +1651,20 @@
      "t_en": "Teck to Present at the BMO Global Metals, Mining & Critical Minerals Conference February 23, 2026"
     }
    ]
+  },
+  {
+   "name": "Agnico Eagle",
+   "code": "AEM",
+   "sector": "黄金",
+   "region": "NA",
+   "exchange": "TSX",
+   "home": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
+   "news_url": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
+   "method": "html",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 30,
+   "items": []
   },
   {
    "name": "Albemarle",
@@ -2075,12 +2172,82 @@
    "stale": false,
    "rank": 99,
    "items": []
+  },
+  {
+   "name": "中钨高新",
+   "code": "000657",
+   "sector": "钨",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/000657.phtml",
+   "news_url": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/000657.phtml",
+   "method": "html",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "盛屯矿业",
+   "code": "600711",
+   "sector": "锌",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/600711.phtml",
+   "news_url": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/600711.phtml",
+   "method": "html",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "银泰黄金",
+   "code": "000975",
+   "sector": "黄金",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/000975.phtml",
+   "news_url": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/000975.phtml",
+   "method": "html",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "盛和资源",
+   "code": "600392",
+   "sector": "稀土",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/600392.phtml",
+   "news_url": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/600392.phtml",
+   "method": "html",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "四川黄金",
+   "code": "001337",
+   "sector": "黄金",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/001337.phtml",
+   "news_url": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/001337.phtml",
+   "method": "html",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
   }
  ],
  "counts": {
-  "domestic": 32,
+  "domestic": 37,
   "foreign": 15,
-  "total": 47,
-  "items": 231
+  "total": 52,
+  "items": 247
  }
 }
