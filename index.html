@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260924-1700" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260924-1800" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -276,6 +276,36 @@ body[data-filter-mode="history"] #archFavList .aggregate-item-remove{opacity:1;b
 }
 body.dark .col-rail .expo-mini{background:var(--surface);border-color:var(--line-1)}
 body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
+
+/* ===== 2026-09-24 P1 UX（#6/#7）：回到顶部 / 焦点 / 视图淡入 / 刷新 / 关键词订阅高亮 ===== */
+/* A1 全局回到顶部浮动按钮（纯 opacity 过渡，无发光） */
+#mdTopBtn{position:fixed;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:var(--z-fab);width:44px;height:44px;border-radius:50%;background:var(--brand);color:#fff;border:none;box-shadow:var(--shadow-md);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;opacity:0;pointer-events:none;transition:opacity .2s var(--ease),transform .12s var(--ease)}
+#mdTopBtn.show{opacity:1;pointer-events:auto}
+#mdTopBtn:active{transform:scale(.94)}
+body.dark #mdTopBtn{background:var(--brand-600)}
+/* F5 无障碍：全局 :focus-visible 轮廓（保留已有 skip-link） */
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+:focus:not(:focus-visible){outline:none}
+/* D1 视图切换轻淡入（仅 opacity，尊重 reduced-motion） */
+@keyframes mdViewFade{from{opacity:0}to{opacity:1}}
+.md-view-enter{animation:mdViewFade var(--dur-slow) var(--ease)}
+/* D4 更新时间 + 刷新按钮 */
+.md-update-time{font-size:var(--fs-nano);color:var(--ink-400);white-space:nowrap}
+.md-refresh-btn{border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink-700);border-radius:var(--r-md);padding:4px var(--s3);font-size:var(--fs-meta);cursor:pointer;min-height:32px}
+.md-refresh-btn:active{background:var(--surface-3)}
+/* B3 关键词订阅命中高亮（仅左侧描边 + 浅底，无发光） */
+.md-watch{box-shadow:inset 3px 0 0 var(--brand);background:var(--brand-soft)}
+/* 深链定位闪烁 */
+@keyframes mdFlash{0%{background:var(--brand-soft)}100%{background:transparent}}
+.md-flash{animation:mdFlash 1.6s var(--ease)}
+/* B3 我的面板内关键词订阅编辑器 */
+.mine-watch-editor{padding:var(--s3) var(--s4);background:var(--surface-2);border-top:1px solid var(--line-1)}
+.mine-watch-row{display:flex;gap:6px}
+.mine-watch-input{flex:1;min-width:0;padding:8px var(--s3);border:1px solid var(--line-2);border-radius:var(--r-md);font-size:var(--fs-meta);background:var(--surface)}
+.mine-watch-add{border:none;background:var(--brand);color:#fff;border-radius:var(--r-md);padding:8px var(--s4);font-size:var(--fs-meta);cursor:pointer;white-space:nowrap}
+.mine-watch-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.mine-watch-chip{display:inline-flex;align-items:center;gap:4px;background:var(--chip-bg);color:var(--chip-ink);border-radius:var(--r-pill);padding:4px 10px;font-size:var(--fs-meta)}
+.mine-watch-x{cursor:pointer;opacity:.7;margin-left:2px}
 /* 头部 */
 .header{background:var(--surface);color:var(--ink-900);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:10px var(--s4);margin-bottom:var(--s4);display:flex;align-items:center;gap:var(--s3)}
 .header h1{font-size:var(--fs-h3);display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;margin:0;font-weight:700}

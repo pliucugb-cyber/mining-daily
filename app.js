@@ -2357,6 +2357,7 @@ function switchView(view, el){
     var targetEl=document.getElementById(targetId);
     if(targetEl) targetTop=Math.max(0,targetEl.offsetTop-headerOffset);
   }
+  if(targetEl){ targetEl.classList.remove('md-view-enter'); void targetEl.offsetWidth; targetEl.classList.add('md-view-enter'); }
   window.scrollTo({top:targetTop,behavior:'smooth'});
 }
 function clearView(){ document.body.removeAttribute('data-view'); }
@@ -3002,6 +3003,8 @@ function mdMobileTopTabs(){
   var top=document.createElement('div'); top.id='mdTop';
   var dateTxt='';
   try{ var d=document.querySelector('.date-badge'); if(d) dateTxt=d.textContent.trim(); }catch(e){}
+  // 2026-09-24 E2：窄屏日期短格式 MM-DD 周X（≤360px 不再截断，纯展示处理）
+  try{ var _dm=dateTxt.match(/(\d{4})[-/年](\d{1,2})[-/月](\d{1,2})/); if(_dm){ var _d=new Date(+_dm[1], +_dm[2]-1, +_dm[3]); var _wd=['周日','周一','周二','周三','周四','周五','周六'][_d.getDay()]; dateTxt=_dm[2]+'-'+_dm[3]+' '+_wd; } }catch(e){}
   var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期'],['meeting','会议']];
   // 2026-09-12 检索统一（用户定夺）：顶栏不再注入搜索按钮 —— 原 #mdSearchBtn 恒不可见（见上方 mdOpenSearch 注释），
   //   是死控件。检索能力统一收进底部「AI 搜」tab 打开的面板，顶栏保持「品牌名 + 日期」的干净两栏。
@@ -3060,6 +3063,7 @@ function mdMobileTabBar(){
     '<button class="mine-item" data-act="fav"><span class="mine-icon">★</span><span class="mine-label">我的收藏</span><span class="mine-badge" id="mineFavBadge"></span><span class="mine-chevron">›</span></button>'+
     '<button class="mine-item" data-act="history"><span class="mine-icon">🕘</span><span class="mine-label">浏览记录</span><span class="mine-badge" id="mineHistBadge"></span><span class="mine-chevron">›</span></button>'+
     '<button class="mine-item" data-act="theme"><span class="mine-icon">🌓</span><span class="mine-label">深色 / 浅色</span><span class="mine-state" id="mineThemeState">当前：浅色</span></button>'+
+    '<button class="mine-item" data-act="refresh"><span class="mine-icon">🔄</span><span class="mine-label">刷新数据</span><span class="mine-chevron">›</span></button>'+
     '<div class="mine-install" id="mineInstallCard"></div>'+
     '</div>';
   document.body.appendChild(bar); document.body.appendChild(sheet);
@@ -3630,12 +3634,98 @@ window.__mdEventCalendar = { render:mdRenderEventCalendar, init:mdInitEventCalen
   get enabled(){ return EC_ENABLED; },
   set enabled(v){ EC_ENABLED = !!v; try{ mdRenderEventCalendar(); }catch(e){} } };
 // 页面加载后再判断一次（处理 iOS 等不触发 beforeinstallprompt 的场景）
+
+// ===== 2026-09-24 P1 UX 批处理（#6/#7 优化清单落地） =====
+// 入口 mdP1UXInit() 在 DOMContentLoaded 末尾调用；覆盖 A1 回到顶部 / D4 更新时间+刷新 / A4 深链 / B3 关键词订阅
+function mdP1UXInit(){
+  try{ mdInitTopButton(); }catch(e){}
+  try{ mdInitUpdateTime(); }catch(e){}
+  try{ mdInitDeepLink(); }catch(e){}
+  try{ mdInitWatchWords(); }catch(e){}
+}
+// A1 全局回到顶部浮动按钮（纯 opacity 过渡，无发光）
+function mdInitTopButton(){
+  if(document.getElementById('mdTopBtn'))return;
+  var b=document.createElement('button');
+  b.id='mdTopBtn'; b.type='button'; b.setAttribute('aria-label','回到顶部'); b.textContent='↑';
+  document.body.appendChild(b);
+  var ticking=false;
+  function onScroll(){ if(ticking)return; ticking=true; requestAnimationFrame(function(){ var y=window.pageYOffset||document.documentElement.scrollTop||0; var show=y>(window.innerHeight||800); b.classList.toggle('show', show); ticking=false; }); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll, {passive:true});
+  onScroll();
+  b.addEventListener('click', function(){ try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);} });
+}
+// D4 更新时间提示 + 手动刷新（清旧 SW 缓存 + 重载，取新 HTML）
+function mdInitUpdateTime(){
+  var meta=document.querySelector('meta[name="build-version"]');
+  var ds= meta? (meta.getAttribute('content')||'') : '';
+  var m=ds.match(/^(\d{4})(\d{2})(\d{2})-/);
+  var mmdd= m? (m[2]+'-'+m[3]) : '';
+  var ha=document.querySelector('.header-actions');
+  if(ha){
+    if(mmdd){ var span=document.createElement('span'); span.className='md-update-time'; span.textContent='更新于 '+mmdd; ha.insertBefore(span, ha.firstChild); }
+    var rb=document.createElement('button'); rb.type='button'; rb.className='md-refresh-btn'; rb.textContent='刷新'; rb.setAttribute('aria-label','刷新获取最新数据'); rb.addEventListener('click', mdManualRefresh); ha.appendChild(rb);
+  }
+}
+function mdManualRefresh(){
+  try{ if(typeof _clearHtmlCache==='function') _clearHtmlCache(); }catch(e){}
+  try{ if('serviceWorker' in navigator && navigator.serviceWorker && navigator.serviceWorker.getRegistrations){ navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){ try{ r.update(); }catch(e){} }); }).catch(function(){}); } }catch(e){}
+  setTimeout(function(){ try{ location.reload(true); }catch(e){ location.reload(); } }, 80);
+}
+// A4 深链路由：#/<sectionId> 切视图/滚动；#/news-<id> 定位条目（不影响生成脚本重建）
+function mdInitDeepLink(){
+  var scrollOnly={'hotListSection':1,'installGuideSection':1};
+  var viewMap={'todaySection':'today','archiveSection':'archive','rightsSection':'rights','companySection':'company'};
+  function apply(){
+    var h=location.hash||''; var m=h.match(/^#\/(.+)$/); if(!m)return; var key=m[1];
+    if(viewMap[key]){ if(typeof switchView==='function') switchView(viewMap[key]); return; }
+    if(scrollOnly[key]){ var s=document.getElementById(key); if(s)s.scrollIntoView({block:'start',behavior:'smooth'}); return; }
+    var nm=key.match(/^news-(.+)$/);
+    if(nm){ var el=document.getElementById('news-'+nm[1])||document.querySelector('[data-news-id="'+nm[1]+'"]'); if(el){ el.scrollIntoView({block:'center',behavior:'smooth'}); try{ el.classList.add('md-flash'); setTimeout(function(){el.classList.remove('md-flash');},1600);}catch(e){} } }
+  }
+  window.addEventListener('hashchange', apply);
+  setTimeout(apply, 600);
+  document.addEventListener('click', function(e){ var it=e.target.closest && e.target.closest('.toc-main-item'); if(it && it.getAttribute('data-target')){ try{ history.replaceState(null,'','#/'+it.getAttribute('data-target')); }catch(e){} } });
+}
+// B3 关键词订阅（本地版，无后端真推送）：我的面板内编辑 + 命中高亮
+function mdInitWatchWords(){
+  var KEY='mdWatchWords';
+  function getWords(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
+  function setWords(a){ try{ localStorage.setItem(KEY, JSON.stringify(a)); }catch(e){} }
+  var sheet=document.getElementById('mineSheet');
+  if(sheet){
+    var themeItem=sheet.querySelector('[data-act="theme"]');
+    if(themeItem){
+      var item=document.createElement('button'); item.type='button'; item.className='mine-item'; item.setAttribute('data-act','watch');
+      item.innerHTML='<span class="mine-icon">🔔</span><span class="mine-label">关键词订阅</span><span class="mine-state" id="mineWatchState"></span>';
+      themeItem.parentNode.insertBefore(item, themeItem.nextSibling);
+      var editor=document.createElement('div'); editor.id='mineWatchEditor'; editor.hidden=true; editor.className='mine-watch-editor';
+      editor.innerHTML='<div class="mine-watch-row"><input class="mine-watch-input" type="text" placeholder="输入关注词，如 铜 / 锂" aria-label="关注关键词"><button type="button" class="mine-watch-add" data-act="watch-add">添加</button></div><div class="mine-watch-chips" id="mineWatchChips"></div>';
+      item.parentNode.insertBefore(editor, item.nextSibling);
+      function renderChips(){ var wrap=document.getElementById('mineWatchChips'); if(!wrap)return; var ws=getWords(); wrap.innerHTML=''; ws.forEach(function(w){ var c=document.createElement('span'); c.className='mine-watch-chip'; c.textContent=w; var x=document.createElement('span'); x.className='mine-watch-x'; x.textContent='✕'; x.setAttribute('data-word',w); c.appendChild(x); wrap.appendChild(c); }); var st=document.getElementById('mineWatchState'); if(st) st.textContent= ws.length? (ws.length+' 个'):''; }
+      item.addEventListener('click', function(){ editor.hidden=!editor.hidden; renderChips(); });
+      editor.addEventListener('click', function(e){ var add=e.target.closest && e.target.closest('[data-act="watch-add"]'); if(add){ var inp=editor.querySelector('.mine-watch-input'); var v=(inp.value||'').trim(); if(v && getWords().indexOf(v)<0){ var a=getWords(); a.push(v); setWords(a); inp.value=''; renderChips(); mdApplyWatch(); } return; } var x=e.target.closest && e.target.closest('.mine-watch-x'); if(x){ var w=x.getAttribute('data-word'); setWords(getWords().filter(function(y){return y!==w;})); renderChips(); mdApplyWatch(); } });
+      renderChips();
+    }
+  }
+  document.addEventListener('click', function(e){ if(e.target.closest && e.target.closest('[data-act="refresh"]')){ e.preventDefault(); mdManualRefresh(); } });
+  mdApplyWatch();
+  if(window.MutationObserver){ ['todaySection','archiveSection','rightsSection'].forEach(function(id){ var sec=document.getElementById(id); if(sec){ try{ new MutationObserver(function(){ mdApplyWatch(); }).observe(sec,{childList:true,subtree:true}); }catch(e){} } }); }
+}
+function mdApplyWatch(){
+  var KEY='mdWatchWords'; var ws; try{ ws=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ ws=[]; }
+  if(!ws.length){ try{ document.querySelectorAll('.news-item.md-watch').forEach(function(n){n.classList.remove('md-watch');}); }catch(e){} return; }
+  var low=ws.map(function(w){return (w||'').toLowerCase();});
+  try{ document.querySelectorAll('.news-item').forEach(function(n){ var txt=(n.textContent||'').toLowerCase(); var hit=low.some(function(w){return w && txt.indexOf(w)>=0;}); n.classList.toggle('md-watch', hit); }); }catch(e){}
+}
 window.addEventListener('DOMContentLoaded',function(){
   // 刷新/重载后强制回到顶部（配合 <head> 里的 history.scrollRestoration='manual'）
   try{ window.scrollTo(0,0); }catch(e){}
   // 移动端：顶部 App Bar + 分类 Tab + 底部 4 全局动作 Tab（仅 ≤768px 通过 CSS 显示；桌面隐藏）
   mdMobileTopTabs();
   mdMobileTabBar();
+  mdP1UXInit();
   mdMarkArchiveDups();
   // ⑨ 会议会展区块注入；⑥ 移动端问答头部返回箭头
   mdInitMeetingSection();

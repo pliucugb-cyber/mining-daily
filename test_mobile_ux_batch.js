@@ -101,7 +101,9 @@ setTimeout(() => {
   check('页头标题为「我的"', !!(sheet && sheet.querySelector('.mine-title') && sheet.querySelector('.mine-title').textContent === '我的'));
   check('页头有关闭按钮 data-act="close"', !!(sheet && sheet.querySelector('.mine-close[data-act="close"]')));
   const items = sheet ? sheet.querySelectorAll('.mine-item') : [];
-  check('设置项共 3 个（收藏/历史/主题）', items.length === 3, '实际 ' + items.length);
+  check('设置项共 5 个（收藏/历史/主题/关键词订阅/刷新）', items.length === 5, '实际 ' + items.length);
+  check('第四项：关键词订阅（B3 本地版）', !!(items[3] && items[3].getAttribute('data-act') === 'watch'));
+  check('第五项：刷新数据（D4 移动端入口）', !!(items[4] && items[4].getAttribute('data-act') === 'refresh'));
   check('第一项：我的收藏', !!(items[0] && items[0].getAttribute('data-act') === 'fav'));
   check('第二项：浏览记录', !!(items[1] && items[1].getAttribute('data-act') === 'history'));
   check('第三项：深色/浅色（带状态标签）', !!(items[2] && items[2].getAttribute('data-act') === 'theme' && items[2].querySelector('#mineThemeState')));

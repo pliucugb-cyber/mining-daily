@@ -2335,7 +2335,29 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **闸门**：`node test_company_section.js`（jsdom，**108 项**，覆盖 v6/v7：跨列区块（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**） + 288px 侧栏 + 无矿种维度 + 长度统一（长文拆标题/正文 + 2 行 clamp + 展开全文）+ 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端、无 `.co-host` 逐条域名行）+ 默认近 90 天/分页 60/日期分组 + 切「全部」并连续「加载更多」渲染全量 + 未收录折叠组 + 公司收敛 + **forcedAll 自动放宽** + hash 路由 + 搜索 + **select 按 国内/海外/暂未收录 三组 optgroup** + 国内/海外分组且组内按 `rank` 升序导航 + 豁免显隐 + `switchView('company')` 隔离 + 无 JS 错误）。改过 `@media`/网格断点 → 仍须补**真实 Chrome** 探针（jsdom 不评估 `@media`；跨列 + sticky 两形态只能在真浏览器肉眼确认）。
 
-**同步两条 prompt**：06:00（重建）与 08:00（复验）的 prompt 须在 §42 索引与必留清单处增补本节的「必留①②③ + 豁免白名单 + 回退指纹⑦⑧⑨⑩⑪⑬⑭⑮⑯⑰⑱⑲** + v10 必留（横幅白底细条 + 字号升档 + 公司区块仅矿业公司视图 + 文案精简）及回退指纹⑳㉑㉒**，否则次日重建/复验不会保护本模块。
+**同步两条 prompt**：06:00（重建）与 08:00（复验）的 prompt 须在 §42 索引与必留清单处增补本节的「必留①②③ + 豁免白名单 + 回退指纹⑦⑧⑨⑩⑪⑬⑭⑮⑯⑰⑱⑲** + v10 必留（横幅白底细条 + 字号升档 + 公司区块仅矿业公司视图 + 文案精简）及回退指纹⑳㉑㉒**，否则次日重建/复验不会保护本模块。；另见 **§42.20**（P1 UX 批处理：回到顶部/焦点/淡入/刷新/订阅/深链/窄屏短日期，均在重建边界内、生成侧不产出）。
+
+
+### 42.20 P1 UX 批处理（#6/#7 优化清单落地，2026-09-24，build `20260924-1800`）
+
+**定位与边界**：纯前端运行期模块——新功能全部落在 ① `<head>` 内联 `<style>`（前缀区，生成脚本不重建）② `app.js` 运行期函数（生成脚本只重写区块内部，不碰 app.js 全局函数）③ 测试文件。**全部在重建边界内，次日 06:00 重建安全**；写进本节仅为契约留痕 + 测试锁定，无需同步两条 prompt 的「必留清单」（生成侧不产出这些）。
+
+**改动文件**：`index.html`（head 新增 P1 CSS 块，`build-version` 1700→1800）、`app.js`（新增 `mdP1UXInit()` 及 A1/D4/A4/B3 四组函数，E2 短日期、D1 视图淡入、`mineSheet` 刷新入口）、`sw.js`（CACHE_NAME 1700→1800）、`test_mobile_ux_batch.js`（我的面板设置项 3→5 校验更新）、新增 `test_p1_ux_20260924.js`。
+
+**功能与必留指纹（缺任一即回退）**：
+- **A1 全局回到顶部**：`#mdTopBtn`（fixed 浮动，`.show` 显隐，纯 opacity 过渡，无发光）+ `mdInitTopButton()`。回退指纹：`#mdTopBtn` 缺失 / 用渐变或发光球 / 长页面无回顶入口。
+- **F5 无障碍焦点**：`:focus-visible{outline:2px solid var(--brand)}` + `:focus:not(:focus-visible){outline:none}`。回退指纹：交互元素获焦无可见轮廓（键盘可达性退化）。
+- **D1 视图切换轻淡入**：`@keyframes mdViewFade` + `.md-view-enter`（仅 opacity，尊重 `prefers-reduced-motion`）；`switchView()` 对已切视图区块加 `.md-view-enter`。回退指纹：视图切换改回生硬瞬显且无 opacity 过渡。
+- **D4 更新时间 + 手动刷新**：`.md-update-time` + `.md-refresh-btn` + `mdInitUpdateTime()` + `mdManualRefresh()`（清旧 SW 缓存 + reload）；`mineSheet` 内新增 `data-act="refresh"` 入口。回退指纹：顶部无「更新于 MM-DD」/ 无刷新入口 / 刷新按钮失效（`mdManualRefresh` 被删）。
+- **A4 深链路由**：`mdInitDeepLink()`——`#/<sectionId>` 切视图/滚动、`#/news-<id>` 定位 + `.md-flash`；视图切换时 `history.replaceState` 写 hash。回退指纹：分享链接带 `#/todaySection` 等无法定位 / `mdInitDeepLink` 缺失。
+- **B3 关键词订阅（本地版，无后端真推送）**：`mdInitWatchWords()` + `mdApplyWatch()` + localStorage 键 `mdWatchWords`；「我的」面板新增 `data-act="watch"` 入口与 `.mine-watch-editor` 编辑器；命中新闻条加 `.md-watch`（左侧描边 + 浅底，无发光）。回退指纹：`mdWatchWords` 功能缺失 / `.md-watch` 高亮复活成发光块 / 承诺了服务端推送（违背纯本地约束）。
+- **E2 窄屏日期短格式**：`mdMobileTopTabs()` 内把 `.md-date` 格式化为 `MM-DD 周X`（≤360px 不再截断）。回退指纹：窄屏日期又溢出截断 / 改动 `body.md-hide-catbar .md-date{display:none}` 规则（test_mobile_ux_batch 断言）。
+
+**红线（不得回退为已否决形态）**：① 回到顶部/刷新按钮不得用渐变或发光球（仅纯色 + opacity 过渡）；② `.md-watch` 高亮不得引入发光/脉冲；③ 关键词订阅**只做本地高亮/置顶，不得承诺服务端推送**（架构为纯静态无后端）；④ 深链仅运行期解析，不得写进生成脚本重建逻辑。
+
+**闸门**：`node test_p1_ux_20260924.js`（jsdom，**29 项**：CSS 规则 + app.js 函数/调用/片段 + 抽取 P1 函数块实跑产出 `#mdTopBtn`/`.md-update-time`/关键词订阅入口）；`test_mobile_ux_batch.js` 已同步（我的面板设置项断言 3→5，覆盖新增 watch/refresh 两项）；`test_p2_20260910.js` 现 29/1 为**历史遗留失败（与本次无关，已用 git stash 在干净 HEAD 复现）**，不计入本次回归。
+
+**同步两条 prompt**：本模块在重建边界内，生成侧不产出，故两条 prompt 的「必留清单」无需增补；§42.19 同步说明已加「+ §42.20」指引。
 
 ### 42.7 PWA 安装引导（§41，2026-09-12 两轮修复后定稿）
 
