@@ -1899,6 +1899,23 @@ document.addEventListener('click',e=>{
     if(item&&item.dataset.url)markUnread(item.dataset.url);
     return;
   }
+  // 单条「标为已读」按钮（与「标为未读」对称）
+  const readBtn=e.target.closest('.btn-read');
+  if(readBtn){
+    e.preventDefault();e.stopPropagation();
+    const item=readBtn.closest('.news-item');
+    if(item&&item.dataset.url)markRead(item.dataset.url);
+    return;
+  }
+  // 展开全文开关
+  const moreBtn=e.target.closest('.news-more');
+  if(moreBtn){
+    e.preventDefault();e.stopPropagation();
+    const item=moreBtn.closest('.news-item');
+    const exp=item.classList.toggle('expanded');
+    moreBtn.innerHTML=exp?'收起 ▴':'展开全文 ▾';
+    return;
+  }
   const a=e.target.closest('a[href]');
   if(a){
     // 统一外链策略：直接外站打开，不再走 iframe 浮窗。
@@ -1932,6 +1949,13 @@ function injectStars(){
     star.innerHTML='☆';
     star.title='收藏/取消收藏';
     acts.appendChild(star);
+    // 单条「标为已读」按钮：仅「未读」条目显示（已读条目上由 .news-item.read 的规则隐藏）
+    const mk=document.createElement('button');
+    mk.type='button';
+    mk.className='btn-read';
+    mk.innerHTML='✓ 标为已读';
+    mk.title='将本条标记为已读（仅本机，不影响其他新闻）';
+    acts.appendChild(mk);
     // 单条恢复未读按钮：仅「已读」条目显示（未读条目上由 .news-item:not(.read) 的规则隐藏）
     const undo=document.createElement('button');
     undo.type='button';
@@ -1940,6 +1964,16 @@ function injectStars(){
     undo.title='只将本条恢复为未读（不影响其他新闻）';
     acts.appendChild(undo);
     el.appendChild(acts);
+    // 展开全文开关：插在摘要之后（order:3，紧随摘要、早于来源·时间与操作行），仅移动端 3 行截断时可见
+    const sumEl=el.querySelector('.news-summary');
+    if(sumEl && !el.querySelector('.news-more')){
+      const more=document.createElement('button');
+      more.type='button';
+      more.className='news-more';
+      more.innerHTML='展开全文 ▾';
+      more.title='展开/收起摘要全文';
+      sumEl.insertAdjacentElement('afterend', more);
+    }
   });
 }
 
