@@ -71,7 +71,10 @@ try {
   w.eval(block);
   w.eval('mdP1UXInit()');
   check('A1 运行时创建 #mdTopBtn', !!w.document.getElementById('mdTopBtn'));
-  check('D4 运行时注入 .md-update-time（解析 build 20260924-1800 → 09-24）', (w.document.querySelector('.md-update-time') || {}).textContent === '更新于 09-24');
+  // 期望值由页面 build-version 现算，不再写死日期（写死会在换日后天天假 FAIL）
+  const _bv = html.match(/name="build-version" content="(\d{4})(\d{2})(\d{2})/);
+  const _bvDay = _bv ? _bv[1] + '-' + _bv[2] + '-' + _bv[3] : '';
+  check('D4 运行时注入 .md-update-time（解析 build ' + _bvDay + '）', (w.document.querySelector('.md-update-time') || {}).textContent === '更新于 ' + _bvDay.slice(5));
   check('D4 运行时注入 .md-refresh-btn', !!w.document.querySelector('.md-refresh-btn'));
   check('B3 我的面板注入「关键词订阅」入口（data-act=watch）', !!w.document.querySelector('[data-act="watch"]'));
   check('B3 关键词订阅编辑器 #mineWatchEditor 已注入', !!w.document.getElementById('mineWatchEditor'));
