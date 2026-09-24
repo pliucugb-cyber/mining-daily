@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260924-2047" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260924-2115" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -356,8 +356,11 @@ body.dark #mdTopBtn{background:var(--brand-600)}
 .news-meta{font-size: var(--fs-meta);color:var(--ink-500);margin:var(--s1) 0 var(--s1) calc(var(--s2) + 9px);order:4}
 .news-meta .src{color:var(--brand);font-weight:var(--fw-semibold)}
 .news-summary{font-size:13px;color:var(--ink-700);margin:2px 0 var(--s2) calc(var(--s2) + 9px);order:3}
-.btn-read{display:inline-block;font-size: var(--fs-meta);color:var(--danger);text-decoration:none;border:1px solid var(--up);border-radius: var(--r-md);padding:3px var(--s3);margin-left:17px;transition:.2s}
-.btn-read:hover{background:var(--up);color:#fff}
+/* 单条「标为已读」按钮：仅「未读」条目显示（与「标为未读」对称；详见 REFERENCE §42.25） */
+.btn-read{display:inline-block;font-size:var(--fs-meta);color:var(--ink-500);text-decoration:none;border:1px solid var(--line-2);border-radius:var(--r-md);padding:2px var(--s3);margin:var(--s2) 0 0 8px;cursor:pointer;background:rgba(255,255,255,.7);transition:.2s;vertical-align:middle;font-family:inherit}
+.btn-read:hover{background:var(--surface-2);color:var(--ink-700)}
+/* 展开全文开关：桌面摘要已完整显示，默认隐藏；移动端在 media 查询内放开 */
+.news-more{display:none}
 /* 自动关键词标签（重点提示词，JS注入）*/
 .news-tags{display:flex;flex-wrap:wrap;gap:var(--s2);margin:var(--s2) 0 0 calc(var(--s2) + 9px);order:2}
 .tag-chip{font-size: var(--fs-meta);font-weight:600;padding:1px var(--s2);border-radius: var(--r-lg);line-height:1.6;letter-spacing:.3px;white-space:nowrap;cursor:pointer;user-select:none;transition:.15s}
@@ -378,6 +381,7 @@ body.dark #mdTopBtn{background:var(--brand-600)}
 .btn-unread{display:inline-block;font-size: var(--fs-meta);color:var(--brand);text-decoration:none;border:1px solid var(--brand);border-radius: var(--r-md);padding:2px var(--s3);margin:var(--s2) 0 0 8px;cursor:pointer;background:rgba(255,255,255,.7);transition:.2s;vertical-align:middle;font-family:inherit}
 .btn-unread:hover{background:var(--brand);color:#fff;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
 .news-item:not(.read) .btn-unread{display:none}
+.news-item.read .btn-read{display:none}
 /* 往期内容：超过7天的旧闻默认折叠 */
 .fold-toggle{margin:var(--s3) var(--s4);padding:var(--s2) var(--s3);background:var(--surface-2);border:1px dashed var(--line-2);border-radius: var(--r-md);font-size: var(--fs-meta);color:var(--ink-500);cursor:pointer;text-align:center;transition:.2s;user-select:none}
 .fold-toggle:hover{background:var(--brand-soft);color:var(--ink-900);border-color:var(--brand)}
@@ -1062,8 +1066,8 @@ body.dark .news-item{border-bottom-color:#232d39}
 body.dark .news-title{color:var(--brand-ink)}
 body.dark .news-meta{color:#8296a8}
 body.dark .news-summary{color:#a8bacb}
-body.dark .btn-read{color:#ff8a80;border-color:#a33d33}
-body.dark .btn-read:hover{background:#c0392b;color:#fff;border-color:#c0392b}
+body.dark .btn-read{color:#9fb0c0;border-color:#3a4a5c}
+body.dark .btn-read:hover{background:#26323d;color:#cdd9e3;border-color:#3a4a5c}
 body.dark .sub-cat{color:var(--ink-700)}
 body.dark .sub-cat .sub-count{background:var(--surface-3);color:var(--brand-ink);border-color:var(--line-1)}
 body.dark .price-card{background:var(--surface);border-color:var(--line-1)}
@@ -1880,6 +1884,10 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
   .nf-chip-metal{display:none}
   /* P1：新闻摘要移动端 3 行截断 */
   .news-summary{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+  /* 2026-09-24 展开全文：移动端摘要 3 行截断时显示开关，点击展开/收起 */
+  .news-more{display:inline-block;order:3;font-size:var(--fs-meta);color:var(--brand);background:none;border:none;padding:2px 0;margin:2px 0 var(--s2) calc(var(--s2) + 9px);cursor:pointer;font-family:inherit}
+  .news-more:hover{text-decoration:underline}
+  .news-item.expanded .news-summary{-webkit-line-clamp:unset;display:block}
   /* P1：标签 chip 圆角 12→4、NEW 角标去脉冲（仅移动端，桌面保留原样） */
   .tag-chip{border-radius:var(--r-sm)}
   .badge-new{animation:none}

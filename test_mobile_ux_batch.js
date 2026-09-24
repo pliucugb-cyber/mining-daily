@@ -662,6 +662,44 @@ setTimeout(() => {
   var _niW = doc.querySelectorAll('.news-item > .ni-actions');
   check('2026-09-24 每条新闻都有操作行包裹（' + _niW.length + ' 条）', _niW.length > 0, 'n=' + _niW.length);
 
+  console.log('\n===== 2026-09-24 展开全文 + 已读弱化 =====');
+  // 展开全文：移动端摘要 3 行截断时显示开关；桌面默认隐藏
+  check('2026-09-24 桌面默认隐藏展开开关（.news-more{display:none}）',
+    /\.news-more\{display:none\}/.test(html), '');
+  check('2026-09-24 移动端放开展开开关 + 展开后去截断',
+    /\.news-more\{display:inline-block;order:3/.test(html) && /\.news-item\.expanded \.news-summary\{-webkit-line-clamp:unset;display:block\}/.test(html), '');
+  check('2026-09-24 注入「标为已读」按钮进操作行（.btn-read）',
+    doc.querySelectorAll('.news-item > .ni-actions > .btn-read').length > 0, 'n=' + doc.querySelectorAll('.btn-read').length);
+  check('2026-09-24 「标为已读」仅未读可见（.news-item.read .btn-read{display:none}）',
+    /\.news-item\.read \.btn-read\{display:none\}/.test(html), '');
+  check('2026-09-24 注入展开开关按钮（.news-more）',
+    doc.querySelectorAll('.news-more').length > 0, 'n=' + doc.querySelectorAll('.news-more').length);
+  // 行为：点「标为已读」→ 条目加 .read；点「标为未读」→ 去掉 .read
+  (function(){
+    var _it = Array.from(doc.querySelectorAll('.news-item')).find(function(x){return x.getAttribute('data-url');});
+    var _ok1=false, _ok2=false;
+    if(_it){
+      var _rb = _it.querySelector('.btn-read');
+      if(_rb){ _rb.dispatchEvent(new window.MouseEvent('click',{bubbles:true,cancelable:true})); }
+      _ok1 = _it.classList.contains('read');
+      var _ub = _it.querySelector('.btn-unread');
+      if(_ub){ _ub.dispatchEvent(new window.MouseEvent('click',{bubbles:true,cancelable:true})); }
+      _ok2 = !_it.classList.contains('read');
+    }
+    check('2026-09-24 点「标为已读」→ 已读；点「标为未读」→ 恢复未读', _ok1 && _ok2, 'ok1='+_ok1+' ok2='+_ok2);
+  })();
+  // 行为：点「展开全文」→ 条目加 .expanded 且按钮文案变「收起」
+  (function(){
+    var _it = Array.from(doc.querySelectorAll('.news-item')).find(function(x){return x.querySelector('.news-summary');});
+    var _mb = _it && _it.querySelector('.news-more');
+    var _ok=false;
+    if(_mb){
+      _mb.dispatchEvent(new window.MouseEvent('click',{bubbles:true,cancelable:true}));
+      _ok = _it.classList.contains('expanded') && /收起/.test(_mb.textContent);
+    }
+    check('2026-09-24 点展开开关 → 条目 .expanded + 文案变「收起」', _ok, 'ok='+_ok);
+  })();
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));

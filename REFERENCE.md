@@ -2434,8 +2434,8 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | 命令 | 期望 | 覆盖 |
 |---|---|---|
 | `node test_brief_layers.js` | **91** | 简报分层渲染（jsdom；含裁剪态持久化 §40） |
-| `node test_smoke_0908.js` | **76** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1；**2026-09-14 新增「百度统计 ID 与后台逐字一致」+1**） |
-| `node test_mobile_ux_batch.js` | **206** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13） |
+| `node test_smoke_0908.js` | **78** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1；**2026-09-14 新增「百度统计 ID 与后台逐字一致」+1**） |
+| `node test_mobile_ux_batch.js` | **222** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13）；**2026-09-24 注入按钮形态修复 +6（208→215）**；**2026-09-24 展开全文+已读弱化 +7（215→222）** |
 | `node test_qa_features.js` | **61** | AI 搜核心函数 / 流式接线 / 语音（含「音量条已删、调节柄已换」） |
 | `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |
 | `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
@@ -2583,3 +2583,30 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 **回退指纹**：`grep -c "ni-actions" index.html app.js`（应为 1 / 3）。
 
 **闸门**：`test_mobile_ux_batch.js` 新增 6 条结构断言（`.ni-actions` 规则、桌面/移动 margin、app.js 包裹、操作行计数），基线 208 → **215 通过 / 0 失败**。
+
+
+### §42.25 展开全文 + 已读弱化（2026-09-24 · build 20260924-2115）
+
+**背景**：P2 评估项 C3（展开全文）+ C4（已读弱化）。核查发现「已读弱化」基线**已实现**（localStorage `mining_daily_read_urls` + `.read` 类 + `index.html:343-347` 弱化样式，点卡片/链接即 `markRead`）；
+缺口是：① 只能靠「点开链接」才标已读，没有就地「标为已读」按钮（与已有的「↶ 标为未读」不对称）；② 移动端 `.news-summary` 被 3 行截断（`index.html:1882`）但**没有展开开关**。
+
+**修法**（纯前端、零口径风险、生成脚本不碰新闻条目内部，次日重建安全）：
+- **展开全文**：`app.js::injectStars` 给每条带 `.news-summary` 的条目在摘要之后注入 `.news-more` 按钮（`order:3`，早于来源·时间与操作行）；
+  点击切 `.expanded` 并换文案「展开全文 ▾ / 收起 ▴」。`index.html` 桌面 `.news-more{display:none}`（摘要本就完整），移动端 media 查询内放开展开关并 `.news-item.expanded .news-summary{-webkit-line-clamp:unset;display:block}` 去截断。
+- **已读弱化补全**：`index.html` 原有的死 CSS `.btn-read` 接管为「✓ 标为已读」按钮，与 `.btn-unread` 一起收进 `.ni-actions` 操作行；
+  可见性对称：`.news-item:not(.read) .btn-unread{display:none}`（未读显「标为已读」）、`.news-item.read .btn-read{display:none}`（已读显「标为未读」）。
+  `app.js` 点击委派新增 `.btn-read` → `markRead(url)`、`.news-more` → 切 `.expanded`。深色模式 `.btn-read` 配色由旧 danger 红改为中性灰（避免像危险操作）。
+
+**必留指纹**：
+- `index.html`：`.news-more{display:none}`（桌面）、`.news-more{display:inline-block;order:3...}`（移动端块内）、`.news-item.expanded .news-summary{-webkit-line-clamp:unset;display:block}`、`.news-item.read .btn-read{display:none}`、`.btn-read{...}` 中性灰样式。
+- `app.js`：`acts.appendChild(mk)`（`mk.className='btn-read'`）、`sumEl.insertAdjacentElement('afterend', more)`、点击委派 `.btn-read`/`.news-more` 两段。
+
+**红线（改前必读）**：
+1. **不得**删 `.news-more{display:none}` 桌面规则 —— 否则桌面摘要本就完整、却冒出「展开全文」多余按钮。
+2. **不得**把 `.news-more` 放进 `.ni-actions` 操作行 —— 它必须紧跟摘要（`order:3`），放进操作行（order:5）会跑到来源·时间之后、破坏阅读顺序。
+3. **不得**让 `.btn-read` 在已读条目上可见（`.news-item.read .btn-read{display:none}` 必须保留）—— 否则已读条目同时显示「标为已读」「标为未读」两个矛盾按钮。
+4. 展开仅解决移动端 3 行截断；桌面不截断，**不得**为桌面也加 clamp（会遮住长摘要，属回归）。
+
+**回退指纹**：`grep -c "news-more" index.html app.js`（应为 3 / 2）、`grep -c "btn-read" index.html app.js`（应为 4 / 2）。
+
+**闸门**：`test_mobile_ux_batch.js` 新增 7 条断言（桌面隐藏 / 移动端放开+去截断 / 注入标为已读 / 仅未读可见 / 注入展开开关 / 点标为已读→已读 / 点展开开关→expanded），基线 215 → **222 通过 / 0 失败**；`test_smoke_0908.js` 78、`test_company_section.js` 108 全过；preflight ✅。
