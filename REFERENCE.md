@@ -2531,12 +2531,28 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **改动（纯 `index.html` head `<style>`，生成脚本不产出，次日重建安全，不需同步两条自动化 prompt 必留清单）**：
 - ① 元信息位置：DOM 顺序本为 `head → tags → meta → summary`（标签由 `injectTags` 插在 `news-head` 后）。用 `.news-item{display:flex;flex-direction:column}` + 各子块 `order` 重排为 **head(1) → tags(2) → summary(3) → meta(4)** ＝标题 → 标签 → 摘要 → 来源·时间（对齐 36氪/财新）。
-- ② 字号层级：桌面 `.news-title` 16→**17px**，`.news-summary` 15→**14px**（差 3px）；移动端维持既有大字（标题 16 / 摘要 13–14）。**未动 `--fs-h3` 全局变量**，避免牵连 favview 等。
+- ② 字号层级：桌面 `.news-title` = **16px**、`.news-summary` = **13px**（差 3px，层级清晰）；此为 09-24 整体收紧（全局 `--fs-*` 同步下调一档，见 §42.23）后的最终值，移动端维持略大（标题 16 / 摘要 13）。**未动 `--fs-h3` 全局变量**（标题用字面量 16 以与摘要保持固定 3px 差），避免牵连 favview 等。
 - ③ 整块左对齐：`.news-meta / .news-summary / .news-tags` 左缩进从 `var(--s5)`(≈20px) 改为 `calc(var(--s2) + 9px)`（＝圆点宽 9px + 间距 `--s2`），与**标题文字**严格左对齐（圆点保留在 flow 作 bullet，不改 absolute）。
 
 **回退指纹 / 红线**：⚠️ 勿把三处 `calc(var(--s2) + 9px)` 改回 `var(--s5)`（会变回"摘要比标题多缩进"）；⚠️ 勿删除 `.news-item` 的 `display:flex;flex-direction:column` 或任意 `order`（否则顺序回到 meta 在 summary 前）；⚠️ 桌面 `.news-title` 保持 ≥17px、`.news-summary` 保持 14px 以维持层级差（移动端除外）；⚠️ `injectTags` 仍 `head.insertAdjacentElement('afterend',wrap)` 注入标签——DOM 顺序不变，靠 CSS order 重排，勿在 JS 里改注入位置。
 
-**必留**：`.news-item` flex 纵向 + `order` 四值、`.news-title` 17px、`.news-summary` 14px、三处 `calc(var(--s2) + 9px)`。
+**必留**：`.news-item` flex 纵向 + `order` 四值、`.news-title` 16px、`.news-summary` 13px、三处 `calc(var(--s2) + 9px)`。
 
 **闸门 / 验收**：preflight ✅；全套回归全绿（smoke 78 / mobile 208 / company 108 / p1 29 / p2 30 / view_switch 22 / p3 33 / ux 41）。线上验收：Dr.COM 网关劫持 HTTPS，靠 `git ls-remote` 确认远端 HEAD == 本地 + 抓真实字节核对 `build-version`/`CACHE_NAME`/`order` 指纹。
 **测试基线**：p2 由 29/1 → 30/0；其余（smoke 78 / mobile_ux 208 / company 108 / view_switch 22 / p3 33 / ux 41 / p1 29）不变。
+
+## §42.23 整体字号收紧到主流基线（build 20260924-1722）
+
+**背景**：v10 把字号整体升一档，§42.22 又把新闻标题 16→17，叠加后「区块标题 22 / 新闻标题 17 / 正文 15」偏涨；用户反馈整体字体偏大、观感不适。
+
+**改动（纯 `index.html` head `<style>` + `sw.js` CACHE，生成脚本 `generate_20260924.py` 不碰 `--fs-`/`:root`，次日重建安全）**：
+- 桌面 `:root`（line 39）：`--fs-display` 26→24、`--fs-h1` 22→20、`--fs-h2` 18→17、`--fs-h3` 16→15、`--fs-body` 15→14、`--fs-meta` 13→12、`--fs-caption` 13→12（`--fs-nano` 11 保持最小）。
+- 移动端 `:root`（line 237，`@media(max-width:768px)`）：`--fs-display` 30→28、`--fs-h1` 24→22、`--fs-body` 16→15、`--fs-meta` 14→13、`--fs-caption` 14→13（小屏保持略大于桌面，维持触控/可读性；`--fs-nano` 12 保持）。
+- 新闻条目字面量：`.news-title` 17→16px、`.news-summary` 14→13px（与 §42.22 的 3px 差保持；元信息/标签跟随 `--fs-meta` 12px）。
+- `sw.js` CACHE `mining-daily-20260924-1700`→`20260924-1722`；`index.html` build-version 同步。
+
+**基线依据**：中文信息/新闻类站（百度新闻、Google News、36氪、财新）正文 14px 是舒适下限、区块标题 18–20px、新闻标题 15–16px、元信息/标签 12–13px；本次即回退到该基线（对比图见交付说明）。
+
+**必留**：上述 `:root` 两处字号变量块与新闻标题/摘要字面量；勿把 `--fs-body` 调回 15、勿把新闻标题调回 17（除非有明确设计意图）。
+
+**闸门 / 验收**：preflight ✅；全套回归全绿（smoke 78 / mobile 208 / company 108 / p1 29 / p2 30 / view_switch 22 / p3 33 / ux 41）。线上验收同 §42.22（git ls-remote + 真实字节核对 build/CACHE）。
