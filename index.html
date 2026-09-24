@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260924-1722" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260924-2047" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -369,7 +369,13 @@ body.dark #mdTopBtn{background:var(--brand-600)}
 .news-item.favorited{box-shadow:inset 3px 0 0 #f39c12}
 .news-item.favorited .btn-star{color:#d97706}
 /* 单条恢复未读按钮（按条操作）*/
-.btn-unread{display:inline-block;font-size: var(--fs-meta);color:var(--brand);text-decoration:none;border:1px solid var(--brand);border-radius: var(--r-md);padding:2px var(--s3);margin-left:8px;cursor:pointer;background:rgba(255,255,255,.7);transition:.2s;vertical-align:middle;font-family:inherit}
+/* 2026-09-24 修复：条目自本日起是 flex column（元信息靠 order 重排，见 §42.22），
+   注入的按钮若直接作子节点，会因 order 默认 0 被顶到条目最前，
+   又被 align-items:stretch 拉成整行横条。
+   现统一收进 .ni-actions 操作行（横向 flex、order:5、align-self:flex-start）：
+   桌面星标照旧绝对定位在右上；移动端星标与未读按钮同行——回到 09-24 之前的形态。 */
+.ni-actions{display:flex;align-items:center;order:5;align-self:flex-start}
+.btn-unread{display:inline-block;font-size: var(--fs-meta);color:var(--brand);text-decoration:none;border:1px solid var(--brand);border-radius: var(--r-md);padding:2px var(--s3);margin:var(--s2) 0 0 8px;cursor:pointer;background:rgba(255,255,255,.7);transition:.2s;vertical-align:middle;font-family:inherit}
 .btn-unread:hover{background:var(--brand);color:#fff;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
 .news-item:not(.read) .btn-unread{display:none}
 /* 往期内容：超过7天的旧闻默认折叠 */
@@ -1277,7 +1283,8 @@ body.dark .guide-toggle:hover{background:#1d4558}
 .btn-star{position:static;display:inline-block;margin-left:10px;font-size: var(--fs-h2);vertical-align:middle;color:var(--ink-500);transform:none}
 .news-item{padding-right:18px}
 .news-summary{margin-bottom:var(--s2)}
-.btn-unread{display:inline-block;font-size: var(--fs-meta);padding:2px var(--s2);margin-left:6px}
+.ni-actions{order:5}
+.btn-unread{display:inline-block;font-size: var(--fs-meta);padding:2px var(--s2);margin:var(--s2) 0 0 6px}
 .news-tags{margin-left:14px;gap:var(--s1)}
 .tag-chip{font-size: var(--fs-nano);padding:1px var(--s2)}
 }
@@ -2936,7 +2943,7 @@ body.dark .co-summary{color:var(--ink-500)}
 <script src="news-data.js?v=911ceb29" defer></script>
 <script src="lme-data.js?v=a167d9be" defer></script>
 <script src="price-history.js?v=78062f99" defer></script>
-<script src="app.js?v=cf758c82" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=365206d3" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
