@@ -885,7 +885,8 @@ SITES = [
     {'name':'山东黄金','code':'600547','sector':'黄金','region':'CN','exchange':'A股',
      'url':'https://www.sd-gold.com/column/81/','method':'chrome'},
     {'name':'中金黄金','code':'600489','sector':'黄金','region':'CN','exchange':'A股',
-     'url':'http://www.zjgold.com.cn/','method':'html'},
+     # v7：上市公司官网域名 zjgold.com.cn 已被域名商挂牌转让（死站），改用集团站 chinagoldgroup.com 兜底采集团新闻
+     'url':'https://www.chinagoldgroup.com/','method':'html'},
     {'name':'赤峰黄金','code':'600988','sector':'黄金','region':'CN','exchange':'A股',
      'url':'https://www.cfgold.com/col36/list','method':'html'},
     {'name':'湖南黄金','code':'002155','sector':'黄金','region':'CN','exchange':'A股',
@@ -901,6 +902,8 @@ SITES = [
      'url':'http://www.zanggekuangye.com/news/cropnews/index.html','method':'html'},
     # —— 稀土 ——
     {'name':'北方稀土','code':'600111','sector':'稀土','region':'CN','exchange':'A股',
+     # 根域 reht.com 与 newscenter.do 均为 JS/AJAX 外壳页，静态抓取抽不到新闻列表；
+     # 维持官网根域（点公司名可直达），内容发现走前端「搜新闻」兜底
      'url':'https://www.reht.com/','method':'html'},
     {'name':'中国稀土','code':'000831','sector':'稀土','region':'CN','exchange':'A股',
      'url':'https://www.regcc.cn/zgxtjt/jtnew/list_9.shtml','method':'html'},

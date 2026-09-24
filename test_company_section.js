@@ -1,11 +1,13 @@
 /**
- * 2026-09-23 矿业公司动态（v6）运行时渲染回归（jsdom）
+ * 2026-09-24 矿业公司动态（v7）运行时渲染回归（jsdom）
  * v6 = v5 布局（跨列区块：左新闻流 + 右 sticky 公司导航）+ 摘要/分组/去域名 修正：
  *   ① 卡片长度统一：源 t 字段 4 字 ↔ 1055 字悬殊 → 按句读切「标题 + 正文」，标题 2 行、正文 2 行折叠 + 「展开全文」
  *   ② 去矿种维度：矿种 chip 筛选 / 导航矿种分组 / 移动端 sector optgroup / 卡片矿种标签 全部移除
  *   ③ 链接可用：数据自带 HTML 实体（&amp;）先解码再转义（否则二次转义成 &amp;amp; 打不开）；外链 rel=noreferrer；显示目标域名
  *   ④ 导航：国内/海外分两组 + 按市值·知名度 rank 升序 + 计数徽标 + 「暂未收录」折叠组；面板内独立滚动
  *   ⑤ v6：每条卡片加一句内容摘要（仿新闻端，读 it.s）；移除逐条「目标域名」行；顶部说明段移除
+ *   ⑥ v7：新闻流单栏（同新闻列表形式）；右栏 sticky 修复（#companySection 改 overflow:clip）+ 上移；
+ *       搜索框纳入摘要匹配；暂未收录公司新增「搜新闻」搜索引擎入口（官网死站/外壳页时仍可发现相关内容）
  * 运行：node test_company_section.js
  */
 const fs = require('fs');
@@ -123,10 +125,14 @@ setTimeout(() => {
     const coStyle = document.querySelector('#companySection > style');
     check('#companySection > style 存在', !!coStyle);
     const css = coStyle ? coStyle.textContent : '';
-    check('CSS：公司区块 grid-column:1/-1', css.indexOf('#companySection{grid-column:1/-1}') >= 0);
+    check('CSS：公司区块 grid-column:1/-1（含 overflow:clip）', /#companySection\{[^}]*grid-column:1\/-1/.test(css) && css.indexOf('overflow:clip') >= 0);
     check('CSS：col-rail 显式回到第一行第二列', css.indexOf('.news-grid>.col-rail{grid-column:2;grid-row:1}') >= 0);
     check('CSS：侧栏 sticky + 内部滚动', /\.co-side\{[^}]*position:sticky/.test(css) && /\.co-nav\{[^}]*overflow:auto/.test(css));
-    check('CSS：宽屏新闻流两栏网格', css.indexOf('.co-day-items') >= 0 && css.indexOf('min-width:1400px') >= 0);
+    check('CSS：新闻流单栏（无 1400px 两栏网格，与新闻列表形式统一）', css.indexOf('.co-day-items') >= 0 && css.indexOf('min-width:1400px') < 0);
+    check('CSS：#companySection overflow:clip（v7 sticky 修复）', css.indexOf('overflow:clip') >= 0);
+    check('CSS：右栏 sticky top:10px（v7 上移）', /\.co-side\{[^}]*top:10px/.test(css));
+    check('搜索占位含「内容」（v7 摘要入搜）', (document.getElementById('coSearch').getAttribute('placeholder')||'').indexOf('内容') >= 0);
+    check('暂未收录公司均提供「搜新闻」链接', document.querySelectorAll('#coEmptyBox .co-empty-search').length === nEmptyCompanies);
     check('CSS：正文 2 行折叠 + 展开解除', /\.co-body\{[^}]*line-clamp:2/.test(css) && /\.co-item\.open \.co-body/.test(css));
     check('搜索框已收进右侧栏 .co-side', !!(document.getElementById('coSearch').closest('.co-side')));
     check('公司导航已收进右侧栏 .co-side', !!(document.getElementById('coNav').closest('.co-side')));
