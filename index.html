@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260924-1630" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260924-1700" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -36,7 +36,7 @@
 --success:#0e7a52;--warning:#966319;--danger:#dc2626;--info:#0e7490;
 --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
 --font-num:"SF Mono","JetBrains Mono",ui-monospace,Consolas,monospace;
---fs-display:24px;--fs-h1:20px;--fs-h2:16px;--fs-h3:14px;--fs-body:13px;--fs-meta:12px;--fs-nano:10px;--fs-caption:12px;
+--fs-display:26px;--fs-h1:22px;--fs-h2:18px;--fs-h3:16px;--fs-body:15px;--fs-meta:13px;--fs-nano:11px;--fs-caption:13px;
 --fw-regular:400;--fw-medium:500;--fw-semibold:600;--fw-bold:700;
 --r-sm:4px;--r-md:8px;--r-lg:12px;--r-xl:20px;--r-pill:999px;
 --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:40px;--s8:48px;--s9:56px;--md-top-h:96px;
@@ -217,6 +217,11 @@ body.dark .favview-clear.confirming{background:#ff6b5b;color:#1a0c0a}
 /* 2026-09-12：移动端「我的」面板收藏/浏览记录条数徽标 */
 .mine-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--brand);color:#fff;font-size:11px;font-weight:700;line-height:1}
 .mine-badge:empty{display:none}
+/* 矿业公司区块仅「矿业公司」视图显示（用户 2026-09-23 诉求②）：默认长页及所有其它视图/收藏/历史均隐藏 */
+#companySection{display:none}
+body[data-view="company"] #companySection{display:block}
+body[data-filter-mode="fav"] #companySection,
+body[data-filter-mode="history"] #companySection{display:none!important}
 /* 收藏/浏览记录沉浸式视图顶部返回条下方的说明行（共 N 条 · 排序） */
 .favview-sub{padding:6px var(--s3) 4px;background:var(--surface);color:var(--ink-500);font-size:var(--fs-meta);border-bottom:1px solid var(--line-2)}
 body.dark .favview-sub{background:#15191f;color:var(--ink-500);border-color:rgba(255,255,255,.08)}
@@ -229,7 +234,7 @@ body.dark .aggregate-item-remove{background:rgba(255,255,255,.12);color:var(--in
 /* 2026-09-12：移动端无 hover，单条移除按钮常驻可见（建议⑥） */
 @media(max-width:768px){
 :root{
---fs-display:28px;--fs-h1:22px;--fs-h2:17px;--fs-h3:15px;--fs-body:15px;--fs-meta:13px;--fs-nano:11px;--fs-caption:13px;
+--fs-display:30px;--fs-h1:24px;--fs-h2:18px;--fs-h3:16px;--fs-body:16px;--fs-meta:14px;--fs-nano:12px;--fs-caption:14px;
 --r-sm:6px;--r-md:10px;--r-lg:16px;
 --shadow-sm:0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
 --shadow-md:0 4px 8px rgba(16,24,40,.05), 0 8px 24px rgba(16,24,40,.08);
@@ -272,9 +277,10 @@ body[data-filter-mode="history"] #archFavList .aggregate-item-remove{opacity:1;b
 body.dark .col-rail .expo-mini{background:var(--surface);border-color:var(--line-1)}
 body.dark .col-rail .expo-mini-head{color:var(--ink-900)}
 /* 头部 */
-.header{background:#1a3a5c;color:#fff;border-radius: var(--r-lg);padding:var(--s4) var(--s5);margin-bottom:var(--s4)}
-.header h1{font-size: var(--fs-display);display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap}
-.date-badge{background:var(--up);color:#fff;font-size: var(--fs-body);padding:3px var(--s3);border-radius: 20px;font-weight:600;white-space:nowrap}
+.header{background:var(--surface);color:var(--ink-900);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:10px var(--s4);margin-bottom:var(--s4);display:flex;align-items:center;gap:var(--s3)}
+.header h1{font-size:var(--fs-h3);display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;margin:0;font-weight:700}
+.date-badge{background:var(--up);color:#fff;font-size:var(--fs-meta);padding:2px var(--s3);border-radius:999px;font-weight:600;white-space:nowrap}
+.header .header-actions{margin-left:auto;display:flex;align-items:center;gap:var(--s2)}
 .header .sub{font-size: var(--fs-body);opacity:.85;margin-top:var(--s2)}
 /* 统计栏 */
 .stats-bar{background:var(--surface);border-radius: var(--r-lg);padding:var(--s3) var(--s4);margin-bottom:var(--s4);display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;box-shadow: var(--shadow-sm)}

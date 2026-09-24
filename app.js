@@ -2370,7 +2370,8 @@ function updateActiveSection(){
   let current=sections[0];
   for(const id of sections){
     const el=document.getElementById(id);
-    if(el&&el.getBoundingClientRect().top<=offset)current=id;
+    if(!el||el.offsetParent===null)continue;   // 跳过 display:none 区块（如默认隐藏的 #companySection），避免高亮锁死
+    if(el.getBoundingClientRect().top<=offset)current=id;
   }
   if(current!==lastActiveId){
     lastActiveId=current;
@@ -6985,7 +6986,7 @@ function toggleTheme(){
     if(!total){
       var msg;
       if(query) msg='没有匹配的条目';
-      else if(activeCompany!=='__all__'&&!itemCount(co)) msg='该公司暂未收录官网新闻（官网暂不可达时次日自动重试）';
+      else if(activeCompany!=='__all__'&&!itemCount(co)) msg='该公司暂未收录官网新闻';
       else msg='该时间范围内暂无条目，可切换到「全部」';
       list.innerHTML='<div class="co-empty">'+msg+'</div>';
     }else{
@@ -7084,10 +7085,10 @@ function toggleTheme(){
     html+=navGroup('海外公司 · 按市值/知名度', frn);
     if(empties.length){
       html+='<button type="button" class="co-nav-empty-t" id="coEmptyToggle"'+
-        ' title="官网暂不可达或本日未采到新闻；点公司名可直达官网，或点「搜新闻」查相关资讯；次日 06:00 自动重试。">暂未收录 '+empties.length+' 家'+
+        ' title="官网暂不可达或本日未采到新闻；点「搜新闻」可查相关资讯。">暂未收录 '+empties.length+' 家'+
         '<span>'+(emptyOpen?'收起 ▴':'展开 ▾')+'</span></button>'+
         '<div class="co-nav-empty-box" id="coEmptyBox"'+(emptyOpen?'':' hidden')+'>'+
-        '<div class="co-empty-note">部分公司官网为动态加载页或域名已失效，暂不可静态抓取；点「搜新闻」可查相关资讯；次日 06:00 自动重试。</div>'+
+        '<div class="co-empty-note">官网为动态加载页或域名已失效，暂不可静态抓取；点「搜新闻」可查相关资讯。</div>'+
         empties.map(function(o){
           var hm=dec(o.home||'');
           var su=searchUrl(o.name+' 新闻');

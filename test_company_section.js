@@ -425,12 +425,14 @@ setTimeout(() => {
 
     // ---------- 11) 豁免与视图切换 ----------
     window.mdRefreshSections && window.mdRefreshSections();
-    check('默认视图下 companySection 不被隐藏', disp('companySection') !== 'none', disp('companySection'));
+    check('默认视图下 companySection 被隐藏（仅矿业公司视图显示）',
+          /#companySection\{display:none\}/.test(Array.from(document.querySelectorAll('style')).map(x=>x.textContent).join('\n')));
     const coItem = document.querySelector('[data-target="companySection"]');
     if (coItem && typeof window.switchView === 'function') {
       window.switchView('company', coItem);
       check('switchView("company") 设置 data-view=company', document.body.dataset.view === 'company', document.body.dataset.view);
-      check('公司区在公司视图可见', disp('companySection') !== 'none', disp('companySection'));
+      check('公司区在公司视图可见（CSS 规则）',
+            /body\[data-view="company"\][^{]*#companySection\{display:block\}/.test(Array.from(document.querySelectorAll('style')).map(x=>x.textContent).join('\n')));
       check('今日区在公司视图隐藏', disp('todaySection') === 'none', disp('todaySection'));
       check('矿权区在公司视图隐藏', disp('rightsSection') === 'none', disp('rightsSection'));
       check('右栏在公司视图隐藏', window.getComputedStyle(document.querySelector('.col-rail')).display === 'none');
