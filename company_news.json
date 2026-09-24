@@ -2,117 +2,6 @@
  "updated_at": "2026-09-24",
  "companies": [
   {
-   "name": "中国铝业",
-   "code": "601600",
-   "sector": "铝",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.chalco.com.cn/",
-   "news_url": "https://www.chalco.com.cn/",
-   "method": "chrome",
-   "unreach": "spa",
-   "stale": false,
-   "rank": 2,
-   "items": [
-    {
-     "t": "中国铝业关于股权激励部分限制性股票回购注销实施公告",
-     "d": "2026-09-11",
-     "u": "https://www.chalco.com.cn/tzzgx/thygg/202609/t20260911_177627.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份荣获第二十六届中国专利优秀奖",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177352.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份镓系列产品亮相首届有色钢铁融合发展论坛",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177351.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份获2026中国信息协会数据要素应用创新大赛...",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177350.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份召开党委（扩大）会议总结树立和践行正确...",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177349.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份两名青年科技人才入选行业人才计划",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177348.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份召开2026年劳动竞赛推进会",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177347.html",
-     "s": ""
-    },
-    {
-     "t": "利润总额同比大增98% 中国铝业中期增速再创历史新高",
-     "d": "2026-08-28",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202608/t20260828_176619.html",
-     "s": ""
-    },
-    {
-     "t": "中国铝业2026年半年度报告摘要",
-     "d": "2026-08-28",
-     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202608/t20260828_176606.html",
-     "s": ""
-    },
-    {
-     "t": "中国铝业2026年半年度报告",
-     "d": "2026-08-28",
-     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202608/t20260828_176605.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份5人获聘中铝集团首席技能大师",
-     "d": "2026-08-21",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202608/t20260821_176122.html",
-     "s": ""
-    },
-    {
-     "t": "中国铝业2025年年度报告（全文）",
-     "d": "2026-03-30",
-     "u": "https://www.chalco.com.cn/tzzgx/thygg/202603/t20260330_166168.html",
-     "s": ""
-    },
-    {
-     "t": "何文建会见攀钢集团有限公司总经理、党...",
-     "d": "2026-01-13",
-     "u": "https://www.chalco.com.cn/xwdt/ggdt/202601/t20260113_162395.html",
-     "s": ""
-    },
-    {
-     "t": "张瑞忠宣讲党的二十届四中全会精神",
-     "d": "2025-12-30",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202512/t20251230_161690.html",
-     "s": ""
-    },
-    {
-     "t": "中国铝业2025年半年度报告摘要",
-     "d": "2025-08-28",
-     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202508/t20250828_154002.html",
-     "s": ""
-    },
-    {
-     "t": "中国铝业2024年年度报告全文",
-     "d": "2025-06-09",
-     "u": "https://www.chalco.com.cn/tzzgx/yjbg/ndbg/202506/t20250609_148836.html",
-     "s": ""
-    }
-   ]
-  },
-  {
    "name": "紫金矿业",
    "code": "601899",
    "sector": "铜",
@@ -264,7 +153,7 @@
      "t": "金威铜业开展《中华人民共和国生态环境法典》培训",
      "d": "2026-09-22",
      "u": "http://www.tlys.cn/news.aspx?cid=24546&amp;classid=383",
-     "s": "日前，金威铜业紧扣新法实施后的监管形势与执法要求，围绕法典出台背景与重大意义、企业合规义务、法律责任与风险提示等内容开展专题培训。本次培训，有效强化岗位环保红线意识，进一步夯实企业环境合规管理基础。"
+     "s": ""
     },
     {
      "t": "金隆铜业实现冶炼渣回收铁精粉首次外销",
@@ -420,13 +309,124 @@
      "t": "洛阳钼业旗下公司TFM铜产品获 LME 注册认证",
      "d": "2026-03-28",
      "u": "https://www.cmoc.com/html/2026/News_0328/400.html",
-     "s": ""
+     "s": "近日，洛阳钼业宣布，旗下在刚果（金）的子公司TFM产品品牌TFM-1正式通过伦敦金属交易所（LME）A级注册认证，纳入全球主流交割品牌体系。"
     },
     {
      "t": "洛阳钼业2025年盈利203亿元 连续五年刷新历史佳绩",
      "d": "2026-03-27",
      "u": "https://www.cmoc.com/html/2026/News_0327/398.html",
      "s": "2026年是全面践行新发展战略、将平台化运营与精细化管理推向纵深的关键之年"
+    }
+   ]
+  },
+  {
+   "name": "中国铝业",
+   "code": "601600",
+   "sector": "铝",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.chalco.com.cn/",
+   "news_url": "https://www.chalco.com.cn/",
+   "method": "chrome",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 2,
+   "items": [
+    {
+     "t": "中国铝业关于股权激励部分限制性股票回购注销实施公告",
+     "d": "2026-09-11",
+     "u": "https://www.chalco.com.cn/tzzgx/thygg/202609/t20260911_177627.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份荣获第二十六届中国专利优秀奖",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177352.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份镓系列产品亮相首届有色钢铁融合发展论坛",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177351.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份获2026中国信息协会数据要素应用创新大赛...",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177350.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份召开党委（扩大）会议总结树立和践行正确...",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177349.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份两名青年科技人才入选行业人才计划",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177348.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份召开2026年劳动竞赛推进会",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177347.html",
+     "s": ""
+    },
+    {
+     "t": "利润总额同比大增98% 中国铝业中期增速再创历史新高",
+     "d": "2026-08-28",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202608/t20260828_176619.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2026年半年度报告摘要",
+     "d": "2026-08-28",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202608/t20260828_176606.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2026年半年度报告",
+     "d": "2026-08-28",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202608/t20260828_176605.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份5人获聘中铝集团首席技能大师",
+     "d": "2026-08-21",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202608/t20260821_176122.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2025年年度报告（全文）",
+     "d": "2026-03-30",
+     "u": "https://www.chalco.com.cn/tzzgx/thygg/202603/t20260330_166168.html",
+     "s": ""
+    },
+    {
+     "t": "何文建会见攀钢集团有限公司总经理、党...",
+     "d": "2026-01-13",
+     "u": "https://www.chalco.com.cn/xwdt/ggdt/202601/t20260113_162395.html",
+     "s": ""
+    },
+    {
+     "t": "张瑞忠宣讲党的二十届四中全会精神",
+     "d": "2025-12-30",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202512/t20251230_161690.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2025年半年度报告摘要",
+     "d": "2025-08-28",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202508/t20250828_154002.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2024年年度报告全文",
+     "d": "2025-06-09",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/ndbg/202506/t20250609_148836.html",
+     "s": ""
     }
    ]
   },
@@ -608,13 +608,13 @@
      "t": "新疆第四届“有色杯”职业技能大赛在天山铝业举办",
      "d": "2025-09-22",
      "u": "http://www.tslyjt.com/info/1093",
-     "s": ""
+     "s": "金秋九月，惠风和畅。9月17日，由新疆维吾尔自治区工业和信息化厅、新疆维吾尔自治区人力资源和社会保障厅、新疆维吾尔自治区总工会联合主办，新疆有色金属行业协会承办，天山铝业有限公司承办并赞助支持的新疆有色金属行业第四届“有色杯”，职业技能大赛在天山铝业举办。"
     },
     {
      "t": "天山铝业举办成立十五周年庆祝大会暨文艺演出",
      "d": "2025-09-11",
      "u": "http://www.tslyjt.com/info/1092",
-     "s": ""
+     "s": "8月12日，以“奋进十五年 再创新辉煌”为主题的庆祝天山铝业成立十五周年表彰大会暨文艺演出在员工活动中心隆重举行。"
     }
    ]
   },
@@ -906,7 +906,7 @@
      "t": "智汇天齐 共赢锂程 | 第五届天齐锂业创新季正式启动 查看详情 ",
      "d": "2026-08-14",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1104",
-     "s": ""
+     "s": "锂资源与锂材料四川省重点实验室学术委员会2024年度工作会议在天齐锂业召开"
     },
     {
      "t": "天齐锂业2026年安全生产委员会半年总结会议圆满召开",
@@ -1549,7 +1549,7 @@
      "t": "Teck和Anglo American宣布未来的Anglo Teck执行领导团队",
      "d": "2026-07-23",
      "u": "http://www.teck.com/news/news-releases/2026/teck-and-anglo-american-announce-future-anglo-teck-executive-leadership-team",
-     "s": "",
+     "s": "合并完成后， Anglo Teck的 ELT将包括 ：",
      "t_en": "Teck and Anglo American announce future Anglo Teck Executive Leadership Team"
     },
     {
@@ -1563,7 +1563,7 @@
      "t": "Teck报告2026年第二季度未经审计的业绩",
      "d": "2026-07-08",
      "u": "http://www.teck.com/news/news-releases/2026/teck-reports-unaudited-second-quarter-results-for-2026",
-     "s": "",
+     "s": "在运营一致性和严格执行的推动下，第二季度业绩强劲",
      "t_en": "Teck Reports Unaudited Second Quarter Results for 2026"
     },
     {
@@ -1577,28 +1577,28 @@
      "t": "Teck、加拿大增长基金和加拿大关键矿物加速器签署协议，支持特雷尔冶炼厂的战略金属生产",
      "d": "2026-06-30",
      "u": "http://www.teck.com/news/news-releases/2026/teck,-canada-growth-fund-and-canada-critical-minerals-accelerator-sign-agreement-to-support-strategic-metals-production-at-trail-smelter",
-     "s": "",
+     "s": "TRAIL是世界上最大的多金属冶炼和精炼综合体之一。",
      "t_en": "Teck, Canada Growth Fund and Canada Critical Minerals Accelerator sign Agreement to Support Strategic Metals Production at Trail Smelter"
     },
     {
      "t": "Teck宣布邮寄与英美平等合并相关的送文函",
      "d": "2026-06-22",
      "u": "http://www.teck.com/news/news-releases/2026/teck-announces-the-mailing-of-a-letter-of-transmittal-in-connection-with-the-merger-of-equals-with-anglo-american",
-     "s": "",
+     "s": "必须向Computershare Investor Services Inc. （ “Computershare存管处” ）存放完整的传递信函。",
      "t_en": "Teck Announces the Mailing of a Letter of Transmittal in Connection with the Merger of Equals with Anglo American"
     },
     {
      "t": "Teck宣布任命代理副总裁、投资者关系和财务主管",
      "d": "2026-04-23",
      "u": "http://www.teck.com/news/news-releases/2026/teck-announces-appointment-of-acting-vice-president,-investor-relations-and-treasurer",
-     "s": "",
+     "s": "Shadeo先生拥有不列颠哥伦比亚大学的商学学士学位，以及特许另类投资分析师（ CAIA ）和Ce...",
      "t_en": "Teck Announces Appointment of Acting Vice President, Investor Relations and Treasurer"
     },
     {
      "t": "Teck报告年度股东大会投票结果",
      "d": "2026-04-23",
      "u": "http://www.teck.com/news/news-releases/2026/teck-reports-voting-results-from-annual-meeting-of-shareholders",
-     "s": "",
+     "s": "Teck提供与Anglo特别股息和合并相关的信息",
      "t_en": "Teck Reports Voting Results from Annual Meeting of Shareholders"
     },
     {
@@ -1612,7 +1612,7 @@
      "t": "Teck报告2026年第一季度未经审计的业绩",
      "d": "2026-04-09",
      "u": "http://www.teck.com/news/news-releases/2026/teck-reports-unaudited-first-quarter-results-for-2026",
-     "s": "",
+     "s": "创纪录的铜销售和持续的经营业绩推动了第一季度强劲的财务业绩",
      "t_en": "Teck Reports Unaudited First Quarter Results for 2026"
     },
     {
@@ -1626,14 +1626,14 @@
      "t": "Teck报告2025年可持续发展绩效",
      "d": "2026-02-18",
      "u": "http://www.teck.com/news/news-releases/2026/teck-reports-2025-sustainability-performance",
-     "s": "",
+     "s": "有关完整报告，请单击此处。其他报告，包括2025年年度报告，也可以在我们的披露门户网站上找到。",
      "t_en": "Teck Reports 2025 Sustainability Performance"
     },
     {
      "t": "Teck报告2025年第四季度未经审计的业绩",
      "d": "2026-02-18",
      "u": "http://www.teck.com/news/news-releases/2026/teck-reports-unaudited-fourth-quarter-results-for-2025",
-     "s": "",
+     "s": "第四季度形成强劲势头，并推进并购，打造全球关键矿产冠军",
      "t_en": "Teck Reports Unaudited Fourth Quarter Results for 2025"
     },
     {
@@ -1689,7 +1689,7 @@
      "t": "新闻稿2026年9月3日Albemarle宣布首席执行官继任计划Ragnar",
      "d": "2026-08-05",
      "u": "https://www.albemarle.com/global/en/news/albemarle-announces-ceo-succession-plan",
-     "s": "UDD 被任命为总裁兼首席执行官，自 2027年 2月 1日起生效 Kent Masters将担任北卡罗来纳州夏洛特市执行主席 ， 2026年 9月 3日/美通社/-- Albemarle Corporation (NYSE: ALB) ，提供 ESSE的全球领导者",
+     "s": "UDD 被任命为总裁兼首席执行官，自 2027年 2月 1日起生效 Kent Masters将担任北卡罗来纳州夏洛特市执行主席 ，",
      "t_en": "Press Releases September 03, 2026 Albemarle Announces CEO Succession Plan Ragnar Udd Appointed President and CEO, Effective February 1, 2027 Kent Masters to Serve as Executive Chairman CHARLOTTE, N.C., Sept. 3, 2026 /PRNewswire/ -- Albemarle Corporation (NYSE: ALB), a global leader in providing essential elements for mobility, energy, connectivity and health, today"
     },
     {
@@ -1710,7 +1710,7 @@
      "t": "新闻稿2026年7月23日， Albemarle任命Eduardo Bartolomeo为北卡罗来纳州夏洛特市董事会成员。",
      "d": "2026-07-21",
      "u": "https://www.albemarle.com/global/en/news/albemarle-appoints-eduardo-bartolomeo-board-directors",
-     "s": "2026 年7月 23日/美通社/-- Albemarle Corporation (NYSE: ALB)今天宣布 ，其董事会",
+     "s": "北卡罗来纳州夏洛特2026年7月23日",
      "t_en": "Press Releases July 23, 2026 Albemarle Appoints Eduardo Bartolomeo to Board of Directors CHARLOTTE, N.C., July 23, 2026 /PRNewswire/ -- Albemarle Corporation (NYSE: ALB), a global leader in providing essential elements for mobility, energy, connectivity and health, today announced that its Board of Directors (the \"Board\") has appointed Eduardo Bartolomeo to the Board, effective July 21"
     },
     {
@@ -1858,43 +1858,13 @@
      "t": "24/08 16 中矿资源赞比亚卡通巴铜矿山 开工典礼隆重举行",
      "d": "",
      "u": "http://www.sinomine.cn/xwdti/179.html",
-     "s": ""
+     "s": "2024 年8月16日，中矿资源集团股份有限公司（以下简称“中矿资源”）卡通巴（Kitumba）铜矿山开工典礼隆重举行。"
     },
     {
      "t": "09/18 中矿资源集团股份有限公司荣登2026北京民营企业百强第89位",
      "d": "",
      "u": "http://www.sinomine.cn/xwdti/423.html",
      "s": "9月17日，北京市工商业联合会正式发布2026北京民营企业百强系列榜单。中矿资源集团股份有限公司（以下简称“中矿资源”）凭借稳健的经营业绩与持续增强的综合实力，荣登“2026北京民营企业百强”主榜单，位列第89位。"
-    },
-    {
-     "t": "中矿资源（江西）锂业有限公司",
-     "d": "2026-09-24",
-     "u": "http://www.sinomine.cn/fzjg/256.html",
-     "s": "中矿资源（江西）锂业有限公司成立于2021年11月，注册资本20000万元，是中矿资源集团股份有限公司全资子公司。"
-    },
-    {
-     "t": "津巴布韦Bikita矿业有限公司",
-     "d": "2026-09-24",
-     "u": "http://www.sinomine.cn/fzjg/175.html",
-     "s": "津巴布韦Bikita矿业有限公司是中矿资源集团于2022年初收购的矿山生产企业。公司Bikita矿区位于津巴布韦首都哈拉雷东南约325km， Masvingo省会北东约80km，位于Masvingo绿岩带内。采矿租约为1,528公顷（15.3平方公里）。"
-    },
-    {
-     "t": "加拿大Tanco矿业有限公司",
-     "d": "2026-09-24",
-     "u": "http://www.sinomine.cn/fzjg/176.html",
-     "s": "公司位于加拿大曼尼托巴省，主要从事铯、锂、钽矿石的采矿和选矿以及铯盐的加工和销售。"
-    },
-    {
-     "t": "中矿资源楚梅布冶炼厂",
-     "d": "2026-09-24",
-     "u": "http://www.sinomine.cn/fzjg/241.html",
-     "s": "位于纳米比亚的 中矿资源楚梅布 冶炼厂是世界上少数能够处理复杂精矿的冶炼厂之一。"
-    },
-    {
-     "t": "英国中矿特种流体有限公司",
-     "d": "2026-09-24",
-     "u": "http://www.sinomine.cn/fzjg/177.html",
-     "s": "公司主要从事甲酸铯的销售和租赁。甲酸铯作为完井液、钻井液用于石油天然气行业的高温高压井。与传统的完井液、钻井液相比，甲酸铯具有低粘稠度、低毒性、高溶解性以及耐高温、可回收等诸多特性，能够有效提高钻井效率，提高出油率，在欧洲、中东、北非、东南亚、南美等地区应用广泛。"
     }
    ]
   },
@@ -1999,7 +1969,7 @@
      "t": "张晋军到中色创新研究院开展工作调研",
      "d": "2026-09-11",
      "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/9/I1548034607188803584.html",
-     "s": ""
+     "s": "9月10日，中国有色集团党委副书记、总经理张晋军到中色创新研究院开展工作调研，深入研发一线实地查看重点项目进展情况，与企业领导班子进行座谈交流，并对下一阶段工作提出要求。"
     },
     {
      "t": "赤峰中色白音诺尔矿业有限公司进入国家级绿色矿山名录",
@@ -2023,13 +1993,13 @@
      "t": "中国有色集团召开2026年年中工作会暨安全环...",
      "d": "2026-07-29",
      "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/7/I1531945272706334720.html",
-     "s": ""
+     "s": "7月28日，中国有色集团召开2026年年中工作会暨安全环保工作会，总结上半年工作，分析当前形势，部署下半年任务。会议传达学习了中央企业负责人研讨班会议精神，通报了2025年度出资企业 党建工作责任制考核评价结果、董事会综合考核评价结果、经营业绩 考核结果，以 及三个专项行动进展情况。"
     },
     {
      "t": "中国有色集团举办2026年度第二期安全生产管...",
      "d": "2026-07-14",
      "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/7/I1526507113470230528.html",
-     "s": ""
+     "s": "为深入学习贯彻习近平总书记关于安全生产的重要论述，全面落实总书记对福建泉州“7・9”重大火灾事故的重要指示精神，7月13日，中国有色集团举办2026年度第二期安全生产管理人员冶化专题培训班。中国有色集团党委副书记、总经理张晋军出席并主持培训班。"
     }
    ]
   },
@@ -2248,6 +2218,6 @@
   "domestic": 37,
   "foreign": 15,
   "total": 52,
-  "items": 247
+  "items": 242
  }
 }

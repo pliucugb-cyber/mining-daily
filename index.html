@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260924-2115" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260924-2300" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -1710,7 +1710,7 @@ body.dark .filter-state{background:#123040;border-color:#1d3d4d;color:var(--ink-
 .pc-value, .pc-chg, .pc-unit, .stat-num, .toc-count, .toc-count-fresh, .sub-count, .day-group, .news-meta{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 /* 只在移动端放大，桌面鼠标操作维持原尺寸，避免视觉回归 */
 @media(max-width:1100px){
-  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.toc-main-item,.toc-back-top,#briefToggle,.mobile-install-close,.nf-clear{min-height:44px}
+  .theme-toggle,.pwa-header-btn,.mobile-install-btn,.theme-option,.guide-toggle,.btn-unread,.btn-star,.btn-co-read,.btn-co-unread,.toc-main-item,.toc-back-top,#briefToggle,.mobile-install-close,.nf-clear{min-height:44px}
   /* 2026-09-11 视觉规范评审修复 G2A–G2D：图标按钮补 min-width:44px（G2E .nf-clear 仅补高——加宽会盖住输入文字，按报告改用热区策略） */
   .theme-toggle,.pwa-header-btn,#briefToggle,.mobile-install-close{min-width:44px}
 }
@@ -2832,6 +2832,31 @@ body.dark .co-dot{background:#818cf8}
 .co-summary{margin:2px 0 var(--s2) 14px;font-size:var(--fs-body);color:var(--ink-700);line-height:1.6;
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
 body.dark .co-summary{color:var(--ink-500)}
+.co-summary-empty{color:var(--ink-400,#9aa4b2);font-style:italic;display:block}
+body.dark .co-summary-empty{color:var(--ink-400,#7c8794)}
+/* ==== 2026-09-24 公司动态「已读/未读」====
+   背景：此前公司视图完全没有已读状态 —— 点开新闻毫无反馈，也没有「读完变浅」的弱化，
+   与新闻流（标题变灰 + 圆点空心 + 就地标读）体验割裂。
+   与新闻流同构：已读条目弱化、操作行按内容宽贴在条目末尾（不是整行横条）。 */
+.co-item.read .co-title{color:var(--ink-300);font-weight:var(--fw-regular)}
+.co-item.read .co-title:hover{color:#4f46e5}
+.co-item.read .co-summary,.co-item.read .co-body{color:var(--ink-300)}
+.co-item.read .co-dot{background:transparent;box-shadow:inset 0 0 0 2px #c8d0d8}
+body.dark .co-item.read .co-title{color:var(--ink-300)}
+body.dark .co-item.read .co-dot{background:transparent;box-shadow:inset 0 0 0 2px #4a5765}
+.co-actions{display:flex;align-items:center;gap:var(--s2);margin:var(--s2) 0 0 14px;flex-wrap:wrap}
+.co-actions button{font-family:inherit;font-size:var(--fs-meta);border-radius:var(--r-md);padding:2px var(--s3);
+  cursor:pointer;transition:.2s;vertical-align:middle;background:rgba(255,255,255,.7)}
+.btn-co-read{color:var(--ink-500);border:1px solid var(--line-2)}
+.btn-co-read:hover{background:var(--surface-2);color:var(--ink-700)}
+.btn-co-unread{color:var(--brand);border:1px solid var(--brand)}
+.btn-co-unread:hover{background:var(--brand);color:#fff;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.co-item:not(.read) .btn-co-unread{display:none}
+.co-item.read .btn-co-read{display:none}
+body.dark .btn-co-read{color:#9fb0c0;border-color:#3a4a5c}
+body.dark .btn-co-read:hover{background:#26323d;color:#cdd9e3;border-color:#3a4a5c}
+body.dark .btn-co-unread{background:rgba(255,255,255,.06);color:#45b7a4;border-color:#2f8f7d}
+body.dark .btn-co-unread:hover{background:#1f6b5c;color:#fff;box-shadow:0 2px 4px rgba(31,107,92,.35)}
 .co-empty,.co-loading,.co-err{font-size:var(--fs-meta);color:#5b6b7a;padding:var(--s5)}
 .co-err{color:#b42318}
 .co-more-wrap{display:flex;align-items:center;justify-content:center;gap:var(--s3);padding:var(--s4);border-top:1px solid var(--line-1)}
@@ -2951,7 +2976,7 @@ body.dark .co-summary{color:var(--ink-500)}
 <script src="news-data.js?v=911ceb29" defer></script>
 <script src="lme-data.js?v=a167d9be" defer></script>
 <script src="price-history.js?v=78062f99" defer></script>
-<script src="app.js?v=d68939d7" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=30fe7291" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
