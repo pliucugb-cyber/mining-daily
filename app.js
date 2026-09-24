@@ -6769,6 +6769,13 @@ function toggleTheme(){
 //   ④ 导航面板：按条数降序 + 计数徽标 + 「暂未收录」折叠组；面板内部独立滚动，长列表不再撑开页面。
 //   ⑤ 选公司时若该公司条目全部在当前时间范围之外，自动放宽到「全部」，避免假空列表。
 //   ⑥ 暴露 window.__mdCo 供回归测试断言（范围 / 分页 / 计数 / 切分与解码助手）。
+// v7（2026-09-24 用户二轮反馈：搜索冗余 / 导航未固定 / 两栏不统一 / 11 家未收录）：
+//   ① 搜索：公司视图下顶部全局搜索+分类 chips 已隐藏（见 index.html `body[data-view="company"] #newsFilterBar`）
+//      —— 它只过滤主新闻列表，在本视图点了没反应；本区块自带的 #coSearch 保留，并把摘要 s 纳入匹配范围。
+//   ② 右栏公司导航：真正吸顶（index.html `#companySection` 改 `overflow:clip`，否则 .section 的 overflow:hidden
+//      会让 sticky 相对它定位而失效）+ 面板内边距收紧上移。
+//   ③ 新闻流单栏（删 ≥1400px 两栏网格），与「今日新增 / 往期内容」的新闻列表形式统一。
+//   ④ 「暂未收录」折叠组补原因说明（官网暂不可达 / 本日未采到，次日 06:00 自动重试）。
 (function(){
   function esc(s){
     return String(s==null?'':s).replace(/[&<>"']/g,function(m){
@@ -6821,8 +6828,10 @@ function toggleTheme(){
   function passQuery(x){
     if(!query) return true;
     var q=query.toLowerCase();
+    // v7：摘要也参与匹配（此前只搜标题+公司名，摘要里出现的关键词搜不到）
     return String(x.t||'').toLowerCase().indexOf(q)>=0
-        || String(x.name||'').toLowerCase().indexOf(q)>=0;
+        || String(x.name||'').toLowerCase().indexOf(q)>=0
+        || String(x.s||'').toLowerCase().indexOf(q)>=0;
   }
 
   // ---------- 文本清洗与「标题 / 正文」切分（解决字符数 4 ↔ 1055 的悬殊） ----------
@@ -7074,13 +7083,19 @@ function toggleTheme(){
     html+=navGroup('国内公司 · 按市值/知名度', dom);
     html+=navGroup('海外公司 · 按市值/知名度', frn);
     if(empties.length){
-      html+='<button type="button" class="co-nav-empty-t" id="coEmptyToggle">暂未收录 '+empties.length+' 家'+
+      html+='<button type="button" class="co-nav-empty-t" id="coEmptyToggle"'+
+        ' title="官网暂不可达或本日未采到新闻；点公司名可直达官网，或点「搜新闻」查相关资讯；次日 06:00 自动重试。">暂未收录 '+empties.length+' 家'+
         '<span>'+(emptyOpen?'收起 ▴':'展开 ▾')+'</span></button>'+
         '<div class="co-nav-empty-box" id="coEmptyBox"'+(emptyOpen?'':' hidden')+'>'+
+        '<div class="co-empty-note">官网暂不可达或本日未采到新闻；点公司名可直达官网，或点「搜新闻」用搜索引擎查相关资讯；次日 06:00 自动重试。</div>'+
         empties.map(function(o){
           var hm=dec(o.home||'');
-          return '<button type="button" class="co-nav-item empty" data-name="'+esc(o.name)+'" data-home="'+esc(hm)+'">'+
-            '<span>'+esc(o.name)+'</span><span class="co-n">'+(hm?esc(hostOf(hm))+' &#8599;':'—')+'</span></button>';
+          var su=searchUrl(o.name+' 新闻');
+          return '<div class="co-nav-empty-item">'+
+            '<button type="button" class="co-nav-item empty" data-name="'+esc(o.name)+'" data-home="'+esc(hm)+'">'+
+              '<span>'+esc(o.name)+'</span><span class="co-n">'+(hm?esc(hostOf(hm))+' &#8599;':'—')+'</span></button>'+
+            '<a class="co-empty-search" href="'+esc(su)+'" target="_blank" rel="noopener" title="在 Bing 查 '+esc(o.name)+' 相关新闻">搜新闻</a>'+
+          '</div>';
         }).join('')+'</div>';
     }
     nav.innerHTML=html;
