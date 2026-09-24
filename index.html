@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260924-1630" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260924-1700" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -333,7 +333,7 @@ body.dark #mdTopBtn{background:var(--brand-600)}
 .section-title.today{background:var(--brand-soft);border-left-color:var(--brand)}
 .news-count{font-size: var(--fs-body);color:var(--ink-500);font-weight:400;margin-left:auto}
 /* 新闻条目 */
-.news-item{padding:var(--s4) var(--s5);border-bottom:1px solid #f4f6f8;transition:opacity .3s;position:relative;cursor:pointer}
+.news-item{padding:var(--s4) var(--s5);border-bottom:1px solid #f4f6f8;transition:opacity .3s;position:relative;cursor:pointer;display:flex;flex-direction:column}
 .news-item:last-child{border-bottom:none}
 /* 已读态（2026-09-08 step3 修订）：原用 opacity:.6 整块降透明，会让 13px 中文在白底发灰糊掉
    （DESIGN.md Don'ts 明令禁止）。现改为：标题/摘要/元信息统一降为 --ink-300 文字色
@@ -342,7 +342,7 @@ body.dark #mdTopBtn{background:var(--brand-600)}
    标题后的「已读」文字标签已于 09-06 移除（圆点+颜色已表意，另设「↶ 标为未读」按钮）。 */
 .news-item.read .news-title{color:var(--ink-300);font-weight:var(--fw-regular)}
 .news-item.read .news-summary{color:var(--ink-300)}
-.news-head{display:flex;align-items:flex-start;gap:var(--s2)}
+.news-head{display:flex;align-items:flex-start;gap:var(--s2);order:1}
 .dot{width:9px;height:9px;border-radius: 50%;background:var(--brand);flex-shrink:0;margin-top:var(--s2);transition:background .2s,box-shadow .2s}
 .news-item.read .dot{background:transparent;box-shadow:inset 0 0 0 2px #c8d0d8}
 .badge-new{background:var(--up);color:#fff;font-size: var(--fs-meta);padding:1px var(--s2);border-radius: var(--r-sm);font-weight:600;flex-shrink:0;margin-top:var(--s1);animation:pulse 1.5s infinite}
@@ -351,15 +351,15 @@ body.dark #mdTopBtn{background:var(--brand-600)}
 /* 矿权结果摘要标记（2026-09-09）：与「补录」徽章同款浅灰，但语义独立（非降级徽章），避免与 demoteStaleNew 的补录检测混淆 */
 .badge-rights{background:var(--brand-soft);color:var(--brand-ink);border:1px solid #cce0ed;font-size: var(--fs-meta);padding:0 var(--s2);border-radius: var(--r-sm);font-weight:600;flex-shrink:0;margin-top:var(--s1)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
-.news-title{color:var(--ink-900);text-decoration:none;font-weight:var(--fw-medium);font-size: var(--fs-h3);line-height:1.5}
+.news-title{color:var(--ink-900);text-decoration:none;font-weight:var(--fw-medium);font-size:17px;line-height:1.5}
 .news-title:hover{text-decoration:underline}
-.news-meta{font-size: var(--fs-meta);color:var(--ink-500);margin:var(--s1) 0 var(--s1) var(--s5)}
+.news-meta{font-size: var(--fs-meta);color:var(--ink-500);margin:var(--s1) 0 var(--s1) calc(var(--s2) + 9px);order:4}
 .news-meta .src{color:var(--brand);font-weight:var(--fw-semibold)}
-.news-summary{font-size: var(--fs-body);color:var(--ink-700);margin:2px 0 var(--s2) var(--s5)}
+.news-summary{font-size:14px;color:var(--ink-700);margin:2px 0 var(--s2) calc(var(--s2) + 9px);order:3}
 .btn-read{display:inline-block;font-size: var(--fs-meta);color:var(--danger);text-decoration:none;border:1px solid var(--up);border-radius: var(--r-md);padding:3px var(--s3);margin-left:17px;transition:.2s}
 .btn-read:hover{background:var(--up);color:#fff}
 /* 自动关键词标签（重点提示词，JS注入）*/
-.news-tags{display:flex;flex-wrap:wrap;gap:var(--s2);margin:var(--s2) 0 0 var(--s5)}
+.news-tags{display:flex;flex-wrap:wrap;gap:var(--s2);margin:var(--s2) 0 0 calc(var(--s2) + 9px);order:2}
 .tag-chip{font-size: var(--fs-meta);font-weight:600;padding:1px var(--s2);border-radius: var(--r-lg);line-height:1.6;letter-spacing:.3px;white-space:nowrap;cursor:pointer;user-select:none;transition:.15s}
 .tag-chip:hover{filter:brightness(.92)}
 .tag-chip.chip-active{box-shadow:0 0 0 2px currentColor;font-weight:600}

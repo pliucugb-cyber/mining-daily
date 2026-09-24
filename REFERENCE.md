@@ -2525,4 +2525,18 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **回退指纹 / 红线**：⚠️ 勿把 `mdMobileRailOrder` 改回「父节点变化」式重排（`_mdGuideOrigin` 那套）；⚠️ 勿把测试断言改回 `parent!==grid`（当前 DOM 下恒假）；⚠️ 若日后把 `#installGuideSection` 移出 `.news-grid`，本函数与测试需同步重做。本函数在 app.js 运行时，生成侧不产出，安全。
 
+### 42.22 新闻条目排版三处微调（2026-09-24，build `20260924-1700`）
+
+**背景**：用户对比主流新闻站（纯标题流 / 标题+摘要 / 图文卡片）后，要求对齐「标题+摘要」主流形态，并修正三处细节。
+
+**改动（纯 `index.html` head `<style>`，生成脚本不产出，次日重建安全，不需同步两条自动化 prompt 必留清单）**：
+- ① 元信息位置：DOM 顺序本为 `head → tags → meta → summary`（标签由 `injectTags` 插在 `news-head` 后）。用 `.news-item{display:flex;flex-direction:column}` + 各子块 `order` 重排为 **head(1) → tags(2) → summary(3) → meta(4)** ＝标题 → 标签 → 摘要 → 来源·时间（对齐 36氪/财新）。
+- ② 字号层级：桌面 `.news-title` 16→**17px**，`.news-summary` 15→**14px**（差 3px）；移动端维持既有大字（标题 16 / 摘要 13–14）。**未动 `--fs-h3` 全局变量**，避免牵连 favview 等。
+- ③ 整块左对齐：`.news-meta / .news-summary / .news-tags` 左缩进从 `var(--s5)`(≈20px) 改为 `calc(var(--s2) + 9px)`（＝圆点宽 9px + 间距 `--s2`），与**标题文字**严格左对齐（圆点保留在 flow 作 bullet，不改 absolute）。
+
+**回退指纹 / 红线**：⚠️ 勿把三处 `calc(var(--s2) + 9px)` 改回 `var(--s5)`（会变回"摘要比标题多缩进"）；⚠️ 勿删除 `.news-item` 的 `display:flex;flex-direction:column` 或任意 `order`（否则顺序回到 meta 在 summary 前）；⚠️ 桌面 `.news-title` 保持 ≥17px、`.news-summary` 保持 14px 以维持层级差（移动端除外）；⚠️ `injectTags` 仍 `head.insertAdjacentElement('afterend',wrap)` 注入标签——DOM 顺序不变，靠 CSS order 重排，勿在 JS 里改注入位置。
+
+**必留**：`.news-item` flex 纵向 + `order` 四值、`.news-title` 17px、`.news-summary` 14px、三处 `calc(var(--s2) + 9px)`。
+
+**闸门 / 验收**：preflight ✅；全套回归全绿（smoke 78 / mobile 208 / company 108 / p1 29 / p2 30 / view_switch 22 / p3 33 / ux 41）。线上验收：Dr.COM 网关劫持 HTTPS，靠 `git ls-remote` 确认远端 HEAD == 本地 + 抓真实字节核对 `build-version`/`CACHE_NAME`/`order` 指纹。
 **测试基线**：p2 由 29/1 → 30/0；其余（smoke 78 / mobile_ux 208 / company 108 / view_switch 22 / p3 33 / ux 41 / p1 29）不变。
