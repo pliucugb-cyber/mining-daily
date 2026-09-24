@@ -318,6 +318,16 @@ setTimeout(() => {
       check('「暂未收录」折叠开关存在（无空公司时豁免）', nEmptyCompanies === 0);
     }
 
+    // ---------- 7.5) unreach 标注（v8：spa 动态不可抓 / dead 死域名）----------
+    const spaNames = (companyData.companies || []).filter(c => c.unreach === 'spa').map(c => c.name);
+    const spaEls = Array.from(document.querySelectorAll('#coNav .co-nav-item.empty'))
+      .filter(el => /动态/.test((el.querySelector('.co-n') || {}).textContent || ''));
+    check('spa 类空壳均显示「动态」标签', spaNames.length > 0 &&
+          spaNames.every(n => spaEls.some(el => el.getAttribute('data-name') === n)),
+          spaEls.length + '/' + spaNames.length);
+    check('co-empty-note 文案说明动态加载/域名失效',
+          /动态加载|域名已失效/.test((document.querySelector('.co-empty-note') || {}).textContent || ''));
+
     // ---------- 8) 首条卡片结构 ----------
     const items = document.querySelectorAll('#companyList .co-item');
     const first = items[0];

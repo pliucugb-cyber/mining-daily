@@ -864,7 +864,7 @@ SITES = [
     {'name':'铜陵有色','code':'000630','sector':'铜','region':'CN','exchange':'A股',
      'url':'http://www.tlys.cn/list.aspx?parentclassid=67&classid=383','method':'html'},
     {'name':'云南铜业','code':'000878','sector':'铜','region':'CN','exchange':'A股',
-     'url':'https://www.ynfc.com.cn/','method':'html'},
+     'url':'https://www.ynfc.com.cn/','method':'html','unreach':'dead'},
     {'name':'西部矿业','code':'601168','sector':'铜','region':'CN','exchange':'A股',
      'url':'https://www.westmining.com/mtzx/xkxw/','method':'html'},
     # —— 钼 ——
@@ -872,11 +872,11 @@ SITES = [
      'url':'https://www.cmoc.com/html/Media/News/','method':'html'},
     # —— 铝 ——
     {'name':'中国铝业','code':'601600','sector':'铝','region':'CN','exchange':'A股',
-     'url':'https://www.chalco.com.cn/','method':'html'},
+     'url':'https://www.chalco.com.cn/','method':'html','unreach':'spa'},
     {'name':'南山铝业','code':'600219','sector':'铝','region':'CN','exchange':'A股',
      'url':'https://www.nanshan.com.cn/news.html','method':'html'},
     {'name':'云铝股份','code':'000807','sector':'铝','region':'CN','exchange':'A股',
-     'url':'http://www.ylgf.com.cn/','method':'html'},
+     'url':'http://www.ylgf.com.cn/','method':'html','unreach':'dead'},
     {'name':'神火股份','code':'000933','sector':'铝','region':'CN','exchange':'A股',
      'url':'http://www.shenhuo.com/home/newslist/newslist?categoryId=3','method':'html'},
     {'name':'天山铝业','code':'002532','sector':'铝','region':'CN','exchange':'A股',
@@ -890,7 +890,7 @@ SITES = [
     {'name':'赤峰黄金','code':'600988','sector':'黄金','region':'CN','exchange':'A股',
      'url':'https://www.cfgold.com/col36/list','method':'html'},
     {'name':'湖南黄金','code':'002155','sector':'黄金','region':'CN','exchange':'A股',
-     'url':'https://www.hngold.com.cn/','method':'html'},
+     'url':'https://www.hngold.com.cn/','method':'html','unreach':'spa'},
     # —— 锂 ——
     {'name':'天齐锂业','code':'002466','sector':'锂','region':'CN','exchange':'A股',
      'url':'https://www.tianqilithium.com/news.aspx?t=27','method':'html'},
@@ -904,7 +904,7 @@ SITES = [
     {'name':'北方稀土','code':'600111','sector':'稀土','region':'CN','exchange':'A股',
      # 根域 reht.com 与 newscenter.do 均为 JS/AJAX 外壳页，静态抓取抽不到新闻列表；
      # 维持官网根域（点公司名可直达），内容发现走前端「搜新闻」兜底
-     'url':'https://www.reht.com/','method':'html'},
+     'url':'https://www.reht.com/','method':'html','unreach':'spa'},
     {'name':'中国稀土','code':'000831','sector':'稀土','region':'CN','exchange':'A股',
      'url':'https://www.regcc.cn/zgxtjt/jtnew/list_9.shtml','method':'html'},
     # —— 铅锌 ——
@@ -919,19 +919,49 @@ SITES = [
      'url':'https://www.cxtc.com/News.aspx','method':'chrome'},
     # —— 海外 7 家（本机 Chrome 不可用 → 统一走静态 html 抓取；代理由 effective_proxy 发现）——
     {'name':'Newmont','code':'NEM','sector':'黄金','region':'NA','exchange':'NYSE',
-     'url':'https://www.newmont.com/investors/news-release/default.aspx','method':'html'},
+     'url':'https://www.newmont.com/investors/news-release/default.aspx','method':'html','unreach':'spa'},
     {'name':'Barrick','code':'B','sector':'黄金','region':'NA','exchange':'NYSE',
-     'url':'https://www.barrick.com/English/News/default.aspx','method':'html'},
+     'url':'https://www.barrick.com/English/News/default.aspx','method':'html','unreach':'spa'},
     {'name':'Freeport-McMoRan','code':'FCX','sector':'铜','region':'NA','exchange':'NYSE',
-     'url':'https://www.fcx.com/','method':'html'},
+     'url':'https://www.fcx.com/','method':'html','unreach':'spa'},
     {'name':'Southern Copper','code':'SCCO','sector':'铜','region':'NA','exchange':'NYSE',
-     'url':'https://www.southerncopper.com/','method':'html','to':12},
+     'url':'https://www.southerncopper.com/','method':'html','unreach':'spa','to':12},
     {'name':'Teck Resources','code':'TECK','sector':'铅锌','region':'NA','exchange':'TSX',
      'url':'https://www.teck.com/news/','method':'html'},
     {'name':'Agnico Eagle','code':'AEM','sector':'黄金','region':'NA','exchange':'TSX',
-     'url':'https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx','method':'html'},
+     'url':'https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx','method':'html','unreach':'spa'},
     {'name':'Albemarle','code':'ALB','sector':'锂','region':'NA','exchange':'NYSE',
      'url':'https://www.albemarle.com/news','method':'html'},
+    {'name':'盐湖股份','code':'000792','sector':'锂','region':'CN','exchange':'A股',
+     'url':'http://www.qhyhgf.com/','method':'html'},
+    {'name':'中矿资源','code':'002738','sector':'锂','region':'CN','exchange':'A股',
+     'url':'http://www.sinomine.cn/','method':'html'},
+    {'name':'永兴材料','code':'002756','sector':'锂','region':'CN','exchange':'A股',
+     'url':'http://www.yongxing.com.cn/','method':'html'},
+    {'name':'白银有色','code':'601212','sector':'铜铅锌','region':'CN','exchange':'A股',
+     'url':'http://www.bynmc.com/','method':'html'},
+    {'name':'中色股份','code':'000758','sector':'海外工程','region':'CN','exchange':'A股',
+     'url':'http://www.nfc.com.cn/','method':'html'},
+    {'name':'株冶集团','code':'600961','sector':'铅锌','region':'CN','exchange':'A股',
+     'url':'http://www.zygroup.com.cn/','method':'html','unreach':'spa'},
+    {'name':'广晟有色','code':'600259','sector':'稀土','region':'CN','exchange':'A股',
+     'url':'http://www.graset.com/','method':'html','unreach':'spa'},
+    {'name':'五矿资源','code':'1208','sector':'铜锌','region':'NA','exchange':'HK',
+     'url':'https://www.mmg.com/','method':'html','unreach':'spa'},
+    {'name':'中国有色矿业','code':'1258','sector':'铜','region':'NA','exchange':'HK',
+     'url':'https://www.cnmc.com.hk/','method':'html','unreach':'spa'},
+    {'name':'力拓','code':'RIO','sector':'综合','region':'NA','exchange':'LSE',
+     'url':'https://www.riotinto.com/','method':'html','unreach':'spa'},
+    {'name':'必和必拓','code':'BHP','sector':'综合','region':'NA','exchange':'LSE',
+     'url':'https://www.bhp.com/','method':'html','unreach':'spa'},
+    {'name':'淡水河谷','code':'VALE','sector':'综合','region':'NA','exchange':'NYSE',
+     'url':'https://www.vale.com/','method':'html','unreach':'spa'},
+    {'name':'嘉能可','code':'GLEN','sector':'综合','region':'NA','exchange':'LSE',
+     'url':'https://www.glencore.com/','method':'html','unreach':'spa'},
+    {'name':'英美资源','code':'AAL','sector':'综合','region':'NA','exchange':'LSE',
+     'url':'https://www.angloamerican.com/','method':'html','unreach':'spa'},
+    {'name':'第一量子','code':'FM','sector':'铜','region':'NA','exchange':'TSX',
+     'url':'https://www.first-quantum.com/','method':'html','unreach':'spa'},
 ]
 
 INDEX = {s['name']: s for s in SITES}
@@ -958,6 +988,7 @@ def _stub(site):
     return {'name': site['name'], 'code': site['code'], 'sector': site['sector'],
             'region': site['region'], 'exchange': site['exchange'],
             'home': site['url'], 'news_url': site['url'], 'method': '',
+            'unreach': site.get('unreach', ''),
             'stale': False, 'rank': RANK.get(site['name'], 99), 'items': []}
 
 # ============================ 4. 单公司采集 ============================
@@ -1021,6 +1052,7 @@ def collect(site, old, force):
         'name': name, 'code': site['code'], 'sector': site['sector'],
         'region': site['region'], 'exchange': site['exchange'],
         'home': site['url'], 'news_url': site['url'], 'method': used,
+        'unreach': site.get('unreach', ''),
         'stale': stale, 'rank': RANK.get(name, 99), 'items': items,
     }, items, stale, reuse, cached
 

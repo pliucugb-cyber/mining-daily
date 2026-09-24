@@ -2,139 +2,32 @@
  "updated_at": "2026-09-24",
  "companies": [
   {
-   "name": "北方稀土",
-   "code": "600111",
-   "sector": "稀土",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.reht.com/index/newscenter.do?TYPE_CODE=020201",
-   "news_url": "https://www.reht.com/index/newscenter.do?TYPE_CODE=020201",
+   "name": "Southern Copper",
+   "code": "SCCO",
+   "sector": "铜",
+   "region": "NA",
+   "exchange": "NYSE",
+   "home": "https://www.southerncopper.com/",
+   "news_url": "https://www.southerncopper.com/",
    "method": "html",
+   "unreach": "spa",
    "stale": false,
-   "rank": 3,
+   "rank": 29,
    "items": []
   },
   {
-   "name": "中金黄金",
-   "code": "600489",
+   "name": "Agnico Eagle",
+   "code": "AEM",
    "sector": "黄金",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.chinagoldgroup.com/",
-   "news_url": "https://www.chinagoldgroup.com/",
+   "region": "NA",
+   "exchange": "TSX",
+   "home": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
+   "news_url": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
    "method": "html",
+   "unreach": "spa",
    "stale": false,
-   "rank": 7,
-   "items": [
-    {
-     "t": "周洲：黄金行业迎来大有可为的战略机遇期 \"> 周洲：黄金行业迎来大有可为的战略机遇期",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1548347985945952256.html",
-     "s": ""
-    },
-    {
-     "t": "中国黄金集团2026年劳模疗休养活动圆满结束 \"> 中国黄金集团2026年劳模疗休养活动圆满结束",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1548004906961469440.html",
-     "s": ""
-    },
-    {
-     "t": "周洲赴吉林区域调研，强调聚焦资源保障以“十五五... \"> 周洲赴吉林区域调研，强调聚焦资源保障以“十五五...",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1547668452339089408.html",
-     "s": ""
-    },
-    {
-     "t": "央视财经| 博物馆内全方位体验黄金开采全流程 \"> 央视财经| 博物馆内全方位体验黄金开采全流程",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551959640089034752.html",
-     "s": ""
-    },
-    {
-     "t": "中国财富网| 中国黄金集团发布科技创新路线图 \"> 中国财富网| 中国黄金集团发布科技创新路线图",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551877125680660480.html",
-     "s": ""
-    },
-    {
-     "t": "吉林日报| 黄金博物馆开放啦！ \"> 吉林日报| 黄金博物馆开放啦！",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551170665535504384.html",
-     "s": ""
-    },
-    {
-     "t": "中国吉林网| 夹皮沟的黄金博物馆，真正的金子，是人 \"> 中国吉林网| 夹皮沟的黄金博物馆，真正的金子，是人",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551170112294223872.html",
-     "s": ""
-    },
-    {
-     "t": "中国新闻网| 黄金博物馆吉林桦甸开馆 百年金矿焕新文旅地标 \"> 中国新闻网| 黄金博物馆吉林桦甸开馆 百年金矿焕新文旅地标",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551168483377545216.html",
-     "s": ""
-    },
-    {
-     "t": "央广网| 吉林这座黄金博物馆 19日正式开门迎客 \"> 央广网| 吉林这座黄金博物馆 19日正式开门迎客",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551167097340428288.html",
-     "s": ""
-    },
-    {
-     "t": "新华社| 盘活工业遗产 黄金博物馆开门迎客 \"> 新华社| 盘活工业遗产 黄金博物馆开门迎客",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551166619487567872.html",
-     "s": ""
-    },
-    {
-     "t": "科技日报| 中国黄金集团全方位引育选聘人才，落地三大高能级创新平台 \"> 科技日报|",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551173253865668608.html",
-     "s": ""
-    },
-    {
-     "t": "光明网| 人才与科创双轮驱动 中国黄金集团打通人才与科技双向赋能通道... \"> 光明网| 人才与科创双轮驱动",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1550537771259527168.html",
-     "s": ""
-    },
-    {
-     "t": "周洲、殷长波拜会辽宁省委书记许昆林 省委副书记、省长王新伟",
-     "d": "2026-02-04",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/1/I1464708210920259584.html",
-     "s": ""
-    },
-    {
-     "t": "集团公司党委传达学习习近平总书记近期重要讲话和... \"> 集团公司党委传达学习习近平总书记近期重要讲话和...",
-     "d": "2026-02-04",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1551990733307641856.html",
-     "s": ""
-    },
-    {
-     "t": "黄金博物馆正式开放 \"> 黄金博物馆正式开放",
-     "d": "2026-02-04",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1550961481527328768.html",
-     "s": ""
-    },
-    {
-     "t": "中国黄金集团召开2026年干部人才暨科技创新大会... \"> 中国黄金集团召开2026年干部人才暨科技创新大会...",
-     "d": "2026-02-04",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1550536441447055360.html",
-     "s": ""
-    },
-    {
-     "t": "集团公司党委传达学习习近平总书记近期重要指示精... \"> 集团公司党委传达学习习近平总书记近期重要指示精...",
-     "d": "2026-02-04",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1549057011239354368.html",
-     "s": ""
-    },
-    {
-     "t": "中国黄金集团党委召开传达学习贯彻党的二十届四中全会精神视频会",
-     "d": "2026-02-03",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2025/11/I1440996622312931328.html",
-     "s": ""
-    }
-   ]
+   "rank": 30,
+   "items": []
   },
   {
    "name": "紫金矿业",
@@ -355,6 +248,7 @@
    "home": "https://www.ynfc.com.cn/",
    "news_url": "https://www.ynfc.com.cn/",
    "method": "html",
+   "unreach": "dead",
    "stale": false,
    "rank": 19,
    "items": []
@@ -462,6 +356,7 @@
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
    "method": "html",
+   "unreach": "spa",
    "stale": false,
    "rank": 2,
    "items": []
@@ -531,6 +426,7 @@
    "home": "http://www.ylgf.com.cn/",
    "news_url": "http://www.ylgf.com.cn/",
    "method": "html",
+   "unreach": "dead",
    "stale": false,
    "rank": 13,
    "items": []
@@ -740,6 +636,128 @@
    ]
   },
   {
+   "name": "中金黄金",
+   "code": "600489",
+   "sector": "黄金",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.chinagoldgroup.com/",
+   "news_url": "https://www.chinagoldgroup.com/",
+   "method": "html",
+   "stale": false,
+   "rank": 7,
+   "items": [
+    {
+     "t": "周洲：黄金行业迎来大有可为的战略机遇期 \"> 周洲：黄金行业迎来大有可为的战略机遇期",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1548347985945952256.html",
+     "s": "9月11日，2026中国国际矿业大会主题论坛在天津梅江会展中心举行。中国黄金协会会长，中国黄金集团有限公司党委书记、董事长周洲出席主题论坛并发表主旨演讲。"
+    },
+    {
+     "t": "中国黄金集团2026年劳模疗休养活动圆满结束 \"> 中国黄金集团2026年劳模疗休养活动圆满结束",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1548004906961469440.html",
+     "s": ""
+    },
+    {
+     "t": "周洲赴吉林区域调研，强调聚焦资源保障以“十五五... \"> 周洲赴吉林区域调研，强调聚焦资源保障以“十五五...",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1547668452339089408.html",
+     "s": "9月8日，中国黄金集团党委书记、董事长周洲赴吉林区域调研，实地察看黄金博物馆建设运营情况，听取夹皮沟公司工作汇报并座谈，部署推进“十五五”开局各项重点工作。集团公司党委副书记、董事、工会主席覃荆文陪同调研。"
+    },
+    {
+     "t": "央视财经| 博物馆内全方位体验黄金开采全流程 \"> 央视财经| 博物馆内全方位体验黄金开采全流程",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551959640089034752.html",
+     "s": ""
+    },
+    {
+     "t": "中国财富网| 中国黄金集团发布科技创新路线图 \"> 中国财富网| 中国黄金集团发布科技创新路线图",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551877125680660480.html",
+     "s": "https://www.cfbond.com/ejy/qyzx/4896219660.shtml"
+    },
+    {
+     "t": "吉林日报| 黄金博物馆开放啦！ \"> 吉林日报| 黄金博物馆开放啦！",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551170665535504384.html",
+     "s": "https://mp.weixin.qq.com/s/9lgLszDQ6RcAXUJBHfToLQ"
+    },
+    {
+     "t": "中国吉林网| 夹皮沟的黄金博物馆，真正的金子，是人 \"> 中国吉林网| 夹皮沟的黄金博物馆，真正的金子，是人",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551170112294223872.html",
+     "s": "https://news.cnjiwang.com/jwyc/202609/4082803.html#20898"
+    },
+    {
+     "t": "中国新闻网| 黄金博物馆吉林桦甸开馆 百年金矿焕新文旅地标 \"> 中国新闻网| 黄金博物馆吉林桦甸开馆 百年金矿焕新文旅地标",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551168483377545216.html",
+     "s": "https://m.chinanews.com/wap/detail/chs/zwsp/10699440.shtml"
+    },
+    {
+     "t": "央广网| 吉林这座黄金博物馆 19日正式开门迎客 \"> 央广网| 吉林这座黄金博物馆 19日正式开门迎客",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551167097340428288.html",
+     "s": "https://jl.cnr.cn/jlgd/20260919/t20260919_527818434.shtml"
+    },
+    {
+     "t": "新华社| 盘活工业遗产 黄金博物馆开门迎客 \"> 新华社| 盘活工业遗产 黄金博物馆开门迎客",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551166619487567872.html",
+     "s": "https://www.news.cn/photo/20260919/f2d4b9a87cbc4cf48e23023c7faf9851/c.html?page=1"
+    },
+    {
+     "t": "科技日报| 中国黄金集团全方位引育选聘人才，落地三大高能级创新平台 \"> 科技日报|",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551173253865668608.html",
+     "s": "https://app.kjrb.com.cn/app/template/displayTemplate/news/newsDetail/137/583675.html?isShare=true&xyt=1789740120220"
+    },
+    {
+     "t": "光明网| 人才与科创双轮驱动 中国黄金集团打通人才与科技双向赋能通道... \"> 光明网| 人才与科创双轮驱动",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1550537771259527168.html",
+     "s": "https://share.gmw.cn/economy/2026-09/18/content_39008108.htm"
+    },
+    {
+     "t": "周洲、殷长波拜会辽宁省委书记许昆林 省委副书记、省长王新伟",
+     "d": "2026-02-04",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/1/I1464708210920259584.html",
+     "s": "1月24日，中国黄金集团有限公司党委书记、董事长周洲，党委副书记、董事、总经理殷长波在沈阳拜会辽宁省委书记许昆林，省委副书记、省长王新伟。"
+    },
+    {
+     "t": "集团公司党委传达学习习近平总书记近期重要讲话和... \"> 集团公司党委传达学习习近平总书记近期重要讲话和...",
+     "d": "2026-02-04",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1551990733307641856.html",
+     "s": "9月22日，集团公司党委召开扩大会议，认真传达学习习近平总书记在《求是》杂志发表的重要文章《坚持落实管党治党政治责任》，习近平主席致第八届中俄能源商务论坛的贺信精神，习近平主席出席金砖国家领导人第十八次会晤第一阶段、第二阶段会议的重要讲话精神，习近平总书记致中央广播电视总台《小喇叭》节目开播70周年…"
+    },
+    {
+     "t": "黄金博物馆正式开放 \"> 黄金博物馆正式开放",
+     "d": "2026-02-04",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1550961481527328768.html",
+     "s": "9月19日，“金色吉林”吉林省秋季文旅推广活动暨黄金博物馆开放启动仪式，在桦甸市夹皮沟镇黄金博物馆举行。吉林省委常委、省委宣传部部长曹路宝，省政府党组成员金育辉出席启动仪式。受中国黄金集团有限公司党委书记、董事长周洲委托，党委副书记、董事、工会主席覃荆文出席启动仪式并致辞。"
+    },
+    {
+     "t": "中国黄金集团召开2026年干部人才暨科技创新大会... \"> 中国黄金集团召开2026年干部人才暨科技创新大会...",
+     "d": "2026-02-04",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1550536441447055360.html",
+     "s": "聚力人才强企，勇攀科技高峰。9月16日，中国黄金集团有限公司2026年干部人才暨科技创新大会在北京中国科技会堂隆重召开。"
+    },
+    {
+     "t": "集团公司党委传达学习习近平总书记近期重要指示精... \"> 集团公司党委传达学习习近平总书记近期重要指示精...",
+     "d": "2026-02-04",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1549057011239354368.html",
+     "s": "9月7日，集团公司党委召开扩大会议，认真传达学习习近平总书记在第四十二个教师节到来之际向全国广大教师和教育工作者致以节日祝贺和诚挚问候的重要精神，习近平总书记对山东青岛市北海造船厂一货轮火灾事故作出的重要指示精神，紧密结合实际研究贯彻落实举措。"
+    },
+    {
+     "t": "中国黄金集团党委召开传达学习贯彻党的二十届四中全会精神视频会",
+     "d": "2026-02-03",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2025/11/I1440996622312931328.html",
+     "s": "11月19日，中国黄金集团党委召开传达学习贯彻党的二十届四中全会精神视频会议，在前期学习的基础上对进一步抓好学习宣传贯彻落实工作作出部署，进一步推动建设世界一流黄金产业科技领军企业，为以中国式现代化全面推进强国建设、民族复兴伟业作出更大贡献。集团公司党委书记、董事长周洲出席会议并讲话。"
+    }
+   ]
+  },
+  {
    "name": "赤峰黄金",
    "code": "600988",
    "sector": "黄金",
@@ -780,6 +798,7 @@
    "home": "https://www.hngold.com.cn/",
    "news_url": "https://www.hngold.com.cn/",
    "method": "html",
+   "unreach": "spa",
    "stale": false,
    "rank": 24,
    "items": []
@@ -1049,6 +1068,20 @@
      "s": "1月25日，藏格矿业股份有限公司2025年度工作会议在格尔木隆重召开，公司董事长吴健辉、副董事长兼总裁肖瑶、独立董事及其他领导班子成员参加会议。"
     }
    ]
+  },
+  {
+   "name": "北方稀土",
+   "code": "600111",
+   "sector": "稀土",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.reht.com/",
+   "news_url": "https://www.reht.com/",
+   "method": "html",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 3,
+   "items": []
   },
   {
    "name": "中国稀土",
@@ -1363,6 +1396,7 @@
    "home": "https://www.newmont.com/investors/news-release/default.aspx",
    "news_url": "https://www.newmont.com/investors/news-release/default.aspx",
    "method": "html",
+   "unreach": "spa",
    "stale": false,
    "rank": 26,
    "items": []
@@ -1376,6 +1410,7 @@
    "home": "https://www.barrick.com/English/News/default.aspx",
    "news_url": "https://www.barrick.com/English/News/default.aspx",
    "method": "html",
+   "unreach": "spa",
    "stale": false,
    "rank": 28,
    "items": []
@@ -1389,21 +1424,9 @@
    "home": "https://www.fcx.com/",
    "news_url": "https://www.fcx.com/",
    "method": "html",
+   "unreach": "spa",
    "stale": false,
    "rank": 27,
-   "items": []
-  },
-  {
-   "name": "Southern Copper",
-   "code": "SCCO",
-   "sector": "铜",
-   "region": "NA",
-   "exchange": "NYSE",
-   "home": "https://www.southerncopper.com/",
-   "news_url": "https://www.southerncopper.com/",
-   "method": "html",
-   "stale": false,
-   "rank": 29,
    "items": []
   },
   {
@@ -1547,19 +1570,6 @@
    ]
   },
   {
-   "name": "Agnico Eagle",
-   "code": "AEM",
-   "sector": "黄金",
-   "region": "NA",
-   "exchange": "TSX",
-   "home": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
-   "news_url": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
-   "method": "html",
-   "stale": false,
-   "rank": 30,
-   "items": []
-  },
-  {
    "name": "Albemarle",
    "code": "ALB",
    "sector": "锂",
@@ -1628,12 +1638,449 @@
      "t_en": "In The News March 31, 2026 Insights in Lithium Chemistry: Shaping Advanced Rubber Materials Lithium chemistry is fundamental in producing advanced rubber materials that are durable, elastic and resilient. It enables precise polymer engineering, improving performance across various industries including mobility, infrastructure and specialty products."
     }
    ]
+  },
+  {
+   "name": "盐湖股份",
+   "code": "000792",
+   "sector": "锂",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.qhyhgf.com/",
+   "news_url": "http://www.qhyhgf.com/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "盐湖股份：关于与关联方共同投资参与中试项目暨关联交易的公告2026-031",
+     "d": "2026-09-15",
+     "u": "http://www.qhyhgf.com/newsinfo/11310258.html",
+     "s": "盐湖股份：关于与关联方共同投资参与中试项目暨关联交易的公告2026-031"
+    },
+    {
+     "t": "青海盐湖工业股份有限公司国际矿业分公司外聘法律服务机构采购结果公示",
+     "d": "2026-08-31",
+     "u": "http://www.qhyhgf.com/newsinfo/11325268.html",
+     "s": ""
+    },
+    {
+     "t": "盐湖股份：十五五发展规划暨三年行动方案（2026-2028）纲要",
+     "d": "2026-08-31",
+     "u": "http://www.qhyhgf.com/newsinfo/11310270.html",
+     "s": "盐湖股份：十五五发展规划暨三年行动方案（2026-2028）纲要"
+    },
+    {
+     "t": "盐湖股份：青海盐湖工业股份有限公司境外投资管理办法",
+     "d": "2026-08-31",
+     "u": "http://www.qhyhgf.com/newsinfo/11310264.html",
+     "s": ""
+    },
+    {
+     "t": "盐湖股份：关于召开2026年第二次临时股东会的通知2026-032",
+     "d": "2026-08-31",
+     "u": "http://www.qhyhgf.com/newsinfo/11310260.html",
+     "s": "盐湖股份：关于召开2026年第二次临时股东会的通知2026-032"
+    },
+    {
+     "t": "雷志刚到察尔汗盐湖产业区调研",
+     "d": "2026-08-04",
+     "u": "http://www.qhyhgf.com/newsinfo/11222462.html",
+     "s": "近日，盐湖股 份 党委副书记、 总经理雷志刚赴察尔汗盐湖产业区，深入盐湖钾肥、盐湖资源、蓝科锂业等 多家 单位，实地 督查现场安全管控、设备设施运维等工作， 精细梳理发展堵点与安全隐患，现场部署整改提升工作 。"
+    },
+    {
+     "t": "2026年中国（格尔木）锂业大会暨第四届锂电新能源发展大会在格尔木隆重召开",
+     "d": "2026-08-03",
+     "u": "http://www.qhyhgf.com/newsinfo/11304576.html",
+     "s": "盛夏八月，盐湖盛景。8月4日，由中国有色金属工业协会锂业分会主办、中国盐湖所属盐湖股份特邀协办的2026年中国（格尔木）锂业大会暨第四届锂电新能源发展大会在格尔木盛大开幕。"
+    },
+    {
+     "t": "3万＋，察尔汗盐湖景区单日游客接待量再获新高！",
+     "d": "2026-07-22",
+     "u": "http://www.qhyhgf.com/newsinfo/11301394.html",
+     "s": "8月3日，察尔汗盐湖景区单日游客接待量首次突破3万大关，较2025年最高日接待量增长43%，创下运营以来单日客流新纪录。这串数字背后，是万千游客跨越山海的奔赴与信任，是全体员工默默坚守的付出，更折射出景区从“热门打卡”向“品质长红”转型的坚实步伐。"
+    },
+    {
+     "t": "地企协同拓新局 共筑盐湖产业高地——青海盐湖工业股份有限公司与青海省核工业地质局签署战略合作框架协议",
+     "d": "2026-07-16",
+     "u": "http://www.qhyhgf.com/newsinfo/11271744.html",
+     "s": "7月22日，青海盐湖工业股份有限公司与青海省核工业地质局战略合作框架协议签约仪式在青海省核工业地质局生物园区基地举行。盐湖股份党委书记、董事长侯昭飞与青海省核工业地质局党委书记、局长李为民签署战略合作框架协议，青海省核工业地质局党委委员、副局长段建华主持仪式，双方相关负责人出席。"
+    },
+    {
+     "t": "陈得信出席第27届中国·青海绿色发展投资贸易洽谈会并作开幕式发言",
+     "d": "2026-06-15",
+     "u": "http://www.qhyhgf.com/newsinfo/11262943.html",
+     "s": "7月15日，第27届中国·青海绿色发展投资贸易洽谈会在西宁开幕。全国政协副主席、农工党中央常务副主席杨震致辞并宣布开幕。青海省委书记、省人大常委会主任吴晓军致欢迎辞，省委副书记、省长罗东川主持，省政协主席公保扎西出席。中国五矿党组书记、董事长陈得信应邀出席并作开幕式发言。"
+    },
+    {
+     "t": "盐湖股份公司党委基层党支部书记培训 圆满收官",
+     "d": "2025-07-18",
+     "u": "http://www.qhyhgf.com/newsinfo/7810810.html",
+     "s": "11月11日—22日，盐湖股份公司党委在青海多巴国家高原训练基地成功举办两期基层党支部书记综合素能提升培训班，旨在深入学习贯彻习近平新时代中国特色社会主义思想和党的二十届三中全会精神，全方位提升公司各基层党支部书记的政治素养、业务能力和履职水平，推动公司党建工作高质量发展。"
+    },
+    {
+     "t": "盐湖股份公司党委深入研究政治生态为公司高质量发展保驾护航",
+     "d": "2024-12-02",
+     "u": "http://www.qhyhgf.com/newsinfo/7841277.html",
+     "s": "12月5日，盐湖股份公司党委召开2024年政治生态分析研判会，会议学习习近平总书记关于政治生态建设的重要论述，深入剖析公司当前政治生态现状，进一步加强党风廉政建设，推动全面从严治党向纵深发展，为公司持续健康稳定发展提供坚实有力的政治保障。"
+    }
+   ]
+  },
+  {
+   "name": "中矿资源",
+   "code": "002738",
+   "sector": "锂",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.sinomine.cn/",
+   "news_url": "http://www.sinomine.cn/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "竣工投产 逐光启航！中矿卡通巴选矿厂正式投产运营",
+     "d": "",
+     "u": "http://www.sinomine.cn/xwdti/426.html",
+     "s": "2026年9月21日，中矿卡通巴矿业有限公司（以下简称“卡通巴矿业”）选矿厂完成建设期各项工作任务，正式进入生产运营阶段。"
+    },
+    {
+     "t": "中矿锂业接待津巴政府代表团考察 共探锂电全产业链合作新路径",
+     "d": "",
+     "u": "http://www.sinomine.cn/xwdti/425.html",
+     "s": "9月18日，津巴布韦矿业部副部长弗雷德・莫约率代表团一行莅临中矿资源（江西）锂业有限公司（以下简称“中矿锂业”）参观考察。双方围绕锂盐冶炼技术创新、产业链延伸、锂渣处理、绿色环保、智能制造等议题开展深入技术交流，并实地参观了电池级锂盐生产基地。"
+    },
+    {
+     "t": "擘画非洲新蓝图 开启协同新征程——中矿资源集团中南部非洲运营管理中心正式揭牌",
+     "d": "",
+     "u": "http://www.sinomine.cn/xwdti/424.html",
+     "s": "当地时间2026年9月19日，中矿资源中南部非洲运营管理中心（以下简称“中南非中心”）揭牌仪式在赞比亚首都卢萨卡举行。中矿资源集团股份有限公司（以下简称“中矿资源”）董事长、总裁王平卫出席仪式，标志着中矿资源深化非洲本土化经营、构建区域协同发展新格局迈出了关键一步。"
+    },
+    {
+     "t": "24/08 16 中矿资源赞比亚卡通巴铜矿山 开工典礼隆重举行",
+     "d": "",
+     "u": "http://www.sinomine.cn/xwdti/179.html",
+     "s": ""
+    },
+    {
+     "t": "09/18 中矿资源集团股份有限公司荣登2026北京民营企业百强第89位",
+     "d": "",
+     "u": "http://www.sinomine.cn/xwdti/423.html",
+     "s": "9月17日，北京市工商业联合会正式发布2026北京民营企业百强系列榜单。中矿资源集团股份有限公司（以下简称“中矿资源”）凭借稳健的经营业绩与持续增强的综合实力，荣登“2026北京民营企业百强”主榜单，位列第89位。"
+    },
+    {
+     "t": "中矿资源（江西）锂业有限公司",
+     "d": "2026-09-24",
+     "u": "http://www.sinomine.cn/fzjg/256.html",
+     "s": "中矿资源（江西）锂业有限公司成立于2021年11月，注册资本20000万元，是中矿资源集团股份有限公司全资子公司。"
+    },
+    {
+     "t": "津巴布韦Bikita矿业有限公司",
+     "d": "2026-09-24",
+     "u": "http://www.sinomine.cn/fzjg/175.html",
+     "s": "津巴布韦Bikita矿业有限公司是中矿资源集团于2022年初收购的矿山生产企业。公司Bikita矿区位于津巴布韦首都哈拉雷东南约325km， Masvingo省会北东约80km，位于Masvingo绿岩带内。采矿租约为1,528公顷（15.3平方公里）。"
+    },
+    {
+     "t": "加拿大Tanco矿业有限公司",
+     "d": "2026-09-24",
+     "u": "http://www.sinomine.cn/fzjg/176.html",
+     "s": "公司位于加拿大曼尼托巴省，主要从事铯、锂、钽矿石的采矿和选矿以及铯盐的加工和销售。"
+    },
+    {
+     "t": "中矿资源楚梅布冶炼厂",
+     "d": "2026-09-24",
+     "u": "http://www.sinomine.cn/fzjg/241.html",
+     "s": "位于纳米比亚的 中矿资源楚梅布 冶炼厂是世界上少数能够处理复杂精矿的冶炼厂之一。"
+    },
+    {
+     "t": "英国中矿特种流体有限公司",
+     "d": "2026-09-24",
+     "u": "http://www.sinomine.cn/fzjg/177.html",
+     "s": "公司主要从事甲酸铯的销售和租赁。甲酸铯作为完井液、钻井液用于石油天然气行业的高温高压井。与传统的完井液、钻井液相比，甲酸铯具有低粘稠度、低毒性、高溶解性以及耐高温、可回收等诸多特性，能够有效提高钻井效率，提高出油率，在欧洲、中东、北非、东南亚、南美等地区应用广泛。"
+    }
+   ]
+  },
+  {
+   "name": "永兴材料",
+   "code": "002756",
+   "sector": "锂",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.yongxing.com.cn/",
+   "news_url": "http://www.yongxing.com.cn/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "设备发往内蒙古自治区巴彦淖尔市",
+     "d": "",
+     "u": "http://www.yongxing.com.cn/show-7-58-1.html",
+     "s": ""
+    },
+    {
+     "t": "关爱环卫工 高温送清凉 关爱环卫工 高温送清凉",
+     "d": "",
+     "u": "http://www.yongxing.com.cn/show-7-57-1.html",
+     "s": ""
+    },
+    {
+     "t": "中老铁路拌合站",
+     "d": "",
+     "u": "http://www.yongxing.com.cn/show-8-21-1.html",
+     "s": ""
+    }
+   ]
+  },
+  {
+   "name": "白银有色",
+   "code": "601212",
+   "sector": "铜铅锌",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.bynmc.com/",
+   "news_url": "http://www.bynmc.com/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "生产性服务业 工业物流业务、国内外贸易业务、投资金融业务、制造和工程业务",
+     "d": "2026-09-23",
+     "u": "http://www.bynmc.com/yewulingyu/haiwaibankuai/",
+     "s": ""
+    },
+    {
+     "t": "白银有色集团股份有限公司2026年半年度业绩预告的公告",
+     "d": "2026-08-20",
+     "u": "http://www.bynmc.com/touzizheguanxi/gonggaoxinxi/20260820/155159100b7dee96b25.htm",
+     "s": "白银有色集团股份有限公司2026年半年度业绩预告的公告"
+    },
+    {
+     "t": "白银有色集团股份有限公司2025年年度报告（修订稿）",
+     "d": "2026-06-26",
+     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260626/09162134855b710cad8.htm",
+     "s": "白银有色集团股份有限公司2025年年度报告（修订稿）"
+    },
+    {
+     "t": "白银有色集团股份有限公司2025年年度报告摘要（修订稿）",
+     "d": "2026-06-26",
+     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260626/0917312787d3747a5c5.htm",
+     "s": "白银有色集团股份有限公司2025年年度报告摘要（修订稿）"
+    },
+    {
+     "t": "白银有色集团股份有限公司2025年年度报告",
+     "d": "2026-04-28",
+     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260428/1127010676b64baba83.htm",
+     "s": ""
+    },
+    {
+     "t": "白银有色集团股份有限公司2025年年度报告摘要",
+     "d": "2026-04-28",
+     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260428/11253423371a08b402f.htm",
+     "s": ""
+    }
+   ]
+  },
+  {
+   "name": "中色股份",
+   "code": "000758",
+   "sector": "海外工程",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.nfc.com.cn/",
+   "news_url": "http://www.nfc.com.cn/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "张晋军到中色创新研究院开展工作调研",
+     "d": "2026-09-11",
+     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/9/I1548034607188803584.html",
+     "s": ""
+    },
+    {
+     "t": "赤峰中色白音诺尔矿业有限公司进入国家级绿色矿山名录",
+     "d": "2026-08-28",
+     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/8/I1542897932603228160.html",
+     "s": "近期，赤峰中色白音诺尔矿业有限公司（简称中色白矿或公司）凭借在矿区环境治理、资源集约利用、生态修复再造、智能科创赋能等多领域亮眼成效，成功入选国家级绿色矿山名录。这一国家级权威认定，是对中色白矿多年坚守生态优先、深耕绿色发展的充分肯定，也标志着中色白矿在矿产资源绿色可持续开发利用领域迈上全新台阶。"
+    },
+    {
+     "t": "中色股份党委学习传达习近平总书记近期重要讲话重要指示等内容",
+     "d": "2026-08-20",
+     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/8/I1539922749214949376.html",
+     "s": "8月18日，中国有色金属建设股份有限公司党委召开会议，认真传达学习习近平总书记7月30日主持召开中央政治局会议和中央政治局第二十七次集体学习、在中共中央党外人士座谈会、在山东德州考察时的重要讲话，以及总书记对侨务工作作出的重要指示，并结合公司工作实际研究贯彻落实举措。"
+    },
+    {
+     "t": "中色股份2026年度新员工培训圆满结业",
+     "d": "2026-08-04",
+     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/8/I1534129068503465984.html",
+     "s": "7月31日，中色股份召开2026年度新员工培训结业座谈会。中国有色集团党委委员、副总经理，中色股份党委书记、董事长刘宇出席座谈会并讲话。公司党委副书记马引代主持会议。"
+    },
+    {
+     "t": "中国有色集团召开2026年年中工作会暨安全环...",
+     "d": "2026-07-29",
+     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/7/I1531945272706334720.html",
+     "s": ""
+    },
+    {
+     "t": "中国有色集团举办2026年度第二期安全生产管...",
+     "d": "2026-07-14",
+     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/7/I1526507113470230528.html",
+     "s": ""
+    }
+   ]
+  },
+  {
+   "name": "株冶集团",
+   "code": "600961",
+   "sector": "铅锌",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.zygroup.com.cn/",
+   "news_url": "http://www.zygroup.com.cn/",
+   "method": "html",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "广晟有色",
+   "code": "600259",
+   "sector": "稀土",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.graset.com/",
+   "news_url": "http://www.graset.com/",
+   "method": "html",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "五矿资源",
+   "code": "1208",
+   "sector": "铜锌",
+   "region": "NA",
+   "exchange": "HK",
+   "home": "https://www.mmg.com/",
+   "news_url": "https://www.mmg.com/",
+   "method": "",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "中国有色矿业",
+   "code": "1258",
+   "sector": "铜",
+   "region": "NA",
+   "exchange": "HK",
+   "home": "https://www.cnmc.com.hk/",
+   "news_url": "https://www.cnmc.com.hk/",
+   "method": "",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "力拓",
+   "code": "RIO",
+   "sector": "综合",
+   "region": "NA",
+   "exchange": "LSE",
+   "home": "https://www.riotinto.com/",
+   "news_url": "https://www.riotinto.com/",
+   "method": "",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "必和必拓",
+   "code": "BHP",
+   "sector": "综合",
+   "region": "NA",
+   "exchange": "LSE",
+   "home": "https://www.bhp.com/",
+   "news_url": "https://www.bhp.com/",
+   "method": "",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "淡水河谷",
+   "code": "VALE",
+   "sector": "综合",
+   "region": "NA",
+   "exchange": "NYSE",
+   "home": "https://www.vale.com/",
+   "news_url": "https://www.vale.com/",
+   "method": "",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "嘉能可",
+   "code": "GLEN",
+   "sector": "综合",
+   "region": "NA",
+   "exchange": "LSE",
+   "home": "https://www.glencore.com/",
+   "news_url": "https://www.glencore.com/",
+   "method": "",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "英美资源",
+   "code": "AAL",
+   "sector": "综合",
+   "region": "NA",
+   "exchange": "LSE",
+   "home": "https://www.angloamerican.com/",
+   "news_url": "https://www.angloamerican.com/",
+   "method": "",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
+  },
+  {
+   "name": "第一量子",
+   "code": "FM",
+   "sector": "铜",
+   "region": "NA",
+   "exchange": "TSX",
+   "home": "https://www.first-quantum.com/",
+   "news_url": "https://www.first-quantum.com/",
+   "method": "",
+   "unreach": "spa",
+   "stale": false,
+   "rank": 99,
+   "items": []
   }
  ],
  "counts": {
-  "domestic": 25,
-  "foreign": 7,
-  "total": 32,
-  "items": 194
+  "domestic": 32,
+  "foreign": 15,
+  "total": 47,
+  "items": 231
  }
 }

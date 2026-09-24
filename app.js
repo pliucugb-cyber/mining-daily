@@ -7087,13 +7087,13 @@ function toggleTheme(){
         ' title="官网暂不可达或本日未采到新闻；点公司名可直达官网，或点「搜新闻」查相关资讯；次日 06:00 自动重试。">暂未收录 '+empties.length+' 家'+
         '<span>'+(emptyOpen?'收起 ▴':'展开 ▾')+'</span></button>'+
         '<div class="co-nav-empty-box" id="coEmptyBox"'+(emptyOpen?'':' hidden')+'>'+
-        '<div class="co-empty-note">官网暂不可达或本日未采到新闻；点公司名可直达官网，或点「搜新闻」用搜索引擎查相关资讯；次日 06:00 自动重试。</div>'+
+        '<div class="co-empty-note">部分公司官网为动态加载页或域名已失效，暂不可静态抓取；点「搜新闻」可查相关资讯；次日 06:00 自动重试。</div>'+
         empties.map(function(o){
           var hm=dec(o.home||'');
           var su=searchUrl(o.name+' 新闻');
           return '<div class="co-nav-empty-item">'+
             '<button type="button" class="co-nav-item empty" data-name="'+esc(o.name)+'" data-home="'+esc(hm)+'">'+
-              '<span>'+esc(o.name)+'</span><span class="co-n">'+(hm?esc(hostOf(hm))+' &#8599;':'—')+'</span></button>'+
+              '<span>'+esc(o.name)+'</span><span class="co-n">'+(o.unreach==='spa'?'动态 &#10005;':(hm?esc(hostOf(hm))+' &#8599;':'—'))+'</span></button>'+
             '<a class="co-empty-search" href="'+esc(su)+'" target="_blank" rel="noopener" title="在 Bing 查 '+esc(o.name)+' 相关新闻">搜新闻</a>'+
           '</div>';
         }).join('')+'</div>';
