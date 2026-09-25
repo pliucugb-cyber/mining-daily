@@ -523,6 +523,7 @@ const STORE_KEY='mining_daily_read_urls';
 // 「隐藏已读」筛选口径与未读计数（2026-09-24）
 const CO_READ_KEY='mining_daily_read_co_urls';
 const FAV_KEY='mining_daily_favorites';
+const CO_FAV_KEY='mining_daily_co_fav';   // 公司动态「关注」：独立键，与新闻流收藏（FAV_KEY）互不污染
 const HISTORY_KEY='mining_daily_history';
 
 // 2026-09-06 晚：统一 localStorage 写入封装（隐私模式/配额满时静默失败，不中断交互）
@@ -622,13 +623,21 @@ function markCoRead(url){
   const s=getCoReadSet();
   if(!s.has(url)){s.add(url);saveCoReadSet(s);}
   syncCoRead();
+  if(coUnreadOnly) renderFeed();
 }
 function markCoUnread(url){
   if(!url)return;
   const s=getCoReadSet();
   if(s.has(url)){s.delete(url);saveCoReadSet(s);}
   syncCoRead();
+  if(coUnreadOnly) renderFeed();
 }
+
+// ===== 公司动态「关注」（2026-09-25 P1-B）=====
+var coUnreadOnly=false;
+function getCoFavs(){try{return JSON.parse(localStorage.getItem(CO_FAV_KEY)||'[]')||[]}catch(e){return[]}}
+function saveCoFavs(a){lsSet(CO_FAV_KEY,JSON.stringify(a.slice(0,50)))}
+function coFavHas(name){return !!name&&getCoFavs().indexOf(name)>=0}
 
 // ===== 收藏功能（对象存储：收藏永久保留，即使新闻滚出页面）=====
 function toggleFav(url){
@@ -7070,6 +7079,23 @@ function toggleTheme(){
     });
     return rows;
   }
+  function coItemUrl(it){
+    var url=dec(it.u||'').trim();
+    if(url) return url;
+    var tb=splitTB(it.t);
+    return searchUrl((it.name||'')+' '+(tb.head||''));
+  }
+  function toggleCoFav(name){
+    if(!name)return;
+    var a=getCoFavs(),i=a.indexOf(name);
+    if(i>=0)a.splice(i,1);else a.unshift(name);
+    saveCoFavs(a);
+    renderNav();
+    var fb=document.querySelector('.co-fav-toggle'); if(fb&&fb.getAttribute('data-name')===name){
+      var on=coFavHas(name); fb.classList.toggle('on',on); fb.textContent='★ '+(on?'已关注':'关注');
+    }
+    if(typeof mdRefreshSections==='function') mdRefreshSections();
+  }
   function coOf(name){
     for(var i=0;i<COS.length;i++){ if(COS[i].name===name) return COS[i]; }
     return null;
@@ -7104,6 +7130,14 @@ function toggleTheme(){
     });
   }
 
+  function bindFeedHead(){
+    var head=document.getElementById('coFeedHead'); if(!head) return;
+    var ut=head.querySelector('.co-unread-toggle');
+    if(ut) ut.onclick=function(){ coUnreadOnly=!coUnreadOnly; shown=PAGE; renderFeed(); };
+    var ft=head.querySelector('.co-fav-toggle');
+    if(ft) ft.onclick=function(){ toggleCoFav(ft.getAttribute('data-name')); };
+  }
+
   // ---------- 左：日期分组 + 分页的新闻流 ----------
   function dayLabel(d){
     if(!d) return '未标注日期';
@@ -7131,6 +7165,8 @@ function toggleTheme(){
     // 2026-09-24：已读态。data-url 作为本地已读集合的键（原文链接缺失时退化为搜索链接，
     // 仍是稳定键）；已读条目整体弱化，且只显示「标为未读」。
     var isRead=coReadHas(primary);
+    var co_=coOf(it.name);   // 矿种是「公司级」字段，条目本身不带 sector，需从所属公司取
+    var sec=(co_&&co_.sector)?('<i class="co-sec" title="矿种">'+esc(co_.sector)+'</i>'):'';
     var acts='<div class="co-actions">'+
       '<button type="button" class="btn-co-read" title="将本条标记为已读（仅本机，不影响其他条目）">&#10003; 标为已读</button>'+
       '<button type="button" class="btn-co-unread" title="将本条恢复为未读（仅本机，不影响其他条目）">&#8630; 标为未读</button>'+
@@ -7139,7 +7175,7 @@ function toggleTheme(){
       '<div class="co-head"><span class="co-dot"></span>'+
       '<a class="co-title" href="'+esc(primary)+'" target="_blank" rel="noopener noreferrer"'+
         (url?'':' title="原文链接缺失：点击将前往搜索引擎"')+'>'+esc(tb.head||'(无标题)')+'</a></div>'+
-      '<div class="co-meta"><button type="button" class="co-src" data-name="'+esc(it.name)+'">'+esc(it.name)+'</button>'+
+      '<div class="co-meta"><button type="button" class="co-src" data-name="'+esc(it.name)+'">'+esc(it.name)+'</button>'+sec+
       '<span>'+esc(it.d||'')+'</span>'+ex+stale+'</div>'+summ+acts+'</div>';
   }
   function renderFeed(){
@@ -7147,31 +7183,36 @@ function toggleTheme(){
     var head=document.getElementById('coFeedHead');
     if(!list) return;
     var co=coOf(activeCompany)||{};
+    _coReadCache=getCoReadSet();
     var rows;
     if(activeCompany==='__all__'){ rows=ALL.filter(passRange).filter(passQuery); }
     else{ rows=ALL.filter(function(x){return x.name===activeCompany;}).filter(passRange).filter(passQuery); }
+    if(coUnreadOnly){ rows=rows.filter(function(x){ return !coReadHas(coItemUrl(x)); }); }
     var total=rows.length;
     var vis=rows.slice(0,shown);
 
     if(head){
       var sub='显示 '+vis.length+' / '+total+' 条'+(forcedAll?'（已自动放宽到全部）':'');
+            var unreadToggle='<button type="button" class="co-unread-toggle'+(coUnreadOnly?' on':'')+'" data-act="co-unread" title="只显示未读条目（已读的自动隐藏）">未读'+(coUnreadOnly?' ✓':'')+'</button>';
+      var favToggle=(activeCompany==='__all__'?'':'<button type="button" class="co-fav-toggle'+(coFavHas(activeCompany)?' on':'')+'" data-act="co-fav" data-name="'+esc(activeCompany)+'" title="关注/取消关注该公司">★ '+(coFavHas(activeCompany)?'已关注':'关注')+'</button>');
       var right=rangeHtml()+(activeCompany==='__all__'?''
         :(co.home?'<a class="co-feed-link" href="'+esc(dec(co.home))+'" target="_blank" rel="noopener noreferrer">官网 &#8599;</a>':''));
       if(activeCompany==='__all__'){
         head.innerHTML='<span class="co-feed-name">全站最新动态</span>'+
           '<span class="co-feed-sub">'+sub+(query?'（已筛选）':'')+'</span>'+
-          '<span class="co-fh-right">'+right+'</span>';
+          '<span class="co-fh-right">'+right+unreadToggle+favToggle+'</span>';
       }else{
         head.innerHTML='<span class="co-feed-name">'+esc(activeCompany)+'</span>'+
           '<span class="co-feed-sub">'+(co.code?esc(co.code)+' · ':'')+sub+'</span>'+
-          '<span class="co-fh-right">'+right+'</span>';
+          '<span class="co-fh-right">'+right+unreadToggle+favToggle+'</span>';
       }
-      bindRange();
+      bindRange(); bindFeedHead();
     }
 
     if(!total){
       var msg;
       if(query) msg='没有匹配的条目';
+      else if(coUnreadOnly) msg='全部已读 🎉（关闭「未读」筛选可查看全部）';
       else if(activeCompany!=='__all__'&&!itemCount(co)) msg='该公司暂未收录官网新闻';
       else msg='该时间范围内暂无条目，可切换到「全部」';
       list.innerHTML='<div class="co-empty">'+msg+'</div>';
@@ -7213,6 +7254,8 @@ function toggleTheme(){
 
   // ---------- 右：搜索 + 公司导航（国内 / 海外 分两组，组内按市值·知名度 rank 升序） ----------
   function byRank(a,b){
+    var fa=coFavHas(a.name)?0:1, fb=coFavHas(b.name)?0:1;
+    if(fa!==fb) return fa-fb;
     var ra=(a.rank==null?99:a.rank), rb=(b.rank==null?99:b.rank);
     if(ra!==rb) return ra-rb;
     var d=itemCount(b)-itemCount(a); if(d) return d;
@@ -7225,8 +7268,8 @@ function toggleTheme(){
     if(!arr.length) return '';
     var h='<div class="co-nav-g-h">'+esc(label)+'（'+arr.length+'）</div>';
     h+=arr.map(function(o){
-      return '<button type="button" class="co-nav-item'+(o.name===activeCompany?' on':'')+'" data-name="'+esc(o.name)+'">'+
-        '<span>'+esc(o.name)+'</span><span class="co-n">'+itemCount(o)+'</span></button>';
+      var fav=coFavHas(o.name);
+      return '<button type="button" class="co-nav-item'+(o.name===activeCompany?' on':'')+'" data-name="'+esc(o.name)+'">'+'<span class="co-nav-name">'+esc(o.name)+'</span>'+'<span class="co-nav-right">'+'<span class="co-star'+(fav?' on':'')+'" data-fav="'+esc(o.name)+'" title="关注/取消关注">'+(fav?'★':'☆')+'</span>'+'<span class="co-n">'+itemCount(o)+'</span>'+'</span></button>';
     }).join('');
     return h;
   }
@@ -7249,7 +7292,13 @@ function toggleTheme(){
     // 移动端：国内 / 海外 / 暂未收录 三组
     var sel=document.getElementById('coNavSel');
     if(sel){
+      var favNames=getCoFavs().filter(function(n){ return coOf(n); });
       var opts=['<option value="__all__">全部公司（'+ALL.length+' 条）</option>'];
+      if(favNames.length){
+        opts.push('<optgroup label="★ 我的关注（'+favNames.length+'）">');
+        favNames.forEach(function(n){ opts.push(optFor(coOf(n))); });
+        opts.push('</optgroup>');
+      }
       opts.push('<optgroup label="国内公司（'+dom.length+'）">');
       dom.forEach(function(o){ opts.push(optFor(o)); });
       opts.push('</optgroup>');
@@ -7301,6 +7350,9 @@ function toggleTheme(){
         var target=hh||searchUrl(nm+' 官网');
         try{ window.open(target,'_blank','noopener'); }catch(e){}
       };
+    });
+    Array.prototype.forEach.call(nav.querySelectorAll('.co-star'),function(el){
+      el.onclick=function(e){ e.stopPropagation(); toggleCoFav(el.getAttribute('data-fav')); };
     });
     var tog=document.getElementById('coEmptyToggle');
     if(tog) tog.onclick=function(){ emptyOpen=!emptyOpen; renderNav(); };
@@ -7376,6 +7428,7 @@ function toggleTheme(){
     state:function(){
       return {range:range,shown:shown,totalItems:ALL.length,companies:COS.length,
         activeCompany:activeCompany,query:query,forcedAll:forcedAll,
+        coUnreadOnly:coUnreadOnly,coFavs:getCoFavs(),
         rendered:document.querySelectorAll('#companyList .co-item').length,
         groups:document.querySelectorAll('#companyList .co-day').length,
         collapsed:document.querySelectorAll('#companyList .co-exp').length,
@@ -7384,6 +7437,8 @@ function toggleTheme(){
     setRange:function(r){ setRange(r); },
     setQuery:function(q){ query=String(q||''); shown=PAGE; renderFeed(); },
     select:function(n){ selectCompany(n); },
+    toggleUnread:function(){ coUnreadOnly=!coUnreadOnly; shown=PAGE; renderFeed(); },
+    toggleFav:function(n){ toggleCoFav(n); },
     helpers:{clean:cleanT,split:splitTB,dec:dec,host:hostOf}
   };
   window.addEventListener('hashchange',function(){

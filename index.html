@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260925-0609" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260925-2237" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2806,7 +2806,7 @@ body.dark .co-side{background:#151d29}
   background:var(--surface-2);border:1px solid var(--line-1);border-radius:999px;padding:2px 8px;cursor:pointer;transition:.15s}
 .co-range button:hover{color:var(--brand);border-color:var(--brand)}
 .co-range button.on{background:#4f46e5;color:#fff;border-color:#4f46e5}
-.co-day-h{display:flex;align-items:center;gap:var(--s2);padding:6px var(--s5);background:var(--surface-2);
+.co-day-h{position:sticky;top:0;z-index:1;display:flex;align-items:center;gap:var(--s2);padding:6px var(--s5);background:var(--surface-2);
   border-bottom:1px solid var(--line-1);font-size:var(--fs-caption);font-weight:700;color:var(--ink-700);letter-spacing:.02em}
 .co-day-h .co-day-n{margin-left:auto;font-weight:600;color:var(--ink-500)}
 .co-item{padding:var(--s4) var(--s5);border-bottom:1px solid var(--line-1);position:relative;min-width:0}
@@ -2861,6 +2861,24 @@ body.dark .btn-co-unread:hover{background:#1f6b5c;color:#fff;box-shadow:0 2px 4p
 .co-err{color:#b42318}
 .co-more-wrap{display:flex;align-items:center;justify-content:center;gap:var(--s3);padding:var(--s4);border-top:1px solid var(--line-1)}
 .co-more-wrap[hidden]{display:none}
+/* ==== 2026-09-26 公司动态 P1/P2 优化样式 ====
+   P1-A 未读筛选开关 / P1-B 关注开关与导航星标 / P2 矿种标签 / P1-C 日期分组表头常驻 */
+.co-unread-toggle,.co-fav-toggle{font-family:inherit;font-size:var(--fs-caption);font-weight:600;border-radius:999px;
+  padding:2px 10px;cursor:pointer;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink-500);transition:.15s;white-space:nowrap}
+.co-unread-toggle:hover,.co-fav-toggle:hover{border-color:var(--brand);color:var(--brand)}
+.co-unread-toggle.on{background:#4f46e5;color:#fff;border-color:#4f46e5}
+.co-fav-toggle.on{background:#e11d48;border-color:#e11d48;color:#fff}
+.co-star{margin-left:6px;cursor:pointer;color:var(--ink-400);font-size:14px;line-height:1;transition:.15s}
+.co-star:hover{color:#e11d48}
+.co-star.on{color:#e11d48}
+.co-nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.co-nav-right .co-n{font-size:var(--fs-caption);color:var(--ink-500)}
+.co-sec{font-style:normal;color:#4f46e5;border:1px solid var(--brand);border-radius:999px;padding:0 6px;font-size:var(--fs-caption);margin-right:6px;white-space:nowrap}
+body.dark .co-unread-toggle,body.dark .co-fav-toggle{background:var(--surface-2);color:var(--ink-400)}
+body.dark .co-unread-toggle.on{background:#6366f1}
+body.dark .co-fav-toggle.on{background:#e11d48}
+body.dark .co-sec{border-color:#5b6bff;color:#a5b4fc}
+body.dark .co-star,.co-star:hover{color:#e11d48}
 .co-more{font-family:inherit;font-size:var(--fs-meta);font-weight:600;color:var(--brand-ink);
   background:var(--surface-2);border:1px solid var(--line-2);border-radius:999px;padding:6px var(--s5);cursor:pointer;transition:.15s}
 .co-more:hover{background:var(--brand-soft);border-color:var(--brand);color:var(--brand)}
@@ -2976,7 +2994,7 @@ body.dark .btn-co-unread:hover{background:#1f6b5c;color:#fff;box-shadow:0 2px 4p
 <script src="news-data.js?v=d8eb926e" defer></script>
 <script src="lme-data.js?v=af8f478a" defer></script>
 <script src="price-history.js?v=c27267f9" defer></script>
-<script src="app.js?v=30fe7291" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=abd7f5c1" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
