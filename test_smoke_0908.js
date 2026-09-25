@@ -2,6 +2,7 @@
  * 2026-09-08 批次改动冒烟测试（jsdom）
  * 覆盖：① 找矿专项区已取消 ② 要闻跨源去重 + 日期标注 ③ 热榜 ≤5 条且与要闻互斥
  *       ④ 会展迷你卡进侧栏 ⑤ 矿权改紧凑列表 + 去重（09-12 起桌面恢复「卡片/列表」双视图） ⑥ 已读样式对比度
+ *       ⑬ 点击分区：标题可点跳转 / 正文可选字不跳转（2026-09-25 §42.28）
  * 运行：node test_smoke_0908.js
  */
 const fs = require('fs');
@@ -42,6 +43,9 @@ const dom = new JSDOM(html, {
     if (typeof win.fetch !== 'function') {
       win.fetch = () => Promise.reject(new Error('jsdom: fetch stub'));
     }
+    // 2026-09-25：拦截 window.open 作为「是否跳转」的观测点（REFERENCE §42.28）
+    win.__openedUrls = [];
+    win.open = u => { win.__openedUrls.push(u); return null; };
     win.addEventListener('error', e => errors.push('window.error: ' + e.message));
     const origErr = win.console.error;
     win.console.error = (...a) => { errors.push('console.error: ' + a.join(' ')); origErr.apply(win.console, a); };
@@ -439,6 +443,67 @@ setTimeout(() => {
       check('⑫ 今日新增数 = 今日区 is-new（不含矿权摘要）', newCount === isNew, '顶部=' + newCount + ' is-new=' + isNew);
     }
   } catch (e) { check('⑫ 今日新增计数口径', false, e.message); }
+
+  console.log('\n===== ⑬ 点击分区：标题可点跳转 / 正文可选字（2026-09-25 §42.28）=====');
+  try {
+    const appSrc = fs.readFileSync(path.join(__dirname, 'app.js'), 'utf-8');
+    // —— 静态契约：直接扫 index.html 源码 ——
+    check('⑬a .news-item 不再整卡手型光标（cursor:default）', /\.news-item\{[^}]*cursor:default/.test(html));
+    check('⑬b .news-item 规则里已无 cursor:pointer（假可点信号）', !/\.news-item\{[^}]*cursor:pointer/.test(html));
+    check('⑬c .news-title 手型光标', /\.news-title\{[^}]*cursor:pointer/.test(html));
+    check('⑬d .news-summary I 型光标 + 显式可选', /\.news-summary\{[^}]*cursor:text[^}]*user-select:text/.test(html));
+    check('⑬e 链接型标题禁原生拖拽（-webkit-user-drag:none）', /-webkit-user-drag:none/.test(html));
+    check('⑬f 移动端卡片按压下沉已移除（改挂 .news-title）',
+      !/\.news-item:active\{transform:translateY/.test(html) && /\.news-title:active\{opacity/.test(html));
+    check('⑬g 公司视图同族：.co-title 手型 + .co-summary/.co-body 可选',
+      /\.co-title\{cursor:pointer\}/.test(html) && /\.co-summary,\.co-body\{cursor:text/.test(html));
+    check('⑬h app.js 已把 .news-item 移出整卡点击委托',
+      /closest\('\.hot-item,\.digest-list > li'\)/.test(appSrc) && !/closest\('\.news-item,/.test(appSrc));
+    check('⑬i app.js 有选区守卫 mdHasTextSelection',
+      /function mdHasTextSelection\(\)/.test(appSrc) && /if\(mdHasTextSelection\(\)\)return;/.test(appSrc));
+
+    // —— 运行时契约：真派发 click，看 window.open 是否被调 ——
+    const opened = window.__openedUrls;
+    const sample = doc.querySelector('#todaySection .news-item:not([data-rights-summary])')
+                || doc.querySelector('#todaySection .news-item');
+    const summary = sample && sample.querySelector('.news-summary');
+    const title = sample && sample.querySelector('a.news-title');
+    check('⑬j 今日区存在「标题链接 + 独立摘要」样本', !!(summary && title));
+    if (summary) {
+      summary.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+      check('⑬k 点摘要不打开原文（正文不再是热区）', opened.length === 0, 'opened=' + JSON.stringify(opened));
+    }
+    if (title) {
+      const href = title.getAttribute('href') || '';
+      check('⑬l 标题仍是 <a> 指向原文（target=_blank）',
+        /^https?:/.test(href) && title.getAttribute('target') === '_blank', href.slice(0, 60));
+      try { window.localStorage.removeItem('md_last_seen_url'); } catch (e) {}
+      title.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+      let seen = '';
+      try { seen = window.localStorage.getItem('md_last_seen_url') || ''; } catch (e) {}
+      check('⑬l2 点标题仍被 app.js 接住（记入 md_last_seen_url）', seen === href, 'seen=' + seen.slice(0, 60));
+    }
+    const hot = doc.querySelector('#hotListBody li.hot-item');
+    if (hot) {
+      opened.length = 0;
+      hot.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+      check('⑬m 热榜整行仍可点（保留便捷入口）', opened.length === 1, 'opened=' + JSON.stringify(opened));
+      opened.length = 0;
+      const sel = window.getSelection(), rng = doc.createRange();
+      rng.selectNodeContents(hot); sel.removeAllRanges(); sel.addRange(rng);
+      hot.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
+      check('⑬n 有文字选区时整行点击不跳转（选区守卫）', opened.length === 0,
+        'sel=' + JSON.stringify(String(sel).slice(0, 8)) + ' opened=' + JSON.stringify(opened));
+      sel.removeAllRanges();
+    }
+    // —— 级联结果断言（比源码字符串更强：证明规则真的作用到了元素上；
+    //    -webkit-user-drag jsdom 不暴露，只能扫源码，见 ⑬e）——
+    const csOf = sel => { const el = doc.querySelector(sel); return el ? window.getComputedStyle(el) : null; };
+    const nItem = csOf('#todaySection .news-item'), nTit = csOf('#todaySection a.news-title'), nSum = csOf('#todaySection .news-summary');
+    check('⑬o 级联：.news-item 计算光标 = default（不再冒充可点）', !!nItem && nItem.cursor === 'default', nItem ? nItem.cursor : 'no-el');
+    check('⑬p 级联：.news-title 计算光标 = pointer', !!nTit && nTit.cursor === 'pointer', nTit ? nTit.cursor : 'no-el');
+    check('⑬q 级联：.news-summary 计算光标 = text 且文字可选', !!nSum && nSum.cursor === 'text' && nSum.userSelect === 'text', nSum ? (nSum.cursor + '/' + nSum.userSelect) : 'no-el');
+  } catch (e) { check('⑬ 点击分区运行时契约', false, e.message); }
 
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));

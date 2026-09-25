@@ -2434,7 +2434,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | 命令 | 期望 | 覆盖 |
 |---|---|---|
 | `node test_brief_layers.js` | **91** | 简报分层渲染（jsdom；含裁剪态持久化 §40） |
-| `node test_smoke_0908.js` | **78** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1；**2026-09-14 新增「百度统计 ID 与后台逐字一致」+1**） |
+| `node test_smoke_0908.js` | **96** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1；**2026-09-14 新增「百度统计 ID 与后台逐字一致」+1**；**2026-09-25 新增 ⑬ 点击分区 +18（78→96）**；**2026-09-25 §42.27 公司 P1/P2：`test_company_section.js` 116→135**） |
 | `node test_mobile_ux_batch.js` | **222** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13）；**2026-09-24 注入按钮形态修复 +6（208→215）**；**2026-09-24 展开全文+已读弱化 +7（215→222）** |
 | `node test_qa_features.js` | **61** | AI 搜核心函数 / 流式接线 / 语音（含「音量条已删、调节柄已换」） |
 | `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |
@@ -2456,6 +2456,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **涉及价格区视图切换 / 热力图 / 排行 / `#priceViewBar` / `#priceHeatmap` / `#priceRank` / `rank-on` / `__mdPriceRank` / `md_price_view`** → 必跑 `node test_price_heatmap.js`，并补**真实 Chrome** 探针（改过 `@media` 与 grid 断点）。
 - **涉及安装引导 / `manifest.json` / head 声明** → 必跑两个 PWA 测试。
 - **改过 CSS 断点或 `@media`** → 必须用**真实 Chrome**（jsdom 不评估 `@media`）。
+- **涉及点击热区 / `cursor` / 整卡点击打开原文 / `setupCardOpen` / `.news-summary` 可选性（§42.28）** → 必跑 `node test_smoke_0908.js`（⑬ 段）+ `PY preflight_check.py`。该段含**反向对照**：改动前点摘要必 `window.open` 新标签页（本机实测复现用户痛点）。⚠️ 本机 headless Chrome 被**环境管控**（`--dump-dom` 零输出，见 `headless-chrome-responsive-probe` 技能「退路」节），故 §42.28 的证据等级 = **jsdom 级联计算值**（`.news-item`→`default`、`.news-title`→`pointer`、`.news-summary`→`text`/`text`）+ 源码正则 + `:active` 态源码断言；**不含**真实布局几何（本次改动无布局变化，故可接受）。
 - 全量闸门（如有）＝根目录全部 `test_*.js` + `test_*.py`（**不写死条数**，以实际文件为准；2026-09-13 盘点为 24 个 node / 9 个 python —— 原「21 + 9」已随新增测试漂移）。
 
 ### 42.10 验证方法与已知的「假 FAIL」坑（从两条 prompt 的节流规则迁入）
@@ -2665,3 +2666,43 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 **闸门**：`node test_company_section.js` 新增 Section 15（P1/P2 回归：矿种标签 / 未读筛选 / 关注置顶 / 移动端「我的关注」分组 / sticky CSS），基线 116 → **135 通过 / 0 失败**；`test_smoke_0908.js` 78、`test_mobile_ux_batch.js` 222、`test_view_switch.js` 22 全过；preflight ✅（build 20260925-2237 与 sw.js `CACHE_NAME` 一致）；`app.js node --check` 通过。
 
 **未决（P0-A，待用户在有网环境核实）**：中钨高新 / 盛屯矿业 / 银泰黄金 / 盛和资源 / 四川黄金 5 家空壳公司当前 `home` 走 sina corp 页（仅用于「暂未收录」组的官网/搜新闻兜底），未配真实官网域名。沙箱网络被拦无法核实，故本节点**未臆测域名**；待用户在能联网的机器上核实各家官网后，再于 `fetch_company.py` 补 `home` 字段并重抓（不阻塞本次 P1/P2 上线）。
+
+### §42.28 点击分区：标题是链接 / 正文是可选文本（2026-09-25 · build `20260925-2258`）
+
+**背景（回应 2026-09-25 用户诉求）**：用户描述「鼠标停在**标题**上可点链接跳转；停在**下面具体内容**上可以随意选字、不跳转」，并举例「谷歌搜出来的内容好像是这个逻辑」，问描述是否准确、有无更好意见。
+
+**改前实测（本机复现，非推测）**：机制上**标题本来就是 `<a target="_blank">`、摘要本来就是独立 `<div>`**，但 `app.js:902` 的 `setupCardOpen()`（2026-09-05 加的「整张卡片点击打开原文」）把**整张卡**都做成了热区 ——
+`closest('.news-item,.hot-item,.digest-list > li')` → 非 `<a>`/`<button>` 区域一律 `window.open(url)`。
+**关键机理**：**拖选文字后松手，浏览器同样会派发 `click`**（mousedown 与 mouseup 落在同一元素/共同祖先即可），于是「在正文里选字」被当成点击 → 新标签页被打开。用户诉求的核心就是这个。
+反向对照证据（`test_smoke_0908.js` ⑬ 段用「改前源码 + 改后断言」跑）：`⑬k FAIL opened=["https://ky.mnr.gov.cn/…"]`、`⑬o 计算光标 = pointer`（整卡手型）、`⑬q .news-summary 计算光标 = pointer/auto`（正文无文本光标）。
+
+**现行分工（契约）**：
+
+| 区域 | 光标 | 行为 |
+|---|---|---|
+| `.news-title`（标题） | `pointer` | `<a target="_blank" rel=…>` → 跳转原文；**并触发 `markRead()`** |
+| `.news-summary` / `.co-summary` / `.co-body`（正文） | `text`（I 型） | 纯文本，可自由选字、可拖选、**不跳转** |
+| `.news-item`（卡片本体/空白/来源行） | `default` | **不跳转**（已移出整卡点击委托） |
+| `li.hot-item`（侧栏矿业热榜）/ `li.digest-list > li` | `pointer` | **保留**整行可点（标题短、整行小而精），但加**选区守卫** |
+
+**实现点（两个文件，均为重建边界内）**：
+- `app.js` `setupCardOpen()`：选择器收窄为 `.hot-item,.digest-list > li`（**移除 `.news-item`**）+ 新增全局 `mdHasTextSelection()`（`String(window.getSelection()).length>0`）作为守卫 —— 正在选字时不跳转。`markRead()` 主路径不变（仍由下方通用委托在点 `<a>` 时调用，浏览记录口径不变）。
+- `index.html`：`.news-item{cursor:default}`（原 `pointer`）；`.news-title{…;cursor:pointer;-webkit-user-drag:none}`；`.news-summary{…;cursor:text;user-select:text;-webkit-user-select:text}`；移动端 `.news-item:active{transform:translateY(1px)}` → **`.news-title:active{opacity:.65}`**（卡片不再有「按下去陷」的假按钮感）；公司视图同族 `.co-title{cursor:pointer}`、`.co-summary,.co-body{cursor:text;user-select:text}`；`.co-title,.hot-title,.digest-link,.rr-link{-webkit-user-drag:none}`。
+- **`-webkit-user-drag:none` 的作用**：从标题上按下拖拽时，Chrome/Safari 默认会启动**原生链接拖拽**（拖出链接幽灵图），导致「想从标题选字却拖出个链接」。禁掉后拖拽 = 选字。Firefox 忽略该属性（其默认即选字）。
+
+**必留**：
+- **生成侧**：`generate_common.py` 继续输出 `class="news-item"` / `class="news-title"` / `class="news-summary"` 三个类名（本契约靠它们命中 CSS）；**不得**给 `.news-item` 或 `.news-title` 写**内联 `style`**（内联恒压过 `<style>`，会静默废掉本契约）。三个类名同时被 §42.22 / §42.23 / §42.25 的指纹保护，无需新增 prompt 索引项（同 §42.20 的先例：本模块生成侧不产出）。
+- **复核侧**：`app.js` 的 `mdHasTextSelection` + `setupCardOpen` 选择器里**没有** `.news-item`；`index.html` 的三条 `cursor` 规则；移动端 `:active` 挂在 `.news-title` 上。
+
+**回退指纹**（出现任一即回退 → 修回 + bump build-version + 重跑 `test_smoke_0908.js`）：
+1. **点摘要/正文/来源行会打开新标签页** —— `.news-item` 又回到 `setupCardOpen()` 的选择器里（最典型的回退；用 ⑬k 复现）。
+2. **正文区显示手型光标** —— `.news-item` 又是 `cursor:pointer`，或 `.news-summary` 缺 `cursor:text`（`⑬o`/`⑬q` 计算值断言）。
+3. 标题区不是手型 —— `.news-title` 缺 `cursor:pointer`（`⑬p`）。
+4. **拖选文字时整行跳转** —— 选区守卫 `mdHasTextSelection()` 丢失，或被挪到 `window.open` 之后（`⑬n`）。
+5. `.news-item:active{transform:translateY(1px)}` 复活（卡片重新有假按钮按压感，`⑬f`）。
+6. 生成侧给 `.news-item` 加了内联 `style`（外部看不出，但本契约静默失效 → 用命令行 `grep -c 'class="news-item"'` 对比带 `style=` 的数量）。
+
+**闸门 / 验收**：`node test_smoke_0908.js` 新增 ⑬ 段 **18 条**（9 条源码契约 + 3 条 jsdom 级联计算值 + 6 条运行时派发 `click`），基线 **78 → 96 通过 / 0 失败**；`test_mobile_ux_batch.js` 222、`test_company_section.js` 135、`test_view_switch.js` 22、`test_fav_history_aggregate.js` 37 全过；`preflight_check.py` ✅；`app.js node --check` 通过。⚠️ **反向对照必做**：用 `git archive HEAD`（改前源码）+ 改后测试跑一遍，⑬ 段应有 **13 条 FAIL**（证明断言非空过）。
+
+**明确不做（避免后来者"顺手优化"回去）**：**不要**改回「整卡可点 + `getSelection()` 拦截」的折中方案 —— ① 站内摘要的主要用途是**复制进报告/汇报**，整卡热区让"选字失败还多开一标签页"的成本高于收益；② 卡内已有 ☆ 收藏 / 矿种标签 / 标为已读 三个控件，整卡热区本就在和它们抢点击（`e.target.closest('button')` 只能挡按钮本身）；③ 光标能自我说明（标题手型 / 正文 I 型），比任何提示文案都直接。若将来用户明确要求恢复整卡可点，**必须同时**保留 `mdHasTextSelection()` 守卫，并把 `.news-summary` 的 `cursor` 改回 `pointer`（两者不可同时成立，光标必须与真实行为一致）。
+
