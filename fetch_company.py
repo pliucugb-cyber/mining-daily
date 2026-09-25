@@ -1102,17 +1102,6 @@ SITES = [
      'url':'https://www.angloamerican.com/','method':'html','unreach':'spa'},
     {'name':'第一量子','code':'FM','sector':'铜','region':'NA','exchange':'TSX',
      'url':'https://www.first-quantum.com/','method':'html','unreach':'spa'},
-    # —— v8b：本轮补入（官网经无头浏览器核实 / 新浪个股新闻源）——
-    {'name':'中钨高新','code':'000657','sector':'钨','region':'CN','exchange':'A股',
-     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/000657.phtml','method':'html','unreach':'spa'},
-    {'name':'盛屯矿业','code':'600711','sector':'锌','region':'CN','exchange':'A股',
-     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/600711.phtml','method':'html','unreach':'spa'},
-    {'name':'银泰黄金','code':'000975','sector':'黄金','region':'CN','exchange':'A股',
-     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/000975.phtml','method':'html','unreach':'spa'},
-    {'name':'盛和资源','code':'600392','sector':'稀土','region':'CN','exchange':'A股',
-     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/600392.phtml','method':'html','unreach':'spa'},
-    {'name':'四川黄金','code':'001337','sector':'黄金','region':'CN','exchange':'A股',
-     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/kind/company/stockid/001337.phtml','method':'html','unreach':'spa'},
 ]
 
 INDEX = {s['name']: s for s in SITES}
