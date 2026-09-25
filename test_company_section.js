@@ -472,13 +472,71 @@ setTimeout(() => {
     check('渲染摘要不含电头/地址/征集代理等模板残片', !badMark, summText.slice(0, 80));
     // 诚实的「仅标题」体验：暂未提取到摘要时显示占位，而非空白或错乱电头
     check('存在「暂未提取到正文摘要」占位（.co-summary-empty）', document.querySelectorAll('#companyList .co-summary-empty').length >= 1);
+
+    // ---------- 15) P1/P2 优化回归（2026-09-26）：未读筛选 / 关注置顶 / 矿种标签 / sticky ----------
+    // P2 矿种标签：矿种是公司级字段，卡片从 it.name 所属公司取 sector 渲染 .co-sec
+    check('卡片含矿种标签 .co-sec（从公司级 sector 派生）',
+          document.querySelectorAll('#companyList .co-sec').length >= 1,
+          'sec=' + document.querySelectorAll('#companyList .co-sec').length);
+    check('矿种标签文案非空（已知矿种）',
+          Array.from(document.querySelectorAll('#companyList .co-sec')).some(e => (e.textContent||'').trim().length > 0));
+
+    // P1-A 未读筛选开关
+    check('默认 coUnreadOnly=false', coState().coUnreadOnly === false);
+    const ut = document.querySelector('#coFeedHead .co-unread-toggle');
+    check('新闻流头部含「未读」筛选按钮', !!ut);
+    if (ut) {
+      check('未读按钮默认无 .on', !ut.classList.contains('on'));
+      ut.click();
+      check('点「未读」→ coUnreadOnly=true', coState().coUnreadOnly === true, 'coUnreadOnly=' + coState().coUnreadOnly);
+      const utAfter = document.querySelector('#coFeedHead .co-unread-toggle');
+      check('点「未读」→ 按钮加 .on', !!(utAfter && utAfter.classList.contains('on')));
+      check('未读筛选触发重渲（rendered 为数字）', typeof coState().rendered === 'number');
+      if (utAfter) utAfter.click();
+      check('再点「未读」→ coUnreadOnly=false', coState().coUnreadOnly === false);
+    }
+    check('__mdCo.toggleUnread() 可用', typeof window.__mdCo.toggleUnread === 'function');
+
+    // P1-B 关注置顶 + 星标
+    check('默认 coFavs 为空数组', Array.isArray(coState().coFavs) && coState().coFavs.length === 0);
+    const stars15 = document.querySelectorAll('#coNav .co-star');
+    const listedNav15 = document.querySelectorAll('#coNav .co-nav-item:not(.empty)');
+    check('导航每列公司均带星标（stars == 列出公司数）',
+          stars15.length === listedNav15.length && stars15.length >= 1,
+          'stars=' + stars15.length + ' listed=' + listedNav15.length);
+    const firstStar15 = stars15[0];
+    let favName15 = '';
+    if (firstStar15) {
+      favName15 = firstStar15.getAttribute('data-fav');
+      firstStar15.click();
+      const starAfter15 = document.querySelector('#coNav .co-star[data-fav="' + favName15 + '"]');
+      check('点星标 → coFavs 含该公司', coState().coFavs.indexOf(favName15) >= 0,
+            'favs=' + JSON.stringify(coState().coFavs));
+      check('点星标 → 星标加 .on', !!(starAfter15 && starAfter15.classList.contains('on')));
+      const navOrder15 = Array.from(document.querySelectorAll('#coNav .co-nav-item:not(.empty)'))
+        .map(el => el.getAttribute('data-name'));
+      check('关注公司置顶（导航首位=被关注公司）', navOrder15[0] === favName15,
+            (navOrder15[0] || '') + ' vs ' + favName15);
+      const favOg15 = Array.from(document.querySelectorAll('#coNavSel optgroup'))
+        .filter(g => /我的关注/.test(g.getAttribute('label') || ''));
+      check('移动端 select 含「★ 我的关注」分组（关注后）', favOg15.length === 1, 'og=' + favOg15.length);
+      check('__mdCo.toggleFav() 可用', typeof window.__mdCo.toggleFav === 'function');
+      const starBack15 = document.querySelector('#coNav .co-star[data-fav="' + favName15 + '"]');
+      if (starBack15) { starBack15.click(); check('再点星标 → coFavs 移除该公司', coState().coFavs.indexOf(favName15) < 0); }
+    } else {
+      check('存在可关注的星标', false);
+    }
+
+    // P1-C 日期分组表头常驻（CSS position:sticky）
+    check('CSS：.co-day-h 含 position:sticky（日期分组表头常驻）', /\.co-day-h\{[^}]*position:sticky/.test(css));
+
     check('无阻塞性 JS 错误', errors.length === 0, errors.join(' | '));
 
   } catch (e) {
     fail++;
     console.log('  FAIL  测试执行抛错 -> ' + (e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e));
   }
-  console.log('\n===== 矿业公司动态 v6（摘要 + 国内/海外分组 + 域名行移除）汇总 =====');
+  console.log('\n===== 矿业公司动态 v7 + P1/P2（未读筛选/关注置顶/矿种标签/日期sticky）汇总 =====');
   console.log('  通过 ' + pass + ' / 失败 ' + fail);
   process.exit(fail ? 1 : 0);
 }, 1500);

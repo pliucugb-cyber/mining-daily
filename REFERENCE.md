@@ -2441,7 +2441,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
 | `node test_price_heatmap.js` | **126** | 价格区热力图：静态契约（容器顺序 / pre-paint 位置 / 选择器）+ jsdom 运行时（16 色块、方向与 `.pc-chg` 一致、alpha 单调、红涨绿跌、2 分组、图例 >=7、点击开走势图、视图持久化）+ 反向用例；**价格区间榜**：三态互斥 / 两栏固定 / 空栏占位 / 红涨绿跌 / 条形归一 / 跨度日数回归锁 / `__mdPriceRank` 等（§42.14 / §42.15） |
 | `node test_event_calendar.js` | **29 PASS** | 事件·数据日历：默认隐藏态（开关 `EC_ENABLED=false`）+ 开关往返恢复隐藏 + 静态容器 `#eventCalendar` 存活（重建边界）+ 未被 `refreshSectionVisibility` 隐藏（防回归）+ 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签（会议/政策/数据/截止）+ 外链 `target=_blank` + 空占位「暂无已收录的近期事件」（§42.16） |
-| `node test_company_section.js` | **116 PASS** | 矿业公司动态（v7：单栏 + sticky 修复 + 搜新闻兜底 + 已读态回归 + 数据洁净回归）：跨列布局（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**）（companySection/installGuide 为 `.news-grid` 直接子级、col-rail 显式定位）+ 288px 侧栏无矿种维度 + 默认近 90 天 + 分页 60 + 日期分组 + 长 t 拆标题/正文 2 行 clamp + 展开全文 + 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端）+ **无逐条 `.co-host` 域名行** + 切「全部」并连续「加载更多」渲染全量 + 未收录公司折叠组（10 家）+ 点公司收敛 + **forcedAll 自动放宽** + hash 路由 `#co=` 深链 + 搜索过滤 + 移动端 `#coNavSel` 国内/海外/暂未收录 三组 optgroup + 国内/海外分组且组内按 `rank` 升序导航 + 豁免显隐 + `switchView('company')` 视图隔离 + **公司视图已读态（独立 key `mining_daily_read_co_urls` + `.read` 弱化 + 标为已读/未读按钮）+ 数据洁净（摘要无电头/地址/征集代理残片 + 空摘要斜体占位 `.co-summary-empty`）** + 无 JS 错误（§42.19 / §42.26） |
+| `node test_company_section.js` | **135 PASS** | 矿业公司动态（v7：单栏 + sticky 修复 + 搜新闻兜底 + 已读态回归 + 数据洁净回归）：跨列布局（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**）（companySection/installGuide 为 `.news-grid` 直接子级、col-rail 显式定位）+ 288px 侧栏无矿种维度 + 默认近 90 天 + 分页 60 + 日期分组 + 长 t 拆标题/正文 2 行 clamp + 展开全文 + 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端）+ **无逐条 `.co-host` 域名行** + 切「全部」并连续「加载更多」渲染全量 + 未收录公司折叠组（10 家）+ 点公司收敛 + **forcedAll 自动放宽** + hash 路由 `#co=` 深链 + 搜索过滤 + 移动端 `#coNavSel` 国内/海外/暂未收录 三组 optgroup + 国内/海外分组且组内按 `rank` 升序导航 + 豁免显隐 + `switchView('company')` 视图隔离 + **公司视图已读态（独立 key `mining_daily_read_co_urls` + `.read` 弱化 + 标为已读/未读按钮）+ 数据洁净（摘要无电头/地址/征集代理残片 + 空摘要斜体占位 `.co-summary-empty`）** + 无 JS 错误（§42.19 / §42.26 / §42.27） |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
@@ -2644,3 +2644,24 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 4. `LEAD_CACHE_VER` 被回退到 v2（旧污染缓存复活）。
 
 **必留（生成侧）**：`fetch_company.py` 的 `DATELINE_PAT` / `ADDR_PAT` / `STRIP_TAIL_PAT` / `is_boilerplate_summary` / `pick_lead` / `normalize_item` 显式清空分支 / `LEAD_CACHE_VER='v3'`；`app.js` 的 `co-summary-empty` 分支 + 公司已读按钮注入 + `mining_daily_read_co_urls` 读写；`index.html` 的 `.co-summary-empty` 两条规则。
+
+### §42.27 矿业公司动态 P1/P2 优化（2026-09-25 · build 20260925-2237）
+
+**背景（回应 2026-09-23 用户诉求 #4「矿业公司界面还能优化什么」）**：在 §42.26 已落地「已读态 + 摘要去污」的基础上，按 P0/P1/P2 三档建议继续打磨公司视图的浏览效率。本节点覆盖 P1（未读筛选、关注置顶、日期分组表头常驻）与 P2（矿种标签）；P0-A（5 家空壳公司真域名）因沙箱无网、无法核实域名，暂缓，见下方「未决」。
+
+**前端（app.js + index.html，运行时渲染、零口径风险、抗每日重建）**：
+- **P1-A 未读筛选**：新增全局态 `coUnreadOnly` + `coItemUrl(it)`（从条目所属公司取真实链接，缺失退化为搜索链接）；`renderFeed()` 在 `coUnreadOnly` 时过滤掉已读条目；新闻流头部新增「未读」按钮（`.co-unread-toggle`，含 `.on` 态），点选即重渲并切换；空列表文案补「全部已读 🎉」。`__mdCo.toggleUnread()` 暴露给测试。
+- **P1-B 关注置顶**：新增**独立** localStorage key `mining_daily_co_fav`（与新闻流收藏 `FAV_KEY` 物理隔离），存关注公司名数组（上限 50）；`byRank()` 排序时关注公司 `priority=0` 置顶；桌面导航每家公司右侧加星标（`.co-star` / `☆→★`），点选 `toggleCoFav()` 即时重渲导航 + 切换；移动端 `#coNavSel` 新增「★ 我的关注」optgroup；公司视图头部加「关注/已关注」按钮（`.co-fav-toggle`）。`__mdCo.toggleFav()` 暴露给测试。
+- **P1-C 日期分组表头常驻**：`index.html` `.co-day-h` 加 `position:sticky;top:0;z-index:1`（滚动浏览某日条目时日期分组不跑掉；全局已有回到顶部，故只做分组 sticky）。
+- **P2 矿种标签**：卡片 meta 行新增矿种 chip `.co-sec`（圆角描边、与品牌同色系）。**关键修正**：矿种是**公司级**字段（条目本身不含 `sector`），`cardHtml()` 原误读 `it.sector`（恒为空）→ 标签永不渲染；改为 `coOf(it.name).sector` 派生。
+- **作用域修正（关键）**：`coItemUrl` / `toggleCoFav` 最初被误插到**全局作用域**，但它们引用公司 IIFE（`(function(){…})()`，app.js 6985–7458）内部的 `dec` / `splitTB` / `searchUrl` / `renderNav`，运行时必抛 `renderNav is not defined`、且未读筛选 `coItemUrl` 也会越界。已**移入公司 IIFE 内部**（紧邻 `coOf`），修复后 jsdom 中点击星标/未读均不再抛错。
+
+**回退指纹**：
+1. 点导航星标 / 头部「关注」报 `renderNav is not defined`（作用域回归）—— 确认 `coItemUrl` / `toggleCoFav` 位于 app.js 公司 IIFE 内（搜索 `function toggleCoFav` 应在 `function coOf` 附近、而非全局）。
+2. 点「未读」筛选后卡片无变化或报错—— 确认 `renderFeed()` 把 `unreadToggle`/`favToggle` 真正拼进 `head.innerHTML` 的 `.co-fh-right`（原补丁只生成字符串未注入，导致按钮不出现）。
+3. 卡片无矿种标签 `.co-sec`—— 确认 `cardHtml` 用 `coOf(it.name).sector` 而非 `it.sector`。
+4. `.co-day-h` 缺 `position:sticky`（日期表头不常驻）。
+
+**闸门**：`node test_company_section.js` 新增 Section 15（P1/P2 回归：矿种标签 / 未读筛选 / 关注置顶 / 移动端「我的关注」分组 / sticky CSS），基线 116 → **135 通过 / 0 失败**；`test_smoke_0908.js` 78、`test_mobile_ux_batch.js` 222、`test_view_switch.js` 22 全过；preflight ✅（build 20260925-2237 与 sw.js `CACHE_NAME` 一致）；`app.js node --check` 通过。
+
+**未决（P0-A，待用户在有网环境核实）**：中钨高新 / 盛屯矿业 / 银泰黄金 / 盛和资源 / 四川黄金 5 家空壳公司当前 `home` 走 sina corp 页（仅用于「暂未收录」组的官网/搜新闻兜底），未配真实官网域名。沙箱网络被拦无法核实，故本节点**未臆测域名**；待用户在能联网的机器上核实各家官网后，再于 `fetch_company.py` 补 `home` 字段并重抓（不阻塞本次 P1/P2 上线）。
