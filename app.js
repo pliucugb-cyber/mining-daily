@@ -899,15 +899,29 @@ function _dayBucketOf(it){
   return '更早';
 }
 
-// ===== 整张卡片点击打开原文（2026-09-05 增强）=====
-// 标题与「查看原文」本就是 <a> 链接直接可点；这里补全：点击卡片其余区域（摘要/来源等）
-// 也能打开原文。点 <a>（链接本身）或 <button>（收藏/未读等）不拦截，走各自默认行为。
-// 同时标记已读，与「浏览记录」统计口径一致。
+// ===== 卡片点击打开原文（2026-09-05 增强 / 2026-09-25 收窄）=====
+// 2026-09-25 修订（用户诉求：鼠标停在标题上可点跳转、停在正文上可选字不跳转；
+// 对齐搜索结果页的交互模型 —— 只有标题是链接，正文是纯文本）：
+//   · 从下面委托的选择器里**移除 .news-item**：点摘要/来源/空白不再打开原文。
+//     缘由：拖选摘要文字后松手，浏览器同样派发 click，会命中该委托 window.open 跳走 ——
+//     表现为「在正文里选字会被跳走」，与「复制摘要进报告」的高频用法直接冲突。
+//   · 侧栏「矿业热榜」li.hot-item 与「今日要闻」li 仍整块可点（标题短、整行小而精），
+//     但加选区守卫 mdHasTextSelection()：正在选字时不跳转。
+//   · 标记已读口径不变：点标题（<a>）时仍由下方通用委托 markRead()。
+//   · 配套 CSS 在 index.html（.news-item cursor:default / .news-summary cursor:text），
+//     见 REFERENCE.md §42.28。
+function mdHasTextSelection(){
+  try{
+    var s=window.getSelection&&window.getSelection();
+    return !!(s&&String(s).length>0);
+  }catch(e){ return false; }
+}
 function setupCardOpen(){
   document.addEventListener('click',function(e){
-    var item=e.target.closest?e.target.closest('.news-item,.hot-item,.digest-list > li'):null;
+    var item=e.target.closest?e.target.closest('.hot-item,.digest-list > li'):null;
     if(!item)return;
     if(e.target.closest('a')||e.target.closest('button'))return; // 链接/按钮各自处理
+    if(mdHasTextSelection())return;                              // 正在选字 → 不跳转
     var url=item.getAttribute('data-url');
     if(url&&url!=='#'&&/^https?:/i.test(url)){
       e.preventDefault();
