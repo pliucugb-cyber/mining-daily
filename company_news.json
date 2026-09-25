@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-09-25",
+ "updated_at": "2026-09-26",
  "companies": [
   {
    "name": "紫金矿业",
@@ -326,9 +326,9 @@
    "exchange": "A股",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "chrome",
+   "method": "html",
    "unreach": "spa",
-   "stale": false,
+   "stale": true,
    "rank": 2,
    "items": [
     {
@@ -721,6 +721,12 @@
    "rank": 7,
    "items": [
     {
+     "t": "集团公司党委传达学习习近平总书记近期重要指示精... \"> 集团公司党委传达学习习近平总书记近期重要指示精...",
+     "d": "",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1549057011239354368.html",
+     "s": "9月7日，集团公司党委召开扩大会议，认真传达学习习近平总书记在第四十二个教师节到来之际向全国广大教师和教育工作者致以节日祝贺和诚挚问候的重要精神，习近平总书记对山东青岛市北海造船厂一货轮火灾事故作出的重要指示精神，紧密结合实际研究贯彻落实举措。"
+    },
+    {
      "t": "周洲：黄金行业迎来大有可为的战略机遇期 \"> 周洲：黄金行业迎来大有可为的战略机遇期",
      "d": "",
      "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1548347985945952256.html",
@@ -731,12 +737,6 @@
      "d": "",
      "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1548004906961469440.html",
      "s": ""
-    },
-    {
-     "t": "周洲赴吉林区域调研，强调聚焦资源保障以“十五五... \"> 周洲赴吉林区域调研，强调聚焦资源保障以“十五五...",
-     "d": "",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1547668452339089408.html",
-     "s": "9月8日，中国黄金集团党委书记、董事长周洲赴吉林区域调研，实地察看黄金博物馆建设运营情况，听取夹皮沟公司工作汇报并座谈，部署推进“十五五”开局各项重点工作。集团公司党委副书记、董事、工会主席覃荆文陪同调研。"
     },
     {
      "t": "央视财经| 博物馆内全方位体验黄金开采全流程 \"> 央视财经| 博物馆内全方位体验黄金开采全流程",
@@ -799,6 +799,12 @@
      "s": "周洲、殷长波感谢辽宁省委、省政府对中国黄金集团的大力支持。周洲说，辽宁是矿产资源大省，资源禀赋良好，产业基础坚实，区位优势优越，双方合作基础深厚、空间广阔，特别是辽宁营商环境越来越好，政企同心、携手并进的扎实举措和浓厚氛围，让我们更加坚定了在辽投资发展的信心。"
     },
     {
+     "t": "中国黄金集团举办“金彩双节·月满华诞” 迎国庆贺... \"> 中国黄金集团举办“金彩双节·月满华诞” 迎国庆贺...",
+     "d": "2026-02-04",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1552799447128211456.html",
+     "s": "张国强在致辞中代表集团公司党委向全体干部职工致以节日的问候和美好的祝福。他指出，2026年是“十五五”开局之年，集团公司上下正以奋进姿态实干开新局，加快建设世界一流黄金产业科技领军企业。"
+    },
+    {
      "t": "集团公司党委传达学习习近平总书记近期重要讲话和... \"> 集团公司党委传达学习习近平总书记近期重要讲话和...",
      "d": "2026-02-04",
      "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1551990733307641856.html",
@@ -815,12 +821,6 @@
      "d": "2026-02-04",
      "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1550536441447055360.html",
      "s": "中国工程院院士汪旭光、刘炯天、陆军、沈政昌、葛世荣、吴爱祥、唐菊兴、李夕兵，自然资源部、国务院国资委、国家矿山安全监察局相关司局领导，中国科学技术协会、中国有色金属工业协会、北京市科学技术协会、中国黄金协会相关领导出席会议，集团公司党委书记、董事长周洲出席会议并讲话，党委副书记、董事、工会主席覃荆文…"
-    },
-    {
-     "t": "集团公司党委传达学习习近平总书记近期重要指示精... \"> 集团公司党委传达学习习近平总书记近期重要指示精...",
-     "d": "2026-02-04",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1549057011239354368.html",
-     "s": "9月7日，集团公司党委召开扩大会议，认真传达学习习近平总书记在第四十二个教师节到来之际向全国广大教师和教育工作者致以节日祝贺和诚挚问候的重要精神，习近平总书记对山东青岛市北海造船厂一货轮火灾事故作出的重要指示精神，紧密结合实际研究贯彻落实举措。"
     },
     {
      "t": "中国黄金集团党委召开传达学习贯彻党的二十届四中全会精神视频会",
@@ -2073,7 +2073,15 @@
    "unreach": "spa",
    "stale": false,
    "rank": 99,
-   "items": []
+   "items": [
+    {
+     "t": "JORC信息",
+     "d": "",
+     "u": "https://www.cnmc.com.hk/jorc_information.html",
+     "s": "根据IQPR 2025摘要，截至2025年12月31日， Sokor项目的矿产资源估算如下表A所示。",
+     "t_en": "JORC Information"
+    }
+   ]
   },
   {
    "name": "力拓",
@@ -2236,7 +2244,64 @@
    "unreach": "spa",
    "stale": false,
    "rank": 99,
-   "items": []
+   "items": [
+    {
+     "t": "52. 介绍和发言",
+     "d": "",
+     "u": "https://www.angloamerican.com/media/speeches/2026",
+     "s": "阅读英美演讲稿和演讲稿。",
+     "t_en": "Presentations and speeches"
+    },
+    {
+     "t": "我们对Kabwe法律索赔的立场",
+     "d": "",
+     "u": "https://www.angloamerican.com/media/our-position-on-kabwe",
+     "s": "Leigh Day代表居住在赞比亚前Kabwe铅矿附近的赞比亚索赔人宣布对AASA提起集体诉讼。",
+     "t_en": "Our position on the Kabwe legal claim"
+    },
+    {
+     "t": "阅读更多阅读更多",
+     "d": "",
+     "u": "https://www.angloamerican.com/media",
+     "s": "了解英美资源集团的新闻稿、演示文稿和其他相关媒体信息。",
+     "t_en": "Read more Read more"
+    },
+    {
+     "t": "在此处阅读有关2026年第二季度生产报告页面的信息",
+     "d": "",
+     "u": "https://www.angloamerican.com/media/press-releases/2026/23-07-2026",
+     "s": "Anglo American plc截至2026年6月30日的第二季度生产报告。",
+     "t_en": "Read it here about Q2 2026 Production Report page"
+    },
+    {
+     "t": "阅读更多关于公司公告页面的信息",
+     "d": "",
+     "u": "https://www.angloamerican.com/media/press-releases/2026/18-05-2026",
+     "s": "英美资源集团宣布已同意将其在澳大利亚的炼钢煤矿投资组合（ “炼钢煤炭投资组合” ）出售给Dhilmar Lim……",
+     "t_en": "Read more about Company announcement page"
+    },
+    {
+     "t": "Anglo American和Teck宣布未来的Anglo Teck执行领导团队",
+     "d": "2026-09-24",
+     "u": "https://www.angloamerican.com/media/press-releases/2026/30-07-2026b",
+     "s": "Nolitha Fakude will continue in her current role, serving as Chair of Anglo Teck’s management board in South Africa, reporting to Duncan Wanblad.",
+     "t_en": "Anglo American and Teck announce future Anglo Teck Executive Leadership Team"
+    },
+    {
+     "t": "2026年英美期中业绩",
+     "d": "2026-09-24",
+     "u": "https://www.angloamerican.com/media/press-releases/2026/30-07-2026",
+     "s": "© Anglo American Services (UK) Ltd 2026.™和™是Anglo American Services (UK) Ltd.的商标。",
+     "t_en": "Anglo American Interim Results 2026"
+    },
+    {
+     "t": "中期股息公告（第49号）",
+     "d": "2026-09-24",
+     "u": "https://www.angloamerican.com/media/press-releases/2026/30-07-2026a",
+     "s": "3.博茨瓦纳普拉的股息基于2026年7月29日星期三（即货币兑换日）的汇率1美元： BWP14.36780。",
+     "t_en": "Notice of Interim Dividend (No.49)"
+    }
+   ]
   },
   {
    "name": "第一量子",
@@ -2293,6 +2358,6 @@
   "domestic": 32,
   "foreign": 15,
   "total": 47,
-  "items": 259
+  "items": 268
  }
 }
