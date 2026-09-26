@@ -4,11 +4,11 @@
  *   ① 卡片长度统一：源 t 字段 4 字 ↔ 1055 字悬殊 → 按句读切「标题 + 正文」，标题 2 行、正文 2 行折叠 + 「展开全文」
  *   ② 去矿种维度：矿种 chip 筛选 / 导航矿种分组 / 移动端 sector optgroup / 卡片矿种标签 全部移除
  *   ③ 链接可用：数据自带 HTML 实体（&amp;）先解码再转义（否则二次转义成 &amp;amp; 打不开）；外链 rel=noreferrer；显示目标域名
- *   ④ 导航：国内/中资港股/海外 分三组（2026-09-26 拆出中资港股）+ 按市值·知名度 rank 升序 + 计数徽标 + 「暂未收录」折叠组；面板内独立滚动
+ *   ④ 导航：中国/海外 分两组（2026-09-26 晚：原「中资港股」仅 2 家、头重脚轻，按资本归属并回中国组）+ 按市值·知名度 rank 升序 + 计数徽标 + 「暂未收录」折叠组；面板内独立滚动
  *   ⑦ 命名统一（2026-09-26）：海外/中资港股 显示「中文（英文）」，国内仅中文；name 仍作主键
  *   ⑧ 媒体源披露（2026-09-26）：选中公司后头部 sub 显示「来源：新浪财经 / 官网 RSS / 公司官网」
  *   ⑤ v6：每条卡片加一句内容摘要（仿新闻端，读 it.s）；移除逐条「目标域名」行；顶部说明段移除
- *   ⑨ v11（2026-09-26）：条目标题近黑加粗偏大 / 摘要中灰常规偏小（三级层级）；右栏三组表头可折叠（md_co_groups 记忆，默认全展开） + 文案精简（去「按市值·知名度」「最新动态」「有内容」）
+ *   ⑨ v11（2026-09-26）：条目标题近黑加粗偏大 / 摘要中灰常规偏小（三级层级）；右栏两组表头可折叠（md_co_groups 记忆，默认全展开） + 文案精简（去「按市值·知名度」「最新动态」「有内容」）
  *   ⑥ v7：新闻流单栏（同新闻列表形式）；右栏 sticky 修复（#companySection 改 overflow:clip）+ 上移；
  *       搜索框纳入摘要匹配；暂未收录公司新增「搜新闻」搜索引擎入口（官网死站/外壳页时仍可发现相关内容）
  * 运行：node test_company_section.js
@@ -291,14 +291,21 @@ setTimeout(() => {
           'got ' + navItems.length);
     const navAll = document.querySelector('#coNav .co-nav-all');
     check('公司导航「全部公司」入口存在', !!navAll);
-    // 国内 / 中资港股 / 海外 分三组（2026-09-26 拆三组：海外按「是否 A股」→ 拆出中资港股）
+    // 中国 / 海外 分两组（2026-09-26 晚：原三组把中国公司按上市地切成「国内/中资港股」，
+    // 后者仅 2 家、头重脚轻 → 改回只按资本归属分组，中资港股并入中国组）
     const gh = document.querySelectorAll('#coNav .co-nav-g-h');
-    check('导航按 国内 / 中资港股 / 海外 分三组', gh.length === 3, 'got ' + gh.length);
+    check('导航按 中国 / 海外 分两组', gh.length === 2, 'got ' + gh.length);
     const ghLabels = Array.from(gh).map(e => e.textContent);
-    check('分组标题含「国内公司」「中资港股」「海外公司」',
-          /国内公司/.test(ghLabels.join('|')) &&
-          /中资港股/.test(ghLabels.join('|')) &&
+    check('分组标题含「中国公司」「海外公司」',
+          /中国公司/.test(ghLabels.join('|')) &&
+          !/中资港股/.test(ghLabels.join('|')) &&
           /海外公司/.test(ghLabels.join('|')), ghLabels.join('|'));
+    // 中资港股（五矿资源 / 中国有色矿业）并入中国组，不再单独成组（2026-09-26 晚）
+    const cnGroupNames = Array.from(document.querySelectorAll('#coNav .co-nav-g-body[data-g="CN"] .co-nav-item'))
+      .map(el => el.getAttribute('data-name'));
+    check('中国公司组含中资港股「五矿资源」「中国有色矿业」',
+          cnGroupNames.indexOf('五矿资源') >= 0 && cnGroupNames.indexOf('中国有色矿业') >= 0,
+          'cn=' + cnGroupNames.length);
     // 组内按市值/知名度 rank 升序（紫金矿业 rank=1 早于 湖南黄金；Newmont 早于 Albemarle）
     const domOrder = Array.from(document.querySelectorAll('#coNav .co-nav-item:not(.empty)'))
       .map(el => el.getAttribute('data-name'));
@@ -306,18 +313,18 @@ setTimeout(() => {
     check('国内组按 rank 升序（紫金矿业 早于 山东黄金）', zjIdx >= 0 && sdIdx >= 0 && zjIdx < sdIdx, zjIdx + '/' + sdIdx);
     const tkIdx = domOrder.indexOf('Teck Resources'), albIdx = domOrder.indexOf('Albemarle');
     check('海外组按 rank 升序（Teck Resources 早于 Albemarle）', tkIdx >= 0 && albIdx >= 0 && tkIdx < albIdx, tkIdx + '/' + albIdx);
-    // 命名统一（2026-09-26）：海外/中资港股 显示「中文（英文）」；国内仅中文（name 仍作主键）
+    // 命名统一（2026-09-26）：海外/中资港股 显示「中文（英文）」；A 股仅中文（name 仍作主键）
     const navNameMap = {};
     document.querySelectorAll('#coNav .co-nav-item').forEach(el => {
       navNameMap[el.getAttribute('data-name')] = (el.querySelector('.co-nav-name') || {}).textContent || '';
     });
     check('海外英文公司「纽蒙特」显示 纽蒙特（Newmont）',
           (navNameMap['Newmont'] || '').indexOf('纽蒙特（Newmont）') >= 0, navNameMap['Newmont']);
-    check('中资港股「五矿资源」显示 五矿资源（MMG）',
+    check('港股公司「五矿资源」显示 五矿资源（MMG）',
           (navNameMap['五矿资源'] || '').indexOf('五矿资源（MMG）') >= 0, navNameMap['五矿资源']);
     check('海外中文公司「力拓」显示 力拓（Rio Tinto）',
           (navNameMap['力拓'] || '').indexOf('力拓（Rio Tinto）') >= 0, navNameMap['力拓']);
-    check('国内公司「紫金矿业」仅显示中文（不含括号英文）',
+    check('A 股公司「紫金矿业」仅显示中文（不含括号英文）',
           (navNameMap['紫金矿业'] || '') === '紫金矿业', navNameMap['紫金矿业']);
     check('导航标题显示家数/条数', /家/.test((document.getElementById('coNavH') || {}).textContent || ''),
           (document.getElementById('coNavH') || {}).textContent);
@@ -454,14 +461,14 @@ setTimeout(() => {
       check('搜索框存在', false);
     }
 
-    // ---------- 10) 移动端 select：国内 / 海外 / 暂未收录 三组 ----------
+    // ---------- 10) 移动端 select：中国 / 海外（+ 暂未收录） ----------
     const opts = document.querySelectorAll('#coNavSel option');
     check('移动端 select 选项=公司数+1', opts.length === nCompanies + 1, 'got ' + opts.length + ' / ' + (nCompanies + 1));
     const og = document.querySelectorAll('#coNavSel optgroup');
     const ogLabels = Array.from(og).map(g => g.getAttribute('label') || '');
-    check('移动端 select 含 国内/中资港股/海外（+ 暂未收录）',
-          /国内公司/.test(ogLabels.join('|')) &&
-          /中资港股/.test(ogLabels.join('|')) &&
+    check('移动端 select 含 中国/海外（+ 暂未收录）',
+          /中国公司/.test(ogLabels.join('|')) &&
+          !/中资港股/.test(ogLabels.join('|')) &&
           /海外公司/.test(ogLabels.join('|')) &&
           (nEmptyCompanies === 0 || /暂未收录/.test(ogLabels.join('|'))),
           'optgroups=' + og.length + ' labels=' + ogLabels.join('|'));
@@ -617,15 +624,15 @@ setTimeout(() => {
 
     // ---------- 16) v11（2026-09-26）：标题/正文层级 + 右栏分组折叠 + 文案精简 ----------
     const ghBtns = document.querySelectorAll('#coNav .co-nav-g-h');
-    check('v11 分组表头为可点击 button（3 组）',
-          ghBtns.length === 3 && Array.from(ghBtns).every(b => b.tagName === 'BUTTON'),
+    check('v11 分组表头为可点击 button（2 组）',
+          ghBtns.length === 2 && Array.from(ghBtns).every(b => b.tagName === 'BUTTON'),
           'n=' + ghBtns.length + ' first=' + (ghBtns[0] && ghBtns[0].tagName));
     check('v11 分组表头带 aria-expanded（可折叠）',
           ghBtns.length > 0 && Array.from(ghBtns).every(b => b.hasAttribute('aria-expanded')));
     const ghTxt = Array.from(ghBtns).map(b => b.textContent).join('|');
     check('v11 组头去掉「按市值/知名度」标注（精简）', !/按市值|知名度/.test(ghTxt), ghTxt);
-    check('v11 组头仍保留 国内公司/中资港股/海外公司',
-          /国内公司/.test(ghTxt) && /中资港股/.test(ghTxt) && /海外公司/.test(ghTxt), ghTxt);
+    check('v11 组头仍保留 中国公司/海外公司',
+          /中国公司/.test(ghTxt) && !/中资港股/.test(ghTxt) && /海外公司/.test(ghTxt), ghTxt);
     check('v11 CSS：.co-nav-g-body[hidden]{display:none}', /\.co-nav-g-body\[hidden\]\{display:none\}/.test(css));
     const navItemsBefore = document.querySelectorAll('#coNav .co-nav-item:not(.empty)').length;
     const g0 = ghBtns[0], g0Key = g0 && g0.getAttribute('data-g');
