@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260926-2200" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260926-2240" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -290,7 +290,7 @@ body.dark #mdTopBtn{background:var(--brand-600)}
 @keyframes mdViewFade{from{opacity:0}to{opacity:1}}
 .md-view-enter{animation:mdViewFade var(--dur-slow) var(--ease)}
 /* D4 更新时间 + 刷新按钮 */
-.md-update-time{font-size:var(--fs-nano);color:var(--ink-400);white-space:nowrap}
+.md-update-time{font-size:var(--fs-nano);color:rgba(255,255,255,.72);white-space:nowrap}
 .md-refresh-btn{border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink-700);border-radius:var(--r-md);padding:4px var(--s3);font-size:var(--fs-meta);cursor:pointer;min-height:32px}
 .md-refresh-btn:active{background:var(--surface-3)}
 /* B3 关键词订阅命中高亮（仅左侧描边 + 浅底，无发光） */
@@ -307,9 +307,9 @@ body.dark #mdTopBtn{background:var(--brand-600)}
 .mine-watch-chip{display:inline-flex;align-items:center;gap:4px;background:var(--chip-bg);color:var(--chip-ink);border-radius:var(--r-pill);padding:4px 10px;font-size:var(--fs-meta)}
 .mine-watch-x{cursor:pointer;opacity:.7;margin-left:2px}
 /* 头部 */
-.header{background:var(--surface);color:var(--ink-900);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:10px var(--s4);margin-bottom:var(--s4);display:flex;align-items:center;gap:var(--s3)}
+.header{background:#1a3a5c;color:#fff;border:1px solid #1a3a5c;border-radius:var(--r-lg);padding:10px var(--s4);margin-bottom:var(--s4);display:flex;align-items:center;gap:var(--s3)}
 .header h1{font-size:var(--fs-h3);display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;margin:0;font-weight:700}
-.date-badge{background:var(--up);color:#fff;font-size:var(--fs-meta);padding:2px var(--s3);border-radius:999px;font-weight:600;white-space:nowrap}
+.date-badge{background:#fff;color:var(--up);font-size:var(--fs-meta);padding:2px var(--s3);border-radius:999px;font-weight:600;white-space:nowrap}
 .header .header-actions{margin-left:auto;display:flex;align-items:center;gap:var(--s2)}
 .header .sub{font-size: var(--fs-body);opacity:.85;margin-top:var(--s2)}
 /* 统计栏 */
@@ -1088,7 +1088,7 @@ body.dark ::selection{background:#2c5f8a;color:#fff}
    规则做差集后逐一补写。装饰色（涨跌红绿、TOP1-3 徽章）与纯状态类不改。 */
 /* ---- 目录 / 头部 / 通用控件 ---- */
 body.dark .toc-all{color:var(--ink-700)!important}
-body.dark .date-badge{background:#c0392b;color:#fff}
+body.dark .date-badge{background:#fff;color:#c0392b}
 body.dark .stat-num.new{color:#ff8a8a}
 body.dark .stat-num.unread{color:#6ab4e0}
 body.dark .btn-restore{background:#4a5765;color:#fff}
