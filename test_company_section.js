@@ -8,6 +8,7 @@
  *   ⑦ 命名统一（2026-09-26）：海外/中资港股 显示「中文（英文）」，国内仅中文；name 仍作主键
  *   ⑧ 媒体源披露（2026-09-26）：选中公司后头部 sub 显示「来源：新浪财经 / 官网 RSS / 公司官网」
  *   ⑤ v6：每条卡片加一句内容摘要（仿新闻端，读 it.s）；移除逐条「目标域名」行；顶部说明段移除
+ *   ⑨ v11（2026-09-26）：条目标题近黑加粗偏大 / 摘要中灰常规偏小（三级层级）；右栏三组表头可折叠（md_co_groups 记忆，默认全展开） + 文案精简（去「按市值·知名度」「最新动态」「有内容」）
  *   ⑥ v7：新闻流单栏（同新闻列表形式）；右栏 sticky 修复（#companySection 改 overflow:clip）+ 上移；
  *       搜索框纳入摘要匹配；暂未收录公司新增「搜新闻」搜索引擎入口（官网死站/外壳页时仍可发现相关内容）
  * 运行：node test_company_section.js
@@ -614,13 +615,64 @@ setTimeout(() => {
     } else { check('可定位「第一量子」', false); }
     if (navAll) navAll.click();
 
+    // ---------- 16) v11（2026-09-26）：标题/正文层级 + 右栏分组折叠 + 文案精简 ----------
+    const ghBtns = document.querySelectorAll('#coNav .co-nav-g-h');
+    check('v11 分组表头为可点击 button（3 组）',
+          ghBtns.length === 3 && Array.from(ghBtns).every(b => b.tagName === 'BUTTON'),
+          'n=' + ghBtns.length + ' first=' + (ghBtns[0] && ghBtns[0].tagName));
+    check('v11 分组表头带 aria-expanded（可折叠）',
+          ghBtns.length > 0 && Array.from(ghBtns).every(b => b.hasAttribute('aria-expanded')));
+    const ghTxt = Array.from(ghBtns).map(b => b.textContent).join('|');
+    check('v11 组头去掉「按市值/知名度」标注（精简）', !/按市值|知名度/.test(ghTxt), ghTxt);
+    check('v11 组头仍保留 国内公司/中资港股/海外公司',
+          /国内公司/.test(ghTxt) && /中资港股/.test(ghTxt) && /海外公司/.test(ghTxt), ghTxt);
+    check('v11 CSS：.co-nav-g-body[hidden]{display:none}', /\.co-nav-g-body\[hidden\]\{display:none\}/.test(css));
+    const navItemsBefore = document.querySelectorAll('#coNav .co-nav-item:not(.empty)').length;
+    const g0 = ghBtns[0], g0Key = g0 && g0.getAttribute('data-g');
+    if (g0 && g0Key) {
+      g0.click();
+      const body0 = document.querySelector('#coNav .co-nav-g-body[data-g="' + g0Key + '"]');
+      const head0 = document.querySelector('#coNav .co-nav-g-h[data-g="' + g0Key + '"]');
+      check('v11 点组头 → 该组折叠（body 加 hidden）', !!(body0 && body0.hasAttribute('hidden')));
+      check('v11 折叠后 aria-expanded=false', !!(head0 && head0.getAttribute('aria-expanded') === 'false'));
+      check('v11 折叠仅隐藏、不移除导航项（DOM 计数不变）',
+            document.querySelectorAll('#coNav .co-nav-item:not(.empty)').length === navItemsBefore,
+            'before=' + navItemsBefore + ' after=' + document.querySelectorAll('#coNav .co-nav-item:not(.empty)').length);
+      const head0b = document.querySelector('#coNav .co-nav-g-h[data-g="' + g0Key + '"]');
+      if (head0b) head0b.click();
+      const body0b = document.querySelector('#coNav .co-nav-g-body[data-g="' + g0Key + '"]');
+      check('v11 再点组头 → 重新展开', !!(body0b && !body0b.hasAttribute('hidden')));
+    } else {
+      check('v11 可定位首个分组表头', false);
+      check('v11 点组头 → 该组折叠（body 加 hidden）', false);
+      check('v11 折叠后 aria-expanded=false', false);
+      check('v11 折叠仅隐藏、不移除导航项（DOM 计数不变）', false);
+      check('v11 再点组头 → 重新展开', false);
+    }
+    check('v11 __mdCo.toggleGroup() 可用', typeof window.__mdCo.toggleGroup === 'function');
+    const navAllTxt16 = (document.querySelector('#coNav .co-nav-all') || {}).textContent || '';
+    check('v11「全部公司」入口不再带「最新动态」后缀', /全部公司/.test(navAllTxt16) && !/最新动态/.test(navAllTxt16), navAllTxt16);
+    check('v11 导航标题去掉「有内容」冗词', !/有内容/.test((document.getElementById('coNavH') || {}).textContent || ''),
+          (document.getElementById('coNavH') || {}).textContent);
+    // 标题/正文视觉层级（对照主流新闻站：标题近黑加粗偏大 / 摘要中灰常规偏小）
+    check('v11 CSS：条目标题字号 = 正文 + 3px（calc +2px vs -1px）',
+          /\.co-title\{[^}]*font-size:calc\(var\(--fs-body\) \+ 2px\)/.test(css) &&
+          /\.co-summary\{[^}]*font-size:calc\(var\(--fs-body\) - 1px\)/.test(css));
+    check('v11 CSS：标题近黑（--ink-900）/ 摘要中灰（--ink-500）',
+          /\.co-title\{[^}]*color:var\(--ink-900\)/.test(css) &&
+          /\.co-summary\{[^}]*color:var\(--ink-500\)/.test(css));
+    check('v11 CSS：条目标题加粗（font-weight:600）', /\.co-title\{[^}]*font-weight:600/.test(css));
+    check('v11 CSS：已读态摘要再降一档（--ink-400）+ 暗色覆盖',
+          /\.co-item\.read \.co-summary,\.co-item\.read \.co-body\{color:var\(--ink-400\)\}/.test(css) &&
+          /body\.dark \.co-item\.read \.co-summary,body\.dark \.co-item\.read \.co-body\{color:var\(--ink-300\)\}/.test(css));
+
     check('无阻塞性 JS 错误', errors.length === 0, errors.join(' | '));
 
   } catch (e) {
     fail++;
     console.log('  FAIL  测试执行抛错 -> ' + (e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e));
   }
-  console.log('\n===== 矿业公司动态 v7 + P1/P2（未读筛选/关注置顶/矿种标签/日期sticky）汇总 =====');
+  console.log('\n===== 矿业公司动态 v7 + P1/P2 + v11（标题层级/分组折叠/文案精简）汇总 =====');
   console.log('  通过 ' + pass + ' / 失败 ' + fail);
   process.exit(fail ? 1 : 0);
 }, 1500);

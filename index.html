@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260926-1600" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260926-2031" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2763,8 +2763,13 @@ body.dark .co-side{background:#151d29}
 .co-nav-h{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s2);margin-top:var(--s2);
   font-size:var(--fs-caption);font-weight:700;color:var(--ink-700);letter-spacing:.04em}
 .co-nav-h span{font-weight:600;color:var(--ink-500);letter-spacing:0}
-.co-nav-g-h{margin-top:var(--s2);padding:5px var(--s4) 2px;font-size:var(--fs-caption);font-weight:700;
-  color:var(--ink-500);letter-spacing:.03em;border-top:1px solid var(--line-1)}
+.co-nav-g-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);width:100%;text-align:left;
+  font-family:inherit;background:none;margin-top:var(--s2);padding:7px var(--s4);font-size:var(--fs-caption);
+  font-weight:700;color:var(--ink-500);letter-spacing:.03em;border:0;border-top:1px solid var(--line-1);cursor:pointer}
+.co-nav-g-h:hover{background:var(--brand-soft)}
+.co-nav-g-t{min-width:0}
+.co-nav-g-c{flex:0 0 auto;font-size:var(--fs-nano);color:var(--ink-400);line-height:1}
+.co-nav-g-body[hidden]{display:none}
 .co-nav{flex:1 1 auto;min-height:0;overflow:auto;padding-bottom:var(--s2);overscroll-behavior:contain}
 .co-nav::-webkit-scrollbar{width:5px}
 .co-nav::-webkit-scrollbar-thumb{background:#c8d6e5;border-radius:var(--r-sm)}
@@ -2798,7 +2803,7 @@ body.dark .co-side{background:#151d29}
 .co-feed{min-width:0;order:1}
 .co-feed-head{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;padding:var(--s3) var(--s5);
   border-bottom:1px solid var(--line-1);background:var(--surface-2)}
-.co-feed-name{font-size:var(--fs-h3);font-weight:600;color:var(--ink-900)}
+.co-feed-name{font-size:calc(var(--fs-body) + 3px);font-weight:600;color:var(--ink-900)}
 .co-feed-sub{font-size:var(--fs-meta);color:var(--ink-500)}
 .co-fh-right{margin-left:auto;display:flex;align-items:center;gap:var(--s2)}
 .co-feed-link{font-size:var(--fs-meta);color:#4f46e5;text-decoration:none;white-space:nowrap}
@@ -2817,7 +2822,7 @@ body.dark .co-side{background:#151d29}
 .co-dot{width:6px;height:6px;border-radius:50%;background:#4f46e5;flex-shrink:0;margin-top:7px}
 body.dark .co-dot{background:#818cf8}
 /* 标题固定 2 行：源数据标题从 4 字到上千字不等，截断后所有卡片默认等高 */
-.co-title{font-size:var(--fs-body);color:var(--ink-900);text-decoration:none;line-height:1.55;font-weight:500;min-width:0;
+.co-title{font-size:calc(var(--fs-body) + 2px);color:var(--ink-900);text-decoration:none;line-height:1.45;font-weight:600;min-width:0;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .co-title:hover{color:#4f46e5;text-decoration:underline}
 .co-title{cursor:pointer}
@@ -2829,13 +2834,13 @@ body.dark .co-dot{background:#818cf8}
 .co-ex-hk{color:#b45309;border-color:#fcd34d}
 .co-src-tag{font-style:normal;color:#0f766e;border:1px solid #99f6e4;background:#ccfbf1;border-radius:999px;padding:0 var(--s2);font-size:var(--fs-caption);font-weight:600}
 /* 正文默认 2 行折叠，点「展开全文」看完整内容 */
-.co-body{margin:2px 0 0 14px;font-size:var(--fs-body);color:var(--ink-700);line-height:1.6;
+.co-body{margin:2px 0 0 14px;font-size:calc(var(--fs-body) - 1px);color:var(--ink-500);line-height:1.62;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
 .co-item.open .co-body{display:block;overflow:visible;-webkit-line-clamp:unset}
 .co-exp{margin:4px 0 0 14px;font-family:inherit;font-size:var(--fs-caption);font-weight:600;color:#4f46e5;
   background:none;border:0;padding:0;cursor:pointer}
 .co-exp:hover{text-decoration:underline}
-.co-summary{margin:2px 0 var(--s2) 14px;font-size:var(--fs-body);color:var(--ink-700);line-height:1.6;
+.co-summary{margin:2px 0 var(--s2) 14px;font-size:calc(var(--fs-body) - 1px);color:var(--ink-500);line-height:1.62;
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
 body.dark .co-summary{color:var(--ink-500)}
 .co-summary-empty{color:var(--ink-400,#9aa4b2);font-style:italic;display:block}
@@ -2846,9 +2851,10 @@ body.dark .co-summary-empty{color:var(--ink-400,#7c8794)}
    与新闻流同构：已读条目弱化、操作行按内容宽贴在条目末尾（不是整行横条）。 */
 .co-item.read .co-title{color:var(--ink-300);font-weight:var(--fw-regular)}
 .co-item.read .co-title:hover{color:#4f46e5}
-.co-item.read .co-summary,.co-item.read .co-body{color:var(--ink-300)}
+.co-item.read .co-summary,.co-item.read .co-body{color:var(--ink-400)}
 .co-item.read .co-dot{background:transparent;box-shadow:inset 0 0 0 2px #c8d0d8}
 body.dark .co-item.read .co-title{color:var(--ink-300)}
+body.dark .co-item.read .co-summary,body.dark .co-item.read .co-body{color:var(--ink-300)}
 body.dark .co-item.read .co-dot{background:transparent;box-shadow:inset 0 0 0 2px #4a5765}
 .co-actions{display:flex;align-items:center;gap:var(--s2);margin:var(--s2) 0 0 14px;flex-wrap:wrap}
 .co-actions button{font-family:inherit;font-size:var(--fs-meta);border-radius:var(--r-md);padding:2px var(--s3);

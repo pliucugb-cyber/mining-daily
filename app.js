@@ -7005,6 +7005,9 @@ function toggleTheme(){
   var PAGE=60;
   var shown=PAGE;              // 当前已渲染条数（分页游标）
   var emptyOpen=false;         // 「暂未收录」分组是否展开
+  var coGroupsClosed=(function(){   // v11：右栏导航三组（CN/HK/NA）折叠态，默认全展开
+    try{ var o=JSON.parse(localStorage.getItem('md_co_groups')||'{}'); return (o&&typeof o==='object'&&!Array.isArray(o))?o:{}; }catch(e){ return {}; }
+  })();
   var baseDate='';             // 数据基准日（updated_at），用于算「N 天前」
   var RANGES=[{d:30,l:'近30天'},{d:90,l:'近90天'},{d:0,l:'全部'}];
   var HEAD_MAX=64;             // 标题最多保留字符数（超出部分转正文折叠）
@@ -7317,7 +7320,7 @@ function toggleTheme(){
     }
   }
 
-  // ---------- 右：搜索 + 公司导航（国内 / 海外 分两组，组内按市值·知名度 rank 升序） ----------
+  // ---------- 右：搜索 + 公司导航（国内 / 中资港股 / 海外 三组，组内按 rank 升序；组头可折叠） ----------
   function byRank(a,b){
     var fa=coFavHas(a.name)?0:1, fb=coFavHas(b.name)?0:1;
     if(fa!==fb) return fa-fb;
@@ -7329,23 +7332,34 @@ function toggleTheme(){
   function sortedCompanies(){
     return COS.slice().sort(byRank);
   }
-  function navGroup(label, arr){
+  function navGroup(key, label, arr){
     if(!arr.length) return '';
-    var h='<div class="co-nav-g-h">'+esc(label)+'（'+arr.length+'）</div>';
+    var hasActive=arr.some(function(o){ return o.name===activeCompany; });
+    var closed=!!coGroupsClosed[key] && !hasActive;
+    var h='<button type="button" class="co-nav-g-h" data-g="'+esc(key)+'" aria-expanded="'+(closed?'false':'true')+'" title="点击折叠 / 展开本组">'+
+      '<span class="co-nav-g-t">'+esc(label)+'（'+arr.length+'）</span>'+
+      '<span class="co-nav-g-c" aria-hidden="true">'+(closed?'▸':'▾')+'</span></button>'+
+      '<div class="co-nav-g-body" data-g="'+esc(key)+'"'+(closed?' hidden':'')+'>';
     h+=arr.map(function(o){
       var fav=coFavHas(o.name);
       return '<button type="button" class="co-nav-item'+(o.name===activeCompany?' on':'')+'" data-name="'+esc(o.name)+'">'+'<span class="co-nav-name">'+esc(coDisplayName(o))+'</span>'+'<span class="co-nav-right">'+'<span class="co-star'+(fav?' on':'')+'" data-fav="'+esc(o.name)+'" title="关注/取消关注">'+(fav?'★':'☆')+'</span>'+'<span class="co-n">'+visibleCount(o)+'</span>'+'</span></button>';
-    }).join('');
+    }).join('')+'</div>';
     return h;
   }
   function optFor(o){
     return '<option value="'+esc(o.name)+'"'+(o.name===activeCompany?' selected':'')+'>'+
       esc(coDisplayName(o))+(visibleCount(o)?'（'+visibleCount(o)+' 条）':'')+'</option>';
   }
+  function toggleCoGroup(key){
+    if(!key) return;
+    coGroupsClosed[key]=!coGroupsClosed[key];
+    try{ localStorage.setItem('md_co_groups',JSON.stringify(coGroupsClosed)); }catch(e){}
+    renderNav();
+  }
   function renderNav(){
     var nav=document.getElementById('coNav'); if(!nav) return;
     var list=COS.slice();
-    // 国内/海外两组只列「有内容」公司，空壳公司统一收进「暂未收录」折叠组（避免重复出现）
+    // 国内/中资港股/海外 三组只列「有内容」公司；空壳公司统一收进「暂未收录」折叠组（避免重复出现）
     var dom=list.filter(function(o){ return o.region==='CN' && itemCount(o)>0; }).sort(byRank);
     var hk=list.filter(function(o){ return o.region==='HK' && itemCount(o)>0; }).sort(byRank);
     var frn=list.filter(function(o){ return o.region==='NA' && itemCount(o)>0; }).sort(byRank);
@@ -7353,9 +7367,9 @@ function toggleTheme(){
     var empties=list.filter(function(o){ return !itemCount(o); });
 
     var h=document.getElementById('coNavH');
-    if(h) h.innerHTML='公司导航<span>'+live.length+' 家有内容 · '+scopeTotalCount()+' 条'+(range===0?'':'（近'+range+'天）')+'</span>';
+    if(h) h.innerHTML='公司导航<span>'+live.length+' 家 · '+scopeTotalCount()+' 条'+(range===0?'':'（近'+range+'天）')+'</span>';
 
-    // 移动端：国内 / 海外 / 暂未收录 三组
+    // 移动端 select：国内 / 中资港股 / 海外（+ 暂未收录）
     var sel=document.getElementById('coNavSel');
     if(sel){
       var favNames=getCoFavs().filter(function(n){ return coOf(n); });
@@ -7383,12 +7397,12 @@ function toggleTheme(){
       sel.onchange=function(){ selectCompany(sel.value); };
     }
 
-    // 桌面：全部公司 + 国内 + 海外 + 暂未收录（折叠组）
+    // 桌面：全部公司 + 国内/中资港股/海外 三组（表头可折叠）+ 暂未收录（折叠组）
     var html='<button type="button" class="co-nav-all'+(activeCompany==='__all__'?' on':'')+'" data-name="__all__">'+
-      '<span>全部公司（最新动态）</span><span class="co-n">'+scopeTotalCount()+'</span></button>';
-    html+=navGroup('国内公司 · 按市值/知名度', dom);
-    html+=navGroup('中资港股 · 按市值/知名度', hk);
-    html+=navGroup('海外公司 · 按市值/知名度', frn);
+      '<span>全部公司</span><span class="co-n">'+scopeTotalCount()+'</span></button>';
+    html+=navGroup('CN','国内公司', dom);
+    html+=navGroup('HK','中资港股', hk);
+    html+=navGroup('NA','海外公司', frn);
     if(empties.length){
       html+='<button type="button" class="co-nav-empty-t" id="coEmptyToggle"'+
         ' title="官网暂不可达或本日未采到新闻；点「搜新闻」可查相关资讯。">暂未收录 '+empties.length+' 家'+
@@ -7423,6 +7437,10 @@ function toggleTheme(){
     });
     Array.prototype.forEach.call(nav.querySelectorAll('.co-star'),function(el){
       el.onclick=function(e){ e.stopPropagation(); toggleCoFav(el.getAttribute('data-fav')); };
+    });
+    // v11：分组表头可折叠（状态存 md_co_groups，默认全展开；选中公司所在组强制展开）
+    Array.prototype.forEach.call(nav.querySelectorAll('.co-nav-g-h'),function(el){
+      el.onclick=function(){ toggleCoGroup(el.getAttribute('data-g')); };
     });
     var tog=document.getElementById('coEmptyToggle');
     if(tog) tog.onclick=function(){ emptyOpen=!emptyOpen; renderNav(); };
@@ -7460,8 +7478,7 @@ function toggleTheme(){
         baseDate=(d&&d.updated_at)||todayStr();
         if(count) count.textContent=(c.total||COS.length)+' 家';
         var stat=document.getElementById('coStat');
-        if(stat) stat.innerHTML='国内 '+(c.domestic||0)+' · 中资港股 '+(c.hk||0)+' · 海外 '+(c.foreign||0)+' 家<br>'+
-          (c.items||0)+' 条'+((d&&d.updated_at)?' · 更新于 '+esc(d.updated_at):'');
+        if(stat) stat.innerHTML=(d&&d.updated_at)?('更新于 '+esc(d.updated_at)):'';
         ALL=flatten(COS);
         // 日期降序；未标注日期的排最后；同一天按公司名 → 标题
         ALL.sort(function(a,b){
@@ -7502,11 +7519,13 @@ function toggleTheme(){
         rendered:document.querySelectorAll('#companyList .co-item').length,
         groups:document.querySelectorAll('#companyList .co-day').length,
         collapsed:document.querySelectorAll('#companyList .co-exp').length,
+        coGroupsClosed:coGroupsClosed,
         moreVisible:!document.getElementById('coMoreWrap').hidden};
     },
     setRange:function(r){ setRange(r); },
     setQuery:function(q){ query=String(q||''); shown=PAGE; renderFeed(); },
     select:function(n){ selectCompany(n); },
+    toggleGroup:function(k){ toggleCoGroup(k); },
     toggleUnread:function(){ coUnreadOnly=!coUnreadOnly; shown=PAGE; renderFeed(); },
     toggleFav:function(n){ toggleCoFav(n); },
     helpers:{clean:cleanT,split:splitTB,dec:dec,host:hostOf}
