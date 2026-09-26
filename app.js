@@ -7115,6 +7115,27 @@ function toggleTheme(){
     return null;
   }
   function itemCount(co){ return ((co&&co.items)||[]).length; }
+
+  // 2026-09-26：徽标 / 「全部公司」计数改为「点进去实际会看到的条数」，
+  // 修复「洛阳钼业显示 9 条、点进去只有 2 条」的口径错位（此前徽标用全量、默认视图只显近 90 天）。
+  function inRangeStrict(it){
+    if(range===0) return true;            // 「全部」
+    var n=dayDiff(it.d);
+    if(isNaN(n)) return false;           // 无日期只在「全部」下出现
+    return n>=0 && n<=range;
+  }
+  // 点进某公司后实际会显示的条数：范围内有则显示范围内；否则 widenRangeIfNeeded
+  // 会自动放宽到「全部」，故返回全量（含无日期）。搜索词同样纳入口径。
+  function visibleCount(o){
+    if(!o||!o.items) return 0;
+    var base=o.items.filter(passQuery);
+    var ir=base.filter(inRangeStrict).length;
+    return ir>0 ? ir : base.length;
+  }
+  // 全站当前范围（含搜索）可见总条数 —— 用于「全部公司」徽标与导航头。
+  function scopeTotalCount(){
+    return ALL.filter(inRangeStrict).filter(passQuery).length;
+  }
   // 切到某公司时，若该公司条目全部落在当前时间范围之外，自动放宽到「全部」
   // —— 否则会出现「选了公司却一条不显示」的假空列表（用户会以为该公司没数据）
   function widenRangeIfNeeded(){
@@ -7140,6 +7161,7 @@ function toggleTheme(){
         forcedAll=false;
         shown=PAGE;
         renderFeed();
+        renderNav();
       };
     });
   }
@@ -7179,8 +7201,6 @@ function toggleTheme(){
     // 2026-09-24：已读态。data-url 作为本地已读集合的键（原文链接缺失时退化为搜索链接，
     // 仍是稳定键）；已读条目整体弱化，且只显示「标为未读」。
     var isRead=coReadHas(primary);
-    var co_=coOf(it.name);   // 矿种是「公司级」字段，条目本身不带 sector，需从所属公司取
-    var sec=(co_&&co_.sector)?('<i class="co-sec" title="矿种">'+esc(co_.sector)+'</i>'):'';
     var acts='<div class="co-actions">'+
       '<button type="button" class="btn-co-read" title="将本条标记为已读（仅本机，不影响其他条目）">&#10003; 标为已读</button>'+
       '<button type="button" class="btn-co-unread" title="将本条恢复为未读（仅本机，不影响其他条目）">&#8630; 标为未读</button>'+
@@ -7189,7 +7209,7 @@ function toggleTheme(){
       '<div class="co-head"><span class="co-dot"></span>'+
       '<a class="co-title" href="'+esc(primary)+'" target="_blank" rel="noopener noreferrer"'+
         (url?'':' title="原文链接缺失：点击将前往搜索引擎"')+'>'+esc(tb.head||'(无标题)')+'</a></div>'+
-      '<div class="co-meta"><button type="button" class="co-src" data-name="'+esc(it.name)+'">'+esc(it.name)+'</button>'+sec+
+      '<div class="co-meta"><button type="button" class="co-src" data-name="'+esc(it.name)+'">'+esc(it.name)+'</button>'+
       '<span>'+esc(it.d||'')+'</span>'+ex+stale+'</div>'+summ+acts+'</div>';
   }
   function renderFeed(){
@@ -7206,7 +7226,9 @@ function toggleTheme(){
     var vis=rows.slice(0,shown);
 
     if(head){
-      var sub='显示 '+vis.length+' / '+total+' 条'+(forcedAll?'（已自动放宽到全部）':'');
+      var companyTotal=(activeCompany==='__all__')?ALL.length:itemCount(co);
+      var olderHint=(range!==0&&!forcedAll&&companyTotal>total)?'（另有 '+(companyTotal-total)+' 条更早，切到「全部」可见）':'';
+      var sub='显示 '+vis.length+' / '+total+' 条'+olderHint+(forcedAll?'（已自动放宽到全部）':'');
             var unreadToggle='<button type="button" class="co-unread-toggle'+(coUnreadOnly?' on':'')+'" data-act="co-unread" title="只显示未读条目（已读的自动隐藏）">未读'+(coUnreadOnly?' ✓':'')+'</button>';
       var favToggle=(activeCompany==='__all__'?'':'<button type="button" class="co-fav-toggle'+(coFavHas(activeCompany)?' on':'')+'" data-act="co-fav" data-name="'+esc(activeCompany)+'" title="关注/取消关注该公司">★ '+(coFavHas(activeCompany)?'已关注':'关注')+'</button>');
       var right=rangeHtml()+(activeCompany==='__all__'?''
@@ -7283,13 +7305,13 @@ function toggleTheme(){
     var h='<div class="co-nav-g-h">'+esc(label)+'（'+arr.length+'）</div>';
     h+=arr.map(function(o){
       var fav=coFavHas(o.name);
-      return '<button type="button" class="co-nav-item'+(o.name===activeCompany?' on':'')+'" data-name="'+esc(o.name)+'">'+'<span class="co-nav-name">'+esc(o.name)+'</span>'+'<span class="co-nav-right">'+'<span class="co-star'+(fav?' on':'')+'" data-fav="'+esc(o.name)+'" title="关注/取消关注">'+(fav?'★':'☆')+'</span>'+'<span class="co-n">'+itemCount(o)+'</span>'+'</span></button>';
+      return '<button type="button" class="co-nav-item'+(o.name===activeCompany?' on':'')+'" data-name="'+esc(o.name)+'">'+'<span class="co-nav-name">'+esc(o.name)+'</span>'+'<span class="co-nav-right">'+'<span class="co-star'+(fav?' on':'')+'" data-fav="'+esc(o.name)+'" title="关注/取消关注">'+(fav?'★':'☆')+'</span>'+'<span class="co-n">'+visibleCount(o)+'</span>'+'</span></button>';
     }).join('');
     return h;
   }
   function optFor(o){
     return '<option value="'+esc(o.name)+'"'+(o.name===activeCompany?' selected':'')+'>'+
-      esc(o.name)+(itemCount(o)?'（'+itemCount(o)+' 条）':'')+'</option>';
+      esc(o.name)+(visibleCount(o)?'（'+visibleCount(o)+' 条）':'')+'</option>';
   }
   function renderNav(){
     var nav=document.getElementById('coNav'); if(!nav) return;
@@ -7301,7 +7323,7 @@ function toggleTheme(){
     var empties=list.filter(function(o){ return !itemCount(o); });
 
     var h=document.getElementById('coNavH');
-    if(h) h.innerHTML='公司导航<span>'+live.length+' 家有内容 · '+ALL.length+' 条</span>';
+    if(h) h.innerHTML='公司导航<span>'+live.length+' 家有内容 · '+scopeTotalCount()+' 条'+(range===0?'':'（近'+range+'天）')+'</span>';
 
     // 移动端：国内 / 海外 / 暂未收录 三组
     var sel=document.getElementById('coNavSel');
@@ -7330,7 +7352,7 @@ function toggleTheme(){
 
     // 桌面：全部公司 + 国内 + 海外 + 暂未收录（折叠组）
     var html='<button type="button" class="co-nav-all'+(activeCompany==='__all__'?' on':'')+'" data-name="__all__">'+
-      '<span>全部公司（最新动态）</span><span class="co-n">'+ALL.length+'</span></button>';
+      '<span>全部公司（最新动态）</span><span class="co-n">'+scopeTotalCount()+'</span></button>';
     html+=navGroup('国内公司 · 按市值/知名度', dom);
     html+=navGroup('海外公司 · 按市值/知名度', frn);
     if(empties.length){
@@ -7425,7 +7447,7 @@ function toggleTheme(){
         forcedAll=false;
         widenRangeIfNeeded();
         var q=document.getElementById('coSearch');
-        if(q){ q.value=query; q.oninput=function(){ query=q.value.trim(); shown=PAGE; renderFeed(); }; }
+        if(q){ q.value=query; q.oninput=function(){ query=q.value.trim(); shown=PAGE; renderFeed(); renderNav(); }; }
         var more=document.getElementById('coMore');
         if(more) more.onclick=function(){ shown+=PAGE; renderFeed(); };
         renderNav(); renderFeed();
