@@ -2948,3 +2948,49 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 **闸门**：`test_company_section.js`（**165**）+ 全量 node/py 回归 + `preflight_check.py` 全绿；改的是 `app.js`（前端渲染）须 `node --check app.js`。
 
 **同步两条 prompt**：与 §42.33 提示合并处理 —— 若内联了「三组」或「中资港股显示中文（英文）」，须改为「中国/海外两组；中国组（A 股 + 中资港股）纯中文，海外显示「中文（英文）」；公司名单 44 家（已删 盐湖股份/永兴材料/株冶集团）」，并把 §42.9 基线同步（`test_company_section.js` → **165**）。
+
+
+### §42.35 公司名单护栏（preflight 硬闸门）+ M&A 池同步去噪 + EXCLUDE 配置化 + 懒渲染（2026-09-26 晚）
+
+**背景**：§42.34 完成「中国组去英文 + 删 3 家（盐湖股份 / 株冶集团 / 永兴材料）」，把名单定在 44 家（国内 29 / 中资港股 2 / 海外 13，items 363）。本节把该口径「固化」成部署前硬闸门，并补全 §42.34 因「两套清单」遗留的 M&A 池去噪、配置化剔除，最后做一项零口径风险的渲染优化。对应 A/B/C/D/E 五项优化建议，全部执行。
+
+**A — preflight_check.py 新增「公司名单护栏」（部署前硬闸门）**
+- 新增常量（L493-495）：`EXPECTED_COMPANY_TOTAL = 44`、`EXPECTED_COUNTS = {'domestic': 29, 'hk': 2, 'foreign': 13}`、`BANNED_COMPANIES = ['盐湖股份', '株冶集团', '永兴材料']`。
+- 新增 `check_company_roster()`（L498-547）：读 `company_news.json`，四重校验 ① counts.total==44 ② 分组 domestic/hk/foreign 自洽 ③ companies 实有数 == total（无孤儿/重复）④ BANNED 三家不回归。
+- `main()` 的 `sections` 列表插入 `('公司名单护栏', check_company_roster())`（L586）。
+- **意义**：此前 v11 preflight 只扫 CSS 指纹 / 折叠 / 文案红线，**不扫公司数量与名单**；若某次 06:00 重抓误灌回被删公司或总数漂移，只有浏览器测试 `test_company_section.js` 能在**部署后**发现。本闸门把拦截前移到 preflight 阶段（重建前 / 复验前）。
+- 实测：`python preflight_check.py` 全过，含新增分支（total=44、domestic=29/hk=2/foreign=13、companies 实有 44==total、被删三家均未出现）。
+
+**C — fetch_ma.py 的 CURATED_MINERS 同步去噪（全删 3 家）**
+- §42.34 因「两套清单」未动 M&A 模块的 `CURATED_MINERS`（用于巨潮公告匹配 + `data/ma_YYYY-MM.json`）。本次按用户指令「C（全删）」从 `CURATED_MINERS` 移除 株冶集团 / 盐湖股份 / 永兴材料。
+- Grep 复核：fetch_ma.py 对这三家 **0 命中**（已删净）。
+- **注意**：`fetch_company.py SITES` 与 `fetch_ma.py CURATED_MINERS` 仍是两套独立清单；本次仅从后者删 3 家。若日后需统一去噪口径，须两处同步（见 D 的配置化思路）。
+
+**D — fetch_company.py 增加 EXCLUDE 配置化剔除**
+- 新增 `EXCLUDE = ['盐湖股份', '株冶集团', '永兴材料']`（L1293，带注释「加到这里即永久剔除；fetch 采集后过滤，preflight 据此外校验」）。
+- 采集落盘前过滤：`companies = [c for c in companies if c.get('name') not in EXCLUDE]`（L1806）。
+- 文档头（L8 附近）追加「配置化删除」说明。
+- **意义**：把「名单去噪」从散落的多处硬删除收敛为单一 EXCLUDE 常量——将来删公司只改一处，preflight 的 BANNED_COMPANIES 与之呼应，形成「配置 + 闸门」双保险。与 §42.34 在 `SITES` 直接删条目相比，EXCLUDE 是**可审计、可撤销、不污染 SITES 语义**的更优留法。
+
+**E — index.html .co-item 懒渲染（零口径风险）**
+- `.co-item`（L2819）追加 `content-visibility:auto;contain-intrinsic-size:auto 120px`。
+- **意义**：公司板块条目多（44 家 × 多条），懒渲染让视口外卡片跳过布局/绘制，首屏更快；120px 占位高度避免滚动条抖动。纯 CSS 性能优化，不触布局几何与计数口径，不进每日重建风险。
+
+**B — 两条每日自动化 prompt 口径同步（06:00 抓取 / 08:00 复验）**
+- 06:00（`5cdcdfff-4524-4083-9453-9f6577c7c7d6`）：6 处定点替换——47→44 家、CN32→CN29、三组→中国公司/海外公司两组、146→165 PASS、命名口径（中国组纯中文 / 海外「中文（英文）」、中资港股并入中国组）。
+- 08:00（`21dba82b-993b-4889-8381-77d621fd1c73`）：8 处定点替换——44 家、两组划分、165 PASS、test_company_section 基线 165、各类口径对齐。
+- **合规路径**：automation 改动**必须走 `automation_update` 工具整段回填**（不得直接改 `workbuddy.db`——平台有缓存、直接改库不生效且可能被判违规）；回填后逐处校验路径转义无回归。本项已执行并校验通过。
+
+**回归与闸门**
+- `node test_company_section.js`：**165 PASS / 0 FAIL**（基线；任何同步→异步化改动会误判失败）。
+- `python preflight_check.py`：全过，含新增「公司名单护栏」分支。
+- `node --check app.js` 通过；其余 node/py 回归（smoke 104 / mobile 222 / data_integrity 9 / price_heatmap 126）沿用 §42.34 基线全绿。
+- A-E 改动文件：`fetch_company.py` / `fetch_ma.py` / `index.html` / `preflight_check.py`（四文件 modified，待 commit + push + deploy）；automation prompt（B）改动存于 `workbuddy.db`，不入库。
+
+**回退指纹（新增 ㊱-㊳）**
+- ㊱ `preflight_check.py` 的 `('公司名单护栏', check_company_roster())` 被删，或 `EXPECTED_COMPANY_TOTAL` 被改回 47 → 「名单去噪」部署前硬闸门消失，被删公司可借重抓回归（`grep -n "公司名单护栏" preflight_check.py` 应命中 2 处：docstring + sections）。
+- ㊲ `fetch_company.py` 的 `EXCLUDE` 被清空 / L1806 过滤被删 → 删公司须改多处、易遗漏；与 preflight BANNED 双保险断裂（`grep -n "EXCLUDE" fetch_company.py` 应命中定义 + 过滤两处）。
+- ㊳ `fetch_ma.py` 的 `CURATED_MINERS` 又被加回 株冶集团/盐湖股份/永兴材料 → M&A 池去噪回退（`grep -c "盐湖股份" fetch_ma.py` 应为 0）。
+- `index.html` 的 `.co-item` 缺 `content-visibility:auto`（非红线，仅性能回归，`grep -n "content-visibility" index.html` 应命中 1 处）。
+
+**部署备注**：bump build-version（index.html L10 `build-version` + sw.js L21 `CACHE_NAME`）触发 gh-pages 重建；GitHub Pages 构建有 1~2 分钟延迟，须轮询 build-version 变新值才算上线成功（本机 HTTPS 被 Dr.COM 网关劫持，拿不到真实字节，以 `git ls-remote` + worktree md5 为据）。

@@ -490,6 +490,63 @@ def check_site_title(text):
     return True, findings
 
 
+EXPECTED_COMPANY_TOTAL = 44
+EXPECTED_COUNTS = {'domestic': 29, 'hk': 2, 'foreign': 13}
+BANNED_COMPANIES = ['盐湖股份', '株冶集团', '永兴材料']
+
+
+def check_company_roster():
+    """公司名单护栏（2026-09-26 晚新增）：把"名单去噪"做成部署前硬闸门。
+
+    背景：盐湖股份/株冶集团/永兴材料 已按用户要求从矿业公司板块移除
+    （fetch_company.SITES 删除 + company_news.json 剔除）。此前 preflight v11
+    只扫 CSS 指纹/折叠句柄/文案红线，**不扫公司数量与名单**——若某次重抓误把
+     被删公司灌回、或总数漂移，只有浏览器测试 test_company_section.js 能发现
+    （且是部署后）。这里在 06:00 重建前/08:00 复验前的 preflight 阶段就拦住。
+
+    检查：① counts.total == EXPECTED_COMPANY_TOTAL（44）；② 分组 domestic/hk/
+     foreign 自洽；③ 公司数 == counts.total（无孤儿/重复）；④ BANNED 三家不回归。
+    """
+    findings = []
+    ok = True
+    p = ROOT / 'company_news.json'
+    if not p.exists():
+        findings.append('❌ 找不到 company_news.json（矿业公司数据文件）')
+        return False, findings
+    try:
+        data = json.loads(p.read_text(encoding='utf-8'))
+    except Exception as e:
+        findings.append('❌ company_news.json 解析失败：%s' % e)
+        return False, findings
+    companies = data.get('companies') or []
+    counts = data.get('counts') or {}
+    total = counts.get('total')
+    if total != EXPECTED_COMPANY_TOTAL:
+        findings.append('❌ 公司总数=%s，期望 %s（名单漂移或被删公司回归）' % (total, EXPECTED_COMPANY_TOTAL))
+        ok = False
+    else:
+        findings.append('✅ 公司总数=%s（与基线一致）' % total)
+    for k, v in EXPECTED_COUNTS.items():
+        got = counts.get(k)
+        if got != v:
+            findings.append('❌ counts.%s=%s，期望 %s' % (k, got, v))
+            ok = False
+        else:
+            findings.append('✅ counts.%s=%s' % (k, v))
+    if len(companies) != total:
+        findings.append('❌ companies 实际 %d 家 ≠ counts.total %d（孤儿/重复）' % (len(companies), total))
+        ok = False
+    else:
+        findings.append('✅ companies 实有 %d 家 == counts.total' % len(companies))
+    banned = [c.get('name') for c in companies if c.get('name') in BANNED_COMPANIES]
+    if banned:
+        findings.append('❌ 被删公司回归：%s（须从 fetch_company.SITES 移除）' % '、'.join(banned))
+        ok = False
+    else:
+        findings.append('✅ 被删三家（盐湖股份/株冶集团/永兴材料）均未出现')
+    return ok, findings
+
+
 def main():
     argv = set(sys.argv[1:])    # --fail-on-error 是 06:00 自动化在用的历史参数，现为默认行为（no-op，仅兼容保留）
     fail = '--no-fail' not in argv
@@ -525,7 +582,8 @@ def main():
         ('关键功能', check_functions(text)),
         ('关键容器', check_containers(text)),
         ('价格单位去重', check_price_unit_dedup(html_text)),   # 只扫 index.html，避免 app.js 干扰计数
-        ('公司模块 v11 指纹', check_company_v11(html_text, app_text)),   # §42.19 v11 重建边界 + 折叠逻辑 + 文案红线
+        ('公司模块 v11 指纹', check_company_v11(html_text, app_text)),
+        ('公司名单护栏', check_company_roster()),   # §42.19 v11 重建边界 + 折叠逻辑 + 文案红线
         ('build-version', check_build_version(text)),
         ('站点标题', check_site_title(html_text)),
         ('百度统计 ID', check_baidu_stat_id(html_text)),
