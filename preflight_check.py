@@ -23,7 +23,12 @@ preflight_check.py — 矿业资讯速览自动化前置/回归健康检查。
 
   9. 百度统计站点 ID 必须与 tongji 后台「代码获取」给出的 32 位 ID 逐字一致
      ——2026-09-14 事故：页面装的是另一站点条目的 ID，后台「代码安装错误」且数据恒 0；
-     可站内一切正常（hm.js 200 / 信标 200 均真机实测通过），极难自查。约定见 REFERENCE.md §42.8。
+     可站内一切正常（hm.js 200 / 信标 200 均真机实测通过），    极难自查。约定见 REFERENCE.md §42.8。
+
+  10. 公司模块 v11 重建指纹（§42.19 回退指纹㉓㉔㉕）：index.html 内联 <style> 的
+      v11 CSS 必留指纹（标题三级层级 / 折叠机制 / 已读态覆盖）+ app.js 折叠逻辑与
+      文案精简红线（禁「按市值/知名度」「家有内容」「（最新动态）」）。把"被动保护"
+      升级为"主动断言"，06:00 重建后 / 08:00 复验前自动跑（见 check_company_v11）。
 
 退出码（2026-09 改）：
   **默认** 任一检查失败 → exit 1。旧行为是「默认只报告、exit 0」，
@@ -240,6 +245,76 @@ def check_price_unit_dedup(text):
 
 
 
+def check_company_v11(html_text, app_text):
+    """矿业公司模块 v11 重建指纹闸门（REFERENCE.md §42.19 v11 / 回退指纹㉓㉔㉕）。
+
+    背景（优化清单 A3 / 用户待办③）：v11 的抗重建原本只靠「生成脚本不碰
+    `#companySection` 内联 <style>」的**被动保护**——一旦 generate_*.py 改成整段
+    重建、或误改内联样式，v11 会在次日 06:00 静默回退，08:00 复验前用户已看到坏版。
+    这里把 v11 必留指纹做成**主动断言**，每次 preflight（06:00 重建后 / 08:00 复验前）
+    都跑，把"被动保护"升级为"主动锁死"。
+
+    扫两块（与契约边界对齐）：
+      html_text —— index.html #companySection 内联 <style>（重建边界真身）
+      app_text  —— app.js（运行时文案 / 折叠逻辑源；不扫整文件，因为 index.html
+                  内联样式的**历史注释**里本就含「按市值·知名度排序」等字样，
+                  整文件禁语会误红——文案红线只针对渲染源 app.js）
+    """
+    findings = []
+    ok = True
+
+    # —— ① 重建边界：index.html 内联 <style> 的 v11 CSS 指纹（缺任一即回退＝㉓）——
+    CSS_FINGERPRINTS = [
+        ('.co-title{font-size:calc(var(--fs-body) + 2px);color:var(--ink-900);',
+         '条目标题三级层级（近黑 --ink-900 + calc(+2px)，v11①）'),
+        ('calc(var(--fs-body) - 1px)',
+         '正文/摘要最浅档字号（co-summary/co-body 共用，v11①）'),
+        ('calc(var(--fs-body) + 3px)',
+         '.co-feed-name 修正（避免与条目标题倒挂，v11③）'),
+        ('.co-nav-g-body[hidden]{display:none}',
+         '右栏分组折叠机制（组头 <button> + 组内 [hidden]，v11②）'),
+        ('.co-item.read .co-summary,.co-item.read .co-body{color:var(--ink-400)}',
+         '已读态摘要降档（防与未读倒挂，v11①）'),
+        ('body.dark .co-item.read .co-summary,body.dark .co-item.read .co-body{color:var(--ink-300)}',
+         '暗色已读态覆盖（v11①，第162条断言锁死）'),
+    ]
+    for snippet, desc in CSS_FINGERPRINTS:
+        if snippet in html_text:
+            findings.append('✅ %s' % desc)
+        else:
+            findings.append('❌ 缺失 %s — #companySection 内联样式可能被重建脚本改写（§42.19 v11㉓）' % desc)
+            ok = False
+
+    # —— ② 运行时源：app.js 折叠逻辑 + button 形态（缺任一即回退＝㉔）——
+    RUNTIME_MARKERS = [
+        ('class="co-nav-g-h"', '组头为可点 <button>（非旧 div 装饰，v11②）'),
+        ('function toggleCoGroup', 'toggleCoGroup 折叠/展开句柄（仅隐藏不移除，v11②）'),
+        ('md_co_groups', '折叠状态持久化 localStorage 键（v11②）'),
+    ]
+    for marker, desc in RUNTIME_MARKERS:
+        if marker in app_text:
+            findings.append('✅ %s' % desc)
+        else:
+            findings.append('❌ 缺失 %s — 折叠逻辑回退（§42.19 v11㉔）' % desc)
+            ok = False
+
+    # —— ③ 文案精简红线：app.js 渲染源不得出现旧冗余文案（出现即回退＝㉕）——
+    FORBIDDEN = [
+        ('按市值', '组头「按市值/知名度」排名标注（v11② 已删）'),
+        ('知名度', '组头排名标注（v11② 已删）'),
+        ('家有内容', 'coNavH 旧「…家有内容 · …」（v11② 已删）'),
+        ('（最新动态）', '「全部公司（最新动态）」旧文案（v11② 已改「全部公司」）'),
+    ]
+    for bad, desc in FORBIDDEN:
+        if bad in app_text:
+            findings.append('❌ 出现 %s — 文案精简红线被打破（§42.19 v11㉕）' % desc)
+            ok = False
+        else:
+            findings.append('✅ 无 %s' % desc)
+    return ok, findings
+
+
+
 def check_build_version(text):
     findings = []
     m = re.search(r'name="build-version"\s+content="([^"]+)"', text)
@@ -438,6 +513,9 @@ def main():
     app_js = ROOT / 'app.js'
     if app_js.exists():
         text = text + '\n' + app_js.read_text(encoding='utf-8')
+    # 单独保留 app.js 原文，供 check_company_v11 做"文案精简红线"扫描——
+    # 不混入 index.html（其内联样式历史注释含「按市值·知名度」字样，整文件禁语会误红）
+    app_text = app_js.read_text(encoding='utf-8') if app_js.exists() else ''
 
     sections = [
         ('生成 marker', check_markers(text)),
@@ -447,6 +525,7 @@ def main():
         ('关键功能', check_functions(text)),
         ('关键容器', check_containers(text)),
         ('价格单位去重', check_price_unit_dedup(html_text)),   # 只扫 index.html，避免 app.js 干扰计数
+        ('公司模块 v11 指纹', check_company_v11(html_text, app_text)),   # §42.19 v11 重建边界 + 折叠逻辑 + 文案红线
         ('build-version', check_build_version(text)),
         ('站点标题', check_site_title(html_text)),
         ('百度统计 ID', check_baidu_stat_id(html_text)),
