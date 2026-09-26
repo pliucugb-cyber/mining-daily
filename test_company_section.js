@@ -4,7 +4,9 @@
  *   ① 卡片长度统一：源 t 字段 4 字 ↔ 1055 字悬殊 → 按句读切「标题 + 正文」，标题 2 行、正文 2 行折叠 + 「展开全文」
  *   ② 去矿种维度：矿种 chip 筛选 / 导航矿种分组 / 移动端 sector optgroup / 卡片矿种标签 全部移除
  *   ③ 链接可用：数据自带 HTML 实体（&amp;）先解码再转义（否则二次转义成 &amp;amp; 打不开）；外链 rel=noreferrer；显示目标域名
- *   ④ 导航：国内/海外分两组 + 按市值·知名度 rank 升序 + 计数徽标 + 「暂未收录」折叠组；面板内独立滚动
+ *   ④ 导航：国内/中资港股/海外 分三组（2026-09-26 拆出中资港股）+ 按市值·知名度 rank 升序 + 计数徽标 + 「暂未收录」折叠组；面板内独立滚动
+ *   ⑦ 命名统一（2026-09-26）：海外/中资港股 显示「中文（英文）」，国内仅中文；name 仍作主键
+ *   ⑧ 媒体源披露（2026-09-26）：选中公司后头部 sub 显示「来源：新浪财经 / 官网 RSS / 公司官网」
  *   ⑤ v6：每条卡片加一句内容摘要（仿新闻端，读 it.s）；移除逐条「目标域名」行；顶部说明段移除
  *   ⑥ v7：新闻流单栏（同新闻列表形式）；右栏 sticky 修复（#companySection 改 overflow:clip）+ 上移；
  *       搜索框纳入摘要匹配；暂未收录公司新增「搜新闻」搜索引擎入口（官网死站/外壳页时仍可发现相关内容）
@@ -288,12 +290,14 @@ setTimeout(() => {
           'got ' + navItems.length);
     const navAll = document.querySelector('#coNav .co-nav-all');
     check('公司导航「全部公司」入口存在', !!navAll);
-    // 国内 / 海外 分两组
+    // 国内 / 中资港股 / 海外 分三组（2026-09-26 拆三组：海外按「是否 A股」→ 拆出中资港股）
     const gh = document.querySelectorAll('#coNav .co-nav-g-h');
-    check('导航按 国内 / 海外 分两组', gh.length === 2, 'got ' + gh.length);
-    check('分组标题含「国内公司」「海外公司」',
-          Array.from(gh).some(e => /国内公司/.test(e.textContent)) &&
-          Array.from(gh).some(e => /海外公司/.test(e.textContent)));
+    check('导航按 国内 / 中资港股 / 海外 分三组', gh.length === 3, 'got ' + gh.length);
+    const ghLabels = Array.from(gh).map(e => e.textContent);
+    check('分组标题含「国内公司」「中资港股」「海外公司」',
+          /国内公司/.test(ghLabels.join('|')) &&
+          /中资港股/.test(ghLabels.join('|')) &&
+          /海外公司/.test(ghLabels.join('|')), ghLabels.join('|'));
     // 组内按市值/知名度 rank 升序（紫金矿业 rank=1 早于 湖南黄金；Newmont 早于 Albemarle）
     const domOrder = Array.from(document.querySelectorAll('#coNav .co-nav-item:not(.empty)'))
       .map(el => el.getAttribute('data-name'));
@@ -301,6 +305,19 @@ setTimeout(() => {
     check('国内组按 rank 升序（紫金矿业 早于 山东黄金）', zjIdx >= 0 && sdIdx >= 0 && zjIdx < sdIdx, zjIdx + '/' + sdIdx);
     const tkIdx = domOrder.indexOf('Teck Resources'), albIdx = domOrder.indexOf('Albemarle');
     check('海外组按 rank 升序（Teck Resources 早于 Albemarle）', tkIdx >= 0 && albIdx >= 0 && tkIdx < albIdx, tkIdx + '/' + albIdx);
+    // 命名统一（2026-09-26）：海外/中资港股 显示「中文（英文）」；国内仅中文（name 仍作主键）
+    const navNameMap = {};
+    document.querySelectorAll('#coNav .co-nav-item').forEach(el => {
+      navNameMap[el.getAttribute('data-name')] = (el.querySelector('.co-nav-name') || {}).textContent || '';
+    });
+    check('海外英文公司「纽蒙特」显示 纽蒙特（Newmont）',
+          (navNameMap['Newmont'] || '').indexOf('纽蒙特（Newmont）') >= 0, navNameMap['Newmont']);
+    check('中资港股「五矿资源」显示 五矿资源（MMG）',
+          (navNameMap['五矿资源'] || '').indexOf('五矿资源（MMG）') >= 0, navNameMap['五矿资源']);
+    check('海外中文公司「力拓」显示 力拓（Rio Tinto）',
+          (navNameMap['力拓'] || '').indexOf('力拓（Rio Tinto）') >= 0, navNameMap['力拓']);
+    check('国内公司「紫金矿业」仅显示中文（不含括号英文）',
+          (navNameMap['紫金矿业'] || '') === '紫金矿业', navNameMap['紫金矿业']);
     check('导航标题显示家数/条数', /家/.test((document.getElementById('coNavH') || {}).textContent || ''),
           (document.getElementById('coNavH') || {}).textContent);
     const emptyItems = document.querySelectorAll('#coNav .co-nav-item.empty');
@@ -416,11 +433,13 @@ setTimeout(() => {
     const opts = document.querySelectorAll('#coNavSel option');
     check('移动端 select 选项=公司数+1', opts.length === nCompanies + 1, 'got ' + opts.length + ' / ' + (nCompanies + 1));
     const og = document.querySelectorAll('#coNavSel optgroup');
-    check('移动端 select 按 国内/海外/暂未收录 三组',
-          og.length >= 2 && /国内公司/.test(og[0].getAttribute('label') || '') &&
-          /海外公司/.test(og[1].getAttribute('label') || '') &&
-          (og.length < 3 || /暂未收录/.test(og[2].getAttribute('label') || '')),
-          'optgroups=' + og.length + (og[0] ? ' labels=' + Array.from(og).map(g => g.getAttribute('label')).join('|') : ''));
+    const ogLabels = Array.from(og).map(g => g.getAttribute('label') || '');
+    check('移动端 select 含 国内/中资港股/海外（+ 暂未收录）',
+          /国内公司/.test(ogLabels.join('|')) &&
+          /中资港股/.test(ogLabels.join('|')) &&
+          /海外公司/.test(ogLabels.join('|')) &&
+          (nEmptyCompanies === 0 || /暂未收录/.test(ogLabels.join('|'))),
+          'optgroups=' + og.length + ' labels=' + ogLabels.join('|'));
     check('select 首项 = 全部公司', (opts[0] || {}).value === '__all__');
 
     // ---------- 11) 豁免与视图切换 ----------
@@ -471,7 +490,13 @@ setTimeout(() => {
     const badMark = /TSX\s*[:：]|Suite\s*\d|Burrard|美通社|PRNewswire|Copyright|proxy solicitation|征集代理|Barclays|Vancouver/i.test(summText);
     check('渲染摘要不含电头/地址/征集代理等模板残片', !badMark, summText.slice(0, 80));
     // 诚实的「仅标题」体验：暂未提取到摘要时显示占位，而非空白或错乱电头
-    check('存在「暂未提取到正文摘要」占位（.co-summary-empty）', document.querySelectorAll('#companyList .co-summary-empty').length >= 1);
+    // 诚实的「仅标题」体验：暂未提取到摘要时显示占位，而非空白或错乱电头。
+    // 改为数据无关的结构断言：每条卡片必含 摘要 / 占位 / 折叠 之一（不允许空白卡片）。
+    const cards14 = document.querySelectorAll('#companyList .co-item');
+    const blank14 = Array.from(cards14).filter(c =>
+      !c.querySelector('.co-summary') && !c.querySelector('.co-summary-empty') && !c.querySelector('.co-exp'));
+    check('每条卡片都有摘要/占位/折叠之一（无空白卡片；.co-summary-empty 仍为缺摘要时的诚实占位）',
+          blank14.length === 0, 'blank=' + blank14.length);
 
     // ---------- 15) P1/P2 优化回归（2026-09-26）：未读筛选 / 关注置顶 / 矿种标签 / sticky ----------
     // P2 矿种标签：2026-09-26 用户拍板「删掉」—— 卡片不再渲染矿种标签（回归 v5 ② 去矿种维度契约）
@@ -548,6 +573,22 @@ setTimeout(() => {
 
     // P1-C 日期分组表头常驻（CSS position:sticky）
     check('CSS：.co-day-h 含 position:sticky（日期分组表头常驻）', /\.co-day-h\{[^}]*position:sticky/.test(css));
+
+    // ---------- 15.5) 媒体源披露（2026-09-26）：选中 re-sourced 公司后头部显示来源 ----------
+    function selectCoByName(name) {
+      const el = document.querySelector('#coNav .co-nav-item[data-name="' + name + '"]');
+      if (el) el.click();
+      return el;
+    }
+    if (selectCoByName('五矿资源')) {
+      const sub1 = (document.querySelector('#coFeedHead .co-feed-sub') || {}).textContent || '';
+      check('选中「五矿资源」头部披露来源：新浪财经', /新浪财经/.test(sub1), sub1);
+    } else { check('可定位「五矿资源」', false); }
+    if (selectCoByName('第一量子')) {
+      const sub2 = (document.querySelector('#coFeedHead .co-feed-sub') || {}).textContent || '';
+      check('选中「第一量子」头部披露来源：官网 RSS', /官网 RSS/.test(sub2), sub2);
+    } else { check('可定位「第一量子」', false); }
+    if (navAll) navAll.click();
 
     check('无阻塞性 JS 错误', errors.length === 0, errors.join(' | '));
 

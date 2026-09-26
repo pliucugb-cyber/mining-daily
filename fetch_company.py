@@ -2,13 +2,17 @@
 """
 fetch_company.py — 矿业公司动态板块数据采集（v2：官网新闻，非公告）
 
-数据来源：32 家矿业龙头「官方网站新闻栏目」（非 cninfo/SEC 公告）。
-  - 国内 25 家 A股：各公司官网新闻列表页
-  - 海外 7 家（纽蒙特/巴里克/自由港/南方铜业/泰克/阿格尼科/雅保）：官网 News/IR 栏目，英文标题经 MyMemory 译中
+数据来源：47 家矿业龙头「官方网站新闻栏目」（非 cninfo/SEC 公告），按三组划分：
+  - 国内 A股（32 家）：各公司官网新闻列表页；其中 6 家原死站/JS 外壳站（云南铜业/云铝股份/湖南黄金/
+    北方稀土/株冶集团/广晟有色）改用新浪财经个股页（gb2312→gbk 解码）兜底采集
+  - 中资港股（2 家：五矿资源/中国有色矿业）：新浪财经港股个股页（中文新闻）
+  - 海外（13 家）：官网 News/IR 栏目，英文标题经 MyMemory 译中；第一量子改用官网 RSS 结构化源
 
 采集策略：
   - 国内/海外站：Python urllib 静态抓取（走本机 http 代理取外网、直连兜底），正则抽取新闻条目；
     个别 SPA 动态站（如中国铝业官网）method='chrome'，用系统 Chrome 无头渲染后再抽，无 Chrome 环境时安全降级静态抓取
+  - 字符集：按 <meta charset> 解码，gb2312/gbk/gb18030 统一走 gbk，避免新浪等 GBK 站乱码
+  - RSS 源（第一量子）：专用 extract_rss 解析 <item><title><link><pubDate>
   - 海外英文标题：MyMemory 免费接口译中（langpair=en|zh-CN），失败回退原文
   - 容错：某站点抓取失败（网络/Chrome 不可用）时，复用 company_news.json 中该公司上一次成功的数据并标 stale，避免每日重建把整块清空
 
@@ -140,6 +144,16 @@ ASSET_EXT = ('.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.p
 NAV_HREF = ('index', 'about', 'contact', 'login', 'search', 'sitemap', 'privacy',
             'english', 'home', 'column', 'category', 'channel', 'list', 'menu',
             'wechat', 'weibo', 'app', 'join', 'job', 'recruit')
+# 新浪财经「财报/公告」类目链接（vCB_BulletinYi/Yi/San/Zhong/Nian + page_type/yjdbg.phtml 等），
+# 是行情中心的报告查询页，并非公司新闻，必须丢弃（否则「一季度报告」之类混进条目）。
+SINA_BULLETIN_RE = re.compile(r'/vCB_Bulletin|page_type/[^/]*bg\.phtml', re.I)
+# 新浪个股页的自动化市场数据（融资融券、金价/金属 ticker、龙虎榜/大宗交易、换手率、N 天涨跌幅），
+# 是行情机器人生成，并非「公司发生的新闻」，丢弃。误杀风险极低（真实公司新闻标题几乎不会含这些词）。
+SINA_AUTO_RE = re.compile(
+    r'融资买入|融资余额|融券买入|融券余额|获融资|获融券|'
+    r'元/克|元/吨|元/千克|元/公斤|元/斤|'
+    r'龙虎榜|大宗交易|换手率|'
+    r'\d+天上涨|\d+天下跌|主力资金净?流入|主力资金净?流出', re.I)
 
 # ===== 新闻优先过滤（2026-09-23 新增；口径「适中＝事件类 + 行业技术观察」）=====
 # ① 非新闻 URL（栏目/介绍/业务/招聘/合规/矿山项目页），命中即丢。
@@ -281,6 +295,38 @@ def is_blocked(txt):
         return True
     return bool(_BLOCK_RE.search(txt))
 
+# ============================ 0.5 字符集探测（2026-09-26 新增）============================
+# 新浪财经个股/港股页是 gb2312，若一律按 utf-8 解码会产生上千个乱码字符（�）。
+# 这里按 <meta charset> 声明的编码解码，gb2312/gbk/gb18030 统一用 gbk（gbk 是超集）；
+# 未声明或 utf-8 时按 utf-8 解，并以「替换字符占比」兜底回退 gbk，避免漏网的 GBK 站乱码。
+def _detect_charset(data):
+    m = re.search(rb'<meta[^>]+charset=["\']?\s*([A-Za-z0-9\-]+)', data[:4000], re.I)
+    if m:
+        return m.group(1).decode('ascii', 'replace').strip().lower()
+    # HTML5 短写法 <meta charset=utf-8> 已覆盖；少数站用 content="text/html; charset=gbk"
+    m = re.search(rb'content\s*=\s*["\'][^"\']*charset\s*=\s*([A-Za-z0-9\-]+)', data[:4000], re.I)
+    if m:
+        return m.group(1).decode('ascii', 'replace').strip().lower()
+    return ''
+
+def _decode(data):
+    if not data:
+        return ''
+    cs = _detect_charset(data)
+    if cs in ('gb2312', 'gbk', 'gb18030', 'gb2312_80'):
+        try:
+            return data.decode('gbk', 'replace')
+        except Exception:
+            pass
+    txt = data.decode('utf-8', 'replace')
+    # 兜底：若替换字符占比过高（>2%），极可能是被当成 utf-8 解的 GBK 站，回退 gbk
+    if len(txt) > 200 and txt.count('\ufffd') * 100 > 2 * len(txt):
+        try:
+            return data.decode('gbk', 'replace')
+        except Exception:
+            return txt
+    return txt
+
 def fetch_html(url, timeout=25):
     """尝试给定 url，被代理错误页劫持则翻转 http/https 方案再试一次。"""
     cands = [url]
@@ -291,7 +337,7 @@ def fetch_html(url, timeout=25):
     for u in cands:
         st, data = http_get(u, timeout, proxy=proxy)
         if st == 200 and data and len(data) > 300:
-            txt = data.decode('utf-8', 'replace')
+            txt = _decode(data)
             if not is_blocked(txt):
                 return txt
     return ''
@@ -551,6 +597,12 @@ def looks_like_news(title, href=''):
     # 非新闻 URL（栏目/介绍/业务/招聘/矿山项目页）
     if href and NON_NEWS_HREF.search(href):
         return False
+    # 新浪财经财报类目查询页（vCB_Bulletin…/yjdbg.phtml）
+    if href and SINA_BULLETIN_RE.search(href):
+        return False
+    # 新浪自动化市场数据（融资融券/金价 ticker/龙虎榜/换手率/N 天涨跌幅）
+    if SINA_AUTO_RE.search(title):
+        return False
     # 非公司新闻（党务/工会文体/领导视察/荣誉榜单/招聘培训公示）—— 见 DROP_TITLE_KW
     if is_droppable_title(title):
         return False
@@ -608,6 +660,59 @@ def extract_gridview(raw, base_url):
         items.append({'t': title, 'd': d or '', 'u': absurl, 's': ''})
         seen.add(absurl)
     return items
+
+# ============================ 1.1 RSS 解析（2026-09-26 新增）============================
+# 部分海外公司官网提供标准 RSS（如第一量子 https://www.first-quantum.com/rss），
+# 其条目是 <item><title><link><pubDate> 结构，<link> 是元素内容而非 <a href>，
+# 通用锚点抽取器抽不到，故单独解析。返回与 extract_items 同构的条目列表。
+RSS_ITEM = re.compile(r'<item\b[^>]*>(.*?)</item>', re.I | re.S)
+RSS_FIELD = re.compile(r'<(title|link|pubDate)\b[^>]*>(.*?)</\1>', re.I | re.S)
+RSS_CDATA = re.compile(r'<!\[CDATA\[(.*?)\]\]>', re.I | re.S)
+
+def _rss_text(s):
+    if not s:
+        return ''
+    m = RSS_CDATA.search(s)
+    if m:
+        s = m.group(1)
+    return clean_ws(strip_tags(s))
+
+def _rss_date(s):
+    s = _rss_text(s)
+    if not s:
+        return ''
+    m = re.search(r'(\d{1,2})\s+([A-Za-z]{3,9})\.?,?\s+(20\d{2})', s)
+    if m:
+        mi = _MON.get(m.group(2)[:3].lower())
+        if mi:
+            return _valid_ymd(m.group(3), mi, m.group(1))
+    return ''
+
+def extract_rss(raw, base_url, max_items=18):
+    if not raw:
+        return []
+    items, seen = [], set()
+    for blk in RSS_ITEM.finditer(raw):
+        body = blk.group(1)
+        title = link = pub = ''
+        for fm in RSS_FIELD.finditer(body):
+            tag = fm.group(1).lower()
+            val = fm.group(2)
+            if tag == 'title' and not title:
+                title = _rss_text(val)
+            elif tag == 'link' and not link:
+                link = _rss_text(val)
+            elif tag == 'pubdate' and not pub:
+                pub = _rss_text(val)
+        if not title or not link:
+            continue
+        absurl = urllib.parse.urljoin(base_url, link)
+        if absurl in seen:
+            continue
+        seen.add(absurl)
+        items.append({'t': title, 'd': _rss_date(pub), 'u': absurl, 's': ''})
+    items.sort(key=lambda x: (x['d'] == '', x['d']), reverse=True)
+    return items[:max_items]
 
 def extract_items(raw, base_url, max_items=18, require_date=False):
     if not raw:
@@ -840,6 +945,12 @@ def is_junk_item(title, url, date=''):
     if is_droppable_title(t):
         return True
     if url and URL_COL_JUNK.search(html.unescape(url)):
+        return True
+    # 新浪财经财报类目查询页（vCB_Bulletin…/yjdbg.phtml）
+    if url and SINA_BULLETIN_RE.search(html.unescape(url)):
+        return True
+    # 新浪自动化市场数据（融资融券/金价 ticker/龙虎榜/换手率/N 天涨跌幅）
+    if SINA_AUTO_RE.search(t):
         return True
     return False
 
@@ -1180,111 +1291,160 @@ def _save_trans_cache():
 # method: 'html' 静态优先（不足 3 条自动回退 chrome）；'chrome' 直接渲染
 SITES = [
     # —— 铜 ——
-    {'name':'紫金矿业','code':'601899','sector':'铜','region':'CN','exchange':'A股',
+    {'name':'紫金矿业','code':'601899','sector':'铜','region':'CN','exchange':'A股','origin':'official',
+     'zh':'紫金矿业','en':'Zijin Mining',
      'url':'https://www.zjky.cn/news/news_list.jsp','method':'html'},
-    {'name':'江西铜业','code':'600362','sector':'铜','region':'CN','exchange':'A股',
+    {'name':'江西铜业','code':'600362','sector':'铜','region':'CN','exchange':'A股','origin':'official',
+     'zh':'江西铜业','en':'Jiangxi Copper',
      'url':'https://www.jxcc.com/news.html','method':'html'},
-    {'name':'铜陵有色','code':'000630','sector':'铜','region':'CN','exchange':'A股',
+    {'name':'铜陵有色','code':'000630','sector':'铜','region':'CN','exchange':'A股','origin':'official',
+     'zh':'铜陵有色','en':'Tongling Nonferrous',
      'url':'http://www.tlys.cn/list.aspx?parentclassid=67&classid=383','method':'html'},
-    {'name':'云南铜业','code':'000878','sector':'铜','region':'CN','exchange':'A股',
-     'url':'https://www.ynfc.com.cn/','method':'html','unreach':'dead'},
-    {'name':'西部矿业','code':'601168','sector':'铜','region':'CN','exchange':'A股',
+    {'name':'云南铜业','code':'000878','sector':'铜','region':'CN','exchange':'A股','origin':'sina-a',
+     'zh':'云南铜业','en':'Yunnan Copper',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/sz000878.phtml','method':'html'},
+    {'name':'西部矿业','code':'601168','sector':'铜','region':'CN','exchange':'A股','origin':'official',
+     'zh':'西部矿业','en':'Western Mining',
      'url':'https://www.westmining.com/mtzx/xkxw/','method':'html'},
     # —— 钼 ——
-    {'name':'洛阳钼业','code':'603993','sector':'钼','region':'CN','exchange':'A股',
+    {'name':'洛阳钼业','code':'603993','sector':'钼','region':'CN','exchange':'A股','origin':'official',
+     'zh':'洛阳钼业','en':'CMOC',
      'url':'https://www.cmoc.com/html/Media/News/','method':'html'},
     # —— 铝 ——
-    {'name':'中国铝业','code':'601600','sector':'铝','region':'CN','exchange':'A股',
+    {'name':'中国铝业','code':'601600','sector':'铝','region':'CN','exchange':'A股','origin':'official',
+     'zh':'中国铝业','en':'Chalco',
      'url':'https://www.chalco.com.cn/','method':'chrome','unreach':'spa'},
-    {'name':'南山铝业','code':'600219','sector':'铝','region':'CN','exchange':'A股',
+    {'name':'南山铝业','code':'600219','sector':'铝','region':'CN','exchange':'A股','origin':'official',
+     'zh':'南山铝业','en':'Nanshan Aluminium',
      'url':'https://www.nanshan.com.cn/news.html','method':'html'},
-    {'name':'云铝股份','code':'000807','sector':'铝','region':'CN','exchange':'A股',
-     'url':'http://www.ylgf.com.cn/','method':'html','unreach':'dead'},
-    {'name':'神火股份','code':'000933','sector':'铝','region':'CN','exchange':'A股',
+    {'name':'云铝股份','code':'000807','sector':'铝','region':'CN','exchange':'A股','origin':'sina-a',
+     'zh':'云铝股份','en':'Yunlu Aluminium',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/sz000807.phtml','method':'html'},
+    {'name':'神火股份','code':'000933','sector':'铝','region':'CN','exchange':'A股','origin':'official',
+     'zh':'神火股份','en':'Shenhuo',
      'url':'http://www.shenhuo.com/home/newslist/newslist?categoryId=3','method':'html'},
-    {'name':'天山铝业','code':'002532','sector':'铝','region':'CN','exchange':'A股',
+    {'name':'天山铝业','code':'002532','sector':'铝','region':'CN','exchange':'A股','origin':'official',
+     'zh':'天山铝业','en':'Tianshan Aluminium',
      'url':'http://www.tslyjt.com/node/48','method':'html'},
     # —— 黄金 ——
-    {'name':'山东黄金','code':'600547','sector':'黄金','region':'CN','exchange':'A股',
+    {'name':'山东黄金','code':'600547','sector':'黄金','region':'CN','exchange':'A股','origin':'official',
+     'zh':'山东黄金','en':'Shandong Gold',
      'url':'https://www.sd-gold.com/column/81/','method':'html'},
-    {'name':'中金黄金','code':'600489','sector':'黄金','region':'CN','exchange':'A股',
+    {'name':'中金黄金','code':'600489','sector':'黄金','region':'CN','exchange':'A股','origin':'official',
+     'zh':'中金黄金','en':'Zhongjin Gold',
      # v7：上市公司官网域名 zjgold.com.cn 已被域名商挂牌转让（死站），改用集团站 chinagoldgroup.com 兜底采集团新闻
      'url':'https://www.chinagoldgroup.com/','method':'html'},
-    {'name':'赤峰黄金','code':'600988','sector':'黄金','region':'CN','exchange':'A股',
+    {'name':'赤峰黄金','code':'600988','sector':'黄金','region':'CN','exchange':'A股','origin':'official',
+     'zh':'赤峰黄金','en':'Chifeng Gold',
      'url':'https://www.cfgold.com/col36/list','method':'html'},
-    {'name':'湖南黄金','code':'002155','sector':'黄金','region':'CN','exchange':'A股',
-     'url':'https://www.hngold.com.cn/','method':'html','unreach':'spa'},
+    {'name':'湖南黄金','code':'002155','sector':'黄金','region':'CN','exchange':'A股','origin':'sina-a',
+     'zh':'湖南黄金','en':'Hunan Gold',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/sz002155.phtml','method':'html'},
     # —— 锂 ——
-    {'name':'天齐锂业','code':'002466','sector':'锂','region':'CN','exchange':'A股',
+    {'name':'天齐锂业','code':'002466','sector':'锂','region':'CN','exchange':'A股','origin':'official',
+     'zh':'天齐锂业','en':'Tianqi Lithium',
      'url':'https://www.tianqilithium.com/news.aspx?t=27','method':'html'},
-    {'name':'赣锋锂业','code':'002460','sector':'锂','region':'CN','exchange':'A股',
+    {'name':'赣锋锂业','code':'002460','sector':'锂','region':'CN','exchange':'A股','origin':'official',
+     'zh':'赣锋锂业','en':'Ganfeng Lithium',
      'url':'https://www.ganfenglithium.com/news.html','method':'html'},
-    {'name':'华友钴业','code':'603799','sector':'钴','region':'CN','exchange':'A股',
+    {'name':'华友钴业','code':'603799','sector':'钴','region':'CN','exchange':'A股','origin':'official',
+     'zh':'华友钴业','en':'Huayou Cobalt',
      'url':'https://www.huayou.com/news/corporate-news','method':'html'},
-    {'name':'藏格矿业','code':'000408','sector':'锂','region':'CN','exchange':'A股',
+    {'name':'藏格矿业','code':'000408','sector':'锂','region':'CN','exchange':'A股','origin':'official',
+     'zh':'藏格矿业','en':'Zangge Mining',
      'url':'http://www.zanggekuangye.com/news/cropnews/index.html','method':'html'},
     # —— 稀土 ——
-    {'name':'北方稀土','code':'600111','sector':'稀土','region':'CN','exchange':'A股',
-     # 根域 reht.com 与 newscenter.do 均为 JS/AJAX 外壳页，静态抓取抽不到新闻列表；
-     # 维持官网根域（点公司名可直达），内容发现走前端「搜新闻」兜底
-     'url':'https://www.reht.com/','method':'html','unreach':'spa'},
-    {'name':'中国稀土','code':'000831','sector':'稀土','region':'CN','exchange':'A股',
+    {'name':'北方稀土','code':'600111','sector':'稀土','region':'CN','exchange':'A股','origin':'sina-a',
+     'zh':'北方稀土','en':'China Northern Rare Earth',
+     # 官网根域 reht.com 与 newscenter.do 均为 JS/AJAX 外壳页，静态抓取抽不到新闻列表；
+     # 改用新浪财经个股页（gb2312→gbk 解码）兜底采集个股相关新闻
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/sh600111.phtml','method':'html'},
+    {'name':'中国稀土','code':'000831','sector':'稀土','region':'CN','exchange':'A股','origin':'official',
+     'zh':'中国稀土','en':'China Rare Earth',
      'url':'https://www.regcc.cn/zgxtjt/jtnew/list_9.shtml','method':'html'},
     # —— 铅锌 ——
-    {'name':'驰宏锌锗','code':'600497','sector':'铅锌','region':'CN','exchange':'A股',
+    {'name':'驰宏锌锗','code':'600497','sector':'铅锌','region':'CN','exchange':'A股','origin':'official',
+     'zh':'驰宏锌锗','en':'Chihong Zn & Ge',
      'url':'http://www.chxz.com/xwzx/zhxw/','method':'html'},
-    {'name':'中金岭南','code':'000060','sector':'铅锌','region':'CN','exchange':'A股',
+    {'name':'中金岭南','code':'000060','sector':'铅锌','region':'CN','exchange':'A股','origin':'official',
+     'zh':'中金岭南','en':'Zhongjin Lingnan',
      'url':'https://www.nonfemet.com/channel/74','method':'html'},
     # —— 锡 / 钨 ——
-    {'name':'锡业股份','code':'000960','sector':'锡','region':'CN','exchange':'A股',
+    {'name':'锡业股份','code':'000960','sector':'锡','region':'CN','exchange':'A股','origin':'official',
+     'zh':'锡业股份','en':'Yunnan Tin',
      'url':'https://www.ytc.cn/xwdt1/gsxw.htm','method':'html'},
-    {'name':'厦门钨业','code':'600549','sector':'钨','region':'CN','exchange':'A股',
+    {'name':'厦门钨业','code':'600549','sector':'钨','region':'CN','exchange':'A股','origin':'official',
+     'zh':'厦门钨业','en':'Xiamen Tungsten',
      'url':'https://www.cxtc.com/News.aspx','method':'html'},
-    # —— 海外 7 家（本机 Chrome 不可用 → 统一走静态 html 抓取；代理由 effective_proxy 发现）——
-    {'name':'Newmont','code':'NEM','sector':'黄金','region':'NA','exchange':'NYSE',
+    # —— 海外（官网 News/IR 栏目，英文标题经 MyMemory 译中）——
+    {'name':'Newmont','code':'NEM','sector':'黄金','region':'NA','exchange':'NYSE','origin':'official',
+     'zh':'纽蒙特','en':'Newmont',
      'url':'https://www.newmont.com/investors/news-release/default.aspx','method':'html','unreach':'spa'},
-    {'name':'Barrick','code':'B','sector':'黄金','region':'NA','exchange':'NYSE',
+    {'name':'Barrick','code':'B','sector':'黄金','region':'NA','exchange':'NYSE','origin':'official',
+     'zh':'巴里克','en':'Barrick',
      'url':'https://www.barrick.com/English/News/default.aspx','method':'html','unreach':'spa'},
-    {'name':'Freeport-McMoRan','code':'FCX','sector':'铜','region':'NA','exchange':'NYSE',
+    {'name':'Freeport-McMoRan','code':'FCX','sector':'铜','region':'NA','exchange':'NYSE','origin':'official',
+     'zh':'自由港','en':'Freeport-McMoRan',
      'url':'https://www.fcx.com/','method':'html','unreach':'spa'},
-    {'name':'Southern Copper','code':'SCCO','sector':'铜','region':'NA','exchange':'NYSE',
+    {'name':'Southern Copper','code':'SCCO','sector':'铜','region':'NA','exchange':'NYSE','origin':'official',
+     'zh':'南方铜业','en':'Southern Copper',
      'url':'https://www.southerncopper.com/','method':'html','unreach':'spa','to':12},
-    {'name':'Teck Resources','code':'TECK','sector':'铅锌','region':'NA','exchange':'TSX',
+    {'name':'Teck Resources','code':'TECK','sector':'铅锌','region':'NA','exchange':'TSX','origin':'official',
+     'zh':'泰克资源','en':'Teck Resources',
      'url':'https://www.teck.com/news/','method':'html'},
-    {'name':'Agnico Eagle','code':'AEM','sector':'黄金','region':'NA','exchange':'TSX',
+    {'name':'Agnico Eagle','code':'AEM','sector':'黄金','region':'NA','exchange':'TSX','origin':'official',
+     'zh':'阿格尼科鹰','en':'Agnico Eagle',
      'url':'https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx','method':'html','unreach':'spa'},
-    {'name':'Albemarle','code':'ALB','sector':'锂','region':'NA','exchange':'NYSE',
+    {'name':'Albemarle','code':'ALB','sector':'锂','region':'NA','exchange':'NYSE','origin':'official',
+     'zh':'雅保','en':'Albemarle',
      'url':'https://www.albemarle.com/news','method':'html'},
-    {'name':'盐湖股份','code':'000792','sector':'锂','region':'CN','exchange':'A股',
+    {'name':'盐湖股份','code':'000792','sector':'锂','region':'CN','exchange':'A股','origin':'official',
+     'zh':'盐湖股份','en':'Qinghai Salt Lake',
      'url':'http://www.qhyhgf.com/','method':'html'},
-    {'name':'中矿资源','code':'002738','sector':'锂','region':'CN','exchange':'A股',
+    {'name':'中矿资源','code':'002738','sector':'锂','region':'CN','exchange':'A股','origin':'official',
+     'zh':'中矿资源','en':'Sinomine Resource',
      'url':'http://www.sinomine.cn/','method':'html'},
-    {'name':'永兴材料','code':'002756','sector':'锂','region':'CN','exchange':'A股',
+    {'name':'永兴材料','code':'002756','sector':'锂','region':'CN','exchange':'A股','origin':'official',
+     'zh':'永兴材料','en':'Yongxing Materials',
      'url':'http://www.yongxing.com.cn/','method':'html'},
-    {'name':'白银有色','code':'601212','sector':'铜铅锌','region':'CN','exchange':'A股',
+    {'name':'白银有色','code':'601212','sector':'铜铅锌','region':'CN','exchange':'A股','origin':'official',
+     'zh':'白银有色','en':'Baiyin Nonferrous',
      'url':'http://www.bynmc.com/','method':'html'},
-    {'name':'中色股份','code':'000758','sector':'海外工程','region':'CN','exchange':'A股',
+    {'name':'中色股份','code':'000758','sector':'海外工程','region':'CN','exchange':'A股','origin':'official',
+     'zh':'中色股份','en':'NFC',
      'url':'http://www.nfc.com.cn/','method':'html'},
-    {'name':'株冶集团','code':'600961','sector':'铅锌','region':'CN','exchange':'A股',
-     'url':'http://www.zygroup.com.cn/','method':'html','unreach':'spa'},
-    {'name':'广晟有色','code':'600259','sector':'稀土','region':'CN','exchange':'A股',
-     'url':'http://www.graset.com/','method':'html','unreach':'spa'},
-    {'name':'五矿资源','code':'1208','sector':'铜锌','region':'NA','exchange':'HK',
-     'url':'https://www.mmg.com/','method':'html','unreach':'spa'},
-    {'name':'中国有色矿业','code':'1258','sector':'铜','region':'NA','exchange':'HK',
-     'url':'https://www.cnmc.com.hk/','method':'html','unreach':'spa'},
-    {'name':'力拓','code':'RIO','sector':'综合','region':'NA','exchange':'LSE',
+    {'name':'株冶集团','code':'600961','sector':'铅锌','region':'CN','exchange':'A股','origin':'sina-a',
+     'zh':'株冶集团','en':'Zhuzhou Smelter',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/sh600961.phtml','method':'html'},
+    {'name':'广晟有色','code':'600259','sector':'稀土','region':'CN','exchange':'A股','origin':'sina-a',
+     'zh':'广晟有色','en':'Guangdong Rising Nonferrous',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/sh600259.phtml','method':'html'},
+    # —— 中资港股（新浪财经港股个股页，gb2312→gbk 解码，中文新闻）——
+    {'name':'五矿资源','code':'1208','sector':'铜锌','region':'HK','exchange':'港股','origin':'sina-hk',
+     'zh':'五矿资源','en':'MMG',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/hk01208.phtml','method':'html'},
+    {'name':'中国有色矿业','code':'1258','sector':'铜','region':'HK','exchange':'港股','origin':'sina-hk',
+     'zh':'中国有色矿业','en':'China Nonferrous Mining',
+     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/hk01258.phtml','method':'html'},
+    {'name':'力拓','code':'RIO','sector':'综合','region':'NA','exchange':'LSE','origin':'official',
+     'zh':'力拓','en':'Rio Tinto',
      'url':'https://www.riotinto.com/','method':'html','unreach':'spa'},
-    {'name':'必和必拓','code':'BHP','sector':'综合','region':'NA','exchange':'LSE',
+    {'name':'必和必拓','code':'BHP','sector':'综合','region':'NA','exchange':'LSE','origin':'official',
+     'zh':'必和必拓','en':'BHP',
      'url':'https://www.bhp.com/','method':'html','unreach':'spa'},
-    {'name':'淡水河谷','code':'VALE','sector':'综合','region':'NA','exchange':'NYSE',
+    {'name':'淡水河谷','code':'VALE','sector':'综合','region':'NA','exchange':'NYSE','origin':'official',
+     'zh':'淡水河谷','en':'Vale',
      'url':'https://www.vale.com/','method':'html','unreach':'spa'},
-    {'name':'嘉能可','code':'GLEN','sector':'综合','region':'NA','exchange':'LSE',
+    {'name':'嘉能可','code':'GLEN','sector':'综合','region':'NA','exchange':'LSE','origin':'official',
+     'zh':'嘉能可','en':'Glencore',
      'url':'https://www.glencore.com/','method':'html','unreach':'spa'},
-    {'name':'英美资源','code':'AAL','sector':'综合','region':'NA','exchange':'LSE',
+    {'name':'英美资源','code':'AAL','sector':'综合','region':'NA','exchange':'LSE','origin':'official',
+     'zh':'英美资源','en':'Anglo American',
      'url':'https://www.angloamerican.com/','method':'html','unreach':'spa'},
-    {'name':'第一量子','code':'FM','sector':'铜','region':'NA','exchange':'TSX',
-     'url':'https://www.first-quantum.com/','method':'html','unreach':'spa'},
+    # —— 第一量子（官网 RSS，结构化新闻，英文标题经 MyMemory 译中）——
+    {'name':'第一量子','code':'FM','sector':'铜','region':'NA','exchange':'TSX','origin':'rss',
+     'zh':'第一量子','en':'First Quantum',
+     'url':'https://www.first-quantum.com/rss','method':'rss'},
 ]
 
 INDEX = {s['name']: s for s in SITES}
@@ -1310,6 +1470,8 @@ def _stub(site):
     """未采集公司的占位记录（保持全量 32 家花名册）。"""
     return {'name': site['name'], 'code': site['code'], 'sector': site['sector'],
             'region': site['region'], 'exchange': site['exchange'],
+            'zh': site.get('zh', site['name']), 'en': site.get('en', ''),
+            'origin': site.get('origin', 'official'),
             'home': site['url'], 'news_url': site['url'], 'method': '',
             'unreach': site.get('unreach', ''),
             'stale': False, 'rank': RANK.get(site['name'], 99), 'items': []}
@@ -1324,7 +1486,11 @@ def fetch_one(site, force=False):
     cached = raw is not None
     used_method = method
     if raw is None:
-        if method == 'chrome':
+        if method == 'rss':
+            # 官网 RSS：静态抓取后走专用 RSS 解析器（第一量子等）
+            raw = fetch_html(url, timeout=to)
+            used_method = 'rss' if raw else 'html'
+        elif method == 'chrome':
             raw = fetch_render(url, wait=4.0, timeout=45)
             used_method = 'chrome' if raw else 'html'
             if not raw:
@@ -1336,7 +1502,12 @@ def fetch_one(site, force=False):
             used_method = 'html'
         if raw:
             cache_put(name, raw)
-    items = extract_items(raw, url, require_date=(method == 'chrome')) if raw else []
+    # 海外/中资港股（非 RSS）锚点抽取：强制要求日期，过滤导航项/栏目名等无日期脏数据。
+    require_date = (method == 'chrome') or (site.get('region') in ('NA', 'HK') and method == 'html')
+    if method == 'rss':
+        items = extract_rss(raw, url, max_items=18) if raw else []
+    else:
+        items = extract_items(raw, url, require_date=require_date) if raw else []
     # 海外译中
     if site.get('region') == 'NA':
         for it in items:
@@ -1380,6 +1551,8 @@ def collect(site, old, force):
     return {
         'name': name, 'code': site['code'], 'sector': site['sector'],
         'region': site['region'], 'exchange': site['exchange'],
+        'zh': site.get('zh', name), 'en': site.get('en', ''),
+        'origin': site.get('origin', 'official'),
         'home': site['url'], 'news_url': site['url'], 'method': used,
         'unreach': site.get('unreach', ''),
         'stale': stale, 'rank': RANK.get(name, 99), 'items': items,
@@ -1397,13 +1570,14 @@ def _full_roster(companies, old):
 
 def _write_json(companies):
     domestic = [c for c in companies if c['region'] == 'CN']
+    hk = [c for c in companies if c['region'] == 'HK']
     foreign = [c for c in companies if c['region'] == 'NA']
     real_total = sum(len(c['items']) for c in companies)
     data = {
         'updated_at': time.strftime('%Y-%m-%d'),
         'companies': companies,
         'counts': {
-            'domestic': len(domestic), 'foreign': len(foreign),
+            'domestic': len(domestic), 'hk': len(hk), 'foreign': len(foreign),
             'total': len(companies), 'items': real_total,
         },
     }
@@ -1486,9 +1660,10 @@ def main():
     real_total = _write_json(companies)
     _save_trans_cache()
     domestic = [c for c in companies if c['region'] == 'CN']
+    hk = [c for c in companies if c['region'] == 'HK']
     foreign = [c for c in companies if c['region'] == 'NA']
-    print('\n国内 %d / 海外 %d / 合计 %d 家，条目 %d'
-          % (len(domestic), len(foreign), len(companies), real_total))
+    print('\n国内 %d / 中资港股 %d / 海外 %d / 合计 %d 家，条目 %d'
+          % (len(domestic), len(hk), len(foreign), len(companies), real_total))
     print('saved', OUT)
 
 if __name__ == '__main__':

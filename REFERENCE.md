@@ -2441,7 +2441,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
 | `node test_price_heatmap.js` | **126** | 价格区热力图：静态契约（容器顺序 / pre-paint 位置 / 选择器）+ jsdom 运行时（16 色块、方向与 `.pc-chg` 一致、alpha 单调、红涨绿跌、2 分组、图例 >=7、点击开走势图、视图持久化）+ 反向用例；**价格区间榜**：三态互斥 / 两栏固定 / 空栏占位 / 红涨绿跌 / 条形归一 / 跨度日数回归锁 / `__mdPriceRank` 等（§42.14 / §42.15） |
 | `node test_event_calendar.js` | **29 PASS** | 事件·数据日历：默认隐藏态（开关 `EC_ENABLED=false`）+ 开关往返恢复隐藏 + 静态容器 `#eventCalendar` 存活（重建边界）+ 未被 `refreshSectionVisibility` 隐藏（防回归）+ 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签（会议/政策/数据/截止）+ 外链 `target=_blank` + 空占位「暂无已收录的近期事件」（§42.16） |
-| `node test_company_section.js` | **137 PASS** | 矿业公司动态（v7：单栏 + sticky 修复 + 搜新闻兜底 + 已读态回归 + 数据洁净回归）：跨列布局（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**）（companySection/installGuide 为 `.news-grid` 直接子级、col-rail 显式定位）+ 288px 侧栏无矿种维度 + 默认近 90 天 + 分页 60 + 日期分组 + 长 t 拆标题/正文 2 行 clamp + 展开全文 + 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端）+ **无逐条 `.co-host` 域名行** + 切「全部」并连续「加载更多」渲染全量 + 未收录公司折叠组（10 家）+ 点公司收敛 + **forcedAll 自动放宽** + hash 路由 `#co=` 深链 + 搜索过滤 + 移动端 `#coNavSel` 国内/海外/暂未收录 三组 optgroup + 国内/海外分组且组内按 `rank` 升序导航 + 豁免显隐 + `switchView('company')` 视图隔离 + **公司视图已读态（独立 key `mining_daily_read_co_urls` + `.read` 弱化 + 标为已读/未读按钮）+ 数据洁净（摘要无电头/地址/征集代理残片 + 空摘要斜体占位 `.co-summary-empty`）** + 无 JS 错误（§42.19 / §42.26 / §42.27 / §42.29） |
+| `node test_company_section.js` | **143 PASS** | 矿业公司动态（v7：单栏 + sticky 修复 + 搜新闻兜底 + 已读态回归 + 数据洁净回归）：跨列布局（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**）（companySection/installGuide 为 `.news-grid` 直接子级、col-rail 显式定位）+ 288px 侧栏无矿种维度 + 默认近 90 天 + 分页 60 + 日期分组 + 长 t 拆标题/正文 2 行 clamp + 展开全文 + 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端）+ **无逐条 `.co-host` 域名行** + 切「全部」并连续「加载更多」渲染全量 + 未收录公司折叠组（10 家）+ 点公司收敛 + **forcedAll 自动放宽** + hash 路由 `#co=` 深链 + 搜索过滤 + 移动端 `#coNavSel` **国内/中资港股/海外** 三组 optgroup（2026-09-26 拆出中资港股）+ 国内/**中资港股**/海外 三组导航（组内按 `rank` 升序）+ **命名统一「中文（英文）」**（海外/中资港股显示 `zh（en）`、国内仅中文，`name` 仍主键）+ **媒体源披露**（选中公司头部 sub 显示「来源：新浪财经 / 官网 RSS / 公司官网」）+ 豁免显隐 + `switchView('company')` 视图隔离 + **公司视图已读态（独立 key `mining_daily_read_co_urls` + `.read` 弱化 + 标为已读/未读按钮）+ 数据洁净（摘要无电头/地址/征集代理残片 + 无空白卡片）** + 无 JS 错误（§42.19 / §42.26 / §42.27 / §42.29 / §42.31） |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
@@ -2780,5 +2780,36 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **未动**：控件尺寸/字号/配色（`.theme-toggle` 34px、`.md-refresh-btn` 等）、`.header` 的 padding/圆角/字号、a11y landmark、`--md-top-h`。
 
-**回退指纹（新增 ㉗-㉘）**：㉗ 桌面 `.header-actions` 退回 `position:absolute;top:12px`（右侧控件组又偏下，即本次用户反馈的现象）；㉘ ≤600px 的 `.header-actions` 缺 `transform:none`（手机端控件组被 `translateY(-50%)` 拽偏）。**闸门**：`test_smoke_0908.js` ⑭ 段 **+2**（⑭g 桌面居中契约：`top:50%`+`translateY(-50%)` 且无 `top:12px`；⑭h 手机 `transform:none` 复位），基线 **102 → 104**；反向对照（`git show HEAD:index.html` + 新测试）得 **102 通过 / 2 失败**（⑭g、⑭h 全 FAIL），证明非空过。**证据等级**：源码正则 + jsdom 级联（不评估 `@media` 断点；本改动为绝对定位偏移，无断点变化），**不含像素渲染几何**。
+**回退指纹（新增 ㉗-㉘）**：㉗ 桌面 `.header-actions` 退回 `position:absolute;top:12px`（右侧控件组又偏下，即本次用户反馈的现象）；㉘ ≤600px 的 `.header-actions` 缺 `transform:none`（手机端控件组被 `translateY(-50%)` 拽偏）。**闸门**：`test_smoke_0908.js` ⑭ 段 **+2**（⑭g 桌面居中契约：`top:50%`+`translateY(-50%)` 且无 `top:12px`；⑭h 手机 `transform:none` 复位），基线 **102 → 104**；反向对照（`git show HEAD:index.html` + 新测试）得 **102 通过 / 2 失败**（⑭g、�h 全 FAIL），证明非空过。**证据等级**：源码正则 + jsdom 级联（不评估 `@media` 断点；本改动为绝对定位偏移，无断点变化），**不含像素渲染几何**。
+
+
+### §42.31 矿业公司动态：空壳公司可抓性 + 海外分组口径修正 + 命名统一 + 媒体源披露（2026-09-26 · build `20260926-1500`）
+
+**背景（回应 2026-09-26 用户三诉求）**：① 矿业公司模块下 14 家「动态 ✗」空壳/脏数据公司能否再抓；② 海外组为何混入中资港股（中国有色矿业、五矿资源）；③ 海外公司命名有的英文有的中文，要求统一 + 让 AI 提其他优化点。经 AskUserQuestion 拍板**全做**：拆三组（国内 A股 / 中资港股 / 海外）、命名统一「中文（英文）」、补可抓源、清洗海外脏数据。
+
+**一、采集侧 `fetch_company.py`（v2）改造**
+- **① 字符集探测**：`fetch_html()` 新增 `_detect_charset()`（读 `<meta charset>` / 字节序，`gb2312→gbk` 回退），`data.decode('utf-8','replace')` 改为优先用探测到的编码。根因：新浪个股页 / 港股页是 `gb2312`，原 utf-8 解码全乱码。**实测**：6 家国内 + 2 家港股新浪页 GBK 解码后标题/日期全正常。
+- **② 换源**：6 家国内死站/JS 外壳站（云南铜业 sz000878 / 云铝股份 sz000807 / 湖南黄金 sz002155 / 北方稀土 sh600111 / 株冶集团 sh600961 / 广晟有色 sh600259）的 `url` 改为新浪财经个股页 `vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/<code>.phtml`（`origin:'sina-a'`）；2 家中资港股（五矿资源 hk01208 / 中国有色矿业 hk01258）改用新浪港股个股页（`origin:'sina-hk'`）。
+- **③ RSS 解析器**：新增 `extract_rss()`（解析 `<item>/<title>/<pubDate>/<link>`），`fetch_one()` 支持 `method:'rss'`；第一量子 `url` 改为 `https://www.first-quantum.com/rss`（`origin:'rss'`），替掉原 5 条导航项脏数据 → 8 条带日期真新闻。
+- **④ 脏数据清洗**：`looks_like_news()` 加「新浪财报类目链接」黑名单（`/vCB_Bulletin|page_type/...bg.phtml`，是行情中心报告查询页非新闻）；`is_junk_item()` 加「新浪自动化市场数据」（融资买入/余额/龙虎榜/金价 ticker 等）过滤。**先清空**了力拓/淡水河谷/英美资源 3 家残留脏数据（原 `items` 全为导航项），否则 `--only` 不覆盖、stale 兜底会把脏数据重新注入。
+- **⑤ 字段透传**：`collect()` / `_stub()` 新增 `zh` / `en` / `origin` 透传到 `company_news.json`；`SITES` 为全部 13 家海外/港股补 `zh`/`en`（如 `纽蒙特/Newmont`、`力拓/Rio Tinto`、`五矿资源/MMG`、`中国有色矿业/China Nonferrous Mining`）；`_write_json()` 计数新增 `hk`（total 47 = 国内 32 + 中资港股 2 + 海外 13）。
+
+**二、数据 `company_news.json`**
+- 重采 9 家（`--only`）：云南铜业 18 / 云铝股份 18 / 湖南黄金 14 / 北方稀土 12 / 株冶集团 7 / 广晟有色 18 / 五矿资源 17（港股）/ 中国有色矿业 14（港股）/ 第一量子 8（RSS）条，全部带日期 + 摘要，`zh/en/origin` 正确。
+- 清掉力拓/淡水河谷/英美资源 3 家脏数据（现空壳）。
+- 直接补 `zh/en` 到其余 12 家海外公司（SITES 已带，但非 `--only` 名单故 JSON 旧记录缺，已补并与 SITES 一致，下次全量重建不丢）。
+- counts 现含 `hk:2`。
+
+**三、前端 `app.js` + `index.html`**
+- 新增 `coDisplayName(o)`（国内→中文；海外/中资港股→`zh（en）`）、`originLabel(o)`（新浪财经 / 官网 RSS / 公司官网）；`flatten()` 给条目注入 `zh`/`zh_en`。
+- 导航 `renderNav()`：`dom`（CN）/ `hk`（HK）/ `frn`（NA）**三组**，组内按 `rank` 升序；导航项 / 移动端 `#coNavSel` optgroup / 卡片 `co-src` / 空壳项均改用 `coDisplayName`。
+- 卡片 `cardHtml()`：海外加 `海外` 标签、中资港股加 `中资港股` 标签（`.co-ex-hk` 橙底）；选中公司头部 `co-feed-sub` 披露「来源：xxx」。
+- `coStat` 统计行改为「国内 X · 中资港股 Y · 海外 Z 家」。
+
+**四、回归测试 `test_company_section.js`（137 → 143）**
+- 分组断言 2→3（国内/中资港股/海外）；新增「命名统一」断言（纽蒙特（Newmont）/ 五矿资源（MMG）/ 力拓（Rio Tinto）/ 紫金矿业仅中文）；新增「媒体源披露」断言（五矿资源→新浪财经、第一量子→官网 RSS）；移动端 select 断言含中资港股组；把脆弱的「`.co-summary-empty` 计数≥1」改为数据无关的「无空白卡片」结构断言（`.co-nav-name` 类也补到空壳项以便断言）。
+
+**回退指纹（新增 ㉙-㉜）**：㉙ 导航退回「国内/海外」两组（缺「中资港股」组，或 `region==='HK'` 的判断被删）；㚀 海外/中资港股公司又退回纯英文或纯中文（无 `（en）` 括号，即 `coDisplayName` 被改回 `o.name`）；㉛ 选中公司头部不再显示「来源：xxx」（媒体源披露被删）；㉜ `company_news.json` 的 `counts.hk` 缺失或 `region:'HK'` 公司被算进海外组。**闸门**：`test_company_section.js`（**143**）+ `test_smoke_0908.js`（104）+ `test_mobile_ux_batch.js`（222）+ `test_data_integrity.js`（9）+ `test_price_heatmap.js`（126）+ `preflight_check.py` 全绿。
+
+**同步两条 prompt（必须）**：06:00（重建 `5cdcdfff`）与 08:00（复验 `21dba82b`）的 prompt 须在 §42 索引与必留清单处增补**本节**：① 三组划分（国内/中资港股/海外）+ 中资港股源是新浪港股页（`hk01208`/`hk01258`）；② 命名统一「中文（英文）」（`coDisplayName` + `zh/en` 字段）；③ 媒体源披露（新浪财经 / 官网 RSS / 公司官网）；④ 回退指纹 ㉙-㉜；⑤ §42.9 `test_company_section.js` 基线 **137 → 143**。否则次日重建/复验不会保护本模块（尤其 `zh/en` 字段、`hk` 计数、`region:'HK'` 分组）。
 
