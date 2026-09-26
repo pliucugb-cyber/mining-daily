@@ -2434,7 +2434,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | 命令 | 期望 | 覆盖 |
 |---|---|---|
 | `node test_brief_layers.js` | **91** | 简报分层渲染（jsdom；含裁剪态持久化 §40） |
-| `node test_smoke_0908.js` | **102** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1；**2026-09-14 新增「百度统计 ID 与后台逐字一致」+1**；**2026-09-25 新增 ⑬ 点击分区 +18（78→96）**；**2026-09-26 新增 ⑭ 顶栏配色契约 +6（96→102）**；**2026-09-25 §42.27 公司 P1/P2：`test_company_section.js` 116→135**） |
+| `node test_smoke_0908.js` | **104** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1；**2026-09-14 新增「百度统计 ID 与后台逐字一致」+1**；**2026-09-25 新增 ⑬ 点击分区 +18（78→96）**；**2026-09-26 新增 ⑭ 顶栏配色契约 +6（96→102）**；**同日补 ⑭ 垂直居中 +2（102→104）**；**2026-09-25 §42.27 公司 P1/P2：`test_company_section.js` 116→135**） |
 | `node test_mobile_ux_batch.js` | **222** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13）；**2026-09-24 注入按钮形态修复 +6（208→215）**；**2026-09-24 展开全文+已读弱化 +7（215→222）** |
 | `node test_qa_features.js` | **61** | AI 搜核心函数 / 流式接线 / 语音（含「音量条已删、调节柄已换」） |
 | `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |
@@ -2765,8 +2765,20 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **为什么 `.md-update-time` 必须一起改**：它原用 `--ink-400`（`#8794a1`）灰字，在白底上尚可；置于 `#1a3a5c` 深蓝底上对比度掉到不可读。故提亮为 `rgba(255,255,255,.72)`——该元素**只在顶栏内出现**（唯一注入点 `mdInitUpdateTime()`），改动无副作用。
 
-**未动（红线）**：`.date-badge` 仍是**日期唯一来源**（生成脚本 `generate_*.py` 每日只以 `re.subn` 重写其**文本** `2026年09月DD日 星期.`，**从不碰 CSS** → 本改动不会被每日 06:00 重建撤销）；`.theme-toggle`、`#pwaHeaderBtn`、`.header-actions` 结构与定位、a11y landmark（`mdA11yLandmarks()` 给 `.header` 加 `role="banner"`）、`--md-top-h`、移动端 `@media(max-width:600px)` 的顶栏重排（`flex-direction:column` + `header-actions{order:3}`）全部未改。暗色模式 `body.dark .header{background:#14293f}` 保持原值（本就是深蓝，与新亮色底同族，无需同步）。
+**未动（红线）**：`.date-badge` 仍是**日期唯一来源**（生成脚本 `generate_*.py` 每日只以 `re.subn` 重写其**文本** `2026年09月DD日 星期.`，**从不碰 CSS** → 本改动不会被每日 06:00 重建撤销）；`.theme-toggle`、`#pwaHeaderBtn`、`.header-actions` 结构与定位、a11y landmark（`mdA11yLandmarks()` 给 `.header` 加 `role="banner"`）、`--md-top-h`、移动端 `@media(max-width:600px)` 的顶栏重排（`flex-direction:column` + `header-actions{order:3}`）全部未改（**惟同日午后补丁为该组补 `transform:none` 复位，见文末「补丁」段**）。暗色模式 `body.dark .header{background:#14293f}` 保持原值（本就是深蓝，与新亮色底同族，无需同步）。
 
 **回退指纹（新增 ㉓-㉖）**：㉓ `.header` 底色退回 `var(--surface)` 白底，或退回 `--fs-display` 大横幅形态，或 `padding` 不再是 `10px var(--s4)`；㉔ `.date-badge` 退回红底白字（亮色）或 `#c0392b` 红底（暗色）；㉕ `.md-update-time` 颜色退回 `var(--ink-400)`（在深蓝底上不可读）；㉖ 顶栏内出现「深底 + 深字」组合——`.pwa-header-btn` 的 `var(--ink-900)` 字必须配 `var(--surface)` 浅底、`.md-refresh-btn` 的 `var(--ink-700)` 字必须配 `var(--surface-2)` 浅底，任一被改成深底即翻车（v10 已实际发生过一次：白胶囊在白底上消失）。
 
 **闸门**：`test_smoke_0908.js` 新增 **⑭ 段 6 条**（源码规则 4 + jsdom 级联 2），基线 **96 → 102**；`preflight_check.py` + `test_mobile_ux_batch.js`（222）+ `test_company_section.js`（137）+ `test_view_switch.js`（22）全过。⚠️ **本机 headless Chrome 被环境管控**（`--dump-dom` 零输出、`--screenshot` rc=21 不产文件 —— 见技能 `headless-chrome-responsive-probe` 退路节），故 ⑭ 段用 **jsdom 级联**取证：jsdom **能**解析本次的字面色值（`#1a3a5c`/`#fff`/`#c0392b`/`rgba(...)`），而 `var()` 类只解析成字面串 `"var(--up)"`、**不得当断言依据**。**证据等级 = 级联计算值 + 源码正则，不含像素渲染**；本改动不涉及布局几何，故可接受。
+
+**补丁（同日午后 · build `20260926-1130`）—— 顶栏右侧控件组垂直居中**：用户 2026-09-26 反馈「把红框里面的内容放在深蓝色框的中间，现在有点偏下」。红框 = 顶栏右侧 `.header-actions`（「更新于 / 主题胶囊 / 刷新」三件套）。**根因**：桌面态 `.header-actions` 自 2026-09-05 补暗色基础层起就是 `position:absolute;top:12px;right:12px` —— 用**固定 12px 顶偏移**压到右上角，而顶栏高度由 h1 撑到约 48px（`padding:10px` 上下 + h1 行高），该组上留 12px、下仅剩约 2px，**视觉偏下**（与底色深浅无关，是定位偏移问题）。**修法**：桌面态改 `top:50%;transform:translateY(-50%)` —— 绝对定位的百分比参照近定位祖先的 **padding box**，上下 padding 对称（10px）故等于视觉居中。手机端 ≤600px 该组已 `position:static`（回正常流、排到标题下方），**必须补 `transform:none`** 复位，否则会被 `-50%` 拽偏（与桌面改动**配套**，漏了就手机翻车）。
+
+| 选择器 / 上下文 | 旧 | 新 |
+|---|---|---|
+| `.header-actions`（桌面，第 835 行） | `position:absolute;top:12px;right:12px;…` | `position:absolute;top:50%;transform:translateY(-50%);right:12px;…` |
+| `.header-actions`（`@media(max-width:600px)`，第 1273 行） | `…right:auto;order:3;…` | `…right:auto;transform:none;order:3;…` |
+
+**未动**：控件尺寸/字号/配色（`.theme-toggle` 34px、`.md-refresh-btn` 等）、`.header` 的 padding/圆角/字号、a11y landmark、`--md-top-h`。
+
+**回退指纹（新增 ㉗-㉘）**：㉗ 桌面 `.header-actions` 退回 `position:absolute;top:12px`（右侧控件组又偏下，即本次用户反馈的现象）；㉘ ≤600px 的 `.header-actions` 缺 `transform:none`（手机端控件组被 `translateY(-50%)` 拽偏）。**闸门**：`test_smoke_0908.js` ⑭ 段 **+2**（⑭g 桌面居中契约：`top:50%`+`translateY(-50%)` 且无 `top:12px`；⑭h 手机 `transform:none` 复位），基线 **102 → 104**；反向对照（`git show HEAD:index.html` + 新测试）得 **102 通过 / 2 失败**（⑭g、⑭h 全 FAIL），证明非空过。**证据等级**：源码正则 + jsdom 级联（不评估 `@media` 断点；本改动为绝对定位偏移，无断点变化），**不含像素渲染几何**。
+

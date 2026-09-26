@@ -505,7 +505,7 @@ setTimeout(() => {
     check('⑬q 级联：.news-summary 计算光标 = text 且文字可选', !!nSum && nSum.cursor === 'text' && nSum.userSelect === 'text', nSum ? (nSum.cursor + '/' + nSum.userSelect) : 'no-el');
   } catch (e) { check('⑬ 点击分区运行时契约', false, e.message); }
 
-  // ===== ⑭ 顶栏配色契约（2026-09-26 §42.30：细条形态不变、底色回归深蓝、日期徽章白底红字）=====
+  // ===== ⑭ 顶栏配色与居中契约（2026-09-26 §42.30：细条形态不变、底色深蓝、徽章白底红字、右侧控件垂直居中）=====
   try {
     const headerRules = html.match(/^\.header\{[^\n]*\}/gm) || [];
     const headerRule = headerRules.find(s => /background:/.test(s)) || '';
@@ -529,6 +529,13 @@ setTimeout(() => {
     check('⑭f 级联：.header 计算底色 = rgb(26, 58, 92)、文字 = 白',
       hcs.backgroundColor === 'rgb(26, 58, 92)' && hcs.color === 'rgb(255, 255, 255)',
       hcs.backgroundColor + ' / ' + hcs.color);
+    const haRule = (html.match(/^\.header-actions\{[^\n]*\}/gm) || []).find(s => /position:absolute/.test(s)) || '';
+    const haMobile = (html.match(/^\.header-actions\{[^\n]*\}/gm) || []).find(s => /position:static/.test(s)) || '';
+    check('⑭g 桌面 .header-actions 垂直居中（top:50% + translateY(-50%)，不再是 top:12px 偏下）',
+      /top:50%/.test(haRule) && /transform:translateY\(-50%\)/.test(haRule) && !/top:12px/.test(haRule),
+      haRule.slice(0, 110));
+    check('⑭h 手机端 .header-actions 回正常流时重置 transform（transform:none，避免被 -50% 带偏）',
+      /transform:none/.test(haMobile), haMobile.slice(0, 110));
   } catch (e) { check('⑭ 顶栏配色契约', false, e.message); }
 
   console.log('\n===== JS 运行时错误 =====');

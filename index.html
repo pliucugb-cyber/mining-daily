@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260926-2240" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260926-1130" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -832,7 +832,7 @@ body.dark .ai-empty, body.dark .ai-disabled{background:var(--surface);border-col
    页面骨架（背景、区块、新闻条目、价格卡、侧栏、按钮）缺配套样式，
    暗色下会大面积白底黑字 —— 这里补齐基础层，并新增右上角切换按钮。 */
 .header{position:relative}
-.header-actions{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:var(--s2);z-index:2}
+.header-actions{position:absolute;top:50%;transform:translateY(-50%);right:12px;display:flex;align-items:center;gap:var(--s2);z-index:2}
 .theme-toggle{height:34px;border:none;border-radius: 17px;padding:3px;background:rgba(255,255,255,.16);color:#fff;font-size: var(--fs-h3);line-height:1;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:2px}
 .theme-toggle:hover{background:rgba(255,255,255,.28)}
 .theme-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
@@ -1270,7 +1270,7 @@ body.dark .guide-toggle:hover{background:#1d4558}
 .header h1{font-size: var(--fs-h1);order:1}
 .header .sub{order:2;margin-top:var(--s2)}
 /* 手机端：夜间模式/桌面按钮改回正常流，排到标题下方并右对齐，避免盖住标题与副标题 */
-.header-actions{position:static;top:auto;right:auto;order:3;justify-content:flex-end;margin-top:var(--s3)}
+.header-actions{position:static;top:auto;right:auto;transform:none;order:3;justify-content:flex-end;margin-top:var(--s3)}
 .mobile-install-bar{padding:var(--s2) var(--s3);font-size: var(--fs-body)}
 .mobile-install-btn{height:32px;padding:0 var(--s3)}
 .mobile-install-text{line-height:1.35}
