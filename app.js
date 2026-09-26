@@ -7088,7 +7088,7 @@ function toggleTheme(){
       (co.items||[]).forEach(function(it){
         rows.push({t:it.t,d:it.d||'',u:it.u||'',s:it.s||'',en:it.t_en||'',
           name:co.name,code:co.code||'' ,sector:co.sector||'',
-          region:co.region,stale:!!co.stale});
+          region:co.region,stale:!!co.stale,zh:co.zh||'',zh_en:co.en||''});
       });
     });
     return rows;
@@ -7185,11 +7185,28 @@ function toggleTheme(){
     if(n>1&&n<=7) return d+wd+' · '+n+' 天前';
     return d+wd;
   }
+  // 2026-09-26：公司展示名 —— 国内 A股 直接显示中文名；中资港股 / 海外 显示「中文（英文）」，
+  // 兼顾统一命名（修复此前海外公司有的英文有的中文）与国际读者可读性。name 仍作主键不变。
+  function coDisplayName(o){
+    if(!o) return '';
+    var zh=o.zh||o.name||'';
+    if(o.region==='CN') return zh;
+    var en=o.en||o.zh_en||'';
+    if(en && en!==zh) return zh+'（'+en+'）';
+    return zh;
+  }
+  // 媒体源披露：新浪财经 / 官网 RSS / 公司官网
+  function originLabel(o){
+    var or=(o&&o.origin)||'';
+    if(or==='sina-a'||or==='sina-hk') return '新浪财经';
+    if(or==='rss') return '官网 RSS';
+    return '公司官网';
+  }
   function cardHtml(it){
     var tb=splitTB(it.t);
     var url=dec(it.u||'').trim();
     var primary=url||searchUrl((it.name||'')+' '+(tb.head||''));
-    var ex=it.region==='NA'?'<i class="co-ex">海外</i>':'';
+    var ex=it.region==='NA'?'<i class="co-ex">海外</i>':(it.region==='HK'?'<i class="co-ex co-ex-hk">中资港股</i>':'');
     var stale=it.stale?'<i class="co-ex">数据暂缓</i>':'';
     // v6：每条加一句内容摘要（仿新闻端，读 it.s）；有摘要则用它，否则退回「长标题续写」折叠
     var summ=it.s
@@ -7209,7 +7226,7 @@ function toggleTheme(){
       '<div class="co-head"><span class="co-dot"></span>'+
       '<a class="co-title" href="'+esc(primary)+'" target="_blank" rel="noopener noreferrer"'+
         (url?'':' title="原文链接缺失：点击将前往搜索引擎"')+'>'+esc(tb.head||'(无标题)')+'</a></div>'+
-      '<div class="co-meta"><button type="button" class="co-src" data-name="'+esc(it.name)+'">'+esc(it.name)+'</button>'+
+      '<div class="co-meta"><button type="button" class="co-src" data-name="'+esc(it.name)+'">'+esc(coDisplayName(it))+'</button>'+
       '<span>'+esc(it.d||'')+'</span>'+ex+stale+'</div>'+summ+acts+'</div>';
   }
   function renderFeed(){
@@ -7238,8 +7255,10 @@ function toggleTheme(){
           '<span class="co-feed-sub">'+sub+(query?'（已筛选）':'')+'</span>'+
           '<span class="co-fh-right">'+right+unreadToggle+favToggle+'</span>';
       }else{
-        head.innerHTML='<span class="co-feed-name">'+esc(activeCompany)+'</span>'+
-          '<span class="co-feed-sub">'+(co.code?esc(co.code)+' · ':'')+sub+'</span>'+
+        var dispName=coDisplayName(co);
+        var originTxt=(co.origin?('来源：'+originLabel(co)+' · '):'');
+        head.innerHTML='<span class="co-feed-name">'+esc(dispName)+'</span>'+
+          '<span class="co-feed-sub">'+(co.code?esc(co.code)+' · ':'')+originTxt+sub+'</span>'+
           '<span class="co-fh-right">'+right+unreadToggle+favToggle+'</span>';
       }
       bindRange(); bindFeedHead();
@@ -7305,19 +7324,20 @@ function toggleTheme(){
     var h='<div class="co-nav-g-h">'+esc(label)+'（'+arr.length+'）</div>';
     h+=arr.map(function(o){
       var fav=coFavHas(o.name);
-      return '<button type="button" class="co-nav-item'+(o.name===activeCompany?' on':'')+'" data-name="'+esc(o.name)+'">'+'<span class="co-nav-name">'+esc(o.name)+'</span>'+'<span class="co-nav-right">'+'<span class="co-star'+(fav?' on':'')+'" data-fav="'+esc(o.name)+'" title="关注/取消关注">'+(fav?'★':'☆')+'</span>'+'<span class="co-n">'+visibleCount(o)+'</span>'+'</span></button>';
+      return '<button type="button" class="co-nav-item'+(o.name===activeCompany?' on':'')+'" data-name="'+esc(o.name)+'">'+'<span class="co-nav-name">'+esc(coDisplayName(o))+'</span>'+'<span class="co-nav-right">'+'<span class="co-star'+(fav?' on':'')+'" data-fav="'+esc(o.name)+'" title="关注/取消关注">'+(fav?'★':'☆')+'</span>'+'<span class="co-n">'+visibleCount(o)+'</span>'+'</span></button>';
     }).join('');
     return h;
   }
   function optFor(o){
     return '<option value="'+esc(o.name)+'"'+(o.name===activeCompany?' selected':'')+'>'+
-      esc(o.name)+(visibleCount(o)?'（'+visibleCount(o)+' 条）':'')+'</option>';
+      esc(coDisplayName(o))+(visibleCount(o)?'（'+visibleCount(o)+' 条）':'')+'</option>';
   }
   function renderNav(){
     var nav=document.getElementById('coNav'); if(!nav) return;
     var list=COS.slice();
     // 国内/海外两组只列「有内容」公司，空壳公司统一收进「暂未收录」折叠组（避免重复出现）
     var dom=list.filter(function(o){ return o.region==='CN' && itemCount(o)>0; }).sort(byRank);
+    var hk=list.filter(function(o){ return o.region==='HK' && itemCount(o)>0; }).sort(byRank);
     var frn=list.filter(function(o){ return o.region==='NA' && itemCount(o)>0; }).sort(byRank);
     var live=list.filter(function(o){ return itemCount(o)>0; });
     var empties=list.filter(function(o){ return !itemCount(o); });
@@ -7338,6 +7358,9 @@ function toggleTheme(){
       opts.push('<optgroup label="国内公司（'+dom.length+'）">');
       dom.forEach(function(o){ opts.push(optFor(o)); });
       opts.push('</optgroup>');
+      opts.push('<optgroup label="中资港股（'+hk.length+'）">');
+      hk.forEach(function(o){ opts.push(optFor(o)); });
+      opts.push('</optgroup>');
       opts.push('<optgroup label="海外公司（'+frn.length+'）">');
       frn.forEach(function(o){ opts.push(optFor(o)); });
       opts.push('</optgroup>');
@@ -7354,6 +7377,7 @@ function toggleTheme(){
     var html='<button type="button" class="co-nav-all'+(activeCompany==='__all__'?' on':'')+'" data-name="__all__">'+
       '<span>全部公司（最新动态）</span><span class="co-n">'+scopeTotalCount()+'</span></button>';
     html+=navGroup('国内公司 · 按市值/知名度', dom);
+    html+=navGroup('中资港股 · 按市值/知名度', hk);
     html+=navGroup('海外公司 · 按市值/知名度', frn);
     if(empties.length){
       html+='<button type="button" class="co-nav-empty-t" id="coEmptyToggle"'+
@@ -7366,8 +7390,8 @@ function toggleTheme(){
           var su=searchUrl(o.name+' 新闻');
           return '<div class="co-nav-empty-item">'+
             '<button type="button" class="co-nav-item empty" data-name="'+esc(o.name)+'" data-home="'+esc(hm)+'">'+
-              '<span>'+esc(o.name)+'</span><span class="co-n">'+(o.unreach==='spa'?'动态 &#10005;':(hm?esc(hostOf(hm))+' &#8599;':'—'))+'</span></button>'+
-            '<a class="co-empty-search" href="'+esc(su)+'" target="_blank" rel="noopener" title="在 Bing 查 '+esc(o.name)+' 相关新闻">搜新闻</a>'+
+              '<span class="co-nav-name">'+esc(coDisplayName(o))+'</span><span class="co-n">'+(o.unreach==='spa'?'动态 &#10005;':(hm?esc(hostOf(hm))+' &#8599;':'—'))+'</span></button>'+
+            '<a class="co-empty-search" href="'+esc(su)+'" target="_blank" rel="noopener" title="在 Bing 查 '+esc(coDisplayName(o))+' 相关新闻">搜新闻</a>'+
           '</div>';
         }).join('')+'</div>';
     }
@@ -7426,7 +7450,7 @@ function toggleTheme(){
         baseDate=(d&&d.updated_at)||todayStr();
         if(count) count.textContent=(c.total||COS.length)+' 家';
         var stat=document.getElementById('coStat');
-        if(stat) stat.innerHTML='国内 '+(c.domestic||0)+' 家 · 海外 '+(c.foreign||0)+' 家<br>'+
+        if(stat) stat.innerHTML='国内 '+(c.domestic||0)+' · 中资港股 '+(c.hk||0)+' · 海外 '+(c.foreign||0)+' 家<br>'+
           (c.items||0)+' 条'+((d&&d.updated_at)?' · 更新于 '+esc(d.updated_at):'');
         ALL=flatten(COS);
         // 日期降序；未标注日期的排最后；同一天按公司名 → 标题
