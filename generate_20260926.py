@@ -47,7 +47,7 @@ assert _n_title == 1, 'title 替换次数异常: %d' % _n_title
 assert '<title>%s · %s</title>' % (SITE_NAME, REPORT) in html, '站点标题格式不符'
 
 html, _n_badge = re.subn(r'(<span class="date-badge"[^>]*>)2026年09月\d{2}日 星期.',
-                         r'\g<1>2026年09月25日 星期五', html)
+                         r'\g<1>2026年09月26日 星期六', html)
 assert _n_badge == 1, 'date-badge 替换次数异常: %d' % _n_badge
 now = datetime.datetime.now().strftime('%H:%M')
 html = re.sub(r'今日新增（2026-09-\d{2} 抓取）', '今日新增（%s 抓取）' % GRAB, html)
