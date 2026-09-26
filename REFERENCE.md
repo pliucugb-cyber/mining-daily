@@ -2319,6 +2319,39 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **v11 变更（2026-09-26，build `20260926-2031`，用户三点诉求落地）**：① **条目标题/正文视觉层级重设计** —— 原 `.co-title`(`var(--fs-body)`/500/`--ink-900`) 与 `.co-summary`(`var(--fs-body)`/400/`--ink-700`) 仅差一档灰、字号相同，观感层次弱。改为三级范式：标题 `.co-title` ＝ `calc(var(--fs-body)+2px)`(≈17px)/`font-weight:600`/`--ink-900`（近黑加粗）；正文 `.co-summary`/`.co-body` ＝ `calc(var(--fs-body)-1px)`(≈14px)/`--ink-500`（中灰常规字重）；元信息 `.co-meta` 最浅最小（沿用 `--ink-400`）。对齐主站 `.news-title`(16px/500) vs `.news-summary`(13px/`--ink-700`) 成熟范式。已读态 `.co-item.read` 摘要再降一档：`--ink-400`（暗色 `body.dark` 覆盖 `--ink-300`）防与未读倒挂。② **右栏导航分组可折叠 + 文案精简** —— 组头由装饰 `div.co-nav-g-h` 改为可点 `<button class="co-nav-g-h" data-g aria-expanded>`（带 ▸/▾ 指示），组内条目包进 `<div class="co-nav-g-body" data-g hidden>`；点击组头 `toggleCoGroup(key)` 折叠/展开（仅隐藏不移除，DOM 计数不变），状态持久化 `localStorage.md_co_groups`（默认全展开，选中公司所在组强制展开）。三组键 `CN/HK/NA`，组头文案**去掉「· 按市值/知名度」排名标注**（用户明确不要排名提示）；「全部公司（最新动态）」→「全部公司」；`coNavH`「…家有内容 · …」→「…家 · …」；`coStat` 去掉与导航重复的汇总数，只留「更新于 <日期>」。③ **顺带修复**：`.co-feed-name` 字号 `var(--fs-h3)`→`calc(var(--fs-body)+3px)` 避免与条目标题倒挂。④ **测试锁定**：`test_company_section.js` 新增 Section 16（16 条 v11 断言：组头 button/aria/无排名标注/仍含三组名/CSS `.co-nav-g-body[hidden]`/折叠-展开-DOM 不变/`toggleGroup` 句柄/「全部公司」无「最新动态」/导航标题无「有内容」/标题字号差 3px/标题 `--ink-900` 摘要 `--ink-500`/标题 `600`/已读态 `--ink-400`+暗色覆盖），通过数 146 → **162**。
 
+#### 42.19.v11 交接沉淀（2026-09-26，供开新 task 速读）
+
+> 本节是「结论 / 约定红线 / 废弃项 / 待办」四块速读；权威契约见上方 v11 变更段落与回退指纹㉓㉔㉕，测试基线见 §42.9。
+
+**① 本次达成的结论**
+- 矿业公司模块 v11 已上线：build `20260926-2031`，main `cd84f71`、gh-pages `4af04eb`（均推送；`git ls-remote` 远端 SHA == 本地推送）。
+- 用户三点诉求全部落地：① 条目标题/正文视觉层级重设计（原同字号 14px、仅差一档灰，层次弱）；② 右栏导航分组可折叠 + 文案精简（按用户要求去掉排名标注）；③ agent 主动补的额外优化（修 `.co-feed-name` 字号倒挂）。
+- 测试 `node test_company_section.js` **146 → 162 PASS / 0 FAIL**（新增 Section 16，16 条 v11 断言，未改既有 146 项期望值）。
+- 重建安全已确认：`grep` 证实 `generate_*.py` 只重写 `priceCardsShfe/Lme` 等行情块，**不触碰 `#companySection` 内联 `<style>`** → v11 CSS 天然抗每日重建（被动保护，非靠生成脚本必留）。
+- 两条每日自动化 prompt（06:00 `5cdcdfff-4524-4083-9453-9f6577c7c7d6` / 08:00 `21dba82b-993b-4889-8381-77d621fd1c73`）**未整体重发**（工程决策，与 §42.32 先例一致）：防护由「代码结构不重建 + §42.19/§42.9 权威文档」保证，prompt 自身「以 §42.9 为准」已覆盖内联旧值「146」。
+
+**② 新确立的约定 / 红线**
+- **条目视觉层级范式**：标题 `.co-title` ＝ 近黑 `--ink-900` + `font-weight:600` + `calc(var(--fs-body)+2px)`；正文 `.co-summary`/`.co-body` ＝ 中灰 `--ink-500` + 常规字重 + `calc(var(--fs-body)-1px)`；元信息 `.co-meta` 最浅最小（`--ink-400`）。已读态 `.co-item.read` 摘要再降一档（`--ink-400` + 暗色 `body.dark` 覆盖 `--ink-300`）防与未读倒挂。
+- **右栏导航形态**：组头必须是 `<button class="co-nav-g-h" data-g aria-expanded>` + ▸/▾ 指示；组内 `<div class="co-nav-g-body" data-g hidden>`；`toggleCoGroup(key)` 折叠/展开（仅隐藏不移除，DOM 计数不变）；状态存 `localStorage.md_co_groups`（默认全展开、选中公司所在组强制展开）；三组键 `CN/HK/NA`。
+- **文案精简红线（用户明确「能精简尽量精简」「排名标注没必要」）**：组头**不得写**「按市值/知名度」类排名标注；不得写「（最新动态）」「有内容」冗余；`coStat` 仅留「更新于 <日期>」。
+- **测试纪律**：本模块 **162 PASS** 为权威基线（§42.9）；改公司前端须同步新增断言、勿改既有 146 项期望值；改 `@media`/网格断点须补真实 Chrome 探针（jsdom 不评 @media）。
+
+**③ 废弃项（勿再使用）**
+- 组头装饰 `div.co-nav-g-h`（旧，不可折叠）→ 已改 `<button>` 形态。
+- 组头「· 按市值/知名度」排名标注文案。
+- 「全部公司（最新动态）」旧文案 → 改「全部公司」。
+- `coNavH`「…家有内容 · …」旧文案 → 改「…家 · …」。
+- `coStat` 含与导航重复的汇总数（旧）。
+- `.co-feed-name` 旧 `font-size:var(--fs-h3)`（与条目标题倒挂）→ 改 `calc(var(--fs-body)+3px)`。
+- （回退指纹见 ㉓㉔㉕，命中即判回退。）
+
+**④ 未完成事项与下一步**
+- **自动化 prompt 零偏差重发（可选）**：两条 prompt 内联「146」未改；当前靠「以 §42.9 为准」兜底。如需零偏差，用 `automation_update` 的 view→解码→替换→再编码 闭环整体重发（注意 ~10KB 生产 prompt 转义风险，须谨慎，切勿打断每日线上链路）。
+- **线上字节验收受限**：本机受 Dr.COM 网关劫持，`urllib` 拿不到真实线上字节；以 `git ls-remote` 远端 SHA（`4af04eb`）== 本地推送 SHA 作「部署已达成」替代证据。待网关放行后，用 `%TEMP%\md_online_retry.py` 轮询确认 `build-version==20260926-2031` + `app.js?v`==md5 前 8 + `CACHE_NAME` 同步。
+- **若日后把 v11 静态 CSS 纳入生成脚本**：必须补 §42.19 必留指纹 + 同步两条 prompt（当前靠「不重建」被动保护，一旦生成脚本改成整段重建即失效）。
+
+
+
 **新闻流展示规则（v5 新增长度统一 + 链接修复，必留）**：① **按日期分组** —— `.co-day`（`.co-day-h` 分组头「今天／昨天／N 天前／未标注日期 · YYYY-MM-DD 周X」+ `.co-day-n` 条数）、`.co-day-items` 装当天条目；② **新闻流单栏（v7 变更）** —— 原 `@media(min-width:1400px){.co-day-items{grid-template-columns:1fr 1fr}}` 两栏网格**已移除**，新闻流改为与「今日新闻」一致的**一行一条**单栏（`.co-day-items` 默认 block 流，不再分两列）；③ **时间范围切换** —— `#coFeedHead` 内 `.co-range` 三按钮 `data-r="30|90|0"`，**默认 `range=90`**；`passRange()` 中 `range===0` 放行全部，`d===""` 的条目只在「全部」下出现；④ **分页** —— `PAGE=60`，`#coMoreWrap`/`#coMore`/`#coMoreHint`，`total>shown` 时显示，任何筛选动作**重置 `shown=PAGE`**；⑤ **长度统一（v5 核心）** —— `t` 字段长短悬殊（4 字～1055 字，21 条 ≥120 字、29 条 ≤15 字），`cleanT(t)` 清洗「序号+年月」前缀/尾随日期/不间断空格后，`splitTB(t)` 在首个句末标点（≤64 字）处拆为 **标题**（`head`，2 行 clamp）+ **正文**（`body`，仅当 body 超出 2 行折叠阈值才渲染，2 行 clamp + 「展开全文」`.co-exp` 切换 `.co-item.open` 显全）。短标题（≤15 字）只显示标题，不出现折叠/展开；⑥ **链接修复（v5 核心）** —— 26/199 条 URL 在 `company_news.json` 里含字面 `&amp;`（tlys/shenhuo/teck/albemarle），旧版 `esc()` 再转义一次成 `&amp;amp;` 致链接打不开。`dec(u)` 在 `esc()` **之前**解码 HTML 实体（`&#x..;`/`&#..;`/`&lt; &gt; &quot; &apos; &nbsp;`、`&amp;` 置最后避免二次解码），主链接 = 解码后 URL 或 `searchUrl(公司名+标题)` 兜底；外链统一 `rel="noopener noreferrer"`。**v6 不再逐条展示目标主机 `.co-host`（用户要求「不用显示每个网页的链接」）**，改为每条渲染一句内容摘要 `.co-summary`（读 `it.s`，3 行 clamp，仿新闻端；无 `it.s` 且标题 >64 字才退回 `.co-body` + `.co-exp` 折叠展开，无 `it.s` 的短标题只显示标题）。排序：`d` 降序，`d===""` 置底。
 
 **采集裁定（未变）**：① 数据来源 = 各公司**官网新闻栏目**；② 范围 = 国内 32 家（A 股品种龙头 + 五矿系 + 中色系 + 细分龙头）+ 海外 15 家（纯跨国矿企 + 中资海外 MMG / 中国有色矿业 + 全球综合巨头）共 47 家；③ 海外英文标题经 MyMemory 译中（保留 `t_en` 原文）；④ 新闻优先过滤（口径「适中＝事件类 + 行业技术观察」），`require_date` 默认 False（中文站日期常离标题远/仅在 URL，强制日期误杀真实事件新闻，故保留 `d:''` 置底）。采集层 `fetch_company.py` 现已**全站静态 urllib 抓取**（国内站静态 urllib；SPA 动态站中国铝业走 `method='chrome'` 无头渲染，无 Chrome 时降级静态）；海外站经 `effective_proxy()` 运行时发现存活本机 HTTP 代理端口取外网。**已知局限**：47 家中静态可抽约 28 家 + 无头渲染 1 家（中国铝业）；其余 18 家为 `unreach='spa'`（官网 JS/AJAX 动态加载或代理超时，静态 urllib 抽不到，前端标「动态 ✕」）或 `unreach='dead'`（云南铜业 / 云铝域名已失效）。（v9 已攻克：复用本机已装 Chrome + playwright，见 v9 变更 ①；仅中国铝业 `method:'chrome'`，其余仍静态 urllib）。原始 HTML 落盘 `tmp/co_cache/<slug>.html` 24h 复用，支持 `--only` 单家重采与 `--force` 强刷。**链接实体坑（v5 已修前端解码，采集侧仍应避免落 `&amp;` 字面）**。
