@@ -7188,12 +7188,13 @@ function toggleTheme(){
     if(n>1&&n<=7) return d+wd+' · '+n+' 天前';
     return d+wd;
   }
-  // 2026-09-26：公司展示名 —— 国内 A股 直接显示中文名；中资港股 / 海外 显示「中文（英文）」，
-  // 兼顾统一命名（修复此前海外公司有的英文有的中文）与国际读者可读性。name 仍作主键不变。
+  // 公司展示名：中国组（A 股 + 中资港股）只显示中文名；海外公司显示「中文（英文）」。
+  // 2026-09-26 晚：中资港股并入中国组后，其中的英文后缀（如 五矿资源（MMG））与同组 A 股不一致，
+  // 按用户要求去掉 —— 中国公司一律纯中文，只有海外公司保留英文原名。name 仍作主键不变。
   function coDisplayName(o){
     if(!o) return '';
     var zh=o.zh||o.name||'';
-    if(o.region==='CN') return zh;
+    if(o.region==='CN'||o.region==='HK') return zh;
     var en=o.en||o.zh_en||'';
     if(en && en!==zh) return zh+'（'+en+'）';
     return zh;

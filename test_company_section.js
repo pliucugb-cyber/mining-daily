@@ -5,7 +5,7 @@
  *   ② 去矿种维度：矿种 chip 筛选 / 导航矿种分组 / 移动端 sector optgroup / 卡片矿种标签 全部移除
  *   ③ 链接可用：数据自带 HTML 实体（&amp;）先解码再转义（否则二次转义成 &amp;amp; 打不开）；外链 rel=noreferrer；显示目标域名
  *   ④ 导航：中国/海外 分两组（2026-09-26 晚：原「中资港股」仅 2 家、头重脚轻，按资本归属并回中国组）+ 按市值·知名度 rank 升序 + 计数徽标 + 「暂未收录」折叠组；面板内独立滚动
- *   ⑦ 命名统一（2026-09-26）：海外/中资港股 显示「中文（英文）」，国内仅中文；name 仍作主键
+ *   ⑦ 命名（2026-09-26 晚）：海外公司显示「中文（英文）」；中国组（A 股 + 中资港股）仅中文；name 仍作主键
  *   ⑧ 媒体源披露（2026-09-26）：选中公司后头部 sub 显示「来源：新浪财经 / 官网 RSS / 公司官网」
  *   ⑤ v6：每条卡片加一句内容摘要（仿新闻端，读 it.s）；移除逐条「目标域名」行；顶部说明段移除
  *   ⑨ v11（2026-09-26）：条目标题近黑加粗偏大 / 摘要中灰常规偏小（三级层级）；右栏两组表头可折叠（md_co_groups 记忆，默认全展开） + 文案精简（去「按市值·知名度」「最新动态」「有内容」）
@@ -313,19 +313,25 @@ setTimeout(() => {
     check('国内组按 rank 升序（紫金矿业 早于 山东黄金）', zjIdx >= 0 && sdIdx >= 0 && zjIdx < sdIdx, zjIdx + '/' + sdIdx);
     const tkIdx = domOrder.indexOf('Teck Resources'), albIdx = domOrder.indexOf('Albemarle');
     check('海外组按 rank 升序（Teck Resources 早于 Albemarle）', tkIdx >= 0 && albIdx >= 0 && tkIdx < albIdx, tkIdx + '/' + albIdx);
-    // 命名统一（2026-09-26）：海外/中资港股 显示「中文（英文）」；A 股仅中文（name 仍作主键）
+    // 命名（2026-09-26 晚）：海外显示「中文（英文）」；中国组（A 股 + 中资港股）仅中文（name 仍作主键）
     const navNameMap = {};
     document.querySelectorAll('#coNav .co-nav-item').forEach(el => {
       navNameMap[el.getAttribute('data-name')] = (el.querySelector('.co-nav-name') || {}).textContent || '';
     });
     check('海外英文公司「纽蒙特」显示 纽蒙特（Newmont）',
           (navNameMap['Newmont'] || '').indexOf('纽蒙特（Newmont）') >= 0, navNameMap['Newmont']);
-    check('港股公司「五矿资源」显示 五矿资源（MMG）',
-          (navNameMap['五矿资源'] || '').indexOf('五矿资源（MMG）') >= 0, navNameMap['五矿资源']);
+    check('中国组港股公司「五矿资源」仅显示中文（2026-09-26 晚去英文）',
+          (navNameMap['五矿资源'] || '') === '五矿资源', navNameMap['五矿资源']);
+    check('中国组港股公司「中国有色矿业」仅显示中文（去英文，避免长英文折行）',
+          (navNameMap['中国有色矿业'] || '') === '中国有色矿业', navNameMap['中国有色矿业']);
     check('海外中文公司「力拓」显示 力拓（Rio Tinto）',
           (navNameMap['力拓'] || '').indexOf('力拓（Rio Tinto）') >= 0, navNameMap['力拓']);
     check('A 股公司「紫金矿业」仅显示中文（不含括号英文）',
           (navNameMap['紫金矿业'] || '') === '紫金矿业', navNameMap['紫金矿业']);
+    check('中国组已移除「盐湖股份 / 株冶集团 / 永兴材料」三家（用户 2026-09-26 晚）',
+          ['盐湖股份','株冶集团','永兴材料'].every(n => (companyData.companies||[]).every(c => c.name !== n) &&
+            !document.querySelector('#coNav .co-nav-item[data-name="' + n + '"]')),
+          'left=' + (companyData.companies||[]).filter(c => ['盐湖股份','株冶集团','永兴材料'].indexOf(c.name) >= 0).map(c=>c.name).join(','));
     check('导航标题显示家数/条数', /家/.test((document.getElementById('coNavH') || {}).textContent || ''),
           (document.getElementById('coNavH') || {}).textContent);
     const emptyItems = document.querySelectorAll('#coNav .co-nav-item.empty');

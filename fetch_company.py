@@ -2,9 +2,10 @@
 """
 fetch_company.py — 矿业公司动态板块数据采集（v2：官网新闻，非公告）
 
-数据来源：47 家矿业龙头「官方网站新闻栏目」（非 cninfo/SEC 公告），按三组划分：
-  - 国内 A股（32 家）：各公司官网新闻列表页；其中 6 家原死站/JS 外壳站（云南铜业/云铝股份/湖南黄金/
-    北方稀土/株冶集团/广晟有色）改用新浪财经个股页（gb2312→gbk 解码）兜底采集
+数据来源：44 家矿业龙头「官方网站新闻栏目」（非 cninfo/SEC 公告），按三组划分：
+  - 国内 A股（29 家）：各公司官网新闻列表页；其中 5 家原死站/JS 外壳站（云南铜业/云铝股份/湖南黄金/
+    北方稀土/广晟有色）改用新浪财经个股页（gb2312→gbk 解码）兜底采集
+    （2026-09-26 晚按用户要求删除 盐湖股份 / 永兴材料 / 株冶集团 三家，原 47 家）
   - 中资港股（2 家：五矿资源/中国有色矿业）：新浪财经港股个股页（中文新闻）
   - 海外（13 家）：官网 News/IR 栏目，英文标题经 MyMemory 译中；第一量子改用官网 RSS 结构化源
 
@@ -1398,24 +1399,15 @@ SITES = [
     {'name':'Albemarle','code':'ALB','sector':'锂','region':'NA','exchange':'NYSE','origin':'official',
      'zh':'雅保','en':'Albemarle',
      'url':'https://www.albemarle.com/news','method':'html'},
-    {'name':'盐湖股份','code':'000792','sector':'锂','region':'CN','exchange':'A股','origin':'official',
-     'zh':'盐湖股份','en':'Qinghai Salt Lake',
-     'url':'http://www.qhyhgf.com/','method':'html'},
     {'name':'中矿资源','code':'002738','sector':'锂','region':'CN','exchange':'A股','origin':'official',
      'zh':'中矿资源','en':'Sinomine Resource',
      'url':'http://www.sinomine.cn/','method':'html'},
-    {'name':'永兴材料','code':'002756','sector':'锂','region':'CN','exchange':'A股','origin':'official',
-     'zh':'永兴材料','en':'Yongxing Materials',
-     'url':'http://www.yongxing.com.cn/','method':'html'},
     {'name':'白银有色','code':'601212','sector':'铜铅锌','region':'CN','exchange':'A股','origin':'official',
      'zh':'白银有色','en':'Baiyin Nonferrous',
      'url':'http://www.bynmc.com/','method':'html'},
     {'name':'中色股份','code':'000758','sector':'海外工程','region':'CN','exchange':'A股','origin':'official',
      'zh':'中色股份','en':'NFC',
      'url':'http://www.nfc.com.cn/','method':'html'},
-    {'name':'株冶集团','code':'600961','sector':'铅锌','region':'CN','exchange':'A股','origin':'sina-a',
-     'zh':'株冶集团','en':'Zhuzhou Smelter',
-     'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/sh600961.phtml','method':'html'},
     {'name':'广晟有色','code':'600259','sector':'稀土','region':'CN','exchange':'A股','origin':'sina-a',
      'zh':'广晟有色','en':'Guangdong Rising Nonferrous',
      'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/sh600259.phtml','method':'html'},
