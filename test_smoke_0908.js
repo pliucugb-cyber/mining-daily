@@ -505,6 +505,32 @@ setTimeout(() => {
     check('⑬q 级联：.news-summary 计算光标 = text 且文字可选', !!nSum && nSum.cursor === 'text' && nSum.userSelect === 'text', nSum ? (nSum.cursor + '/' + nSum.userSelect) : 'no-el');
   } catch (e) { check('⑬ 点击分区运行时契约', false, e.message); }
 
+  // ===== ⑭ 顶栏配色契约（2026-09-26 §42.30：细条形态不变、底色回归深蓝、日期徽章白底红字）=====
+  try {
+    const headerRules = html.match(/^\.header\{[^\n]*\}/gm) || [];
+    const headerRule = headerRules.find(s => /background:/.test(s)) || '';
+    const h1Rules = html.match(/^\.header h1\{[^\n]*\}/gm) || [];
+    const badgeRule = (html.match(/^\.date-badge\{[^\n]*\}/gm) || [])[0] || '';
+    const updRule = (html.match(/^\.md-update-time\{[^\n]*\}/gm) || [])[0] || '';
+    check('⑭a .header 底色回归深蓝 #1a3a5c + 白字（不再是 var(--surface) 白底）',
+      /background:#1a3a5c/.test(headerRule) && /color:#fff/.test(headerRule) && !/var\(--surface\)/.test(headerRule),
+      headerRule.slice(0, 96));
+    check('⑭b 细条形态未回退（padding 10px var(--s4) + h1 字号 --fs-h3 + 无 --fs-display 大横幅）',
+      /padding:10px var\(--s4\)/.test(headerRule) && h1Rules.some(s => /font-size:var\(--fs-h3\)/.test(s))
+      && !/--fs-display/.test(headerRule) && !h1Rules.some(s => /--fs-display/.test(s)),
+      'h1Rules=' + h1Rules.length);
+    check('⑭c .date-badge 白底（字面值）+ 文字仍取 var(--up)（日期唯一来源未变）',
+      /background:#fff/.test(badgeRule) && /color:var\(--up\)/.test(badgeRule), badgeRule.slice(0, 96));
+    check('⑭d 暗色模式徽章同调（#fff 底 + #c0392b 字，非旧红底白字）',
+      /body\.dark \.date-badge\{background:#fff;color:#c0392b\}/.test(html));
+    check('⑭e「更新于」提亮为半透明白（深底可读，不再是 --ink-400）',
+      /color:rgba\(255,255,255,\.72\)/.test(updRule) && !/--ink-400/.test(updRule), updRule.slice(0, 88));
+    const hcs = window.getComputedStyle(doc.querySelector('.header'));
+    check('⑭f 级联：.header 计算底色 = rgb(26, 58, 92)、文字 = 白',
+      hcs.backgroundColor === 'rgb(26, 58, 92)' && hcs.color === 'rgb(255, 255, 255)',
+      hcs.backgroundColor + ' / ' + hcs.color);
+  } catch (e) { check('⑭ 顶栏配色契约', false, e.message); }
+
   console.log('\n===== JS 运行时错误 =====');
   const real = errors.filter(e => !/api\/hot-news|api\/ai-analyze|GoatCounter|gc\.zcounter|Failed to fetch|NetworkError/i.test(e));
   check('无阻塞性 JS 错误', real.length === 0, real.slice(0, 3).join(' | '));
