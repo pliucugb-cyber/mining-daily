@@ -2,6 +2,1213 @@
  "updated_at": "2026-09-26",
  "companies": [
   {
+   "name": "Newmont",
+   "code": "NEM",
+   "sector": "黄金",
+   "region": "NA",
+   "exchange": "NYSE",
+   "zh": "纽蒙特",
+   "en": "Newmont",
+   "origin": "agg",
+   "home": "https://www.newmont.com/investors/news-release/default.aspx",
+   "news_url": "https://www.newmont.com/investors/news-release/default.aspx",
+   "method": "agg",
+   "unreach": "",
+   "stale": false,
+   "rank": 26,
+   "items": [
+    {
+     "t": "纽蒙特宣布2026年第三季度业绩电话会议| NEM股票新闻",
+     "d": "2026-09-24",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-announces-third-quarter-2026-results-conference-4lzn26njfi30.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont Announces Third Quarter 2026 Results Conference Call | NEM Stock News"
+    },
+    {
+     "t": "黄金巨头正在返还创纪录的现金，而不是建造新矿| NEM股票新闻",
+     "d": "2026-09-17",
+     "u": "https://www.stocktitan.net/news/NEM/gold-majors-are-returning-record-cash-instead-of-building-new-9q7ymo93e9no.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Gold Majors Are Returning Record Cash Instead of Building New Mines | NEM Stock News"
+    },
+    {
+     "t": "Newmont任命Peter Beaven为董事会成员| NEM股票新闻",
+     "d": "2026-08-20",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-appoints-peter-beaven-to-board-of-x4qyau1twtcs.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont Appoints Peter Beaven to Board of Directors | NEM Stock News"
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 08-20",
+     "d": "2026-08-20",
+     "u": "https://www.sec.gov/Archives/edgar/data/1164727/000110465926099237/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 08-13",
+     "d": "2026-08-13",
+     "u": "https://www.sec.gov/Archives/edgar/data/1164727/000110465926095968/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "纽蒙特公布强劲的2026年第二季度业绩；仍有望实现全年指引| NEM股票新闻",
+     "d": "2026-07-23",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-reports-robust-second-quarter-2026-results-remains-on-track-q08iit98n9be.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont Reports Robust Second Quarter 2026 Results; Remains on Track to Achieve Full Year Guidance | NEM Stock News"
+    },
+    {
+     "t": "提交 SEC 10-Q 表（季度报告）· 07-23",
+     "d": "2026-07-23",
+     "u": "https://www.sec.gov/Archives/edgar/data/1164727/000116472726000036/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 07-23",
+     "d": "2026-07-23",
+     "u": "https://www.sec.gov/Archives/edgar/data/1164727/000116472726000034/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "纽蒙特宣布2026年第二季度业绩电话会议| NEM股票新闻",
+     "d": "2026-07-01",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-announces-second-quarter-2026-results-conference-jd2504ptc0xj.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont Announces Second Quarter 2026 Results Conference Call | NEM Stock News"
+    },
+    {
+     "t": "Newmont的红色Chris Block洞穴项目获得重大监管批准| NEM股票新闻",
+     "d": "2026-06-19",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-s-red-chris-block-cave-project-receives-major-regulatory-hslmxocmbblw.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont’s Red Chris Block Cave Project Receives Major Regulatory Approvals | NEM Stock News"
+    },
+    {
+     "t": "Newmont宣布下一阶段交付的关键高管任命| NEM股票新闻",
+     "d": "2026-06-15",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-announces-key-executive-appointments-for-the-next-phase-of-3as7qadnby6p.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont Announces Key Executive Appointments for the Next Phase of Delivery | NEM Stock News"
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 06-15",
+     "d": "2026-06-15",
+     "u": "https://www.sec.gov/Archives/edgar/data/1164727/000110465926074137/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "Newmont宣布从Lundin Gold Inc.以实物股息方式收到LunR Royalties Corp.的普通股|",
+     "d": "2026-06-12",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-announces-receipt-of-common-shares-of-lun-r-royalties-corp-oe05fchupmyp.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont Announces Receipt of Common Shares of LunR Royalties Corp. by Way of Dividend-In-Kind from Lundin Gold Inc. | NEM Stock News"
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 05-13",
+     "d": "2026-05-13",
+     "u": "https://www.sec.gov/Archives/edgar/data/1164727/000110465926060260/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "Newmont创造创纪录的季度盈利和自由现金流，报告2026年第一季度业绩并宣布增加股票回购授权| NEM股票新闻",
+     "d": "2026-04-23",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-generates-record-quarterly-earnings-and-free-cash-flow-gdsos1zr4mb9.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont Generates Record Quarterly Earnings and Free Cash Flow, Reports First Quarter 2026 Results and Announces Increased Share Repurchase Authorization | NEM Stock News"
+    },
+    {
+     "t": "纽蒙特宣布2026年第一季度业绩电话会议| NEM股票新闻",
+     "d": "2026-03-31",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-announces-first-quarter-2026-results-conference-ski7wwhhthaj.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont Announces First Quarter 2026 Results Conference Call | NEM Stock News"
+    },
+    {
+     "t": "纽蒙特报告2025年矿产储量为1.182亿金盎司和1250万吨铜| NEM股票新闻",
+     "d": "2026-02-19",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-reports-2025-mineral-reserves-of-118-2-million-gold-ounces-kk5ml7uojyp1.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont Reports 2025 Mineral Reserves of 118.2 Million Gold Ounces and 12.5 Million Tonnes of Copper | NEM Stock News"
+    },
+    {
+     "t": "纽蒙特公布2025年第四季度和全年业绩，提供2026年指导，并宣布强化资本配置框架| NEM股票新闻",
+     "d": "2026-02-19",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-reports-fourth-quarter-and-full-year-2025-results-provides-e1fy5txa4xtg.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Newmont Reports Fourth Quarter and Full Year 2025 Results, Provides 2026 Guidance, and Announces Enhanced Capital Allocation Framework | NEM Stock News"
+    }
+   ]
+  },
+  {
+   "name": "Barrick",
+   "code": "B",
+   "sector": "黄金",
+   "region": "NA",
+   "exchange": "NYSE",
+   "zh": "巴里克",
+   "en": "Barrick",
+   "origin": "agg",
+   "home": "https://www.barrick.com/English/News/default.aspx",
+   "news_url": "https://www.barrick.com/English/News/default.aspx",
+   "method": "agg",
+   "unreach": "",
+   "stale": false,
+   "rank": 28,
+   "items": [
+    {
+     "t": "Avathon获选为Barrick北美业务的AI原生采矿运营模式提供支持| B股票新闻",
+     "d": "2026-09-23",
+     "u": "https://www.stocktitan.net/news/B/avathon-selected-to-power-an-ai-native-mining-operating-model-for-73hh6u7orvof.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Avathon Selected to Power an AI-Native Mining Operating Model for Barrick's North American Business | B Stock News"
+    },
+    {
+     "t": "黄金巨头正在返还创纪录的现金，而不是建造新矿| B股新闻",
+     "d": "2026-09-17",
+     "u": "https://www.stocktitan.net/news/B/gold-majors-are-returning-record-cash-instead-of-building-new-9q7ymo93e9no.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Gold Majors Are Returning Record Cash Instead of Building New Mines | B Stock News"
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 08-17",
+     "d": "2026-08-17",
+     "u": "https://www.sec.gov/Archives/edgar/data/756894/000119312526353144/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "Barrick任命Sebastiaan Bock为世界其他地区首席执行官| B股票新闻",
+     "d": "2026-08-11",
+     "u": "https://www.stocktitan.net/news/B/barrick-appoints-sebastiaan-bock-ceo-rest-of-k6xaz1mzy7am.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick Appoints Sebastiaan Bock CEO, Rest of World | B Stock News"
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 08-11",
+     "d": "2026-08-11",
+     "u": "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "Barrick和Newmont就内华达金矿合资企业达成协议| B股票新闻",
+     "d": "2026-08-10",
+     "u": "https://www.stocktitan.net/news/B/barrick-and-newmont-reach-agreement-regarding-nevada-gold-mines-bih4gdv3o1ek.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick and Newmont Reach Agreement Regarding Nevada Gold Mines Joint Venture | B Stock News"
+    },
+    {
+     "t": "Barrick公布2026年第二季度业绩| B股新闻",
+     "d": "2026-08-10",
+     "u": "https://www.stocktitan.net/news/B/barrick-reports-second-quarter-2026-xwainj60y9nw.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick Reports Second Quarter 2026 Results | B Stock News"
+    },
+    {
+     "t": "Barrick宣布第二季度股息| B股新闻",
+     "d": "2026-08-10",
+     "u": "https://www.stocktitan.net/news/B/barrick-declares-q2-y0e0ajk1xcbk.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick Declares Q2 Dividend | B Stock News"
+    },
+    {
+     "t": "Barrick宣布任命公司事务和投资者关系高级职务| B股新闻",
+     "d": "2026-08-07",
+     "u": "https://www.stocktitan.net/news/B/barrick-announces-senior-appointments-to-corporate-affairs-and-rqovkn3f4wa8.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick Announces Senior Appointments to Corporate Affairs and Investor Relations | B Stock News"
+    },
+    {
+     "t": "Barrick宣布投资翠鸟金属| B股新闻",
+     "d": "2026-07-21",
+     "u": "https://www.stocktitan.net/news/B/barrick-announces-investment-in-kingfisher-ewd98m3xjpqu.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick Announces Investment in Kingfisher Metals | B Stock News"
+    },
+    {
+     "t": "Barrick将于8月10日公布2026年第二季度业绩| B股票新闻",
+     "d": "2026-07-10",
+     "u": "https://www.stocktitan.net/news/B/barrick-to-report-second-quarter-2026-results-on-august-j7p4n9rqu0pe.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick to Report Second Quarter 2026 Results on August 10 | B Stock News"
+    },
+    {
+     "t": "TransAct Technologies任命Troy Ingianni为首席财务官| B股票新闻",
+     "d": "2026-06-29",
+     "u": "https://www.stocktitan.net/news/B/trans-act-technologies-appoints-troy-ingianni-as-chief-financial-smqhhp4qvomq.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "TransAct Technologies Appoints Troy Ingianni as Chief Financial Officer | B Stock News"
+    },
+    {
+     "t": "Barrick发布2025年可持续发展报告和绩效数据| B股票新闻",
+     "d": "2026-06-12",
+     "u": "https://www.stocktitan.net/news/B/barrick-publishes-2025-sustainability-report-and-performance-9rerolrbx5fc.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick Publishes 2025 Sustainability Report and Performance Data | B Stock News"
+    },
+    {
+     "t": "Barrick宣布选举董事| B股新闻",
+     "d": "2026-05-14",
+     "u": "https://www.stocktitan.net/news/B/barrick-announces-election-of-xehn7mxvsx8i.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick Announces Election of Directors | B Stock News"
+    },
+    {
+     "t": "Barrick公布2026年第一季度业绩| B股新闻",
+     "d": "2026-05-11",
+     "u": "https://www.stocktitan.net/news/B/barrick-reports-first-quarter-2026-lchzdf3ag8jp.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick Reports First Quarter 2026 Results | B Stock News"
+    },
+    {
+     "t": "Barrick董事会授权$ 30亿股回购| B股新闻",
+     "d": "2026-05-11",
+     "u": "https://www.stocktitan.net/news/B/barrick-board-authorizes-3-0-billion-share-b3tjtj4g3jml.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick Board Authorizes $3.0 Billion Share Repurchase | B Stock News"
+    },
+    {
+     "t": "Barrick宣布第一季度股息| B股新闻",
+     "d": "2026-05-11",
+     "u": "https://www.stocktitan.net/news/B/barrick-declares-q1-r15itflxgnxv.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Barrick Declares Q1 Dividend | B Stock News"
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 05-11",
+     "d": "2026-05-11",
+     "u": "https://www.sec.gov/Archives/edgar/data/756894/000119312526216613/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    }
+   ]
+  },
+  {
+   "name": "Freeport-McMoRan",
+   "code": "FCX",
+   "sector": "铜",
+   "region": "NA",
+   "exchange": "NYSE",
+   "zh": "自由港",
+   "en": "Freeport-McMoRan",
+   "origin": "agg",
+   "home": "https://www.fcx.com/",
+   "news_url": "https://www.fcx.com/",
+   "method": "agg",
+   "unreach": "",
+   "stale": false,
+   "rank": 27,
+   "items": [
+    {
+     "t": "Freeport宣布发放普通股季度现金股息| FCX股票新闻",
+     "d": "2026-09-23",
+     "u": "https://www.stocktitan.net/news/FCX/freeport-declares-quarterly-cash-dividends-on-common-06u3omh06l56.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Freeport Declares Quarterly Cash Dividends on Common Stock | FCX Stock News"
+    },
+    {
+     "t": "智利铜产量创下19年来最低纪录| FCX股票新闻",
+     "d": "2026-09-17",
+     "u": "https://www.stocktitan.net/news/FCX/copper-hit-a-record-high-as-chile-posts-its-weakest-output-in-19-ml51mgq5pud7.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Copper Hit a Record High as Chile Posts Its Weakest Output in 19 Years | FCX Stock News"
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 09-08",
+     "d": "2026-09-08",
+     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000038/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 10-Q 表（季度报告）· 08-06",
+     "d": "2026-08-06",
+     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000036/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "Freeport 2026年第二季度和六个月财务和运营业绩发布于其网站| FCX股票新闻",
+     "d": "2026-07-23",
+     "u": "https://www.stocktitan.net/news/FCX/freeport-second-quarter-and-six-month-2026-financial-and-operating-l30o5w0ywswd.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Freeport Second-Quarter and Six-Month 2026 Financial and Operating Results Release Available on Its Website | FCX Stock News"
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 07-23",
+     "d": "2026-07-23",
+     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000033/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 06-10",
+     "d": "2026-06-10",
+     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000030/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 05-20",
+     "d": "2026-05-20",
+     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000027/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 10-Q 表（季度报告）· 05-08",
+     "d": "2026-05-08",
+     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000025/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "Freeport 2026年第一季度财务和经营业绩发布可在其网站上查看| FCX股票新闻",
+     "d": "2026-04-23",
+     "u": "https://www.stocktitan.net/news/FCX/freeport-first-quarter-2026-financial-and-operating-results-release-4mngxuhp56in.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Freeport First-Quarter 2026 Financial and Operating Results Release Available on Its Website | FCX Stock News"
+    },
+    {
+     "t": "FCX宣布Grasberg Minerals District经营权资源终身延期协议| FCX股票新闻",
+     "d": "2026-02-19",
+     "u": "https://www.stocktitan.net/news/FCX/fcx-announces-agreement-for-life-of-resource-extension-of-operating-ho03hq2bsbqi.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "FCX Announces Agreement for Life of Resource Extension of Operating Rights in Grasberg Minerals District | FCX Stock News"
+    },
+    {
+     "t": "Freeport 2025年第四季度和年终财务和运营业绩发布可在其网站上查看| FCX股票新闻",
+     "d": "2026-01-22",
+     "u": "https://www.stocktitan.net/news/FCX/freeport-fourth-quarter-and-year-ended-2025-financial-and-operating-vxnso3r8xxeo.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Freeport Fourth-Quarter and Year Ended 2025 Financial and Operating Results Release Available on Its Website | FCX Stock News"
+    },
+    {
+     "t": "Freeport提供Grasberg Minerals District重启计划的最新信息| FCX股票新闻",
+     "d": "2025-11-18",
+     "u": "https://www.stocktitan.net/news/FCX/freeport-provides-update-on-restart-plans-for-grasberg-minerals-gl9xytm8w389.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Freeport Provides Update on Restart Plans for Grasberg Minerals District | FCX Stock News"
+    },
+    {
+     "t": "Freeport宣布任命Cory Stevens为美洲区总裁兼首席运营官| FCX股票新闻",
+     "d": "2025-11-05",
+     "u": "https://www.stocktitan.net/news/FCX/freeport-announces-appointment-of-cory-stevens-as-president-and-muuh3itmydos.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Freeport Announces Appointment of Cory Stevens as President and Chief Operating Officer – Americas | FCX Stock News"
+    },
+    {
+     "t": "自由港2025年第三季度和九个月财务和运营业绩发布于其网站| FCX股票新闻",
+     "d": "2025-10-23",
+     "u": "https://www.stocktitan.net/news/FCX/freeport-third-quarter-and-nine-month-2025-financial-and-operating-kbqma94b7r7a.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Freeport Third-Quarter and Nine-Month 2025 Financial and Operating Results Release Available on Its Website | FCX Stock News"
+    }
+   ]
+  },
+  {
+   "name": "Southern Copper",
+   "code": "SCCO",
+   "sector": "铜",
+   "region": "NA",
+   "exchange": "NYSE",
+   "zh": "南方铜业",
+   "en": "Southern Copper",
+   "origin": "agg",
+   "home": "https://www.southerncoppercorp.com/",
+   "news_url": "https://www.southerncoppercorp.com/",
+   "method": "agg",
+   "unreach": "",
+   "stale": false,
+   "rank": 29,
+   "items": [
+    {
+     "t": "智利铜产量创下19年来最低纪录| SCCO股票新闻",
+     "d": "2026-09-17",
+     "u": "https://www.stocktitan.net/news/SCCO/copper-hit-a-record-high-as-chile-posts-its-weakest-output-in-19-ml51mgq5pud7.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Copper Hit a Record High as Chile Posts Its Weakest Output in 19 Years | SCCO Stock News"
+    },
+    {
+     "t": "提交 SEC 10-Q 表（季度报告）· 07-31",
+     "d": "2026-07-31",
+     "u": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926089169/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 07-22",
+     "d": "2026-07-22",
+     "u": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926085515/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 07-17",
+     "d": "2026-07-17",
+     "u": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926084713/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 06-26",
+     "d": "2026-06-26",
+     "u": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926078041/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 06-25",
+     "d": "2026-06-25",
+     "u": "https://www.sec.gov/Archives/edgar/data/1001838/000114036126026337/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 8-K 表（重大事项披露）· 06-17",
+     "d": "2026-06-17",
+     "u": "https://www.sec.gov/Archives/edgar/data/1001838/000114036126025549/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    }
+   ]
+  },
+  {
+   "name": "Teck Resources",
+   "code": "TECK",
+   "sector": "铅锌",
+   "region": "NA",
+   "exchange": "TSX",
+   "zh": "泰克资源",
+   "en": "Teck Resources",
+   "origin": "agg",
+   "home": "https://www.teck.com/news/",
+   "news_url": "https://www.teck.com/news/",
+   "method": "agg",
+   "unreach": "",
+   "stale": false,
+   "rank": 31,
+   "items": [
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-01",
+     "d": "2026-09-01",
+     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002470/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 08-12",
+     "d": "2026-08-12",
+     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002318/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 08-03",
+     "d": "2026-08-03",
+     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002250/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 07-30",
+     "d": "2026-07-30",
+     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002197/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 07-24",
+     "d": "2026-07-24",
+     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002159/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "随着军事技术繁荣将市场推向40亿美元，锑需求激增| TECK股票新闻",
+     "d": "2026-03-09",
+     "u": "https://www.stocktitan.net/news/TECK/antimony-demand-surges-as-military-tech-boom-pushes-market-toward-4-kcr4egy67us2.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Antimony Demand Surges as Military Tech Boom Pushes Market Toward $4 Billion | TECK Stock News"
+    }
+   ]
+  },
+  {
+   "name": "Agnico Eagle",
+   "code": "AEM",
+   "sector": "黄金",
+   "region": "NA",
+   "exchange": "TSX",
+   "zh": "阿格尼科鹰",
+   "en": "Agnico Eagle",
+   "origin": "agg",
+   "home": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
+   "news_url": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
+   "method": "agg",
+   "unreach": "",
+   "stale": false,
+   "rank": 30,
+   "items": [
+    {
+     "t": "Scout Discoveries宣布Agnico Eagle进行14.9%的战略投资，并在爱达荷州达成盈利协议；",
+     "d": "2026-09-18",
+     "u": "https://www.stocktitan.net/news/AEM/scout-discoveries-announces-14-9-strategic-investment-by-agnico-nrbu6avw4pxv.html",
+     "s": "Electrum在2500万美元私募中的持股比例增至30% | AEM股票新闻",
+     "src": "agg",
+     "t_en": "Scout Discoveries Announces 14.9% Strategic Investment by Agnico Eagle and an Earn-In Agreement in Idaho; Electrum Increases to 30% Ownership in Combined US$25 Million Private Placement | AEM Stock News"
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-09",
+     "d": "2026-09-09",
+     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926106256/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "AGNICO EAGLE宣布处置DELTA和Helm BAY项目以及对VIZSLA铜的投资| AEM股票新闻",
+     "d": "2026-09-08",
+     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-announces-disposition-of-delta-and-helm-bay-projects-knsbvfl6yiff.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "AGNICO EAGLE ANNOUNCES DISPOSITION OF DELTA AND HELM BAY PROJECTS AND INVESTMENT IN VIZSLA COPPER | AEM Stock News"
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 08-31",
+     "d": "2026-08-31",
+     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926103804/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "AVENIR MINERALS LIMITED对加拿大NICKEL COMPANY INC.的额外投资| AEM股票新闻",
+     "d": "2026-08-28",
+     "u": "https://www.stocktitan.net/news/AEM/additional-investment-in-canada-nickel-company-inc-by-avenir-caaqihf97lve.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "ADDITIONAL INVESTMENT IN CANADA NICKEL COMPANY INC. BY AVENIR MINERALS LIMITED | AEM Stock News"
+    },
+    {
+     "t": "AGNICO EAGLE宣布投资RADISSON Mining RESOURCES Inc. | AEM股票新闻",
+     "d": "2026-08-24",
+     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-announces-investment-in-radisson-mining-resources-308fu3uov5ut.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "AGNICO EAGLE ANNOUNCES INVESTMENT IN RADISSON MINING RESOURCES INC. | AEM Stock News"
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 08-24",
+     "d": "2026-08-24",
+     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926100243/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 08-12",
+     "d": "2026-08-12",
+     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926094882/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 07-30",
+     "d": "2026-07-30",
+     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926088794/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "AGNICO Eagle报告2026年第二季度业绩-创纪录的季度自由现金流反映了稳健的运营业绩；",
+     "d": "2026-07-29",
+     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-reports-second-quarter-2026-results-record-quarterly-85mw5jmf8iz0.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "AGNICO EAGLE REPORTS SECOND QUARTER 2026 RESULTS - RECORD QUARTERLY FREE CASH FLOW REFLECTS SOLID OPERATIONAL PERFORMANCE; RECORD QUARTERLY SHAREHOLDER RETURNS | AEM Stock News"
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 07-29",
+     "d": "2026-07-29",
+     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926088216/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "AGNICO Eagle宣布投资凯迪拉克矿业公司| AEM股票新闻",
+     "d": "2026-07-24",
+     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-announces-investment-in-cadillac-mines-jmaer9t0i4hd.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "AGNICO EAGLE ANNOUNCES INVESTMENT IN CADILLAC MINES CORPORATION | AEM Stock News"
+    },
+    {
+     "t": "AGNICO EAGLE报告Barnat OPEN PIT AT CANADIAN MALARTIC的墙壁运动| AEM股票新闻",
+     "d": "2026-07-02",
+     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-reports-wall-movement-at-barnat-open-pit-at-canadian-xqtvwsapb918.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "AGNICO EAGLE REPORTS WALL MOVEMENT AT BARNAT OPEN PIT AT CANADIAN MALARTIC | AEM Stock News"
+    },
+    {
+     "t": "AGNICO EAGLE提供2026年第二季度业绩发布通知和电话会议| AEM股票新闻",
+     "d": "2026-06-29",
+     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-provides-notice-of-release-of-second-quarter-2026-axjywh799pgd.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "AGNICO EAGLE PROVIDES NOTICE OF RELEASE OF SECOND QUARTER 2026 RESULTS AND CONFERENCE CALL | AEM Stock News"
+    },
+    {
+     "t": "Agnico Eagle和Rupert Resources宣布达成协议| AEM股票新闻",
+     "d": "2026-06-16",
+     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-and-rupert-resources-announce-closing-of-8o0z8dfhc35s.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Agnico Eagle and Rupert Resources Announce Closing of Arrangement | AEM Stock News"
+    },
+    {
+     "t": "Rupert Resources获得法院最终批准并宣布与Agnico Eagle达成协议的预计截止日期| AEM股票新闻",
+     "d": "2026-06-11",
+     "u": "https://www.stocktitan.net/news/AEM/rupert-resources-obtains-final-court-approval-and-announces-expected-p2rjsw3cu978.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "Rupert Resources Obtains Final Court Approval and Announces Expected Closing Date for Arrangement With Agnico Eagle | AEM Stock News"
+    },
+    {
+     "t": "Rupert Resources证券持有人批准与Agnico Eagle的拟议安排， Agnico",
+     "d": "2026-06-09",
+     "u": "https://www.stocktitan.net/news/AEM/rupert-resources-securityholders-approve-proposed-arrangement-with-mnwx59ws5cwx.html",
+     "s": "Eagle获得或有价值股权的有条件上市批准| AEM股票新闻",
+     "src": "agg",
+     "t_en": "Rupert Resources Securityholders Approve Proposed Arrangement With Agnico Eagle and Agnico Eagle Receives Conditional Listing Approval of Contingent Value Rights | AEM Stock News"
+    },
+    {
+     "t": "AGNICO EAGLE更新有关PRISM RESOURCES Inc.的早期预警报告| AEM股票新闻",
+     "d": "2026-06-04",
+     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-updates-early-warning-report-in-respect-of-prism-yn4m6dm877e7.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "AGNICO EAGLE UPDATES EARLY WARNING REPORT IN RESPECT OF PRISM RESOURCES INC. | AEM Stock News"
+    }
+   ]
+  },
+  {
+   "name": "力拓",
+   "code": "RIO",
+   "sector": "综合",
+   "region": "NA",
+   "exchange": "LSE",
+   "zh": "力拓",
+   "en": "Rio Tinto",
+   "origin": "agg",
+   "home": "https://www.riotinto.com/",
+   "news_url": "https://www.riotinto.com/",
+   "method": "agg",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-01",
+     "d": "2026-09-01",
+     "u": "https://www.sec.gov/Archives/edgar/data/863064/000162828026059733/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 08-03",
+     "d": "2026-08-03",
+     "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000037/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 07-29",
+     "d": "2026-07-29",
+     "u": "https://www.sec.gov/Archives/edgar/data/863064/000162828026050377/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 07-15",
+     "d": "2026-07-15",
+     "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000035/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 07-01",
+     "d": "2026-07-01",
+     "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000033/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 06-01",
+     "d": "2026-06-01",
+     "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000031/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    }
+   ]
+  },
+  {
+   "name": "必和必拓",
+   "code": "BHP",
+   "sector": "综合",
+   "region": "NA",
+   "exchange": "LSE",
+   "zh": "必和必拓",
+   "en": "BHP",
+   "origin": "agg",
+   "home": "https://www.bhp.com/",
+   "news_url": "https://www.bhp.com/",
+   "method": "agg",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-16",
+     "d": "2026-09-16",
+     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526392490/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-15",
+     "d": "2026-09-15",
+     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526391223/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-14",
+     "d": "2026-09-14",
+     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526389942/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-08",
+     "d": "2026-09-08",
+     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526383926/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 08-28",
+     "d": "2026-08-28",
+     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526371991/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 08-26",
+     "d": "2026-08-26",
+     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526365512/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "必和必拓在其迄今为止最大的Xplor引进中支持下一波勘探和技术人才|必和必拓股票新闻",
+     "d": "2026-02-01",
+     "u": "https://www.stocktitan.net/news/BHP/bhp-backs-the-next-wave-of-exploration-and-technology-talent-in-its-ccn3bdyki9ed.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "BHP backs the next wave of exploration and technology talent in its biggest Xplor intake yet | BHP Stock News"
+    },
+    {
+     "t": "必和必拓Xplor为2026年人群开放申请，提供无股权融资和全球支持|必和必拓股票新闻",
+     "d": "2025-09-09",
+     "u": "https://www.stocktitan.net/news/BHP/bhp-xplor-opens-applications-for-2026-cohort-offering-equity-free-engbqef3pt63.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "BHP Xplor Opens Applications for 2026 Cohort, Offering Equity-Free Funding and Global Support | BHP Stock News"
+    },
+    {
+     "t": "G Mining Ventures提供企业最新动态|必和必拓股票新闻",
+     "d": "2024-12-20",
+     "u": "https://www.stocktitan.net/news/BHP/g-mining-ventures-provides-corporate-w0x71zv2rap2.html",
+     "s": "",
+     "src": "agg",
+     "t_en": "G Mining Ventures Provides Corporate Update | BHP Stock News"
+    }
+   ]
+  },
+  {
+   "name": "淡水河谷",
+   "code": "VALE",
+   "sector": "综合",
+   "region": "NA",
+   "exchange": "NYSE",
+   "zh": "淡水河谷",
+   "en": "Vale",
+   "origin": "agg",
+   "home": "https://www.vale.com/",
+   "news_url": "https://www.vale.com/",
+   "method": "agg",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-24",
+     "d": "2026-09-24",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004682/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-22",
+     "d": "2026-09-22",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004668/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-11",
+     "d": "2026-09-11",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004526/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-10",
+     "d": "2026-09-10",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004514/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    },
+    {
+     "t": "提交 SEC 6-K 表（外资发行人报告）· 09-08",
+     "d": "2026-09-08",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004493/",
+     "s": "",
+     "src": "edgar",
+     "t_en": ""
+    }
+   ]
+  },
+  {
+   "name": "嘉能可",
+   "code": "GLEN",
+   "sector": "综合",
+   "region": "NA",
+   "exchange": "LSE",
+   "zh": "嘉能可",
+   "en": "Glencore",
+   "origin": "mining",
+   "home": "https://www.glencore.com/",
+   "news_url": "https://www.glencore.com/",
+   "method": "mining",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "嘉能可定于10月14日在澳大利亚市场首次亮相",
+     "d": "2026-09-24",
+     "u": "https://www.mining.com/glencore-sets-oct-14-date-for-australian-market-debut/",
+     "s": "8月份宣布的二级上市符合所有监管要求，将在瑞士矿业和大宗商品股票代码GLC下进行交易……",
+     "src": "mining",
+     "t_en": "Glencore sets Oct. 14 date for Australian market debut"
+    },
+    {
+     "t": "Glencore在袭击后停止了Cerrejón煤炭铁路",
+     "d": "2026-09-23",
+     "u": "https://www.mining.com/glencore-halts-cerrejon-coal-railway-after-attack/",
+     "s": "9月22日晚，一列火车在瓜希拉省北部乌里维亚附近受到袭击。",
+     "src": "mining",
+     "t_en": "Glencore halts Cerrejón coal railway after attack"
+    },
+    {
+     "t": "嘉能可、摩科瑞通过$ 1B进出口融资帮助建立美国矿产储备",
+     "d": "2026-09-23",
+     "u": "https://www.mining.com/glencore-to-help-build-us-minerals-stockpile-with-500m-exim-financing/",
+     "s": "大宗商品交易商将采购和交付美国库存的材料，旨在保护制造商免受短缺的影响。",
+     "src": "mining",
+     "t_en": "Glencore, Mercuria to help build US minerals stockpile with $1B EXIM financing"
+    },
+    {
+     "t": "第N个周期与嘉能可签署10年10亿美元的承购协议",
+     "d": "2026-09-22",
+     "u": "https://www.mining.com/nth-cycle-signs-10-year-1-billion-offtake-deal-with-glencore/",
+     "s": "Nth Cycle的技术旨在用于其品牌为“Oyster”的便携式系统中，利用电化学工艺选择性地提取N…",
+     "src": "mining",
+     "t_en": "Nth Cycle signs 10-year, $1 billion offtake deal with Glencore"
+    }
+   ]
+  },
+  {
+   "name": "英美资源",
+   "code": "AAL",
+   "sector": "综合",
+   "region": "NA",
+   "exchange": "LSE",
+   "zh": "英美资源",
+   "en": "Anglo American",
+   "origin": "mining",
+   "home": "https://www.angloamerican.com/",
+   "news_url": "https://www.angloamerican.com/",
+   "method": "mining",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "随着上海、伦敦仓库空置，铜价接近新纪录",
+     "d": "2026-09-22",
+     "u": "https://www.mining.com/copper-price-closes-in-on-new-record-as-shanghai-london-warehouses-empty-out/",
+     "s": "铜生产商周二随铜价上涨，延续了一周的涨幅，这弥补了铜价下跌后抛售造成的一些损失。",
+     "src": "mining",
+     "t_en": "Copper price closes in on new record as Shanghai, London warehouses empty out"
+    }
+   ]
+  },
+  {
+   "name": "紫金矿业",
+   "code": "601899",
+   "sector": "铜",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.zjky.cn/news/news_list.jsp",
+   "news_url": "https://www.zjky.cn/news/news_list.jsp",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 1,
+   "items": [
+    {
+     "t": "福大紫金学院国家自然科学基金立项获历史性突破",
+     "d": "2026-08-28",
+     "u": "https://www.zjky.cn/news/news-detail-122921.htm",
+     "s": "国家自然科学基金委员会8月26日公布，福大紫金学院17项基础研究课题通过立项评审，获批国家自然科学基金支持。其中，衷水平教授申报的“基于矿相重构联合硅酸阻聚强化铜渣湿法利用基础研究”入选重点项目，实现福州大学在国家基金委工程与材料学部重点项目历史“零”的突破。"
+    },
+    {
+     "t": "紫金矿业向西藏吉隆泥石流灾区捐赠1000万元",
+     "d": "2026-08-27",
+     "u": "https://www.zjky.cn/news/news-detail-122919.htm",
+     "s": "8月26日10时30分许，因尼泊尔一侧发生泥石流灾害，造成西藏日喀则市吉隆县吉隆口岸重大人员伤亡、失联，目前各项救援工作正全力推进。 紫金矿业密切关注灾情进展，为援助受灾地区，8月28日，公司决定向灾区捐赠人民币1000万元，用于当地紧急救援、受灾群众安置及灾后重建等相关工作。"
+    }
+   ]
+  },
+  {
+   "name": "江西铜业",
+   "code": "600362",
+   "sector": "铜",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.jxcc.com/news.html",
+   "news_url": "https://www.jxcc.com/news.html",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 6,
+   "items": [
+    {
+     "t": "央视《焦点访谈》聚焦江铜集团德兴铜矿生态修复成果",
+     "d": "2026-09-14",
+     "u": "https://www.jxcc.com/news/details_474_7079.html",
+     "s": "9月12日，中央电视台《焦点访谈》播出《绿色转型 青山不负》节目，详细介绍江铜集团德兴铜矿生态修复典型案例。"
+    },
+    {
+     "t": "央视《江山万里新长征》：江西如何让“有色”更出色",
+     "d": "2026-09-09",
+     "u": "https://www.jxcc.com/news/details_474_7076.html",
+     "s": "9月9日，中央电视台新闻频道播出《江山万里新长征》特别节目，镜头对准江铜集团德兴铜矿、江铜铜箔公司，展现矿山数智发展成效、铜箔公司科研成果。"
+    },
+    {
+     "t": "江铜入选！",
+     "d": "2026-08-26",
+     "u": "https://www.jxcc.com/news/details_474_7054.html",
+     "s": "2026年度全省思政工作“十佳”创新案例！ 《江铜集团：构建“三维联动”思政工作链 赋能企业高质量发展》入选2026年度江西省思想政治工作“十佳”创新案例。"
+    },
+    {
+     "t": "《江西日报》头版聚焦江铜：铜光熠熠，见证产业担当",
+     "d": "2026-08-03",
+     "u": "https://www.jxcc.com/news/details_474_6993.html",
+     "s": "8月2日，《江西日报》头版刊发“落实省会引领战略企业调研行”栏目首期特别报道《铜光熠熠，见证产业担当》。"
+    },
+    {
+     "t": "深化改革国企行：省级媒体聚焦高精铜板带背后的改革密码",
+     "d": "2026-07-31",
+     "u": "https://www.jxcc.com/news/details_474_7001.html",
+     "s": "省国资委启动“深化改革国企行”主题采访活动，邀约驻赣中央媒体、省级媒体走进省属国企一线，第一站来到江铜高精铜板带公司。"
+    },
+    {
+     "t": "《江西日报》头版头条：超3000亿元！",
+     "d": "2026-07-15",
+     "u": "https://www.jxcc.com/news/details_474_7000.html",
+     "s": "江铜集团上半年营收再创新高 7月12日，《江西日报》头版头条刊发报道《超3000亿元！江铜集团上半年营收再创新高》。"
+    }
+   ]
+  },
+  {
+   "name": "铜陵有色",
+   "code": "000630",
+   "sector": "铜",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.tlys.cn/list.aspx?parentclassid=67&classid=383",
+   "news_url": "http://www.tlys.cn/list.aspx?parentclassid=67&classid=383",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 11,
+   "items": [
+    {
+     "t": "庐江矿业强化“设备见本色”管理",
+     "d": "2026-09-24",
+     "u": "http://www.tlys.cn/news.aspx?cid=24559&classid=383",
+     "s": "一是压实组织责任，成立专项领导与工作小组，明确部门、生产单位职责，制定地表及井下设备标准及检查评分细则，着力整治“跑冒滴漏”“脏松缺锈”问题。二是分阶段推进整治，开展设备排查摸底，建立隐患清单，集中整治各类问题，深挖问题根源。"
+    },
+    {
+     "t": "集团公司参加2026世界制造业大会",
+     "d": "2026-09-23",
+     "u": "http://www.tlys.cn/news.aspx?cid=24556&classid=383",
+     "s": "丁士启表示，集团公司将推动科技创新与产业创新深度融合，前瞻布局前沿材料领域，加快推进产品嵌入AI算力、新能源、半导体产业链，提升产业链自主可控水平，为奋力谱写中国式现代化安徽篇章贡献铜陵有色力量。"
+    },
+    {
+     "t": "庐江矿业打好青年人才培养“组合拳”",
+     "d": "2026-09-23",
+     "u": "http://www.tlys.cn/news.aspx?cid=24555&classid=383",
+     "s": "一是搭建双向交流载体，组织近三年入职大学生召开青专题座谈会，交流岗位感悟、梳理技术难题，鼓励青年人才大胆实践、深耕专业，锤炼实干本领。二是健全人才培养机制，落实导师带徒、“技师+工程师”双师培养模式，由技术骨干、岗位能手结对带教，帮助青年人才快速补齐能力短板，夯实专业基础。"
+    },
+    {
+     "t": "米拉多铜矿、金隆铜业、铜冠电工加强网络安全教育",
+     "d": "2026-09-23",
+     "u": "http://www.tlys.cn/news.aspx?cid=24554&classid=383",
+     "s": "米拉多铜矿：一是紧扣网络安全宣传周主题，面向全体员工普及网络防护、网络诈骗等知识，引导员工时刻绷紧网络安全之弦。二是对服务器、OA平台等逐项检查，优化防护策略，完善应急预案，提升网络故障应急处置能力。 三是修订完善网络安全、设备运维等制度，压实网络安全主体责任，不断提升海外矿山网络安全防护水平。"
+    },
+    {
+     "t": "铜冠冶化加强在建项目管理",
+     "d": "2026-09-22",
+     "u": "http://www.tlys.cn/news.aspx?cid=24547&classid=383",
+     "s": "一是加强组织领导，成立7个工程项目组、20个技改项目组，项目负责人在授权范围内统筹管理各项工作，确保有序推进。二是加强现场管控，对项目施工区域进行作业围护，设置安全通道，规范材料堆放，做到统一标牌、统一标准、统一内容，推动项目现场管理规范化。"
+    },
+    {
+     "t": "金隆铜业实现冶炼渣回收铁精粉首次外销",
+     "d": "2026-09-21",
+     "u": "http://www.tlys.cn/news.aspx?cid=24542&classid=383",
+     "s": "日前，金隆铜业顺利完成冶炼渣回收铁精粉首次对外销售。此举不仅有效缓解冶炼渣堆存压力，还成功拓展副产品增收渠道，成功探索出固废减量化、资源化利用新路径。下一步，该公司将持续拓展铁精粉销售市场，稳步扩大产品外销规模。"
+    },
+    {
+     "t": "天马山矿启用地表人员定位系统",
+     "d": "2026-09-21",
+     "u": "http://www.tlys.cn/news.aspx?cid=24541&classid=383",
+     "s": "日前，天马山矿正式启用地表人员定位系统，实现地表与井下人员定位一体化管理。一是科学规划布点。提前做好航拍、地图绘制、信标部署等工作，确保系统建设有序推进。二是强化运行调试。认真开展系统联调、信号校准和功能验证，重点测试目标跟踪、轨迹回放、一键报警等功能，确保系统运行稳定可靠。三是深化平台应用。"
+    },
+    {
+     "t": "质检中心自研全自动棒磨机进入试验验证阶段",
+     "d": "2026-09-20",
+     "u": "http://www.tlys.cn/news.aspx?cid=24535&classid=383",
+     "s": "日前，质检中心自主研发的新型全自动棒磨机完成安装及空载试运行，各项智能化功能达到预期，正在开展试验验证。新设备搭载PLC智能控制系统，具有配方调用、权限管控、全程留痕等功能，单次制样量由12个增至30个，综合效能较原型机提升2.5倍，且具备全密闭结构和独立收尘功能，可有效提升作业效率、改善作业环境。"
+    },
+    {
+     "t": "金冠铜业阳极泥扩建项目顺利投产",
+     "d": "2026-09-20",
+     "u": "http://www.tlys.cn/news.aspx?cid=24536&classid=383",
+     "s": "日前，金冠铜业阳极泥扩建项目顺利投产，成功产出首炉金银合金。该项目采用“压力浸铜+卡尔多炉熔炼+高电流密度银电解+二次还原（或金电解）+铂钯精制”先进工艺，在回收金银的同时，可综合提取多种稀有稀散金属，有效实现资源“吃干榨净”。"
+    },
+    {
+     "t": "金隆铜业获铜陵市第六届QC小组成果发布第二名",
+     "d": "2026-09-20",
+     "u": "http://www.tlys.cn/news.aspx?cid=24534&classid=383",
+     "s": "日前，在铜陵市第六届QC小组成果发布赛上，金隆铜业《提高净液杂质砷脱除率》课题荣获本次QC小组成果发布赛第二名。下一步，该公司将进一步总结参赛经验，深化成果应用，力争再创佳绩。"
+    }
+   ]
+  },
+  {
    "name": "云南铜业",
    "code": "000878",
    "sector": "铜",
@@ -118,6 +1325,198 @@
      "d": "2026-09-09",
      "u": "https://finance.sina.com.cn/jjxw/2026-09-09/doc-inirexha3896664.shtml",
      "s": "（来源：财闻） 机构看好有色金属板块，铜铝等工业金属供需格局偏紧，新能源与AI产业链需求旺盛，板块具备防御与成长双重价值。 截至9月9日10点0分，上证指数涨0.21%，深证成指涨0.41%，..."
+    }
+   ]
+  },
+  {
+   "name": "西部矿业",
+   "code": "601168",
+   "sector": "铜",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.westmining.com/mtzx/xkxw/",
+   "news_url": "https://www.westmining.com/mtzx/xkxw/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 16,
+   "items": [
+    {
+     "t": "《生态湖盐》《生态湖盐评价技术规范》两项团体标准启动会在西宁召开",
+     "d": "2026-09-24",
+     "u": "https://www.westmining.com/mtzx/xkxw/202609/t20260924_33880.html",
+     "s": "青海盐业讯 近日，由中国盐业协会组织的《生态湖盐》《生态湖盐评价技术规范》两项团体标准启动会在西宁市青盐大厦召开。国家盐产品质量检验检测中心，以及青海盐业等单位代表参会。会议由中国盐业协会团体标准技术委员会主任赵建国主持。"
+    }
+   ]
+  },
+  {
+   "name": "洛阳钼业",
+   "code": "603993",
+   "sector": "钼",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.cmoc.com/html/Media/News/",
+   "news_url": "https://www.cmoc.com/html/Media/News/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 4,
+   "items": [
+    {
+     "t": "洛阳钼业完成15亿元科创债发行 获市场2.73倍认购",
+     "d": "2026-09-19",
+     "u": "https://www.cmoc.com/html/2026/News_0919/420.html",
+     "s": "募资计划全部用于偿还公司有息债务。本次债券发行主承销商及簿记管理人为中国银行，联席主承销商为工商银行、建设银行、招商银行、中信银行。经中诚信国际综合评定，洛阳钼业主体信用评级为AAA。"
+    },
+    {
+     "t": "再攀高峰 洛阳钼业上半年盈利161.52亿元 同比大增86.27%",
+     "d": "2026-08-19",
+     "u": "https://www.cmoc.com/html/2026/News_0819/415.html",
+     "s": "8月19日，洛阳钼业发布2026年上半年业绩报告， 主要指标再攀历史高峰 ：实现营业收入1,353.20亿元，同比增长42.78%，达到2025年全年近七成体量；归母净利润161.52亿元，同比大增86.27%，盈利接近去年全年的八成；基本每股收益0.76元，同比增长85.37%；"
+    },
+    {
+     "t": "奥丁矿业与厄瓜多尔政府签订采矿协议 凯歌豪斯金矿开发迈出关键一步",
+     "d": "2026-04-30",
+     "u": "https://www.cmoc.com/html/2026/News_0430/406.html",
+     "s": "4月27日，洛阳钼业旗下子公司奥丁矿业与厄瓜多尔政府正式签署凯歌豪斯金矿（Cangrejos Project）采矿协议，标志着这一世界级金矿项目开发迎来重要里程碑。"
+    },
+    {
+     "t": "洛阳钼业以“开门红”开启新纪元：单季盈利78亿元，再创历史新高",
+     "d": "2026-04-28",
+     "u": "https://www.cmoc.com/html/2026/News_0428/405.html",
+     "s": "4月24日晚，洛阳钼业发布2026年第一季度业绩报告。报告期内，公司实现营业收入664.03亿元，同比增长44.34%，环比去年第四季度增长8.50%；归母净利润达77.60亿元，接近2025年全年盈利的四成，同比增长96.65%，环比增长28.07%。基本每股收益为0.36元，同比增长100%；"
+    },
+    {
+     "t": "洛阳钼业旗下公司TFM铜产品获 LME 注册认证",
+     "d": "2026-03-28",
+     "u": "https://www.cmoc.com/html/2026/News_0328/400.html",
+     "s": "近日，洛阳钼业宣布，旗下在刚果（金）的子公司TFM产品品牌TFM-1正式通过伦敦金属交易所（LME）A级注册认证，纳入全球主流交割品牌体系。"
+    },
+    {
+     "t": "洛阳钼业2025年盈利203亿元 连续五年刷新历史佳绩",
+     "d": "2026-03-27",
+     "u": "https://www.cmoc.com/html/2026/News_0327/398.html",
+     "s": "3月27日，洛阳钼业发布的2025年度业绩报告显示，公司营业收入为2066.84亿元， 连续两年站稳两千亿元台阶 ；实现归母净利润203.39亿元，同比增长50.30%， 连续五年刷新佳绩 ；经营性净现金流实现 史上第二高 ，达到208.43亿元；总资产 首次突破两千亿元 ，达到2009."
+    }
+   ]
+  },
+  {
+   "name": "中国铝业",
+   "code": "601600",
+   "sector": "铝",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.chalco.com.cn/",
+   "news_url": "https://www.chalco.com.cn/",
+   "method": "html",
+   "unreach": "spa",
+   "stale": true,
+   "rank": 2,
+   "items": [
+    {
+     "t": "中国铝业关于股权激励部分限制性股票回购注销实施公告",
+     "d": "2026-09-11",
+     "u": "https://www.chalco.com.cn/tzzgx/thygg/202609/t20260911_177627.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份荣获第二十六届中国专利优秀奖",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177352.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份镓系列产品亮相首届有色钢铁融合发展论坛",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177351.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份获2026中国信息协会数据要素应用创新大赛...",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177350.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份两名青年科技人才入选行业人才计划",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177348.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份召开2026年劳动竞赛推进会",
+     "d": "2026-09-08",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177347.html",
+     "s": ""
+    },
+    {
+     "t": "利润总额同比大增98% 中国铝业中期增速再创历史新高",
+     "d": "2026-08-28",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202608/t20260828_176619.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2026年半年度报告摘要",
+     "d": "2026-08-28",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202608/t20260828_176606.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2026年半年度报告",
+     "d": "2026-08-28",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202608/t20260828_176605.html",
+     "s": ""
+    },
+    {
+     "t": "中铝股份5人获聘中铝集团首席技能大师",
+     "d": "2026-08-21",
+     "u": "https://www.chalco.com.cn/xwdt/gsyw/202608/t20260821_176122.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2025年年度报告（全文）",
+     "d": "2026-03-30",
+     "u": "https://www.chalco.com.cn/tzzgx/thygg/202603/t20260330_166168.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2025年半年度报告摘要",
+     "d": "2025-08-28",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202508/t20250828_154002.html",
+     "s": ""
+    },
+    {
+     "t": "中国铝业2024年年度报告全文",
+     "d": "2025-06-09",
+     "u": "https://www.chalco.com.cn/tzzgx/yjbg/ndbg/202506/t20250609_148836.html",
+     "s": ""
+    }
+   ]
+  },
+  {
+   "name": "南山铝业",
+   "code": "600219",
+   "sector": "铝",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.nanshan.com.cn/news.html",
+   "news_url": "https://www.nanshan.com.cn/news.html",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 14,
+   "items": [
+    {
+     "t": "烟台南山庄园葡萄酒有限公司 1.5吨天然气蒸汽锅炉项目竣工环保验收公示",
+     "d": "2026-05-18",
+     "u": "https://www.nanshan.com.cn/News_3/13.html",
+     "s": "根据《建设项目环境保护管理条例》和《建设项目竣工环境保护验收暂行办法》（国环规环评〔2017〕4号）要求，烟台南山庄园葡萄酒有限公司天然气蒸汽锅炉项目竣工环境保护验收工作有关情况公示如下："
+    },
+    {
+     "t": "龙口新花花生油加工有限公司浓香花生油生产线建设项目竣工环境保护验收公示",
+     "d": "2026-04-13",
+     "u": "https://www.nanshan.com.cn/News_3/11.html",
+     "s": "项目建设1条花生油生产线、3台油暂存罐、6台不锈钢储存罐、1条灌装生产线、1台振动筛、1台脉冲布袋除尘器。本次验收完成后，设备总产能为年产食用油量13700t。"
     }
    ]
   },
@@ -242,6 +1641,225 @@
    ]
   },
   {
+   "name": "神火股份",
+   "code": "000933",
+   "sector": "铝",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.shenhuo.com/home/newslist/newslist?categoryId=3",
+   "news_url": "http://www.shenhuo.com/home/newslist/newslist?categoryId=3",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 15,
+   "items": [
+    {
+     "t": "集团年产5万吨钠离子高性能电池铝箔项目开工",
+     "d": "2026-09-19",
+     "u": "http://www.shenhuo.com/home/content/content/?categoryId=20&articleId=1851",
+     "s": "王亚峰在开工仪式上致辞并强调，要加强组织领导，压实工作责任，倒排工期、挂图作战，严把安全关、质量关、环保关，确保项目早竣工、早投产、早达效，努力把项目建成国际一流的绿色化、智能化电池箔生产基地。"
+    },
+    {
+     "t": "《中国有色金属报》走进神火新材料科技有限公司：“内卷”...",
+     "d": "2026-05-12",
+     "u": "http://www.shenhuo.com/home/content/content/?categoryId=22&articleId=1204",
+     "s": "近日，《中国有色金属报》刊发了对神火新材的深度调研报道。报道聚焦铝加工行业 “内卷” 现状，剖析公司在技术突破、管理提效与产业升级中的实践路径。作为行业先进样本，此次权威媒体聚焦，既是对公司发展模式的认可，更为铝加工产业破局提供了新的视角和思路。"
+    }
+   ]
+  },
+  {
+   "name": "天山铝业",
+   "code": "002532",
+   "sector": "铝",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.tslyjt.com/node/48",
+   "news_url": "http://www.tslyjt.com/node/48",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 20,
+   "items": [
+    {
+     "t": "天山铝业公司生产稳定高效运行车间一线热火朝天赶产保供",
+     "d": "2026-04-03",
+     "u": "http://www.tslyjt.com/info/1102",
+     "s": "目前，公司 140万吨电解铝绿色低碳能效提升改造项目首批电解槽顺利达产，新槽建设全面铺开。"
+    },
+    {
+     "t": "科技创新结硕果 绿色智造启新程——天山铝业2025年科技创新斩获多项佳绩",
+     "d": "2026-04-03",
+     "u": "http://www.tslyjt.com/info/1101",
+     "s": "2025年，天山铝业集团始终高度重视科技创新工作，坚定不移实施创新驱动发展战略，将技术攻关摆在企业发展核心位置，聚焦绿色低碳转型、高端精深加工突破与智能化升级提速，在关键技术研发、科技成果转化、行业荣誉评定等领域接连实现重大突破，以硬核科创实力全面赋能企业高质量发展，充分彰显行业龙头的责任与担当。"
+    }
+   ]
+  },
+  {
+   "name": "山东黄金",
+   "code": "600547",
+   "sector": "黄金",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.sd-gold.com/column/81/",
+   "news_url": "https://www.sd-gold.com/column/81/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 5,
+   "items": [
+    {
+     "t": "集团召开新一轮找矿突破和资源获取工作调度会",
+     "d": "",
+     "u": "https://www.sd-gold.com/cmscontent/5810.html",
+     "s": "张晓海指出，今年以来，集团上下坚决落实省委、省人民政府的工作要求，主动担当作为，强化保障举措，狠抓推进落实，组织领导更加有力，制度机制逐步健全，数智赋能不断强化，工作成果持续凸显，取得了明显工作成效。"
+    },
+    {
+     "t": "集团与交通银行举行工作会谈并签署全面战略合作协议",
+     "d": "",
+     "u": "https://www.sd-gold.com/cmscontent/5809.html",
+     "s": "9月18日上午，山东黄金集团与交通银行在上海举行工作会谈并签署全面战略合作协议。山东黄金集团党委书记、董事长张晓海与交通银行党委书记、董事长任德奇围绕积极服务国家战略、全面深化务实合作、共促高质量发展等进行深入交流并见证签约。"
+    },
+    {
+     "t": "山东黄金地勘集团参与编制的《固体矿产绿色勘查规范》国家标准正式发布",
+     "d": "2026-09-17",
+     "u": "https://www.sd-gold.com/cmscontent/5804.html",
+     "s": "近日，在中国国际矿业大会绿色发展成果发布会上，GB/T48133—2026《固体矿产绿色勘查规范》正式发布。该项国家标准由国内多地多行业力量共同编制，山东黄金地勘集团作为12家起草单位之一，是全国黄金行业唯一一家参与该标准制定的企业单位。"
+    },
+    {
+     "t": "山金重工首项团体标准获批发布",
+     "d": "2026-09-14",
+     "u": "https://www.sd-gold.com/cmscontent/5805.html",
+     "s": "近日，由山东黄金集团山金重工牵头起草的团体标准T/SDMI0050-2026《分体式环形永磁无齿轮球磨机》，经山东省机械工业协会正式发布并实施，是山金重工在矿业装备标准化领域取得的重要里程碑。"
+    },
+    {
+     "t": "红岭矿业：细微之处挖出新效益",
+     "d": "2026-08-31",
+     "u": "https://www.sd-gold.com/cmscontent/5806.html",
+     "s": "提质增效，关键在“增”，核心在“挖”。面对价值创造的发展要求，山东黄金集团红岭矿业没有把目光只停留在“增产增收”上，而是从生产经营的细微之处寻找突破口，在一次次流程优化、一项项管理改进中，把被忽视的潜力挖出来，把分散的效益聚起来，让精打细算成为生产经营的鲜明底色。"
+    },
+    {
+     "t": "金创集团成果再次获得国家发明专利授权",
+     "d": "2026-08-25",
+     "u": "https://www.sd-gold.com/cmscontent/5747.html",
+     "s": "下一步，金创集团将以此次专利授权为契机，持续深耕地下工程安全防控核心技术，加快推进关键技术迭代升级与创新成果产业化落地，把技术优势加速转化为安全生产优势和企业发展优势，为企业安全、绿色、高质量发展持续注入科创动能。"
+    },
+    {
+     "t": "地矿工程公司牵头承担的自然资源部新一轮找矿突破战略行动科技支撑项目（第二批）成功立项",
+     "d": "2026-08-05",
+     "u": "https://www.sd-gold.com/cmscontent/5738.html",
+     "s": "该项目由海南山金矿业有限公司出资，地矿工程公司牵头，联合中国地质大学（北京）、中国地质大学（武汉）、海南省地质调查院等8家知名高校及企事业单位共同组建。研究团队产学研深度协同，汇聚了国家级、省部级人才及行业资深专家等骨干力量，依托10余个省部级以上科研平台，为项目的顺利实施提供了坚实的科技条件保障。"
+    }
+   ]
+  },
+  {
+   "name": "中金黄金",
+   "code": "600489",
+   "sector": "黄金",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.chinagoldgroup.com/",
+   "news_url": "https://www.chinagoldgroup.com/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 7,
+   "items": [
+    {
+     "t": "周洲：黄金行业迎来大有可为的战略机遇期",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1548347985945952256.html",
+     "s": "9月11日，2026中国国际矿业大会主题论坛在天津梅江会展中心举行。中国黄金协会会长，中国黄金集团有限公司党委书记、董事长周洲出席主题论坛并发表主旨演讲。"
+    },
+    {
+     "t": "央视财经| 博物馆内全方位体验黄金开采全流程",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551959640089034752.html",
+     "s": ""
+    },
+    {
+     "t": "中国财富网| 中国黄金集团发布科技创新路线图",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551877125680660480.html",
+     "s": "在创新平台建设方面，中国黄金集团与中国工程院院士李夕兵共建的院士专家工作站揭牌，聚焦有色金属安全高效采矿前沿研究；与中国工程院院士刘炯天共建的关键金属未来材料研究院签约揭牌，致力于关键金属新材料研发与产业化。此外，6家“中国黄金科技小院”同步挂牌运行，推动科研力量扎根生产一线。"
+    },
+    {
+     "t": "吉林日报| 黄金博物馆开放啦！",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551170665535504384.html",
+     "s": "9月19日，值此山河鎏金、万物丰成的美好时节，“金色吉林”吉林省秋季文旅推广活动暨黄金博物馆开放启动仪式在桦甸市夹皮沟镇正式启幕。"
+    },
+    {
+     "t": "中国吉林网| 夹皮沟的黄金博物馆，真正的金子，是人",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551170112294223872.html",
+     "s": "说回博物馆。展馆里除了“大金牛”，建设中的二期还有一条680米的井下矿车线，利用的是百年废弃矿巷，能让人真的下到矿洞里，看看一百多年来采矿是怎么变的。"
+    },
+    {
+     "t": "中国新闻网| 黄金博物馆吉林桦甸开馆 百年金矿焕新文旅地标",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551168483377545216.html",
+     "s": "中国黄金集团党委副书记、董事覃荆文在开馆仪式上表示，黄金博物馆不只是一座静态文化展馆，更是承载历史、赋能产业的载体。未来将以馆为媒，持续丰富业态、优化体验，为工业文旅提供可复制、可推广经验。"
+    },
+    {
+     "t": "央广网| 吉林这座黄金博物馆 19日正式开门迎客",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551167097340428288.html",
+     "s": "黄金是沉淀千年的文化符号，是现代工业的战略材料，也是连接历史与未来的纽带。它见证了文明兴衰，助力了产业崛起，支援了革命建设，凝结成民族精神中独特的底色。"
+    },
+    {
+     "t": "新华社| 盘活工业遗产 黄金博物馆开门迎客",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551166619487567872.html",
+     "s": "9月19日，由吉林省与中国黄金集团有限公司携手打造的黄金博物馆正式开馆迎客。位于吉林省桦甸市的夹皮沟金矿素有“中国黄金第一矿”之称，博物馆依托矿区建设，打破传统静态展陈模式，构建“地上全维度展示+井下沉浸式体验”模式，是集史料收藏、文化展示、文脉传承于一体的特色展馆。"
+    },
+    {
+     "t": "科技日报| 中国黄金集团全方位引育选聘人才，落地三大高能级创新平台",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551173253865668608.html",
+     "s": "会上，中国工程院院士唐菊兴、李夕兵、刘炯天、葛世荣分别围绕铜金地质勘查、硬岩资源安全高效开采、关键金属新材料、矿山智能化建设等领域作主旨报告，立足行业发展大势、聚焦产业核心痛点，为集团公司科技创新、产业升级、人才培育提供智力支撑和专业指导。"
+    },
+    {
+     "t": "光明网| 人才与科创双轮驱动 中国黄金集团打通人才与科技双向赋能通道...",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1550537771259527168.html",
+     "s": "本次大会既是中国黄金集团“十五五”人才强企、科技兴企的动员大会，也是改革创新、攻坚突破的誓师大会。"
+    },
+    {
+     "t": "黄金博物馆正式开放",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1550961481527328768.html",
+     "s": "黄金博物馆是中国黄金集团与吉林省深化战略合作的重点工程，依托有“中国黄金第一矿”之称的夹皮沟两百余年矿山历史与红色资源建设而成，立足国家工业遗产活化利用，集文物收藏、展陈教育、研学传播、文化交流于一体，填补了国内黄金工业专题展陈的空白，打造了G334文旅廊道工业文化新地标。"
+    },
+    {
+     "t": "中国黄金集团召开2026年干部人才暨科技创新大会...",
+     "d": "2026-09-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1550536441447055360.html",
+     "s": "中国工程院院士汪旭光、刘炯天、陆军、沈政昌、葛世荣、吴爱祥、唐菊兴、李夕兵，自然资源部、国务院国资委、国家矿山安全监察局相关司局领导，中国科学技术协会、中国有色金属工业协会、北京市科学技术协会、中国黄金协会相关领导出席会议，集团公司党委书记、董事长周洲出席会议并讲话，党委副书记、董事、工会主席覃荆文…"
+    }
+   ]
+  },
+  {
+   "name": "赤峰黄金",
+   "code": "600988",
+   "sector": "黄金",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.cfgold.com/col36/list",
+   "news_url": "https://www.cfgold.com/col36/list",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 12,
+   "items": [
+    {
+     "t": "自治区首家、首日落地！",
+     "d": "2026-09-18",
+     "u": "https://www.cfgold.com/col36/994",
+     "s": "9月14日，中国人民银行、国家外汇管理局联合发布的《关于跨国公司本外币跨境资金集中运营业务有关事宜的通知》（银发〔2026〕163号）正式实施。同日，由国家外汇管理局内蒙古自治区分局、赤峰市分局指导，中国银行赤峰分行协助赤峰黄金成功落地跨境本外币一体化资金池业务。"
+    }
+   ]
+  },
+  {
    "name": "湖南黄金",
    "code": "002155",
    "sector": "黄金",
@@ -344,6 +1962,210 @@
    ]
   },
   {
+   "name": "天齐锂业",
+   "code": "002466",
+   "sector": "锂",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.tianqilithium.com/news.aspx?t=27",
+   "news_url": "https://www.tianqilithium.com/news.aspx?t=27",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 9,
+   "items": [
+    {
+     "t": "可持续锂电池行业工作组正式启动 天齐锂业担任首个轮值主席",
+     "d": "2026-09-09",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1109",
+     "s": "9月3日， “可持续锂电池行业工作组”（Sustainable Lithium Battery Industry Working Group）在第四届零碳协同创新大会上正式启动。"
+    },
+    {
+     "t": "第四届零碳协同创新大会在蓉举行：共绘零碳生态，协同迈向系统重构与价值共赢",
+     "d": "2026-09-03",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1108",
+     "s": "中国市政工程西南设计研究总院党委书记、董事长程鹏，成都市科学技术协会副主席陈钢，国际财务报告准则基金会北京办公室能力建设主管程红粤，CDP全球环境信息研究中心中国区市场总监李蜚等嘉宾，也分别围绕本次大会主题进行了精彩分享。"
+    },
+    {
+     "t": "一图看懂 | 天齐锂业2026年半年度报告",
+     "d": "2026-08-28",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1106",
+     "s": "锂资源综合利用与新型电池基础锂材料四川省重点实验室2025年度学术委员会会议圆满召开"
+    },
+    {
+     "t": "天齐锂业实现首吨钽铌精矿交付",
+     "d": "2026-08-24",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1105",
+     "s": "钽、铌是高端制造、精密电子、先进新材料领域不可或缺的核心稀有金属，具备独特的材料性能，其产业附加值高、应用场景广阔，在全球新材料产业体系中占据重要地位。 查看详情 "
+    },
+    {
+     "t": "智汇天齐 共赢锂程 | 第五届天齐锂业创新季正式启动 查看详情 ",
+     "d": "2026-08-14",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1104",
+     "s": ""
+    },
+    {
+     "t": "天齐锂业2026年安全生产委员会半年总结会议圆满召开",
+     "d": "2026-08-13",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1101",
+     "s": "为总结2026年上半年EHS工作成效，明确下半年安全生产工作任务，进一步加强全员安全意识，推动公司安全生产形势持续稳定向好，天齐锂业股份有限公司于8月12日召开2026年安全生产委员会半年总结会议。 查看详情 "
+    },
+    {
+     "t": "天齐锂业伦交所ESG评级维持A，位居A股同行业公司第1名",
+     "d": "2026-07-21",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1100",
+     "s": "近期，伦敦证券交易所集团（简称“伦交所”）发布最新ESG评级结果，天齐锂业凭借在环境、社会及治理（ESG）领域的综合表现，获得A级。 查看详情 "
+    },
+    {
+     "t": "天齐锂业拟战略投资欣旺达动力，深化新能源产业链协同布局",
+     "d": "2026-07-20",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1098",
+     "s": "近期，天齐锂业股份有限公司（以下简称“天齐锂业”）全资子公司天齐锂业（射洪）有限公司（以下简称“射洪天齐”）拟以人民币1.5亿元自有资金，认购欣旺达动力科技股份有限公司（以下简称“欣旺达动力”）新增股份7,921.8106万股。本次交易完成后，射洪天齐预计将持有欣旺达动力0.55%的股权。"
+    },
+    {
+     "t": "跨越山海，因“锂”而聚 近日",
+     "d": "2026-06-22",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1084",
+     "s": "，来自孟加拉国、巴基斯坦、斯里兰卡三国的南亚国家法官研修班代表团与2026成都国际友城高校青年夏令营师生，先后到访天齐锂业。 查看详情 "
+    }
+   ]
+  },
+  {
+   "name": "赣锋锂业",
+   "code": "002460",
+   "sector": "锂",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.ganfenglithium.com/news.html",
+   "news_url": "https://www.ganfenglithium.com/news.html",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 10,
+   "items": [
+    {
+     "t": "赣锋锂业《可持续发展之路》系列纪录短片正式上线",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/186.html",
+     "s": "如今，Mariana项目已顺利投产，成为推动全球能源可持续发展的重要力量。对于一面是地球赋予的矿产资源，一面是自然赋予的珍稀物种，赣锋如何解算这道生态难题？南美高原的可持续发展承诺如何践行？"
+    },
+    {
+     "t": "赣锋锂业正式加入联合国全球契约组织",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/184.html",
+     "s": "近日，赣锋锂业正式加入联合国全球契约组织（United Nations Global Compact, UNGC），以更坚定的承诺推进企业社会责任与可持续发展，助力联合国可持续发展目标实现。"
+    },
+    {
+     "t": "赣锋锂业锂生态产业链一体化产品亮相2025CLNB新能源产业博览会",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/183.html",
+     "s": "赣锋持续推进固态锂电池的研发、生产和商业化应用，积极布局和开发高能量密度、高功率的动力电芯与电源系统产品，以满足不同领域需求。氧化物路线的高能量密度电源产品已经应用于低空经济领域，原理样件已经通过审核。"
+    },
+    {
+     "t": "ESIE2025圆满收官！赣锋全新6.25MWh储能系统成焦点，储能...",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/182.html",
+     "s": "在展会期间中关村储能产业技术联盟发布的2024年度中国储能企业系列榜单中，赣锋锂电入围2024年度全球市场储能电池出货量排行榜top10。"
+    },
+    {
+     "t": "丰城赣锋入选江西省2025年首批“数智工厂”示范企业",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/181.html",
+     "s": "在数字化领域，丰城赣锋基于集团统一的数据采集平台，通过遍布于各个环节的先进传感器、条码等组件，实时采集工厂各项数据，为工厂运行“把脉”；"
+    },
+    {
+     "t": "赣锋锂业一体化布局固态电池，关键原料硫化锂已具备量产能力",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/180.html",
+     "s": "在负极层面， 赣锋超薄锂带同样具备量产能力，可针对循环性能、加工性能、电化学稳定性等各类需求提供定制化解决方案。赣锋已实现300mm宽度的超宽幅超薄锂带量产，铜锂复合带中锂箔厚度可达到3微米。"
+    },
+    {
+     "t": "赣锋锂业推出长续航全地形机器人电池",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/179.html",
+     "s": "在阿西莫夫写出《机器人系列》的80年后，科幻作品中的机器人时代已在我们面前。四足机器人、人形机器人等新品层出不穷，具身智能产业发展不断提速，2025年《政府工作报告》中也明文指出：“大力发展智能机器人等新一代智能终端以及智能制造装备”。"
+    },
+    {
+     "t": "赣锋锂业牵头制定的这项标准入选工信部标准应用推广典型案例",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/178.html",
+     "s": "近期，国家工信部发布2024年百项团体标准应用推广典型案例名单，由赣锋锂业主持制定的团体标准《锂盐加工行业绿色工厂评价要求》（T/CNIA0159-2022）经过专家层层遴选成功入选。"
+    }
+   ]
+  },
+  {
+   "name": "华友钴业",
+   "code": "603799",
+   "sector": "钴",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.huayou.com/news/corporate-news",
+   "news_url": "https://www.huayou.com/news/corporate-news",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 8,
+   "items": [
+    {
+     "t": "华友钴业联合发起《全球矿业可持续发展联合倡议》",
+     "d": "2026-09-15",
+     "u": "https://www.huayou.com/news/corporate-news/755",
+     "s": "近日，在联合国全球契约组织（UNGC）第二届全球企业高质量共建“一带一路”（新加坡）峰会上，华友钴业、友山科技等18家全球矿业及产业链企业共同发起《全球矿业可持续发展联合倡议（GMSA）》。"
+    },
+    {
+     "t": "华友津巴布韦华景科技通过ISO 37301认证 近日，华友钴业旗下津巴布韦华景科技有限公司正式通过英国标准协会（BSI）ISO",
+     "d": "2026-09-13",
+     "u": "https://www.huayou.com/news/corporate-news/751",
+     "s": "37301 合规管理体系认证，成为非洲首家获此认证的硫酸锂生产企业。"
+    },
+    {
+     "t": "华友控股集团董事长陈雪华致全体华友讲师的贺信 全体华友讲师们： 大家好！",
+     "d": "2026-09-10",
+     "u": "https://www.huayou.com/news/corporate-news/749",
+     "s": "值此第42个教师节到来之际，我谨代表公司，向你们致以节日的问候和诚挚的祝福！"
+    },
+    {
+     "t": "华友控股集团再次荣登民营企业500家创新类两张榜单！",
+     "d": "2026-09-10",
+     "u": "https://www.huayou.com/news/corporate-news/748",
+     "s": "9月9日，全国工商联在2026民营经济创新发展大会上发布民营企业研发投入500家和发明专利500家两张榜单，华友控股集团再次上榜，位列研发投入榜第121位，发明专利榜第290位。"
+    }
+   ]
+  },
+  {
+   "name": "藏格矿业",
+   "code": "000408",
+   "sector": "锂",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.zanggekuangye.com/news/cropnews/index.html",
+   "news_url": "http://www.zanggekuangye.com/news/cropnews/index.html",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 17,
+   "items": [
+    {
+     "t": "关于麻米措矿业取得采矿许可证的公告",
+     "d": "2026-09-22",
+     "u": "http://www.zanggekuangye.com/news/cropnews/1961814261197963267.html",
+     "s": "《采矿许可证》的取得，赋予了麻米措矿业合法开采盐湖资源的权利，公司能够按照规划对麻米错盐湖的锂硼矿资源进行有序开发；有利于取得当地金融机构的授信支持，为项目建设提供充足的资金保障；有利于与其他企业开展合作，加快项目建设的推进。"
+    },
+    {
+     "t": "藏格矿业成功签约刚果（布）Kanga钾盐项目",
+     "d": "2026-09-22",
+     "u": "http://www.zanggekuangye.com/news/cropnews/2102302762270789634.html",
+     "s": "2026年9月18日，藏格矿业股份有限公司（证券代码：000408，以下简称“公司”）收购Kanga Potash（以下简称“KP公司”）92%股权的签约仪式在成都市银泰中心2号楼29层顺利完成，双方正式签署《股份买卖协议》。"
+    },
+    {
+     "t": "藏格矿业首次登榜《福布斯》全球上市企业2000强",
+     "d": "2026-06-26",
+     "u": "http://www.zanggekuangye.com/news/cropnews/2070422467884158977.html",
+     "s": "日前，《福布斯》2026全球上市企业2000强榜单正式发布。藏格矿业首次跻身榜单，位列第1834位，成功迈入全球上市企业2000强行列。凭借钾、锂、铜多元资源协同布局、持续增强的盈利能力以及稳健的资产规模，公司综合实力获得国际权威榜单认可，在国内盐湖资源开发领域进一步彰显竞争优势。"
+    }
+   ]
+  },
+  {
    "name": "北方稀土",
    "code": "600111",
    "sector": "稀土",
@@ -430,6 +2252,547 @@
      "d": "2026-09-14",
      "u": "https://finance.sina.com.cn/roll/2026-09-14/doc-inirveau4024900.shtml",
      "s": "2026-09-14 17:15 美联储加息“箭在弦上”？霍尔木兹通航受挫，有色ETF震荡拉锯，华宝基金：宏观扰动落地后或迎新阶段 2026-09-14 16:17 09月14日镨钕合金885000.00元/吨 90天上涨4.12% 2026-09-14 14:17"
+    }
+   ]
+  },
+  {
+   "name": "中国稀土",
+   "code": "000831",
+   "sector": "稀土",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.regcc.cn/zgxtjt/jtnew/list_9.shtml",
+   "news_url": "https://www.regcc.cn/zgxtjt/jtnew/list_9.shtml",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 22,
+   "items": [
+    {
+     "t": "中国稀土集团与中国科学院宁波材料所举行工作会谈",
+     "d": "2026-02-05",
+     "u": "https://www.regcc.cn/zgxtjt/jtnew/202602/feea221748d646699946dbfc00912888.shtml",
+     "s": "2月5日，中国稀土集团党委书记、董事长刘雷云在总部与中国科学院宁波材料所所长王立平一行举行工作会谈。中国科学院院士沈保根，集团公司董事会秘书杨杰，中国科学院宁波材料所党委书记张家元出席。"
+    },
+    {
+     "t": "中国稀土集团召开2026年科技工作会",
+     "d": "2026-01-24",
+     "u": "https://www.regcc.cn/zgxtjt/jtnew/202601/ef7caedf431140d58ffd6f0e1b774540.shtml",
+     "s": "1月23日，中国稀土集团在总部召开2026年科技工作会，深入贯彻落实党中央关于科技创新的决策部署和国务院国资委有关工作要求，统筹谋划全年科技创新重点工作。集团公司党委书记、董事长刘雷云出席会议并讲话，党委副书记、董事、总经理李志辉主持会议。集团公司党委领导杨国安、刘华斌、王涛、郭良金、谢志宏出席。"
+    },
+    {
+     "t": "中国稀土集团和福建省工控集团举行工作会谈",
+     "d": "2026-01-20",
+     "u": "https://www.regcc.cn/zgxtjt/jtnew/202601/70d999dc99124f9da7b203d0c3761b91.shtml",
+     "s": "1月20日，中国稀土集团党委书记、董事长刘雷云在总部与福建省工业控股集团有限公司党委书记、董事长杨方一行举行工作会谈。集团公司党委副书记、董事、总经理李志辉，党委委员、总会计师郭良金；"
+    }
+   ]
+  },
+  {
+   "name": "驰宏锌锗",
+   "code": "600497",
+   "sector": "铅锌",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.chxz.com/xwzx/zhxw/",
+   "news_url": "http://www.chxz.com/xwzx/zhxw/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 21,
+   "items": [
+    {
+     "t": "奋战“春天里”，启航“十五五”：会泽矿业实现首月“开门红”",
+     "d": "2026-04-10",
+     "u": "http://www.chxz.com/xwzx/zhxw/202604/t20260410_167013.html",
+     "s": "时序开新局，奋进正当时。会泽矿业采、掘、充、运、选全链条高效协同，顺利完成1月份各项生产任务。其中，掘进工程量、铅锌精矿金属量月度计划达成率分别为111.26%、113.82%，铅选矿回收率同比提升0.09%，锌选矿回收率同比提升0.13%，超额完成月度目标任务，成功实现首月“开门红”。"
+    },
+    {
+     "t": "“小投入”撬动“大效益”",
+     "d": "2026-02-02",
+     "u": "http://www.chxz.com/xwzx/zhxw/202602/t20260202_163548.html",
+     "s": "这项仅用半年时间就完成建设投产的硫精矿产率提升流程改造项目，是青海鸿鑫2025年“两带两创”重点项目，它用“小投入”撬动了“大效益”。"
+    },
+    {
+     "t": "金鼎锌业入选云南省2025年度省级绿色矿山",
+     "d": "2026-02-02",
+     "u": "http://www.chxz.com/xwzx/zhxw/202602/t20260202_163547.html",
+     "s": "近日，云南省自然资源厅发布公告，金鼎锌业兰坪铅锌矿正式入选“云南省2025年度省级绿色矿山”名录。这标志着金鼎锌业绿色发展成效获得认可，为企业迈向国家级绿色矿山、实现高质量可持续发展奠定坚实基础。"
+    },
+    {
+     "t": "在矿山，把青春“打磨”成光",
+     "d": "2026-02-02",
+     "u": "http://www.chxz.com/xwzx/zhxw/202602/t20260202_163546.html",
+     "s": "从11月启动到12月落幕，“青锋淬炼 创赢驰宏”不只是一句响亮口号，更是一段交织着汗水、执着与成长的青春修行，在企业的精心浇灌下，绽放出青年与企业共成长的绚丽光彩。"
+    },
+    {
+     "t": "高原矿山的“破题者”——青海鸿鑫2025年科技创新工作侧记",
+     "d": "2026-02-02",
+     "u": "http://www.chxz.com/xwzx/zhxw/202602/t20260202_163545.html",
+     "s": "但这里从不缺直面挑战的“破题者”。青海鸿鑫的技术人员，像扎根戈壁的“骆驼刺”，耐得住高寒缺氧的考验；又如精雕细琢的“昆仑玉”匠人，守得住攻坚克难的匠心。"
+    },
+    {
+     "t": "精准到“厘米”，安全“看得见”",
+     "d": "2026-02-02",
+     "u": "http://www.chxz.com/xwzx/zhxw/202602/t20260202_163544.html",
+     "s": "此次升级针对原有系统“范围性读卡、定位模糊”等痛点，分阶段推进技术改造。一方面部署UWB精确定位系统，集成通信、环境监测与视频监控等功能，推动信息互联；"
+    },
+    {
+     "t": "青海鸿鑫机修车间“焕新颜”",
+     "d": "2026-01-16",
+     "u": "http://www.chxz.com/xwzx/zhxw/202601/t20260116_162674.html",
+     "s": "“以前工具也有固定区域，但找起来得核对清单；现在标签清清楚楚，一眼就能定位！”走进青海鸿鑫选矿厂机修车间，焊工李冲冲着规整的钳工区笑了。"
+    },
+    {
+     "t": "青海鸿鑫攻克磨矿智能化关键技术",
+     "d": "2026-01-16",
+     "u": "http://www.chxz.com/xwzx/zhxw/202601/t20260116_162619.html",
+     "s": "近日，青海鸿鑫“磨矿流程智能化控制技术研究与应用”项目取得重要进展。通过技术攻关，磨矿效率提升7.573%，为后续浮选工序创造了更优条件，有力保障了选矿指标稳定；同时，磨机吨矿钢球单耗降低0.04千克，降本增效成果显著。"
+    },
+    {
+     "t": "这五年，我们于变局中开新局——金鼎锌业“十四五”跨越发展之路",
+     "d": "2026-01-16",
+     "u": "http://www.chxz.com/xwzx/zhxw/202601/t20260116_162618.html",
+     "s": "5年来，我们穿越行业周期波动，营业收入增长22.98%。同时，坚持创新驱动发展，累计获授权专利93件，构建起自主知识产权技术体系。更振奋人心的是，企业创新发展、效益向好时，员工共享成果，员工人均工资逐年增长，员工幸福感和获得感同步提升。"
+    }
+   ]
+  },
+  {
+   "name": "中金岭南",
+   "code": "000060",
+   "sector": "铅锌",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.nonfemet.com/channel/74",
+   "news_url": "https://www.nonfemet.com/channel/74",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 25,
+   "items": [
+    {
+     "t": "中金岭南凡口铅锌矿顺利通过安全生产许可证延期换证现场复核",
+     "d": "2026-07-06",
+     "u": "https://www.nonfemet.com/info/5178",
+     "s": "本次复核严格对照《安全生产许可证条例》《金属非金属矿山安全规程》等法规标准，采用资料审查与现场实地核查同步推进的方式，全方位排查矿山安全生产各项工作。"
+    },
+    {
+     "t": "中金岭南广西矿业西回风井风机试车成功 即将投入使用",
+     "d": "2026-07-03",
+     "u": "https://www.nonfemet.com/info/5176",
+     "s": "7月1日，中金岭南广西矿业（以下简称“广西矿业”）西回风井通风机，经过48小时连续带负荷联动试车，设备运转平稳，各项参数达标，圆满完成试运行，具备投入使用条件，标志着盘龙铅锌矿通风系统建设取得关键性突破，为6000吨/日规模化生产提供了坚实安全保障。"
+    },
+    {
+     "t": "中金岭南广西矿业新选矿厂浮选机单机空载试车成功",
+     "d": "2026-06-22",
+     "u": "https://www.nonfemet.com/info/5161",
+     "s": "浮选机单机空载试车顺利完成，为推动新选矿厂向投产运行目标迈出了关键一步。下一步，广西矿业将加紧6000t/d扩产改造新选矿厂磨矿分级、浮选全流程无负荷联动带水试车的推进，全面检验系统设备联动、连锁及自动控制功能，保障选矿系统按期实现投料试产目标。"
+    },
+    {
+     "t": "“资源筑基、协作共生” 助力中金岭南“复兴计划”落地",
+     "d": "2026-06-08",
+     "u": "https://www.nonfemet.com/info/5154",
+     "s": "面对当前全球矿产市场竞争加剧、供应链风险持续攀升，提质创效、协同稳盘成为海外贸易工作的核心任务，作为供应链事业部中金香港公司副总经理，我始终以“资源筑基、协作共生”为主线，带领团队拓资源、强协同、防风险，持续为公司“复兴计划”赋能增效。"
+    },
+    {
+     "t": "中金科技所属山东中金新材：延链就是我们的“复兴”",
+     "d": "2026-06-05",
+     "u": "https://www.nonfemet.com/info/5146",
+     "s": "在中金岭南 打造具有全球竞争力的有色 金属全产业链国际矿冶集团 、实现 “复兴计划”的进程 中， 中金科技所属 山东中金新材的使命就是把承上启下的那根 产业 链条 彻底 打通。"
+    },
+    {
+     "t": "中金铜业：以绿为底 向新而行 以绿色低碳转型助力企业高质...",
+     "d": "2026-06-05",
+     "u": "https://www.nonfemet.com/info/5145",
+     "s": "2026年6月5日是第55个世界环境日，主题为“全面绿色转型，共建美丽中国”。作为铜产业链绿色转型先行者，中金岭南所属中金铜业深植“绿水青山就是金山银山”理念，走出一条现代化、绿色、低碳、智能、高效的高质量发展之路，用实干书写新时代传统企业绿色转型答卷。"
+    },
+    {
+     "t": "凡口矿井下铲运装备智能化实现关键突破：地下铲运机无人驾驶...",
+     "d": "2026-05-27",
+     "u": "https://www.nonfemet.com/info/5122",
+     "s": "试运行期间，系统累计生产15日，完成生产运行181趟、空车运行15趟，出矿800余吨，最高行驶速度达10公里/小时。系统支持自动驾驶与远程遥控铲运作业两种模式，操作人员可根据作业场景灵活切换。"
+    },
+    {
+     "t": "康发公司：启航“十五五” 聚力谋新篇 以“金牌管家...",
+     "d": "2026-05-26",
+     "u": "https://www.nonfemet.com/info/5117",
+     "s": "中金岭南 “复兴计划”的号角已响彻云霄，“十五五”规划的蓝图正待挥毫。作为公司服务体系的关键一环，中金岭南所属康发公司深知重任在肩，深刻领悟FAITH经营理念的核心要义， 国企复兴从来不是头部企业的独角戏，而是全链条各环节的同频共振；基层单元的微光汇聚，方能照亮高质量发展的整片星河 。"
+    },
+    {
+     "t": "供应链事业部中金香港公司：以金融贸易双循环打造境外供应链...",
+     "d": "2026-05-26",
+     "u": "https://www.nonfemet.com/info/5123",
+     "s": "中金香港公司强化香港矿业托管与双平台一体化管理，为海外企业筹备预付款融资授信，严格控制境外融资成本；加快建设境外财资中心与大宗商品集采集销中心，打造贸易与金融并重的利润中心，加快建成境外“采销融管”一体化的价值中心。"
+    }
+   ]
+  },
+  {
+   "name": "锡业股份",
+   "code": "000960",
+   "sector": "锡",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.ytc.cn/xwdt1/gsxw.htm",
+   "news_url": "https://www.ytc.cn/xwdt1/gsxw.htm",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 18,
+   "items": [
+    {
+     "t": "喜报！云锡2项成果获云南省2025年度科学技术奖励",
+     "d": "2026-09-16",
+     "u": "https://www.ytc.cn/info/1024/16311.htm",
+     "s": "9月15日，2025年度云南省科学技术奖励大会在昆明海埂会堂顺利召开。云锡《数据驱动下的高性能锡铟新材料制备关键技术及应用》《甲基锡系列新型热稳定剂制备关键技术及产业化应用》2个项目分别荣获科学技术进步奖一等奖、二等奖。"
+    },
+    {
+     "t": "云锡与国开行云南分行签署战略合作协议",
+     "d": "2026-09-02",
+     "u": "https://www.ytc.cn/info/1024/16299.htm",
+     "s": "根据协议，双方将本着合作共赢、互惠互利、共同发展的宗旨，发挥各自优势，在保持锡铟资源勘探开发、采选冶、精深加工等传统优势领域良好合作的基础上，积极培育绿色矿山、循环经济、绿美产业链，深化产融协同创新，在重大项目建设、锡铟新材料、高端精深加工、绿色低碳转型、数智化矿山、资源综合利用、跨境资源合作等多领…"
+    },
+    {
+     "t": "大井子锡业公司首批“YT”牌锡锭顺利下线",
+     "d": "2026-09-02",
+     "u": "https://www.ytc.cn/info/1024/16296.htm",
+     "s": "百日攻坚，系统检修保复产。 股权交割后，云锡大井子锡业公司项目工作组闻令而动、火速进驻，全面打响复工复产百日攻坚战。"
+    },
+    {
+     "t": "云锡大井子锡业公司举行复工复产仪式",
+     "d": "2026-09-02",
+     "u": "https://www.ytc.cn/info/1024/16298.htm",
+     "s": "8月14日，云锡大井子锡业公司圆满举行复工复产仪式，标志着云锡北方资源基地建设取得关键性突破。作为云锡锚定国家战略性矿产资源安全、衔接“十五五”产业规划的战略落子，生产、安全、环保、化验计量系统全部达标，正式转入烘炉试生产阶段，拉通云锡南北产业协同布局，为赤峰“北方锡都”建设筑牢坚实产业支撑。"
+    },
+    {
+     "t": "云锡“期中答卷”分量十足 主要经营指标大幅超额完成",
+     "d": "2026-07-24",
+     "u": "https://www.ytc.cn/info/1024/16232.htm",
+     "s": "产业布局再优化 。“走出去”战略加速落地，完成赤峰大井子锡业股权收购，形成北方锡冶炼产能布局和战略性锡产业基地“战略支点”，北方资源基地提速打造。云锡近10年最大的深加工产业项目——新材料产业园（华东）项目完成联合带料试车并产出合格产品，形成产业前移稳定产能和新的“利润增长点”。"
+    },
+    {
+     "t": "云锡锡业分公司发明专利入围中国专利优秀奖",
+     "d": "2026-07-10",
+     "u": "https://www.ytc.cn/info/1024/16234.htm",
+     "s": "近日，国家知识产权局公示第二十六届中国专利奖评审结果，锡业分公司自主研发的发明专利“一种含锡物料熔炼的系统及方法”入围中国专利优秀奖。"
+    },
+    {
+     "t": "我们的南博会：“数智云锡”闪耀亮相第10届南博会",
+     "d": "2026-06-11",
+     "u": "https://www.ytc.cn/info/1024/16176.htm",
+     "s": "世界锡业看中国，中国锡业看云锡。云锡将持续深化AI赋能，以锡铟基础材料支撑AI时代，以全产业链数智能力引领行业未来，进一步做强“全球最优锡铟产品供应商、全球最优锡铟解决方案提供商”，加快创建锡铟行业世界一流企业。"
+    },
+    {
+     "t": "云锡与赤峰市政府、兴业银锡签订锡产业发展合作备忘录",
+     "d": "2026-05-25",
+     "u": "https://www.ytc.cn/info/1024/16134.htm",
+     "s": "吴君代表控股公司感谢赤峰市委、市政府为云锡发展提供了优良沃土，表示将与兴业银锡发挥协同优势，稳定锡原料保障，推动产业迭代升级，完善提升区域产业链条，最大化发挥赤峰市锡资源价值。"
+    }
+   ]
+  },
+  {
+   "name": "厦门钨业",
+   "code": "600549",
+   "sector": "钨",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "https://www.cxtc.com/News.aspx",
+   "news_url": "https://www.cxtc.com/News.aspx",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 23,
+   "items": [
+    {
+     "t": "厦门钨业高强钨丝专利产业化案例入选国家级典型案例",
+     "d": "",
+     "u": "https://www.cxtc.com/",
+     "s": ""
+    }
+   ]
+  },
+  {
+   "name": "Albemarle",
+   "code": "ALB",
+   "sector": "锂",
+   "region": "NA",
+   "exchange": "NYSE",
+   "home": "https://www.albemarle.com/news",
+   "news_url": "https://www.albemarle.com/news",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 32,
+   "items": [
+    {
+     "t": "在2026年3月31日的新闻中，随着各国加强电网和支持能源转型，电网储能101",
+     "d": "2026-09-03",
+     "u": "https://www.albemarle.com/global/en/news/grid-energy-storage-101-what-it-and-why-it-matters",
+     "s": "：它是什么以及为什么它很重要随着各国加强电网和支持能源转型，对固定储能的需求正在飙升，预计到2026年产量将增加。人工智能和数据中心正在加速电力需求，而lithiu",
+     "t_en": "In The News March 31, 2026 Grid Energy Storage 101: What It Is and Why It Matters Demand for stationary energy storage is surging as countries strengthen grids and support the energy transition, with output expected to jump in 2026. AI and data centers are accelerating electricity demand, and lithium-based batteries help balance peak loads, reduce outages, and delay grid upgrades"
+    },
+    {
+     "t": "新闻稿2026年9月3日Albemarle宣布首席执行官继任计划Ragnar",
+     "d": "2026-08-05",
+     "u": "https://www.albemarle.com/global/en/news/albemarle-announces-ceo-succession-plan",
+     "s": "UDD 被任命为总裁兼首席执行官，自 2027年 2月 1日起生效 Kent Masters将担任北卡罗来纳州夏洛特市执行主席 ，",
+     "t_en": "Press Releases September 03, 2026 Albemarle Announces CEO Succession Plan Ragnar Udd Appointed President and CEO, Effective February 1, 2027 Kent Masters to Serve as Executive Chairman CHARLOTTE, N.C., Sept. 3, 2026 /PRNewswire/ -- Albemarle Corporation (NYSE: ALB), a global leader in providing essential elements for mobility, energy, connectivity and health, today"
+    },
+    {
+     "t": "新闻稿2026年7月21日， Albemarle宣布北卡罗来纳州夏洛特的季度普通股股息， 2026年7月21日/美通社/--",
+     "d": "2026-08-05",
+     "u": "https://www.albemarle.com/global/en/news/albemarle-announces-quarterly-common-stock-dividend-7",
+     "s": "Albemarle Corporation (NYSE: ALB)董事会今天宣布 ，其宣布每股 0.41的季度普通股股息。股息 $ ，它有一个",
+     "t_en": "Press Releases July 21, 2026 Albemarle Announces Quarterly Common Stock Dividend CHARLOTTE, N.C., July 21, 2026 /PRNewswire/ -- The Board of Directors of Albemarle Corporation (NYSE: ALB) today announced that it declared a quarterly common stock dividend of $0.41 per share. The dividend, which has an annualized rate of $1.64, is payable Oct. 1, 2026, to shareholders of record at"
+    },
+    {
+     "t": "新闻稿2026年8月5日Albemarle公布2026年第二季度业绩北卡罗来纳州夏洛特2026年8月5日/美通社/--为交通、能",
+     "d": "2026-07-23",
+     "u": "https://www.albemarle.com/global/en/news/albemarle-reports-second-quarter-2026-results",
+     "s": "源、连通性和健康提供基本要素的全球领导者Albemarle Corporation (NYSE: ALB)今日宣布第二季度业绩",
+     "t_en": "Press Releases August 05, 2026 Albemarle Reports Second Quarter 2026 Results CHARLOTTE, N.C., Aug. 5, 2026 /PRNewswire/ -- Albemarle Corporation (NYSE: ALB), a global leader in providing essential elements for mobility, energy, connectivity and health, today announced its results for the second quarter ended June 30, 2026. Second Quarter 2026 and Recent Highlights (Unless"
+    },
+    {
+     "t": "新闻稿2026年7月23日， Albemarle任命Eduardo Bartolomeo为北卡罗来纳州夏洛特市董事会成员。",
+     "d": "2026-07-21",
+     "u": "https://www.albemarle.com/global/en/news/albemarle-appoints-eduardo-bartolomeo-board-directors",
+     "s": "北卡罗来纳州夏洛特，",
+     "t_en": "Press Releases July 23, 2026 Albemarle Appoints Eduardo Bartolomeo to Board of Directors CHARLOTTE, N.C., July 23, 2026 /PRNewswire/ -- Albemarle Corporation (NYSE: ALB), a global leader in providing essential elements for mobility, energy, connectivity and health, today announced that its Board of Directors (the \"Board\") has appointed Eduardo Bartolomeo to the Board, effective July 21"
+    },
+    {
+     "t": "可持续发展2026年6月5日Albemarle发布《2025年可持续发展报告》该报告重点介绍了在管理、创新和卓越运营方面取得的进",
+     "d": "2026-03-31",
+     "u": "https://www.albemarle.com/global/en/news/albemarle-publishes-2025-sustainability-report",
+     "s": "报告强调了在管理、创新和卓越运营方面取得的进展。",
+     "t_en": "Sustainability June 05, 2026 Albemarle Publishes 2025 Sustainability Report The report highlights progress in stewardship, innovation and operational excellence."
+    },
+    {
+     "t": "创新2026年1月14日专家之声：巴吞鲁日Albemarle工艺发展中心的核磁共振（ NMR ）光谱化学家Zhaoxiong",
+     "d": "2026-03-31",
+     "u": "https://www.albemarle.com/global/en/news/expert-voices-science-seeing-invisible",
+     "s": "（ Norm ） Zheng博士使用先进的成像技术—不是扫描身体，而是分析分子",
+     "t_en": "Innovation January 14, 2026 Expert Voices: The Science of Seeing the Invisible Dr. Zhaoxiong (Norm) Zheng, a nuclear magnetic resonance (NMR) spectroscopy chemist at Albemarle’s Process Development Center in Baton Rouge, uses advanced imaging technology — not to scan bodies, but to analyze the molecular structure of specialty chemicals, helping teams across the company"
+    },
+    {
+     "t": "在2026年3月31日的新闻中，锂化学的见解：塑造先进橡胶材料锂化学是生产耐用、有弹性和弹性的先进橡胶材料的基础。",
+     "d": "2026-01-14",
+     "u": "https://www.albemarle.com/global/en/news/insights-lithium-chemistry-shaping-advanced-rubber-materials",
+     "s": "Albemarle has more than 100 years of experience in pioneering the responsible use of lithium, most recently for use in lithium-ion batteries.",
+     "t_en": "In The News March 31, 2026 Insights in Lithium Chemistry: Shaping Advanced Rubber Materials Lithium chemistry is fundamental in producing advanced rubber materials that are durable, elastic and resilient. It enables precise polymer engineering, improving performance across various industries including mobility, infrastructure and specialty products."
+    }
+   ],
+   "zh": "雅保",
+   "en": "Albemarle"
+  },
+  {
+   "name": "盐湖股份",
+   "code": "000792",
+   "sector": "锂",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.qhyhgf.com/",
+   "news_url": "http://www.qhyhgf.com/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "盐湖股份：关于与关联方共同投资参与中试项目暨关联交易的公告2026-031",
+     "d": "2026-09-15",
+     "u": "http://www.qhyhgf.com/newsinfo/11310258.html",
+     "s": ""
+    },
+    {
+     "t": "盐湖股份：十五五发展规划暨三年行动方案（2026-2028）纲要",
+     "d": "2026-08-31",
+     "u": "http://www.qhyhgf.com/newsinfo/11310270.html",
+     "s": ""
+    },
+    {
+     "t": "盐湖股份：青海盐湖工业股份有限公司境外投资管理办法",
+     "d": "2026-08-31",
+     "u": "http://www.qhyhgf.com/newsinfo/11310264.html",
+     "s": ""
+    },
+    {
+     "t": "盐湖股份：关于召开2026年第二次临时股东会的通知2026-032",
+     "d": "2026-08-31",
+     "u": "http://www.qhyhgf.com/newsinfo/11310260.html",
+     "s": ""
+    },
+    {
+     "t": "2026年中国（格尔木）锂业大会暨第四届锂电新能源发展大会在格尔木隆重召开",
+     "d": "2026-08-03",
+     "u": "http://www.qhyhgf.com/newsinfo/11304576.html",
+     "s": "开幕式上，中国有色金属工业协会党 委书记敖宏致辞并讲话，高度总结十四五有色行业取得的成果，并就推动锂行业高质量发展分享了认识与思考，中国盐湖党委副书记、董事、总经理王祥文，广州期货交易所副总经理曹子海，藏青工业园区管委会党组成员，副主任范兴伟分别为大会致辞。"
+    },
+    {
+     "t": "3万＋，察尔汗盐湖景区单日游客接待量再获新高！",
+     "d": "2026-07-22",
+     "u": "http://www.qhyhgf.com/newsinfo/11301394.html",
+     "s": "8月3日，察尔汗盐湖景区单日游客接待量首次突破3万大关，较2025年最高日接待量增长43%，创下运营以来单日客流新纪录。这串数字背后，是万千游客跨越山海的奔赴与信任，是全体员工默默坚守的付出，更折射出景区从“热门打卡”向“品质长红”转型的坚实步伐。"
+    },
+    {
+     "t": "地企协同拓新局 共筑盐湖产业高地——青海盐湖工业股份有限公司与青海省核工业地质局签署战略合作框架协议",
+     "d": "2026-07-16",
+     "u": "http://www.qhyhgf.com/newsinfo/11271744.html",
+     "s": "7月22日，青海盐湖工业股份有限公司与青海省核工业地质局战略合作框架协议签约仪式在青海省核工业地质局生物园区基地举行。盐湖股份党委书记、董事长侯昭飞与青海省核工业地质局党委书记、局长李为民签署战略合作框架协议，青海省核工业地质局党委委员、副局长段建华主持仪式，双方相关负责人出席。"
+    }
+   ]
+  },
+  {
+   "name": "中矿资源",
+   "code": "002738",
+   "sector": "锂",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.sinomine.cn/",
+   "news_url": "http://www.sinomine.cn/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "竣工投产 逐光启航！中矿卡通巴选矿厂正式投产运营",
+     "d": "",
+     "u": "http://www.sinomine.cn/xwdti/426.html",
+     "s": "2026年9月21日，中矿卡通巴矿业有限公司（以下简称“卡通巴矿业”）选矿厂完成建设期各项工作任务，正式进入生产运营阶段。"
+    },
+    {
+     "t": "擘画非洲新蓝图 开启协同新征程——中矿资源集团中南部非洲运营管理中心正式揭牌",
+     "d": "",
+     "u": "http://www.sinomine.cn/xwdti/424.html",
+     "s": "作为中南非中心“赋能服务、深化协同”职能的首次重要实践，仪式上举行了首批配套企业战略合作签约仪式。王治伟总经理代表中南非中心与五家服务型企业签署战略合作协议。通过构建上下游配套企业集群，一个资源共享、优势互补的产业生态圈正加快形成，集团在非业务领域正式开启区域协同化、系统化布局。"
+    },
+    {
+     "t": "24/08 16 中矿资源赞比亚卡通巴铜矿山 开工典礼隆重举行",
+     "d": "",
+     "u": "http://www.sinomine.cn/xwdti/179.html",
+     "s": "2024 年8月16日，中矿资源集团股份有限公司（以下简称“中矿资源”）卡通巴（Kitumba）铜矿山开工典礼隆重举行。"
+    },
+    {
+     "t": "09/18 中矿资源集团股份有限公司荣登2026北京民营企业百强第89位",
+     "d": "",
+     "u": "http://www.sinomine.cn/xwdti/423.html",
+     "s": "9月17日，北京市工商业联合会正式发布2026北京民营企业百强系列榜单。中矿资源集团股份有限公司（以下简称“中矿资源”）凭借稳健的经营业绩与持续增强的综合实力，荣登“2026北京民营企业百强”主榜单，位列第89位。"
+    }
+   ]
+  },
+  {
+   "name": "永兴材料",
+   "code": "002756",
+   "sector": "锂",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.yongxing.com.cn/",
+   "news_url": "http://www.yongxing.com.cn/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "设备发往内蒙古自治区巴彦淖尔市",
+     "d": "",
+     "u": "http://www.yongxing.com.cn/show-7-58-1.html",
+     "s": ""
+    },
+    {
+     "t": "关爱环卫工 高温送清凉 关爱环卫工 高温送清凉",
+     "d": "",
+     "u": "http://www.yongxing.com.cn/show-7-57-1.html",
+     "s": ""
+    },
+    {
+     "t": "中老铁路拌合站",
+     "d": "",
+     "u": "http://www.yongxing.com.cn/show-8-21-1.html",
+     "s": ""
+    }
+   ]
+  },
+  {
+   "name": "白银有色",
+   "code": "601212",
+   "sector": "铜铅锌",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.bynmc.com/",
+   "news_url": "http://www.bynmc.com/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "白银有色集团股份有限公司2026年半年度业绩预告的公告",
+     "d": "2026-08-20",
+     "u": "http://www.bynmc.com/touzizheguanxi/gonggaoxinxi/20260820/155159100b7dee96b25.htm",
+     "s": ""
+    },
+    {
+     "t": "白银有色集团股份有限公司2025年年度报告（修订稿）",
+     "d": "2026-06-26",
+     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260626/09162134855b710cad8.htm",
+     "s": ""
+    },
+    {
+     "t": "白银有色集团股份有限公司2025年年度报告摘要（修订稿）",
+     "d": "2026-06-26",
+     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260626/0917312787d3747a5c5.htm",
+     "s": ""
+    },
+    {
+     "t": "白银有色集团股份有限公司2025年年度报告",
+     "d": "2026-04-28",
+     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260428/1127010676b64baba83.htm",
+     "s": ""
+    },
+    {
+     "t": "白银有色集团股份有限公司2025年年度报告摘要",
+     "d": "2026-04-28",
+     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260428/11253423371a08b402f.htm",
+     "s": ""
+    }
+   ]
+  },
+  {
+   "name": "中色股份",
+   "code": "000758",
+   "sector": "海外工程",
+   "region": "CN",
+   "exchange": "A股",
+   "home": "http://www.nfc.com.cn/",
+   "news_url": "http://www.nfc.com.cn/",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 99,
+   "items": [
+    {
+     "t": "张晋军到中色创新研究院开展工作调研",
+     "d": "2026-09-11",
+     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/9/I1548034607188803584.html",
+     "s": "9月10日，中国有色集团党委副书记、总经理张晋军到中色创新研究院开展工作调研，深入研发一线实地查看重点项目进展情况，与企业领导班子进行座谈交流，并对下一阶段工作提出要求。"
+    },
+    {
+     "t": "赤峰中色白音诺尔矿业有限公司进入国家级绿色矿山名录",
+     "d": "2026-08-28",
+     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/8/I1542897932603228160.html",
+     "s": "坚持边采边治，大力推进矿区生态修复。 中色白矿严格落实“边开采、边修复、边养护”一体化治理原则，累计投入超1.1亿元专项资金，统筹开展边坡防护、土地复垦、采空区综合治理与植被复绿工程，累计完成地质环境治理面积80公顷，栽植苗木5."
+    },
+    {
+     "t": "中国有色集团召开2026年年中工作会暨安全环...",
+     "d": "2026-07-29",
+     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/7/I1531945272706334720.html",
+     "s": "7月28日，中国有色集团召开2026年年中工作会暨安全环保工作会，总结上半年工作，分析当前形势，部署下半年任务。会议传达学习了中央企业负责人研讨班会议精神，通报了2025年度出资企业 党建工作责任制考核评价结果、董事会综合考核评价结果、经营业绩 考核结果，以 及三个专项行动进展情况。"
+    },
+    {
+     "t": "中国有色集团举办2026年度第二期安全生产管...",
+     "d": "2026-07-14",
+     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/7/I1526507113470230528.html",
+     "s": "培训要求各单位深刻吸取泉州火灾事故教训，筑牢安全生产底线，把培训所学标准方法转化为隐患排查整治实招实效，常态化推进风险动态清零，持续深化安全生产“打非治违”，以高水平安全保障集团高质量发展。"
     }
    ]
   },
@@ -861,7 +3224,7 @@
      "t": "First Quantum Minerals获得Quantum Electrahaul的专利和商标",
      "d": "2026-09-16",
      "u": "https://www.first-quantum.com/news/first-quantum-minerals-secures-patent-and-trademark-for-quantum-electrahaul/",
-     "s": "2025年， First Quantum全球生产了396,000吨铜、152,000盎司黄金和23,000吨镍。",
+     "s": "2025年年年年， First Quantum全球生产了 396,000吨铜、 152,000盎司黄金和 23,000吨镍。",
      "t_en": "First Quantum Minerals secures patent and trademark for Quantum Electrahaul"
     },
     {
@@ -875,7 +3238,7 @@
      "t": "First Quantum发布2026年第二季度业绩公告",
      "d": "2026-06-30",
      "u": "https://www.first-quantum.com/news/first-quantum-provides-notice-of-second-quarter-2026-results/",
-     "s": "安大略省多伦多（ 2026年6月30日） - First Quantum Minerals Ltd.",
+     "s": "安大略省多伦多（ 2026年年年年6月月月月30日日日日） - First Quantum Minerals Ltd.",
      "t_en": "First Quantum Provides Notice of Second Quarter 2026 Results"
     },
     {
@@ -896,14 +3259,14 @@
      "t": "首届Quantum Minerals公布董事选举投票结果",
      "d": "2026-05-07",
      "u": "https://www.first-quantum.com/news/first-quantum-minerals-announces-voting-results-for-the-election-of-directors-may-2026/",
-     "s": "安大略省多伦多（ 2026年5月7日） - First Quantum Minerals Ltd.",
+     "s": "安大略省多伦多（ 2026年年年年5月月月月7日日日日） - First Quantum Minerals Ltd.",
      "t_en": "First Quantum Minerals Announces Voting Results for the Election of Directors"
     },
     {
      "t": "Quantum Minerals公布2026年第一季度业绩",
      "d": "2026-04-28",
      "u": "https://www.first-quantum.com/news/first-quantum-minerals-reports-first-quarter-2026-results/",
-     "s": "2026年全年总资本支出指引从$ 1,000 – $ 11.5亿增加到$ 1,075 – $ 12.5亿，反映了…",
+     "s": "2026 年全年总资本支出指引从$ 1,000 – $ 11.5亿增加到 $ 1,075 – $ 12.5亿 ，反映了 …",
      "t_en": "First Quantum Minerals Reports First Quarter 2026 Results"
     },
     {
@@ -914,1597 +3277,6 @@
      "t_en": "Government of Panama Approves Processing of Stockpiled Ore at Cobre Panamá"
     }
    ]
-  },
-  {
-   "name": "紫金矿业",
-   "code": "601899",
-   "sector": "铜",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.zjky.cn/news/news_list.jsp",
-   "news_url": "https://www.zjky.cn/news/news_list.jsp",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 1,
-   "items": [
-    {
-     "t": "福大紫金学院国家自然科学基金立项获历史性突破",
-     "d": "2026-08-28",
-     "u": "https://www.zjky.cn/news/news-detail-122921.htm",
-     "s": "国家自然科学基金委员会8月26日公布，福大紫金学院17项基础研究课题通过立项评审，获批国家自然科学基金支持。其中，衷水平教授申报的“基于矿相重构联合硅酸阻聚强化铜渣湿法利用基础研究”入选重点项目，实现福州大学在国家基金委工程与材料学部重点项目历史“零”的突破。"
-    },
-    {
-     "t": "紫金矿业向西藏吉隆泥石流灾区捐赠1000万元",
-     "d": "2026-08-27",
-     "u": "https://www.zjky.cn/news/news-detail-122919.htm",
-     "s": "8月26日10时30分许，因尼泊尔一侧发生泥石流灾害，造成西藏日喀则市吉隆县吉隆口岸重大人员伤亡、失联，目前各项救援工作正全力推进。 紫金矿业密切关注灾情进展，为援助受灾地区，8月28日，公司决定向灾区捐赠人民币1000万元，用于当地紧急救援、受灾群众安置及灾后重建等相关工作。"
-    }
-   ]
-  },
-  {
-   "name": "江西铜业",
-   "code": "600362",
-   "sector": "铜",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.jxcc.com/news.html",
-   "news_url": "https://www.jxcc.com/news.html",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 6,
-   "items": [
-    {
-     "t": "央视《焦点访谈》聚焦江铜集团德兴铜矿生态修复成果",
-     "d": "2026-09-14",
-     "u": "https://www.jxcc.com/news/details_474_7079.html",
-     "s": "9月12日，中央电视台《焦点访谈》播出《绿色转型 青山不负》节目，详细介绍江铜集团德兴铜矿生态修复典型案例。"
-    },
-    {
-     "t": "央视《江山万里新长征》：江西如何让“有色”更出色",
-     "d": "2026-09-09",
-     "u": "https://www.jxcc.com/news/details_474_7076.html",
-     "s": "9月9日，中央电视台新闻频道播出《江山万里新长征》特别节目，镜头对准江铜集团德兴铜矿、江铜铜箔公司，展现矿山数智发展成效、铜箔公司科研成果。"
-    },
-    {
-     "t": "江铜入选！",
-     "d": "2026-08-26",
-     "u": "https://www.jxcc.com/news/details_474_7054.html",
-     "s": "2026年度全省思政工作“十佳”创新案例！ 《江铜集团：构建“三维联动”思政工作链 赋能企业高质量发展》入选2026年度江西省思想政治工作“十佳”创新案例。"
-    },
-    {
-     "t": "《江西日报》头版聚焦江铜：铜光熠熠，见证产业担当",
-     "d": "2026-08-03",
-     "u": "https://www.jxcc.com/news/details_474_6993.html",
-     "s": "8月2日，《江西日报》头版刊发“落实省会引领战略企业调研行”栏目首期特别报道《铜光熠熠，见证产业担当》。"
-    },
-    {
-     "t": "深化改革国企行：省级媒体聚焦高精铜板带背后的改革密码",
-     "d": "2026-07-31",
-     "u": "https://www.jxcc.com/news/details_474_7001.html",
-     "s": "省国资委启动“深化改革国企行”主题采访活动，邀约驻赣中央媒体、省级媒体走进省属国企一线，第一站来到江铜高精铜板带公司。"
-    },
-    {
-     "t": "《江西日报》头版头条：超3000亿元！",
-     "d": "2026-07-15",
-     "u": "https://www.jxcc.com/news/details_474_7000.html",
-     "s": "江铜集团上半年营收再创新高 7月12日，《江西日报》头版头条刊发报道《超3000亿元！江铜集团上半年营收再创新高》。"
-    }
-   ]
-  },
-  {
-   "name": "铜陵有色",
-   "code": "000630",
-   "sector": "铜",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "http://www.tlys.cn/list.aspx?parentclassid=67&classid=383",
-   "news_url": "http://www.tlys.cn/list.aspx?parentclassid=67&classid=383",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 11,
-   "items": [
-    {
-     "t": "庐江矿业强化“设备见本色”管理",
-     "d": "2026-09-24",
-     "u": "http://www.tlys.cn/news.aspx?cid=24559&classid=383",
-     "s": "一是压实组织责任，成立专项领导与工作小组，明确部门、生产单位职责，制定地表及井下设备标准及检查评分细则，着力整治“跑冒滴漏”“脏松缺锈”问题。二是分阶段推进整治，开展设备排查摸底，建立隐患清单，集中整治各类问题，深挖问题根源。"
-    },
-    {
-     "t": "集团公司参加2026世界制造业大会",
-     "d": "2026-09-23",
-     "u": "http://www.tlys.cn/news.aspx?cid=24556&classid=383",
-     "s": "丁士启表示，集团公司将推动科技创新与产业创新深度融合，前瞻布局前沿材料领域，加快推进产品嵌入AI算力、新能源、半导体产业链，提升产业链自主可控水平，为奋力谱写中国式现代化安徽篇章贡献铜陵有色力量。"
-    },
-    {
-     "t": "庐江矿业打好青年人才培养“组合拳”",
-     "d": "2026-09-23",
-     "u": "http://www.tlys.cn/news.aspx?cid=24555&classid=383",
-     "s": "一是搭建双向交流载体，组织近三年入职大学生召开青专题座谈会，交流岗位感悟、梳理技术难题，鼓励青年人才大胆实践、深耕专业，锤炼实干本领。二是健全人才培养机制，落实导师带徒、“技师+工程师”双师培养模式，由技术骨干、岗位能手结对带教，帮助青年人才快速补齐能力短板，夯实专业基础。"
-    },
-    {
-     "t": "米拉多铜矿、金隆铜业、铜冠电工加强网络安全教育",
-     "d": "2026-09-23",
-     "u": "http://www.tlys.cn/news.aspx?cid=24554&classid=383",
-     "s": "米拉多铜矿：一是紧扣网络安全宣传周主题，面向全体员工普及网络防护、网络诈骗等知识，引导员工时刻绷紧网络安全之弦。二是对服务器、OA平台等逐项检查，优化防护策略，完善应急预案，提升网络故障应急处置能力。 三是修订完善网络安全、设备运维等制度，压实网络安全主体责任，不断提升海外矿山网络安全防护水平。"
-    },
-    {
-     "t": "铜冠冶化加强在建项目管理",
-     "d": "2026-09-22",
-     "u": "http://www.tlys.cn/news.aspx?cid=24547&classid=383",
-     "s": "一是加强组织领导，成立7个工程项目组、20个技改项目组，项目负责人在授权范围内统筹管理各项工作，确保有序推进。二是加强现场管控，对项目施工区域进行作业围护，设置安全通道，规范材料堆放，做到统一标牌、统一标准、统一内容，推动项目现场管理规范化。"
-    },
-    {
-     "t": "金隆铜业实现冶炼渣回收铁精粉首次外销",
-     "d": "2026-09-21",
-     "u": "http://www.tlys.cn/news.aspx?cid=24542&classid=383",
-     "s": "日前，金隆铜业顺利完成冶炼渣回收铁精粉首次对外销售。此举不仅有效缓解冶炼渣堆存压力，还成功拓展副产品增收渠道，成功探索出固废减量化、资源化利用新路径。下一步，该公司将持续拓展铁精粉销售市场，稳步扩大产品外销规模。"
-    },
-    {
-     "t": "天马山矿启用地表人员定位系统",
-     "d": "2026-09-21",
-     "u": "http://www.tlys.cn/news.aspx?cid=24541&classid=383",
-     "s": "日前，天马山矿正式启用地表人员定位系统，实现地表与井下人员定位一体化管理。一是科学规划布点。提前做好航拍、地图绘制、信标部署等工作，确保系统建设有序推进。二是强化运行调试。认真开展系统联调、信号校准和功能验证，重点测试目标跟踪、轨迹回放、一键报警等功能，确保系统运行稳定可靠。三是深化平台应用。"
-    },
-    {
-     "t": "质检中心自研全自动棒磨机进入试验验证阶段",
-     "d": "2026-09-20",
-     "u": "http://www.tlys.cn/news.aspx?cid=24535&classid=383",
-     "s": "日前，质检中心自主研发的新型全自动棒磨机完成安装及空载试运行，各项智能化功能达到预期，正在开展试验验证。新设备搭载PLC智能控制系统，具有配方调用、权限管控、全程留痕等功能，单次制样量由12个增至30个，综合效能较原型机提升2.5倍，且具备全密闭结构和独立收尘功能，可有效提升作业效率、改善作业环境。"
-    },
-    {
-     "t": "金冠铜业阳极泥扩建项目顺利投产",
-     "d": "2026-09-20",
-     "u": "http://www.tlys.cn/news.aspx?cid=24536&classid=383",
-     "s": "日前，金冠铜业阳极泥扩建项目顺利投产，成功产出首炉金银合金。该项目采用“压力浸铜+卡尔多炉熔炼+高电流密度银电解+二次还原（或金电解）+铂钯精制”先进工艺，在回收金银的同时，可综合提取多种稀有稀散金属，有效实现资源“吃干榨净”。"
-    },
-    {
-     "t": "金隆铜业获铜陵市第六届QC小组成果发布第二名",
-     "d": "2026-09-20",
-     "u": "http://www.tlys.cn/news.aspx?cid=24534&classid=383",
-     "s": "日前，在铜陵市第六届QC小组成果发布赛上，金隆铜业《提高净液杂质砷脱除率》课题荣获本次QC小组成果发布赛第二名。下一步，该公司将进一步总结参赛经验，深化成果应用，力争再创佳绩。"
-    }
-   ]
-  },
-  {
-   "name": "西部矿业",
-   "code": "601168",
-   "sector": "铜",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.westmining.com/mtzx/xkxw/",
-   "news_url": "https://www.westmining.com/mtzx/xkxw/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 16,
-   "items": [
-    {
-     "t": "《生态湖盐》《生态湖盐评价技术规范》两项团体标准启动会在西宁召开",
-     "d": "2026-09-24",
-     "u": "https://www.westmining.com/mtzx/xkxw/202609/t20260924_33880.html",
-     "s": "青海盐业讯 近日，由中国盐业协会组织的《生态湖盐》《生态湖盐评价技术规范》两项团体标准启动会在西宁市青盐大厦召开。国家盐产品质量检验检测中心，以及青海盐业等单位代表参会。会议由中国盐业协会团体标准技术委员会主任赵建国主持。"
-    }
-   ]
-  },
-  {
-   "name": "洛阳钼业",
-   "code": "603993",
-   "sector": "钼",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.cmoc.com/html/Media/News/",
-   "news_url": "https://www.cmoc.com/html/Media/News/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 4,
-   "items": [
-    {
-     "t": "洛阳钼业完成15亿元科创债发行 获市场2.73倍认购",
-     "d": "2026-09-19",
-     "u": "https://www.cmoc.com/html/2026/News_0919/420.html",
-     "s": "募资计划全部用于偿还公司有息债务。本次债券发行主承销商及簿记管理人为中国银行，联席主承销商为工商银行、建设银行、招商银行、中信银行。经中诚信国际综合评定，洛阳钼业主体信用评级为AAA。"
-    },
-    {
-     "t": "再攀高峰 洛阳钼业上半年盈利161.52亿元 同比大增86.27%",
-     "d": "2026-08-19",
-     "u": "https://www.cmoc.com/html/2026/News_0819/415.html",
-     "s": "8月19日，洛阳钼业发布2026年上半年业绩报告， 主要指标再攀历史高峰 ：实现营业收入1,353.20亿元，同比增长42.78%，达到2025年全年近七成体量；归母净利润161.52亿元，同比大增86.27%，盈利接近去年全年的八成；基本每股收益0.76元，同比增长85.37%；"
-    },
-    {
-     "t": "奥丁矿业与厄瓜多尔政府签订采矿协议 凯歌豪斯金矿开发迈出关键一步",
-     "d": "2026-04-30",
-     "u": "https://www.cmoc.com/html/2026/News_0430/406.html",
-     "s": "4月27日，洛阳钼业旗下子公司奥丁矿业与厄瓜多尔政府正式签署凯歌豪斯金矿（Cangrejos Project）采矿协议，标志着这一世界级金矿项目开发迎来重要里程碑。"
-    },
-    {
-     "t": "洛阳钼业以“开门红”开启新纪元：单季盈利78亿元，再创历史新高",
-     "d": "2026-04-28",
-     "u": "https://www.cmoc.com/html/2026/News_0428/405.html",
-     "s": "4月24日晚，洛阳钼业发布2026年第一季度业绩报告。报告期内，公司实现营业收入664.03亿元，同比增长44.34%，环比去年第四季度增长8.50%；归母净利润达77.60亿元，接近2025年全年盈利的四成，同比增长96.65%，环比增长28.07%。基本每股收益为0.36元，同比增长100%；"
-    },
-    {
-     "t": "洛阳钼业旗下公司TFM铜产品获 LME 注册认证",
-     "d": "2026-03-28",
-     "u": "https://www.cmoc.com/html/2026/News_0328/400.html",
-     "s": "近日，洛阳钼业宣布，旗下在刚果（金）的子公司TFM产品品牌TFM-1正式通过伦敦金属交易所（LME）A级注册认证，纳入全球主流交割品牌体系。"
-    },
-    {
-     "t": "洛阳钼业2025年盈利203亿元 连续五年刷新历史佳绩",
-     "d": "2026-03-27",
-     "u": "https://www.cmoc.com/html/2026/News_0327/398.html",
-     "s": "3月27日，洛阳钼业发布的2025年度业绩报告显示，公司营业收入为2066.84亿元， 连续两年站稳两千亿元台阶 ；实现归母净利润203.39亿元，同比增长50.30%， 连续五年刷新佳绩 ；经营性净现金流实现 史上第二高 ，达到208.43亿元；总资产 首次突破两千亿元 ，达到2009."
-    }
-   ]
-  },
-  {
-   "name": "中国铝业",
-   "code": "601600",
-   "sector": "铝",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.chalco.com.cn/",
-   "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
-   "unreach": "spa",
-   "stale": true,
-   "rank": 2,
-   "items": [
-    {
-     "t": "中国铝业关于股权激励部分限制性股票回购注销实施公告",
-     "d": "2026-09-11",
-     "u": "https://www.chalco.com.cn/tzzgx/thygg/202609/t20260911_177627.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份荣获第二十六届中国专利优秀奖",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177352.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份镓系列产品亮相首届有色钢铁融合发展论坛",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177351.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份获2026中国信息协会数据要素应用创新大赛...",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177350.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份两名青年科技人才入选行业人才计划",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177348.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份召开2026年劳动竞赛推进会",
-     "d": "2026-09-08",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202609/t20260908_177347.html",
-     "s": ""
-    },
-    {
-     "t": "利润总额同比大增98% 中国铝业中期增速再创历史新高",
-     "d": "2026-08-28",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202608/t20260828_176619.html",
-     "s": ""
-    },
-    {
-     "t": "中国铝业2026年半年度报告摘要",
-     "d": "2026-08-28",
-     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202608/t20260828_176606.html",
-     "s": ""
-    },
-    {
-     "t": "中国铝业2026年半年度报告",
-     "d": "2026-08-28",
-     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202608/t20260828_176605.html",
-     "s": ""
-    },
-    {
-     "t": "中铝股份5人获聘中铝集团首席技能大师",
-     "d": "2026-08-21",
-     "u": "https://www.chalco.com.cn/xwdt/gsyw/202608/t20260821_176122.html",
-     "s": ""
-    },
-    {
-     "t": "中国铝业2025年年度报告（全文）",
-     "d": "2026-03-30",
-     "u": "https://www.chalco.com.cn/tzzgx/thygg/202603/t20260330_166168.html",
-     "s": ""
-    },
-    {
-     "t": "中国铝业2025年半年度报告摘要",
-     "d": "2025-08-28",
-     "u": "https://www.chalco.com.cn/tzzgx/yjbg/zqbg/202508/t20250828_154002.html",
-     "s": ""
-    },
-    {
-     "t": "中国铝业2024年年度报告全文",
-     "d": "2025-06-09",
-     "u": "https://www.chalco.com.cn/tzzgx/yjbg/ndbg/202506/t20250609_148836.html",
-     "s": ""
-    }
-   ]
-  },
-  {
-   "name": "南山铝业",
-   "code": "600219",
-   "sector": "铝",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.nanshan.com.cn/news.html",
-   "news_url": "https://www.nanshan.com.cn/news.html",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 14,
-   "items": [
-    {
-     "t": "烟台南山庄园葡萄酒有限公司 1.5吨天然气蒸汽锅炉项目竣工环保验收公示",
-     "d": "2026-05-18",
-     "u": "https://www.nanshan.com.cn/News_3/13.html",
-     "s": "根据《建设项目环境保护管理条例》和《建设项目竣工环境保护验收暂行办法》（国环规环评〔2017〕4号）要求，烟台南山庄园葡萄酒有限公司天然气蒸汽锅炉项目竣工环境保护验收工作有关情况公示如下："
-    },
-    {
-     "t": "龙口新花花生油加工有限公司浓香花生油生产线建设项目竣工环境保护验收公示",
-     "d": "2026-04-13",
-     "u": "https://www.nanshan.com.cn/News_3/11.html",
-     "s": "项目建设1条花生油生产线、3台油暂存罐、6台不锈钢储存罐、1条灌装生产线、1台振动筛、1台脉冲布袋除尘器。本次验收完成后，设备总产能为年产食用油量13700t。"
-    }
-   ]
-  },
-  {
-   "name": "神火股份",
-   "code": "000933",
-   "sector": "铝",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "http://www.shenhuo.com/home/newslist/newslist?categoryId=3",
-   "news_url": "http://www.shenhuo.com/home/newslist/newslist?categoryId=3",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 15,
-   "items": [
-    {
-     "t": "集团年产5万吨钠离子高性能电池铝箔项目开工",
-     "d": "2026-09-19",
-     "u": "http://www.shenhuo.com/home/content/content/?categoryId=20&articleId=1851",
-     "s": "王亚峰在开工仪式上致辞并强调，要加强组织领导，压实工作责任，倒排工期、挂图作战，严把安全关、质量关、环保关，确保项目早竣工、早投产、早达效，努力把项目建成国际一流的绿色化、智能化电池箔生产基地。"
-    },
-    {
-     "t": "《中国有色金属报》走进神火新材料科技有限公司：“内卷”...",
-     "d": "2026-05-12",
-     "u": "http://www.shenhuo.com/home/content/content/?categoryId=22&articleId=1204",
-     "s": "近日，《中国有色金属报》刊发了对神火新材的深度调研报道。报道聚焦铝加工行业 “内卷” 现状，剖析公司在技术突破、管理提效与产业升级中的实践路径。作为行业先进样本，此次权威媒体聚焦，既是对公司发展模式的认可，更为铝加工产业破局提供了新的视角和思路。"
-    }
-   ]
-  },
-  {
-   "name": "天山铝业",
-   "code": "002532",
-   "sector": "铝",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "http://www.tslyjt.com/node/48",
-   "news_url": "http://www.tslyjt.com/node/48",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 20,
-   "items": [
-    {
-     "t": "天山铝业公司生产稳定高效运行车间一线热火朝天赶产保供",
-     "d": "2026-04-03",
-     "u": "http://www.tslyjt.com/info/1102",
-     "s": "目前，公司 140万吨电解铝绿色低碳能效提升改造项目首批电解槽顺利达产，新槽建设全面铺开。"
-    },
-    {
-     "t": "科技创新结硕果 绿色智造启新程——天山铝业2025年科技创新斩获多项佳绩",
-     "d": "2026-04-03",
-     "u": "http://www.tslyjt.com/info/1101",
-     "s": "2025年，天山铝业集团始终高度重视科技创新工作，坚定不移实施创新驱动发展战略，将技术攻关摆在企业发展核心位置，聚焦绿色低碳转型、高端精深加工突破与智能化升级提速，在关键技术研发、科技成果转化、行业荣誉评定等领域接连实现重大突破，以硬核科创实力全面赋能企业高质量发展，充分彰显行业龙头的责任与担当。"
-    }
-   ]
-  },
-  {
-   "name": "山东黄金",
-   "code": "600547",
-   "sector": "黄金",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.sd-gold.com/column/81/",
-   "news_url": "https://www.sd-gold.com/column/81/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 5,
-   "items": [
-    {
-     "t": "集团召开新一轮找矿突破和资源获取工作调度会",
-     "d": "",
-     "u": "https://www.sd-gold.com/cmscontent/5810.html",
-     "s": "张晓海指出，今年以来，集团上下坚决落实省委、省人民政府的工作要求，主动担当作为，强化保障举措，狠抓推进落实，组织领导更加有力，制度机制逐步健全，数智赋能不断强化，工作成果持续凸显，取得了明显工作成效。"
-    },
-    {
-     "t": "集团与交通银行举行工作会谈并签署全面战略合作协议",
-     "d": "",
-     "u": "https://www.sd-gold.com/cmscontent/5809.html",
-     "s": "9月18日上午，山东黄金集团与交通银行在上海举行工作会谈并签署全面战略合作协议。山东黄金集团党委书记、董事长张晓海与交通银行党委书记、董事长任德奇围绕积极服务国家战略、全面深化务实合作、共促高质量发展等进行深入交流并见证签约。"
-    },
-    {
-     "t": "山东黄金地勘集团参与编制的《固体矿产绿色勘查规范》国家标准正式发布",
-     "d": "2026-09-17",
-     "u": "https://www.sd-gold.com/cmscontent/5804.html",
-     "s": "近日，在中国国际矿业大会绿色发展成果发布会上，GB/T48133—2026《固体矿产绿色勘查规范》正式发布。该项国家标准由国内多地多行业力量共同编制，山东黄金地勘集团作为12家起草单位之一，是全国黄金行业唯一一家参与该标准制定的企业单位。"
-    },
-    {
-     "t": "山金重工首项团体标准获批发布",
-     "d": "2026-09-14",
-     "u": "https://www.sd-gold.com/cmscontent/5805.html",
-     "s": "近日，由山东黄金集团山金重工牵头起草的团体标准T/SDMI0050-2026《分体式环形永磁无齿轮球磨机》，经山东省机械工业协会正式发布并实施，是山金重工在矿业装备标准化领域取得的重要里程碑。"
-    },
-    {
-     "t": "红岭矿业：细微之处挖出新效益",
-     "d": "2026-08-31",
-     "u": "https://www.sd-gold.com/cmscontent/5806.html",
-     "s": "提质增效，关键在“增”，核心在“挖”。面对价值创造的发展要求，山东黄金集团红岭矿业没有把目光只停留在“增产增收”上，而是从生产经营的细微之处寻找突破口，在一次次流程优化、一项项管理改进中，把被忽视的潜力挖出来，把分散的效益聚起来，让精打细算成为生产经营的鲜明底色。"
-    },
-    {
-     "t": "金创集团成果再次获得国家发明专利授权",
-     "d": "2026-08-25",
-     "u": "https://www.sd-gold.com/cmscontent/5747.html",
-     "s": "下一步，金创集团将以此次专利授权为契机，持续深耕地下工程安全防控核心技术，加快推进关键技术迭代升级与创新成果产业化落地，把技术优势加速转化为安全生产优势和企业发展优势，为企业安全、绿色、高质量发展持续注入科创动能。"
-    },
-    {
-     "t": "地矿工程公司牵头承担的自然资源部新一轮找矿突破战略行动科技支撑项目（第二批）成功立项",
-     "d": "2026-08-05",
-     "u": "https://www.sd-gold.com/cmscontent/5738.html",
-     "s": "该项目由海南山金矿业有限公司出资，地矿工程公司牵头，联合中国地质大学（北京）、中国地质大学（武汉）、海南省地质调查院等8家知名高校及企事业单位共同组建。研究团队产学研深度协同，汇聚了国家级、省部级人才及行业资深专家等骨干力量，依托10余个省部级以上科研平台，为项目的顺利实施提供了坚实的科技条件保障。"
-    }
-   ]
-  },
-  {
-   "name": "中金黄金",
-   "code": "600489",
-   "sector": "黄金",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.chinagoldgroup.com/",
-   "news_url": "https://www.chinagoldgroup.com/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 7,
-   "items": [
-    {
-     "t": "周洲：黄金行业迎来大有可为的战略机遇期",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1548347985945952256.html",
-     "s": "9月11日，2026中国国际矿业大会主题论坛在天津梅江会展中心举行。中国黄金协会会长，中国黄金集团有限公司党委书记、董事长周洲出席主题论坛并发表主旨演讲。"
-    },
-    {
-     "t": "央视财经| 博物馆内全方位体验黄金开采全流程",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551959640089034752.html",
-     "s": ""
-    },
-    {
-     "t": "中国财富网| 中国黄金集团发布科技创新路线图",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551877125680660480.html",
-     "s": "在创新平台建设方面，中国黄金集团与中国工程院院士李夕兵共建的院士专家工作站揭牌，聚焦有色金属安全高效采矿前沿研究；与中国工程院院士刘炯天共建的关键金属未来材料研究院签约揭牌，致力于关键金属新材料研发与产业化。此外，6家“中国黄金科技小院”同步挂牌运行，推动科研力量扎根生产一线。"
-    },
-    {
-     "t": "吉林日报| 黄金博物馆开放啦！",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551170665535504384.html",
-     "s": "9月19日，值此山河鎏金、万物丰成的美好时节，“金色吉林”吉林省秋季文旅推广活动暨黄金博物馆开放启动仪式在桦甸市夹皮沟镇正式启幕。"
-    },
-    {
-     "t": "中国吉林网| 夹皮沟的黄金博物馆，真正的金子，是人",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551170112294223872.html",
-     "s": "说回博物馆。展馆里除了“大金牛”，建设中的二期还有一条680米的井下矿车线，利用的是百年废弃矿巷，能让人真的下到矿洞里，看看一百多年来采矿是怎么变的。"
-    },
-    {
-     "t": "中国新闻网| 黄金博物馆吉林桦甸开馆 百年金矿焕新文旅地标",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551168483377545216.html",
-     "s": "中国黄金集团党委副书记、董事覃荆文在开馆仪式上表示，黄金博物馆不只是一座静态文化展馆，更是承载历史、赋能产业的载体。未来将以馆为媒，持续丰富业态、优化体验，为工业文旅提供可复制、可推广经验。"
-    },
-    {
-     "t": "央广网| 吉林这座黄金博物馆 19日正式开门迎客",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551167097340428288.html",
-     "s": "黄金是沉淀千年的文化符号，是现代工业的战略材料，也是连接历史与未来的纽带。它见证了文明兴衰，助力了产业崛起，支援了革命建设，凝结成民族精神中独特的底色。"
-    },
-    {
-     "t": "新华社| 盘活工业遗产 黄金博物馆开门迎客",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551166619487567872.html",
-     "s": "9月19日，由吉林省与中国黄金集团有限公司携手打造的黄金博物馆正式开馆迎客。位于吉林省桦甸市的夹皮沟金矿素有“中国黄金第一矿”之称，博物馆依托矿区建设，打破传统静态展陈模式，构建“地上全维度展示+井下沉浸式体验”模式，是集史料收藏、文化展示、文脉传承于一体的特色展馆。"
-    },
-    {
-     "t": "科技日报| 中国黄金集团全方位引育选聘人才，落地三大高能级创新平台",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551173253865668608.html",
-     "s": "会上，中国工程院院士唐菊兴、李夕兵、刘炯天、葛世荣分别围绕铜金地质勘查、硬岩资源安全高效开采、关键金属新材料、矿山智能化建设等领域作主旨报告，立足行业发展大势、聚焦产业核心痛点，为集团公司科技创新、产业升级、人才培育提供智力支撑和专业指导。"
-    },
-    {
-     "t": "光明网| 人才与科创双轮驱动 中国黄金集团打通人才与科技双向赋能通道...",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1550537771259527168.html",
-     "s": "本次大会既是中国黄金集团“十五五”人才强企、科技兴企的动员大会，也是改革创新、攻坚突破的誓师大会。"
-    },
-    {
-     "t": "黄金博物馆正式开放",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1550961481527328768.html",
-     "s": "黄金博物馆是中国黄金集团与吉林省深化战略合作的重点工程，依托有“中国黄金第一矿”之称的夹皮沟两百余年矿山历史与红色资源建设而成，立足国家工业遗产活化利用，集文物收藏、展陈教育、研学传播、文化交流于一体，填补了国内黄金工业专题展陈的空白，打造了G334文旅廊道工业文化新地标。"
-    },
-    {
-     "t": "中国黄金集团召开2026年干部人才暨科技创新大会...",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/9/I1550536441447055360.html",
-     "s": "中国工程院院士汪旭光、刘炯天、陆军、沈政昌、葛世荣、吴爱祥、唐菊兴、李夕兵，自然资源部、国务院国资委、国家矿山安全监察局相关司局领导，中国科学技术协会、中国有色金属工业协会、北京市科学技术协会、中国黄金协会相关领导出席会议，集团公司党委书记、董事长周洲出席会议并讲话，党委副书记、董事、工会主席覃荆文…"
-    }
-   ]
-  },
-  {
-   "name": "赤峰黄金",
-   "code": "600988",
-   "sector": "黄金",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.cfgold.com/col36/list",
-   "news_url": "https://www.cfgold.com/col36/list",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 12,
-   "items": [
-    {
-     "t": "自治区首家、首日落地！",
-     "d": "2026-09-18",
-     "u": "https://www.cfgold.com/col36/994",
-     "s": "9月14日，中国人民银行、国家外汇管理局联合发布的《关于跨国公司本外币跨境资金集中运营业务有关事宜的通知》（银发〔2026〕163号）正式实施。同日，由国家外汇管理局内蒙古自治区分局、赤峰市分局指导，中国银行赤峰分行协助赤峰黄金成功落地跨境本外币一体化资金池业务。"
-    }
-   ]
-  },
-  {
-   "name": "天齐锂业",
-   "code": "002466",
-   "sector": "锂",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.tianqilithium.com/news.aspx?t=27",
-   "news_url": "https://www.tianqilithium.com/news.aspx?t=27",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 9,
-   "items": [
-    {
-     "t": "可持续锂电池行业工作组正式启动 天齐锂业担任首个轮值主席",
-     "d": "2026-09-09",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1109",
-     "s": "9月3日， “可持续锂电池行业工作组”（Sustainable Lithium Battery Industry Working Group）在第四届零碳协同创新大会上正式启动。"
-    },
-    {
-     "t": "第四届零碳协同创新大会在蓉举行：共绘零碳生态，协同迈向系统重构与价值共赢",
-     "d": "2026-09-03",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1108",
-     "s": "中国市政工程西南设计研究总院党委书记、董事长程鹏，成都市科学技术协会副主席陈钢，国际财务报告准则基金会北京办公室能力建设主管程红粤，CDP全球环境信息研究中心中国区市场总监李蜚等嘉宾，也分别围绕本次大会主题进行了精彩分享。"
-    },
-    {
-     "t": "一图看懂 | 天齐锂业2026年半年度报告",
-     "d": "2026-08-28",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1106",
-     "s": "锂资源综合利用与新型电池基础锂材料四川省重点实验室2025年度学术委员会会议圆满召开"
-    },
-    {
-     "t": "天齐锂业实现首吨钽铌精矿交付",
-     "d": "2026-08-24",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1105",
-     "s": "钽、铌是高端制造、精密电子、先进新材料领域不可或缺的核心稀有金属，具备独特的材料性能，其产业附加值高、应用场景广阔，在全球新材料产业体系中占据重要地位。 查看详情 "
-    },
-    {
-     "t": "智汇天齐 共赢锂程 | 第五届天齐锂业创新季正式启动 查看详情 ",
-     "d": "2026-08-14",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1104",
-     "s": ""
-    },
-    {
-     "t": "天齐锂业2026年安全生产委员会半年总结会议圆满召开",
-     "d": "2026-08-13",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1101",
-     "s": "为总结2026年上半年EHS工作成效，明确下半年安全生产工作任务，进一步加强全员安全意识，推动公司安全生产形势持续稳定向好，天齐锂业股份有限公司于8月12日召开2026年安全生产委员会半年总结会议。 查看详情 "
-    },
-    {
-     "t": "天齐锂业伦交所ESG评级维持A，位居A股同行业公司第1名",
-     "d": "2026-07-21",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1100",
-     "s": "近期，伦敦证券交易所集团（简称“伦交所”）发布最新ESG评级结果，天齐锂业凭借在环境、社会及治理（ESG）领域的综合表现，获得A级。 查看详情 "
-    },
-    {
-     "t": "天齐锂业拟战略投资欣旺达动力，深化新能源产业链协同布局",
-     "d": "2026-07-20",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1098",
-     "s": "近期，天齐锂业股份有限公司（以下简称“天齐锂业”）全资子公司天齐锂业（射洪）有限公司（以下简称“射洪天齐”）拟以人民币1.5亿元自有资金，认购欣旺达动力科技股份有限公司（以下简称“欣旺达动力”）新增股份7,921.8106万股。本次交易完成后，射洪天齐预计将持有欣旺达动力0.55%的股权。"
-    },
-    {
-     "t": "跨越山海，因“锂”而聚 近日",
-     "d": "2026-06-22",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1084",
-     "s": "，来自孟加拉国、巴基斯坦、斯里兰卡三国的南亚国家法官研修班代表团与2026成都国际友城高校青年夏令营师生，先后到访天齐锂业。 查看详情 "
-    }
-   ]
-  },
-  {
-   "name": "赣锋锂业",
-   "code": "002460",
-   "sector": "锂",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.ganfenglithium.com/news.html",
-   "news_url": "https://www.ganfenglithium.com/news.html",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 10,
-   "items": [
-    {
-     "t": "赣锋锂业《可持续发展之路》系列纪录短片正式上线",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/186.html",
-     "s": "如今，Mariana项目已顺利投产，成为推动全球能源可持续发展的重要力量。对于一面是地球赋予的矿产资源，一面是自然赋予的珍稀物种，赣锋如何解算这道生态难题？南美高原的可持续发展承诺如何践行？"
-    },
-    {
-     "t": "赣锋锂业正式加入联合国全球契约组织",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/184.html",
-     "s": "近日，赣锋锂业正式加入联合国全球契约组织（United Nations Global Compact, UNGC），以更坚定的承诺推进企业社会责任与可持续发展，助力联合国可持续发展目标实现。"
-    },
-    {
-     "t": "赣锋锂业锂生态产业链一体化产品亮相2025CLNB新能源产业博览会",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/183.html",
-     "s": "赣锋持续推进固态锂电池的研发、生产和商业化应用，积极布局和开发高能量密度、高功率的动力电芯与电源系统产品，以满足不同领域需求。氧化物路线的高能量密度电源产品已经应用于低空经济领域，原理样件已经通过审核。"
-    },
-    {
-     "t": "ESIE2025圆满收官！赣锋全新6.25MWh储能系统成焦点，储能...",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/182.html",
-     "s": "在展会期间中关村储能产业技术联盟发布的2024年度中国储能企业系列榜单中，赣锋锂电入围2024年度全球市场储能电池出货量排行榜top10。"
-    },
-    {
-     "t": "丰城赣锋入选江西省2025年首批“数智工厂”示范企业",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/181.html",
-     "s": "在数字化领域，丰城赣锋基于集团统一的数据采集平台，通过遍布于各个环节的先进传感器、条码等组件，实时采集工厂各项数据，为工厂运行“把脉”；"
-    },
-    {
-     "t": "赣锋锂业一体化布局固态电池，关键原料硫化锂已具备量产能力",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/180.html",
-     "s": "在负极层面， 赣锋超薄锂带同样具备量产能力，可针对循环性能、加工性能、电化学稳定性等各类需求提供定制化解决方案。赣锋已实现300mm宽度的超宽幅超薄锂带量产，铜锂复合带中锂箔厚度可达到3微米。"
-    },
-    {
-     "t": "赣锋锂业推出长续航全地形机器人电池",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/179.html",
-     "s": "在阿西莫夫写出《机器人系列》的80年后，科幻作品中的机器人时代已在我们面前。四足机器人、人形机器人等新品层出不穷，具身智能产业发展不断提速，2025年《政府工作报告》中也明文指出：“大力发展智能机器人等新一代智能终端以及智能制造装备”。"
-    },
-    {
-     "t": "赣锋锂业牵头制定的这项标准入选工信部标准应用推广典型案例",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/178.html",
-     "s": "近期，国家工信部发布2024年百项团体标准应用推广典型案例名单，由赣锋锂业主持制定的团体标准《锂盐加工行业绿色工厂评价要求》（T/CNIA0159-2022）经过专家层层遴选成功入选。"
-    }
-   ]
-  },
-  {
-   "name": "华友钴业",
-   "code": "603799",
-   "sector": "钴",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.huayou.com/news/corporate-news",
-   "news_url": "https://www.huayou.com/news/corporate-news",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 8,
-   "items": [
-    {
-     "t": "华友钴业联合发起《全球矿业可持续发展联合倡议》",
-     "d": "2026-09-15",
-     "u": "https://www.huayou.com/news/corporate-news/755",
-     "s": "近日，在联合国全球契约组织（UNGC）第二届全球企业高质量共建“一带一路”（新加坡）峰会上，华友钴业、友山科技等18家全球矿业及产业链企业共同发起《全球矿业可持续发展联合倡议（GMSA）》。"
-    },
-    {
-     "t": "华友津巴布韦华景科技通过ISO 37301认证 近日，华友钴业旗下津巴布韦华景科技有限公司正式通过英国标准协会（BSI）ISO",
-     "d": "2026-09-13",
-     "u": "https://www.huayou.com/news/corporate-news/751",
-     "s": "37301 合规管理体系认证，成为非洲首家获此认证的硫酸锂生产企业。"
-    },
-    {
-     "t": "华友控股集团董事长陈雪华致全体华友讲师的贺信 全体华友讲师们： 大家好！",
-     "d": "2026-09-10",
-     "u": "https://www.huayou.com/news/corporate-news/749",
-     "s": "值此第42个教师节到来之际，我谨代表公司，向你们致以节日的问候和诚挚的祝福！"
-    },
-    {
-     "t": "华友控股集团再次荣登民营企业500家创新类两张榜单！",
-     "d": "2026-09-10",
-     "u": "https://www.huayou.com/news/corporate-news/748",
-     "s": "9月9日，全国工商联在2026民营经济创新发展大会上发布民营企业研发投入500家和发明专利500家两张榜单，华友控股集团再次上榜，位列研发投入榜第121位，发明专利榜第290位。"
-    }
-   ]
-  },
-  {
-   "name": "藏格矿业",
-   "code": "000408",
-   "sector": "锂",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "http://www.zanggekuangye.com/news/cropnews/index.html",
-   "news_url": "http://www.zanggekuangye.com/news/cropnews/index.html",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 17,
-   "items": [
-    {
-     "t": "关于麻米措矿业取得采矿许可证的公告",
-     "d": "2026-09-22",
-     "u": "http://www.zanggekuangye.com/news/cropnews/1961814261197963267.html",
-     "s": "《采矿许可证》的取得，赋予了麻米措矿业合法开采盐湖资源的权利，公司能够按照规划对麻米错盐湖的锂硼矿资源进行有序开发；有利于取得当地金融机构的授信支持，为项目建设提供充足的资金保障；有利于与其他企业开展合作，加快项目建设的推进。"
-    },
-    {
-     "t": "藏格矿业成功签约刚果（布）Kanga钾盐项目",
-     "d": "2026-09-22",
-     "u": "http://www.zanggekuangye.com/news/cropnews/2102302762270789634.html",
-     "s": "2026年9月18日，藏格矿业股份有限公司（证券代码：000408，以下简称“公司”）收购Kanga Potash（以下简称“KP公司”）92%股权的签约仪式在成都市银泰中心2号楼29层顺利完成，双方正式签署《股份买卖协议》。"
-    },
-    {
-     "t": "藏格矿业首次登榜《福布斯》全球上市企业2000强",
-     "d": "2026-06-26",
-     "u": "http://www.zanggekuangye.com/news/cropnews/2070422467884158977.html",
-     "s": "日前，《福布斯》2026全球上市企业2000强榜单正式发布。藏格矿业首次跻身榜单，位列第1834位，成功迈入全球上市企业2000强行列。凭借钾、锂、铜多元资源协同布局、持续增强的盈利能力以及稳健的资产规模，公司综合实力获得国际权威榜单认可，在国内盐湖资源开发领域进一步彰显竞争优势。"
-    }
-   ]
-  },
-  {
-   "name": "中国稀土",
-   "code": "000831",
-   "sector": "稀土",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.regcc.cn/zgxtjt/jtnew/list_9.shtml",
-   "news_url": "https://www.regcc.cn/zgxtjt/jtnew/list_9.shtml",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 22,
-   "items": [
-    {
-     "t": "中国稀土集团与中国科学院宁波材料所举行工作会谈",
-     "d": "2026-02-05",
-     "u": "https://www.regcc.cn/zgxtjt/jtnew/202602/feea221748d646699946dbfc00912888.shtml",
-     "s": "2月5日，中国稀土集团党委书记、董事长刘雷云在总部与中国科学院宁波材料所所长王立平一行举行工作会谈。中国科学院院士沈保根，集团公司董事会秘书杨杰，中国科学院宁波材料所党委书记张家元出席。"
-    },
-    {
-     "t": "中国稀土集团召开2026年科技工作会",
-     "d": "2026-01-24",
-     "u": "https://www.regcc.cn/zgxtjt/jtnew/202601/ef7caedf431140d58ffd6f0e1b774540.shtml",
-     "s": "1月23日，中国稀土集团在总部召开2026年科技工作会，深入贯彻落实党中央关于科技创新的决策部署和国务院国资委有关工作要求，统筹谋划全年科技创新重点工作。集团公司党委书记、董事长刘雷云出席会议并讲话，党委副书记、董事、总经理李志辉主持会议。集团公司党委领导杨国安、刘华斌、王涛、郭良金、谢志宏出席。"
-    },
-    {
-     "t": "中国稀土集团和福建省工控集团举行工作会谈",
-     "d": "2026-01-20",
-     "u": "https://www.regcc.cn/zgxtjt/jtnew/202601/70d999dc99124f9da7b203d0c3761b91.shtml",
-     "s": "1月20日，中国稀土集团党委书记、董事长刘雷云在总部与福建省工业控股集团有限公司党委书记、董事长杨方一行举行工作会谈。集团公司党委副书记、董事、总经理李志辉，党委委员、总会计师郭良金；"
-    }
-   ]
-  },
-  {
-   "name": "驰宏锌锗",
-   "code": "600497",
-   "sector": "铅锌",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "http://www.chxz.com/xwzx/zhxw/",
-   "news_url": "http://www.chxz.com/xwzx/zhxw/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 21,
-   "items": [
-    {
-     "t": "奋战“春天里”，启航“十五五”：会泽矿业实现首月“开门红”",
-     "d": "2026-04-10",
-     "u": "http://www.chxz.com/xwzx/zhxw/202604/t20260410_167013.html",
-     "s": "时序开新局，奋进正当时。会泽矿业采、掘、充、运、选全链条高效协同，顺利完成1月份各项生产任务。其中，掘进工程量、铅锌精矿金属量月度计划达成率分别为111.26%、113.82%，铅选矿回收率同比提升0.09%，锌选矿回收率同比提升0.13%，超额完成月度目标任务，成功实现首月“开门红”。"
-    },
-    {
-     "t": "“小投入”撬动“大效益”",
-     "d": "2026-02-02",
-     "u": "http://www.chxz.com/xwzx/zhxw/202602/t20260202_163548.html",
-     "s": "这项仅用半年时间就完成建设投产的硫精矿产率提升流程改造项目，是青海鸿鑫2025年“两带两创”重点项目，它用“小投入”撬动了“大效益”。"
-    },
-    {
-     "t": "金鼎锌业入选云南省2025年度省级绿色矿山",
-     "d": "2026-02-02",
-     "u": "http://www.chxz.com/xwzx/zhxw/202602/t20260202_163547.html",
-     "s": "近日，云南省自然资源厅发布公告，金鼎锌业兰坪铅锌矿正式入选“云南省2025年度省级绿色矿山”名录。这标志着金鼎锌业绿色发展成效获得认可，为企业迈向国家级绿色矿山、实现高质量可持续发展奠定坚实基础。"
-    },
-    {
-     "t": "在矿山，把青春“打磨”成光",
-     "d": "2026-02-02",
-     "u": "http://www.chxz.com/xwzx/zhxw/202602/t20260202_163546.html",
-     "s": "从11月启动到12月落幕，“青锋淬炼 创赢驰宏”不只是一句响亮口号，更是一段交织着汗水、执着与成长的青春修行，在企业的精心浇灌下，绽放出青年与企业共成长的绚丽光彩。"
-    },
-    {
-     "t": "高原矿山的“破题者”——青海鸿鑫2025年科技创新工作侧记",
-     "d": "2026-02-02",
-     "u": "http://www.chxz.com/xwzx/zhxw/202602/t20260202_163545.html",
-     "s": "但这里从不缺直面挑战的“破题者”。青海鸿鑫的技术人员，像扎根戈壁的“骆驼刺”，耐得住高寒缺氧的考验；又如精雕细琢的“昆仑玉”匠人，守得住攻坚克难的匠心。"
-    },
-    {
-     "t": "精准到“厘米”，安全“看得见”",
-     "d": "2026-02-02",
-     "u": "http://www.chxz.com/xwzx/zhxw/202602/t20260202_163544.html",
-     "s": "此次升级针对原有系统“范围性读卡、定位模糊”等痛点，分阶段推进技术改造。一方面部署UWB精确定位系统，集成通信、环境监测与视频监控等功能，推动信息互联；"
-    },
-    {
-     "t": "青海鸿鑫机修车间“焕新颜”",
-     "d": "2026-01-16",
-     "u": "http://www.chxz.com/xwzx/zhxw/202601/t20260116_162674.html",
-     "s": "“以前工具也有固定区域，但找起来得核对清单；现在标签清清楚楚，一眼就能定位！”走进青海鸿鑫选矿厂机修车间，焊工李冲冲着规整的钳工区笑了。"
-    },
-    {
-     "t": "青海鸿鑫攻克磨矿智能化关键技术",
-     "d": "2026-01-16",
-     "u": "http://www.chxz.com/xwzx/zhxw/202601/t20260116_162619.html",
-     "s": "近日，青海鸿鑫“磨矿流程智能化控制技术研究与应用”项目取得重要进展。通过技术攻关，磨矿效率提升7.573%，为后续浮选工序创造了更优条件，有力保障了选矿指标稳定；同时，磨机吨矿钢球单耗降低0.04千克，降本增效成果显著。"
-    },
-    {
-     "t": "这五年，我们于变局中开新局——金鼎锌业“十四五”跨越发展之路",
-     "d": "2026-01-16",
-     "u": "http://www.chxz.com/xwzx/zhxw/202601/t20260116_162618.html",
-     "s": "5年来，我们穿越行业周期波动，营业收入增长22.98%。同时，坚持创新驱动发展，累计获授权专利93件，构建起自主知识产权技术体系。更振奋人心的是，企业创新发展、效益向好时，员工共享成果，员工人均工资逐年增长，员工幸福感和获得感同步提升。"
-    }
-   ]
-  },
-  {
-   "name": "中金岭南",
-   "code": "000060",
-   "sector": "铅锌",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.nonfemet.com/channel/74",
-   "news_url": "https://www.nonfemet.com/channel/74",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 25,
-   "items": [
-    {
-     "t": "中金岭南凡口铅锌矿顺利通过安全生产许可证延期换证现场复核",
-     "d": "2026-07-06",
-     "u": "https://www.nonfemet.com/info/5178",
-     "s": "本次复核严格对照《安全生产许可证条例》《金属非金属矿山安全规程》等法规标准，采用资料审查与现场实地核查同步推进的方式，全方位排查矿山安全生产各项工作。"
-    },
-    {
-     "t": "中金岭南广西矿业西回风井风机试车成功 即将投入使用",
-     "d": "2026-07-03",
-     "u": "https://www.nonfemet.com/info/5176",
-     "s": "7月1日，中金岭南广西矿业（以下简称“广西矿业”）西回风井通风机，经过48小时连续带负荷联动试车，设备运转平稳，各项参数达标，圆满完成试运行，具备投入使用条件，标志着盘龙铅锌矿通风系统建设取得关键性突破，为6000吨/日规模化生产提供了坚实安全保障。"
-    },
-    {
-     "t": "中金岭南广西矿业新选矿厂浮选机单机空载试车成功",
-     "d": "2026-06-22",
-     "u": "https://www.nonfemet.com/info/5161",
-     "s": "浮选机单机空载试车顺利完成，为推动新选矿厂向投产运行目标迈出了关键一步。下一步，广西矿业将加紧6000t/d扩产改造新选矿厂磨矿分级、浮选全流程无负荷联动带水试车的推进，全面检验系统设备联动、连锁及自动控制功能，保障选矿系统按期实现投料试产目标。"
-    },
-    {
-     "t": "“资源筑基、协作共生” 助力中金岭南“复兴计划”落地",
-     "d": "2026-06-08",
-     "u": "https://www.nonfemet.com/info/5154",
-     "s": "面对当前全球矿产市场竞争加剧、供应链风险持续攀升，提质创效、协同稳盘成为海外贸易工作的核心任务，作为供应链事业部中金香港公司副总经理，我始终以“资源筑基、协作共生”为主线，带领团队拓资源、强协同、防风险，持续为公司“复兴计划”赋能增效。"
-    },
-    {
-     "t": "中金科技所属山东中金新材：延链就是我们的“复兴”",
-     "d": "2026-06-05",
-     "u": "https://www.nonfemet.com/info/5146",
-     "s": "在中金岭南 打造具有全球竞争力的有色 金属全产业链国际矿冶集团 、实现 “复兴计划”的进程 中， 中金科技所属 山东中金新材的使命就是把承上启下的那根 产业 链条 彻底 打通。"
-    },
-    {
-     "t": "中金铜业：以绿为底 向新而行 以绿色低碳转型助力企业高质...",
-     "d": "2026-06-05",
-     "u": "https://www.nonfemet.com/info/5145",
-     "s": "2026年6月5日是第55个世界环境日，主题为“全面绿色转型，共建美丽中国”。作为铜产业链绿色转型先行者，中金岭南所属中金铜业深植“绿水青山就是金山银山”理念，走出一条现代化、绿色、低碳、智能、高效的高质量发展之路，用实干书写新时代传统企业绿色转型答卷。"
-    },
-    {
-     "t": "凡口矿井下铲运装备智能化实现关键突破：地下铲运机无人驾驶...",
-     "d": "2026-05-27",
-     "u": "https://www.nonfemet.com/info/5122",
-     "s": "试运行期间，系统累计生产15日，完成生产运行181趟、空车运行15趟，出矿800余吨，最高行驶速度达10公里/小时。系统支持自动驾驶与远程遥控铲运作业两种模式，操作人员可根据作业场景灵活切换。"
-    },
-    {
-     "t": "康发公司：启航“十五五” 聚力谋新篇 以“金牌管家...",
-     "d": "2026-05-26",
-     "u": "https://www.nonfemet.com/info/5117",
-     "s": "中金岭南 “复兴计划”的号角已响彻云霄，“十五五”规划的蓝图正待挥毫。作为公司服务体系的关键一环，中金岭南所属康发公司深知重任在肩，深刻领悟FAITH经营理念的核心要义， 国企复兴从来不是头部企业的独角戏，而是全链条各环节的同频共振；基层单元的微光汇聚，方能照亮高质量发展的整片星河 。"
-    },
-    {
-     "t": "供应链事业部中金香港公司：以金融贸易双循环打造境外供应链...",
-     "d": "2026-05-26",
-     "u": "https://www.nonfemet.com/info/5123",
-     "s": "中金香港公司强化香港矿业托管与双平台一体化管理，为海外企业筹备预付款融资授信，严格控制境外融资成本；加快建设境外财资中心与大宗商品集采集销中心，打造贸易与金融并重的利润中心，加快建成境外“采销融管”一体化的价值中心。"
-    }
-   ]
-  },
-  {
-   "name": "锡业股份",
-   "code": "000960",
-   "sector": "锡",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.ytc.cn/xwdt1/gsxw.htm",
-   "news_url": "https://www.ytc.cn/xwdt1/gsxw.htm",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 18,
-   "items": [
-    {
-     "t": "喜报！云锡2项成果获云南省2025年度科学技术奖励",
-     "d": "2026-09-16",
-     "u": "https://www.ytc.cn/info/1024/16311.htm",
-     "s": "9月15日，2025年度云南省科学技术奖励大会在昆明海埂会堂顺利召开。云锡《数据驱动下的高性能锡铟新材料制备关键技术及应用》《甲基锡系列新型热稳定剂制备关键技术及产业化应用》2个项目分别荣获科学技术进步奖一等奖、二等奖。"
-    },
-    {
-     "t": "云锡与国开行云南分行签署战略合作协议",
-     "d": "2026-09-02",
-     "u": "https://www.ytc.cn/info/1024/16299.htm",
-     "s": "根据协议，双方将本着合作共赢、互惠互利、共同发展的宗旨，发挥各自优势，在保持锡铟资源勘探开发、采选冶、精深加工等传统优势领域良好合作的基础上，积极培育绿色矿山、循环经济、绿美产业链，深化产融协同创新，在重大项目建设、锡铟新材料、高端精深加工、绿色低碳转型、数智化矿山、资源综合利用、跨境资源合作等多领…"
-    },
-    {
-     "t": "大井子锡业公司首批“YT”牌锡锭顺利下线",
-     "d": "2026-09-02",
-     "u": "https://www.ytc.cn/info/1024/16296.htm",
-     "s": "百日攻坚，系统检修保复产。 股权交割后，云锡大井子锡业公司项目工作组闻令而动、火速进驻，全面打响复工复产百日攻坚战。"
-    },
-    {
-     "t": "云锡大井子锡业公司举行复工复产仪式",
-     "d": "2026-09-02",
-     "u": "https://www.ytc.cn/info/1024/16298.htm",
-     "s": "8月14日，云锡大井子锡业公司圆满举行复工复产仪式，标志着云锡北方资源基地建设取得关键性突破。作为云锡锚定国家战略性矿产资源安全、衔接“十五五”产业规划的战略落子，生产、安全、环保、化验计量系统全部达标，正式转入烘炉试生产阶段，拉通云锡南北产业协同布局，为赤峰“北方锡都”建设筑牢坚实产业支撑。"
-    },
-    {
-     "t": "云锡“期中答卷”分量十足 主要经营指标大幅超额完成",
-     "d": "2026-07-24",
-     "u": "https://www.ytc.cn/info/1024/16232.htm",
-     "s": "产业布局再优化 。“走出去”战略加速落地，完成赤峰大井子锡业股权收购，形成北方锡冶炼产能布局和战略性锡产业基地“战略支点”，北方资源基地提速打造。云锡近10年最大的深加工产业项目——新材料产业园（华东）项目完成联合带料试车并产出合格产品，形成产业前移稳定产能和新的“利润增长点”。"
-    },
-    {
-     "t": "云锡锡业分公司发明专利入围中国专利优秀奖",
-     "d": "2026-07-10",
-     "u": "https://www.ytc.cn/info/1024/16234.htm",
-     "s": "近日，国家知识产权局公示第二十六届中国专利奖评审结果，锡业分公司自主研发的发明专利“一种含锡物料熔炼的系统及方法”入围中国专利优秀奖。"
-    },
-    {
-     "t": "我们的南博会：“数智云锡”闪耀亮相第10届南博会",
-     "d": "2026-06-11",
-     "u": "https://www.ytc.cn/info/1024/16176.htm",
-     "s": "世界锡业看中国，中国锡业看云锡。云锡将持续深化AI赋能，以锡铟基础材料支撑AI时代，以全产业链数智能力引领行业未来，进一步做强“全球最优锡铟产品供应商、全球最优锡铟解决方案提供商”，加快创建锡铟行业世界一流企业。"
-    },
-    {
-     "t": "云锡与赤峰市政府、兴业银锡签订锡产业发展合作备忘录",
-     "d": "2026-05-25",
-     "u": "https://www.ytc.cn/info/1024/16134.htm",
-     "s": "吴君代表控股公司感谢赤峰市委、市政府为云锡发展提供了优良沃土，表示将与兴业银锡发挥协同优势，稳定锡原料保障，推动产业迭代升级，完善提升区域产业链条，最大化发挥赤峰市锡资源价值。"
-    }
-   ]
-  },
-  {
-   "name": "厦门钨业",
-   "code": "600549",
-   "sector": "钨",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "https://www.cxtc.com/News.aspx",
-   "news_url": "https://www.cxtc.com/News.aspx",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 23,
-   "items": [
-    {
-     "t": "厦门钨业高强钨丝专利产业化案例入选国家级典型案例",
-     "d": "",
-     "u": "https://www.cxtc.com/",
-     "s": ""
-    }
-   ]
-  },
-  {
-   "name": "Newmont",
-   "code": "NEM",
-   "sector": "黄金",
-   "region": "NA",
-   "exchange": "NYSE",
-   "home": "https://www.newmont.com/investors/news-release/default.aspx",
-   "news_url": "https://www.newmont.com/investors/news-release/default.aspx",
-   "method": "html",
-   "unreach": "spa",
-   "stale": false,
-   "rank": 26,
-   "items": [],
-   "zh": "纽蒙特",
-   "en": "Newmont"
-  },
-  {
-   "name": "Barrick",
-   "code": "B",
-   "sector": "黄金",
-   "region": "NA",
-   "exchange": "NYSE",
-   "home": "https://www.barrick.com/English/News/default.aspx",
-   "news_url": "https://www.barrick.com/English/News/default.aspx",
-   "method": "html",
-   "unreach": "spa",
-   "stale": false,
-   "rank": 28,
-   "items": [],
-   "zh": "巴里克",
-   "en": "Barrick"
-  },
-  {
-   "name": "Freeport-McMoRan",
-   "code": "FCX",
-   "sector": "铜",
-   "region": "NA",
-   "exchange": "NYSE",
-   "home": "https://www.fcx.com/",
-   "news_url": "https://www.fcx.com/",
-   "method": "html",
-   "unreach": "spa",
-   "stale": false,
-   "rank": 27,
-   "items": [],
-   "zh": "自由港麦克莫兰",
-   "en": "Freeport-McMoRan"
-  },
-  {
-   "name": "Southern Copper",
-   "code": "SCCO",
-   "sector": "铜",
-   "region": "NA",
-   "exchange": "NYSE",
-   "home": "https://www.southerncopper.com/",
-   "news_url": "https://www.southerncopper.com/",
-   "method": "html",
-   "unreach": "spa",
-   "stale": false,
-   "rank": 29,
-   "items": [],
-   "zh": "南方铜业",
-   "en": "Southern Copper"
-  },
-  {
-   "name": "Teck Resources",
-   "code": "TECK",
-   "sector": "铅锌",
-   "region": "NA",
-   "exchange": "TSX",
-   "home": "https://www.teck.com/news/",
-   "news_url": "https://www.teck.com/news/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 31,
-   "items": [
-    {
-     "t": "Teck提供与Anglo特别股息和合并相关的信息",
-     "d": "2026-08-12",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-provides-information-related-to-the-anglo-special-dividend-and-the-merger",
-     "s": "",
-     "t_en": "Teck Provides Information Related to the Anglo Special Dividend and the Merger"
-    },
-    {
-     "t": "Teck宣布收到必要的同意和同意征求的到期",
-     "d": "2026-08-03",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-announces-receipt-of-requisite-consents-and-expiration-of-consent-solicitations",
-     "s": "",
-     "t_en": "Teck Announces Receipt of Requisite Consents and Expiration of Consent Solicitations"
-    },
-    {
-     "t": "Teck宣布开始征求同意书",
-     "d": "2026-07-30",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-announces-commencement-of-consent-solicitation",
-     "s": "",
-     "t_en": "Teck Announces Commencement of Consent Solicitation"
-    },
-    {
-     "t": "Teck和Anglo American宣布未来的Anglo Teck执行领导团队",
-     "d": "2026-07-23",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-and-anglo-american-announce-future-anglo-teck-executive-leadership-team",
-     "s": "Nolitha Fakude will continue in her current role, serving as Chair of Anglo Teck’s management board in South Africa, reporting to Duncan Wanblad.",
-     "t_en": "Teck and Anglo American announce future Anglo Teck Executive Leadership Team"
-    },
-    {
-     "t": "Teck宣布派发股息",
-     "d": "2026-07-22",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-announces-dividend-en_ca-488ea3cc",
-     "s": "",
-     "t_en": "Teck Announces Dividend"
-    },
-    {
-     "t": "Teck报告2026年第二季度未经审计的业绩",
-     "d": "2026-07-08",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-reports-unaudited-second-quarter-results-for-2026",
-     "s": "Cash flow from operations of $1.7 billion increased our net cash 1 position by $756 million in Q2 2026. Our liquidity as at June 30, 2026 is $10.",
-     "t_en": "Teck Reports Unaudited Second Quarter Results for 2026"
-    },
-    {
-     "t": "Teck将于2026年7月23日发布2026年第二季度业绩",
-     "d": "2026-07-07",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-to-release-second-quarter-2026-results-on-july-23,-2026",
-     "s": "",
-     "t_en": "Teck to Release Second Quarter 2026 Results on July 23, 2026"
-    },
-    {
-     "t": "Teck、加拿大增长基金和加拿大关键矿物加速器签署协议，支持特雷尔冶炼厂的战略金属生产",
-     "d": "2026-06-30",
-     "u": "http://www.teck.com/news/news-releases/2026/teck,-canada-growth-fund-and-canada-critical-minerals-accelerator-sign-agreement-to-support-strategic-metals-production-at-trail-smelter",
-     "s": "Trail is one of the world’s largest fully integrated polymetallic smelting and refining complexes.",
-     "t_en": "Teck, Canada Growth Fund and Canada Critical Minerals Accelerator sign Agreement to Support Strategic Metals Production at Trail Smelter"
-    },
-    {
-     "t": "Teck宣布邮寄与英美平等合并相关的送文函",
-     "d": "2026-06-22",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-announces-the-mailing-of-a-letter-of-transmittal-in-connection-with-the-merger-of-equals-with-anglo-american",
-     "s": "Must deposit a completed Letter of Transmittal with Computershare Investor Services Inc. (the “Depositary”).",
-     "t_en": "Teck Announces the Mailing of a Letter of Transmittal in Connection with the Merger of Equals with Anglo American"
-    },
-    {
-     "t": "Teck宣布任命代理副总裁、投资者关系和财务主管",
-     "d": "2026-04-23",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-announces-appointment-of-acting-vice-president,-investor-relations-and-treasurer",
-     "s": "Mr. Shadeo holds a Bachelor of Commerce from the University of British Columbia, as well as the Chartered Alternative Investment Analyst (CAIA) and Ce…",
-     "t_en": "Teck Announces Appointment of Acting Vice President, Investor Relations and Treasurer"
-    },
-    {
-     "t": "Teck报告年度股东大会投票结果",
-     "d": "2026-04-23",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-reports-voting-results-from-annual-meeting-of-shareholders",
-     "s": "",
-     "t_en": "Teck Reports Voting Results from Annual Meeting of Shareholders"
-    },
-    {
-     "t": "Teck报告2026年第一季度未经审计的业绩",
-     "d": "2026-04-09",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-reports-unaudited-first-quarter-results-for-2026",
-     "s": "Gross profit from our zinc segment was $359 million in Q1 2026 of which $257 million related to our Trail Operations.",
-     "t_en": "Teck Reports Unaudited First Quarter Results for 2026"
-    },
-    {
-     "t": "Teck将于2026年4月23日发布2026年第一季度业绩",
-     "d": "2026-03-12",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-to-release-first-quarter-2026-results-on-april-23,-2026",
-     "s": "",
-     "t_en": "Teck to Release First Quarter 2026 Results on April 23, 2026"
-    },
-    {
-     "t": "Teck报告2025年可持续发展绩效",
-     "d": "2026-02-18",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-reports-2025-sustainability-performance",
-     "s": "For the full report, please click here . Other reports, including the 2025 Annual Report are also available on our Disclosure Portal .",
-     "t_en": "Teck Reports 2025 Sustainability Performance"
-    },
-    {
-     "t": "Teck报告2025年第四季度未经审计的业绩",
-     "d": "2026-02-18",
-     "u": "http://www.teck.com/news/news-releases/2026/teck-reports-unaudited-fourth-quarter-results-for-2025",
-     "s": "Click here to view Teck’s full fourth quarter results for 2025.",
-     "t_en": "Teck Reports Unaudited Fourth Quarter Results for 2025"
-    }
-   ],
-   "zh": "泰克资源",
-   "en": "Teck Resources"
-  },
-  {
-   "name": "Agnico Eagle",
-   "code": "AEM",
-   "sector": "黄金",
-   "region": "NA",
-   "exchange": "TSX",
-   "home": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
-   "news_url": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
-   "method": "html",
-   "unreach": "spa",
-   "stale": false,
-   "rank": 30,
-   "items": [],
-   "zh": "阿格尼科鹰",
-   "en": "Agnico Eagle"
-  },
-  {
-   "name": "Albemarle",
-   "code": "ALB",
-   "sector": "锂",
-   "region": "NA",
-   "exchange": "NYSE",
-   "home": "https://www.albemarle.com/news",
-   "news_url": "https://www.albemarle.com/news",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 32,
-   "items": [
-    {
-     "t": "在2026年3月31日的新闻中，随着各国加强电网和支持能源转型，电网储能101",
-     "d": "2026-09-03",
-     "u": "https://www.albemarle.com/global/en/news/grid-energy-storage-101-what-it-and-why-it-matters",
-     "s": "：它是什么以及为什么它很重要随着各国加强电网和支持能源转型，对固定储能的需求正在飙升，预计到2026年产量将增加。人工智能和数据中心正在加速电力需求，而lithiu",
-     "t_en": "In The News March 31, 2026 Grid Energy Storage 101: What It Is and Why It Matters Demand for stationary energy storage is surging as countries strengthen grids and support the energy transition, with output expected to jump in 2026. AI and data centers are accelerating electricity demand, and lithium-based batteries help balance peak loads, reduce outages, and delay grid upgrades"
-    },
-    {
-     "t": "新闻稿2026年9月3日Albemarle宣布首席执行官继任计划Ragnar",
-     "d": "2026-08-05",
-     "u": "https://www.albemarle.com/global/en/news/albemarle-announces-ceo-succession-plan",
-     "s": "UDD 被任命为总裁兼首席执行官，自 2027年 2月 1日起生效 Kent Masters将担任北卡罗来纳州夏洛特市执行主席 ，",
-     "t_en": "Press Releases September 03, 2026 Albemarle Announces CEO Succession Plan Ragnar Udd Appointed President and CEO, Effective February 1, 2027 Kent Masters to Serve as Executive Chairman CHARLOTTE, N.C., Sept. 3, 2026 /PRNewswire/ -- Albemarle Corporation (NYSE: ALB), a global leader in providing essential elements for mobility, energy, connectivity and health, today"
-    },
-    {
-     "t": "新闻稿2026年7月21日， Albemarle宣布北卡罗来纳州夏洛特的季度普通股股息， 2026年7月21日/美通社/--",
-     "d": "2026-08-05",
-     "u": "https://www.albemarle.com/global/en/news/albemarle-announces-quarterly-common-stock-dividend-7",
-     "s": "Albemarle Corporation (NYSE: ALB)董事会今天宣布 ，其宣布每股 0.41的季度普通股股息。股息 $ ，它有一个",
-     "t_en": "Press Releases July 21, 2026 Albemarle Announces Quarterly Common Stock Dividend CHARLOTTE, N.C., July 21, 2026 /PRNewswire/ -- The Board of Directors of Albemarle Corporation (NYSE: ALB) today announced that it declared a quarterly common stock dividend of $0.41 per share. The dividend, which has an annualized rate of $1.64, is payable Oct. 1, 2026, to shareholders of record at"
-    },
-    {
-     "t": "新闻稿2026年8月5日Albemarle公布2026年第二季度业绩北卡罗来纳州夏洛特2026年8月5日/美通社/--为交通、能",
-     "d": "2026-07-23",
-     "u": "https://www.albemarle.com/global/en/news/albemarle-reports-second-quarter-2026-results",
-     "s": "源、连通性和健康提供基本要素的全球领导者Albemarle Corporation (NYSE: ALB)今日宣布第二季度业绩",
-     "t_en": "Press Releases August 05, 2026 Albemarle Reports Second Quarter 2026 Results CHARLOTTE, N.C., Aug. 5, 2026 /PRNewswire/ -- Albemarle Corporation (NYSE: ALB), a global leader in providing essential elements for mobility, energy, connectivity and health, today announced its results for the second quarter ended June 30, 2026. Second Quarter 2026 and Recent Highlights (Unless"
-    },
-    {
-     "t": "新闻稿2026年7月23日， Albemarle任命Eduardo Bartolomeo为北卡罗来纳州夏洛特市董事会成员。",
-     "d": "2026-07-21",
-     "u": "https://www.albemarle.com/global/en/news/albemarle-appoints-eduardo-bartolomeo-board-directors",
-     "s": "北卡罗来纳州夏洛特，",
-     "t_en": "Press Releases July 23, 2026 Albemarle Appoints Eduardo Bartolomeo to Board of Directors CHARLOTTE, N.C., July 23, 2026 /PRNewswire/ -- Albemarle Corporation (NYSE: ALB), a global leader in providing essential elements for mobility, energy, connectivity and health, today announced that its Board of Directors (the \"Board\") has appointed Eduardo Bartolomeo to the Board, effective July 21"
-    },
-    {
-     "t": "可持续发展2026年6月5日Albemarle发布《2025年可持续发展报告》该报告重点介绍了在管理、创新和卓越运营方面取得的进",
-     "d": "2026-03-31",
-     "u": "https://www.albemarle.com/global/en/news/albemarle-publishes-2025-sustainability-report",
-     "s": "报告强调了在管理、创新和卓越运营方面取得的进展。",
-     "t_en": "Sustainability June 05, 2026 Albemarle Publishes 2025 Sustainability Report The report highlights progress in stewardship, innovation and operational excellence."
-    },
-    {
-     "t": "创新2026年1月14日专家之声：巴吞鲁日Albemarle工艺发展中心的核磁共振（ NMR ）光谱化学家Zhaoxiong",
-     "d": "2026-03-31",
-     "u": "https://www.albemarle.com/global/en/news/expert-voices-science-seeing-invisible",
-     "s": "（ Norm ） Zheng博士使用先进的成像技术—不是扫描身体，而是分析分子",
-     "t_en": "Innovation January 14, 2026 Expert Voices: The Science of Seeing the Invisible Dr. Zhaoxiong (Norm) Zheng, a nuclear magnetic resonance (NMR) spectroscopy chemist at Albemarle’s Process Development Center in Baton Rouge, uses advanced imaging technology — not to scan bodies, but to analyze the molecular structure of specialty chemicals, helping teams across the company"
-    },
-    {
-     "t": "在2026年3月31日的新闻中，锂化学的见解：塑造先进橡胶材料锂化学是生产耐用、有弹性和弹性的先进橡胶材料的基础。",
-     "d": "2026-01-14",
-     "u": "https://www.albemarle.com/global/en/news/insights-lithium-chemistry-shaping-advanced-rubber-materials",
-     "s": "Albemarle has more than 100 years of experience in pioneering the responsible use of lithium, most recently for use in lithium-ion batteries.",
-     "t_en": "In The News March 31, 2026 Insights in Lithium Chemistry: Shaping Advanced Rubber Materials Lithium chemistry is fundamental in producing advanced rubber materials that are durable, elastic and resilient. It enables precise polymer engineering, improving performance across various industries including mobility, infrastructure and specialty products."
-    }
-   ],
-   "zh": "雅保",
-   "en": "Albemarle"
-  },
-  {
-   "name": "盐湖股份",
-   "code": "000792",
-   "sector": "锂",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "http://www.qhyhgf.com/",
-   "news_url": "http://www.qhyhgf.com/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 99,
-   "items": [
-    {
-     "t": "盐湖股份：关于与关联方共同投资参与中试项目暨关联交易的公告2026-031",
-     "d": "2026-09-15",
-     "u": "http://www.qhyhgf.com/newsinfo/11310258.html",
-     "s": ""
-    },
-    {
-     "t": "盐湖股份：十五五发展规划暨三年行动方案（2026-2028）纲要",
-     "d": "2026-08-31",
-     "u": "http://www.qhyhgf.com/newsinfo/11310270.html",
-     "s": ""
-    },
-    {
-     "t": "盐湖股份：青海盐湖工业股份有限公司境外投资管理办法",
-     "d": "2026-08-31",
-     "u": "http://www.qhyhgf.com/newsinfo/11310264.html",
-     "s": ""
-    },
-    {
-     "t": "盐湖股份：关于召开2026年第二次临时股东会的通知2026-032",
-     "d": "2026-08-31",
-     "u": "http://www.qhyhgf.com/newsinfo/11310260.html",
-     "s": ""
-    },
-    {
-     "t": "2026年中国（格尔木）锂业大会暨第四届锂电新能源发展大会在格尔木隆重召开",
-     "d": "2026-08-03",
-     "u": "http://www.qhyhgf.com/newsinfo/11304576.html",
-     "s": "开幕式上，中国有色金属工业协会党 委书记敖宏致辞并讲话，高度总结十四五有色行业取得的成果，并就推动锂行业高质量发展分享了认识与思考，中国盐湖党委副书记、董事、总经理王祥文，广州期货交易所副总经理曹子海，藏青工业园区管委会党组成员，副主任范兴伟分别为大会致辞。"
-    },
-    {
-     "t": "3万＋，察尔汗盐湖景区单日游客接待量再获新高！",
-     "d": "2026-07-22",
-     "u": "http://www.qhyhgf.com/newsinfo/11301394.html",
-     "s": "8月3日，察尔汗盐湖景区单日游客接待量首次突破3万大关，较2025年最高日接待量增长43%，创下运营以来单日客流新纪录。这串数字背后，是万千游客跨越山海的奔赴与信任，是全体员工默默坚守的付出，更折射出景区从“热门打卡”向“品质长红”转型的坚实步伐。"
-    },
-    {
-     "t": "地企协同拓新局 共筑盐湖产业高地——青海盐湖工业股份有限公司与青海省核工业地质局签署战略合作框架协议",
-     "d": "2026-07-16",
-     "u": "http://www.qhyhgf.com/newsinfo/11271744.html",
-     "s": "7月22日，青海盐湖工业股份有限公司与青海省核工业地质局战略合作框架协议签约仪式在青海省核工业地质局生物园区基地举行。盐湖股份党委书记、董事长侯昭飞与青海省核工业地质局党委书记、局长李为民签署战略合作框架协议，青海省核工业地质局党委委员、副局长段建华主持仪式，双方相关负责人出席。"
-    }
-   ]
-  },
-  {
-   "name": "中矿资源",
-   "code": "002738",
-   "sector": "锂",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "http://www.sinomine.cn/",
-   "news_url": "http://www.sinomine.cn/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 99,
-   "items": [
-    {
-     "t": "竣工投产 逐光启航！中矿卡通巴选矿厂正式投产运营",
-     "d": "",
-     "u": "http://www.sinomine.cn/xwdti/426.html",
-     "s": "2026年9月21日，中矿卡通巴矿业有限公司（以下简称“卡通巴矿业”）选矿厂完成建设期各项工作任务，正式进入生产运营阶段。"
-    },
-    {
-     "t": "擘画非洲新蓝图 开启协同新征程——中矿资源集团中南部非洲运营管理中心正式揭牌",
-     "d": "",
-     "u": "http://www.sinomine.cn/xwdti/424.html",
-     "s": "作为中南非中心“赋能服务、深化协同”职能的首次重要实践，仪式上举行了首批配套企业战略合作签约仪式。王治伟总经理代表中南非中心与五家服务型企业签署战略合作协议。通过构建上下游配套企业集群，一个资源共享、优势互补的产业生态圈正加快形成，集团在非业务领域正式开启区域协同化、系统化布局。"
-    },
-    {
-     "t": "24/08 16 中矿资源赞比亚卡通巴铜矿山 开工典礼隆重举行",
-     "d": "",
-     "u": "http://www.sinomine.cn/xwdti/179.html",
-     "s": "2024 年8月16日，中矿资源集团股份有限公司（以下简称“中矿资源”）卡通巴（Kitumba）铜矿山开工典礼隆重举行。"
-    },
-    {
-     "t": "09/18 中矿资源集团股份有限公司荣登2026北京民营企业百强第89位",
-     "d": "",
-     "u": "http://www.sinomine.cn/xwdti/423.html",
-     "s": "9月17日，北京市工商业联合会正式发布2026北京民营企业百强系列榜单。中矿资源集团股份有限公司（以下简称“中矿资源”）凭借稳健的经营业绩与持续增强的综合实力，荣登“2026北京民营企业百强”主榜单，位列第89位。"
-    }
-   ]
-  },
-  {
-   "name": "永兴材料",
-   "code": "002756",
-   "sector": "锂",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "http://www.yongxing.com.cn/",
-   "news_url": "http://www.yongxing.com.cn/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 99,
-   "items": [
-    {
-     "t": "设备发往内蒙古自治区巴彦淖尔市",
-     "d": "",
-     "u": "http://www.yongxing.com.cn/show-7-58-1.html",
-     "s": ""
-    },
-    {
-     "t": "关爱环卫工 高温送清凉 关爱环卫工 高温送清凉",
-     "d": "",
-     "u": "http://www.yongxing.com.cn/show-7-57-1.html",
-     "s": ""
-    },
-    {
-     "t": "中老铁路拌合站",
-     "d": "",
-     "u": "http://www.yongxing.com.cn/show-8-21-1.html",
-     "s": ""
-    }
-   ]
-  },
-  {
-   "name": "白银有色",
-   "code": "601212",
-   "sector": "铜铅锌",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "http://www.bynmc.com/",
-   "news_url": "http://www.bynmc.com/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 99,
-   "items": [
-    {
-     "t": "白银有色集团股份有限公司2026年半年度业绩预告的公告",
-     "d": "2026-08-20",
-     "u": "http://www.bynmc.com/touzizheguanxi/gonggaoxinxi/20260820/155159100b7dee96b25.htm",
-     "s": ""
-    },
-    {
-     "t": "白银有色集团股份有限公司2025年年度报告（修订稿）",
-     "d": "2026-06-26",
-     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260626/09162134855b710cad8.htm",
-     "s": ""
-    },
-    {
-     "t": "白银有色集团股份有限公司2025年年度报告摘要（修订稿）",
-     "d": "2026-06-26",
-     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260626/0917312787d3747a5c5.htm",
-     "s": ""
-    },
-    {
-     "t": "白银有色集团股份有限公司2025年年度报告",
-     "d": "2026-04-28",
-     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260428/1127010676b64baba83.htm",
-     "s": ""
-    },
-    {
-     "t": "白银有色集团股份有限公司2025年年度报告摘要",
-     "d": "2026-04-28",
-     "u": "http://www.bynmc.com/touzizheguanxi/yejibaogao/20260428/11253423371a08b402f.htm",
-     "s": ""
-    }
-   ]
-  },
-  {
-   "name": "中色股份",
-   "code": "000758",
-   "sector": "海外工程",
-   "region": "CN",
-   "exchange": "A股",
-   "home": "http://www.nfc.com.cn/",
-   "news_url": "http://www.nfc.com.cn/",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 99,
-   "items": [
-    {
-     "t": "张晋军到中色创新研究院开展工作调研",
-     "d": "2026-09-11",
-     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/9/I1548034607188803584.html",
-     "s": "9月10日，中国有色集团党委副书记、总经理张晋军到中色创新研究院开展工作调研，深入研发一线实地查看重点项目进展情况，与企业领导班子进行座谈交流，并对下一阶段工作提出要求。"
-    },
-    {
-     "t": "赤峰中色白音诺尔矿业有限公司进入国家级绿色矿山名录",
-     "d": "2026-08-28",
-     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/8/I1542897932603228160.html",
-     "s": "坚持边采边治，大力推进矿区生态修复。 中色白矿严格落实“边开采、边修复、边养护”一体化治理原则，累计投入超1.1亿元专项资金，统筹开展边坡防护、土地复垦、采空区综合治理与植被复绿工程，累计完成地质环境治理面积80公顷，栽植苗木5."
-    },
-    {
-     "t": "中国有色集团召开2026年年中工作会暨安全环...",
-     "d": "2026-07-29",
-     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/7/I1531945272706334720.html",
-     "s": "7月28日，中国有色集团召开2026年年中工作会暨安全环保工作会，总结上半年工作，分析当前形势，部署下半年任务。会议传达学习了中央企业负责人研讨班会议精神，通报了2025年度出资企业 党建工作责任制考核评价结果、董事会综合考核评价结果、经营业绩 考核结果，以 及三个专项行动进展情况。"
-    },
-    {
-     "t": "中国有色集团举办2026年度第二期安全生产管...",
-     "d": "2026-07-14",
-     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/7/I1526507113470230528.html",
-     "s": "培训要求各单位深刻吸取泉州火灾事故教训，筑牢安全生产底线，把培训所学标准方法转化为隐患排查整治实招实效，常态化推进风险动态清零，持续深化安全生产“打非治违”，以高水平安全保障集团高质量发展。"
-    }
-   ]
-  },
-  {
-   "name": "力拓",
-   "code": "RIO",
-   "sector": "综合",
-   "region": "NA",
-   "exchange": "LSE",
-   "home": "https://www.riotinto.com/",
-   "news_url": "https://www.riotinto.com/",
-   "method": "html",
-   "unreach": "spa",
-   "stale": true,
-   "rank": 99,
-   "items": [],
-   "zh": "力拓",
-   "en": "Rio Tinto"
-  },
-  {
-   "name": "必和必拓",
-   "code": "BHP",
-   "sector": "综合",
-   "region": "NA",
-   "exchange": "LSE",
-   "home": "https://www.bhp.com/",
-   "news_url": "https://www.bhp.com/",
-   "method": "html",
-   "unreach": "spa",
-   "stale": false,
-   "rank": 99,
-   "items": [],
-   "zh": "必和必拓",
-   "en": "BHP"
-  },
-  {
-   "name": "淡水河谷",
-   "code": "VALE",
-   "sector": "综合",
-   "region": "NA",
-   "exchange": "NYSE",
-   "home": "https://www.vale.com/",
-   "news_url": "https://www.vale.com/",
-   "method": "html",
-   "unreach": "spa",
-   "stale": true,
-   "rank": 99,
-   "items": [],
-   "zh": "淡水河谷",
-   "en": "Vale"
-  },
-  {
-   "name": "嘉能可",
-   "code": "GLEN",
-   "sector": "综合",
-   "region": "NA",
-   "exchange": "LSE",
-   "home": "https://www.glencore.com/",
-   "news_url": "https://www.glencore.com/",
-   "method": "html",
-   "unreach": "spa",
-   "stale": false,
-   "rank": 99,
-   "items": [],
-   "zh": "嘉能可",
-   "en": "Glencore"
-  },
-  {
-   "name": "英美资源",
-   "code": "AAL",
-   "sector": "综合",
-   "region": "NA",
-   "exchange": "LSE",
-   "home": "https://www.angloamerican.com/",
-   "news_url": "https://www.angloamerican.com/",
-   "method": "html",
-   "unreach": "spa",
-   "stale": true,
-   "rank": 99,
-   "items": [],
-   "zh": "英美资源",
-   "en": "Anglo American"
   }
  ],
  "counts": {
@@ -2512,6 +3284,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 47,
-  "items": 288
+  "items": 380
  }
 }

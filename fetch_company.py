@@ -1377,24 +1377,24 @@ SITES = [
      'zh':'厦门钨业','en':'Xiamen Tungsten',
      'url':'https://www.cxtc.com/News.aspx','method':'html'},
     # —— 海外（官网 News/IR 栏目，英文标题经 MyMemory 译中）——
-    {'name':'Newmont','code':'NEM','sector':'黄金','region':'NA','exchange':'NYSE','origin':'official',
+    {'name':'Newmont','code':'NEM','sector':'黄金','region':'NA','exchange':'NYSE','origin':'agg',
      'zh':'纽蒙特','en':'Newmont',
-     'url':'https://www.newmont.com/investors/news-release/default.aspx','method':'html','unreach':'spa'},
-    {'name':'Barrick','code':'B','sector':'黄金','region':'NA','exchange':'NYSE','origin':'official',
+     'url':'https://www.newmont.com/investors/news-release/default.aspx','method':'agg','ticker':'NEM','cik':1164727},
+    {'name':'Barrick','code':'B','sector':'黄金','region':'NA','exchange':'NYSE','origin':'agg',
      'zh':'巴里克','en':'Barrick',
-     'url':'https://www.barrick.com/English/News/default.aspx','method':'html','unreach':'spa'},
-    {'name':'Freeport-McMoRan','code':'FCX','sector':'铜','region':'NA','exchange':'NYSE','origin':'official',
+     'url':'https://www.barrick.com/English/News/default.aspx','method':'agg','ticker':'B','cik':756894},
+    {'name':'Freeport-McMoRan','code':'FCX','sector':'铜','region':'NA','exchange':'NYSE','origin':'agg',
      'zh':'自由港','en':'Freeport-McMoRan',
-     'url':'https://www.fcx.com/','method':'html','unreach':'spa'},
-    {'name':'Southern Copper','code':'SCCO','sector':'铜','region':'NA','exchange':'NYSE','origin':'official',
+     'url':'https://www.fcx.com/','method':'agg','ticker':'FCX','cik':831259},
+    {'name':'Southern Copper','code':'SCCO','sector':'铜','region':'NA','exchange':'NYSE','origin':'agg',
      'zh':'南方铜业','en':'Southern Copper',
-     'url':'https://www.southerncopper.com/','method':'html','unreach':'spa','to':12},
-    {'name':'Teck Resources','code':'TECK','sector':'铅锌','region':'NA','exchange':'TSX','origin':'official',
+     'url':'https://www.southerncoppercorp.com/','method':'agg','ticker':'SCCO','cik':1001838},
+    {'name':'Teck Resources','code':'TECK','sector':'铅锌','region':'NA','exchange':'TSX','origin':'agg',
      'zh':'泰克资源','en':'Teck Resources',
-     'url':'https://www.teck.com/news/','method':'html'},
-    {'name':'Agnico Eagle','code':'AEM','sector':'黄金','region':'NA','exchange':'TSX','origin':'official',
+     'url':'https://www.teck.com/news/','method':'agg','ticker':'TECK','cik':886986},
+    {'name':'Agnico Eagle','code':'AEM','sector':'黄金','region':'NA','exchange':'TSX','origin':'agg',
      'zh':'阿格尼科鹰','en':'Agnico Eagle',
-     'url':'https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx','method':'html','unreach':'spa'},
+     'url':'https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx','method':'agg','ticker':'AEM','cik':2809},
     {'name':'Albemarle','code':'ALB','sector':'锂','region':'NA','exchange':'NYSE','origin':'official',
      'zh':'雅保','en':'Albemarle',
      'url':'https://www.albemarle.com/news','method':'html'},
@@ -1426,21 +1426,21 @@ SITES = [
     {'name':'中国有色矿业','code':'1258','sector':'铜','region':'HK','exchange':'港股','origin':'sina-hk',
      'zh':'中国有色矿业','en':'China Nonferrous Mining',
      'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/hk01258.phtml','method':'html'},
-    {'name':'力拓','code':'RIO','sector':'综合','region':'NA','exchange':'LSE','origin':'official',
+    {'name':'力拓','code':'RIO','sector':'综合','region':'NA','exchange':'LSE','origin':'agg',
      'zh':'力拓','en':'Rio Tinto',
-     'url':'https://www.riotinto.com/','method':'html','unreach':'spa'},
-    {'name':'必和必拓','code':'BHP','sector':'综合','region':'NA','exchange':'LSE','origin':'official',
+     'url':'https://www.riotinto.com/','method':'agg','ticker':'RIO','cik':863064},
+    {'name':'必和必拓','code':'BHP','sector':'综合','region':'NA','exchange':'LSE','origin':'agg',
      'zh':'必和必拓','en':'BHP',
-     'url':'https://www.bhp.com/','method':'html','unreach':'spa'},
-    {'name':'淡水河谷','code':'VALE','sector':'综合','region':'NA','exchange':'NYSE','origin':'official',
+     'url':'https://www.bhp.com/','method':'agg','ticker':'BHP','cik':811809},
+    {'name':'淡水河谷','code':'VALE','sector':'综合','region':'NA','exchange':'NYSE','origin':'agg',
      'zh':'淡水河谷','en':'Vale',
-     'url':'https://www.vale.com/','method':'html','unreach':'spa'},
-    {'name':'嘉能可','code':'GLEN','sector':'综合','region':'NA','exchange':'LSE','origin':'official',
+     'url':'https://www.vale.com/','method':'agg','ticker':'VALE','cik':917851},
+    {'name':'嘉能可','code':'GLEN','sector':'综合','region':'NA','exchange':'LSE','origin':'mining',
      'zh':'嘉能可','en':'Glencore',
-     'url':'https://www.glencore.com/','method':'html','unreach':'spa'},
-    {'name':'英美资源','code':'AAL','sector':'综合','region':'NA','exchange':'LSE','origin':'official',
+     'url':'https://www.glencore.com/','method':'mining','minkw':['glencore']},
+    {'name':'英美资源','code':'AAL','sector':'综合','region':'NA','exchange':'LSE','origin':'mining',
      'zh':'英美资源','en':'Anglo American',
-     'url':'https://www.angloamerican.com/','method':'html','unreach':'spa'},
+     'url':'https://www.angloamerican.com/','method':'mining','minkw':['anglo american']},
     # —— 第一量子（官网 RSS，结构化新闻，英文标题经 MyMemory 译中）——
     {'name':'第一量子','code':'FM','sector':'铜','region':'NA','exchange':'TSX','origin':'rss',
      'zh':'第一量子','en':'First Quantum',
@@ -1476,6 +1476,146 @@ def _stub(site):
             'unreach': site.get('unreach', ''),
             'stale': False, 'rank': RANK.get(site['name'], 99), 'items': []}
 
+# ============================ 3.9 海外动态站换源（2026-09-26 新增）============================
+# 背景：纽蒙特 / 巴里克 / 自由港 / 南方铜业 / 阿格尼科鹰 / 力拓 / 必和必拓 / 淡水河谷等海外官网
+# 是纯 JS 动态加载页（SPA），静态抓取拿不到新闻列表；嘉能可 / 英美资源（伦交所）连 EDGAR 都只有
+# ADR 注册文件（F-6）。用户 2026-09-26 拍板「全部救活」，故换用两个静态可得源：
+#   method='agg'    → SEC EDGAR 官方披露（data.sec.gov，静态 JSON、免鉴权，覆盖美股/ADR filer）
+#                     + 按 ticker 的股票新闻聚合（stocktitan RSS，有真实可读新闻标题）双源合并；
+#   method='mining' → mining.com 全球矿业 RSS 全站 feed，按公司名关键字匹配
+#                     （伦交所公司无美股实质披露，这是唯一可行的静态兜底）。
+# 两者都返回与 extract_items 同构的条目（t/d/u/s），额外带 src 字段（'edgar'/'agg'/'mining'）供前端披露来源。
+EDGAR_UA = 'mining-daily research pliucugb@gmail.com'
+ST_RSS_BASE = 'https://www.stocktitan.net/rss/news/{}'
+MINING_FEED = 'https://www.mining.com/feed/'
+# EDGAR 里「有信息量」的表单类型（排除 4/SD/144/13F 等内部人持仓类噪音）
+EDGAR_WANT = ('8-K', '6-K', '20-F', '40-F', '10-K', '10-Q')
+EDGAR_FORM_DESC = {
+    '8-K': '重大事项披露', '6-K': '外资发行人报告',
+    '20-F': '年度报告', '40-F': '年度报告',
+    '10-K': '年度报告', '10-Q': '季度报告',
+}
+
+def fetch_edgar_json(cik):
+    """抓 SEC EDGAR submissions JSON（EDGAR 要求 UA 带联系方式，故不能用项目默认 UA）。"""
+    url = 'https://data.sec.gov/submissions/CIK%010d.json' % int(cik)
+    proxy = effective_proxy()
+    try:
+        req = urllib.request.Request(url, headers={
+            'User-Agent': EDGAR_UA, 'Accept': '*/*',
+            'Accept-Encoding': 'gzip, deflate'})
+        hd = {'http': proxy, 'https': proxy} if proxy else {}
+        op = urllib.request.build_opener(urllib.request.ProxyHandler(hd))
+        r = op.open(req, timeout=15)
+        data = r.read()
+        if 'gzip' in (r.headers.get('Content-Encoding') or ''):
+            import gzip as _gz
+            data = _gz.decompress(data)
+        return data.decode('utf-8', 'replace')
+    except Exception:
+        return ''
+
+def fetch_edgar(cik, max_items=6):
+    """SEC EDGAR → 重大披露条目。标题带 MM-DD，避免同 form 标题相同被 prune_items 去重成 1 条。"""
+    raw = fetch_edgar_json(cik)
+    if not raw:
+        return []
+    try:
+        d = json.loads(raw)
+    except Exception:
+        return []
+    fr = (d.get('filings') or {}).get('recent') or {}
+    forms = fr.get('form') or []
+    dates = fr.get('filingDate') or []
+    accns = fr.get('accessionNumber') or []
+    out, seen = [], set()
+    for i in range(min(len(forms), 100)):
+        f = forms[i]
+        if f not in EDGAR_WANT:
+            continue
+        ds = dates[i] if i < len(dates) else ''
+        accn = (accns[i] if i < len(accns) else '').replace('-', '')
+        if not accn:
+            continue
+        u = 'https://www.sec.gov/Archives/edgar/data/%d/%s/' % (int(cik), accn)
+        if u in seen:
+            continue
+        seen.add(u)
+        md = ds[5:] if len(ds) >= 10 else ds
+        out.append({'t': '提交 SEC %s 表（%s）· %s' % (f, EDGAR_FORM_DESC.get(f, ''), md),
+                    'd': ds, 'u': u, 's': '', 'src': 'edgar'})
+        if len(out) >= max_items:
+            break
+    return out
+
+def _rss_field(blk, tag):
+    m = re.search(r'<%s\b[^>]*>(.*?)</%s>' % (tag, tag), blk, re.I | re.S)
+    return _rss_text(m.group(1)) if m else ''
+
+def fetch_agg_ticker(tk, max_items=18):
+    """按 ticker 抓股票新闻聚合（stocktitan RSS，<item> 结构）。"""
+    if not tk:
+        return []
+    url = ST_RSS_BASE.format(tk)
+    raw = fetch_html(url, timeout=25)
+    if not raw:
+        return []
+    items = extract_rss(raw, url, max_items=max_items)
+    for it in items:
+        it['src'] = 'agg'
+    return items
+
+def fetch_mining(site, max_items=10):
+    """mining.com 全站 RSS，按公司名关键字匹配（伦交所公司唯一可行的静态源）。
+    优先标题匹配；当某关键字是多词短语（如 'anglo american'）且标题无命中时，
+    退而匹配 <content:encoded> 正文，覆盖「今天没有以该公司为题、但文中重点提及」的报道。"""
+    keywords = site.get('minkw') or []
+    if not keywords:
+        return []
+    raw = fetch_html(MINING_FEED, timeout=25)
+    if not raw:
+        return []
+    phrases = [k.lower() for k in keywords if ' ' in k]  # 仅多词短语进正文匹配，避免 AngloGold 误命中
+    out, seen = [], set()
+    for blk in RSS_ITEM.findall(raw):
+        title = _rss_field(blk, 'title')
+        if not title:
+            continue
+        tl = title.lower()
+        hit = any(k in tl for k in keywords)
+        if not hit and phrases:
+            ce = re.search(r'<content:encoded[^>]*>(.*?)</content:encoded>', blk, re.I | re.S)
+            c = _rss_text(ce.group(1)) if ce else ''
+            if c and any(p in c.lower() for p in phrases):
+                hit = True
+        if not hit:
+            continue
+        u = urllib.parse.urljoin(MINING_FEED, _rss_field(blk, 'link'))
+        if not u or u in seen:
+            continue
+        seen.add(u)
+        out.append({'t': clean_ws(title), 'd': _rss_date(_rss_field(blk, 'pubDate')),
+                    'u': u, 's': '', 'src': 'mining'})
+        if len(out) >= max_items:
+            break
+    out.sort(key=lambda x: (x['d'] == '', x['d']), reverse=True)
+    return out
+
+def build_agg_items(site, max_items=18):
+    """agg 双源合并：股票新闻聚合（有可读标题）+ SEC EDGAR 披露（补聚合覆盖陈旧的公司）。
+    2026-09-26 修：SEC filer 一律补抓 EDGAR（不再受 stocktitan 条数门槛限制）——
+    实测 stocktitan 部分 ticker（如 RIO）整源停在 2023，仅靠它会被 730 天年龄过滤清空，
+    而 EDGAR 的近期 6-K/8-K 才是真实新鲜披露。"""
+    items = fetch_agg_ticker(site.get('ticker'), max_items=max_items)
+    cik = site.get('cik')
+    if cik:
+        have = set(x['u'] for x in items)
+        for e in fetch_edgar(cik, max_items=6):
+            if e['u'] not in have:
+                items.append(e)
+    items.sort(key=lambda x: (x['d'] == '', x['d']), reverse=True)
+    return items[:max_items]
+
 # ============================ 4. 单公司采集 ============================
 def fetch_one(site, force=False):
     name = site['name']
@@ -1485,6 +1625,19 @@ def fetch_one(site, force=False):
     raw = cache_get(name, force)
     cached = raw is not None
     used_method = method
+    # 2026-09-26 新增源：agg（股票新闻聚合 + SEC EDGAR 披露）/ mining（mining.com 全站按名匹配）。
+    # 不走 HTML 抽取——海外官网是纯 JS 动态页，静态抓取本就拿不到新闻列表；直接由专用函数取数。
+    if method in ('agg', 'mining'):
+        items = (build_agg_items(site) if method == 'agg'
+                 else fetch_mining(site))
+        if site.get('region') == 'NA':
+            for it in items:
+                if re.search(r'[\u4e00-\u9fff]', it.get('t') or ''):
+                    it.setdefault('t_en', '')
+                    continue
+                it['t_en'] = clean_ws(it['t'])
+                it['t'] = clean_ws(translate(it['t']))
+        return items, method, False
     if raw is None:
         if method == 'rss':
             # 官网 RSS：静态抓取后走专用 RSS 解析器（第一量子等）

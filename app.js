@@ -7086,7 +7086,7 @@ function toggleTheme(){
     var rows=[];
     cs.forEach(function(co){
       (co.items||[]).forEach(function(it){
-        rows.push({t:it.t,d:it.d||'',u:it.u||'',s:it.s||'',en:it.t_en||'',
+        rows.push({t:it.t,d:it.d||'',u:it.u||'',s:it.s||'',en:it.t_en||'',src:it.src||'',
           name:co.name,code:co.code||'' ,sector:co.sector||'',
           region:co.region,stale:!!co.stale,zh:co.zh||'',zh_en:co.en||''});
       });
@@ -7195,12 +7195,21 @@ function toggleTheme(){
     if(en && en!==zh) return zh+'（'+en+'）';
     return zh;
   }
-  // 媒体源披露：新浪财经 / 官网 RSS / 公司官网
+  // 媒体源披露：新浪财经 / 官网 RSS / 公司官网 / SEC披露·股票新闻 / 矿业媒体
   function originLabel(o){
     var or=(o&&o.origin)||'';
     if(or==='sina-a'||or==='sina-hk') return '新浪财经';
     if(or==='rss') return '官网 RSS';
+    if(or==='agg') return 'SEC披露·股票新闻';
+    if(or==='mining') return '矿业媒体';
     return '公司官网';
+  }
+  // 条目级来源标签（与 fetch_company.py 写入的 it.src 对应）
+  function srcLabel(s){
+    if(s==='edgar') return 'SEC披露';
+    if(s==='agg') return '股票新闻';
+    if(s==='mining') return '矿业媒体';
+    return '';
   }
   function cardHtml(it){
     var tb=splitTB(it.t);
@@ -7218,6 +7227,7 @@ function toggleTheme(){
     // 2026-09-24：已读态。data-url 作为本地已读集合的键（原文链接缺失时退化为搜索链接，
     // 仍是稳定键）；已读条目整体弱化，且只显示「标为未读」。
     var isRead=coReadHas(primary);
+    var srcTag=it.src?('<span class="co-src-tag co-src-'+esc(it.src)+'">'+esc(srcLabel(it.src))+'</span>'):'';
     var acts='<div class="co-actions">'+
       '<button type="button" class="btn-co-read" title="将本条标记为已读（仅本机，不影响其他条目）">&#10003; 标为已读</button>'+
       '<button type="button" class="btn-co-unread" title="将本条恢复为未读（仅本机，不影响其他条目）">&#8630; 标为未读</button>'+
@@ -7227,7 +7237,7 @@ function toggleTheme(){
       '<a class="co-title" href="'+esc(primary)+'" target="_blank" rel="noopener noreferrer"'+
         (url?'':' title="原文链接缺失：点击将前往搜索引擎"')+'>'+esc(tb.head||'(无标题)')+'</a></div>'+
       '<div class="co-meta"><button type="button" class="co-src" data-name="'+esc(it.name)+'">'+esc(coDisplayName(it))+'</button>'+
-      '<span>'+esc(it.d||'')+'</span>'+ex+stale+'</div>'+summ+acts+'</div>';
+      '<span>'+esc(it.d||'')+'</span>'+srcTag+ex+stale+'</div>'+summ+acts+'</div>';
   }
   function renderFeed(){
     var list=document.getElementById('companyList');

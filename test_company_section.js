@@ -345,7 +345,8 @@ setTimeout(() => {
     check('spa 类空壳均显示「动态」标签', spaEmptyNames.length === 0 ||
           spaEmptyNames.every(n => spaEls.some(el => el.getAttribute('data-name') === n)),
           spaEls.length + '/' + spaEmptyNames.length);
-    check('co-empty-note 文案说明动态加载/域名失效',
+    check('co-empty-note 文案说明动态加载/域名失效（无空公司时豁免）',
+          nEmptyCompanies === 0 ||
           /动态加载|域名已失效/.test((document.querySelector('.co-empty-note') || {}).textContent || ''));
 
     // ---------- 8) 首条卡片结构 ----------
@@ -359,6 +360,29 @@ setTimeout(() => {
     check('卡片结构完整（标题/来源/可选摘要，无残留旧 co-host）',
           document.querySelectorAll('#companyList .co-host').length === 0 &&
           !!(first && first.querySelector('.co-title') && first.querySelector('.co-src')));
+
+    // ---------- 8.5) 媒体源披露（agg=SEC披露·股票新闻 / mining=矿业媒体 / 条目级 co-src-tag）----------
+    const taggedEls = document.querySelectorAll('#companyList .co-src-tag');
+    check('动态源条目带来源标签 co-src-tag', taggedEls.length > 0, 'tagged=' + taggedEls.length);
+    const tagTexts = {};
+    taggedEls.forEach(e => { const t = e.textContent.trim(); tagTexts[t] = (tagTexts[t] || 0) + 1; });
+    check('来源标签含 SEC披露/股票新闻/矿业媒体 之一',
+          !!tagTexts['SEC披露'] || !!tagTexts['股票新闻'] || !!tagTexts['矿业媒体'], JSON.stringify(tagTexts));
+    const aggCo = (companyData.companies.find(c => c.origin === 'agg' && (c.items || []).length) || {}).name;
+    if (aggCo) {
+      window.location.hash = '#co=' + encodeURIComponent(aggCo);
+      window.dispatchEvent(new window.Event('hashchange'));
+      const subAgg = (document.querySelector('#coFeedHead .co-feed-sub') || {}).textContent || '';
+      check('agg 公司头部显示「SEC披露·股票新闻」(' + aggCo + ')', /SEC披露|股票新闻/.test(subAgg), subAgg);
+    }
+    const minCo = (companyData.companies.find(c => c.origin === 'mining' && (c.items || []).length) || {}).name;
+    if (minCo) {
+      window.location.hash = '#co=' + encodeURIComponent(minCo);
+      window.dispatchEvent(new window.Event('hashchange'));
+      const subMin = (document.querySelector('#coFeedHead .co-feed-sub') || {}).textContent || '';
+      check('mining 公司头部显示「矿业媒体」(' + minCo + ')', /矿业媒体/.test(subMin), subMin);
+    }
+    if (navAll) navAll.click();
 
     // ---------- 9) 公司选择（含「范围外自动放宽」）/ hash 路由 / 搜索 ----------
     let selName = '', selTotal = 0;

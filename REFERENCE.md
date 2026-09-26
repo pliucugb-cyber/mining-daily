@@ -2441,7 +2441,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 | `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
 | `node test_price_heatmap.js` | **126** | 价格区热力图：静态契约（容器顺序 / pre-paint 位置 / 选择器）+ jsdom 运行时（16 色块、方向与 `.pc-chg` 一致、alpha 单调、红涨绿跌、2 分组、图例 >=7、点击开走势图、视图持久化）+ 反向用例；**价格区间榜**：三态互斥 / 两栏固定 / 空栏占位 / 红涨绿跌 / 条形归一 / 跨度日数回归锁 / `__mdPriceRank` 等（§42.14 / §42.15） |
 | `node test_event_calendar.js` | **29 PASS** | 事件·数据日历：默认隐藏态（开关 `EC_ENABLED=false`）+ 开关往返恢复隐藏 + 静态容器 `#eventCalendar` 存活（重建边界）+ 未被 `refreshSectionVisibility` 隐藏（防回归）+ 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签（会议/政策/数据/截止）+ 外链 `target=_blank` + 空占位「暂无已收录的近期事件」（§42.16） |
-| `node test_company_section.js` | **143 PASS** | 矿业公司动态（v7：单栏 + sticky 修复 + 搜新闻兜底 + 已读态回归 + 数据洁净回归）：跨列布局（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**）（companySection/installGuide 为 `.news-grid` 直接子级、col-rail 显式定位）+ 288px 侧栏无矿种维度 + 默认近 90 天 + 分页 60 + 日期分组 + 长 t 拆标题/正文 2 行 clamp + 展开全文 + 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端）+ **无逐条 `.co-host` 域名行** + 切「全部」并连续「加载更多」渲染全量 + 未收录公司折叠组（10 家）+ 点公司收敛 + **forcedAll 自动放宽** + hash 路由 `#co=` 深链 + 搜索过滤 + 移动端 `#coNavSel` **国内/中资港股/海外** 三组 optgroup（2026-09-26 拆出中资港股）+ 国内/**中资港股**/海外 三组导航（组内按 `rank` 升序）+ **命名统一「中文（英文）」**（海外/中资港股显示 `zh（en）`、国内仅中文，`name` 仍主键）+ **媒体源披露**（选中公司头部 sub 显示「来源：新浪财经 / 官网 RSS / 公司官网」）+ 豁免显隐 + `switchView('company')` 视图隔离 + **公司视图已读态（独立 key `mining_daily_read_co_urls` + `.read` 弱化 + 标为已读/未读按钮）+ 数据洁净（摘要无电头/地址/征集代理残片 + 无空白卡片）** + 无 JS 错误（§42.19 / §42.26 / §42.27 / §42.29 / §42.31） |
+| `node test_company_section.js` | **146 PASS** | 矿业公司动态（v7：单栏 + sticky 修复 + 搜新闻兜底 + 已读态回归 + 数据洁净回归）：跨列布局（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**）（companySection/installGuide 为 `.news-grid` 直接子级、col-rail 显式定位）+ 288px 侧栏无矿种维度 + 默认近 90 天 + 分页 60 + 日期分组 + 长 t 拆标题/正文 2 行 clamp + 展开全文 + 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端）+ **无逐条 `.co-host` 域名行** + 切「全部」并连续「加载更多」渲染全量 + 未收录公司折叠组（10 家）+ 点公司收敛 + **forcedAll 自动放宽** + hash 路由 `#co=` 深链 + 搜索过滤 + 移动端 `#coNavSel` **国内/中资港股/海外** 三组 optgroup（2026-09-26 拆出中资港股）+ 国内/**中资港股**/海外 三组导航（组内按 `rank` 升序）+ **命名统一「中文（英文）」**（海外/中资港股显示 `zh（en）`、国内仅中文，`name` 仍主键）+ **媒体源披露**（选中公司头部 sub 显示「来源：新浪财经 / 官网 RSS / 公司官网」；**海外双源逐条 `.co-src-tag` 披露 SEC披露 / 股票新闻 / 矿业媒体**，根因 `flatten` 透传 `src` + `build_agg_items` 无条件补 EDGAR，§42.32**）+ 豁免显隐 + `switchView('company')` 视图隔离 + **公司视图已读态（独立 key `mining_daily_read_co_urls` + `.read` 弱化 + 标为已读/未读按钮）+ 数据洁净（摘要无电头/地址/征集代理残片 + 无空白卡片）** + 无 JS 错误（§42.19 / §42.26 / §42.27 / §42.29 / §42.31 / §42.32） |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
@@ -2812,4 +2812,47 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 **回退指纹（新增 ㉙-㉜）**：㉙ 导航退回「国内/海外」两组（缺「中资港股」组，或 `region==='HK'` 的判断被删）；㚀 海外/中资港股公司又退回纯英文或纯中文（无 `（en）` 括号，即 `coDisplayName` 被改回 `o.name`）；㉛ 选中公司头部不再显示「来源：xxx」（媒体源披露被删）；㉜ `company_news.json` 的 `counts.hk` 缺失或 `region:'HK'` 公司被算进海外组。**闸门**：`test_company_section.js`（**143**）+ `test_smoke_0908.js`（104）+ `test_mobile_ux_batch.js`（222）+ `test_data_integrity.js`（9）+ `test_price_heatmap.js`（126）+ `preflight_check.py` 全绿。
 
 **同步两条 prompt（必须）**：06:00（重建 `5cdcdfff`）与 08:00（复验 `21dba82b`）的 prompt 须在 §42 索引与必留清单处增补**本节**：① 三组划分（国内/中资港股/海外）+ 中资港股源是新浪港股页（`hk01208`/`hk01258`）；② 命名统一「中文（英文）」（`coDisplayName` + `zh/en` 字段）；③ 媒体源披露（新浪财经 / 官网 RSS / 公司官网）；④ 回退指纹 ㉙-㉜；⑤ §42.9 `test_company_section.js` 基线 **137 → 143**。否则次日重建/复验不会保护本模块（尤其 `zh/en` 字段、`hk` 计数、`region:'HK'` 分组）。
+
+
+### §42.32 矿业公司动态：海外公司双源采集 overhaul（SEC EDGAR + stocktitan + mining.com 兜底），清零「暂未收录」（2026-09-26 · build `20260926-1600`）
+
+**背景（回应 2026-09-26 用户诉求 + 截图）**：矿业公司模块下 10 家海外公司被标「暂未收录」（空壳）。用户原话「其他公司域名是可以打开的，那域名打不开的就删了吧；对于动态加载的就没办法抓了？没有解决方案吗」。经实测澄清：南方铜业（Southern Copper）实为**域名配置笔误**（实际可开），其余 9 家官网是**纯 JS 动态渲染页（SPA）**，本机静态 `urllib` 抓不到条目。经 AskUserQuestion 拍板**全部救活（推荐）**：修南方铜业笔误 + 接入 SEC EDGAR 官方披露 + 按 ticker 精准新闻双源，把 10 家全部激活、「暂未收录」清零。
+
+**双源方案（`fetch_company.py`，生成侧、次日重建安全）**：
+- **`method='agg'`（SEC EDGAR 官方披露 + stocktitan 股票新闻 RSS 双源合并）**——覆盖 9 家美股/ADR filer：纽蒙特(NEM) / 巴里克(GOLD) / 自由港(FCX) / 阿格尼科鹰(AEM) / 泰克资源(TECK) / 力拓(RIO) / 必和必拓(BHP) / 淡水河谷(VALE) / 南方铜业(SCCO)。
+  - `fetch_edgar()`:SEC EDGAR 官方 **`cgi-bin/browse-edgar?action=getcompany&CIK=<cik>&type=6-K&...&count=`** 抓取 6-K/8-K 等披露（权威官方源，日期新鲜）。
+  - `fetch_agg_ticker()`:stocktitan **`https://www.stocktitan.net/tickers/<ticker>.rss`** 股票新闻 RSS（按 ticker 精准匹配，标题带中文翻译后缀如 `|力拓股票新闻`，未触发中文 junk 过滤器）。
+  - **`build_agg_items()` 核心修复**：原 `if cik and len(items) < 8:`（stocktitan ≥8 条就不补 EDGAR）改为 **`if cik:`（SEC filer 一律无条件补抓 EDGAR）**。根因：RIO 等 stocktitan 按 ticker 的 feed **全是 2023 旧文**（age > 730 天被 `prune_items` 年龄过滤全丢），旧阈值下因 stocktitan 有 18 条就**跳过 EDGAR**（2026-06~09 的新鲜 6-K），导致整家公司被清空。无条件 EDGAR 保证官方新鲜披露恒在。
+- **`method='mining'`（mining.com 全站 RSS 按公司名匹配）**——覆盖伦交所 2 家：嘉能可(GLEN.L) / 英美资源(AAL.L)。
+  - `fetch_mining(site, max_items=10)`（旧 `fetch_mining(keywords, max_items=10)` 改为入参 `site`、取 `keywords = site.get('minkw') or []`）：先在 `<title>` 匹配关键词；**新增多词短语兜底**：仅多词短语（如 `'anglo american'`）进 `<content:encoded>` 正文匹配（Anglo American 当天无独立标题文章、只在铜价文章正文被重点提及，否则会落回 0 条；单字词（如 `anglo`）不入正文匹配以防 AngloGold 误命中）。
+  - 不可行的退路（已实测排除）：Google News RSS（企业网关拦截 0 字节）、Yahoo Finance RSS（已废弃 0 字节）、mining.com `/tag/{slug}/feed/`（返回 0）。**全站 feed + content:encoded 是唯一可行的伦交所兜底**。
+
+**数据契约（items 新增 `src` 字段）**：
+- 条目 `src` ∈ `{'edgar'`(SEC 披露) / `'agg'`(股票新闻) / `'mining'`(矿业媒体) / `''`(国内官网/新浪/原 RSS 等)}；公司 `origin` ∈ `{'agg' / 'mining' / 'sina-a' / 'sina-hk' / 'rss' / 'official'}`。
+- `counts` 不变：total 47 = 国内 32 + 中资港股 2 + 海外 13；`items: 380`。前端加载逻辑未变。
+
+**前端（`app.js` + `index.html`，运行时渲染、零口径风险、抗每日重建）**：
+- `originLabel(o)` 增分支：`'agg' → 'SEC披露·股票新闻'`、`'mining' → '矿业媒体'`。
+- 新增 `srcLabel(s)`：`'edgar'→'SEC披露'`、`'agg'→'股票新闻'`、`'mining'→'矿业媒体'`。
+- `cardHtml(it)`：`.co-meta` 内加 **`.co-src-tag`**（青绿 pill）显示 `srcLabel(it.src)`（无 src 则不加）。
+- **`flatten(cs)` 关键修复**：行对象新增 `src:it.src||''`——拍扁时**透传 src**，否则卡片拿不到 `it.src`、`.co-src-tag` 渲染为 0（这是首轮测试 FAIL 的根因）。
+- `index.html` 新增 `.co-src-tag{...teal...}` CSS（紧接 `.co-ex-hk` 之后）。
+
+**重建结果（三轮核对 run3）**：9 家 agg = 纽蒙特/巴里克/自由港/阿格尼科/泰克/力拓/必和必拓 **各 18**、南方铜业 **7**、淡水河谷 **13**；2 家 mining = 嘉能可 **4**、英美资源 **1**。`EMPTY companies: []`（「暂未收录」组合法消失）。南方铜业笔误域名已修（现可开、走 agg 源）。
+
+**回归测试（`test_company_section.js` 143 → 146）**：
+- 新增 **8.5) 媒体源披露** 断言块：`.co-src-tag` 存在；标签 ∈ {SEC披露 / 股票新闻 / 矿业媒体}；agg 公司头部显示「SEC披露·股票新闻」；mining 公司头部显示「矿业媒体」（实测 纽蒙特→SEC披露、嘉能可→矿业媒体 通过）。
+- 把 `co-empty-note 文案说明动态加载/域名失效` 断言改为 `nEmptyCompanies === 0 || /动态加载|域名已失效/.test(...)`（无空公司时豁免，因「暂未收录」组已消失）。
+
+**回退指纹（新增 ㉝-㉟）**：
+- ㉝ `build_agg_items` 的 `if cik:` 又被改回 `if cik and len(items) < 8:` → 海外 SEC filer 又会因 stocktitan 整源陈旧被 730 天过滤清空（力拓/淡水河谷类重演）。
+- ㉞ `flatten()` 行对象缺 `src:it.src||''` → 卡片 `.co-src-tag` 不渲染（媒体源标签消失）。
+- ㉟ `fetch_mining` 的 `content:encoded` 多词短语兜底被删 → 英美资源类「正文提及但无独立标题」公司又落回 0 条。
+- 附加：`company_news.json` 的 `counts.foreign` 下又出现空壳 / `method:'agg'|'mining'` 公司 `items` 全空（双源采集被回退）。
+
+**必留（生成侧）**：`fetch_company.py` 的 `fetch_edgar` / `fetch_agg_ticker` / `fetch_mining` / `build_agg_items`（无条件 EDGAR）/ `fetch_mining` content:encoded 短语兜底 / items `src` 字段；`app.js` 的 `originLabel` agg/mining 分支 / `srcLabel` / `cardHtml` co-src-tag / `flatten` 透传 src；`index.html` 的 `.co-src-tag` CSS + build-version。
+
+**闸门**：`test_company_section.js`（**146**）+ `test_smoke_0908.js`（104）+ `test_mobile_ux_batch.js`（222）+ `test_data_integrity.js`（9）+ `test_price_heatmap.js`（126）+ `preflight_check.py` 全绿；`app.js node --check` 通过。
+
+**同步两条 prompt（必须）**：06:00（重建 `5cdcdfff`）与 08:00（复验 `21dba82b`）的 prompt 须在 §42 索引与必留清单处增补**本节**：① 海外双源 `method='agg'`（SEC EDGAR **无条件**补抓 + stocktitan ticker RSS）覆盖 9 家美股/ADR，`method='mining'`（mining.com 全站 RSS + content:encoded 多词短语兜底）覆盖伦交所嘉能可/英美资源；② 数据契约新增 `src` 字段（edgar/agg/mining）；③ 前端 `originLabel`/`srcLabel`/`.co-src-tag`/`flatten` 透传 src；④ 回退指纹 ㉝-㉟；⑤ §42.9 `test_company_section.js` 基线 **143 → 146**。否则次日重建/复验不会保护本模块（尤其 `build_agg_items` 无条件 EDGAR、`flatten` 透传 src、`fetch_mining` 短语兜底）。
 
