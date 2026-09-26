@@ -7005,7 +7005,7 @@ function toggleTheme(){
   var PAGE=60;
   var shown=PAGE;              // 当前已渲染条数（分页游标）
   var emptyOpen=false;         // 「暂未收录」分组是否展开
-  var coGroupsClosed=(function(){   // v11：右栏导航三组（CN/HK/NA）折叠态，默认全展开
+  var coGroupsClosed=(function(){   // v11：右栏导航两组（CN/NA）折叠态，默认全展开
     try{ var o=JSON.parse(localStorage.getItem('md_co_groups')||'{}'); return (o&&typeof o==='object'&&!Array.isArray(o))?o:{}; }catch(e){ return {}; }
   })();
   var baseDate='';             // 数据基准日（updated_at），用于算「N 天前」
@@ -7320,7 +7320,7 @@ function toggleTheme(){
     }
   }
 
-  // ---------- 右：搜索 + 公司导航（国内 / 中资港股 / 海外 三组，组内按 rank 升序；组头可折叠） ----------
+  // ---------- 右：搜索 + 公司导航（中国 / 海外 两组，组内按 rank 升序；组头可折叠） ----------
   function byRank(a,b){
     var fa=coFavHas(a.name)?0:1, fb=coFavHas(b.name)?0:1;
     if(fa!==fb) return fa-fb;
@@ -7359,9 +7359,8 @@ function toggleTheme(){
   function renderNav(){
     var nav=document.getElementById('coNav'); if(!nav) return;
     var list=COS.slice();
-    // 国内/中资港股/海外 三组只列「有内容」公司；空壳公司统一收进「暂未收录」折叠组（避免重复出现）
-    var dom=list.filter(function(o){ return o.region==='CN' && itemCount(o)>0; }).sort(byRank);
-    var hk=list.filter(function(o){ return o.region==='HK' && itemCount(o)>0; }).sort(byRank);
+    // 中国/海外 两组只列「有内容」公司（中国组 = A 股 + 中资港股）；空壳公司统一收进「暂未收录」折叠组（避免重复出现）
+    var dom=list.filter(function(o){ return (o.region==='CN'||o.region==='HK') && itemCount(o)>0; }).sort(byRank);
     var frn=list.filter(function(o){ return o.region==='NA' && itemCount(o)>0; }).sort(byRank);
     var live=list.filter(function(o){ return itemCount(o)>0; });
     var empties=list.filter(function(o){ return !itemCount(o); });
@@ -7369,7 +7368,7 @@ function toggleTheme(){
     var h=document.getElementById('coNavH');
     if(h) h.innerHTML='公司导航<span>'+live.length+' 家 · '+scopeTotalCount()+' 条'+(range===0?'':'（近'+range+'天）')+'</span>';
 
-    // 移动端 select：国内 / 中资港股 / 海外（+ 暂未收录）
+    // 移动端 select：中国 / 海外（+ 暂未收录）
     var sel=document.getElementById('coNavSel');
     if(sel){
       var favNames=getCoFavs().filter(function(n){ return coOf(n); });
@@ -7379,11 +7378,8 @@ function toggleTheme(){
         favNames.forEach(function(n){ opts.push(optFor(coOf(n))); });
         opts.push('</optgroup>');
       }
-      opts.push('<optgroup label="国内公司（'+dom.length+'）">');
+      opts.push('<optgroup label="中国公司（'+dom.length+'）">');
       dom.forEach(function(o){ opts.push(optFor(o)); });
-      opts.push('</optgroup>');
-      opts.push('<optgroup label="中资港股（'+hk.length+'）">');
-      hk.forEach(function(o){ opts.push(optFor(o)); });
       opts.push('</optgroup>');
       opts.push('<optgroup label="海外公司（'+frn.length+'）">');
       frn.forEach(function(o){ opts.push(optFor(o)); });
@@ -7397,11 +7393,10 @@ function toggleTheme(){
       sel.onchange=function(){ selectCompany(sel.value); };
     }
 
-    // 桌面：全部公司 + 国内/中资港股/海外 三组（表头可折叠）+ 暂未收录（折叠组）
+    // 桌面：全部公司 + 中国/海外 两组（表头可折叠）+ 暂未收录（折叠组）
     var html='<button type="button" class="co-nav-all'+(activeCompany==='__all__'?' on':'')+'" data-name="__all__">'+
       '<span>全部公司</span><span class="co-n">'+scopeTotalCount()+'</span></button>';
-    html+=navGroup('CN','国内公司', dom);
-    html+=navGroup('HK','中资港股', hk);
+    html+=navGroup('CN','中国公司', dom);
     html+=navGroup('NA','海外公司', frn);
     if(empties.length){
       html+='<button type="button" class="co-nav-empty-t" id="coEmptyToggle"'+
