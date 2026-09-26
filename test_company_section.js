@@ -474,12 +474,31 @@ setTimeout(() => {
     check('存在「暂未提取到正文摘要」占位（.co-summary-empty）', document.querySelectorAll('#companyList .co-summary-empty').length >= 1);
 
     // ---------- 15) P1/P2 优化回归（2026-09-26）：未读筛选 / 关注置顶 / 矿种标签 / sticky ----------
-    // P2 矿种标签：矿种是公司级字段，卡片从 it.name 所属公司取 sector 渲染 .co-sec
-    check('卡片含矿种标签 .co-sec（从公司级 sector 派生）',
-          document.querySelectorAll('#companyList .co-sec').length >= 1,
+    // P2 矿种标签：2026-09-26 用户拍板「删掉」—— 卡片不再渲染矿种标签（回归 v5 ② 去矿种维度契约）
+    check('卡片已不渲染矿种标签 .co-sec（用户 09-26 拍板删除）',
+          document.querySelectorAll('#companyList .co-sec').length === 0,
           'sec=' + document.querySelectorAll('#companyList .co-sec').length);
-    check('矿种标签文案非空（已知矿种）',
-          Array.from(document.querySelectorAll('#companyList .co-sec')).some(e => (e.textContent||'').trim().length > 0));
+    check('CSS 中已无 .co-sec 规则（index.html 已删除）', css.indexOf('.co-sec') < 0);
+
+    // P3 计数口径对齐（修「洛阳钼业显示 9 条、点进去只有 2 条」的口径错位）
+    // 期望：导航徽标 == 「点进去实际会看到的条数」（范围内有则显示范围内，否则 widenRangeIfNeeded 自动放宽到全部）
+    const navBadges = {};
+    document.querySelectorAll('#coNav .co-nav-item:not(.empty)').forEach(el => {
+      navBadges[el.getAttribute('data-name')] = (el.querySelector('.co-n') || {}).textContent || '';
+    });
+    const navAllBadge = (document.querySelector('#coNav .co-nav-all .co-n') || {}).textContent || '';
+    check('「全部公司」徽标 = 近 90 天总条数（' + navAllBadge + ' vs ' + inRange90 + '）',
+          String(navAllBadge) === String(inRange90), navAllBadge + '/' + inRange90);
+    let badgeMismatch = 0, badgeChecked = 0;
+    (companyData.companies || []).forEach(c => {
+      const n = c.name; if (!((c.items || []).length)) return;
+      const exp = in90Count(n) > 0 ? in90Count(n) : (c.items || []).length;
+      const got = navBadges[n];
+      badgeChecked++;
+      if (String(got) !== String(exp)) { badgeMismatch++; if (badgeMismatch <= 5) console.log('    mismatch ' + n + ': badge=' + got + ' exp=' + exp); }
+    });
+    check('导航每家公司徽标 == 点进去实际可见条数（' + badgeChecked + ' 家，错 ' + badgeMismatch + '）',
+          badgeMismatch === 0, badgeMismatch + '/' + badgeChecked);
 
     // P1-A 未读筛选开关
     check('默认 coUnreadOnly=false', coState().coUnreadOnly === false);

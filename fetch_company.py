@@ -151,7 +151,11 @@ NON_NEWS_HREF = re.compile(
     r'download|feedback|sitemap|privacy|disclaim|zhaopin|rencai|gonggao_?notice|'
     # 2026-09-24 新增：分支机构 / 下属单位 / 成员企业栏目（中矿资源页脚「分支机构」列表
     # 里的 fzjg/175.html 之类被误当新闻抓入，摘要变成子公司简介）
-    r'fzjg|fenzhi|branch|subsidiar|member|jigou)'
+    r'fzjg|fenzhi|branch|subsidiar|member|jigou|'
+    # 2026-09-26 新增：栏目/介绍页 URL 的**拼音**写法。白银有色 /yewulingyu/haiwaibankuai/
+    #（业务领域-海外板块）这类路径此前漏网，把公司业务介绍抓成了新闻（用户截图红框那条）。
+    r'yewu|lianxi|jianjie|jieshao|wenhua|rongyu|jiangli|bankuai|zhaopin|peixun|'
+    r'dangjian|gonghui|tuandui|zuzhi|qiye)'
     r'[\w\-/\.]*', re.I)
 # ② 导航/栏目/介绍类标题（精确整串命中即丢）
 NON_NEWS_TITLE = set('''可持续发展 社会责任 环境社会及管治 子公司介绍 分子公司 销售及服务 产品与服务
@@ -184,6 +188,58 @@ NEWS_VERB = ('发布', '签署', '签订', '签约', '达成', '收购', '并购
 NEWS_URL_HINT = re.compile(
     r'(news|detail|article|content|info|show|item|xwzx|xwdt|gsxw|press|media|story|'
     r'release|zixun|dongtai|jsp\?id|\?id=|/\d{3,}\.htm)', re.I)
+
+# ===== 采集口径（2026-09-26 用户拍板「直接删掉」）=====
+# 用户原话：「我不是所有内容都想要抓过来，我是想通过矿业公司这个模块快速浏览每家公司近期发生的
+# 重要新闻」。故：非「公司发生的新闻」的站务/活动内容命中 DROP 即丢；命中 KEEP（重大事件）则豁免。
+DROP_TITLE_KW = (
+    # ① 党务 / 意识形态
+    '党委','党组','党支部','党建','党群','纪委','纪检','监察','廉洁','党课','四中全会',
+    '总书记','宣讲','学习传达','传达学习','宣传思想','统战','精神文明','政治生态','党旗',
+    '巾帼','青年文明号','主题教育','民主生活会','组织生活会','理论中心组',
+    # ② 工会 / 职工 / 文体 / 节庆活动
+    '劳模','工会','职工','疗休养','慰问','献血','志愿','运动会','球赛','征文','书法',
+    '合唱','文艺','汇演','联欢','开学典礼','教师节','中秋','国庆','元旦','五一','端午',
+    '春节','迎新','团建','生日','颁奖典礼','表彰','先进人物','优秀员工','技能大赛',
+    # ③ 领导视察 / 调研 / 会见 / 出席
+    '调研','视察','莅临','到访','会见','座谈','督导','检查指导','走访','拜会','考察','出席',
+    # ④ 荣誉 / 榜单 / 评级
+    '位列','排名','排行榜','500强','2000强','中企全球','影响力榜','获评','荣获','获奖',
+    '摘金','摘得','摘冠','上榜','称号','领跑者','金奖','银奖','冠军','五星佳','最高评级',
+    '先进个人','模范',
+    # ⑤ 招聘 / 培训 / 公示 / 招标
+    '招聘','招贤','诚聘','人才引进','公示','环评','环境影响','水土保持','招标','询价',
+    '采购结果','废标','培训','演练','安全生产月','合规管理','结业','安委会','工作会议',
+)
+# 命中即丢（**先于** KEEP 判定）：这些词只在荣誉/活动标题里出现，免得被 KEEP 的
+# 「认证/注册」之类宽词救回来（如「蝉联卓越职场认证」不是公司新闻）。
+DROP_TITLE_HARD = (
+    '卓越职场','最佳雇主','示范单位','文明单位','先进基层党组织','获奖','摘金','摘冠',
+    '颁奖','疗休养','慰问','献血','运动会','开学典礼','教师节','新春','元宵','团拜',
+    '开讲啦','能效“领跑者”','单项冠军',
+)
+# 重大事件保护名单（用户 2026-09-26 圈定的「要闻」范围）：命中即**不删**，
+# 避免「党委 + 签约」「出席 + 投产」这类真事件新闻被误杀。
+KEEP_TITLE_KW = (
+    # 资本运作与股权 / 投资并购
+    '收购','并购','竞购','增资','募资','融资','股权','重组','分拆','剥离','合资','注资',
+    '增发','可转债','要约','分红','回购','增持','减持','举牌','控股','上市','IPO',
+    # 生产运营与项目
+    '投产','试产','达产','扩产','增产','减产','开工','竣工','复产','停产','检修','技改',
+    '中标','承建','签约','签署','签订','合同','协议','订单','交付','发运','出口','进口',
+    '并网','贯通','封顶','落成','出矿','选厂','冶炼厂','产能',
+    # 业绩与资源储量
+    '净利','营收','业绩','财报','年报','季报','预告','预增','预亏','盈利','亏损','减值',
+    '产量','销量','储量','资源量','品位','勘探','增储','探矿权','采矿权','采矿许可','矿权',
+    # 技术突破
+    '专利','研发','首创','创新','认证','注册','突破','量产',
+    # 风险事件
+    '事故','伤亡','环保处罚','整顿','诉讼','仲裁','制裁','罢工','停牌','退市','处罚',
+)
+# 窄口径 URL 栏目规则：用于对**既有 JSON** 重洗，避免宽表 NON_NEWS_HREF 误伤真实新闻 URL
+URL_COL_JUNK = re.compile(
+    r'/(yewu|lianxi|jianjie|jieshao|wenhua|rongyu|jiangli|bankuai|zhaopin|peixun|'
+    r'dangjian|gonghui|tuandui|zuzhi|honor|about)[\w\-/\.]*', re.I)
 
 CACHE_TTL = 24 * 3600  # 秒
 
@@ -427,10 +483,16 @@ def _valid_ymd(y, mo, d):
         pass
     return ''
 
-_DATE_URL = re.compile(r'(20\d{2})[-/_]?(\d{2})[-/_]?(\d{2})')
+# 2026-09-26：原正则要求月/日都是 2 位数，`/.../2026/9/I155279944712`（中金黄金）这类
+# **1 位月份**路径匹配不上 → 回落到列表页日期（常是页脚/相邻条目日期）→ 日期整月错位。
+_DATE_URL = re.compile(r'(20\d{2})[-/_](\d{1,2})(?:[-/_](\d{1,2}))?')
+_DATE_URL_C = re.compile(r'(20\d{2})(\d{2})(\d{2})')
 def _date_from_url(href):
-    # 很多中文站把日期写进 URL：t20260916_33816.html / 2026/09/16/xxx / 2026-09-16
+    # 很多中文站把日期写进 URL：t20260916_33816.html / 2026/09/16/xxx / 2026-09-16 / 2026/9/
     m = _DATE_URL.search(href or '')
+    if m:
+        return _valid_ymd(m.group(1), m.group(2), m.group(3) or '1')
+    m = _DATE_URL_C.search(href or '')
     if m:
         return _valid_ymd(m.group(1), m.group(2), m.group(3))
     return ''
@@ -489,12 +551,31 @@ def looks_like_news(title, href=''):
     # 非新闻 URL（栏目/介绍/业务/招聘/矿山项目页）
     if href and NON_NEWS_HREF.search(href):
         return False
+    # 非公司新闻（党务/工会文体/领导视察/荣誉榜单/招聘培训公示）—— 见 DROP_TITLE_KW
+    if is_droppable_title(title):
+        return False
     cjk = len(re.findall(r'[\u4e00-\u9fff]', title))
     if cjk == 0 and len(title) < 12:
         return False
     if cjk > 0 and len(title) < 5:
         return False
     return True
+
+def is_droppable_title(title):
+    """DROP_TITLE_HARD（荣誉/活动独有）→ 立即丢；否则命中 KEEP 保留、命中 DROP 丢。"""
+    t = clean_ws(title)
+    if not t:
+        return False
+    for kw in DROP_TITLE_HARD:
+        if kw in t:
+            return True
+    for kw in KEEP_TITLE_KW:
+        if kw in t:
+            return False
+    for kw in DROP_TITLE_KW:
+        if kw in t:
+            return True
+    return False
 
 def extract_gridview(raw, base_url):
     """ASPX GridView 表格型新闻列表（如铜陵有色）：标题在 <td class="txtSubject">，
@@ -670,6 +751,8 @@ _TD_PREFIX      = re.compile(r'^(20\d{2})[.\-/年](\d{1,2})[.\-/月](\d{1,2})日
 _TD_PREFIX_YM   = re.compile(r'^(20\d{2})[.\-/年](\d{1,2})[\s\u3000]+(\d{1,2})[\s\u3000]+')
 _TD_PREFIX_MDY  = re.compile(r'^(\d{1,2})[/.](\d{1,2})[\s.]*(20\d{2})[\s\u3000]+')
 _TD_TAIL        = re.compile(r'[\s\u3000]+(20\d{2})[.\-/年](\d{1,2})[.\-/月](\d{1,2})日?\s*$')
+# 2026-09-26 新增：先「列表序号 + 年月」再标题（赤峰黄金「06 2026.06 中国恩菲董事长刘诚一行到访…」）
+_TD_SEQ         = re.compile(r'^\d{1,2}[\s\u3000]+(20\d{2})[.\-/](\d{1,2})[\s\u3000]+')
 
 def title_date(t):
     """把列表页混进标题的日期摘出来 → (日期, 去日期标题)。摘不到返回 ('', 原标题)。"""
@@ -677,6 +760,11 @@ def title_date(t):
     m = _TD_PREFIX_MDY.match(x)          # 天山铝业式：「05/12 2026 …」（MM/DD YYYY）
     if m:
         d = _valid_ymd(m.group(3), m.group(1), m.group(2))
+        if d:
+            return d, x[m.end():].strip()
+    m = _TD_SEQ.match(x)                 # 「06 2026.06 …」→ 年月可用（日未知，置 01，后面文章页会精修）
+    if m:
+        d = _valid_ymd(m.group(1), m.group(2), '1')
         if d:
             return d, x[m.end():].strip()
     for rx in (_TD_PREFIX, _TD_PREFIX_YM):
@@ -747,6 +835,12 @@ def is_junk_item(title, url, date=''):
     # 这类条目只有公司名 + 公司简介，不是「公司发生的新闻」，命中即丢。
     if not has_verb and t.endswith(ORG_SUFFIX):
         return True
+    # 2026-09-26：对**既有 JSON** 重洗时也走「非新闻」判定 —— 既有条目不经过 looks_like_news，
+    # 只经过 normalize_item + prune_items/is_junk_item，故必须在这里再拦一道。
+    if is_droppable_title(t):
+        return True
+    if url and URL_COL_JUNK.search(html.unescape(url)):
+        return True
     return False
 
 # 文章页候选摘要（优先级：meta description → 正文容器首段 → 全文前几段）
@@ -811,33 +905,76 @@ def lead_candidates(raw):
 
 
 
-LEAD_CACHE_VER = 'v3'   # 摘要抽取器/词表变更时 bump：避免旧的「空结果」缓存挡住重新抽取
+LEAD_CACHE_VER = 'v4'   # 摘要抽取器/词表变更时 bump：避免旧的「空结果」缓存挡住重新抽取
+                        # v4（2026-09-26）：缓存结构由 list 改为 {c:[摘要候选], d:发布日期}
 
 def _art_cache(url):
     import hashlib
     key = (LEAD_CACHE_VER + url).encode('utf-8')
     return os.path.join(CACHE, 'art_%s_%s.json' % (LEAD_CACHE_VER, hashlib.md5(key).hexdigest()[:16]))
 
+# 文章页发布日期（2026-09-26 新增）：54 条条目无日期 → 默认范围（近 90 天）下不可见，
+# 而公司徽标按总条数显示 → 用户看到「洛阳钼业 9 条，点进去只有 2 条」。文章页 meta 最可靠。
+ART_DATE_PATS = (
+    r'<meta[^>]+(?:property|name)=["\'](?:article:published_time|og:published_time|pubdate|'
+    r'publishdate|publish_time|published_time|datePublished|og:release_date|'
+    r'weibo:article:create_at)["\'][^>]*content=["\']([^"\']{4,40})["\']',
+    r'<meta[^>]+content=["\']([^"\']{4,40})["\'][^>]*(?:property|name)=["\']'
+    r'(?:article:published_time|pubdate|publishdate|published_time|datePublished)["\']',
+    r'(?:发布时间|发布日期|发表时间)[\s\u3000]*[:：][\s\u3000]*([^<\n]{4,30})',
+    r'"pubDate"[\s\u3000]*:[\s\u3000]*"([^"]{4,40})"',
+)
+
+def _parse_any_date(s):
+    """从任意日期串取 YYYY-MM-DD（兼容 2026-09-19T10:00 / 2026年9月19日 / 09/19/2026 / 2026-09）。"""
+    s = html.unescape(str(s or ''))
+    m = re.search(r'(20\d{2})\s*[-/年.]\s*(\d{1,2})\s*[-/月.]\s*(\d{1,2})', s)
+    if m:
+        return _valid_ymd(m.group(1), m.group(2), m.group(3))
+    m = re.search(r'(\d{1,2})[/-](\d{1,2})[/-](20\d{2})', s)
+    if m:
+        return _valid_ymd(m.group(3), m.group(1), m.group(2))
+    m = re.search(r'(20\d{2})[-/](\d{1,2})', s)
+    if m:
+        return _valid_ymd(m.group(1), m.group(2), '1')
+    return ''
+
+def art_date_of(raw):
+    """从文章页 HTML 抽发布日期；抽不到返回 ''。只认显式 meta / 「发布时间：」，
+    ／不做全页日期兜底（页面侧栏的新闻列表会带来随机日期）。"""
+    for pat in ART_DATE_PATS:
+        m = re.search(pat, raw, re.I | re.S)
+        if m:
+            d = _parse_any_date(m.group(1))
+            if d:
+                return d
+    return ''
+
 def lead_of_article(url, timeout=12, ttl=7 * 24 * 3600):
-    """抓文章页取候选摘要（带磁盘缓存）。抓不到返回 []。"""
+    """抓文章页 → (候选摘要, 发布日期)。带磁盘缓存。抓不到返回 ([], '')。"""
     p = _art_cache(url)
     try:
         if os.path.exists(p) and (time.time() - os.path.getmtime(p)) < ttl:
-            return json.load(open(p, encoding='utf-8')) or []
+            o = json.load(open(p, encoding='utf-8'))
+            if isinstance(o, dict):
+                return o.get('c') or [], o.get('d') or ''
+            if isinstance(o, list):        # 兼容 v3 旧缓存形状
+                return o, ''
     except Exception:
         pass
-    cands = []
+    cands, dt = [], ''
     try:
         raw = fetch_html(url, timeout=timeout)
         if raw:
             cands = lead_candidates(raw)
+            dt = art_date_of(raw)
     except Exception:
-        cands = []
+        cands, dt = [], ''
     try:
-        json.dump(cands, open(p, 'w', encoding='utf-8'), ensure_ascii=False)
+        json.dump({'c': cands, 'd': dt}, open(p, 'w', encoding='utf-8'), ensure_ascii=False)
     except Exception:
         pass
-    return cands
+    return cands, dt
 
 def _age_days(d, base):
     """条目距基准日的天数；日期缺失返回 None。"""
@@ -849,16 +986,41 @@ def _age_days(d, base):
     except Exception:
         return None
 
+# 标题里的站务残片（2026-09-26 新增）：
+#   ① `"\s*>` —— 列表页把标题截断后又把完整标题塞进 title 属性，抽取时两段粘连
+#      （中金黄金 16 条：`集团公司党委传达学习…精... "> 集团公司党委传达学习习近平总书记`）
+#   ② 栏目前缀 —— 江西铜业 `公司新闻 ｜ 2026/07/02 江铜贵冶…`、`媒体报道 ｜ 2026/08/04 …`
+_TD_COL_PREFIX = re.compile(
+    r'^(?:公司新闻|集团新闻|企业新闻|媒体报道|媒体聚焦|新闻中心|集团要闻|公司要闻|'
+    r'基层动态|行业动态|图片新闻|视频新闻|最新动态|媒体关注|要闻|动态)'
+    r'[\s\u3000]*[｜|丨:：\-–—]*[\s\u3000]*')
+_TD_HTML_JUNK = re.compile(r'["\']\s*>')
+
+def clean_title_artifacts(t):
+    """剥标题里的站务残片；含 `">` 时取更长的一侧（截断版 vs 完整版）。"""
+    x = clean_ws(strip_comments(t))
+    if _TD_HTML_JUNK.search(x):
+        parts = [p.strip() for p in _TD_HTML_JUNK.split(x) if p.strip()]
+        if parts:
+            x = max(parts, key=len)
+    return _TD_COL_PREFIX.sub('', x)
+
 def normalize_item(it):
-    """就地规整一条：剥日期前缀 → 拆标题/正文 → 填本地摘要。"""
-    raw = strip_comments(it.get('t') or '')
+    """就地规整一条：剥站务残片 → 剥日期前缀 → 拆标题/正文 → 填摘要 → 纠偏链接/日期。"""
+    it['u'] = html.unescape(it.get('u') or '')   # 落库前解净字面 `&amp;`（神火/铜陵/Teck 等 24 条）
+    raw = clean_title_artifacts(it.get('t') or '')
     tdate, t1 = title_date(raw)
     head, body = split_title_body(t1)
     head = re.sub(r'[\s\u3000]+(详情|查看更多|查看详细|了解|了解更多)$', '', head).strip()
     it['t'] = head or clean_ws(t1)
     d = clean_ws(it.get('d') or '')
-    if tdate and (not d or tdate > d):     # 列表页抓到的日期可能落到页脚，标题内的更可信
+    du = _date_from_url(it['u'])
+    if tdate:                                  # 标题内嵌日期最明确
         it['d'] = tdate
+    elif du and (not d or du[:7] != d[:7]):    # URL 年月与列表页不一致 → 信 URL
+        it['d'] = du                            #（finalize 会再用文章页日期精修）
+    elif d:
+        it['d'] = d
     s = clean_ws(it.get('s') or '')
     if s:
         s = STRIP_TAIL_PAT.split(s)[0].strip()   # 剥末尾「日期/美通社/--公司(NYSE)」等电头残片
@@ -880,7 +1042,9 @@ def prune_items(items, base):
         u = html.unescape(it.get('u') or '')
         if is_junk_item(t, u, it.get('d')):
             continue
-        k = (t, it.get('d') or '')
+        # 2026-09-26：同公司内**标题完全相同**即视为同一条。原键是 (标题,日期)，导致同一篇文章
+        # 因列表页日期不同而重复入库（驰宏锌锗「精准到“厘米”，安全“看得见”」曾同题 3 条）。
+        k = clean_ws(t)
         if k in seen:
             continue
         seen.add(k)
@@ -909,7 +1073,12 @@ def finalize(companies, base, net=True, workers=4, quiet=False):
     from concurrent.futures import ThreadPoolExecutor
     todo = []
     for c in companies:
-        miss = [it for it in (c.get('items') or []) if not clean_ws(it.get('s') or '')]
+        # 2026-09-26：除「缺摘要」外，把「缺日期」与「URL 只到年月的占位日期(YYYY-MM-01)」也排进队列
+        # —— 日期缺失会让条目在默认范围（近 90 天）下不可见。
+        miss = [it for it in (c.get('items') or [])
+                if not clean_ws(it.get('s') or '')
+                or not clean_ws(it.get('d') or '')
+                or clean_ws(it.get('d') or '').endswith('-01')]
         if miss:
             todo.append((c, miss))
     if not todo:
@@ -921,21 +1090,35 @@ def finalize(companies, base, net=True, workers=4, quiet=False):
         out = []
         for it in miss:
             u = html.unescape(it.get('u') or '').strip()
-            out.append(lead_of_article(u) if u.startswith('http') else [])
+            out.append(lead_of_article(u) if u.startswith('http') else ([], ''))
         return out
     with ThreadPoolExecutor(max_workers=workers) as ex:
         got = list(ex.map(work, todo))
     filled = 0
     for (c, miss), cands_list in zip(todo, got):
         freq = {}
-        for cs in cands_list:
+        for cs, _ad in cands_list:
             for t in cs:
                 freq[t] = freq.get(t, 0) + 1
-        for it, cs in zip(miss, cands_list):
+        for it, (cs, ad) in zip(miss, cands_list):
             t = pick_lead(cs, it.get('t'), freq)   # 挑最像内容摘要的候选，而非首条
             if t:
                 it['s'] = trim_summary(t)
                 filled += 1
+            # 文章页日期：缺失直接用；占位(YYYY-MM-01)或与列表页相差 >45 天则以文章页为准
+            if ad:
+                cur = clean_ws(it.get('d') or '')
+                if (not cur) or cur.endswith('-01'):
+                    it['d'] = ad
+                else:
+                    try:
+                        import datetime
+                        a = datetime.date(*[int(x) for x in cur.split('-')[:3]])
+                        b = datetime.date(*[int(x) for x in ad.split('-')[:3]])
+                        if abs((b - a).days) > 45:
+                            it['d'] = ad
+                    except Exception:
+                        pass
     if not quiet:
         print('[摘要] 填充 %d 条' % filled)
     # 海外公司摘要译中（best-effort，失败/受限保留英文，绝不阻塞整轮）
@@ -1281,9 +1464,17 @@ def main():
             sample = '（官网暂不可达）'
         print('  %-16s %-5s %-3s 条 %-7s %-5s %s' % (c['name'], site['code'], len(items), c['method'], src, sample))
         time.sleep(0.15)
-        # 增量落盘：每采一家写一次，进程被杀也不丢已采集结果（旧公告数据不会回填）
+        # 增量落盘：每采一家写一次，进程被杀也不丢已采集结果（旧公告数据不会回填）。
+        # 2026-09-26 修 bug：原实现写的是**未规整**数据 —— 采集中途被网络中断/超时杀掉时，
+        # 线上留下的就是「标题内嵌日期、字面 &amp;、`">` 残片、未去重、未过滤」的脏快照
+        # （这正是线上 company_news.json 与 normalize_item 输出长期不一致的根因）。
         try:
-            _write_json(_full_roster(companies, old))
+            snap = _full_roster(companies, old)
+            for _c in snap:
+                for _it in (_c.get('items') or []):
+                    normalize_item(_it)
+                _c['items'] = prune_items(_c.get('items') or [], time.strftime('%Y-%m-%d'))
+            _write_json(snap)
         except Exception:
             pass
     # --only：未重采的公司保留旧 JSON 中的对应条目（旧数据干净时才安全）
