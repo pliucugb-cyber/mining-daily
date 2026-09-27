@@ -3104,3 +3104,33 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - `.news-more[data-overflow="0"]{display:none}` 被移除 → 短摘要也显示「展开全文」空开关，成噪声。
 - `.news-item.expanded .news-summary{-webkit-line-clamp:unset;display:block}` 被移除 → 桌面点击「展开全文」无效，摘要仍截断。
 - app.js `syncNewsMore` / `applyNewsMoreAll` 被移除 → 溢出判定失效，开关显隐错乱（短摘要可能误显、长摘要可能误隐）。
+### §42.39 海外公司权威新闻源：mining.com 站点搜索 RSS（build `20260927-1827`）
+
+**背景（用户截图反馈“淡水河谷内容几乎相当于没有”）**：用户附截图问“淡水河谷这家公司，从全网找有没有权威网站能获取新闻动态，现在内容太少几乎等于没有”。诊断：淡水河谷（agg 方法）此前仅剩 1 条 SEC EDGAR 6-K——`stocktitan` 的 VALE 行情流已冻结在 2024-03-19，等于无增量；`vale.com/imprensa` 与 `vale.com/vale-now` 均为 JS 渲染，静态抓不到列表。这是所有海外公司的共性问题（淡水河谷/力拓/英美/必和必拓/南方铜业等当时均 ≤4 条）。
+
+**调研（逐源实测，Windows + 本地代理 127.0.0.1:64199）**
+- `vale.com/imprensa`：静态 HTML 仅 `${categoryName} ${title} ${date}` 模板，JS 渲染无静态列表 → 放弃。
+- Google News RSS（news.google.com/rss/search）：经代理返回 502 → 不可靠。
+- Yahoo Finance / Investing.com 新闻页：403 被拦 → 放弃。
+- `stocktitan.net` VALE：行情流冻结于 2024-03 → 只能作次要补充，不可作主源。
+- **mining.com 站点搜索 RSS** `https://www.mining.com/?s=<name>&feed=rss2`：**静态可抓、无需鉴权、按公司名检索、召回高、时效新（2026-08~09）**。实测 14 家公司名（BHP 09-25、Rio Tinto 09-24、Glencore 09-24、Vale 09-22 等）均稳定返回 ~36 条精确匹配 → 选定为权威主源。
+
+**方案（agg 三源合并 + 相关性过滤）**
+- `fetch_company.py` 新增 `MINING_SEARCH` 常量与 `fetch_mining_search(query, name, max_items)`：拉取 mining.com 站点搜索 RSS，并按 `_match_company()` 做相关性过滤。
+- `build_agg_items()` 改为三源合并：mining.com 站点搜索（主，14 条）+ `fetch_agg_ticker`（stocktitan 股票新闻，辅，6 条）+ `fetch_edgar`（SEC EDGAR 监管披露，5 条）；按日期去重取前 N。
+- 新增 `_match_company(title, name)`：**全词词边界匹配**优先；否则取首词匹配，但首词落入 `_AMBIG_FIRST`（rio/southern/anglo/american/copper/gold/resources/mining/iron/eagle/quantum 等歧义词且长度 <4 或歧义时跳过）。解决 mining.com 子串误命中——实测 “Equinox Gold approves **Valentine** mine expansion” 不再误中 “**Vale**”；真实 Vale 条目（Ligga 铁矿 30% 股权、贱金属 IPO、稀土提取、Salobo 铜扩产、董事会变更等）全部保留。
+
+**改动（5 文件，commit `4fe72dc`）**
+- `fetch_company.py`：+`MINING_SEARCH` / `fetch_mining_search()` / 改写 `fetch_mining()` 优先站点搜索、改写 `build_agg_items()` 三源合并 / 新增 `_match_company()` 及 `_AMBIG_FIRST`。
+- `company_news.json`：淡水河谷 1→**14**（13 矿业媒体 + 1 SEC）；力拓 1→15、英美 1→9、必和必拓 4→13、南方铜业 3→14、嘉能可 4→10、泰克 2→7、自由港 11→13 等；全量 **398 条**，44 家公司名单与计数（domestic 29 / hk 2 / foreign 13）不变。
+- `app.js`：`originLabel()` 的 agg 分支 `'SEC披露·股票新闻'` → `'矿业媒体·SEC披露'`（agg 条目现多为“矿业媒体”，头部标签更准确；仍含“SEC披露”使测试正则 `/SEC披露|股票新闻/` 保持绿）。
+- `index.html` / `sw.js`：build-version 与 CACHE_NAME 同步 `20260927-1802`→`20260927-1827`（强制 SW 失效，使新 `company_news.json` 触达用户）。
+
+**回归/闸门**：`node test_company_section.js`=178 PASS/0 FAIL（含新头部标签 + `reg` 徽标断言）；`preflight_check.py` 全过（含 sw.js CACHE_NAME 与 build-version 一致）；`node test_data_integrity.js`=9/0（44 家 + 计数一致）；`node test_mobile_ux_batch.js`=226/0；`node test_p2_20260910.js`=30/0；`node test_mobile_opt_20260910.js`=37/0。
+
+**上线**：commit `4fe72dc`；`git push origin main` `d3ca130..4fe72dc`；`python deploy_pages.py` gh-pages 推送成功（线上版本 `8905783` / build `20260927-1827`，站点 https://pliucugb-cyber.github.io/mining-daily/）。验收：`git ls-remote` 远端 `refs/heads/main` SHA == 本地 HEAD `4fe72dc3bbc296e04827f23af58a1056cb0cf59a` OK；gh-pages 独立分支已更新至 `8905783`。
+
+**回退指纹**
+- `fetch_company.py` 的 `MINING_SEARCH` / `fetch_mining_search()` / `build_agg_items()` 三源合并 / `_match_company()` 任一处被移除 → 海外公司退回“仅 SEC/冻结源”，淡水河谷等再次变空。
+- `app.js` `originLabel()` agg 分支 `'矿业媒体·SEC披露'` 被改回 `'SEC披露·股票新闻'` → 头部标签与实际来源不符（agg 条目已多为“矿业媒体”）。
+- `company_news.json` 若回退到 `4fe72dc` 之前快照 → 淡水河谷 14→1、全量 398→约 328，海外公司新闻塌缩。
