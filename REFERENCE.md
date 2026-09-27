@@ -3134,3 +3134,25 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - `fetch_company.py` 的 `MINING_SEARCH` / `fetch_mining_search()` / `build_agg_items()` 三源合并 / `_match_company()` 任一处被移除 → 海外公司退回“仅 SEC/冻结源”，淡水河谷等再次变空。
 - `app.js` `originLabel()` agg 分支 `'矿业媒体·SEC披露'` 被改回 `'SEC披露·股票新闻'` → 头部标签与实际来源不符（agg 条目已多为“矿业媒体”）。
 - `company_news.json` 若回退到 `4fe72dc` 之前快照 → 淡水河谷 14→1、全量 398→约 328，海外公司新闻塌缩。
+## §42.40 矿业公司板块内容补全（口径分层放宽 + 日期修复）
+
+**起因**：用户截图反馈——紫金矿业「数据治理领跑者」、洛阳钼业「500强/2000强/影响力榜/LME 注册」这类**实力认定类**新闻没被抓进来，质疑「内容是不是不全」；同时问国内几个没听过的冷门公司是否有必要抓（其新闻量很小）。经诊断，原口径 `is_droppable_title()` 把「实力认定类」与「纯内部活动」混在同一张 DROP 黑名单里，误删约 1/4 国内条目（紫金/洛钼的榜单与认证新闻全被 `DROP_TITLE_KW` ④ 吞掉）。
+
+**拍板（AskUserQuestion，2026-09-27）**：口径方向=**分层放宽**；冷门公司=**不删、先修源**；先做=**口径 + 日期**。（厦门钨业 JS 外壳页抽不到、山东黄金等个别文章页无日期属真缺失，留待 P1 用 chrome/sina 重源修复。）
+
+**方案**
+- **口径分层放宽**：把 `DROP_TITLE_KW` ④ 中的「实力认定类」——`500强`/`2000强`/`中企全球`/`影响力榜`/`位列`/`排名`/`排行榜`/`领跑者`/`单项冠军`/`称号`/`金奖`/`冠军`/`五星佳`/`最高评级`/`国家级`/`名单`/`数据治理`/`绿色工厂`/`LME`/`上榜`/`摘得`——移出 DROP，迁入 `KEEP_TITLE_KW` 新增「实力认定」子类（命中即不删）。`DROP_TITLE_HARD` 同步移出 `能效"领跑者"`/`单项冠军`/`获奖`/`摘金`/`摘冠`，仅保留纯内部软性荣誉（`卓越职场`/`最佳雇主`/`示范单位`/`文明单位`/`先进基层党组织`/`颁奖`/`疗休养`/`慰问`/`献血`/`运动会`/`开学典礼`/`教师节`/`新春`/`元宵`/`团拜`/`开讲啦`），仍立即丢。`DROP_TITLE_KW` ④ 仅留 `获评`/`荣获`/`获奖`/`先进个人`/`模范`/`摘金`/`摘冠`/`银奖`（软性/内部表彰）。
+- **日期修复**：新增 `ART_DATE_NEAR`（匹配「日期独立成标签 / 紧跟日历图标」如 `<p>2026-09-26</p>`、`alt="">2026-09-26</p>`），`art_date_of()` 增加「标题之后近区（前 6000 字符）检索」分支以规避侧栏随机日期；据此补填中矿资源 3 条（`xwdti/427.html` 等发布日放在图标后独立标签，旧 `ART_DATE_PATS` 漏抓）。赣锋锂业 JSON 全为陈旧 `2025-05-26`（官网最新 2026-03-17）——属列表页陈旧缓存，已 `--force` 强制重采修正。
+
+**改动（2 文件，commit `53d9ab1`）**
+- `fetch_company.py`：`DROP_TITLE_KW`/`DROP_TITLE_HARD`/`KEEP_TITLE_KW` 三表分层重构 + 新增 `ART_DATE_NEAR` 与 `art_date_of()` 近区分支。
+- `company_news.json`：国内 29 家按新口径重采（复用缓存）+ 赣锋 `--force` 重采 + 中矿资源 3 条补日期；紫金「数据治理领跑者」、洛阳钼业「500强第135位/2000强第410位/影响力榜/LME注册」等恢复；全量 **398→406 条**，44 家名单与计数（domestic 29 / hk 2 / foreign 13）不变。
+
+**回归/闸门**：`node test_company_section.js`=178/0；`preflight_check.py` 全过；`node test_data_integrity.js`=9/0；`node test_mobile_ux_batch.js`=226/0；`node test_p2_20260910.js`=30/0；`node test_mobile_opt_20260910.js`=37/0。
+
+**上线**：commit `53d9ab1`；`git push origin main` `9e0ab95..53d9ab1`；`python deploy_pages.py` gh-pages 推送成功（线上版本 `ca07ca2` / build `20260927-1827`，站点 https://pliucugb-cyber.github.io/mining-daily/）。验收：`git ls-remote` 远端 `refs/heads/main` SHA == 本地 HEAD `53d9ab15f383f8294347efd928e49cc9e6c42ab7` OK；gh-pages 独立分支已更新至 `ca07ca2`。
+
+**回退指纹**
+- `KEEP_TITLE_KW` 的「实力认定」子类被删 → 紫金/洛钼榜单与认证新闻再次消失，板块内容塌缩回 398 条。
+- `ART_DATE_NEAR` 被删 → 中矿资源 3 条再次无日期，默认 90 天窗口下不可见。
+- `company_news.json` 若回退到 `53d9ab1` 之前快照 → 全量 406→398，且中矿资源日期丢失。
