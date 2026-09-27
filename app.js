@@ -2041,7 +2041,9 @@ function injectStars(){
     undo.title='只将本条恢复为未读（不影响其他新闻）';
     acts.appendChild(undo);
     el.appendChild(acts);
-    // 展开全文开关：插在摘要之后（order:3，紧随摘要、早于来源·时间与操作行），仅移动端 3 行截断时可见
+    // 展开全文开关：插在摘要之后（order:3，紧随摘要、早于来源·时间与操作行）。
+    // 2026-09-27 起桌面端摘要也折叠 2 行（见 index.html .news-summary），开关不再只在移动端可见；
+    // 仅当摘要确实被截断时才显示（syncNewsMore 给未溢出的条目置 data-overflow="0"）。
     const sumEl=el.querySelector('.news-summary');
     if(sumEl && !el.querySelector('.news-more')){
       const more=document.createElement('button');
@@ -2050,9 +2052,31 @@ function injectStars(){
       more.innerHTML='展开全文 ▾';
       more.title='展开/收起摘要全文';
       sumEl.insertAdjacentElement('afterend', more);
+      syncNewsMore(el);
     }
   });
 }
+
+// ===== 桌面端摘要折叠：溢出检测（2026-09-27 起）=====
+// 仅当 .news-summary 被 2 行截断（scrollHeight > clientHeight）时才显示展开开关；
+// 未截断的短摘要（如 ≤60 字符）置 data-overflow="0"，CSS 将其隐藏，避免无意义的「展开全文」按钮。
+function syncNewsMore(item){
+  const sum=item.querySelector('.news-summary');
+  const btn=item.querySelector('.news-more');
+  if(!sum||!btn)return;
+  const of=(sum.scrollHeight - sum.clientHeight) > 2;
+  btn.setAttribute('data-overflow', of ? '1':'0');
+}
+function applyNewsMoreAll(){
+  document.querySelectorAll('.news-item').forEach(function(it){
+    if(!it.querySelector('.news-more'))return; // 仅对已注入开关的条目重算
+    syncNewsMore(it);
+  });
+}
+// 字体加载 / 视口变化都会改变摘要是否溢出，需重算开关可见性。
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(applyNewsMoreAll); }
+window.addEventListener('load', applyNewsMoreAll);
+window.addEventListener('resize', applyNewsMoreAll);
 
 // ===== 自动关键词标签（重点提示词，按词典从标题+摘要提取）=====
 const TAG_DICT=[
