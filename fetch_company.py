@@ -1449,9 +1449,7 @@ SITES = [
     {'name':'锡业股份','code':'000960','sector':'锡','region':'CN','exchange':'A股','origin':'official',
      'zh':'锡业股份','en':'Yunnan Tin',
      'url':'https://www.ytc.cn/xwdt1/gsxw.htm','method':'html'},
-    {'name':'厦门钨业','code':'600549','sector':'钨','region':'CN','exchange':'A股','origin':'official',
-     'zh':'厦门钨业','en':'Xiamen Tungsten',
-     'url':'https://www.cxtc.com/News.aspx','method':'html'},
+
     # —— 海外（官网 News/IR 栏目，英文标题经 MyMemory 译中）——
     {'name':'Newmont','code':'NEM','sector':'黄金','region':'NA','exchange':'NYSE','origin':'agg',
      'zh':'纽蒙特','en':'Newmont',
@@ -1526,7 +1524,7 @@ PROMINENCE = [
     '江西铜业', '中金黄金', '华友钴业', '天齐锂业', '赣锋锂业',
     '铜陵有色', '赤峰黄金', '云铝股份', '南山铝业', '神火股份',
     '西部矿业', '藏格矿业', '锡业股份', '云南铜业', '天山铝业',
-    '驰宏锌锗', '中国稀土', '厦门钨业', '湖南黄金', '中金岭南',
+    '驰宏锌锗', '中国稀土', '湖南黄金', '中金岭南',
     # —— 海外 ——
     'Newmont', 'Freeport-McMoRan', 'Barrick', 'Southern Copper',
     'Agnico Eagle', 'Teck Resources', 'Albemarle',

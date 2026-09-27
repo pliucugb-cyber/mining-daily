@@ -1720,31 +1720,6 @@
    ]
   },
   {
-   "name": "厦门钨业",
-   "code": "600549",
-   "sector": "钨",
-   "region": "CN",
-   "exchange": "A股",
-   "zh": "厦门钨业",
-   "en": "Xiamen Tungsten",
-   "origin": "official",
-   "home": "https://www.cxtc.com/News.aspx",
-   "news_url": "https://www.cxtc.com/News.aspx",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 23,
-   "items": [
-    {
-     "t": "厦门钨业高强钨丝专利产业化案例入选国家级典型案例",
-     "d": "",
-     "u": "https://www.cxtc.com/",
-     "s": "",
-     "k": "news"
-    }
-   ]
-  },
-  {
    "name": "Newmont",
    "code": "NEM",
    "sector": "黄金",
@@ -3917,10 +3892,10 @@
   }
  ],
  "counts": {
-  "domestic": 29,
+  "domestic": 28,
   "hk": 2,
   "foreign": 13,
-  "total": 44,
-  "items": 406
+  "total": 43,
+  "items": 405
  }
 }

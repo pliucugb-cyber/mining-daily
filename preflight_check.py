@@ -490,9 +490,9 @@ def check_site_title(text):
     return True, findings
 
 
-EXPECTED_COMPANY_TOTAL = 44
-EXPECTED_COUNTS = {'domestic': 29, 'hk': 2, 'foreign': 13}
-BANNED_COMPANIES = ['盐湖股份', '株冶集团', '永兴材料']
+EXPECTED_COMPANY_TOTAL = 43
+EXPECTED_COUNTS = {'domestic': 28, 'hk': 2, 'foreign': 13}
+BANNED_COMPANIES = ['盐湖股份', '株冶集团', '永兴材料', '厦门钨业']
 
 
 def check_company_roster():
@@ -504,7 +504,7 @@ def check_company_roster():
      被删公司灌回、或总数漂移，只有浏览器测试 test_company_section.js 能发现
     （且是部署后）。这里在 06:00 重建前/08:00 复验前的 preflight 阶段就拦住。
 
-    检查：① counts.total == EXPECTED_COMPANY_TOTAL（44）；② 分组 domestic/hk/
+    检查：① counts.total == EXPECTED_COMPANY_TOTAL（43）；② 分组 domestic/hk/
      foreign 自洽；③ 公司数 == counts.total（无孤儿/重复）；④ BANNED 三家不回归。
     """
     findings = []
@@ -543,7 +543,7 @@ def check_company_roster():
         findings.append('❌ 被删公司回归：%s（须从 fetch_company.SITES 移除）' % '、'.join(banned))
         ok = False
     else:
-        findings.append('✅ 被删三家（盐湖股份/株冶集团/永兴材料）均未出现')
+        findings.append('✅ 被删四家（盐湖股份/株冶集团/永兴材料/厦门钨业）均未出现')
     return ok, findings
 
 
