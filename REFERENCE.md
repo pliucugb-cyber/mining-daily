@@ -2994,3 +2994,48 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - `index.html` 的 `.co-item` 缺 `content-visibility:auto`（非红线，仅性能回归，`grep -n "content-visibility" index.html` 应命中 1 处）。
 
 **部署备注**：bump build-version（index.html L10 `build-version` + sw.js L21 `CACHE_NAME`）触发 gh-pages 重建；GitHub Pages 构建有 1~2 分钟延迟，须轮询 build-version 变新值才算上线成功（本机 HTTPS 被 Dr.COM 网关劫持，拿不到真实字节，以 `git ls-remote` + worktree md5 为据）。
+
+### §42.36 移动端顶部新增「矿业公司」分类 tab（build `20260927-0850`）
+
+**背景（真实功能洞）**：手机端原来没有「矿业公司」入口。桌面「🏢 矿业公司」写在 `.toc-sidebar`（`switchView('company')`），但 `.toc-sidebar` 在 `@media(max-width:768px)` 被 `display:none!important`；顶部 4 个分类 tab、底部 5 个导航、我的面板都不含 company → 手机端只能靠 `#/companySection` 深链进入，普通用户摸不到。用户截图看到 5 个 tab（含矿业公司），但线上/历史 `cats` 从未含 company，确认是设想效果，需新增。
+
+**方案**：用户拍板方案 A——顶部分类栏新增「矿业公司」tab，放在「会议」右边，复用顶部 `data-md-cat` 机制，并与桌面 `data-view` 整页视图打通（`#companySection` 手机适配此前已完成）。
+
+**改动（4 文件，commit `48f7771`）**
+- `app.js`：① `cats` 追加 `['company','矿业公司']`（app.js:3130）；② `mdSelectCat` 在 `setAttribute('data-md-cat',cat)` 后同步置/清 `body[data-view]`（company→`'company'`，其余 remove），并对选中项 `scrollIntoView({inline:'center'})` 防 5 个 tab 在 ≤360px 溢出裁切（jsdom 无该 API 时静默跳过）。
+- `index.html`：`.md-cat-bar` 加 `overflow-x:auto;overflow-y:hidden;scrollbar-width:none` + 隐藏 webkit 滚动条（横滑防溢出）；build-version `20260927-0611`→`20260927-0850`。
+- `sw.js`：CACHE_NAME `mining-daily-20260927-0850`（与 build 同源，preflight 校验一致）。
+- `test_mobile_ux_batch.js`：4 处硬断言 `===4`→`===5`（顶部 tab 数、遍历 company 存在性、切 company 后 `body[data-md-cat=company]` 且 `body[data-view=company]`、切回推荐清除 `data-view` 无残留）。
+
+**回归/闸门**：`node test_mobile_ux_batch.js` = 226 PASS / 0 FAIL（含 5 条新断言）；`preflight_check.py` 全过（build 0850、sw 一致、公司护栏 44 家、div 收支平衡、sw 语法）。
+
+**上线**：`git push origin main` 成功 `91584da..48f7771`；`python deploy_pages.py` gh-pages 提交 `1d1db83`。线上字节验收：index.html `build-version=20260927-0850`（0611 已消失），`app.js?v=e192d2bf` 含 `['company','矿业公司']` + `setAttribute('data-view','company')`（本机 HTTPS 未被 Dr.COM 劫持时直连 github.io 取到真实字节确认；否则以 `git ls-remote` 远端 main SHA == `48f7771` 为到达证据）。
+
+**回退指纹**
+- `grep -n "\['company','矿业公司'\]" app.js` 应为 1 处；若被删 → 顶部分类回到 4 个、手机无矿业公司入口。
+- `grep -n "setAttribute('data-view','company')" app.js` 应为 1 处；若被删 → 切到矿业公司 tab 只会显隐区块、不会切整页视图（与桌面行为不一致、`#companySection` 不出现）。
+- `.md-cat-bar` 的 `overflow-x:auto` 被移除 → 5 个 tab 在窄屏重新溢出裁切（非红线，仅 UX 回归）。
+- `test_mobile_ux_batch.js` 断言若被改回 `===4` → 回归测试会放过「矿业公司 tab 缺失」，须同步维护。
+
+### §42.37 手机端矿业公司模块全量优化（build `20260927-1013`）
+
+**背景（用户截图反馈体验差）**：用户附手机截图指出日报“矿业公司”模块体验差。诊断出 5 个真实缺陷：① 首屏要 4 行控件（下拉/搜索/统计/筛选）才见内容；② 数字口径矛盾（360/262/98 同屏，含跨口径相减 + 切范围下拉不刷新）；③ 日期表头被吸顶栏（`.co-day-h`）滚进 `z-index:230` 的 `#mdTop` 下方被遮挡（缺陷级）；④ 每条“✓ 标为已读”整行按钮视觉噪声；⑤ 无摘要时长占位文案。用户择“全量优化”。
+
+**方案（全量）**：下拉移入 `.co-side-top` 与搜索 flex 并排一行；统计口径统一（olderHint 同口径 + `setRange` 补 `renderNav`）；`.co-day-h` 吸顶让位 `--md-top-h`；操作按钮图标 + 双文案（桌面全称/手机简称）；缺摘要占位改短文案。
+
+**改动（4 文件，commit 待生成）**
+- `app.js`：`cardHtml()` 操作按钮段改“图标 + 全称 + 简称”三段（保留 `.btn-co-read`/`.btn-co-unread` class 维持 test 断言）；`renderFeed()` 头部口径统一为 `scopeAll`（与当前视图同口径）；`olderHint` 加 `!coUnreadOnly` 条件且改短文案；下拉首项同口径 `N`（去掉“条”字便并排）；`setRange(r)` 补 `renderNav()` 修复切范围不刷新；缺摘要占位改“（暂无摘要 · 点标题看原文）”（保留 `.co-summary-empty` 元素）。
+- `index.html`：`#companySection` 内联 style 里删除 `.co-navsel` 独占行、改移入 `.co-side-top` 容器（桌面 `display:none` 不受影响）；`.co-actions button` 加 `inline-flex` + 新增 `.co-act-ico`/`.co-act-short`；`@media(max-width:1100px)` `.co-side-top` 改 flex 一行、`.co-navsel` 并排、`.co-search` flex 占余；`@media(max-width:768px)` 修复 `.co-day-h` 吸顶让位 `--md-top-h` + 顶栏隐藏时回顶、操作按钮瘦身（`.co-act-full{display:none}`/`.co-act-short{display:inline}`）；build-version `20260927-0902`→`20260927-1013`。
+- `sw.js`：CACHE_NAME `mining-daily-20260927-1013`（与 build 同源）。
+- `test_company_section.js`：文件头补 ⑩ 行 + 尾部新增 12 条 2026-09-27 回归断言（下拉移入 `.co-side-top`、CSS flex 一行、头部条数格式保留无“另有/条更早”、下拉首项同口径 N=262、`.co-day-h` 让位 `--md-top-h`、按钮双文案、占位短文案）。
+
+**回归/闸门**：`node test_company_section.js` = 177 PASS / 0 FAIL（含 12 新断言）；`node test_mobile_ux_batch.js` = 226 PASS / 0 FAIL；`node test_p2_20260910.js` = 30 PASS / 0 FAIL；`preflight_check.py` 全过（build 1013、sw 一致、公司护栏 44 家、div 收支平衡、sw 语法）。
+
+**上线**：待 `git push origin main` + `python deploy_pages.py` 后填写 SHA。线上验收：index.html `build-version=20260927-1013`（0902 已消失），`sw.js` CACHE_NAME `mining-daily-20260927-1013`；以 `git ls-remote` 远端 main SHA 为到达证据。
+
+**回退指纹**
+- `.co-navsel` 仍在独立行（不在 `.co-side-top` 内）→ 手机端下拉与搜索不再并排，回到两行。
+- `.co-side-top{display:flex}`（移动端）被移除 → 并排布局回退。
+- `.co-day-h{top:calc(...var(--md-top-h)...)}` 被移除 → 日期表头重新被吸顶栏遮挡（缺陷级）。
+- `.co-act-short{display:none}` 默认 + `.co-act-full{display:none}` ≤768px 被移除 → 手机端按钮回到整行长文案。
+- 占位长句“（该条暂未提取到正文摘要，点击标题前往来源查看）”若重现 → 回到长文案。

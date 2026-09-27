@@ -9,6 +9,8 @@
  *   ⑧ 媒体源披露（2026-09-26）：选中公司后头部 sub 显示「来源：新浪财经 / 官网 RSS / 公司官网」
  *   ⑤ v6：每条卡片加一句内容摘要（仿新闻端，读 it.s）；移除逐条「目标域名」行；顶部说明段移除
  *   ⑨ v11（2026-09-26）：条目标题近黑加粗偏大 / 摘要中灰常规偏小（三级层级）；右栏两组表头可折叠（md_co_groups 记忆，默认全展开） + 文案精简（去「按市值·知名度」「最新动态」「有内容」）
+ *   ⑩ 2026-09-27 手机端体验优化：下拉＋搜索并排一行（.co-side-top flex）／统计口径统一（「更早 N 条」不再跨口径相减）／
+ *       日期分组表头让位手机吸顶栏（--md-top-h，修滚动被 #mdTop 遮住）／操作按钮手机端简称瘦身／缺摘要占位改短文案
  *   ⑥ v7：新闻流单栏（同新闻列表形式）；右栏 sticky 修复（#companySection 改 overflow:clip）+ 上移；
  *       搜索框纳入摘要匹配；暂未收录公司新增「搜新闻」搜索引擎入口（官网死站/外壳页时仍可发现相关内容）
  * 运行：node test_company_section.js
@@ -678,6 +680,41 @@ setTimeout(() => {
     check('v11 CSS：已读态摘要再降一档（--ink-400）+ 暗色覆盖',
           /\.co-item\.read \.co-summary,\.co-item\.read \.co-body\{color:var\(--ink-400\)\}/.test(css) &&
           /body\.dark \.co-item\.read \.co-summary,body\.dark \.co-item\.read \.co-body\{color:var\(--ink-300\)\}/.test(css));
+
+    // ---------- 17) 2026-09-27 手机端矿业公司模块体验优化（控件一行化 / 口径统一 / 吸顶修复 / 按钮瘦身） ----------
+    const selEl = document.getElementById('coNavSel');
+    const searchEl = document.getElementById('coSearch');
+    check('2026-09-27 公司下拉已移入 .co-side-top（手机端与搜索并排成一行）',
+          !!(selEl && selEl.closest('.co-side-top')));
+    check('2026-09-27 下拉与搜索同父节点（可并排）',
+          !!(selEl && searchEl && selEl.parentElement === searchEl.parentElement));
+    check('2026-09-27 CSS：.co-side-top 移动端为 flex 一行',
+          /@media\(max-width:1100px\)\{[\s\S]*?\.co-side-top\{display:flex/.test(css));
+    // 统计口径统一：头部条数格式保留，但不再出现跨口径的「另有 N 条更早」
+    const sub17 = (document.querySelector('#coFeedHead .co-feed-sub') || {}).textContent || '';
+    check('2026-09-27 头部条数仍为「显示 N / M 条」', /显示 \d+ \/ \d+ 条/.test(sub17), sub17);
+    check('2026-09-27 头部不再出现跨口径长提示（无「另有」/「条更早」）',
+          sub17.indexOf('另有') < 0 && sub17.indexOf('条更早') < 0, sub17);
+    const selFirst17 = (document.querySelector('#coNavSel option') || {}).textContent || '';
+    check('2026-09-27 下拉首项「全部公司（N）」与「全部」范围同口径（N=' + inRange90 + '）',
+          selFirst17.indexOf('全部公司') >= 0 && selFirst17.indexOf(String(inRange90)) >= 0, selFirst17);
+    // 日期分组表头让位手机吸顶栏（修复滚动时被 #mdTop 遮住）
+    check('2026-09-27 CSS：.co-day-h 让位顶栏高度（--md-top-h）',
+          /\.co-day-h\{top:calc\(env\(safe-area-inset-top,0px\) \+ var\(--md-top-h,96px\)\)\}/.test(css));
+    check('2026-09-27 CSS：顶栏自动隐藏时日期表头回到顶部',
+          /body\.md-top-hidden \.co-day-h\{top:env\(safe-area-inset-top,0px\)\}/.test(css));
+    // 操作按钮双文案（桌面全称 / 手机简称）
+    check('2026-09-27 操作按钮含「图标 + 全称 + 简称」三段',
+          document.querySelectorAll('#companyList .btn-co-read .co-act-ico').length >= 1 &&
+          document.querySelectorAll('#companyList .btn-co-read .co-act-full').length >= 1 &&
+          document.querySelectorAll('#companyList .btn-co-read .co-act-short').length >= 1);
+    check('2026-09-27 CSS：桌面默认全称（.co-act-short{display:none}）',
+          /\.co-act-short\{display:none\}/.test(css));
+    check('2026-09-27 CSS：≤768px 切简称（.co-act-full{display:none}）',
+          /@media\(max-width:768px\)\{[\s\S]*?\.co-act-full\{display:none\}/.test(css));
+    // 缺摘要占位精简（不再渲染长句）
+    check('2026-09-27 缺摘要占位改短文案（渲染源已无「暂未提取到正文摘要」长句）',
+          html.indexOf('暂未提取到正文摘要') < 0 && html.indexOf('（暂无摘要 · 点标题看原文）') >= 0);
 
     check('无阻塞性 JS 错误', errors.length === 0, errors.join(' | '));
 
