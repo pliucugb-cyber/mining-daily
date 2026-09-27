@@ -4,7 +4,7 @@
   "short_name": "矿业资讯",
   "description": "每日矿业资讯与价格摘要，离线也能看。",
   "lang": "zh-CN",
-  "start_url": "./",
+  "start_url": "./#/companySection",
   "scope": "./",
   "display": "standalone",
   "display_override": ["standalone"],
