@@ -3138,7 +3138,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **起因**：用户截图反馈——紫金矿业「数据治理领跑者」、洛阳钼业「500强/2000强/影响力榜/LME 注册」这类**实力认定类**新闻没被抓进来，质疑「内容是不是不全」；同时问国内几个没听过的冷门公司是否有必要抓（其新闻量很小）。经诊断，原口径 `is_droppable_title()` 把「实力认定类」与「纯内部活动」混在同一张 DROP 黑名单里，误删约 1/4 国内条目（紫金/洛钼的榜单与认证新闻全被 `DROP_TITLE_KW` ④ 吞掉）。
 
-**拍板（AskUserQuestion，2026-09-27）**：口径方向=**分层放宽**；冷门公司=**不删、先修源**；先做=**口径 + 日期**。（厦门钨业 JS 外壳页抽不到、山东黄金等个别文章页无日期属真缺失，留待 P1 用 chrome/sina 重源修复。）
+**拍板（AskUserQuestion，2026-09-27）**：口径方向=**分层放宽**；冷门公司=**不删、先修源**；先做=**口径 + 日期**。（厦门钨业 JS 外壳页抽不到、山东黄金等个别文章页无日期属真缺失，留待 P1 用 chrome/sina 重源修复；其中**厦门钨业后于 2026-09-27 晚按用户要求直接从板块删除**，见 §42.41。）
 
 **方案**
 - **口径分层放宽**：把 `DROP_TITLE_KW` ④ 中的「实力认定类」——`500强`/`2000强`/`中企全球`/`影响力榜`/`位列`/`排名`/`排行榜`/`领跑者`/`单项冠军`/`称号`/`金奖`/`冠军`/`五星佳`/`最高评级`/`国家级`/`名单`/`数据治理`/`绿色工厂`/`LME`/`上榜`/`摘得`——移出 DROP，迁入 `KEEP_TITLE_KW` 新增「实力认定」子类（命中即不删）。`DROP_TITLE_HARD` 同步移出 `能效"领跑者"`/`单项冠军`/`获奖`/`摘金`/`摘冠`，仅保留纯内部软性荣誉（`卓越职场`/`最佳雇主`/`示范单位`/`文明单位`/`先进基层党组织`/`颁奖`/`疗休养`/`慰问`/`献血`/`运动会`/`开学典礼`/`教师节`/`新春`/`元宵`/`团拜`/`开讲啦`），仍立即丢。`DROP_TITLE_KW` ④ 仅留 `获评`/`荣获`/`获奖`/`先进个人`/`模范`/`摘金`/`摘冠`/`银奖`（软性/内部表彰）。
@@ -3156,3 +3156,27 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - `KEEP_TITLE_KW` 的「实力认定」子类被删 → 紫金/洛钼榜单与认证新闻再次消失，板块内容塌缩回 398 条。
 - `ART_DATE_NEAR` 被删 → 中矿资源 3 条再次无日期，默认 90 天窗口下不可见。
 - `company_news.json` 若回退到 `53d9ab1` 之前快照 → 全量 406→398，且中矿资源日期丢失。
+## §42.41 删除厦门钨业（矿业公司板块减员）
+
+**起因**：§42.40 上线后用户明确「厦门钨业，把相关内容删除了吧」。其官网 `cxtc.com/News.aspx` 是 ASP.NET `javascript:void(0)` + `doPostBack` 的 JS 外壳页，静态抓取只能抽到 1 条且 href 退回根路径 `https://www.cxtc.com/`、无日期——属「抽不到有效内容」的死站，与其修源不如直接移除（与 §42.34 删盐湖/株冶/永兴同逻辑：名单护栏化）。
+
+**方案**
+- `fetch_company.py`：`SITES` 删除厦门钨业 dict（钨 sector、`region:CN`、`method:html`、`url:cxtc.com/News.aspx`）；`PROMINENCE` 展示序同步移除。
+- `company_news.json`：用流水线 `_write_json()` 重写剔除该条目，计数自动重算——`domestic 29→28`、`total 44→43`、`items 406→405`（hk 2 / foreign 13 不变）。
+- `preflight_check.py`：护栏同步——`EXPECTED_COMPANY_TOTAL 44→43`、`EXPECTED_COUNTS.domestic 29→28`、`BANNED_COMPANIES` 新增 `'厦门钨业'`（防重抓复活），文档注释「三家→四家」。
+- 另清理遗留快照 `data/company_news.json`（Sep-21 旧格式、未部署、含厦门钨业）中的对应对象，保持仓库一致。
+
+**改动（4 文件，commit `826cf1d`）**
+- `fetch_company.py`：SITES + PROMINENCE 移除厦门钨业（CRLF 保形）。
+- `company_news.json`：43 家 / 405 条（_write_json 重写）。
+- `preflight_check.py`：计数护栏 + BANNED 名单（LF 保形）。
+- `data/company_news.json`：删除对应对象（遗留快照）。
+
+**回归/闸门**：`preflight_check.py` ✅ 全部通过（总数 43、domestic 28、被删四家含厦门钨业不回归）；`node test_company_section.js`=178/0；`node test_data_integrity.js`=9/0；`node test_mobile_ux_batch.js`=226/0；`node test_p2_20260910.js`=30/0；`node test_mobile_opt_20260910.js`=37/0。
+
+**上线**：commit `826cf1d`；`git push origin main`（远程 main 已推进至 `826cf1d`）；`python deploy_pages.py` gh-pages 部署（站点 https://pliucugb-cyber.github.io/mining-daily/）。
+
+**回退指纹**
+- `fetch_company.py` SITES 重新加回厦门钨业 → 重抓会将其灌回 `company_news.json`；`preflight` 的 `BANNED_COMPANIES` 会拦住，故需同步从 BANNED 移除。
+- `BANNED_COMPANIES` 含厦门钨业但 SITES 已删 → 仅作护栏，不影响线上渲染。
+- `company_news.json` 回退到 `826cf1d` 之前快照 → 厦门钨业回归，计数回到 44 家 / 406 条。
