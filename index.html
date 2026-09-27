@@ -2772,6 +2772,10 @@ body.dark .co-side{background:#151d29}
 .co-nav-g-t{min-width:0}
 .co-nav-g-c{flex:0 0 auto;font-size:var(--fs-nano);color:var(--ink-400);line-height:1}
 .co-nav-g-body[hidden]{display:none}
+/* 2026-09-27：导航层级强化 —— 组头做成「分区带」并加左侧色条；组内公司缩进 + 连接竖线，避免组头与公司项看起来同一层级 */
+.co-nav-g-h{background:var(--surface-2);border-left:3px solid #c7d2fe}
+.co-nav-g-body{padding-left:14px;margin-left:8px;border-left:2px solid var(--line-1)}
+.co-nav-g-body .co-nav-item{font-size:var(--fs-caption);color:var(--ink-700)}
 .co-nav{flex:1 1 auto;min-height:0;overflow:auto;padding-bottom:var(--s2);overscroll-behavior:contain}
 .co-nav::-webkit-scrollbar{width:5px}
 .co-nav::-webkit-scrollbar-thumb{background:#c8d6e5;border-radius:var(--r-sm)}
@@ -2835,6 +2839,8 @@ body.dark .co-dot{background:#818cf8}
 .co-ex{font-style:normal;color:var(--ink-500);border:1px solid var(--line-2);border-radius:999px;padding:0 var(--s2);font-size:var(--fs-caption)}
 .co-ex-hk{color:#b45309;border-color:#fcd34d}
 .co-src-tag{font-style:normal;color:#0f766e;border:1px solid #99f6e4;background:#ccfbf1;border-radius:999px;padding:0 var(--s2);font-size:var(--fs-caption);font-weight:600}
+/* 2026-09-27：监管披露（SEC/公告类）专用徽标 —— 与「股票新闻/矿业媒体」区分，明确非公司动态新闻 */
+.co-src-reg{color:#b45309;border-color:#fcd34d;background:#fef3c7}
 /* 正文默认 2 行折叠，点「展开全文」看完整内容 */
 .co-body{margin:2px 0 0 14px;font-size:calc(var(--fs-body) - 1px);color:var(--ink-500);line-height:1.62;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
@@ -3024,7 +3030,7 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
 <script src="news-data.js?v=810e0088" defer></script>
 <script src="lme-data.js?v=e2986071" defer></script>
 <script src="price-history.js?v=a0cecfc1" defer></script>
-<script src="app.js?v=7763f195" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=6e22cd27" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
