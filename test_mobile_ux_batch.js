@@ -211,10 +211,13 @@ setTimeout(() => {
 
   console.log('\n===== ⑨ 会议 tab + 会议会展区块 =====');
   const mctabs = doc.querySelectorAll('#mdTop .mctab');
-  check('顶部分类 Tab 共 4 个（含会议）', mctabs.length === 4, '实际 ' + mctabs.length);
+  check('顶部分类 Tab 共 5 个（含会议/矿业公司）', mctabs.length === 5, '实际 ' + mctabs.length);
   let hasMeeting = false;
   mctabs.forEach(t => { if (t.getAttribute('data-cat') === 'meeting') hasMeeting = true; });
   check('存在「会议」分类 tab', hasMeeting);
+  let hasCompany = false;
+  mctabs.forEach(t => { if (t.getAttribute('data-cat') === 'company') hasCompany = true; });
+  check('存在「矿业公司」分类 tab', hasCompany);
   check('会议会展区块已注入 DOM', !!doc.getElementById('meetingSection'));
   const rs = doc.getElementById('rightsSection');
   const ms = doc.getElementById('meetingSection');
@@ -226,6 +229,12 @@ setTimeout(() => {
   check('点击会议 tab 写入 body[data-md-cat=meeting]', doc.body.getAttribute('data-md-cat') === 'meeting');
   try { window.mdSelectCat('tuijian'); } catch (e) {}
   check('切回推荐写入 body[data-md-cat=tuijian]', doc.body.getAttribute('data-md-cat') === 'tuijian');
+  // 2026-09-27：矿业公司 tab 复用桌面 data-view 机制
+  try { window.mdSelectCat('company'); } catch (e) {}
+  check('切到矿业公司 → body[data-md-cat=company]', doc.body.getAttribute('data-md-cat') === 'company');
+  check('切到矿业公司 → body[data-view=company]', doc.body.getAttribute('data-view') === 'company');
+  try { window.mdSelectCat('tuijian'); } catch (e) {}
+  check('从矿业公司切回推荐 → 清除 data-view（无残留）', !doc.body.getAttribute('data-view'));
 
   console.log('\n===== ⑩ 顶栏智能吸顶：隐藏不得改动布局（2026-09-11 P0 修复）=====');
   const hidRule = (html.match(/body\.md-top-hidden #mdTop\{[^}]*\}/) || [''])[0];
@@ -258,7 +267,7 @@ setTimeout(() => {
   const homeLabel = homeTab ? ((homeTab.querySelector('span:last-child') || {}).textContent || '') : '';
   check('底部首页 tab 标签为「首页」（原「推荐」已改名，避免与顶部分类重复）', homeLabel === '首页', '实际「' + homeLabel + '」');
   const topCats = doc.querySelectorAll('#mdTop .mctab');
-  check('顶部分类栏仍有 4 个分类（推荐/热榜/往期/会议）', topCats.length === 4, '实际 ' + topCats.length);
+  check('顶部分类栏仍有 5 个分类（推荐/热榜/往期/会议/矿业公司）', topCats.length === 5, '实际 ' + topCats.length);
   function clickGo(go){ const b = doc.querySelector('#mobileTabBar .mtab[data-go="' + go + '"]'); if (b) b.dispatchEvent(new window.Event('click', { bubbles: true })); }
   check('初始（首页）顶部分类栏可见（无 md-hide-catbar）', !doc.body.classList.contains('md-hide-catbar'));
   clickGo('price');

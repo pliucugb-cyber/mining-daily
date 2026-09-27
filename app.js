@@ -3043,11 +3043,20 @@ function mdSelectCat(cat){
   document.body.classList.remove('md-search-open');
   document.body.classList.remove('md-top-hidden');
   document.body.setAttribute('data-md-cat',cat);
+  // 2026-09-27：公司区块沿用桌面 data-view 机制显隐（index.html 内 body[data-view="company"]
+  //   隐藏其它区块并显示 #companySection）；切到 company 同步置 data-view，
+  //   切到其它分类必须清掉，否则从公司页返回会残留整页视图。
+  if(cat==='company'){ document.body.setAttribute('data-view','company'); }
+  else { document.body.removeAttribute('data-view'); }
+  var onBtn=null;
   [].forEach.call(top.querySelectorAll('.mctab'),function(b){
     var on=b.getAttribute('data-cat')===cat;
     b.classList.toggle('active',on);
+    if(on) onBtn=b;
     try{ b.setAttribute('aria-selected',on?'true':'false'); }catch(e){}
   });
+  // 分类增至 5 个后最右 tab 可能被容器裁切 → 让选中项滚入视野（jsdom 无此 API 时静默跳过）
+  if(onBtn && onBtn.scrollIntoView){ try{ onBtn.scrollIntoView({inline:'center',block:'nearest'}); }catch(e){} }
   mdSyncNav(cat);
 }
 // 同步底部主导航高亮（首页/价格/矿权 ↔ 顶部分类；热榜/往期无对应底部项）
@@ -3117,7 +3126,8 @@ function mdMobileTopTabs(){
   try{ var d=document.querySelector('.date-badge'); if(d) dateTxt=d.textContent.trim(); }catch(e){}
   // 2026-09-24 E2：窄屏日期短格式 MM-DD 周X（≤360px 不再截断，纯展示处理）
   try{ var _dm=dateTxt.match(/(\d{4})[-/年](\d{1,2})[-/月](\d{1,2})/); if(_dm){ var _d=new Date(+_dm[1], +_dm[2]-1, +_dm[3]); var _wd=['周日','周一','周二','周三','周四','周五','周六'][_d.getDay()]; dateTxt=_dm[2]+'-'+_dm[3]+' '+_wd; } }catch(e){}
-  var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期'],['meeting','会议']];
+  // 2026-09-27：新增「矿业公司」分类 tab（复用桌面 data-view 机制，见 mdSelectCat）
+  var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期'],['meeting','会议'],['company','矿业公司']];
   // 2026-09-12 检索统一（用户定夺）：顶栏不再注入搜索按钮 —— 原 #mdSearchBtn 恒不可见（见上方 mdOpenSearch 注释），
   //   是死控件。检索能力统一收进底部「AI 搜」tab 打开的面板，顶栏保持「品牌名 + 日期」的干净两栏。
   var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业资讯速览</span><span class="md-date">'+dateTxt+'</span></div>'
