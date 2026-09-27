@@ -3083,3 +3083,24 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - `.co-nav-g-body{padding-left:14px;margin-left:8px;border-left:2px solid var(--line-1)}` 被移除 → 组内公司项不再缩进，与组头同层级。
 - `.co-src-reg{color:#b45309;border-color:#fcd34d;background:#fef3c7}` 被移除 → 监管披露与股票新闻同色，无法区分。
 - app.js `it.k==='reg'` 分支被移除 → SEC/公告类重新混入「新闻」。
+
+### §42.38 桌面端新闻摘要折叠（build `20260927-1802`）
+
+**背景（用户截图反馈“标题像带了总结”）**：用户附截图问“有些新闻标题下面为什么像带了总结内容、是不是没必要”。诊断：卡片加粗那行是**源站原标题**（SMM 用「栏目：要点」、西方财经标题是“因→果”，属来源语义、不可省）；下方灰色行是**编辑摘要**。真正的冗余是**桌面端摘要默认全展开**，与标题视觉重复。用户择“桌面摘要折叠”。
+
+**方案（折叠而非删摘要）**：桌面端摘要从全展开改为**折叠 2 行**，仅当摘要确实超出 2 行时（几何判定）才显示「展开全文 ▾」开关；短摘要（约 ≤60 字，占比约 9%）自动隐藏开关。移动端维持 3 行不变，避免桌面/移动差异混淆。
+
+**改动（3 文件，commit `f23649f`）**
+- `index.html`：`.news-summary` 基础规则加 `-webkit-line-clamp:2`（桌面折叠）；`.news-more` 由 `display:none` 改为默认 `display:inline-block`，新增 `.news-more[data-overflow="0"]{display:none}`（仅未截断时隐藏）；新增 `.news-item.expanded .news-summary{-webkit-line-clamp:unset;display:block}`（桌面点击展开去截断）；build-version `20260927-1749`→`20260927-1802`。移动端 `@media` 内 `.news-summary` 3 行 clamp 与 `.news-item.expanded` 去截断规则维持不变。
+- `app.js`：`injectStars()` 注入 `.news-more` 开关后调用 `syncNewsMore(el)` 用 `scrollHeight-clientHeight>2` 算几何溢出；新增 `syncNewsMore(item)` / `applyNewsMoreAll()` 两函数，并在 `load` / `resize` / `document.fonts.ready`（字体加载与视口变化会改变是否溢出）重算；`.news-more` 点击切换 `.expanded` 并换文案（沿用旧逻辑，桌面同样生效）。
+- `test_mobile_ux_batch.js`：旧断言“桌面默认隐藏 `.news-more{display:none}`”改为“旧的 `display:none` 已移除 + `[data-overflow="0"]` 隐藏规则存在 + 桌面展开去截断规则存在”。
+
+**回归/闸门**：`node test_mobile_ux_batch.js` = 226 PASS / 0 FAIL（含新断言 + “无阻塞性 JS 错误”确认 `syncNewsMore` 运行干净）；`node test_company_section.js` = 178 PASS / 0 FAIL；`node test_p2_20260910.js` = 30 PASS / 0 FAIL；`node test_mobile_opt_20260910.js` = 37 PASS / 0 FAIL（其中“news-summary 移动端 3 行截断”仍过，确认桌面 2 行未破坏移动端）；`preflight_check.py` 全过。
+
+**上线**：commit `f23649f`；`git push origin main` `9fcf1c3..f23649f`；`python deploy_pages.py` gh-pages 推送成功（线上版本 `8805035` / build `20260927-1802`，站点 https://pliucugb-cyber.github.io/mining-daily/）。验收：`git ls-remote` 远端 `refs/heads/main` SHA == 本地 HEAD `f23649f8feb6cc166353789922f5698122ddaa11` OK；gh-pages 独立分支已更新至 `8805035`。
+
+**回退指纹**
+- `.news-summary{...-webkit-line-clamp:2;overflow:hidden}` 被移除 → 桌面摘要回到全展开，与标题视觉重复复发。
+- `.news-more[data-overflow="0"]{display:none}` 被移除 → 短摘要也显示「展开全文」空开关，成噪声。
+- `.news-item.expanded .news-summary{-webkit-line-clamp:unset;display:block}` 被移除 → 桌面点击「展开全文」无效，摘要仍截断。
+- app.js `syncNewsMore` / `applyNewsMoreAll` 被移除 → 溢出判定失效，开关显隐错乱（短摘要可能误显、长摘要可能误隐）。
