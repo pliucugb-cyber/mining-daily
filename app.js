@@ -3801,7 +3801,7 @@ function mdInitDeepLink(){
   var viewMap={'todaySection':'today','archiveSection':'archive','rightsSection':'rights','companySection':'company'};
   function apply(){
     var h=location.hash||''; var m=h.match(/^#\/(.+)$/); if(!m)return; var key=m[1];
-    if(viewMap[key]){ if(typeof switchView==='function') switchView(viewMap[key]); return; }
+    if(viewMap[key]){ if(key==='companySection' && typeof mdSelectCat==='function'){ mdSelectCat('company'); } else if(typeof switchView==='function'){ switchView(viewMap[key]); } return; }
     if(scrollOnly[key]){ var s=document.getElementById(key); if(s)s.scrollIntoView({block:'start',behavior:'smooth'}); return; }
     var nm=key.match(/^news-(.+)$/);
     if(nm){ var el=document.getElementById('news-'+nm[1])||document.querySelector('[data-news-id="'+nm[1]+'"]'); if(el){ el.scrollIntoView({block:'center',behavior:'smooth'}); try{ el.classList.add('md-flash'); setTimeout(function(){el.classList.remove('md-flash');},1600);}catch(e){} } }
