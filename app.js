@@ -7099,7 +7099,7 @@ function toggleTheme(){
     var rows=[];
     cs.forEach(function(co){
       (co.items||[]).forEach(function(it){
-        rows.push({t:it.t,d:it.d||'',u:it.u||'',s:it.s||'',en:it.t_en||'',src:it.src||'',
+        rows.push({t:it.t,d:it.d||'',u:it.u||'',s:it.s||'',en:it.t_en||'',src:it.src||'',k:it.k||'news',
           name:co.name,code:co.code||'' ,sector:co.sector||'',
           region:co.region,stale:!!co.stale,zh:co.zh||'',zh_en:co.en||''});
       });
@@ -7241,7 +7241,10 @@ function toggleTheme(){
     // 2026-09-24：已读态。data-url 作为本地已读集合的键（原文链接缺失时退化为搜索链接，
     // 仍是稳定键）；已读条目整体弱化，且只显示「标为未读」。
     var isRead=coReadHas(primary);
-    var srcTag=it.src?('<span class="co-src-tag co-src-'+esc(it.src)+'">'+esc(srcLabel(it.src))+'</span>'):'';
+    var isReg=(it.k==='reg');
+    var srcTag=isReg
+      ? '<span class="co-src-tag co-src-reg">监管披露</span>'
+      : (it.src?('<span class="co-src-tag co-src-'+esc(it.src)+'">'+esc(srcLabel(it.src))+'</span>'):'');
     // 2026-09-27：操作按钮改「图标 + 全称/简称」双文案 —— 桌面显示「标为已读 / 标为未读」，
     // 手机（≤768px）只显示「已读 / 未读」并收紧内边距，降低每条卡片的视觉噪声（样式见 index.html 内联）。
     var acts='<div class="co-actions">'+

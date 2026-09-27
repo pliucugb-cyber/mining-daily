@@ -544,16 +544,18 @@ def _date_from_url(href):
         return _valid_ymd(m.group(1), m.group(2), m.group(3))
     return ''
 
-def find_date(raw, pos_start, pos_end, href=''):
+def find_date(raw, pos_start, pos_end, href='', win=5000):
     # 1) URL 内嵌日期优先（西部矿业 t20260916、新闻列表按年月建目录等）
     du = _date_from_url(href)
     if du:
         return du
-    # 2) 锚点前后各 5000 字符（覆盖同列表项/单元格内的独立日期 span，部分站日期离标题较远）
-    W = 5000
+    # 2) 锚点前后各 win 字符（覆盖同列表项/单元格内的独立日期 span，部分站日期离标题较远）
+    W = win
+    inner = raw[pos_start:pos_end]
     fwd = raw[pos_end:pos_end + W]
     bwd = raw[max(0, pos_start - W):pos_start]
-    for seg in (fwd, bwd):
+    # 先点内部先扫查日期：标题+正文同处一个 <a> 时，正文里的日期才是本条日期。
+    for seg in (inner, fwd, bwd):
         m = DATE_RE.search(seg) or DATE_RE2.search(seg)
         if m:
             nd = norm_date(m)
@@ -614,6 +616,56 @@ def looks_like_news(title, href=''):
         return False
     return True
 
+def clean_headline(title):
+    """从被正文摘要污染的锚点标题里摘出干净的「标题」：正文多以独立日期 / 双空格 / 句末标点开始。
+    返回用于展示与新闻性判定的标题；无污染时原样返回。"""
+    t = clean_ws(title or '').strip()
+    if not t:
+        return t
+    cand = []
+    for rx in (r'\s+\d{1,2}月\d{1,2}[日号]?\s*[，,。\s]',
+               r'\s+\d{1,2}月\d{1,2}[日号]?\s*\d{1,2}时',
+               r'\s{2,}'):
+        m = re.search(rx, t)
+        if m and 6 <= m.start() <= 70:
+            head = t[:m.start()].strip()
+            if 6 <= len(head) <= 70:
+                cand.append(head)
+    if cand:
+        return cand[0]
+    for sep in ('。', '；', '——'):
+        mi = t.find(sep)
+        if 6 <= mi <= 70:
+            head = t[:mi].strip()
+            if 6 <= len(head) <= 70:
+                return head
+    return t if len(t) <= 140 else t[:140].strip()
+
+
+def extract_anchor_title(inner):
+    """从锚点内部 HTML 摘出「标题容器」文字，避免把标题+正文粘成一团。
+    典型结构：<a ...> <div class="left"> <div class="tit el">标题</div> <div class="con">正文</div> </a>
+    此时 strip_tags(整段) 会得到「标题正文」，clean_headline 难以可靠切分。
+    优先取标题容器（tit/h/span.title），长度限 6~90，取最短候选。"""
+    if not inner:
+        return None
+    best = None
+    pats = (
+        r'<div\b[^>]*class=["\'][^"\']*\btit\b[^"\']*["\'][^>]*>(.*?)</div>',
+        r'<h[1-4]\b[^>]*>(.*?)</h[1-4]>',
+        r'<span\b[^>]*class=["\'][^"\']*\btitle\b[^"\']*["\'][^>]*>(.*?)</span>',
+    )
+    for pat in pats:
+        for m in re.finditer(pat, inner, re.IGNORECASE | re.DOTALL):
+            cand = strip_tags(m.group(1)).strip()
+            L = len(cand)
+            if 6 <= L <= 90:
+                if best is None or L < len(best):
+                    best = cand
+        if best:
+            return best
+    return None
+
 def is_droppable_title(title):
     """DROP_TITLE_HARD（荣誉/活动独有）→ 立即丢；否则命中 KEEP 保留、命中 DROP 丢。"""
     t = clean_ws(title)
@@ -658,7 +710,7 @@ def extract_gridview(raw, base_url):
             d = norm_date(dm)
         if not d:
             d = _date_from_url(links[i])
-        items.append({'t': title, 'd': d or '', 'u': absurl, 's': ''})
+        items.append({'t': title, 'd': d or '', 'u': absurl, 's': '', 'k': 'news'})
         seen.add(absurl)
     return items
 
@@ -711,7 +763,7 @@ def extract_rss(raw, base_url, max_items=18):
         if absurl in seen:
             continue
         seen.add(absurl)
-        items.append({'t': title, 'd': _rss_date(pub), 'u': absurl, 's': ''})
+        items.append({'t': title, 'd': _rss_date(pub), 'u': absurl, 's': '', 'k': 'news'})
     items.sort(key=lambda x: (x['d'] == '', x['d']), reverse=True)
     return items[:max_items]
 
@@ -738,7 +790,10 @@ def extract_items(raw, base_url, max_items=18, require_date=False):
         absurl = urllib.parse.urljoin(base_url, href)
         if not same_host(host_of(absurl), base_host):
             continue
-        title = strip_tags(m.group(2))
+        title = extract_anchor_title(m.group(2))
+        if not title:
+            title = strip_tags(m.group(2))
+        title = clean_headline(title)
         if not looks_like_news(title, absurl):
             continue
         if absurl in seen:
@@ -746,7 +801,7 @@ def extract_items(raw, base_url, max_items=18, require_date=False):
         # 新闻性判定：URL 像新闻 或 标题含事件/技术观察动词；两者皆无视为导航/栏目
         if not (NEWS_URL_HINT.search(absurl) or any(v in title for v in NEWS_VERB)):
             continue
-        d = find_date(raw, m.start(), m.end(), absurl)
+        d = find_date(raw, m.start(), m.end(), absurl, win=400)
         if require_date and not d:
             continue
         # 摘要：</a> 之后到下一个列表项边界之间的文本（尽力）
@@ -758,7 +813,7 @@ def extract_items(raw, base_url, max_items=18, require_date=False):
         if 14 <= len(seg) <= 240 and seg != title:
             s = seg[:150]
         seen.add(absurl)
-        items.append({'t': title, 'd': d or '', 'u': absurl, 's': s})
+        items.append({'t': title, 'd': d or '', 'u': absurl, 's': s, 'k': 'news'})
     # 有日期在前，无日期在后；各自按日期倒序
     items.sort(key=lambda x: (x['d'] == '', x['d']), reverse=True)
     return items[:max_items]
@@ -1536,8 +1591,8 @@ def fetch_edgar(cik, max_items=6):
             continue
         seen.add(u)
         md = ds[5:] if len(ds) >= 10 else ds
-        out.append({'t': '提交 SEC %s 表（%s）· %s' % (f, EDGAR_FORM_DESC.get(f, ''), md),
-                    'd': ds, 'u': u, 's': '', 'src': 'edgar'})
+        out.append({'t': 'SEC %s（%s）' % (f, EDGAR_FORM_DESC.get(f, '')),
+                    'd': ds, 'u': u, 's': '', 'src': 'edgar', 'k': 'reg'})
         if len(out) >= max_items:
             break
     return out
@@ -1557,6 +1612,7 @@ def fetch_agg_ticker(tk, max_items=18):
     items = extract_rss(raw, url, max_items=max_items)
     for it in items:
         it['src'] = 'agg'
+        it['k'] = 'news'
     return items
 
 def fetch_mining(site, max_items=10):
@@ -1589,7 +1645,7 @@ def fetch_mining(site, max_items=10):
             continue
         seen.add(u)
         out.append({'t': clean_ws(title), 'd': _rss_date(_rss_field(blk, 'pubDate')),
-                    'u': u, 's': '', 'src': 'mining'})
+                    'u': u, 's': '', 'src': 'mining', 'k': 'news'})
         if len(out) >= max_items:
             break
     out.sort(key=lambda x: (x['d'] == '', x['d']), reverse=True)

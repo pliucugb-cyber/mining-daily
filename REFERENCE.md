@@ -3039,3 +3039,47 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - `.co-day-h{top:calc(...var(--md-top-h)...)}` 被移除 → 日期表头重新被吸顶栏遮挡（缺陷级）。
 - `.co-act-short{display:none}` 默认 + `.co-act-full{display:none}` ≤768px 被移除 → 手机端按钮回到整行长文案。
 - 占位长句“（该条暂未提取到正文摘要，点击标题前往来源查看）”若重现 → 回到长文案。
+
+
+## 2026-09-27（晚）矿业公司模块优化（用户 4 点反馈）
+
+背景：用户就「矿业公司」模块提 4 点优化 —— ① 右栏导航层级不清（组头与公司项像同一层级）；
+② 淡水河谷相关条目不像公司新闻（核实）；③ 紫金矿业只抓 2 条、官网有更多最新新闻（为何漏抓、
+其他公司是否同理）；④ 其他应优化处。结论与落地如下。
+
+1. 导航层级（前端 app.js + index.html 内联样式，均为**追加规则**，未改 v11 六条 CSS 指纹）
+   - 组头 `co-nav-g-h` 改成「分区带」：`background:var(--surface-2)` + 左侧 3px indigo 色条 `#c7d2fe`；
+   - 组内 `co-nav-g-body` 缩进（`padding-left:14px;margin-left:8px`）+ 连接竖线 `border-left:2px solid var(--line-1)`；
+   - 组内公司项 `.co-nav-g-body .co-nav-item` 降一档（`--fs-caption` / `--ink-700`）读作子级。
+   - 效果：组头成可见分区、公司项明显内缩，层级一眼可辨。
+
+2. 淡水河谷/力拓/必和必拓等「不像新闻」核实（fetch_company.py）
+   - 确认：`agg` 源把 SEC 6-K/8-K/10-Q 监管文件当新闻灌入（淡水河谷 5/5、力拓 6/6、必和必拓 6/9…）。
+   - 落地：SEC 类条目打 `k:'reg'`，标题改为「SEC 6-K（外资发行人报告）」等纯披露表述；
+     前端 `cardHtml` 对 `k==='reg'` 渲染独立「监管披露」琥珀色徽标（`co-src-reg`），与「股票新闻/矿业媒体」
+     明确区分，不再冒充公司动态新闻。本轮 12 条 reg 分布在 9 家海外公司（Newmont/Barrick/FCX/SCCO/Teck/AEM/力拓/必和必拓/淡水河谷）。
+
+3. 紫金只抓 2 条（fetch_company.py 解析器，通用修复非紫金特例）
+   - 根因：官网列表页 `<a>` 内「标题 `<div class="tit">`」与「正文 `<div class="con">`」同处一个锚点，
+     `strip_tags` 把两者粘成超长标题 → `looks_like_news` 判否丢弃；`find_date` 扫 ±5000 窗口误取邻近条目日期 → 个别错配旧日期。
+   - 修复：
+     - 新增 `extract_anchor_title(inner)`：优先从标题容器（`div.tit` / `h1-4` / `span.title`）摘标题，长度限 6~90 取最短候选；
+     - `find_date` 先扫锚点内部（pos_start:pos_end）再扫前后窗口，正文里的日期才是本条日期；
+     - `clean_headline` 补「独立日期 / 双空格 / 句末标点」切分规则。
+   - 效果：紫金 2 → 4 条干净、日期正确的新闻（GMSA 联合倡议 / 西藏吉隆捐赠 / 福大紫金学院 / 数智增效），
+     3 条导航/栏目名（紫金BLOG/紫金全媒体/储量与资源量）经 `is_junk_item` 正确剔除。
+
+4. 其他公司同理排查：对西部/南山/神火/天山/赤峰/华友/藏格/中国稀土/厦门钨业等 `--force` 重抓复核 ——
+   这些站点列表页真实只暴露少量可抽取条目（标题多为「日期前缀/子公司名」格式，非 `tit` 容器污染），
+   修复后条数与修复前一致，属站点客观情况，非解析 bug；其余 `tit` 容器结构站点一并受益。
+
+回归/闸门：`py_compile` 通过；`node test_company_section.js` 178/0（新增 1 条「监管披露徽标」断言）；
+`node test_mobile_ux_batch.js` 226/0；`node test_p2_20260910.js` 30/0；`preflight_check.py` 全过。
+
+上线：commit `[TBD]`；`git push origin main`；`python deploy_pages.py` 推送 gh-pages（线上 build-version `[TBD]`）。
+
+回退指纹（本轮新增，防 v11 重建回退时丢）：
+- `.co-nav-g-h{background:var(--surface-2);border-left:3px solid #c7d2fe}` 被移除 → 组头回到无分区带平铺样式，层级错觉复发。
+- `.co-nav-g-body{padding-left:14px;margin-left:8px;border-left:2px solid var(--line-1)}` 被移除 → 组内公司项不再缩进，与组头同层级。
+- `.co-src-reg{color:#b45309;border-color:#fcd34d;background:#fef3c7}` 被移除 → 监管披露与股票新闻同色，无法区分。
+- app.js `it.k==='reg'` 分支被移除 → SEC/公告类重新混入「新闻」。

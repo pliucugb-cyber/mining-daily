@@ -715,6 +715,9 @@ setTimeout(() => {
     // 缺摘要占位精简（不再渲染长句）
     check('2026-09-27 缺摘要占位改短文案（渲染源已无「暂未提取到正文摘要」长句）',
           html.indexOf('暂未提取到正文摘要') < 0 && html.indexOf('（暂无摘要 · 点标题看原文）') >= 0);
+    // 2026-09-27：监管披露徽标（k=reg，把 SEC/公告类与「公司动态新闻」区分，回应「淡水河谷不像新闻」的反馈）
+    check('2026-09-27 监管披露徽标：reg 条目有独立徽标（k=reg → co-src-reg + 监管披露 文案）',
+          html.indexOf('.co-src-reg') >= 0 && html.indexOf('监管披露') >= 0 && html.indexOf("it.k==='reg'") >= 0);
 
     check('无阻塞性 JS 错误', errors.length === 0, errors.join(' | '));
 
