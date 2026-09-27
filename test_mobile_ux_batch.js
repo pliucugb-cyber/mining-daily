@@ -673,8 +673,8 @@ setTimeout(() => {
 
   console.log('\n===== 2026-09-24 展开全文 + 已读弱化 =====');
   // 展开全文：移动端摘要 3 行截断时显示开关；桌面默认隐藏
-  check('2026-09-24 桌面默认隐藏展开开关（.news-more{display:none}）',
-    /\.news-more\{display:none\}/.test(html), '');
+  check('2026-09-27 桌面展开开关改为「溢出才显示」：旧的 .news-more{display:none} 已移除，且 [data-overflow="0"] 隐藏规则存在',
+    !/\.news-more\{display:none\}/.test(html) && /\.news-more\[data-overflow="0"\]\{display:none\}/.test(html), '');
   check('2026-09-24 移动端放开展开开关 + 展开后去截断',
     /\.news-more\{display:inline-block;order:3/.test(html) && /\.news-item\.expanded \.news-summary\{-webkit-line-clamp:unset;display:block\}/.test(html), '');
   check('2026-09-24 注入「标为已读」按钮进操作行（.btn-read）',

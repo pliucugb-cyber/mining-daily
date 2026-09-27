@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260927-1749" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260927-1802" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -355,15 +355,20 @@ body.dark #mdTopBtn{background:var(--brand-600)}
 .news-title:hover{text-decoration:underline}
 .news-meta{font-size: var(--fs-meta);color:var(--ink-500);margin:var(--s1) 0 var(--s1) calc(var(--s2) + 9px);order:4}
 .news-meta .src{color:var(--brand);font-weight:var(--fw-semibold)}
-.news-summary{font-size:13px;color:var(--ink-700);margin:2px 0 var(--s2) calc(var(--s2) + 9px);order:3;cursor:text;user-select:text;-webkit-user-select:text}
+.news-summary{font-size:13px;color:var(--ink-700);margin:2px 0 var(--s2) calc(var(--s2) + 9px);order:3;cursor:text;user-select:text;-webkit-user-select:text;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 /* 2026-09-25 点击分区（REFERENCE §42.28）：仅标题是链接、正文是可选文本。
    同族链接禁用原生链接拖拽 —— 从标题上起拖应选中文字，而非拖出链接幽灵图（Chrome/Safari）。 */
 .co-title,.hot-title,.digest-link,.rr-link{-webkit-user-drag:none}
 /* 单条「标为已读」按钮：仅「未读」条目显示（与「标为未读」对称；详见 REFERENCE §42.25） */
 .btn-read{display:inline-block;font-size:var(--fs-meta);color:var(--ink-500);text-decoration:none;border:1px solid var(--line-2);border-radius:var(--r-md);padding:2px var(--s3);margin:var(--s2) 0 0 8px;cursor:pointer;background:rgba(255,255,255,.7);transition:.2s;vertical-align:middle;font-family:inherit}
 .btn-read:hover{background:var(--surface-2);color:var(--ink-700)}
-/* 展开全文开关：桌面摘要已完整显示，默认隐藏；移动端在 media 查询内放开 */
-.news-more{display:none}
+/* 展开全文开关：2026-09-27 起**桌面端摘要也折叠 2 行**（见上方 .news-summary 第 358 行），
+   故开关改为默认显示；仅当摘要确实被截断时才出现 —— JS 给未溢出的条目置
+   data-overflow="0"（见 app.js syncNewsMore）。移动端在 media 查询内维持原生形态（3 行）。 */
+.news-more{display:inline-block;order:3;font-size:var(--fs-meta);color:var(--brand);background:none;border:none;padding:2px 0;margin:2px 0 var(--s2) calc(var(--s2) + 9px);cursor:pointer;font-family:inherit}
+.news-more:hover{text-decoration:underline}
+.news-more[data-overflow="0"]{display:none}
+.news-item.expanded .news-summary{-webkit-line-clamp:unset;display:block}
 /* 自动关键词标签（重点提示词，JS注入）*/
 .news-tags{display:flex;flex-wrap:wrap;gap:var(--s2);margin:var(--s2) 0 0 calc(var(--s2) + 9px);order:2}
 .tag-chip{font-size: var(--fs-meta);font-weight:600;padding:1px var(--s2);border-radius: var(--r-lg);line-height:1.6;letter-spacing:.3px;white-space:nowrap;cursor:pointer;user-select:none;transition:.15s}
