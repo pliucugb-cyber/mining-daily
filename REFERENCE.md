@@ -3031,7 +3031,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **回归/闸门**：`node test_company_section.js` = 177 PASS / 0 FAIL（含 12 新断言）；`node test_mobile_ux_batch.js` = 226 PASS / 0 FAIL；`node test_p2_20260910.js` = 30 PASS / 0 FAIL；`preflight_check.py` 全过（build 1013、sw 一致、公司护栏 44 家、div 收支平衡、sw 语法）。
 
-**上线**：待 `git push origin main` + `python deploy_pages.py` 后填写 SHA。线上验收：index.html `build-version=20260927-1013`（0902 已消失），`sw.js` CACHE_NAME `mining-daily-20260927-1013`；以 `git ls-remote` 远端 main SHA 为到达证据。
+**上线**：`git push origin main` `09463ab..ea80529`（commit `ea80529`）；`python deploy_pages.py` gh-pages 推送成功（线上版本 `3312a34`，站点 https://pliucugb-cyber.github.io/mining-daily/）。验收：`git ls-remote` 远端 main SHA == 本地 HEAD `ea80529` OK；线上 index.html `build-version=20260927-1013`、sw.js CACHE_NAME `mining-daily-20260927-1013`（0902 已消失）。
 
 **回退指纹**
 - `.co-navsel` 仍在独立行（不在 `.co-side-top` 内）→ 手机端下拉与搜索不再并排，回到两行。
