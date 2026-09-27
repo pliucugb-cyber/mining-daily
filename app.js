@@ -7237,14 +7237,16 @@ function toggleTheme(){
       : (tb.body
           ? '<div class="co-body">'+esc(tb.body)+'</div>'+
             '<button type="button" class="co-exp" aria-expanded="false">展开全文</button>'
-          : '<div class="co-summary co-summary-empty">（该条暂未提取到正文摘要，点击标题前往来源查看）</div>');
+          : '<div class="co-summary co-summary-empty">（暂无摘要 · 点标题看原文）</div>');
     // 2026-09-24：已读态。data-url 作为本地已读集合的键（原文链接缺失时退化为搜索链接，
     // 仍是稳定键）；已读条目整体弱化，且只显示「标为未读」。
     var isRead=coReadHas(primary);
     var srcTag=it.src?('<span class="co-src-tag co-src-'+esc(it.src)+'">'+esc(srcLabel(it.src))+'</span>'):'';
+    // 2026-09-27：操作按钮改「图标 + 全称/简称」双文案 —— 桌面显示「标为已读 / 标为未读」，
+    // 手机（≤768px）只显示「已读 / 未读」并收紧内边距，降低每条卡片的视觉噪声（样式见 index.html 内联）。
     var acts='<div class="co-actions">'+
-      '<button type="button" class="btn-co-read" title="将本条标记为已读（仅本机，不影响其他条目）">&#10003; 标为已读</button>'+
-      '<button type="button" class="btn-co-unread" title="将本条恢复为未读（仅本机，不影响其他条目）">&#8630; 标为未读</button>'+
+      '<button type="button" class="btn-co-read" title="将本条标记为已读（仅本机，不影响其他条目）"><span class="co-act-ico">&#10003;</span><span class="co-act-full">标为已读</span><span class="co-act-short">已读</span></button>'+
+      '<button type="button" class="btn-co-unread" title="将本条恢复为未读（仅本机，不影响其他条目）"><span class="co-act-ico">&#8630;</span><span class="co-act-full">标为未读</span><span class="co-act-short">未读</span></button>'+
       '</div>';
     return '<div class="co-item'+(isRead?' read':'')+'" data-url="'+esc(primary)+'">'+
       '<div class="co-head"><span class="co-dot"></span>'+
@@ -7267,9 +7269,14 @@ function toggleTheme(){
     var vis=rows.slice(0,shown);
 
     if(head){
-      var companyTotal=(activeCompany==='__all__')?ALL.length:itemCount(co);
-      var olderHint=(range!==0&&!forcedAll&&companyTotal>total)?'（另有 '+(companyTotal-total)+' 条更早，切到「全部」可见）':'';
-      var sub='显示 '+vis.length+' / '+total+' 条'+olderHint+(forcedAll?'（已自动放宽到全部）':'');
+      // 2026-09-27 口径统一：「更早条数」改与当前视图同口径。原用 ALL.length（全时段条数）
+      // 跨口径相减，与「显示 N / M 条」的 M 不同源 —— 手机端同屏出现 360 / 262 / 98 三套数，
+      // 用户反馈"看着乱"。现为「该公司（或全站）在『全部』范围下的条数 − 当前范围条数」。
+      var scopeAll=(activeCompany==='__all__')
+        ? ALL.filter(passQuery).length
+        : ALL.filter(function(x){return x.name===activeCompany;}).filter(passQuery).length;
+      var olderHint=(range!==0&&!forcedAll&&!coUnreadOnly&&scopeAll>total)?'（更早 '+(scopeAll-total)+' 条 · 切「全部」）':'';
+      var sub='显示 '+vis.length+' / '+total+' 条'+olderHint+(forcedAll?'（已放宽到全部）':'');
             var unreadToggle='<button type="button" class="co-unread-toggle'+(coUnreadOnly?' on':'')+'" data-act="co-unread" title="只显示未读条目（已读的自动隐藏）">未读'+(coUnreadOnly?' ✓':'')+'</button>';
       var favToggle=(activeCompany==='__all__'?'':'<button type="button" class="co-fav-toggle'+(coFavHas(activeCompany)?' on':'')+'" data-act="co-fav" data-name="'+esc(activeCompany)+'" title="关注/取消关注该公司">★ '+(coFavHas(activeCompany)?'已关注':'关注')+'</button>');
       var right=rangeHtml()+(activeCompany==='__all__'?''
@@ -7383,7 +7390,9 @@ function toggleTheme(){
     var sel=document.getElementById('coNavSel');
     if(sel){
       var favNames=getCoFavs().filter(function(n){ return coOf(n); });
-      var opts=['<option value="__all__">全部公司（'+ALL.length+' 条）</option>'];
+      // 2026-09-27：首项条数改与「全部」范围同口径（scopeTotalCount），与头部「显示 N / M 条」一致；
+      // 去掉「条」字以便手机上与本行搜索框并排（.co-side-top 一行化）。
+      var opts=['<option value="__all__">全部公司（'+scopeTotalCount()+'）</option>'];
       if(favNames.length){
         opts.push('<optgroup label="★ 我的关注（'+favNames.length+'）">');
         favNames.forEach(function(n){ opts.push(optFor(coOf(n))); });
@@ -7470,7 +7479,7 @@ function toggleTheme(){
     setHash(activeCompany);
     renderNav(); renderFeed();
   }
-  function setRange(r){ range=(r===0)?0:((r===30||r===90)?r:90); forcedAll=false; shown=PAGE; renderFeed(); }
+  function setRange(r){ range=(r===0)?0:((r===30||r===90)?r:90); forcedAll=false; shown=PAGE; renderFeed(); renderNav(); }
 
   function renderCompanySection(){
     var count=document.getElementById('coCount');

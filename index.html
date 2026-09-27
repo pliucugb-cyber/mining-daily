@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260927-0902" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260927-1013" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2860,7 +2860,11 @@ body.dark .co-item.read .co-summary,body.dark .co-item.read .co-body{color:var(-
 body.dark .co-item.read .co-dot{background:transparent;box-shadow:inset 0 0 0 2px #4a5765}
 .co-actions{display:flex;align-items:center;gap:var(--s2);margin:var(--s2) 0 0 14px;flex-wrap:wrap}
 .co-actions button{font-family:inherit;font-size:var(--fs-meta);border-radius:var(--r-md);padding:2px var(--s3);
-  cursor:pointer;transition:.2s;vertical-align:middle;background:rgba(255,255,255,.7)}
+  cursor:pointer;transition:.2s;vertical-align:middle;background:rgba(255,255,255,.7);
+  display:inline-flex;align-items:center;gap:4px}
+/* 2026-09-27：操作按钮「图标 + 全称/简称」双文案 —— 默认全称，≤768px 切简称（见下方媒体查询） */
+.co-act-ico{line-height:1}
+.co-act-short{display:none}
 .btn-co-read{color:var(--ink-500);border:1px solid var(--line-2)}
 .btn-co-read:hover{background:var(--surface-2);color:var(--ink-700)}
 .btn-co-unread{color:var(--brand);border:1px solid var(--brand)}
@@ -2904,19 +2908,30 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
   .co-side{position:static;max-height:none;border-left:0;border-top:0;background:transparent;order:1}
   .co-feed{order:2}
   .co-nav{display:none}
-  .co-navsel{display:block}
-  .co-side-top{padding:var(--s3) var(--s5) 0;border-bottom:0}
+  /* 2026-09-27：下拉 + 搜索并排一行（手机首屏少一行控件）；下拉限宽 52%，余下宽度给搜索框 */
+  .co-side-top{display:flex;align-items:center;gap:var(--s2);padding:var(--s3) var(--s4) 0;border-bottom:0}
+  .co-navsel{display:block;flex:0 1 auto;width:auto;max-width:52%;min-width:0;margin:0}
+  .co-search{flex:1 1 auto;width:auto;min-width:0}
   .co-nav-h{display:none}
   .co-stat{display:none}
 }
 @media(max-width:768px){
-  .co-feed-head{padding:var(--s3) var(--s4)}
+  .co-feed-head{padding:var(--s2) var(--s4)}
   .co-item{padding:var(--s3) var(--s4)}
   .co-day-h{padding:6px var(--s4)}
+  /* 2026-09-27 修复：日期分组表头原 sticky top:0（z-index:1），滚动时滑进手机吸顶栏
+     #mdTop（sticky、z-index:230、高 --md-top-h）下方被整块遮住 —— 表头看起来"消失"。
+     现让位顶栏高度；顶栏下滚自动隐藏时（body.md-top-hidden）再回到顶部。 */
+  .co-day-h{top:calc(env(safe-area-inset-top,0px) + var(--md-top-h,96px))}
+  body.md-top-hidden .co-day-h{top:env(safe-area-inset-top,0px)}
+  /* 2026-09-27：操作按钮手机端瘦身 —— 只留「已读 / 未读」短文案 + 收紧内边距 */
+  .co-actions{margin-top:6px}
+  .co-actions button{padding:2px 9px}
+  .co-act-full{display:none}
+  .co-act-short{display:inline}
 }
 </style>
 <div class="section-title co" id="coTitle"><span class="icon">🏢</span> 矿业公司动态<span class="news-count" id="coCount"></span></div>
-<select class="co-navsel" id="coNavSel" aria-label="选择公司"></select>
 <div class="co-panes">
   <div class="co-feed">
     <div class="co-feed-head" id="coFeedHead"></div>
@@ -2925,6 +2940,9 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
   </div>
   <div class="co-side">
     <div class="co-side-top">
+      <!-- 2026-09-27：移动端公司下拉由「标题下独占一行」移入本容器，与搜索框并排成一行，省掉一整行控件高度
+           （此前手机首屏是 下拉 / 搜索 / 统计 / 筛选 四行控件才见内容）。桌面 .co-navsel 仍 display:none，不受影响。 -->
+      <select class="co-navsel" id="coNavSel" aria-label="选择公司"></select>
       <input class="co-search" id="coSearch" type="search" placeholder="搜公司 / 标题 / 内容…" aria-label="搜索公司、标题或内容">
       <div class="co-nav-h" id="coNavH">公司导航</div>
     </div>
@@ -3006,7 +3024,7 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
 <script src="news-data.js?v=810e0088" defer></script>
 <script src="lme-data.js?v=e2986071" defer></script>
 <script src="price-history.js?v=a0cecfc1" defer></script>
-<script src="app.js?v=2d4b7e7e" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=7763f195" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
