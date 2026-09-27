@@ -7233,12 +7233,12 @@ function toggleTheme(){
     if(en && en!==zh) return zh+'（'+en+'）';
     return zh;
   }
-  // 媒体源披露：新浪财经 / 官网 RSS / 公司官网 / SEC披露·股票新闻 / 矿业媒体
+  // 媒体源披露：新浪财经 / 官网 RSS / 公司官网 / 矿业媒体·SEC披露 / 矿业媒体
   function originLabel(o){
     var or=(o&&o.origin)||'';
     if(or==='sina-a'||or==='sina-hk') return '新浪财经';
     if(or==='rss') return '官网 RSS';
-    if(or==='agg') return 'SEC披露·股票新闻';
+    if(or==='agg') return '矿业媒体·SEC披露';
     if(or==='mining') return '矿业媒体';
     return '公司官网';
   }

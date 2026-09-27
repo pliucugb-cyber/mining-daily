@@ -1537,6 +1537,7 @@ def _stub(site):
 EDGAR_UA = 'mining-daily research pliucugb@gmail.com'
 ST_RSS_BASE = 'https://www.stocktitan.net/rss/news/{}'
 MINING_FEED = 'https://www.mining.com/feed/'
+MINING_SEARCH = 'https://www.mining.com/?s={}&feed=rss2'
 # EDGAR 里「有信息量」的表单类型（排除 4/SD/144/13F 等内部人持仓类噪音）
 EDGAR_WANT = ('8-K', '6-K', '20-F', '40-F', '10-K', '10-Q')
 EDGAR_FORM_DESC = {
@@ -1616,9 +1617,13 @@ def fetch_agg_ticker(tk, max_items=18):
     return items
 
 def fetch_mining(site, max_items=10):
-    """mining.com 全站 RSS，按公司名关键字匹配（伦交所公司唯一可行的静态源）。
-    优先标题匹配；当某关键字是多词短语（如 'anglo american'）且标题无命中时，
-    退而匹配 <content:encoded> 正文，覆盖「今天没有以该公司为题、但文中重点提及」的报道。"""
+    """mining.com 新闻：优先「站内搜索 RSS」（?s=<公司英文名>，精准召回），
+    失败时退回旧「全站 feed 关键字匹配」（仅覆盖最近 36 条，召回差）。
+    2026-09-27：全站 feed 实测 36 条里 0 条 Vale；搜索 feed 同词 36 条里 34 条命中。"""
+    q = site.get('en') or (site.get('minkw') or [''])[0]
+    items = fetch_mining_search(q, name=site.get('en') or q, max_items=max_items) if q else []
+    if items:
+        return items
     keywords = site.get('minkw') or []
     if not keywords:
         return []
@@ -1651,22 +1656,73 @@ def fetch_mining(site, max_items=10):
     out.sort(key=lambda x: (x['d'] == '', x['d']), reverse=True)
     return out
 
+# 公司名「歧义首词」：单独出现不足以判定是该公司（可能是地名或别家），
+# 必须命中完整名称短语才收（如 Rio Tinto / Southern Copper / Anglo American）。
+_AMBIG_FIRST = {'rio', 'southern', 'anglo', 'american', 'copper', 'gold',
+                'resources', 'mining', 'iron', 'eagle', 'quantum'}
+
+def _match_company(title, name):
+    """判断标题是否真的在说这家公司。mining.com 搜索是子串匹配，会把 Valentine 当成 Vale。
+    规则：命中完整名称短语（空格/连字符/斜杠弹性）即收；否则收名称首词（≥4 字符且非歧义）。
+    """
+    tl = (title or '').lower()
+    nm = (name or '').strip().lower()
+    if not tl or not nm:
+        return True
+    parts = [p for p in re.split(r'[\s\-\u2013\u2014/]+', nm) if p]
+    if not parts:
+        return True
+    full = r'[\s\-\u2013\u2014/]+'.join(re.escape(p) for p in parts)
+    if re.search(r'\b' + full + r'\b', tl):
+        return True
+    first = parts[0]
+    if len(first) >= 4 and first not in _AMBIG_FIRST:
+        if re.search(r'\b' + re.escape(first) + r'\b', tl):
+            return True
+    return False
+
+def fetch_mining_search(query, name='', max_items=12):
+    """mining.com 站内搜索 RSS（?s=<公司名>&feed=rss2）——权威全球矿业媒体，
+    按公司名精准召回（实测 'Vale' 命中 34/36，日期新到当日），静态可抓、免鉴权。
+    2026-09-27 新增：作为海外公司「真实新闻」主源，替代召回极差的「全站 feed 关键字匹配」。
+    name 非空时用 _match_company 过滤子串误命中（如 Valentine→Vale）。"""
+    q = clean_ws(query or '')
+    if not q:
+        return []
+    url = MINING_SEARCH.format(urllib.parse.quote(q))
+    raw = fetch_html(url, timeout=25)
+    if not raw:
+        return []
+    items = extract_rss(raw, url, max_items=max_items)
+    if name:
+        items = [it for it in items if _match_company(it.get('t'), name)]
+    for it in items:
+        it['src'] = 'mining'
+        it['k'] = 'news'
+    return items
+
 def build_agg_items(site, max_items=18):
-    """agg 双源合并：股票新闻聚合（有可读标题）+ SEC EDGAR 披露（补聚合覆盖陈旧的公司）。
-    2026-09-26 修：SEC filer 一律补抓 EDGAR（不再受 stocktitan 条数门槛限制）——
-    实测 stocktitan 部分 ticker（如 RIO）整源停在 2023，仅靠它会被 730 天年龄过滤清空，
-    而 EDGAR 的近期 6-K/8-K 才是真实新鲜披露。"""
-    items = fetch_agg_ticker(site.get('ticker'), max_items=max_items)
+    """agg 三源合并（2026-09-27 扩充）：
+    1) mining.com 站内搜索（按公司英文名）—— 权威矿业媒体，召回高、日期新（真实新闻主源）
+    2) stocktitan 股票新闻聚合 —— 部分公司可用，多家已冻结在 2023/2024（补充）
+    3) SEC EDGAR 监管披露 —— 真实新鲜但属「监管披露」，前端以 k='reg' 单独标注
+    背景：用户反馈淡水河谷等内容几乎为空——stocktitan VALE 冻结在 2024-03、
+    仅剩 1 条 EDGAR 6-K；补入 mining.com 搜索后同词可召回数十条真实新闻。"""
+    merged = []
+    merged.extend(fetch_mining_search(site.get('en') or site.get('name'), name=site.get('en') or site.get('name'), max_items=14))
+    merged.extend(fetch_agg_ticker(site.get('ticker'), max_items=6))
     cik = site.get('cik')
     if cik:
-        have = set(x['u'] for x in items)
-        for e in fetch_edgar(cik, max_items=6):
-            if e['u'] not in have:
-                items.append(e)
-    items.sort(key=lambda x: (x['d'] == '', x['d']), reverse=True)
-    return items[:max_items]
+        merged.extend(fetch_edgar(cik, max_items=5))
+    seen, out = set(), []
+    for it in sorted(merged, key=lambda x: (x.get('d') == '', x.get('d') or ''), reverse=True):
+        u = it.get('u')
+        if not u or u in seen:
+            continue
+        seen.add(u)
+        out.append(it)
+    return out[:max_items]
 
-# ============================ 4. 单公司采集 ============================
 def fetch_one(site, force=False):
     name = site['name']
     url = site['url']
