@@ -3076,7 +3076,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 回归/闸门：`py_compile` 通过；`node test_company_section.js` 178/0（新增 1 条「监管披露徽标」断言）；
 `node test_mobile_ux_batch.js` 226/0；`node test_p2_20260910.js` 30/0；`preflight_check.py` 全过。
 
-上线：commit `[TBD]`；`git push origin main`；`python deploy_pages.py` 推送 gh-pages（线上 build-version `[TBD]`）。
+上线：commit `5144a8d`；`git push origin main`；`python deploy_pages.py` 推送 gh-pages（线上 16e2dc2 / build-version `20260927-1749`）。
 
 回退指纹（本轮新增，防 v11 重建回退时丢）：
 - `.co-nav-g-h{background:var(--surface-2);border-left:3px solid #c7d2fe}` 被移除 → 组头回到无分区带平铺样式，层级错觉复发。
