@@ -3235,3 +3235,15 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 **验证**：`test_p1_ux_20260924.js` 34/0（含 ④ 段 5 项）、`test_mobile_ux_batch.js` 226/0（① 两条断言已按新契约**翻转**：点价格 / 回首页后 `md_last_tab` 恒为 `null`）、`test_company_section.js` 178/0、`test_data_integrity.js` 9/0、`test_p2_20260910.js` 30 PASS / 0 FAIL、`test_mobile_opt_20260910.js` 37 PASS / 0 FAIL；`preflight_check.py` exit 0；`node --check app.js` 通过。
 
 **给使用者的收尾**：源码修复对**已沉淀的 URL**同样有效（打开瞬间清洗），无需手动改书签；若地址栏仍自动补全出旧 hash，删一次该条历史记录更清爽。PWA 快捷方式若仍带旧 `start_url`，重新"添加到桌面"一次即可。
+
+#### 42.45 外部评审落地（Phase A：今日简报层级 + 字号下限 + 颜色契约，2026-09-28）
+
+- 背景：把日报截图喂给外部模型做优化评审。其中「新闻长摘要折叠」「自动关键词标签」等建议**已于 09-27 上线**，无需重复做；真正还缺且低风险的三件在 Phase A 落地。
+- 改动：
+  1. **今日简报层级**（app.js `briefSectionsHtml` + index.html CSS）：新增高信号关键词表 `BRIEF_KEY_T1/T2`，命中条目前置 🔴（今日重点，红+粗）/ 🟠（值得关注，加粗），普通条目不加任何标记。T1：`突破/重大/风险/联合国/制裁/停产/罢工/收购/合并/增储/储量/减产/禁运/断供/安全事故/封盘/闭矿/矿难`；T2：`关键矿产/战略性/出口管制/关税/232条款/LME/投产/政策/规划/协议/重组/首发/上市`。
+  2. **字号下限**：`--fs-nano` 11px → 12px（适配笔记本 125% 缩放；移动端 `:root` 本就 12px，不受影响）。
+  3. **颜色契约**：`:root` 补注释锁定「涨=红(--up)、跌=绿(--down) 永久保留（国内金属/股市惯例）；紫/靛(--tag-strategy) 专给 AI 与战略；橙(#f39c12 系) 仅收藏/提示；红兼作注意与 NEW」；并将组件里 3 处硬编码 `#0e7490` 归一到 `var(--brand)`。
+- **顺手修复**：app.js / index.html 历史 Edit 累积的 `\r\r\n` 双 CR 换行损坏（app.js 7609 处、index.html 3099 处）全局归一为正确 CRLF。
+- **测试守卫**：`preflight_check.py` 新增「简报层级」闸门（§42.45），断言 `BRIEF_KEY_T1/T2`、`briefKeyTier(`、`brief-key key1` 均在；`test_brief_layers.js` 第 246 行陈旧断言（方案B 已移除页内高亮 `brief-flash`）改为验证「点击 → 标记 visited 并触发外链」。
+- **验证**：`test_brief_layers.js` 91/0（修复后）、`test_company_section.js` 178/0、`test_data_integrity.js` 9/0、`test_mobile_ux_batch.js` 226/0、`test_p1_ux_20260924.js` 34/0、`test_p2_20260910.js` 30/0、`test_mobile_opt_20260910.js` 37/0、`test_view_switch.js` 22/0、`test_pwa_install.py` 51/0；`preflight_check.py` exit 0；`node --check app.js` 通过。
+- 提交/部署：见 git log（2026-09-28）。

@@ -355,6 +355,30 @@ def check_default_landing(app_text):
     return ok, findings
 
 
+def check_brief_hierarchy(app_text):
+    """「今日简报层级标记」闸门（REFERENCE.md §42.45，2026-09-28 评审落地）。
+
+    外部评审建议：今日简报应让真正重要的事件先跳出来，而非逐条平铺。
+    落地：briefSectionsHtml 对命中高信号关键词的条目加 brief-key 标记（🔴 key1 / 🟠 key2）。
+    本闸门防止该标记逻辑被静默删除：要求关键词表与渲染分支都在。
+    """
+    findings = []
+    ok = True
+    MUST = [
+        ('BRIEF_KEY_T1', '简报重点关键词表 T1（🔴 今日重点）存在（§42.45）'),
+        ('BRIEF_KEY_T2', '简报重点关键词表 T2（🟠 值得关注）存在（§42.45）'),
+        ('brief-key key1', '简报条目渲染了 brief-key 重点标记（🔴/🟠，§42.45）'),
+        ('briefKeyTier(', '简报条目分级函数 briefKeyTier 存在（§42.45）'),
+    ]
+    for marker, desc in MUST:
+        if marker in app_text:
+            findings.append('✅ %s' % desc)
+        else:
+            findings.append('❌ 缺失 %s — 简报层级标记可能回退（§42.45）' % desc)
+            ok = False
+    return ok, findings
+
+
 def check_build_version(text):
     findings = []
     m = re.search(r'name="build-version"\s+content="([^"]+)"', text)
@@ -625,6 +649,7 @@ def main():
         ('公司模块 v11 指纹', check_company_v11(html_text, app_text)),
         ('公司名单护栏', check_company_roster()),   # §42.19 v11 重建边界 + 折叠逻辑 + 文案红线
         ('打开落点', check_default_landing(app_text)),   # §42.44 打开一律回首页·全部内容
+        ('简报层级', check_brief_hierarchy(app_text)),   # §42.45 今日简报重点标记
         ('build-version', check_build_version(text)),
         ('站点标题', check_site_title(html_text)),
         ('百度统计 ID', check_baidu_stat_id(html_text)),

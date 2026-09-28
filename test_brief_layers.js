@@ -243,7 +243,7 @@ async function loadPage(stripSections, prefs, portArg) {
       const target = [...doc.querySelectorAll('.news-item')].find(e => e.getAttribute('data-url') === url);
       if (target) {
         a.dispatchEvent(new win.MouseEvent('click', { bubbles: true, cancelable: true }));
-        check('点击简报条目 → 对应新闻卡片高亮', target.classList.contains('brief-flash'));
+        check('点击简报条目 → 标记已读(visited)并触发外链（方案B：不再页内高亮）', a.classList.contains('visited'));
       } else {
         skip('点击跳转高亮', '该条不在当前页 DOM（' + String(url).slice(0, 56) + '）');
       }

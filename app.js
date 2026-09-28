@@ -2269,6 +2269,16 @@ function briefMd(md){
 // 2026-09-12 二次修订：首版的「要点层 highlights + 高异动前置行」与下方「本期要闻」内容重复，
 //   用户要求移除 → 前端不再渲染要点层（highlights 字段生成端仍产出，留待将来复用）。
 // brief_sections 缺失时回退到 report 的 markdown 渲染（历史 JSON / 老 SW 缓存仍可用）。
+// 今日简报层级（2026-09-28 评审落地）：命中高信号关键词的条目加 🔴/🟠 重点标记，
+// 让「今天真正重要的事件」先跳出来；普通条目不加任何标记（参照外部评审「只有重要新闻才标」）。
+var BRIEF_KEY_T1 = ['突破','重大','风险','联合国','制裁','停产','罢工','收购','合并','增储','储量','减产','禁运','断供','安全事故','封盘','闭矿','矿难'];
+var BRIEF_KEY_T2 = ['关键矿产','战略性','出口管制','关税','232条款','LME','投产','政策','规划','协议','重组','首发','上市'];
+function briefKeyTier(txt){
+  if(!txt) return 0;
+  for(var i=0;i<BRIEF_KEY_T1.length;i++){ if(txt.indexOf(BRIEF_KEY_T1[i])>=0) return 1; }
+  for(var j=0;j<BRIEF_KEY_T2.length;j++){ if(txt.indexOf(BRIEF_KEY_T2[j])>=0) return 2; }
+  return 0;
+}
 function briefSectionsHtml(sections){
   var total=0,out=[];
   for(var i=0;i<sections.length;i++){
@@ -2278,8 +2288,11 @@ function briefSectionsHtml(sections){
     out.push('<div class="brief-sec">'+briefEsc(s.name||'')+'<span class="sec-n">'+items.length+'</span></div><ul>');
     for(var k=0;k<items.length;k++){
       var it=items[k]||{};
-      var txt=briefEsc(it.t||'')+(it.s?('（'+briefEsc(it.s)+'）'):'');
-      out.push('<li>'+(it.u?('<a href="'+briefEsc(it.u)+'" data-jump="'+briefEsc(it.u)+'" target="_blank" rel="noopener">'+txt+'</a>'):txt)+'</li>');
+      var raw=briefEsc(it.t||'')+(it.s?('（'+briefEsc(it.s)+'）'):'');
+      var tier=briefKeyTier((it.t||'')+' '+(it.s||''));
+      var mark = tier===1 ? '<span class="brief-key key1" title="今日重点">🔴</span>'
+                : tier===2 ? '<span class="brief-key key2" title="值得关注">🟠</span>' : '';
+      out.push('<li class="brief-li'+(tier?' key'+tier:'')+'">'+(it.u?('<a href="'+briefEsc(it.u)+'" data-jump="'+briefEsc(it.u)+'" target="_blank" rel="noopener">'+mark+raw+'</a>'):mark+raw)+'</li>');
     }
     out.push('</ul>');
   }
@@ -2287,15 +2300,25 @@ function briefSectionsHtml(sections){
 }
 // 简报条目 → 页面内对应新闻卡片：同页滚动定位 + 短暂高亮。
 // 目标卡片不在当前 DOM（如条目属往期/已筛掉）时不做任何事，保持优雅降级。
-function briefJumpTo(url,ev){
+// 2026-09-28 方案B：简报条目点击 → 直接新标签打开原文（不再做页面内滚动定位）。
+// 统一行为：无论下方是否匹配到新闻卡片，一律放行默认 target=_blank 跳转，
+//   消除原「找到就滚动、找不到就跳走」两种逻辑并存的缺陷。
+// 配套：点击后标记已读（变灰，见 CSS .brief-full a.visited）+ 轻量本地埋点（trackBriefClick）。
+function briefJumpTo(url,ev,anchorEl){
   if(!url)return;
-  var el=null;
-  try{ el=(typeof newsItemByUrl==='function')?newsItemByUrl(url):null; }catch(e){}
-  if(!el)return;
-  if(ev&&ev.preventDefault)ev.preventDefault();
-  try{ el.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e2){ el.scrollIntoView(); }
-  el.classList.add('brief-flash');
-  setTimeout(function(){ el.classList.remove('brief-flash'); },1600);
+  if(anchorEl&&anchorEl.classList)anchorEl.classList.add('visited');
+  trackBriefClick(url);
+  // 注意：不调用 preventDefault，浏览器按 <a target="_blank" href> 直接打开原文。
+}
+// 轻量埋点：记录简报外链点击，按自然日计数存 localStorage。
+// 无后端依赖，用于上线后验证方案B（直接跳原文）的点击热度，便于数据决策。
+function trackBriefClick(url){
+  try{
+    var day=new Date().toISOString().slice(0,10);
+    var k='mdBriefClicks_'+day;
+    var n=(parseInt(localStorage.getItem(k)||'0',10)||0)+1;
+    localStorage.setItem(k,String(n));
+  }catch(e){}
 }
 function renderBrief(d){
   var strip=document.getElementById('briefStrip');
@@ -2334,7 +2357,7 @@ function renderBrief(d){
       main.addEventListener('click',function(ev){
         var n=ev.target,a=null;
         while(n&&n!==main){ if(n.getAttribute&&n.getAttribute('data-jump')){a=n;break;} n=n.parentNode; }
-        if(a)briefJumpTo(a.getAttribute('data-jump'),ev);
+        if(a)briefJumpTo(a.getAttribute('data-jump'),ev,a);
       });
     }
   }

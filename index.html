@@ -26,6 +26,9 @@
 <style>
 
 /* 2026-09-11 视觉规范评审修复 E4：--ink-300 亮色值提到达 AA（白底 2.56→4.88，#f5f7fa 2.39→4.55；仅改值不改变量名） */
+/* 颜色契约（2026-09-28 评审落地）：涨=红(--up)、跌=绿(--down) 永久保留（国内金属/股市惯例）；
+   紫/靛(--tag-strategy #4f46e5) 专留给 AI 与战略专项；橙(#f39c12 系) 仅用于收藏/提示；
+   红(--up/--danger) 兼作「需要注意」与 NEW。新增任何颜色一律走变量，禁止裸 hex。 */
 :root{
 --ink-900:#16202b;--ink-700:#3d4b5a;--ink-500:#5f6d7a;--ink-400:#8794a1;--ink-300:#64737f;--ink-200:#c3ccd6;--muted:#6b7a89;
 --line-1:#e5eaf0;--line-2:#d5dde5;
@@ -189,14 +192,14 @@ body[data-filter-mode="history"] #archFavList .aggregate-clone .news-tags{displa
 .aggregate-empty .empty-art{width:128px;height:128px;margin:0 auto var(--s4);display:block}
 .aggregate-empty .empty-title{font-size:var(--fs-h1);font-weight:600;color:var(--ink-700);margin-bottom:var(--s2)}
 .aggregate-empty .empty-tip{font-size:var(--fs-body);color:var(--ink-300);max-width:32em;margin:0 auto var(--s4)}
-.aggregate-empty .empty-cta{display:inline-flex;align-items:center;gap:var(--s2);margin-top:var(--s1);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:#0e7490;border:0;border-radius:10px;cursor:pointer}
+.aggregate-empty .empty-cta{display:inline-flex;align-items:center;gap:var(--s2);margin-top:var(--s1);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:var(--brand);border:0;border-radius:10px;cursor:pointer}
 .aggregate-empty .empty-cta:hover{filter:brightness(1.06)}
 body.dark .aggregate-empty .empty-cta{background:#38bdf8;color:#0b1220}
 /* 2026-09-12：按时间分组标题 + 少条置底 CTA（建议④③） */
 .agg-group-title{display:flex;align-items:center;gap:var(--s2);margin:var(--s4) 0 var(--s2);padding-left:2px;font-size:var(--fs-meta);font-weight:600;color:var(--ink-500);letter-spacing:.5px;scroll-margin-top:76px}
 .agg-group-title::before{content:'';width:3px;height:14px;background:var(--brand);border-radius:2px;display:inline-block}
 .aggregate-foot{text-align:center;padding:var(--s5) 0 var(--s1)}
-.aggregate-foot .empty-cta{display:inline-flex;align-items:center;gap:var(--s2);margin-top:var(--s1);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:#0e7490;border:0;border-radius:10px;cursor:pointer}
+.aggregate-foot .empty-cta{display:inline-flex;align-items:center;gap:var(--s2);margin-top:var(--s1);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:var(--brand);border:0;border-radius:10px;cursor:pointer}
 .aggregate-foot .empty-cta:hover{filter:brightness(1.06)}
 body.dark .agg-group-title{color:var(--ink-300)}
 body.dark .aggregate-foot .empty-cta{background:#38bdf8;color:#0b1220}
@@ -557,6 +560,14 @@ body.dark .brief-sec::after{background:var(--line-1)}
 .brief-sec .sec-n{margin-left:6px;font-size: var(--fs-nano);font-weight:400;color:var(--ink-500);background:var(--surface-2);border-radius:var(--r-sm);padding:0 5px;letter-spacing:0}
 .brief-full ul li>a{color:inherit;text-decoration:none}
 .brief-full ul li>a:hover{text-decoration:underline;text-underline-offset:2px}
+/* 2026-09-28 方案B：点击简报条目直接跳原文后，已读条目变灰，避免重复点击 */
+.brief-full ul li>a.visited{color:var(--ink-400);opacity:.6}
+/* 2026-09-28 评审落地：简报重点标记 —— 🔴 key1（今日重点，红+粗）/ 🟠 key2（值得关注，加粗）；普通条目不加任何标记 */
+.brief-key{margin-right:4px;line-height:1}
+.brief-full ul li.key1>a{color:var(--up);font-weight:600}
+.brief-full ul li.key2>a{font-weight:600}
+body.dark .brief-full ul li>a.visited{color:var(--ink-400);opacity:.5}
+
 /* 从简报条目跳到下方对应新闻卡片时的短暂高亮 */
 .brief-flash{animation:briefFlash 1.6s ease}
 @keyframes briefFlash{0%,100%{background:transparent}15%,55%{background:rgba(14,116,144,.13)}}
@@ -1700,7 +1711,7 @@ body.dark .md-focus-flash{animation-name:mdFocusFlashDark}
 .search-empty .se-icon{font-size:40px;opacity:.75}
 .search-empty .se-title{margin-top:var(--s2);font-size:var(--fs-h2);font-weight:600;color:var(--ink-900)}
 .search-empty .se-tip{margin-top:var(--s2);font-size:var(--fs-body);color:var(--ink-500)}
-.search-empty .se-btn{margin-top:var(--s3);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:#0e7490;border:0;border-radius:8px;cursor:pointer}
+.search-empty .se-btn{margin-top:var(--s3);padding:var(--s2) var(--s4);font-size:var(--fs-body);font-weight:500;color:#fff;background:var(--brand);border:0;border-radius:8px;cursor:pointer}
 body.dark .search-empty{background:var(--bg);border-color:var(--line-1)}
 body.dark .search-empty .se-btn{background:#38bdf8;color:#0b1220}
 </style>
