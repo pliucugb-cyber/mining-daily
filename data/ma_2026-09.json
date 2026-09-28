@@ -1,8 +1,26 @@
 {
   "month": "2026-09",
-  "updated_at": "2026-09-25T06:07:10+08:00",
-  "count": 39,
+  "updated_at": "2026-09-29T06:07:09+08:00",
+  "count": 40,
   "news": [
+    {
+      "id": "34b752122c0c",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-09-29/1225584676.PDF",
+      "title": "中稀有色金属股份有限公司关于对全资子公司增资的公告",
+      "source": "巨潮资讯网·中稀有色",
+      "orig_date": "09-29",
+      "orig_date_full": "2026-09-29",
+      "report_date": "2026-09-29",
+      "category": "并购与投资",
+      "company": "中稀有色",
+      "sec_code": "600259",
+      "ma_type": "增资/认购",
+      "summary": "中稀有色（600259）披露《中稀有色金属股份有限公司关于对全资子公司增资的公告》，涉及增资/认购。",
+      "tags": [
+        "并购",
+        "金"
+      ]
+    },
     {
       "id": "8d4d80081f47",
       "url": "https://static.cninfo.com.cn/finalpage/2026-09-25/1225583140.PDF",
