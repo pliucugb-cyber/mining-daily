@@ -369,7 +369,8 @@ setTimeout(() => {
         typeof window.qaFloatIsMobile === 'function' && typeof window.qaFloatSyncViewport === 'function' && typeof window.qaFloatClearInlineLayout === 'function');
   check('qaFloatIsMobile 在 375 宽为真', window.innerWidth === 375 && window.qaFloatIsMobile() === true, 'w=' + window.innerWidth);
 
-  // 伪造「桌面拖拽/缩放留下的记忆」，再切桌面 → 应恢复内联尺寸/定位（桌面形态不被破坏）
+  // 伪造「桌面拖拽/缩放留下的记忆」，再切桌面 → 抽屉形态下【不应】恢复内联尺寸/定位
+  // （右抽屉由 CSS 固定，恢复旧拖拽记忆会把右抽屉推歪；这是 §42.46 Phase B1 的故意改动）
   Object.defineProperty(window, 'innerWidth', { value: 1280, configurable: true, writable: true });
   check('qaFloatIsMobile 在 1280 宽为假', window.qaFloatIsMobile() === false);
   try {
@@ -377,12 +378,12 @@ setTimeout(() => {
     window.localStorage.setItem('qaFloatSize', JSON.stringify({ width: 440, height: 560 }));
   } catch (e) {}
   window.qaFloatSyncViewport();
-  check('桌面：按记忆恢复内联尺寸', _panel.style.width === '440px' && _panel.style.height === '560px',
+  check('桌面抽屉：清掉内联尺寸（交还 CSS 右抽屉规则，不恢复拖拽记忆）',
+        _panel.style.width === '' && _panel.style.height === '',
         'w=' + JSON.stringify(_panel.style.width) + ' h=' + JSON.stringify(_panel.style.height));
-  var _expTop = Math.min(320, Math.max(window.innerHeight - 560, 0));
-  check('桌面：按记忆恢复内联定位（越界时收敛在视口内）',
-        _panel.style.left === '40px' && _panel.style.top === _expTop + 'px',
-        'l=' + JSON.stringify(_panel.style.left) + ' t=' + JSON.stringify(_panel.style.top) + '  期望 top=' + _expTop + 'px');
+  check('桌面抽屉：清掉内联定位（固定右抽屉，不恢复越界收敛）',
+        _panel.style.left === '' && _panel.style.top === '',
+        'l=' + JSON.stringify(_panel.style.left) + ' t=' + JSON.stringify(_panel.style.top));
 
   // 切回手机 → 必须清掉内联尺寸/定位，交还媒体查询的全屏规则（★ 本轮核心修复）
   Object.defineProperty(window, 'innerWidth', { value: 375, configurable: true, writable: true });

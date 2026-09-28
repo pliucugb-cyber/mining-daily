@@ -3247,3 +3247,14 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **测试守卫**：`preflight_check.py` 新增「简报层级」闸门（§42.45），断言 `BRIEF_KEY_T1/T2`、`briefKeyTier(`、`brief-key key1` 均在；`test_brief_layers.js` 第 246 行陈旧断言（方案B 已移除页内高亮 `brief-flash`）改为验证「点击 → 标记 visited 并触发外链」。
 - **验证**：`test_brief_layers.js` 91/0（修复后）、`test_company_section.js` 178/0、`test_data_integrity.js` 9/0、`test_mobile_ux_batch.js` 226/0、`test_p1_ux_20260924.js` 34/0、`test_p2_20260910.js` 30/0、`test_mobile_opt_20260910.js` 37/0、`test_view_switch.js` 22/0、`test_pwa_install.py` 51/0；`preflight_check.py` exit 0；`node --check app.js` 通过。
 - 提交/部署：见 git log（2026-09-28）。
+
+#### 42.46 外部评审落地（Phase B1：AI 右侧抽屉 + 新闻卡片重要度标签，2026-09-28）
+
+- 背景：用户判断 Phase B 中「AI 抽屉 + 卡片标签」ROI 最高，下令执行这两件；AI 问答使用少，不过度投入后端。
+- 改动：
+  1. **AI 问答面板改右侧抽屉**（app.js `qaFloat*` + index.html `.qa-float` CSS）：桌面端由「左下角可拖拽浮窗」改为「右侧固定全高抽屉」——`.qa-float{top:0;right:0;width:min(460px,92vw);height:100dvh;border-left:1px;无圆角}`；`@media (min-width:769px){.qa-float{transform:translateX(100%);transition…}.qa-float.open{transform:translateX(0)}}` 从右滑入。头部 `cursor:grab→default`。桌面形态下**禁用**拖拽/缩放：`qaFloatStartDrag`/`qaFloatAddResizeHandles`/`qaFloatStartResize` 首行直接 `return`；`qaFloatObserveSize` 仅移动端监听尺寸（`if(!qaFloatIsMobile())return`）；`qaFloatSyncViewport` 桌面分支改为 `qaFloatClearInlineLayout()` 交还 CSS 右抽屉规则（不再恢复旧拖拽/缩放记忆，避免内联定位把右抽屉推歪）。移动端全屏行为不变（≤768px 仍 `top:0;left:0;100dvh`）。
+  2. **新闻卡片重要度标签**（app.js `cardKeyTag` + `mdDecorateKeyTags` + index.html `.keytag` CSS）：新增分类器，复用高信号关键词归为 **找矿突破 / 重大政策 / 供应风险 / 重点** 四类，命中才打标（`.keytag` 胶囊：找矿突破=靛蓝 `var(--brand)`、重大政策=深灰 `#475569`、供应风险=橙 `#f39c12`、重点=红 `var(--danger)`）；普通条目不打标（避免视觉噪声）。`mdDecorateKeyTags()` 在 `DOMContentLoaded` 与 `renderFeed` 重渲染后均调用——主信息流 `.news-item` 为静态预渲染，故走运行时 DOM 装饰；公司动态 `.co-item` 走同一函数（`.co-tags` 容器）。
+- **关键词已收紧两轮**：初版裸词 `突破/风险/扰动/中断/政策/规划` 会把行情分析、宏观评论误标成「找矿突破/重大政策/供应风险」，已去掉，改为精确短语：`找矿突破`、`供应风险`、`供应中断`、`关键矿产`、`战略性矿产`、`232条款`、`出口管制`、`关税`、以及 `增储/储量/找矿/探获/勘查/勘探/新矿/探矿/钻探验证`、`制裁/禁运/断供/减产/停产/罢工/封盘/闭矿/矿难/安全事故`、`联合国/收购/合并/上市/首发/重组/投产/协议/LME/重大/获批/签约/合作`。
+- **测试守卫**：`preflight_check.py` 新增「AI 抽屉 + 卡片标签」闸门（§42.46）——MUST 断言 `qa-float{position:fixed;top:0;right:0`、`@media (min-width:769px){.qa-float{transform:translateX(100%)`、`function cardKeyTag(`、`function mdDecorateKeyTags(`、`window.mdDecorateKeyTags=` 均在；FORBIDDEN 断言旧 `left:16px;bottom:78px` 浮窗定位、`cursor:grab` 头部已移除。**注意**：该闸门须传合并文本 `text`（=index.html+app.js），不能传仅含 app.js 的 `app_text`——抽屉 CSS 在 html、标签函数在 app.js，二者分处两份文件。`test_mobile_ux_batch.js` 两条「桌面恢复内联尺寸/定位」断言按新契约翻转（桌面清内联布局，不恢复拖拽记忆）。
+- **验证**：`test_qa_navtab_20260910.js` 18/0（移动端整页 + 桌面 `#qaFab` 仍在 DOM）、`test_mobile_ux_batch.js` 226/0、`test_brief_layers.js` 91/0、`test_company_section.js` 178/0、`test_view_switch.js` 22/0；`preflight_check.py` exit 0；`node --check app.js` 通过；`mdDecorateKeyTags` jsdom 实跑 458 卡中 **219 打标 / 239 未打标**，`cardKeyTag` 单元校验 6/6 全过，0 致命 JS 错误。
+- 提交/部署：见 git log（2026-09-28）。

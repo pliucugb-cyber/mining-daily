@@ -379,6 +379,42 @@ def check_brief_hierarchy(app_text):
     return ok, findings
 
 
+def check_ai_drawer_and_tags(app_text):
+    """「AI 右侧抽屉 + 新闻卡片重要度标签」闸门（REFERENCE.md §42.46，2026-09-28 Phase B1 评审落地）。
+
+    AI 问答面板：桌面端由「左下角可拖拽浮窗」改为「右侧固定全高抽屉」（从右侧滑入），
+    不再可拖拽/缩放（抽屉固定全高）；移动端全屏行为不变。
+    新闻卡片：复用高信号关键词，对命中条目加 找矿突破/重大政策/供应风险/重点 标签，普通不打标。
+    本闸门锁死两类改动，防止静默回退成旧浮窗或标签逻辑被删。
+    """
+    findings = []
+    ok = True
+    MUST = [
+        ('qa-float{position:fixed;top:0;right:0', 'AI 面板桌面端改为右侧固定定位（top:0;right:0，§42.46）'),
+        ('@media (min-width:769px){.qa-float{transform:translateX(100%)', 'AI 抽屉桌面端从右侧滑入（transform:translateX(100%)，§42.46）'),
+        ('function cardKeyTag(', '新闻卡片重要度标签分类函数 cardKeyTag 存在（§42.46）'),
+        ('function mdDecorateKeyTags(', '卡片标签装饰函数 mdDecorateKeyTags 存在（§42.46）'),
+        ('window.mdDecorateKeyTags=mdDecorateKeyTags', 'mdDecorateKeyTags 已挂到 window（供 DOMContentLoaded/重渲染调用，§42.46）'),
+    ]
+    for marker, desc in MUST:
+        if marker in app_text:
+            findings.append('✅ %s' % desc)
+        else:
+            findings.append('❌ 缺失 %s — B1 改动可能回退（§42.46）' % desc)
+            ok = False
+    FORBIDDEN = [
+        ('qa-float{position:fixed;left:16px;bottom:78px', 'AI 面板仍是左下角浮窗定位（应改为右侧抽屉，§42.46）'),
+        ('.qa-float-head{position:relative;display:flex;align-items:center;justify-content:space-between;padding:6px var(--s3);background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;cursor:grab', 'AI 面板头部仍是可拖拽光标（抽屉不可拖，应 cursor:default，§42.46）'),
+    ]
+    for bad, desc in FORBIDDEN:
+        if bad in app_text:
+            findings.append('❌ 仍保留 %s — %s' % (bad[:36], desc))
+            ok = False
+        else:
+            findings.append('✅ 已移除 %s' % desc)
+    return ok, findings
+
+
 def check_build_version(text):
     findings = []
     m = re.search(r'name="build-version"\s+content="([^"]+)"', text)
@@ -650,6 +686,7 @@ def main():
         ('公司名单护栏', check_company_roster()),   # §42.19 v11 重建边界 + 折叠逻辑 + 文案红线
         ('打开落点', check_default_landing(app_text)),   # §42.44 打开一律回首页·全部内容
         ('简报层级', check_brief_hierarchy(app_text)),   # §42.45 今日简报重点标记
+        ('AI 抽屉 + 卡片标签', check_ai_drawer_and_tags(text)),   # §42.46 Phase B1 评审落地（text=index.html+app.js，抽屉CSS在html、标签函数在app.js）
         ('build-version', check_build_version(text)),
         ('站点标题', check_site_title(html_text)),
         ('百度统计 ID', check_baidu_stat_id(html_text)),
