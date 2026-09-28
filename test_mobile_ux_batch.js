@@ -287,7 +287,8 @@ setTimeout(() => {
   function brandText(){ var b=doc.querySelector('#mdTop .md-brand'); return b?b.textContent:''; }
   function lsGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
   clickGo('price');
-  check('① 点价格 → 持久化 md_last_tab=price', lsGet('md_last_tab')==='price');
+  // 2026-09-28 §42.44④ 行为翻转：不再记忆上次分类（打开一律回首页·全部内容）
+  check('① 点价格 → 不再记忆分类（md_last_tab 已停写，恒为空）', lsGet('md_last_tab')===null);
   check('③ 点价格 → 品牌行显示「价格」', brandText()==='价格', '实际「'+brandText()+'」');
   // 2026-09-12 检索统一（用户定夺）：顶栏搜索按钮已整体移除（DOM/绑定/mdOpenSearch/CSS 全清），
   //   检索能力统一由底部「AI 搜」面板承载 → 断言翻转为「必须不存在」。
@@ -298,7 +299,7 @@ setTimeout(() => {
   check('③ 点矿权 → 品牌行显示「矿权」', brandText()==='矿权', '实际「'+brandText()+'」');
   clickGo('home');
   check('③ 回首页 → 品牌行恢复含「矿业资讯速览」', brandText().indexOf('矿业资讯速览')>=0, '实际「'+brandText()+'」');
-  check('① 回首页 → md_last_tab=home', lsGet('md_last_tab')==='home');
+  check('① 回首页 → 仍不写 md_last_tab（键恒为空）', lsGet('md_last_tab')===null);
   check('② 顶栏搜索按钮已从 DOM 移除', !doc.getElementById('mdSearchBtn'));
   check('② 未残留 md-search-open 生效规则', !/^[ \t]*body\.md-search-open\b/m.test(html));
   check('② 桌面检索条 #newsFilterBar 在移动端仍隐藏', /#newsFilterBar\{position:fixed/.test(html) && /#newsFilterBar\{position:fixed[^}]*display:none/.test(html));

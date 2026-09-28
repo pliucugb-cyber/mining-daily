@@ -315,6 +315,46 @@ def check_company_v11(html_text, app_text):
 
 
 
+def check_default_landing(app_text):
+    """「打开一律回首页·全部内容」闸门（REFERENCE.md §42.44）。
+
+    背景：2026-09-28 用户两次反馈「每次新打开日报都定位在矿业公司模块」。
+    第一次（§42.43）只删了「目录项点击写 `#/companySection`」的**写入端**，而**读取端**
+    （加载 600ms 后读 hash → mdSelectCat('company')）照旧 ⇒ 浏览器地址栏/书签/历史自动补全里
+    残留的 hash 仍在劫持。本闸门把三件事锁死，防止再次静默回退成「打开即跳板块」：
+      ① 冷启动只认内容级深链 `#/news-<id>`（COLD_HASH_RE 黑名单外的唯一放行项）；
+      ② 分类/区块 hash 冷启动一律忽略并 history.replaceState 清洗；
+      ③ 不再记忆/恢复「上次停留的分类」（md_last_tab 写入端+读取端均已移除）。
+    """
+    findings = []
+    ok = True
+    MUST = [
+        ('COLD_HASH_RE', '冷启动「分类/区块 hash 黑名单」常量存在（§42.44①②）'),
+        ('news-/.test(h)', '冷启动仍保留内容级深链 #/news-<id>（§42.44③；行为由 test_p1_ux_20260924.js ④ 实跑守护）'),
+        ("activateTab('home', false)", '初始化固定落「首页·全部内容」（§42.44④）'),
+    ]
+    for marker, desc in MUST:
+        if marker in app_text:
+            findings.append('✅ %s' % desc)
+        else:
+            findings.append('❌ 缺失 %s — 打开落点可能回退（§42.44）' % desc)
+            ok = False
+    # 注意：这里断言的是**函数调用**而非裸键名 —— app.js 的注释里刻意保留了 md_last_tab
+    # 这个键名用于解释「旧键已无人读取」，用裸词断言会把自己的注释判成违规（首次即踩到）。
+    FORBIDDEN = [
+        ('setTimeout(apply, 600)', '冷启动仍无条件套用 URL hash（删掉它才不会再跳板块，§42.44①）'),
+        ("localStorage.setItem('md_last_tab'", '仍在写入「上次停留的分类」（§42.44④ 已废除）'),
+        ("localStorage.getItem('md_last_tab'", '仍在读取并恢复「上次停留的分类」（§42.44④ 已废除）'),
+    ]
+    for bad, desc in FORBIDDEN:
+        if bad in app_text:
+            findings.append('❌ 出现 %s — %s' % (bad, desc))
+            ok = False
+        else:
+            findings.append('✅ 无 %s' % desc)
+    return ok, findings
+
+
 def check_build_version(text):
     findings = []
     m = re.search(r'name="build-version"\s+content="([^"]+)"', text)
@@ -584,6 +624,7 @@ def main():
         ('价格单位去重', check_price_unit_dedup(html_text)),   # 只扫 index.html，避免 app.js 干扰计数
         ('公司模块 v11 指纹', check_company_v11(html_text, app_text)),
         ('公司名单护栏', check_company_roster()),   # §42.19 v11 重建边界 + 折叠逻辑 + 文案红线
+        ('打开落点', check_default_landing(app_text)),   # §42.44 打开一律回首页·全部内容
         ('build-version', check_build_version(text)),
         ('站点标题', check_site_title(html_text)),
         ('百度统计 ID', check_baidu_stat_id(html_text)),

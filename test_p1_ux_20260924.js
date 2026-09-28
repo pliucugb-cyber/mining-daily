@@ -12,9 +12,9 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 
 let pass = 0, fail = 0;
-function check(name, cond) {
+function check(name, cond, extra) {
   if (cond) { pass++; console.log('  ✓ ' + name); }
-  else { fail++; console.log('  ✗ ' + name); }
+  else { fail++; console.log('  ✗ ' + name + (extra ? ' — 实际：' + extra : '')); }
 }
 
 const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
@@ -64,10 +64,13 @@ try {
     const db = w.document.createElement('span'); db.className = 'date-badge'; db.textContent = '2026-09-24 周四'; w.document.body.appendChild(db);
   }
   // 抽取并执行业务函数块（含全部 md* 定义），再调用入口
+  // 本次一并切掉块尾的 window.addEventListener('DOMContentLoaded', …)：见 ④ 的同类说明。
+  // （本文件结束前是不再立即 exit 的异步段，该监听器会在 jsdom load 事件里刷无关报错。）
   const i = appjs.indexOf('// ===== 2026-09-24 P1 UX');
   const j = appjs.indexOf('// ===== 版本戳记录');
   if (i < 0 || j < 0) throw new Error('未定位 P1 函数块边界');
-  const block = appjs.slice(i, j);
+  const cutI = appjs.indexOf("window.addEventListener('DOMContentLoaded'", i);
+  const block = appjs.slice(i, cutI > i ? cutI : j);
   w.eval(block);
   w.eval('mdP1UXInit()');
   check('A1 运行时创建 #mdTopBtn', !!w.document.getElementById('mdTopBtn'));
@@ -82,6 +85,51 @@ try {
   check('③ jsdom 实跑未抛异常（' + e.message + '）', false);
 }
 
-console.log('\n===== 结果 =====');
-console.log('通过 ' + pass + ' / 失败 ' + fail);
-process.exit(fail ? 1 : 0);
+// ===== ④ 2026-09-28「打开一律回首页·全部内容」冷启动回归（REFERENCE.md §42.44）=====
+// 复现用户场景：URL 残留 #/companySection（浏览器书签/历史/地址栏自动补全里由 09-27
+// 「目录项点击写 hash」留下的旧 hash，以及已装 PWA 快捷方式里带的 start_url）→
+// 新打开不得再被劫持到矿业公司视图；同时【内容级深链 #/news-<id>】必须仍然生效。
+(async function () {
+  console.log('\n===== ④ 冷启动不再被 URL 残留分类 hash 劫持（2026-09-28 §42.44）=====');
+  const b = appjs.indexOf('// ===== 2026-09-24 P1 UX');
+  const e = appjs.indexOf('// ===== 版本戳记录');
+  check('④ 定位 P1 函数块边界', b >= 0 && e > b, 'b=' + b + ' e=' + e);
+  // 只取「函数定义」段：切掉块尾的 window.addEventListener('DOMContentLoaded', …)
+  // —— 本段是异步等待（800ms），若把该监听器一起 eval 进来，它会在 jsdom 的 load 事件里
+  //    调用 mdMobileTopTabs()/scrollTo() 等本段未定义的函数，刷一屏无关报错、淹没断言输出。
+  const cut = appjs.indexOf("window.addEventListener('DOMContentLoaded'", b);
+  const block = appjs.slice(b, cut > b ? cut : e);
+
+  function boot(url) {
+    const d = new JSDOM('<!doctype html><html><body><div id="news-n1"></div></body></html>',
+      { runScripts: 'outside-only', pretendToBeVisual: true, url: url });
+    const w = d.window;
+    // jsdom 未实现 scrollIntoView：补空实现，避免深链定位分支抛错干扰断言
+    try { w.HTMLElement.prototype.scrollIntoView = function () {}; } catch (e2) {}
+    const calls = [];
+    w.mdSelectCat = function (c) { calls.push('cat:' + c); };
+    w.switchView = function (v) { calls.push('view:' + v); };
+    w.eval(block);
+    w.mdInitDeepLink();
+    return { w: w, calls: calls };
+  }
+
+  const c1 = boot('https://example.com/#/companySection');
+  await new Promise(function (r) { setTimeout(r, 800); });
+  check('④ 残留 #/companySection 冷启动不再切矿业公司视图', c1.calls.length === 0, JSON.stringify(c1.calls));
+  check('④ 残留分类 hash 已清洗（不再传染下次打开）', c1.w.location.hash === '', JSON.stringify(c1.w.location.hash));
+
+  const c2 = boot('https://example.com/#/news-n1');
+  await new Promise(function (r) { setTimeout(r, 800); });
+  check('④ 内容级深链 #/news-<id> 冷启动仍生效（未被清洗）',
+        c2.calls.length === 0 && c2.w.location.hash === '#/news-n1', JSON.stringify(c2.w.location.hash));
+
+  const c3 = boot('https://example.com/#/rightsSection');
+  await new Promise(function (r) { setTimeout(r, 800); });
+  check('④ 其它分类 hash（#/rightsSection）同样不再劫持',
+        c3.calls.length === 0 && c3.w.location.hash === '', JSON.stringify(c3.calls) + ' hash=' + JSON.stringify(c3.w.location.hash));
+
+  console.log('\n===== 结果 =====');
+  console.log('通过 ' + pass + ' / 失败 ' + fail);
+  process.exit(fail ? 1 : 0);
+})();

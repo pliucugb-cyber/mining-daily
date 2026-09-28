@@ -3212,3 +3212,26 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 2. `app.js` 删除上述目录项点击写 hash 的逻辑——内部导航只切视图、不改 URL；**外部深链**（`直接访问 site/#/companySection`）仍由 `mdInitDeepLink.apply()` 在加载时生效，未破坏。
 
 **验证**：`test_pwa_install.py` = 51 PASS / 0 FAIL（start_url `./` 仍判合法）；`preflight_check.py` 全绿；`node --check app.js` 通过。部署后 build-version 随部署 bump，sw 缓存自动失效。
+
+### 42.44 打开一律回「首页·全部内容」：冷启动不再被 URL 残留分类 hash 劫持（2026-09-28）
+
+**症状（用户二次反馈）**：§42.43 修完并上线后，用户在**浏览器**里打开链接仍定位在「矿业公司动态」。用户判断「新打开应定位在首页全部内容才对」——**判断正确**，且"合理"这一层也成立：默认落点应当是可预期的稳定锚点，不该被上一次的浏览动作改写。
+
+**根因（§42.43 只治了一半）**：§42.43 删掉的是 hash 的**写入端**（目录项点击写 `#/companySection`），但 `mdInitDeepLink` 的**读取端**照旧 —— 加载 600ms 后 `setTimeout(apply, 600)` 读 `location.hash`，命中 `companySection` 就 `mdSelectCat('company')`。而 09-27~09-28 期间被写进 URL 的 hash **已经沉淀在用户浏览器**里（地址栏、书签、历史自动补全），已装到桌面的 PWA 快捷方式也可能带着当时的 `start_url`。于是"新打开"拿到的始终是带 hash 的旧 URL ⇒ 继续被劫持。
+
+> **教训**：删掉**写入端不等于清除残留**。凡是"把 UI 状态写进 URL"的机制，治理时必须同时收掉**读取端**，或对已外溢到用户端的 URL 做**清洗**。只改一侧，症状会以"明明修了却还在"的形态复现。
+
+**修复（用户定夺：一律回首页·全部内容）**：
+1. `app.js :: mdInitDeepLink` —— 冷启动只认**内容级**深链 `#/news-<id>`（单条新闻才有分享价值）；`todaySection / archiveSection / rightsSection / companySection / hotListSection / installGuideSection` 一律**忽略**，并新增常量 `COLD_HASH_RE`，命中后 `history.replaceState` 把残留 hash **清洗**掉（断根，不再传染下一次打开）。`viewMap` 与会话内 `hashchange` 行为保持不变 —— 页内改 hash 跳板块的能力不丢，A4 只"不再于冷启动时自动生效"。
+2. 手机端「记住上次停留的内容 tab」整体废除（回退 2026-09-11 优化①）：写入端 + 读取端均移除，初始化固定 `activateTab('home', false)` ⇒ 打开一律「首页·全部内容」。桌面端不受影响（`data-md-cat` 的显隐规则本就是移动端专用）。
+
+**闸门（防静默回退）**：
+- `preflight_check.py` 新增 `check_default_landing(app_text)` → 段名 `[打开落点]`：正向断言 `COLD_HASH_RE` 在、`news-/.test(h)` 在、`activateTab('home', false)` 在；反向断言 `setTimeout(apply, 600)` 不在、`localStorage.setItem('md_last_tab'` / `localStorage.getItem('md_last_tab'` 不在。
+  - ⚠️ 反向断言**不能用裸键名 `md_last_tab`**：app.js 注释里刻意留了该键名用于解释"旧键已无人读取"，裸词会把注释本身判成违规（首次运行即踩到）。
+  - ⚠️ MUST 断言的标记串**不能被 CJK 括号切开**：初版写 `内容级深链`，而源码注释是 `【内容级】深链`，字面不匹配即误红。断言标记优先选**代码片段**而非注释文案。
+- `test_p1_ux_20260924.js` 新增 ④ 段（jsdom 实跑，真等 800ms）：`#/companySection` 冷启动**不得**调用 `mdSelectCat / switchView` 且 hash 被清洗；`#/rightsSection` 同样；`#/news-n1` 仍生效且**不**被清洗。
+  - 实现要点：该文件由此改为**异步 IIFE**（末尾才 `process.exit`），因此**必须**把 eval 片段的边界收在 `window.addEventListener('DOMContentLoaded', …)` **之前** —— 否则该监听器会在 jsdom 的 load 事件里调用本段未定义的 `mdMobileTopTabs()` / `window.scrollTo()`，刷一屏无关报错淹没断言输出（异步等待 800ms 后必然触发，同步时代因"立刻 exit"而被掩盖）。
+
+**验证**：`test_p1_ux_20260924.js` 34/0（含 ④ 段 5 项）、`test_mobile_ux_batch.js` 226/0（① 两条断言已按新契约**翻转**：点价格 / 回首页后 `md_last_tab` 恒为 `null`）、`test_company_section.js` 178/0、`test_data_integrity.js` 9/0、`test_p2_20260910.js` 30 PASS / 0 FAIL、`test_mobile_opt_20260910.js` 37 PASS / 0 FAIL；`preflight_check.py` exit 0；`node --check app.js` 通过。
+
+**给使用者的收尾**：源码修复对**已沉淀的 URL**同样有效（打开瞬间清洗），无需手动改书签；若地址栏仍自动补全出旧 hash，删一次该条历史记录更清爽。PWA 快捷方式若仍带旧 `start_url`，重新"添加到桌面"一次即可。

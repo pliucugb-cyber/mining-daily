@@ -3261,8 +3261,9 @@ window.qaFloatBack=mdQaBack;
     var b=e.target.closest('.mtab'); if(!b) return;
     var go=b.getAttribute('data-go');
     activateTab(go, true);
-    // 2026-09-11 优化①：记住上次停留的内容 tab（问/我的为浮层，不持久化）
-    if(go==='home'||go==='price'||go==='rights'){ try{ localStorage.setItem('md_last_tab', go); }catch(e){} }
+    // 2026-09-28 用户定夺（§42.44④）：不再记忆「上次停留的内容 tab」——打开一律落「首页·全部内容」。
+    //   旧逻辑（2026-09-11 优化①）会把上次的价格/矿权分类在下次打开时恢复出来，与「新打开应回首页」相悖；
+    //   写入端与读取端均已移除；localStorage 里可能残留的旧键 md_last_tab 已无人读取（保留亦无害）。
   });
   sheet.addEventListener('click',function(e){
     var b=e.target.closest('button[data-act]'); if(!b) return;
@@ -3320,10 +3321,9 @@ window.qaFloatBack=mdQaBack;
     });
   }
   mdQaBindKeys();
-  // 2026-09-11 优化①：初始化恢复上次停留的内容 tab（问/我的为浮层不持久化，回退首页）
-  var mdSavedTab='home';
-  try{ var _s=localStorage.getItem('md_last_tab'); if(_s==='home'||_s==='price'||_s==='rights') mdSavedTab=_s; }catch(e){}
-  activateTab(mdSavedTab, false);
+  // 2026-09-28 用户定夺（§42.44④）：初始化不再恢复「上次停留的内容 tab」，固定落首页·全部内容。
+  //   原 2026-09-11 优化① 的恢复逻辑已移除（成因与取舍见 REFERENCE.md §42.44）。
+  activateTab('home', false);
 }
 // ⑧ 我的面板：内联安装分步卡（按 iOS/Android 自动识别；已安装置灰）
 function mdRefreshMineTheme(){
@@ -3820,9 +3820,20 @@ function mdManualRefresh(){
   setTimeout(function(){ try{ location.reload(true); }catch(e){ location.reload(); } }, 80);
 }
 // A4 深链路由：#/<sectionId> 切视图/滚动；#/news-<id> 定位条目（不影响生成脚本重建）
+// 2026-09-28 用户定夺（第二版，见 REFERENCE.md §42.44）——「打开一律回「首页·全部内容」」：
+//   ① 冷启动不再因 URL 里的【分类/区块】hash 自动切视图。
+//      事故链：09-27 新增矿业公司模块时，「目录项点击」会把 `#/companySection` 写进 URL；
+//      该写入端已在同日删除，但用户浏览器【地址栏 / 书签 / 历史自动补全】里**仍存着**这条 hash
+//      （已装到桌面的 PWA 快捷方式也可能带着它），于是每次「新打开」都被 apply() 读 hash
+//      → mdSelectCat('company') 劫持到矿业公司视图。只删写入端治不了残留，故本版把读取端也收掉。
+//   ② 冷启动时把残留的【分类/区块】hash 直接 history.replaceState 抹掉 —— 断根，不再传染下一次打开。
+//   ③ 仍保留【内容级】深链 `#/news-<id>`（单条新闻才是有分享价值的东西）：冷启动生效、且不清洗。
+//   ④ 会话内 hashchange（页内改 hash 跳板块）行为不变，A4 能力不丢。
 function mdInitDeepLink(){
   var scrollOnly={'hotListSection':1,'installGuideSection':1};
   var viewMap={'todaySection':'today','archiveSection':'archive','rightsSection':'rights','companySection':'company'};
+  // 冷启动分类/区块 hash 黑名单：命中即【忽略 + 清洗】（见上方 ①②）
+  var COLD_HASH_RE=/^#\/(todaySection|archiveSection|rightsSection|companySection|hotListSection|installGuideSection)$/;
   function apply(){
     var h=location.hash||''; var m=h.match(/^#\/(.+)$/); if(!m)return; var key=m[1];
     if(viewMap[key]){ if(key==='companySection' && typeof mdSelectCat==='function'){ mdSelectCat('company'); } else if(typeof switchView==='function'){ switchView(viewMap[key]); } return; }
@@ -3831,12 +3842,17 @@ function mdInitDeepLink(){
     if(nm){ var el=document.getElementById('news-'+nm[1])||document.querySelector('[data-news-id="'+nm[1]+'"]'); if(el){ el.scrollIntoView({block:'center',behavior:'smooth'}); try{ el.classList.add('md-flash'); setTimeout(function(){el.classList.remove('md-flash');},1600);}catch(e){} } }
   }
   window.addEventListener('hashchange', apply);
-  setTimeout(apply, 600);
+  // 冷启动（打开/刷新/桌面图标/浏览器书签）：只认【内容级】深链；分类/区块 hash 一律忽略并清洗。
+  setTimeout(function(){
+    var h=location.hash||'';
+    if(/^#\/news-/.test(h)){ apply(); return; }                       // ③ 单条新闻深链仍生效
+    if(COLD_HASH_RE.test(h)){ try{ history.replaceState(null, '', location.pathname+location.search); }catch(e){} }  // ② 清洗残留
+  }, 600);
   // 注意：目录项点击【不再】把当前视图写进 URL hash。
   // 旧逻辑会在点「矿业公司」等目录项后执行 history.replaceState(..., '#/companySection')，
-  // 导致 URL 残留该 hash；而上方 apply() 在每次加载（setTimeout 600ms）会读 hash 并自动切到对应视图，
+  // 导致 URL 残留该 hash；而 apply() 在加载时读 hash 并自动切到对应视图，
   // 于是「点过一次矿业公司 → 之后每次刷新/重开都定位到矿业公司模块」(用户反馈 2026-09-28)。
-  // 改为不写入：内部导航只切换视图、不改 URL；外部深链（直接访问 site/#/companySection）仍由 apply() 生效。
+  // 第一版只删了写入端 ⇒ 残留 hash 仍在劫持；本版（第二版）把冷启动的读取端一并收掉（§42.44①②）。
 }
 // B3 关键词订阅（本地版，无后端真推送）：我的面板内编辑 + 命中高亮
 function mdInitWatchWords(){
