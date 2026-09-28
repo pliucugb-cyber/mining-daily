@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20260928-0854" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20260928-2310" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -374,6 +374,14 @@ body.dark #mdTopBtn{background:var(--brand-600)}
 .news-item.expanded .news-summary{-webkit-line-clamp:unset;display:block}
 /* 自动关键词标签（重点提示词，JS注入）*/
 .news-tags{display:flex;flex-wrap:wrap;gap:var(--s2);margin:var(--s2) 0 0 calc(var(--s2) + 9px);order:2}
+.news-tags .keytag{margin-right:var(--s1)}
+.co-tags{display:flex;flex-wrap:wrap;gap:6px;margin:var(--s1) 0 0}
+.co-tags .keytag{margin-right:0}
+.keytag{display:inline-flex;align-items:center;font-size:11px;line-height:1;font-weight:600;padding:3px 8px;border-radius:10px;color:#fff;letter-spacing:.2px;white-space:nowrap}
+.keytag.k-重点{background:var(--danger)}
+.keytag.k-找矿突破{background:var(--brand)}
+.keytag.k-重大政策{background:#475569}
+.keytag.k-供应风险{background:#f39c12}
 .tag-chip{font-size: var(--fs-meta);font-weight:600;padding:1px var(--s2);border-radius: var(--r-lg);line-height:1.6;letter-spacing:.3px;white-space:nowrap;cursor:pointer;user-select:none;transition:.15s}
 .tag-chip:hover{filter:brightness(.92)}
 .tag-chip.chip-active{box-shadow:0 0 0 2px currentColor;font-weight:600}
@@ -639,7 +647,8 @@ body.dark .pchart-close{background:var(--surface-3);color:var(--ink-700)}
 .qa-fab.tucked::before{opacity:1}
 .qa-fab.tuck-left::before{right:9px}
 .qa-fab.tuck-right::before{left:9px}
-.qa-float{position:fixed;left:16px;bottom:78px;z-index:100001;width:min(440px,calc(100vw - 32px));height:min(560px,calc(100vh - 110px));min-width:300px;min-height:260px;background:var(--surface);border:1px solid #d7deea;border-radius: var(--r-lg);box-shadow: var(--shadow-lg);display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;visibility:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;contain:layout paint;touch-action:none}
+.qa-float{position:fixed;top:0;right:0;z-index:100001;width:min(460px,92vw);height:100vh;height:100dvh;background:var(--surface);border:none;border-left:1px solid #d7deea;border-radius:0;box-shadow: var(--shadow-lg);display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;visibility:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;contain:layout paint;touch-action:none}
+@media (min-width:769px){.qa-float{transform:translateX(100%);transition:transform .26s cubic-bezier(.22,.61,.36,1),opacity .2s,visibility .2s}.qa-float.open{transform:translateX(0)}}
 .qa-float.open{opacity:1;pointer-events:auto;visibility:visible}
 .qa-resize-handle{position:absolute;z-index:1;background:transparent;transition:background .15s}
 .qa-resize-handle:hover{background:rgba(79,70,229,.22)}
@@ -654,7 +663,7 @@ body.dark .pchart-close{background:var(--surface-3);color:var(--ink-700)}
 body.dark .qa-resize-handle:hover{background:rgba(129,140,248,.35)}
 /* 2026-09-12：顶栏瘦身（用户：最上面这条有点宽/太厚）——竖向 padding 12→6px、控件 34→32px，整条 58px → 44px。
    6px 取在 --s1(4px) 与 --s2(8px) 之间：再压按钮就贴边了，且 32px 已是可点住的下限。 */
-.qa-float-head{position:relative;display:flex;align-items:center;justify-content:space-between;padding:6px var(--s3);background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;cursor:grab;user-select:none}
+.qa-float-head{position:relative;display:flex;align-items:center;justify-content:space-between;padding:6px var(--s3);background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;cursor:default;user-select:none}
 .qa-float-head .pchart-close{cursor:pointer}
 .qa-float-title{font-size: var(--fs-h3);font-weight:600}
 .qa-float-head .pchart-close{width:32px;height:32px;font-size:var(--fs-h2);border-radius:50%;background:rgba(255,255,255,.2);color:#fff}
@@ -3046,7 +3055,7 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
 <script src="news-data.js?v=c43c67cc" defer></script>
 <script src="lme-data.js?v=366fe28e" defer></script>
 <script src="price-history.js?v=55eddd78" defer></script>
-<script src="app.js?v=1f6e73de" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=caa81512" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->

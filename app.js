@@ -2279,6 +2279,43 @@ function briefKeyTier(txt){
   for(var j=0;j<BRIEF_KEY_T2.length;j++){ if(txt.indexOf(BRIEF_KEY_T2[j])>=0) return 2; }
   return 0;
 }
+// 新闻卡片 / 公司动态卡片 → 重要度标签（2026-09-28 Phase B1 评审落地）。
+// 复用同一份高信号关键词，按语义归为 找矿突破 / 重大政策 / 供应风险 / 重点 四类；
+// 命中才标注，普通条目不打标（与今日简报层级同源，避免视觉噪声）。
+function cardKeyTag(txt){
+  if(!txt) return '';
+  var G=[
+    ['找矿突破',['找矿突破','增储','储量','找矿','探获','勘查','勘探','新矿','探矿','钻探验证']],
+    ['重大政策',['232条款','出口管制','关税','关键矿产','战略性矿产','法案','条例','监管','部委','国务院','工信部']],
+    ['供应风险',['制裁','禁运','断供','减产','停产','罢工','封盘','闭矿','矿难','安全事故','供应风险','供应中断']],
+    ['重点',['联合国','收购','合并','上市','首发','重组','投产','协议','LME','重大','获批','签约','合作']]
+  ];
+  for(var i=0;i<G.length;i++){ var lbl=G[i][0], kws=G[i][1];
+    for(var j=0;j<kws.length;j++){ if(txt.indexOf(kws[j])>=0) return lbl; } }
+  return '';
+}
+function mdDecorateKeyTags(){
+  try{
+    var items=document.querySelectorAll('.news-item:not([data-keytag]), .co-item:not([data-keytag])');
+    for(var i=0;i<items.length;i++){
+      var el=items[i]; el.setAttribute('data-keytag','1');
+      var titleEl=el.querySelector('.news-title, .co-title');
+      var sumEl=el.querySelector('.news-summary, .co-summary, .co-body');
+      var txt=(titleEl?titleEl.textContent:'')+' '+(sumEl?sumEl.textContent:'');
+      var tag=cardKeyTag(txt); if(!tag) continue;
+      var isCo=el.classList.contains('co-item');
+      var box=el.querySelector(isCo?'.co-tags':'.news-tags');
+      if(!box){
+        box=document.createElement('div'); box.className=isCo?'co-tags':'news-tags';
+        var head=el.querySelector(isCo?'.co-head':'.news-head')||el.firstElementChild;
+        if(head&&head.nextSibling) el.insertBefore(box, head.nextSibling); else el.appendChild(box);
+      }
+      var span=document.createElement('span'); span.className='keytag k-'+tag; span.textContent=tag;
+      box.appendChild(span);
+    }
+  }catch(e){}
+}
+window.mdDecorateKeyTags=mdDecorateKeyTags;
 function briefSectionsHtml(sections){
   var total=0,out=[];
   for(var i=0;i<sections.length;i++){
@@ -3926,6 +3963,7 @@ window.addEventListener('DOMContentLoaded',function(){
   // P1-4 / P1-5 / P1-6：上次看到分隔线、简报折叠、无网络空态
   mdRecordLastSeen();
   mdInitOfflineBanner();
+  mdDecorateKeyTags();
   // 2026-09-12：折叠状态持久化（用户确认「永久记住」）。
   //   两处 key 必须一致：这里 + index.html 中紧跟 #briefStrip 的 pre-paint 内联脚本。
   //   那句点之间的顺序也不能动——aria-expanded 必须紧跟 toggle，见 test_brief_layers ④ 的 140 字符守卫。
@@ -4795,7 +4833,7 @@ function qaStopBreathe(){
 var QA_DRAGGING=null;
 var QA_DRAG_EXCLUDE='input,select,button,a,textarea,[contenteditable],.qa-fsel,.qa-fchip,.pchart-close,.qa-trend,.qa-src,.qa-msg-bubble,.qa-float-body,.qa-float-foot,.qa-float-btn,.qa-resize-handle,.qa-input-grip';
 function qaFloatStartDrag(ev){
-  if(window.innerWidth && window.innerWidth<=768) return;
+  return;  // 2026-09-28：右侧抽屉形态下不再支持拖拽（抽屉从右滑出、固定全高，无需拖动）
   var p=document.getElementById('qaFloat'); if(!p||!p.classList.contains('open'))return;
   // 交互元素不触发拖拽，保证内部可选择/点击/输入
   if(ev.target.closest && ev.target.closest(QA_DRAG_EXCLUDE))return;
@@ -4854,7 +4892,7 @@ function qaFloatClearInlineLayout(){
 function qaFloatSyncViewport(){
   try{
     if(qaFloatIsMobile()){ qaFloatClearInlineLayout(); }
-    else { qaFloatRestoreSize(); qaFloatRestorePos(); qaInputGripPos(); }
+    else { qaFloatClearInlineLayout(); qaInputGripPos(); }  // 2026-09-28：抽屉形态下不恢复旧拖拽/缩放记忆（避免内联定位把右抽屉推歪）
   }catch(e){}
 }
 function qaFloatSavePos(){
@@ -4886,6 +4924,7 @@ function qaFloatSaveSize(){
   }catch(e){}
 }
 function qaFloatObserveSize(){
+  if(!qaFloatIsMobile())return;   // 2026-09-28：右侧抽屉固定全高，不监听/不写尺寸记忆
   try{
     var p=document.getElementById('qaFloat'); if(!p||!window.ResizeObserver)return;
     var ro=new ResizeObserver(function(){
@@ -4982,7 +5021,7 @@ function qaInputStopResize(){
 // ===== 面板四边四角自定义缩放 =====
 var QA_RESIZING=null;
 function qaFloatAddResizeHandles(){
-  if(qaFloatIsMobile())return;   // 2026-09-12：移动端恒全屏，不提供缩放柄
+  return;   // 2026-09-28：右侧抽屉不再提供缩放柄（固定全高）
   var p=document.getElementById('qaFloat'); if(!p||p.querySelector('.qa-resize-handle'))return;
   ['n','s','e','w','ne','nw','se','sw'].forEach(function(dir){
     var d=document.createElement('div'); d.className='qa-resize-handle qa-resize-'+dir; d.dataset.dir=dir;
@@ -4990,7 +5029,7 @@ function qaFloatAddResizeHandles(){
   });
 }
 function qaFloatStartResize(ev){
-  if(qaFloatIsMobile())return;   // 2026-09-12：移动端恒全屏，禁止缩放（否则全屏会被拖坏）
+  return;   // 2026-09-28：右侧抽屉禁止缩放（固定全高）
   if(ev.target.closest && ev.target.closest('input,select,button,a,textarea,[contenteditable]'))return;
   var h=ev.target.closest && ev.target.closest('.qa-resize-handle'); if(!h)return;
   var p=document.getElementById('qaFloat'); if(!p)return;
@@ -7399,6 +7438,7 @@ function toggleTheme(){
           b.setAttribute('aria-expanded',on?'true':'false');
         };
       });
+      mdDecorateKeyTags();
     }
 
     var wrap=document.getElementById('coMoreWrap'), hint=document.getElementById('coMoreHint');
