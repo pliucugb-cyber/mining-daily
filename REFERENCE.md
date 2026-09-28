@@ -3198,3 +3198,17 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - 修法（**只改测试，不动产物**）：`test_brief_layers.js` 12s → **45s**；`test_data_selfheal.js` 8s/5s/13s → **25s/15s/30s**；`test_ready_state_tdz.js` 5s → **25s**。
 - 判据：属**数据量依赖**（`news-data.js` 条数越多越接近阈值）。若某天又整段 FAIL，**先看 `#briefMain` 是否 `brief-md` 占位**再决定是否继续放宽，**不要**去改简报渲染代码。
 - 附带：`test_data_selfheal.js` / `test_ready_state_tdz.js` **不在 §42.9 闸门表内**（无期望通过数），本次一并放宽只为消除噪音。
+
+### 42.43 修复「每次打开 PWA 都定位到矿业公司模块」（2026-09-28）
+
+**症状（用户反馈 2026-09-28）**：每次新打开日报（PWA 从桌面图标启动）都自动定位在「矿业公司」模块，而非默认首页。
+
+**根因**：§42.42 记录的 commit `09463ab`（2026-09-27「PWA 一点直达矿业公司视图」）把 `manifest.json` 的 `start_url` 由 `"./"` 改成 `"./#/companySection"`。PWA 启动时 URL 自带该 hash，`app.js` 的 `mdInitDeepLink` 在加载后 600ms 读 hash 命中 `companySection` → 调 `mdSelectCat('company')` 切到矿业公司视图。即「启动即深链到公司」——对想默认看首页的用户而言表现为 bug。
+
+**次要路径（一并修掉）**：`app.js` 里 `mdInitDeepLink` 的全局 click 监听会对带 `data-target` 的目录项执行 `history.replaceState(...,'#/companySection')`，导致「手动点一次矿业公司 → 之后刷新 / 重开仍卡在公司」。
+
+**修复**：
+1. `manifest.json` 的 `start_url` 回退为 `"./"`（PWA 启动回到默认视图；相对路径且不出 scope，属 §42.42 允许的三形态之一，安装可用性不受影响）。
+2. `app.js` 删除上述目录项点击写 hash 的逻辑——内部导航只切视图、不改 URL；**外部深链**（`直接访问 site/#/companySection`）仍由 `mdInitDeepLink.apply()` 在加载时生效，未破坏。
+
+**验证**：`test_pwa_install.py` = 51 PASS / 0 FAIL（start_url `./` 仍判合法）；`preflight_check.py` 全绿；`node --check app.js` 通过。部署后 build-version 随部署 bump，sw 缓存自动失效。
