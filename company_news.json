@@ -1,80 +1,6 @@
 {
- "updated_at": "2026-09-27",
+ "updated_at": "2026-09-28",
  "companies": [
-  {
-   "name": "赣锋锂业",
-   "code": "002460",
-   "sector": "锂",
-   "region": "CN",
-   "exchange": "A股",
-   "zh": "赣锋锂业",
-   "en": "Ganfeng Lithium",
-   "origin": "official",
-   "home": "https://www.ganfenglithium.com/news.html",
-   "news_url": "https://www.ganfenglithium.com/news.html",
-   "method": "html",
-   "unreach": "",
-   "stale": false,
-   "rank": 10,
-   "items": [
-    {
-     "t": "赣锋锂业《可持续发展之路》系列纪录短片正式上线",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/186.html",
-     "s": "如今，Mariana项目已顺利投产，成为推动全球能源可持续发展的重要力量。对于一面是地球赋予的矿产资源，一面是自然赋予的珍稀物种，赣锋如何解算这道生态难题？南美高原的可持续发展承诺如何践行？",
-     "k": "news"
-    },
-    {
-     "t": "赣锋锂业正式加入联合国全球契约组织",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/184.html",
-     "s": "近日，赣锋锂业正式加入联合国全球契约组织（United Nations Global Compact, UNGC），以更坚定的承诺推进企业社会责任与可持续发展，助力联合国可持续发展目标实现。",
-     "k": "news"
-    },
-    {
-     "t": "赣锋锂业锂生态产业链一体化产品亮相2025CLNB新能源产业博览会",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/183.html",
-     "s": "赣锋持续推进固态锂电池的研发、生产和商业化应用，积极布局和开发高能量密度、高功率的动力电芯与电源系统产品，以满足不同领域需求。氧化物路线的高能量密度电源产品已经应用于低空经济领域，原理样件已经通过审核。",
-     "k": "news"
-    },
-    {
-     "t": "ESIE2025圆满收官！赣锋全新6.25MWh储能系统成焦点，储能...",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/182.html",
-     "s": "在展会期间中关村储能产业技术联盟发布的2024年度中国储能企业系列榜单中，赣锋锂电入围2024年度全球市场储能电池出货量排行榜top10。",
-     "k": "news"
-    },
-    {
-     "t": "丰城赣锋入选江西省2025年首批“数智工厂”示范企业",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/181.html",
-     "s": "在数字化领域，丰城赣锋基于集团统一的数据采集平台，通过遍布于各个环节的先进传感器、条码等组件，实时采集工厂各项数据，为工厂运行“把脉”；",
-     "k": "news"
-    },
-    {
-     "t": "赣锋锂业一体化布局固态电池，关键原料硫化锂已具备量产能力",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/180.html",
-     "s": "在负极层面， 赣锋超薄锂带同样具备量产能力，可针对循环性能、加工性能、电化学稳定性等各类需求提供定制化解决方案。赣锋已实现300mm宽度的超宽幅超薄锂带量产，铜锂复合带中锂箔厚度可达到3微米。",
-     "k": "news"
-    },
-    {
-     "t": "赣锋锂业推出长续航全地形机器人电池",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/179.html",
-     "s": "在阿西莫夫写出《机器人系列》的80年后，科幻作品中的机器人时代已在我们面前。四足机器人、人形机器人等新品层出不穷，具身智能产业发展不断提速，2025年《政府工作报告》中也明文指出：“大力发展智能机器人等新一代智能终端以及智能制造装备”。",
-     "k": "news"
-    },
-    {
-     "t": "赣锋锂业牵头制定的这项标准入选工信部标准应用推广典型案例",
-     "d": "2025-05-26",
-     "u": "https://www.ganfenglithium.com/new_detail/id/178.html",
-     "s": "近期，国家工信部发布2024年百项团体标准应用推广典型案例名单，由赣锋锂业主持制定的团体标准《锂盐加工行业绿色工厂评价要求》（T/CNIA0159-2022）经过专家层层遴选成功入选。",
-     "k": "news"
-    }
-   ]
-  },
   {
    "name": "紫金矿业",
    "code": "601899",
@@ -1063,7 +989,7 @@
    "method": "html",
    "unreach": "",
    "stale": false,
-   "rank": 24,
+   "rank": 23,
    "items": [
     {
      "t": "湖南黄金：并购完成后将并入标的相关黄金资源量",
@@ -1235,6 +1161,80 @@
      "d": "2026-07-21",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1098",
      "s": "近期，天齐锂业股份有限公司（以下简称“天齐锂业”）全资子公司天齐锂业（射洪）有限公司（以下简称“射洪天齐”）拟以人民币1.5亿元自有资金，认购欣旺达动力科技股份有限公司（以下简称“欣旺达动力”）新增股份7,921.8106万",
+     "k": "news"
+    }
+   ]
+  },
+  {
+   "name": "赣锋锂业",
+   "code": "002460",
+   "sector": "锂",
+   "region": "CN",
+   "exchange": "A股",
+   "zh": "赣锋锂业",
+   "en": "Ganfeng Lithium",
+   "origin": "official",
+   "home": "https://www.ganfenglithium.com/news.html",
+   "news_url": "https://www.ganfenglithium.com/news.html",
+   "method": "html",
+   "unreach": "",
+   "stale": false,
+   "rank": 10,
+   "items": [
+    {
+     "t": "赣锋锂业《可持续发展之路》系列纪录短片正式上线",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/186.html",
+     "s": "如今，Mariana项目已顺利投产，成为推动全球能源可持续发展的重要力量。对于一面是地球赋予的矿产资源，一面是自然赋予的珍稀物种，赣锋如何解算这道生态难题？南美高原的可持续发展承诺如何践行？",
+     "k": "news"
+    },
+    {
+     "t": "赣锋锂业正式加入联合国全球契约组织",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/184.html",
+     "s": "近日，赣锋锂业正式加入联合国全球契约组织（United Nations Global Compact, UNGC），以更坚定的承诺推进企业社会责任与可持续发展，助力联合国可持续发展目标实现。",
+     "k": "news"
+    },
+    {
+     "t": "赣锋锂业锂生态产业链一体化产品亮相2025CLNB新能源产业博览会",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/183.html",
+     "s": "赣锋持续推进固态锂电池的研发、生产和商业化应用，积极布局和开发高能量密度、高功率的动力电芯与电源系统产品，以满足不同领域需求。氧化物路线的高能量密度电源产品已经应用于低空经济领域，原理样件已经通过审核。",
+     "k": "news"
+    },
+    {
+     "t": "ESIE2025圆满收官！赣锋全新6.25MWh储能系统成焦点，储能...",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/182.html",
+     "s": "在展会期间中关村储能产业技术联盟发布的2024年度中国储能企业系列榜单中，赣锋锂电入围2024年度全球市场储能电池出货量排行榜top10。",
+     "k": "news"
+    },
+    {
+     "t": "丰城赣锋入选江西省2025年首批“数智工厂”示范企业",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/181.html",
+     "s": "在数字化领域，丰城赣锋基于集团统一的数据采集平台，通过遍布于各个环节的先进传感器、条码等组件，实时采集工厂各项数据，为工厂运行“把脉”；",
+     "k": "news"
+    },
+    {
+     "t": "赣锋锂业一体化布局固态电池，关键原料硫化锂已具备量产能力",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/180.html",
+     "s": "在负极层面， 赣锋超薄锂带同样具备量产能力，可针对循环性能、加工性能、电化学稳定性等各类需求提供定制化解决方案。赣锋已实现300mm宽度的超宽幅超薄锂带量产，铜锂复合带中锂箔厚度可达到3微米。",
+     "k": "news"
+    },
+    {
+     "t": "赣锋锂业推出长续航全地形机器人电池",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/179.html",
+     "s": "在阿西莫夫写出《机器人系列》的80年后，科幻作品中的机器人时代已在我们面前。四足机器人、人形机器人等新品层出不穷，具身智能产业发展不断提速，2025年《政府工作报告》中也明文指出：“大力发展智能机器人等新一代智能终端以及智能制造装备”。",
+     "k": "news"
+    },
+    {
+     "t": "赣锋锂业牵头制定的这项标准入选工信部标准应用推广典型案例",
+     "d": "2025-05-26",
+     "u": "https://www.ganfenglithium.com/new_detail/id/178.html",
+     "s": "近期，国家工信部发布2024年百项团体标准应用推广典型案例名单，由赣锋锂业主持制定的团体标准《锂盐加工行业绿色工厂评价要求》（T/CNIA0159-2022）经过专家层层遴选成功入选。",
      "k": "news"
     }
    ]
@@ -1571,7 +1571,7 @@
    "method": "html",
    "unreach": "",
    "stale": false,
-   "rank": 25,
+   "rank": 24,
    "items": [
     {
      "t": "中金岭南凡口铅锌矿顺利通过安全生产许可证延期换证现场复核",
@@ -1733,7 +1733,7 @@
    "method": "agg",
    "unreach": "",
    "stale": false,
-   "rank": 26,
+   "rank": 25,
    "items": [
     {
      "t": "纽蒙特宣布2026年第三季度业绩电话会议| NEM股票新闻",
@@ -1886,8 +1886,17 @@
    "method": "agg",
    "unreach": "",
    "stale": false,
-   "rank": 28,
+   "rank": 27,
    "items": [
+    {
+     "t": "巴里克矿业与马里金矿工会达成协议，缓解罢工威胁",
+     "d": "2026-09-27",
+     "u": "https://www.mining.com/web/barrick-mining-reaches-deal-with-unions-at-mali-gold-mine-easing-strike-threat/",
+     "s": "发言人说： “我们确认我们已与LG工会签署了新的集体谈判协议。”",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Barrick Mining reaches deal with unions at Mali gold mine, easing strike threat"
+    },
     {
      "t": "Avathon获选为Barrick北美业务的AI原生采矿运营模式提供支持| B股票新闻",
      "d": "2026-09-23",
@@ -2031,15 +2040,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Barrick Declares Q2 Dividend | B Stock News"
-    },
-    {
-     "t": "巴里克董事长计划的改革遇到了投资者的强烈反对",
-     "d": "2026-08-09",
-     "u": "https://www.mining.com/web/barrick-chairmans-planned-overhaul-meets-investor-backlash/",
-     "s": "当巴里克去年12月宣布正在评估IPO时，其股价上涨了4.2% ，但今年到目前为止，其股价几乎没有变化……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick chairman’s planned overhaul meets investor backlash"
     }
    ]
   },
@@ -2057,7 +2057,7 @@
    "method": "agg",
    "unreach": "",
    "stale": false,
-   "rank": 27,
+   "rank": 26,
    "items": [
     {
      "t": "Freeport宣布发放普通股季度现金股息| FCX股票新闻",
@@ -2192,7 +2192,7 @@
    "method": "agg",
    "unreach": "",
    "stale": false,
-   "rank": 29,
+   "rank": 28,
    "items": [
     {
      "t": "智利铜产量创下19年来最低纪录| SCCO股票新闻",
@@ -2336,7 +2336,7 @@
    "method": "agg",
    "unreach": "",
    "stale": false,
-   "rank": 31,
+   "rank": 30,
    "items": [
     {
      "t": "SEC 6-K（外资发行人报告）",
@@ -2417,7 +2417,7 @@
    "method": "agg",
    "unreach": "",
    "stale": false,
-   "rank": 30,
+   "rank": 29,
    "items": [
     {
      "t": "Scout Discoveries宣布Agnico Eagle进行14.9%的战略投资，并在爱达荷州达成盈利协议；",
@@ -2528,6 +2528,15 @@
      "t_en": "Agnico Eagle sells Barsele stake to Goldsky for $166M"
     },
     {
+     "t": "Agnico Eagle、艾芬豪电气和地区金属MDC 11月矿业股排名第一",
+     "d": "2025-12-03",
+     "u": "https://www.mining.com/agnico-eagle-ivanhoe-electric-and-district-metals-top-mdc-november-mining-stock-rankings/",
+     "s": "从突破性的财务业绩到重大项目进展和市场变动公告， 11月的获奖者代表了塑造…",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Agnico Eagle, Ivanhoe Electric and District Metals top MDC November mining stock rankings"
+    },
+    {
      "t": "Agnico Eagle推出价值$ 1.3亿美元的关键矿物Avenir装置",
      "d": "2025-10-30",
      "u": "https://www.mining.com/agnico-eagle-launches-130m-avenir-unit-for-critical-minerals/",
@@ -2552,7 +2561,7 @@
    "method": "html",
    "unreach": "",
    "stale": false,
-   "rank": 32,
+   "rank": 31,
    "items": [
     {
      "t": "新闻稿2026年9月3日Albemarle宣布首席执行官继任计划Ragnar",
@@ -2566,7 +2575,7 @@
      "t": "新闻稿2026年8月5日Albemarle公布2026年第二季度业绩北卡罗来纳州夏洛特2026年8月5日/美通社/--",
      "d": "2026-08-05",
      "u": "https://www.albemarle.com/global/en/news/albemarle-reports-second-quarter-2026-results",
-     "s": "归属于Albemarle的净收入为 $ 4.8亿 ，同比增长 $ 4.57亿。",
+     "s": "归属于Albemarle的净收入为$ 4.8亿，同比增长$ 4.57亿。",
      "k": "news",
      "t_en": "Press Releases August 05, 2026 Albemarle Reports Second Quarter 2026 Results CHARLOTTE, N.C., Aug. 5, 2026 /PRNewswire/ -- Albemarle Corpora"
     },
@@ -2582,7 +2591,7 @@
      "t": "新闻稿2026年7月21日， Albemarle宣布北卡罗来纳州夏洛特的季度普通股股息， 2026年7月21日/美通社/--",
      "d": "2026-07-21",
      "u": "https://www.albemarle.com/global/en/news/albemarle-announces-quarterly-common-stock-dividend-7",
-     "s": "北卡罗来纳州夏洛特2026年7月21日",
+     "s": "北卡罗来纳州夏洛特2026年7月21日电/美通社/--阿尔伯马尔公司(Albemarle Corporation, NYSE: ALB)董事会今天宣布，它已宣布一个季度……",
      "k": "news",
      "t_en": "Press Releases July 21, 2026 Albemarle Announces Quarterly Common Stock Dividend CHARLOTTE, N.C., July 21, 2026 /PRNewswire/ -- The Board of"
     },
@@ -2638,21 +2647,21 @@
    "items": [
     {
      "t": "中矿资源Bikita钽铌回收二厂项目隆重开工 津巴布韦矿业部部长及马辛戈省长出席",
-     "d": "2026-09-26",
+     "d": "",
      "u": "http://www.sinomine.cn/xwdti/427.html",
      "s": "王平卫董事长首先代表中矿资源集团致辞。他对津巴布韦政府、马辛戈省各级政府以及当地社区长期以来的支持表示感谢，并介绍了集团在津巴布韦的业务布局与未来规划，强调将继续秉持“互利共赢、共同发展”理念，深化与当地的全方位合作。",
      "k": "news"
     },
     {
      "t": "竣工投产 逐光启航！中矿卡通巴选矿厂正式投产运营",
-     "d": "2026-09-22",
+     "d": "",
      "u": "http://www.sinomine.cn/xwdti/426.html",
      "s": "2026年9月21日，中矿卡通巴矿业有限公司（以下简称“卡通巴矿业”）选矿厂完成建设期各项工作任务，正式进入生产运营阶段。",
      "k": "news"
     },
     {
      "t": "擘画非洲新蓝图 开启协同新征程",
-     "d": "2026-09-20",
+     "d": "",
      "u": "http://www.sinomine.cn/xwdti/424.html",
      "s": "作为中南非中心“赋能服务、深化协同”职能的首次重要实践，仪式上举行了首批配套企业战略合作签约仪式。王治伟总经理代表中南非中心与五家服务型企业签署战略合作协议。通过构建上下游配套企业集群，一个资源共享、优势互补的产业生态圈正加快形成，集团在非业务领域正式开启区域协同化、系统化布局。",
      "k": "news"
@@ -3339,6 +3348,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "必和必拓智利埃斯孔迪达矿工会在发生致命事故后拒绝暂停合同谈判",
+     "d": "2026-09-27",
+     "u": "https://www.mining.com/web/union-at-bhps-escondida-mine-in-chile-refuses-to-pause-contract-talks-after-fatal-accident/",
+     "s": "由于事故，这家澳大利亚矿业公司要求暂时中止与主管和工作人员的谈判。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Union at BHP’s Escondida mine in Chile refuses to pause contract talks after fatal accident"
+    },
+    {
      "t": "必和必拓的Escondida重启缓解铜市场紧张",
      "d": "2026-09-25",
      "u": "https://www.mining.com/bhps-escondida-restart-eases-tight-copper-market/",
@@ -3445,15 +3463,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "BHP commercial chief exits amid China iron ore strain"
-    },
-    {
-     "t": "黑德兰港工会在9月8日谈判之前向必和必拓提出工资协议反建议",
-     "d": "2026-08-25",
-     "u": "https://www.mining.com/web/port-hedland-unions-place-wage-deal-counterproposal-to-bhp-ahead-of-september-8-talks/",
-     "s": "“We continue to make progress towards an agreement that will address key areas raised by our workforce,” a BHP spokesperson said in an emailed stateme…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Port Hedland unions place wage deal counterproposal to BHP ahead of September 8 talks"
     }
    ]
   },
@@ -3828,7 +3837,7 @@
      "t": "First Quantum Minerals获得Quantum Electrahaul的专利和商标",
      "d": "2026-09-16",
      "u": "https://www.first-quantum.com/news/first-quantum-minerals-secures-patent-and-trademark-for-quantum-electrahaul/",
-     "s": "2025年年年年， First Quantum全球生产了 396,000吨铜、 152,000盎司黄金和 23,000吨镍。",
+     "s": "2025年， First Quantum全球生产了396,000吨铜、152,000盎司黄金和23,000吨镍。",
      "k": "news",
      "t_en": "First Quantum Minerals secures patent and trademark for Quantum Electrahaul"
     },
@@ -3844,7 +3853,7 @@
      "t": "First Quantum发布2026年第二季度业绩公告",
      "d": "2026-06-30",
      "u": "https://www.first-quantum.com/news/first-quantum-provides-notice-of-second-quarter-2026-results/",
-     "s": "安大略省多伦多（ 2026年年年年6月月月月30日日日日） - First Quantum Minerals Ltd.",
+     "s": "安大略省多伦多（ 2026年6月30日） - First Quantum Minerals Ltd.",
      "k": "news",
      "t_en": "First Quantum Provides Notice of Second Quarter 2026 Results"
     },
@@ -3868,7 +3877,7 @@
      "t": "首届Quantum Minerals公布董事选举投票结果",
      "d": "2026-05-07",
      "u": "https://www.first-quantum.com/news/first-quantum-minerals-announces-voting-results-for-the-election-of-directors-may-2026/",
-     "s": "安大略省多伦多（ 2026年年年年5月月月月7日日日日） - First Quantum Minerals Ltd.",
+     "s": "安大略省多伦多（ 2026年5月7日） - First Quantum Minerals Ltd.",
      "k": "news",
      "t_en": "First Quantum Minerals Announces Voting Results for the Election of Directors"
     },
@@ -3876,7 +3885,7 @@
      "t": "Quantum Minerals公布2026年第一季度业绩",
      "d": "2026-04-28",
      "u": "https://www.first-quantum.com/news/first-quantum-minerals-reports-first-quarter-2026-results/",
-     "s": "2026 年全年总资本支出指引从$ 1,000 – $ 11.5亿增加到 $ 1,075 – $ 12.5亿 ，反映了 …",
+     "s": "2026年全年总资本支出指引从$ 1,000 – $ 11.5亿增加到$ 1,075 – $ 12.5亿，反映了…",
      "k": "news",
      "t_en": "First Quantum Minerals Reports First Quarter 2026 Results"
     },
@@ -3896,6 +3905,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 405
+  "items": 406
  }
 }
