@@ -38,5 +38,25 @@
     "dropped": 2,
     "repaired_to_auto": 0,
     "avg_summary_len": 224.1
+  },
+  {
+    "date": "2026-09-28",
+    "days": [
+      "2026-09-26",
+      "2026-09-27",
+      "2026-09-28"
+    ],
+    "total": 34,
+    "foreign": 7,
+    "with_source": 29,
+    "no_source": 5,
+    "initial_pass": 27,
+    "initial_fail": 2,
+    "initial_pass_rate": 93.1,
+    "auto": 27,
+    "review": 5,
+    "dropped": 2,
+    "repaired_to_auto": 0,
+    "avg_summary_len": 202.4
   }
 ]
