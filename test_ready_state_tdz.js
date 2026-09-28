@@ -118,7 +118,7 @@ function loadPage() {
   {
     const { dom, server, jsdomErrors } = await loadPage();
     const w = dom.window;
-    await new Promise(r => setTimeout(r, 5000));
+    await new Promise(r => setTimeout(r, 25000));
     const doc = w.document;
     const errs = [].concat(w.__mdErrors || [], jsdomErrors).map(String)
       .filter(x => !/goatcounter|hm\.baidu/.test(x));

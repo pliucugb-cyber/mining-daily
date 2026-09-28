@@ -3180,3 +3180,21 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - `fetch_company.py` SITES 重新加回厦门钨业 → 重抓会将其灌回 `company_news.json`；`preflight` 的 `BANNED_COMPANIES` 会拦住，故需同步从 BANNED 移除。
 - `BANNED_COMPANIES` 含厦门钨业但 SITES 已删 → 仅作护栏，不影响线上渲染。
 - `company_news.json` 回退到 `826cf1d` 之前快照 → 厦门钨业回归，计数回到 44 家 / 406 条。
+
+### 42.42 PWA 起始页深链口径同步 + 三处 jsdom 等待窗口（2026-09-28 复核轮）
+
+**A. `manifest.json` 的 `start_url` 允许带站内深链（口径同步，非本轮新改动）**
+
+- 事实：`09463ab`（2026-09-27 09:06「PWA 一点直达矿业公司视图」）把 `start_url` 由 `"./"` 改为 `"./#/companySection"`；`app.js` 深链命中 `companySection` 时改调 `mdSelectCat('company')`（比单纯 `switchView` 与顶部 tab 更一致）。
+- 该提交**未同步** `test_pwa_install.py` 的断言（当时写死 `start_url in ('./','.')`）→ §42.9 的 `PY test_pwa_install.py = 51 PASS` 次日回落为 **50 PASS / 1 FAIL**（09-28 复核轮抓到）。
+- **权威口径（现行）**：`start_url` 只须是**相对路径**且**不越出 `scope`** → 允许 `./` / `.` / `./#…` 三形态；绝对 URL、`../`、`/#/…`、空值一律判假。
+- 回退指纹：`start_url` 变回绝对 URL 或 `../` ⇒ Chrome 判不可安装（`Page.getInstallabilityErrors` 会报 start_url 不在 scope，§41.1）。
+- 落地：`test_pwa_install.py` 的 `check_manifest()` 已按三形态改写（守卫仍能判假——该文件内「坏输入必须判假」自检照样过）。
+
+**B. 三个 jsdom 测试的固定等待窗口不足以覆盖本机 `fetch` 落地时间（测试侧加固）**
+
+- 症状：`node test_brief_layers.js` 由 91/0 变成 **73 PASS / 12 FAIL**，②段整段报「无 `.brief-full`／`#briefSub` 文案空／按钮文案为『展开全部』（丢了『（N 条）』）」，实测 `#briefMain` 停在 `class="brief-md"` + 「简报加载较慢，可稍后刷新；不影响下方内容与价格。」占位；`test_data_selfheal.js`（`NEWS_DATA=undefined`、热榜「加载中…」）与 `test_ready_state_tdz.js`（热榜「加载中…」）同源。
+- 定因（探针 `tmp/probe_brief_0928.js` 已证伪「产品缺陷」）：三者都靠 `win.fetch = 桥到 globalThis.fetch`。本机 jsdom 壳里该 fetch **落地极慢** —— 首屏要执行 `news-data.js`（~370KB / 634 条）+ `app.js`（~700KB）并渲染新闻列表与公司区，事件循环被占住期间 undici 的回调被饿死，数据量越大首轮响应越晚。同一份产物把窗口拉长后 **85 → 91 PASS / 0 FAIL**；探针末尾直接 `globalThis.fetch('…/morning_report.json')` 4s 内返回 200，且此时简报已渲染成 `.brief-full data-total="12"`（5 节 / 条数徽标 / `data-jump` / `brief-clamp` 全在位）⇒ 产物正常。
+- 修法（**只改测试，不动产物**）：`test_brief_layers.js` 12s → **45s**；`test_data_selfheal.js` 8s/5s/13s → **25s/15s/30s**；`test_ready_state_tdz.js` 5s → **25s**。
+- 判据：属**数据量依赖**（`news-data.js` 条数越多越接近阈值）。若某天又整段 FAIL，**先看 `#briefMain` 是否 `brief-md` 占位**再决定是否继续放宽，**不要**去改简报渲染代码。
+- 附带：`test_data_selfheal.js` / `test_ready_state_tdz.js` **不在 §42.9 闸门表内**（无期望通过数），本次一并放宽只为消除噪音。

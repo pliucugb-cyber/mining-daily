@@ -154,7 +154,14 @@ async function loadPage(stripSections, prefs, portArg) {
     beforeParse: w => installFetch(w, prefs)
   });
   const win = dom.window, doc = win.document;
-  const deadline = Date.now() + 12000;
+  // 2026-09-28：等待窗口由 12s 放宽到 45s（并保留 li>0 判据）。
+  //   根因：本机 jsdom 壳里 `win.fetch`（桥到 undici globalThis.fetch）会**极慢**——
+  //   页面首屏要执行 news-data.js（~370KB / 600+ 条）+ app.js（~700KB）并渲染新闻列表/公司区，
+  //   事件循环被占住期间 undici 的回调被饿死；数据量越大首轮 fetch 落地越晚。
+  //   实测 09-28（news-data 634 条 / company 406 条）首个响应 >12s → 卡在 app.js 的 8s
+  //   「简报加载较慢」占位分支 → ② 段 12 条断言全假 FAIL（**非产品缺陷**：把窗口拉长后
+  //   同一份产物 85→91 PASS / 0 FAIL，简报结构/条数徽标/data-jump 全部正常）。
+  const deadline = Date.now() + 45000;
   while (Date.now() < deadline) {
     const m = doc.getElementById('briefMain');
     if (m && m.querySelectorAll('li').length > 0 && !doc.querySelector('#briefMain .skeleton')) break;

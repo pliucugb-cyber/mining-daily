@@ -86,8 +86,12 @@ def check_manifest(mf, root):
             errs.append('缺字段 %s' % k)
     if mf.get('display') != 'standalone':
         errs.append('display 应为 standalone（否则装出来仍带浏览器外壳）')
-    if mf.get('start_url') not in ('./', '.'):
-        errs.append('start_url 应为相对路径 ./（站点部署在 /mining-daily/ 子路径）')
+    # 2026-09-27 起 start_url 允许带站内深链：`./#/companySection`（装到桌面后一点直达
+    # 「矿业公司」视图，见 commit 09463ab）。但**必须是相对路径且不越出 scope**，
+    # 因此只放行 `./` / `.` / `./#…` 三种形态，绝对 URL、`../`、`/other/` 一律判假。
+    _su = (mf.get('start_url') or '').strip()
+    if not (_su in ('./', '.') or _su.startswith('./#')):
+        errs.append('start_url 必须是相对路径 ./（可带站内深链 ./#/…）；实际 %r' % _su)
     if mf.get('prefer_related_applications'):
         errs.append('prefer_related_applications 不得为 true（会抑制安装提示）')
     icons = mf.get('icons') or []

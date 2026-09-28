@@ -101,7 +101,7 @@ function regionText(doc, sel) {
     const { dom, server } = await loadPage({ breakAppJs: false });
     const { window } = dom;
     // 等首屏 + 自愈轮次（1200 / 3000ms）跑完
-    await new Promise(r => setTimeout(r, 8000));
+    await new Promise(r => setTimeout(r, 25000));
     const doc = window.document;
 
     const news = window.NEWS_DATA;
@@ -134,7 +134,7 @@ function regionText(doc, sel) {
     // 按建议①良性报错只走 amber info 级（可自动消失），错误只在诊断里可见。
     window.__mdErrors.push('[脚本错误] Uncaught ReferenceError: qaFabClick is not defined');
     // 等 12s 看门狗触发后（此刻已过 ≈8s，再等 5s）
-    await new Promise(r => setTimeout(r, 5000));
+    await new Promise(r => setTimeout(r, 15000));
     const benignBanner = doc.getElementById('mdBootWarn');
     check('健康页 + 良性报错(__mdErrors 有条目) → 不挂红条（仅 info 级或隐藏）',
       !!benignBanner && benignBanner.getAttribute('data-md-level') !== 'error',
@@ -151,7 +151,7 @@ function regionText(doc, sel) {
   {
     const { dom, server } = await loadPage({ breakAppJs: true });
     const { window } = dom;
-    await new Promise(r => setTimeout(r, 13000));
+    await new Promise(r => setTimeout(r, 30000));
     const doc = window.document;
     const banner = doc.getElementById('mdBootWarn');
     check('app.js 取不到时横幅弹出（故障可见）',
