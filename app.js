@@ -3832,7 +3832,11 @@ function mdInitDeepLink(){
   }
   window.addEventListener('hashchange', apply);
   setTimeout(apply, 600);
-  document.addEventListener('click', function(e){ var it=e.target.closest && e.target.closest('.toc-main-item'); if(it && it.getAttribute('data-target')){ try{ history.replaceState(null,'','#/'+it.getAttribute('data-target')); }catch(e){} } });
+  // 注意：目录项点击【不再】把当前视图写进 URL hash。
+  // 旧逻辑会在点「矿业公司」等目录项后执行 history.replaceState(..., '#/companySection')，
+  // 导致 URL 残留该 hash；而上方 apply() 在每次加载（setTimeout 600ms）会读 hash 并自动切到对应视图，
+  // 于是「点过一次矿业公司 → 之后每次刷新/重开都定位到矿业公司模块」(用户反馈 2026-09-28)。
+  // 改为不写入：内部导航只切换视图、不改 URL；外部深链（直接访问 site/#/companySection）仍由 apply() 生效。
 }
 // B3 关键词订阅（本地版，无后端真推送）：我的面板内编辑 + 命中高亮
 function mdInitWatchWords(){
