@@ -3258,3 +3258,45 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **测试守卫**：`preflight_check.py` 新增「AI 抽屉 + 卡片标签」闸门（§42.46）——MUST 断言 `qa-float{position:fixed;top:0;right:0`、`@media (min-width:769px){.qa-float{transform:translateX(100%)`、`function cardKeyTag(`、`function mdDecorateKeyTags(`、`window.mdDecorateKeyTags=` 均在；FORBIDDEN 断言旧 `left:16px;bottom:78px` 浮窗定位、`cursor:grab` 头部已移除。**注意**：该闸门须传合并文本 `text`（=index.html+app.js），不能传仅含 app.js 的 `app_text`——抽屉 CSS 在 html、标签函数在 app.js，二者分处两份文件。`test_mobile_ux_batch.js` 两条「桌面恢复内联尺寸/定位」断言按新契约翻转（桌面清内联布局，不恢复拖拽记忆）。
 - **验证**：`test_qa_navtab_20260910.js` 18/0（移动端整页 + 桌面 `#qaFab` 仍在 DOM）、`test_mobile_ux_batch.js` 226/0、`test_brief_layers.js` 91/0、`test_company_section.js` 178/0、`test_view_switch.js` 22/0；`preflight_check.py` exit 0；`node --check app.js` 通过；`mdDecorateKeyTags` jsdom 实跑 458 卡中 **219 打标 / 239 未打标**，`cardKeyTag` 单元校验 6/6 全过，0 致命 JS 错误。
 - 提交/部署：见 git log（2026-09-28）。
+
+#### §42.47 矿业公司板块「新闻错配」修复（归属闸门 + 摘要污染过滤 + 更名/别名 + 同事件去重，2026-09-29）
+
+**起因（用户刘三 2026-09-29 截图提问）**：矿业公司板块把「每日全球并购：恩捷股份控股子公司拟 11.5 亿元受让亿纬锂能持有的湖北恩捷 45% 股权」挂在「广晟有色」名下；「中稀有色：向全资子公司增资 3.06 亿元」的标签也写「广晟有色」。用户质疑「新闻和公司是否匹配」——判断准确，错配确实存在且系统性的，但**局限于 7 家新浪源**，非前端 bug。
+
+**诊断（按来源统计，company_news.json 43 家 / 406 条）**
+- `official`（24 家 / 150 条）、`agg`（9 家 / 122 条 SEC+股票新闻）、`mining`（19 条）、`rss`（8 条）→ 三类污染全为 0，**干净**。
+- `sina-a`（5 家 / 75 条）→ 摘要 blob 43 条、汇总/行情类错配 11 条；`sina-hk`（2 家 / 32 条）→ blob 27 条、错配 3 条。
+- 即 **70 条摘要污染 + 14 条错配标题 100% 来自 7 家「新浪个股页」源**（云南铜业/云铝股份/湖南黄金/北方稀土/广晟有色 + 五矿资源/中国有色矿业）；另 11 条跨公司同名（SEC 8-K 占位 ×3 家；港股铜业股行情文同挂 五矿资源+中国有色矿业）。
+
+**根因（三处，全数据侧）**
+1. **归属按「来源页」**：新浪 `vCB_AllNewsStock` 把「提到该股的全局新闻」也收录（如 `/roll/` 的每日全球并购、A 股收评、ETF 风向标、概念股），整条算作该公司新闻；`fetch_company.py` 对新浪源无「文章主体是否该公司」校验。
+2. **摘要抓成侧栏**：`lead_candidates`/`pick_lead` 未拦「新浪文章页『相关新闻』标题列表」——含 ≥2 个 `YYYY-MM-DD HH:MM` 的串被当摘要。
+3. **公司更名未同步**：600259 已由「广晟有色」更名为「中稀有色」（新闻自称「证券简称：中稀有色」），`SITES` 里 `name/zh` 仍是「广晟有色」→ 标题与标签两个名字。
+
+**拍板（AskUserQuestion）**：**P0+P1 全修（推荐）**——归属闸门 + 摘要污染过滤 + 公司更名/别名 + 同事件去重，全部落在 `fetch_company.py` + 离线重洗，**不动前端 / 每日自动化 prompt**。
+
+**方案**
+- **P1 更名 + 别名**：`SITES` 中 600259 `name/zh` 广晟有色→中稀有色，`en`→`China Rare Nonferrous`，新增 `alias:['广晟有色']`（新旧名都认）；并在 `--enrich-only` 路径按 `code` 把 `SITES` 元数据（含更名/别名）同步回 `company_news.json`（否则 enrich-only 会保留旧名）。
+- **P0 归属闸门**：`GATE_ORIGINS=('sina-a','sina-hk')` + `MARKET_ROUNDUP_RE`（每日全球并购/收评/午评/ETF/概念股/板块/大宗交易/涨停/跌停…）+ `company_names()`（name/zh/alias/code）+ `item_mentions_company()` + `gate_company_items()`（市场汇总标题 或 未提及本公司者剔除；仅新浪源启用）。
+- **P0 摘要污染过滤**：`LIST_BLOB_TS`（≥2 个 `YYYY-MM-DD HH:MM`）+ `is_list_blob_summary()`，接入 `is_boilerplate_summary`/`lead_candidates`/`pick_lead`。
+- **P1 同事件去重**：`prune_items` 加 `sim_dedup` 分支 + `_dedup_norm`/`_sim_dedup`（归一化标题互相包含且长度相近者合并，仅聚合源启用）。
+
+**改动（2 文件，commit `82795cc`）**
+- `fetch_company.py`：上述 7 处（SITES 更名/alias + `--enrich-only` 元数据同步 + 闸门三函数 + 摘要 blob 过滤 + 去重）。
+- `company_news.json`：离线重洗（`--enrich-only --no-net`，纯本地确定性，未重抓列表页）；全量 **406→352 条**（重洗输入文件本机备份 `co_backup_20260929.json` 实测为 406）；**0 条 blob 摘要、0 条汇总/行情错配标题**（原 70+14）；600259 现 = 中稀有色，5 条全 genuine（恩捷并购错配项已剔除），`alias=['广晟有色']`；87 条摘要被清空（原 blob 侧栏，纯本地未重抓文章页，展示走缺摘要短占位，前端已支持）；`counts` = `domestic 28 / hk 2 / foreign 13 / total 43 / items 352` → preflight 名单护栏绿（name-agnostic）。
+
+**回归/闸门**
+- `preflight_check.py` ✅ 全部通过（总数 43、domestic 28、被删四家含厦门钨业不回归）。
+- `node test_company_section.js` = 178/0（含「全部公司（N）」口径、中文名、分组、v11/v27 样式全绿）。
+
+**上线**
+- commit `82795ccc860b18a7cfee62345845a3005a91d045`（main）；`git push origin main` `eec9f21..82795cc`；`python deploy_pages.py` gh-pages 推送成功（线上版本 `4947ec689bf6260371b7d9266cfe8beaaf7654a5` / build `20260929-0607`，站点 https://pliucugb-cyber.github.io/mining-daily/）。
+- 提交严守只 `git add` 2 文件、绝不 `-A`：他人的 `bprime/llm.py`、`qa_tuning.py`、`ROLLOUT.md`、`brand-domain-plan.md`、`package-lock.json` 未带入。
+- 并发护栏：提交/推送前各查 `~/.workbuddy/projects/c-Users-中铝矿业投并部-mining-daily/*.jsonl`，最近写入 08:11（约 6h 前），无活跃写入会话。
+
+**回退指纹**
+- `GATE_ORIGINS`/`gate_company_items` 被删 → 新浪源错配项（如恩捷并购挂在 600259）复活，摘要 blob 重新出现。
+- `is_list_blob_summary`/`LIST_BLOB_TS` 被删 → 侧栏标题列表再次被当摘要（~70 条灰字小标题）。
+- `SITES` 600259 更名回广晟有色 → 标签与新闻自称「中稀有色」不一致；`alias` 移除则旧名检索失效。
+- `_sim_dedup` 被删 → 「增资 3.06 亿」等被拆成多条的同源新闻重新发散。
+- `company_news.json` 回退到 `82795cc` 之前快照 → 全量回到 406 条且含错配。
