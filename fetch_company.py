@@ -156,6 +156,52 @@ SINA_AUTO_RE = re.compile(
     r'龙虎榜|大宗交易|换手率|'
     r'\d+天上涨|\d+天下跌|主力资金净?流入|主力资金净?流出', re.I)
 
+# ===== 聚合来源「归属闸门」（2026-09-29 新增）=====
+# 背景：新浪财经个股页 vCB_AllNewsStock 会把「提到该股的全局新闻」一并收录（每日全球并购 /
+# A股收评 / ETF 风向标 / 概念股 等全市场汇总），整条被当成「该公司新闻」→ 出现「恩捷股份并购」
+# 挂在「广晟有色」名下这类错配（用户 2026-09-29 截图）。对策两层：
+#   ① 标题命中「市场汇总 / 行情」黑名单 → 直接丢（它本属行业动态，不属某家公司）；
+#   ② 标题与摘要都未出现该公司 name/zh/alias/code → 丢（只是「被该股页面收录」，主体不是它）。
+# 仅对聚合型来源生效；官网直采 / RSS / SEC 披露不做此判（它们天然就是该公司自己的内容）。
+GATE_ORIGINS = ('sina-a', 'sina-hk')
+MARKET_ROUNDUP_RE = re.compile(
+    r'每日全球并购|全球并购|每日要闻|每日复盘|收评|午评|早评|盘前|盘后|复盘|盘面|'
+    r'龙虎榜|大宗交易|涨停|跌停|风向标|概念股|两市|沪指|大盘|指数收|资金净流入|'
+    r'资金净流出|行业今日|ETF|产业链集体|大宗商品情报|板块涨幅|板块集体', re.I)
+
+
+def company_names(c):
+    """公司全部可识别名：name / zh / alias / code。"""
+    out = []
+    for n in [c.get('name') or '', c.get('zh') or ''] + list(c.get('alias') or []):
+        n = (n or '').strip()
+        if n and n not in out:
+            out.append(n)
+    code = c.get('code')
+    if code and str(code) not in out:
+        out.append(str(code))
+    return out
+
+
+def item_mentions_company(c, it):
+    blob = (it.get('t') or '') + ' ' + (it.get('s') or '')
+    return any(nm in blob for nm in company_names(c))
+
+
+def gate_company_items(c):
+    """聚合来源（新浪个股页）归属闸门：市场汇总类标题 / 未提及本公司者剔除。"""
+    if c.get('origin') not in GATE_ORIGINS:
+        return c
+    kept = []
+    for it in (c.get('items') or []):
+        if MARKET_ROUNDUP_RE.search(clean_ws(it.get('t') or '')):
+            continue
+        if not item_mentions_company(c, it):
+            continue
+        kept.append(it)
+    c['items'] = kept
+    return c
+
 # ===== 新闻优先过滤（2026-09-23 新增；口径「适中＝事件类 + 行业技术观察」）=====
 # ① 非新闻 URL（栏目/介绍/业务/招聘/合规/矿山项目页），命中即丢。
 #    例：紫金 /global/program-detail-*.htm（矿山项目介绍）被这条干掉。
@@ -864,10 +910,20 @@ STRIP_TAIL_PAT = re.compile(
     r'|电/?(?:PRNewswire|美通社|新华美通)'
     r'|[-–—]\s*[A-Za-z][A-Za-z\s.]*(?:Resources|Limited|Inc\.?|Corp|Corporation|Company|Ltd|PLC)\b[^。！？；;]{0,6}\(?(?:TSX|NYSE|LSE|ASX|HKEX|SHA|SZSE)\b')
 
+# 列表页 / 侧栏污染（2026-09-29 新增）：新浪文章页的「相关新闻 / 个股新闻」侧栏是一串标题列表，
+# 形如「2026-09-28 15:05 某某跌7.89%… 2026-09-28 14:45 每日全球并购…」，会被 pick_lead 误当摘要
+# （用户 2026-09-29 截图：灰色小字是别的标题）。摘要里出现 ≥2 个「YYYY-MM-DD HH:MM」即判为列表 blob。
+LIST_BLOB_TS = re.compile(r'20\d{2}[-/]\d{1,2}[-/]\d{1,2}\s+\d{1,2}:\d{2}')
+
+def is_list_blob_summary(s):
+    return bool(s) and len(LIST_BLOB_TS.findall(s)) >= 2
+
 def is_boilerplate_summary(s):
-    """已落库的 `s` 若是电头/署名行/征集代理/网播链接等非内容文本 → True（让 finalize 重抓）。"""
+    """已落库的 `s` 若是电头/署名行/征集代理/网播链接/列表页 blob 等非内容文本 → True（重抓）。"""
     if not s:
         return False
+    if is_list_blob_summary(s):
+        return True
     if DATELINE_PAT.search(s) or LEAD_BOIL_PAT.search(s) or BOILER_PAT.search(s) or ADDR_PAT.search(s):
         return True
     return False
@@ -887,6 +943,8 @@ def pick_lead(cands, title='', freq=None):
     for t in cands:
         tt = clean_ws(t)
         if len(tt) < 40 or len(tt) > 400:
+            continue
+        if is_list_blob_summary(tt):
             continue
         if ADDR_PAT.search(tt) or DATELINE_PAT.search(tt) or LEAD_BOIL_PAT.search(tt) or BOILER_PAT.search(tt):
             continue
@@ -1064,6 +1122,8 @@ def lead_candidates(raw):
     for t in cands:
         if t in out:
             continue
+        if is_list_blob_summary(t):
+            continue
         # 页内重复 = 站点模板。必须对「全部候选」生效（含 META 与容器段落）：
         #   · Teck：容器里 2 次的「We are a leading Canadian resource company…」曾被当成摘要；
         #   · 江铜：META 的「江西铜业集团成立于1979年…」正文字段里也重复 2 次 → 同样属公司简介。
@@ -1219,8 +1279,9 @@ def normalize_item(it):
         it['s'] = ''   # 显式清空（否则保留原电头等非内容摘要）
     return it
 
-def prune_items(items, base):
-    """丢导航/模板/重复/超旧（>2 年）条目，并按日期倒序。"""
+def prune_items(items, base, sim_dedup=False, names=None):
+    """丢导航/模板/重复/超旧（>2 年）条目，并按日期倒序。
+    sim_dedup=True（聚合来源）时追加「同事件近似去重」：归一化标题互相包含且长度相近者合并。"""
     keep, seen = [], set()
     for it in items or []:
         t = it.get('t') or ''
@@ -1237,8 +1298,48 @@ def prune_items(items, base):
         if age is not None and age > 730:
             continue
         keep.append(it)
+    if sim_dedup:
+        keep = _sim_dedup(keep, names or [])
     keep.sort(key=lambda x: (x.get('d') == '', x.get('d') or ''), reverse=True)
     return keep
+
+
+def _dedup_norm(t, names=None):
+    """同事件去重键：去栏目前缀 / 公司名 / 括号 / 标点，并去掉无实义的时态助词（拟/将），
+    使「：拟向…增资」≈「：向…增资」这类同稿多标题能归并。仅在聚合来源启用。"""
+    x = clean_ws(t)
+    x = re.sub(r'^【[^】]{0,14}】', '', x)
+    for nm in (names or []):
+        if nm:
+            x = x.replace(nm, '')
+    x = re.sub(r"[\s\u3000:：()（）【】\[\]，,。.、；;！!？?\"'\u2018\u2019\u201c\u201d\-—–|｜/·]+", '', x)
+    return x.replace('拟', '').replace('将', '')
+
+
+def _sim_dedup(rows, names):
+    """聚合来源同事件合并：归一化标题相等 / 互相包含（长度相近）视为同一事件，保留摘要最长者。"""
+    norms, out = [], []
+    for it in rows:
+        n = _dedup_norm(it.get('t') or '', names)
+        dup = False
+        for i, on in enumerate(norms):
+            if not n or not on:
+                continue
+            same = (n == on)
+            if not same and len(n) >= 12 and len(on) >= 12:
+                lo, hi = (n, on) if len(n) <= len(on) else (on, n)
+                if lo in hi and (len(hi) - len(lo)) <= max(6, int(len(hi) * 0.45)):
+                    same = True
+            if same:
+                dup = True
+                if len(clean_ws(it.get('s') or '')) > len(clean_ws(out[i].get('s') or '')):
+                    out[i] = it
+                    norms[i] = n
+                break
+        if not dup:
+            out.append(it)
+            norms.append(n)
+    return out
 
 def _mostly_ascii(s):
     """判断文本是否以 ASCII（英文）为主——用于决定是否译中。"""
@@ -1250,9 +1351,12 @@ def finalize(companies, base, net=True, workers=4, quiet=False):
     """统一收尾：规整 + 清洗 + 摘要（含抓文章页）。net=False 时纯本地。"""
     for c in companies:
         c['rank'] = RANK.get(c.get('name'), c.get('rank', 99))
+        gated = c.get('origin') in GATE_ORIGINS
         for it in (c.get('items') or []):
             normalize_item(it)
-        c['items'] = prune_items(c.get('items') or [], base)
+        c['items'] = prune_items(c.get('items') or [], base,
+                                 sim_dedup=gated, names=company_names(c))
+        gate_company_items(c)   # 2026-09-29：聚合来源归属闸门
     if not net:
         return companies
     from concurrent.futures import ThreadPoolExecutor
@@ -1481,8 +1585,10 @@ SITES = [
     {'name':'中色股份','code':'000758','sector':'海外工程','region':'CN','exchange':'A股','origin':'official',
      'zh':'中色股份','en':'NFC',
      'url':'http://www.nfc.com.cn/','method':'html'},
-    {'name':'广晟有色','code':'600259','sector':'稀土','region':'CN','exchange':'A股','origin':'sina-a',
-     'zh':'广晟有色','en':'Guangdong Rising Nonferrous',
+    # 2026-09-29：600259 由「广晟有色」更名为「中稀有色」，展示名与主键同步改名；旧名保留为 alias，
+    # 归属闸门 / 搜索对新旧名都认（新浪个股页仍按 600259 收录，两名字长期混用）。
+    {'name':'中稀有色','code':'600259','sector':'稀土','region':'CN','exchange':'A股','origin':'sina-a',
+     'zh':'中稀有色','en':'China Rare Nonferrous','alias':['广晟有色'],
      'url':'https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/sh600259.phtml','method':'html'},
     # —— 中资港股（新浪财经港股个股页，gb2312→gbk 解码，中文新闻）——
     {'name':'五矿资源','code':'1208','sector':'铜锌','region':'HK','exchange':'港股','origin':'sina-hk',
@@ -1887,10 +1993,20 @@ def main():
     old = load_old()
     if enrich_only:
         # 只规整 + 抽摘要，绝不重抓列表页（网络差时也不会把已有条目洗掉）
+        # 同步 SITES 元数据（更名 / 别名 / 行业等）：按 code 对齐，使 SITES 里的改名
+        # 自动落到已落库的 company_news.json（否则 --enrich-only 会保留旧名「广晟有色」）。
+        site_by_code = {s.get('code'): s for s in SITES}
+        companies = list(old.values())
+        for c in companies:
+            s = site_by_code.get(c.get('code'))
+            if s:
+                for k in ('name', 'zh', 'en', 'sector', 'region', 'exchange', 'alias'):
+                    if k in s:
+                        c[k] = s[k]
         base = (json.load(open(OUT, encoding='utf-8')).get('updated_at')
                 if os.path.exists(OUT) else time.strftime('%Y-%m-%d'))
         order = {s['name']: i for i, s in enumerate(SITES)}
-        companies = sorted(list(old.values()), key=lambda c: order.get(c.get('name'), 999))
+        companies = sorted(companies, key=lambda c: order.get(c.get('name'), 999))
         finalize(companies, base, net=(not no_net))
         real_total = _write_json(companies)
         print('[enrich-only] %d 家 / %d 条，saved %s' % (len(companies), real_total, OUT))
