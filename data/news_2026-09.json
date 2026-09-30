@@ -1,7 +1,7 @@
 {
   "month": "2026-09",
-  "updated_at": "2026-09-30T12:18:43+08:00",
-  "count": 632,
+  "updated_at": "2026-09-30T18:42:00+08:00",
+  "count": 633,
   "news": [
     {
       "id": "ee3419c35661",
@@ -20,8 +20,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "eb11bffa7ee6",
@@ -40,8 +40,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "ce6d7a9465f9",
@@ -62,8 +62,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "c3dc7fe7776f",
@@ -82,8 +82,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "并购与投资",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "c3cd03729922",
@@ -103,8 +103,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "c1aa93f97832",
@@ -125,8 +125,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "行业动态",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "af7092586811",
@@ -146,8 +146,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "行业动态",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "85727aafa323",
@@ -168,8 +168,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "市场与价格",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "78bd4c8ffe38",
@@ -190,8 +190,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "760f58f430fc",
@@ -211,8 +211,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "72e2668f5eaf",
@@ -232,8 +232,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "2f91d4119513",
@@ -253,8 +253,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "并购与投资",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "264007b3e0aa",
@@ -271,8 +271,8 @@
       "tags": [],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "找矿成果与勘查技术",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "1a940b28fd08",
@@ -292,8 +292,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "行业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "行业动态"
     },
     {
       "id": "157aa9b1f2bb",
@@ -314,8 +314,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "政策与监管",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "政策与监管"
     },
     {
       "id": "0595b1b2dafe",
@@ -336,8 +336,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "找矿成果与勘查技术",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "fdb08d2b318d",
@@ -488,8 +488,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "行业动态",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "b6c76a41d1d7",
@@ -510,8 +510,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "市场与价格",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "b33c23cab4d2",
@@ -599,8 +599,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "79636ba04912",
@@ -619,8 +619,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "并购与投资",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "7922b5bd0359",
@@ -685,8 +685,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "找矿成果与勘查技术",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "59f42e910a5b",
@@ -961,6 +961,24 @@
       "last_seen": "2026-09-30",
       "region": "国内",
       "orig_category": "市场与价格"
+    },
+    {
+      "id": "f087a12ba6e8",
+      "title": "津巴布韦锂矿迎来新投资方：印度 LOHUM 入局",
+      "url": "https://news.metal.com/en/newscontent/104134804-smm-analysis-a-new-variable-in-zimbabwes-lithium-mining",
+      "source": "SMM 国际站",
+      "orig_date": "09-28",
+      "orig_date_full": "2026-09-28",
+      "report_date": "2026-09-30",
+      "category": "并购与投资",
+      "is_new": false,
+      "summary": "SMM 分析指出，印度 LOHUM 公司进入津巴布韦锂矿领域，成为当地锂矿项目的新投资方。文章将其视为津巴布韦锂资源开发格局中正在出现的一个新变量。（原题：[SMM Analysis] Zimbabwe's Lithium Mine Welcomes a New Investor: India's LOHUM Enters the Fray）",
+      "embed": "ok",
+      "tags": [
+        "锂"
+      ],
+      "first_seen": "2026-09-30",
+      "last_seen": "2026-09-30"
     },
     {
       "id": "d8aded98a5f5",
@@ -1290,8 +1308,8 @@
       ],
       "first_seen": "2026-09-30",
       "last_seen": "2026-09-30",
-      "orig_category": "并购与投资",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "并购与投资"
     },
     {
       "id": "7e57390fbcb5",
@@ -1558,7 +1576,7 @@
     {
       "id": "2418b3bdd245",
       "title": "津巴布韦锂矿迎来新投资方：印度 LOHUM 入局",
-      "url": "https://news.metal.com/en/newscontent/104134803-smm-analysis-zimbabwes-lithium-mine-welcomes-a-new-investor-indias-lohum-enters-the-fray",
+      "url": "https://news.metal.com/en/newscontent/104134804-smm-analysis-a-new-variable-in-zimbabwes-lithium-mining",
       "source": "SMM 国际站",
       "orig_date": "09-28",
       "orig_date_full": "2026-09-28",
