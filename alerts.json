@@ -1,16 +1,8 @@
 {
- "date": "2026-09-29",
+ "date": "2026-09-30",
  "has_history": true,
  "history_days": 15,
  "alerts": [
-  {
-   "commodity": "白银",
-   "market": "上金所 Ag(T+D)",
-   "move": "-4.32%",
-   "severity": "medium",
-   "detail": "白银（上金所 Ag(T+D)）最新收报 14,985.00，单日 -4.32%（数据日期 2026-09-28）。",
-   "type": "price"
-  },
   {
    "commodity": "碳酸锂",
    "market": "GFEX 主连",
@@ -20,6 +12,6 @@
    "type": "price"
   }
  ],
- "summary": "今日异动 2 项：白银 -4.32%（上金所 Ag(T+D)）；碳酸锂 -4.32%（GFEX 主连）。",
+ "summary": "今日异动 1 项：碳酸锂 -4.32%（GFEX 主连）。",
  "max_severity": "medium"
 }
