@@ -1,11 +1,11 @@
 {
   "meta": {
     "report_date": "2026-10-01",
-    "generated_at": "2026-10-01T10:40:25+08:00",
-    "total": 496,
+    "generated_at": "2026-10-01T11:22:56+08:00",
+    "total": 495,
     "new_today": 22,
-    "archive": 474,
-    "page_total": 496,
+    "archive": 473,
+    "page_total": 495,
     "page_new_count": 22,
     "sources": [
       "MINING.COM",
@@ -1991,23 +1991,6 @@
         "镍",
         "铝",
         "锂",
-        "国际"
-      ]
-    },
-    {
-      "id": "412e9f19fb56",
-      "title": "印尼将 PT CNI 列为 4016.5 亿印尼盾镍治理案企业嫌疑人",
-      "url": "https://news.metal.com/en/newscontent/104134794-smm-flash-news-indonesia-names-pt-cni-corporate-suspect-in-rp40165-billion-nickel-governance-case",
-      "source": "SMM 国际站",
-      "orig_date": "09-28",
-      "orig_date_full": "2026-09-28",
-      "report_date": "2026-10-01",
-      "category": "政策与监管",
-      "is_new": false,
-      "summary": "SMM 快讯显示，印尼主管部门将 PT CNI 列为一起涉 4016.5 亿印尼盾镍治理案件的企业嫌疑人。该案围绕镍矿治理与合规问题展开，具体指控与后续处理以印尼主管部门公布为准。（原题：[SMM Flash News] Indonesia Names PT CNI Corporate Suspect in Rp401.65 Billion Nickel Governance Case）",
-      "embed": "ok",
-      "tags": [
-        "镍",
         "国际"
       ]
     },

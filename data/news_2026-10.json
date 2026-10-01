@@ -1,6 +1,6 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-01T10:40:25+08:00",
+  "updated_at": "2026-10-01T11:22:56+08:00",
   "count": 8,
   "news": [
     {
@@ -21,8 +21,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "bbc6ef51361c",
@@ -42,8 +42,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "找矿成果与勘查技术",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "ba210a8918f4",
@@ -64,8 +64,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "b65edc1f13b2",
@@ -87,8 +87,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "行业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "行业动态"
     },
     {
       "id": "7d57b539f3c2",
@@ -108,8 +108,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "并购与投资",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "740b0c620942",
@@ -131,8 +131,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "找矿成果与勘查技术",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "70ed391dd7e8",
@@ -151,8 +151,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "5df1c0e32679",
@@ -172,8 +172,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "行业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "行业动态"
     }
   ]
 }

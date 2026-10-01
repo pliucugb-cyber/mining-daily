@@ -1,7 +1,7 @@
 {
   "month": "2026-09",
-  "updated_at": "2026-10-01T10:40:25+08:00",
-  "count": 647,
+  "updated_at": "2026-10-01T11:22:56+08:00",
+  "count": 645,
   "news": [
     {
       "id": "ee3419c35661",
@@ -41,8 +41,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "eb11bffa7ee6",
@@ -82,8 +82,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "并购与投资",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "并购与投资"
     },
     {
       "id": "d5a31af5be3b",
@@ -102,8 +102,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "市场与价格",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "d104b66516bc",
@@ -122,8 +122,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "找矿成果与勘查技术",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "ce6d7a9465f9",
@@ -166,8 +166,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "c3dc7fe7776f",
@@ -229,8 +229,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "c1aa93f97832",
@@ -295,8 +295,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "9a5d36905fc0",
@@ -316,8 +316,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "9979b13072be",
@@ -338,8 +338,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "政策与监管",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "政策与监管"
     },
     {
       "id": "85727aafa323",
@@ -381,8 +381,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "78bd4c8ffe38",
@@ -468,8 +468,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "2f91d4119513",
@@ -528,8 +528,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "1a940b28fd08",
@@ -1076,8 +1076,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "2e5e1cea3f15",
@@ -1206,8 +1206,8 @@
       ],
       "first_seen": "2026-10-01",
       "last_seen": "2026-10-01",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "f89417f2eaec",
@@ -1260,26 +1260,6 @@
       "last_seen": "2026-10-01",
       "region": "国内",
       "orig_category": "市场与价格"
-    },
-    {
-      "id": "f087a12ba6e8",
-      "title": "津巴布韦锂矿迎来新投资方：印度 LOHUM 入局",
-      "url": "https://news.metal.com/en/newscontent/104134804-smm-analysis-a-new-variable-in-zimbabwes-lithium-mining",
-      "source": "SMM 国际站",
-      "orig_date": "09-28",
-      "orig_date_full": "2026-09-28",
-      "report_date": "2026-10-01",
-      "category": "并购与投资",
-      "is_new": false,
-      "summary": "SMM 分析指出，印度 LOHUM 公司进入津巴布韦锂矿领域，成为当地锂矿项目的新投资方。文章将其视为津巴布韦锂资源开发格局中正在出现的一个新变量。（原题：[SMM Analysis] Zimbabwe's Lithium Mine Welcomes a New Investor: India's LOHUM Enters the Fray）",
-      "embed": "ok",
-      "tags": [
-        "锂"
-      ],
-      "first_seen": "2026-09-30",
-      "last_seen": "2026-10-01",
-      "orig_category": "并购与投资",
-      "region": "国际"
     },
     {
       "id": "d8aded98a5f5",
@@ -1786,27 +1766,6 @@
       "last_seen": "2026-10-01",
       "region": "国际",
       "orig_category": "市场与价格"
-    },
-    {
-      "id": "412e9f19fb56",
-      "title": "印尼将 PT CNI 列为 4016.5 亿印尼盾镍治理案企业嫌疑人",
-      "url": "https://news.metal.com/en/newscontent/104134794-smm-flash-news-indonesia-names-pt-cni-corporate-suspect-in-rp40165-billion-nickel-governance-case",
-      "source": "SMM 国际站",
-      "orig_date": "09-28",
-      "orig_date_full": "2026-09-28",
-      "report_date": "2026-10-01",
-      "category": "政策与监管",
-      "is_new": false,
-      "summary": "SMM 快讯显示，印尼主管部门将 PT CNI 列为一起涉 4016.5 亿印尼盾镍治理案件的企业嫌疑人。该案围绕镍矿治理与合规问题展开，具体指控与后续处理以印尼主管部门公布为准。（原题：[SMM Flash News] Indonesia Names PT CNI Corporate Suspect in Rp401.65 Billion Nickel Governance Case）",
-      "embed": "ok",
-      "tags": [
-        "镍",
-        "国际"
-      ],
-      "first_seen": "2026-09-28",
-      "last_seen": "2026-10-01",
-      "region": "国际",
-      "orig_category": "国际矿业动态"
     },
     {
       "id": "3e18643bcf8e",

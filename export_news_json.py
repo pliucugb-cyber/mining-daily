@@ -279,6 +279,19 @@ def merge_into_months(news, data_dir, report_date):
                 e['last_seen'] = report_date
                 added += 1
             store[e['id']] = e
+        # URL 级去重（2026-10-01 新增）：修死链时同一篇文章可能以「旧 id + 新 URL」
+        # 与「新 id + 新 URL」两条并存（同 id 合并挡不住不同 id），导致月库同 URL 重复。
+        # 保留 first_seen 更早者（更早的收录时间才是「首发」）。
+        _by_url = {}
+        for e in store.values():
+            u = e.get('url')
+            prev = _by_url.get(u)
+            if prev is None:
+                _by_url[u] = e
+            elif (e.get('first_seen') or '9999') < (prev.get('first_seen') or '9999'):
+                _by_url[u] = e
+        if len(_by_url) != len(store):
+            store = {e['id']: e for e in _by_url.values()}
         rows = sorted(store.values(),
                       key=lambda x: (x.get('orig_date_full') or '', x.get('id') or ''),
                       reverse=True)
