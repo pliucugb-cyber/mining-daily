@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-09-30",
+ "updated_at": "2026-10-01",
  "companies": [
   {
    "name": "紫金矿业",
@@ -379,7 +379,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -2780,6 +2780,24 @@
    "rank": 99,
    "items": [
     {
+     "t": "力拓确保贝尔湾铝冶炼厂运营至2031年",
+     "d": "2026-09-30",
+     "u": "https://www.mining.com/web/rio-tinto-secures-bell-bay-aluminum-smelter-operations-till-2031/",
+     "s": "全球矿业公司力拓(Rio Tinto) (ASX: RIO)周四表示，已与澳大利亚和塔斯马尼亚政府达成协议，以确保正在进行的歌剧……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Rio Tinto secures Bell Bay aluminum smelter operations till 2031"
+    },
+    {
+     "t": "马达加斯加村民就矿山污染指控向力拓提出索赔",
+     "d": "2026-09-30",
+     "u": "https://www.mining.com/web/madagascar-villagers-file-claim-against-rio-tinto-over-alleged-mine-contamination/",
+     "s": "该公司表示， QMM进行了广泛的水监测，并每年发布结果。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Madagascar villagers file claim against Rio Tinto over alleged mine contamination"
+    },
+    {
      "t": "力拓委托中国首钢钢铁厂进行碳捕集试验",
      "d": "2026-09-28",
      "u": "https://www.mining.com/web/rio-tinto-commissions-carbon-capture-trial-at-chinas-shougang-steel-plant/",
@@ -2895,24 +2913,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Iron ore mine depletion to underpin prices next decade, Rio Tinto says"
-    },
-    {
-     "t": "力拓暗示不急于在停滞期结束时恢复嘉能可交易",
-     "d": "2026-08-04",
-     "u": "https://www.mining.com/web/rio-tinto-signals-no-rush-to-revive-glencore-deal-as-standstill-ends/",
-     "s": "CEO Simon Trott has reassured Australian investors that Rio Tinto has no reason to revisit talks with Glencore.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto signals no rush to revive Glencore deal as standstill ends"
-    },
-    {
-     "t": "力拓首席执行官看到锂需求从电网存储转变",
-     "d": "2026-07-29",
-     "u": "https://www.mining.com/web/rio-tinto-ceo-sees-shift-in-lithium-demand-from-grid-storage/",
-     "s": "Rio Tinto CEO Simon Trott said on Wednesday the miner was seeing a shift in demand for lithium from electrification, with grid storage demand stronger…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto CEO sees shift in lithium demand from grid storage"
     }
    ]
   },
@@ -2932,6 +2932,15 @@
    "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "必和必拓智利Escondida矿的主管拒绝了报价，为罢工铺平了道路",
+     "d": "2026-09-30",
+     "u": "https://www.mining.com/web/supervisors-at-bhps-escondida-mine-in-chile-reject-offer-paving-the-way-for-a-strike/",
+     "s": "根据智利法律，双方现在必须进入强制性的为期五天的政府主导的调解程序，该程序可以通过双方协议延长，以...",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Supervisors at BHP’s Escondida mine in Chile reject offer, paving the way for a strike"
+    },
     {
      "t": "必和必拓智利埃斯孔迪达矿工会在发生致命事故后拒绝暂停合同谈判",
      "d": "2026-09-27",
@@ -3069,8 +3078,8 @@
    "items": [
     {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-09-24",
-     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004682/",
+     "d": "2026-09-30",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004754/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -3212,6 +3221,24 @@
    "rank": 99,
    "items": [
     {
+     "t": "嘉能可、Peabody和Heeney Capital权衡委内瑞拉煤炭交易",
+     "d": "2026-09-30",
+     "u": "https://www.mining.com/web/glencore-peabody-and-heeney-capital-weigh-venezuela-coal-deals-bloomberg-news-reports/",
+     "s": "Glencore （伦敦证券交易所代码： GLEN ）、Peabody Energy （纽约证券交易所代码： BTU ）和投资公司Heeney Capital正在权衡在委内瑞拉生产煤炭的交易。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Glencore, Peabody and Heeney Capital weigh Venezuela coal deals"
+    },
+    {
+     "t": "嘉能可猎人谷煤矿清理至2045年",
+     "d": "2026-09-30",
+     "u": "https://www.mining.com/glencores-hunter-valley-coal-mine-cleared-to-2045/",
+     "s": "嘉能可和Yancoal拥有的合资企业Hunter Valley Operations在2025年生产了超过1400万吨煤炭，雇佣了1500多名工人……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Glencore’s Hunter Valley coal mine cleared to 2045"
+    },
+    {
      "t": "嘉能可定于10月14日在澳大利亚市场首次亮相",
      "d": "2026-09-24",
      "u": "https://www.mining.com/glencore-sets-oct-14-date-for-australian-market-debut/",
@@ -3282,24 +3309,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Suspended Glencore exec told Radiant ‘say nothing on email’"
-    },
-    {
-     "t": "荷兰法警开始拍卖嘉能可的前物流部门Access World ，该公司表示",
-     "d": "2026-09-18",
-     "u": "https://www.mining.com/web/dutch-bailiff-starts-auction-of-glencores-former-logistics-unit-access-world-company-says/",
-     "s": "A Dutch bailiff has launched a public auction of Access World Group Holdings, the logistics and warehousing business previously owned by Glencore (LON…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Dutch bailiff starts auction of Glencore’s former logistics unit Access World, company says"
-    },
-    {
-     "t": "Radiant World表示，当Jefferies调查其交易时，嘉能可提供了帮助",
-     "d": "2026-09-16",
-     "u": "https://www.mining.com/web/radiant-says-glencore-helped-when-jefferies-probed-its-trades/",
-     "s": "In its lawsuit, Radiant World claims that part of the alleged 2021 agreement was that Glencore would help to bring investors and financiers to support…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Radiant World says Glencore helped when Jefferies probed its trades"
     }
    ]
   },
@@ -3490,6 +3499,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 347
+  "items": 348
  }
 }

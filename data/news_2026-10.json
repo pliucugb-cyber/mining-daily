@@ -1,0 +1,179 @@
+{
+  "month": "2026-10",
+  "updated_at": "2026-10-01T10:40:25+08:00",
+  "count": 8,
+  "news": [
+    {
+      "id": "e2cc65f575d3",
+      "title": "美国铜关税交易降温但风险未消",
+      "url": "https://news.metal.com/en/newscontent/104139507-smm-analysis-the-us-copper-tariff-trade-is-fading-but-it-isnt-over-yet",
+      "source": "SMM 国际站",
+      "orig_date": "10-01",
+      "orig_date_full": "2026-10-01",
+      "report_date": "2026-10-01",
+      "category": "市场与价格",
+      "is_new": true,
+      "summary": "SMM 分析称，9 月 29 日午前美国未公布精炼铜关税，COMEX-LME 价差收窄使套利窗口关闭；但 COMEX 库存已由 32 万短吨升至近 77 万短吨，中国社会库存降至 7.83 万吨。（原题：[SMM Analysis] The U.S. Copper Tariff Trade Is Fading — but It Isn’t Over Yet）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "市场"
+      ],
+      "first_seen": "2026-10-01",
+      "last_seen": "2026-10-01",
+      "orig_category": "国际矿业动态",
+      "region": "国际"
+    },
+    {
+      "id": "bbc6ef51361c",
+      "title": "TomaGold 加拿大 Berrigan 深部见 69.40 米锌矿化",
+      "url": "https://news.metal.com/en/newscontent/104143120-smm-flash-newstomagold-reports-6940-metres-grading-194-zinc-at-berrigan-deep",
+      "source": "SMM 国际站",
+      "orig_date": "10-01",
+      "orig_date_full": "2026-10-01",
+      "report_date": "2026-10-01",
+      "category": "技术与勘查",
+      "is_new": true,
+      "summary": "SMM 国际站报道，TomaGold 公布加拿大魁北克 Berrigan 项目二阶段最后三孔结果，TOM-25-012EXT 见矿 69.40 米、品位 1.94% 锌，含 4.20 米 16.49% 锌。（原题：【SMM Flash News】TomaGold Reports 69.40 Metres Grading 1.94% Zinc at Berrigan Deep）",
+      "embed": "ok",
+      "tags": [
+        "锌",
+        "国际"
+      ],
+      "first_seen": "2026-10-01",
+      "last_seen": "2026-10-01",
+      "orig_category": "找矿成果与勘查技术",
+      "region": "国际"
+    },
+    {
+      "id": "ba210a8918f4",
+      "title": "哈萨克斯坦与 Aurubis 探讨铜废料与二次资源加工合作",
+      "url": "https://news.metal.com/en/newscontent/104143102-kazakhstan-and-aurubis-explore-copper-scrap-and-secondary-resource-processing-projects",
+      "source": "SMM 国际站",
+      "orig_date": "10-01",
+      "orig_date_full": "2026-10-01",
+      "report_date": "2026-10-01",
+      "category": "企业经营",
+      "is_new": true,
+      "summary": "SMM 国际站报道，哈萨克斯坦与 Aurubis 探讨铜回收与二次资源加工合作，哈国有 Tau-Ken Samruk 与 Aurubis 正考虑加工铜废料与技术成因矿物，目前仍处讨论阶段。（原题：Kazakhstan and Aurubis Explore Copper Scrap and Secondary Resource Processing Projects）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "技术",
+        "国际"
+      ],
+      "first_seen": "2026-10-01",
+      "last_seen": "2026-10-01",
+      "orig_category": "国际矿业动态",
+      "region": "国际"
+    },
+    {
+      "id": "b65edc1f13b2",
+      "title": "印尼镍铁因碳足迹规则失去欧洲市场准入",
+      "url": "https://news.metal.com/en/newscontent/104143138-smm-nickel-flashindonesia-npi-loses-access-to-european-market-amid-carbon-footprint-rules",
+      "source": "SMM 国际站",
+      "orig_date": "10-01",
+      "orig_date_full": "2026-10-01",
+      "report_date": "2026-10-01",
+      "category": "政策与监管",
+      "is_new": true,
+      "summary": "SMM 国际站援引 Eramet 称，印尼镍铁（NPI）因依赖燃煤自备电、碳排放偏高，在欧盟碳边境调节机制（CBAM）进入实质阶段后已失去欧洲市场准入。（原题：【SMM Nickel Flash】Indonesia NPI Loses Access to European Market Amid Carbon Footprint Rules）",
+      "embed": "ok",
+      "tags": [
+        "镍",
+        "铁",
+        "政策",
+        "国际"
+      ],
+      "first_seen": "2026-10-01",
+      "last_seen": "2026-10-01",
+      "orig_category": "行业动态",
+      "region": "国际"
+    },
+    {
+      "id": "7d57b539f3c2",
+      "title": "Liontown 批准 3.89 亿澳元扩建 Kathleen Valley 锂矿",
+      "url": "https://news.metal.com/en/newscontent/104143106-liontown-makes-final-investment-decision-on-kathleen-valley-lithium-mine-expansion",
+      "source": "SMM 国际站",
+      "orig_date": "10-01",
+      "orig_date_full": "2026-10-01",
+      "report_date": "2026-10-01",
+      "category": "项目与产能",
+      "is_new": true,
+      "summary": "SMM 国际站报道，澳大利亚 Liontown Resources 就 Kathleen Valley 锂矿扩建作出最终投资决定，批准 3.89 亿澳元资本开支，年处理能力将由约 280 万吨提升至 420 万吨。（原题：Liontown Makes Final Investment Decision on Kathleen Valley Lithium Mine Expansion）",
+      "embed": "ok",
+      "tags": [
+        "锂",
+        "国际"
+      ],
+      "first_seen": "2026-10-01",
+      "last_seen": "2026-10-01",
+      "orig_category": "并购与投资",
+      "region": "国际"
+    },
+    {
+      "id": "740b0c620942",
+      "title": "Masivo 墨西哥 Cerro Colorado 首孔见 32.50 米铅锌多金属矿",
+      "url": "https://news.metal.com/en/newscontent/104143124-smm-flash-newsmasivo-intersects-3250-metres-of-lead-zinc-bearing-polymetallic-mineralization-at-cerro-colorado",
+      "source": "SMM 国际站",
+      "orig_date": "10-01",
+      "orig_date_full": "2026-10-01",
+      "report_date": "2026-10-01",
+      "category": "技术与勘查",
+      "is_new": true,
+      "summary": "SMM 国际站报道，Masivo Silver 在墨西哥索诺拉州 Cerro Colorado 首孔 CC-26-001 见矿 32.50 米，平均品位锌 0.271%、铅 0.141%、银 7.0 克/吨。（原题：【SMM Flash News】Masivo Intersects 32.50 Metres of Lead-Zinc-Bearing Polymetallic Mineralization at Cerro Colorado）",
+      "embed": "ok",
+      "tags": [
+        "铅",
+        "锌",
+        "银",
+        "国际"
+      ],
+      "first_seen": "2026-10-01",
+      "last_seen": "2026-10-01",
+      "orig_category": "找矿成果与勘查技术",
+      "region": "国际"
+    },
+    {
+      "id": "70ed391dd7e8",
+      "title": "印度尚未决定取消废金属进口装运前检验",
+      "url": "https://news.metal.com/en/newscontent/104143105-india-has-yet-to-decide-on-scrapping-pre-shipment-inspections-for-metal-scrap-imports",
+      "source": "SMM 国际站",
+      "orig_date": "10-01",
+      "orig_date_full": "2026-10-01",
+      "report_date": "2026-10-01",
+      "category": "政策与监管",
+      "is_new": true,
+      "summary": "SMM 国际站报道，印度对外贸易总局 9 月 30 日称尚未决定取消进口废金属的装运前检验要求，正在评估行业协会提案；印度每年进口约 1300 万吨可回收废金属。（原题：India Has Yet to Decide on Scrapping Pre-Shipment Inspections for Metal Scrap Imports）",
+      "embed": "ok",
+      "tags": [
+        "国际"
+      ],
+      "first_seen": "2026-10-01",
+      "last_seen": "2026-10-01",
+      "orig_category": "国际矿业动态",
+      "region": "国际"
+    },
+    {
+      "id": "5df1c0e32679",
+      "title": "SMM 推出铝 CBAM 计算器",
+      "url": "https://news.metal.com/en/newscontent/104139874-smm-launches-aluminium-cbam-calculator-what-cost-estimates-mean-for-eu-bound-offerssmm-analysis",
+      "source": "SMM 国际站",
+      "orig_date": "10-01",
+      "orig_date_full": "2026-10-01",
+      "report_date": "2026-10-01",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "SMM 推出铝碳边境调节机制（CBAM）计算器，覆盖 58 个 CN 编码与 68 个原产地/默认值类别，整合产品、原产地、排放数据与证书价格，支持对欧出口报价核算。（原题：SMM Launches Aluminium CBAM Calculator: What Cost Estimates Mean for EU-Bound Offers）",
+      "embed": "ok",
+      "tags": [
+        "铝",
+        "市场"
+      ],
+      "first_seen": "2026-10-01",
+      "last_seen": "2026-10-01",
+      "orig_category": "行业动态",
+      "region": "国际"
+    }
+  ]
+}
