@@ -910,6 +910,36 @@ STRIP_TAIL_PAT = re.compile(
     r'|电/?(?:PRNewswire|美通社|新华美通)'
     r'|[-–—]\s*[A-Za-z][A-Za-z\s.]*(?:Resources|Limited|Inc\.?|Corp|Corporation|Company|Ltd|PLC)\b[^。！？；;]{0,6}\(?(?:TSX|NYSE|LSE|ASX|HKEX|SHA|SZSE)\b')
 
+# 新闻稿「电头」残片（2026-10-02 新增）：`地点+日期+电/通社/--` 开头，如
+# 「北卡罗来纳州夏洛特2026年10月1日电/美通社/-- Albemarle Corporation…」→ 纯电头非内容摘要。
+# 结尾无空格粘连（`夏洛特2026年10月1日电/美通社`）使 STRIP_TAIL_PAT 的 `(?:^|\s)` 断言失配 → 漏网。
+PR_DATELINE_LEAD = re.compile(
+    r'^[\s\u3000]*(?:[^，。；;]{0,30}?)\d{4}\s*年\s*\d{1,2}\s*月\s*\d{1,2}\s*日\s*'
+    r'(?:电|讯)?\s*[/／]?\s*(?:美通社|PRNewswire|新华美通)\s*[/／]?\s*-{1,2}\s*', re.I)
+# 串中 `/美通社/--` 残片（前无「日期电」，如「Bartolomeo…董事会成员/美通社/-- Albemarle」）
+PR_WIRE_INLINE = re.compile(r'[/／]\s*(?:美通社|PRNewswire|新华美通)\s*[/／]?\s*-{0,2}\s*', re.I)
+# 交易所代码括注残片（电头后半段），如「（ TSX ， NYSE ： AEM ）」「(NYSE: ALB)」→ 去括号内交易所串
+# 允许「(交易所: 代码)」形式（NYSE: ALB / TSX: ABX）；代码为 1~6 位字母数字点号。
+EXCH_PAREN = re.compile(
+    r'[（(]\s*(?:(?:TSX|NYSE|LSE|ASX|TSE|HKEX|SZSE|SHA|NASDAQ|多伦多证券交易所|纽约证券交易所)'
+    r'\s*[，,：:、/]?\s*)+[A-Za-z0-9.\-]{0,6}\s*[）)]', re.I)
+
+
+def sanitize_summary_residue(s):
+    """剥新闻稿电头残片（2026-10-02）：开头「地点+日期+电/通社/--」、串中 `/通社/--`、
+    交易所代码括注。返回清洗后字符串（可能为空 → 由调用方决定丢弃/占位）。"""
+    if not s:
+        return s
+    x = clean_ws(s)
+    x = PR_DATELINE_LEAD.sub('', x)
+    x = PR_WIRE_INLINE.sub(' ', x)
+    x = EXCH_PAREN.sub(' ', x)
+    x = re.sub(r'\s{2,}', ' ', x).strip()
+    # 截断残尾（2026-10-02）：`， （ NYSE…` 这类截断遗留的「逗号 + 未闭合括号」清掉
+    x = re.sub(r'[，,]\s*[（(][^）)]{0,20}(?:…|\.\.\.)?\s*$', '', x).strip()
+    return x
+
+
 # 列表页 / 侧栏污染（2026-09-29 新增）：新浪文章页的「相关新闻 / 个股新闻」侧栏是一串标题列表，
 # 形如「2026-09-28 15:05 某某跌7.89%… 2026-09-28 14:45 每日全球并购…」，会被 pick_lead 误当摘要
 # （用户 2026-09-29 截图：灰色小字是别的标题）。摘要里出现 ≥2 个「YYYY-MM-DD HH:MM」即判为列表 blob。
@@ -1269,8 +1299,10 @@ def normalize_item(it):
     s = clean_ws(it.get('s') or '')
     if s:
         s = STRIP_TAIL_PAT.split(s)[0].strip()   # 剥末尾「日期/美通社/--公司(NYSE)」等电头残片
+        s = sanitize_summary_residue(s)          # 剥开头/串中「地点+日期+电/通社/--」与交易所括注残片
     if not s and len(body) >= 30:
         s = trim_summary(body)
+        s = sanitize_summary_residue(s)
     if s and is_boilerplate_summary(s):   # 电头/征集代理/网播链接等非内容文本，清掉让 finalize 重抓
         s = ''
     if s:
@@ -1928,6 +1960,10 @@ def collect(site, old, force):
         prev = (old or {}).get(name) or {}
         pitems = prev.get('items') or []
         if pitems:
+            # 复用旧条目时也要过一遍摘要清洗（2026-10-02）：旧库可能含历史遗留的电头残片
+            # （如 Albemarle「…2026年10月1日电/美通社/--」），直接复制会让脏摘要沉淀到当日窗口顶部。
+            pitems = [dict(it, s=sanitize_summary_residue(it.get('s') or ''))
+                      if it.get('s') else it for it in pitems]
             items, stale, reuse = pitems, True, True
     return {
         'name': name, 'code': site['code'], 'sector': site['sector'],

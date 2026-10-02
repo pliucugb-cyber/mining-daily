@@ -1,7 +1,7 @@
 {
- "date": "2026-10-01",
+ "date": "2026-10-02",
  "has_history": true,
- "history_days": 15,
+ "history_days": 14,
  "alerts": [],
  "summary": "15 个品种单日涨跌幅均未超过 3%，无显著异动。",
  "max_severity": "none"
