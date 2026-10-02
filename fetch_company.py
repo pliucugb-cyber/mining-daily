@@ -1986,6 +1986,19 @@ def _full_roster(companies, old):
     return out
 
 def _write_json(companies):
+    # 统一兜底清洗（2026-10-03）：`s`/`t` 是 finalize() 之后才填进来的，
+    # 任何早于 finalize 的清洗都是空操作 → 残片（Agnico/Barrick 的「（ TSX ： AEM ）」、
+    # Albemarle 的「…2026年10月1日电/美通社/--」）会重新回到默认视图前 60 条，
+    # 打挂 test_company_section 的模板残片断言。放在唯一落盘口，增量快照与最终写盘一并覆盖。
+    for _c in companies:
+        _fix = []
+        for _it in (_c.get('items') or []):
+            if _it.get('s'):
+                _it = dict(_it, s=sanitize_summary_residue(_it['s']))
+            if _it.get('t'):
+                _it = dict(_it, t=sanitize_summary_residue(_it['t']))
+            _fix.append(_it)
+        _c['items'] = _fix
     domestic = [c for c in companies if c['region'] == 'CN']
     hk = [c for c in companies if c['region'] == 'HK']
     foreign = [c for c in companies if c['region'] == 'NA']
