@@ -1,6 +1,6 @@
 {
-  "date": "2026-10-03",
-  "updated": "2026-10-03 06:00:41",
+  "date": "2026-10-04",
+  "updated": "2026-10-04 06:01:18",
   "source": "东方财富国际期货（LME 主力 03 合约）",
   "currency": "USD",
   "unit": "metric tonne",
@@ -10,67 +10,60 @@
       "zh": "LME 铜",
       "code": "LCPT",
       "name": "综合铜03",
-      "price": 14244.5,
-      "chg": -44.5,
-      "chg_pct": -0.31,
-      "prev": 14289.0,
-      "asof": "2026-10-02"
+      "price": 14266.5,
+      "chg": 23.0,
+      "chg_pct": 0.16,
+      "prev": 14243.5
     },
     {
       "slug": "lalt",
       "zh": "LME 铝",
       "code": "LALT",
       "name": "综合铝03",
-      "price": 3248.0,
-      "chg": -29.5,
-      "chg_pct": -0.9,
-      "prev": 3277.5,
-      "asof": "2026-09-28"
+      "price": 3098.5,
+      "chg": -24.5,
+      "chg_pct": -0.78,
+      "prev": 3123.0
     },
     {
       "slug": "lznt",
       "zh": "LME 锌",
       "code": "LZNT",
       "name": "综合锌03",
-      "price": 3851.0,
-      "chg": -42.5,
-      "chg_pct": -1.09,
-      "prev": 3893.5,
-      "asof": "2026-09-28"
+      "price": 3701.5,
+      "chg": -22.5,
+      "chg_pct": -0.6,
+      "prev": 3724.0
     },
     {
       "slug": "lldt",
       "zh": "LME 铅",
       "code": "LLDT",
       "name": "综合铅03",
-      "price": 1904.5,
-      "chg": -25.5,
-      "chg_pct": -1.32,
-      "prev": 1930.0,
-      "asof": "2026-09-28"
+      "price": 1853.5,
+      "chg": -3.5,
+      "chg_pct": -0.19,
+      "prev": 1857.0
     },
     {
       "slug": "lnkt",
       "zh": "LME 镍",
       "code": "LNKT",
       "name": "综合镍03",
-      "price": 16165.0,
-      "chg": -220.0,
-      "chg_pct": -1.34,
-      "prev": 16385.0,
-      "asof": "2026-09-28"
+      "price": 15530.0,
+      "chg": -104.0,
+      "chg_pct": -0.67,
+      "prev": 15634.0
     },
     {
       "slug": "ltnt",
       "zh": "LME 锡",
       "code": "LTNT",
       "name": "综合锡03",
-      "price": 53510.0,
-      "chg": -1040.0,
-      "chg_pct": -1.91,
-      "prev": 54550.0,
-      "asof": "2026-09-28"
+      "price": 53980.0,
+      "chg": -352.0,
+      "chg_pct": -0.65,
+      "prev": 54332.0
     }
-  ],
-  "note": "LME 当日尚未收盘，价格卡沿用最近已收盘交易日（2026-10-02）收盘价"
+  ]
 }

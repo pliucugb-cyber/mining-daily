@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-03",
+ "updated_at": "2026-10-04",
  "companies": [
   {
    "name": "紫金矿业",
@@ -372,7 +372,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "chrome",
+   "method": "html",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -943,7 +943,7 @@
      "t": "智汇天齐 共赢锂程 | 第五届天齐锂业创新季正式启动 查看详情 ",
      "d": "2026-08-24",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1104",
-     "s": "",
+     "s": "领航高质量发展 | 天齐锂业荣获香港董事学会“2023年度杰出董事奖” 和 “2023年度杰出董事会奖”",
      "k": "news"
     },
     {
@@ -2430,14 +2430,14 @@
     },
     {
      "t": "竣工投产 逐光启航！中矿卡通巴选矿厂正式投产运营",
-     "d": "",
+     "d": "2026-09-22",
      "u": "http://www.sinomine.cn/xwdti/426.html",
      "s": "2026年9月21日，中矿卡通巴矿业有限公司（以下简称“卡通巴矿业”）选矿厂完成建设期各项工作任务，正式进入生产运营阶段。",
      "k": "news"
     },
     {
      "t": "擘画非洲新蓝图 开启协同新征程",
-     "d": "",
+     "d": "2026-09-20",
      "u": "http://www.sinomine.cn/xwdti/424.html",
      "s": "作为中南非中心“赋能服务、深化协同”职能的首次重要实践，仪式上举行了首批配套企业战略合作签约仪式。王治伟总经理代表中南非中心与五家服务型企业签署战略合作协议。通过构建上下游配套企业集群，一个资源共享、优势互补的产业生态圈正加快形成，集团在非业务领域正式开启区域协同化、系统化布局。",
      "k": "news"
@@ -3230,6 +3230,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "嘉能可表示，今年的交易利润将超过50 $",
+     "d": "2026-10-02",
+     "u": "https://www.mining.com/web/glencore-says-trading-profits-will-top-5-billion-this-year/",
+     "s": "嘉能可公司预计其大宗商品交易利润今年将超过50 $ ，使其有望实现其历史上最好的成绩之一。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Glencore says trading profits will top $5 billion this year"
+    },
+    {
      "t": "嘉能可、Peabody和Heeney Capital权衡委内瑞拉煤炭交易",
      "d": "2026-09-30",
      "u": "https://www.mining.com/web/glencore-peabody-and-heeney-capital-weigh-venezuela-coal-deals-bloomberg-news-reports/",
@@ -3309,15 +3318,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Inside Jefferies’ months-long tussle with Glencore over Radiant"
-    },
-    {
-     "t": "被停职的嘉能可高管告诉Radiant “在电子邮件中一言不发”",
-     "d": "2026-09-18",
-     "u": "https://www.mining.com/web/suspended-glencore-exec-told-radiant-say-nothing-on-email/",
-     "s": "In other messages dating from 2023 to 2025 he highlighted Glencore’s role as an important backer of the Radiant World, Bloomberg reports.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Suspended Glencore exec told Radiant ‘say nothing on email’"
     }
    ]
   },
