@@ -38,6 +38,9 @@ import argparse
 # ---------- 1. 数字提取 ----------
 # 数值：可选货币符号 + 阿拉伯数字（允许千分位逗号、小数）
 # 单位：已知单位词表「最长匹配」，避免 "公里" 被拆成 "公"+"里"、或 "公告" 的"公"被误吞
+# 2026-10-05 修正：单位前允许一个连字符（hyphen/minus – en – em —），识别英文 "数字-单位" 写法
+#   （如 "$600-million" / "1.4-billion"），否则只提出裸数 → 摘要里的正确意译被判「未落地」（假 dropped）。
+#   注意：\s*[-–—]?\s* 仅影响「数字紧邻连字符+单位」的附着，不改动无连字符的正常匹配与日期判定。
 _UNIT_LIST = [
     '万亿美元', '亿美元', '万美元', '美元/吨', '美元', '元/吨', '元/克', '元/千克', '克/吨',
     '万吨/年', '万吨', '吨', '千克', '公斤', '克', '公里', '千米', '万盎司', '盎司', '米', '吨/年',
@@ -46,7 +49,7 @@ _UNIT_LIST = [
     'Trillion', 'trillion', 'Billion', 'billion', 'Million', 'million', 'B', 'M', 'm',
 ]
 _UNIT_ALT = '|'.join(sorted(set(_UNIT_LIST), key=len, reverse=True))
-_NUM_RE = re.compile(r'([$£€]?\d[\d,]*(?:\.\d+)?)\s*(%s)?' % _UNIT_ALT)
+_NUM_RE = re.compile(r'([$£€]?\d[\d,]*(?:\.\d+)?)\s*[-–—]?\s*(%s)?' % _UNIT_ALT)
 
 
 def extract_numbers(text):
