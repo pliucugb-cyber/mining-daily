@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-05",
+ "updated_at": "2026-10-06",
  "companies": [
   {
    "name": "紫金矿业",
@@ -372,7 +372,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -1658,6 +1658,15 @@
    "rank": 27,
    "items": [
     {
+     "t": "Barrick在坦桑尼亚获得15年北马拉采矿许可证",
+     "d": "2026-10-05",
+     "u": "https://www.mining.com/barrick-secures-15-year-north-mara-mining-licences-in-tanzania/",
+     "s": "北马拉是多多马西北约540公里和肯尼亚边境以南20公里的露天和地下综合作业。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Barrick secures 15-year North Mara mining licences in Tanzania"
+    },
+    {
      "t": "Barrick Mining标志着北美IPO的潜在延迟",
      "d": "2026-09-29",
      "u": "https://www.mining.com/web/barrick-mining-flags-potential-delay-for-north-american-ipo/",
@@ -1791,15 +1800,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Barrick, Newmont settle dispute with $1.95B deal"
-    },
-    {
-     "t": "Barrick和Newmont就内华达金矿合资企业达成协议| B股票新闻",
-     "d": "2026-08-10",
-     "u": "https://www.stocktitan.net/news/B/barrick-and-newmont-reach-agreement-regarding-nevada-gold-mines-bih4gdv3o1ek.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Barrick and Newmont Reach Agreement Regarding Nevada Gold Mines Joint Venture | B Stock News"
     }
    ]
   },
@@ -2189,6 +2189,15 @@
    "rank": 29,
    "items": [
     {
+     "t": "锑市场面临11月27日中国出口管制截止日期| AEM股票新闻",
+     "d": "2026-10-05",
+     "u": "https://www.stocktitan.net/news/AEM/antimony-market-faces-a-nov-27-export-control-deadline-from-b3yjbydljmq1.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Antimony Market Faces a Nov. 27 Export-Control Deadline from China | AEM Stock News"
+    },
+    {
      "t": "SEC 6-K（外资发行人报告）",
      "d": "2026-09-29",
      "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926111750/",
@@ -2259,15 +2268,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Agnico Eagle keeps 2026 target despite 370,000-ounce loss"
-    },
-    {
-     "t": "AGNICO Eagle报告2026年第二季度业绩-创纪录的季度自由现金流反映了稳健的运营业绩；",
-     "d": "2026-07-29",
-     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-reports-second-quarter-2026-results-record-quarterly-85mw5jmf8iz0.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "AGNICO EAGLE REPORTS SECOND QUARTER 2026 RESULTS - RECORD QUARTERLY FREE CASH FLOW REFLECTS SOLID OPERATIONAL PERFORMANCE; RECORD QUARTERLY SHAREHOLDER RETURNS | AEM Stock News"
     },
     {
      "t": "Agnico Eagle暂停魁北克矿坑开采，旗帜生产受到打击",
@@ -2782,6 +2782,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "Rio Tinto ，创始人工厂支持五家采矿初创公司",
+     "d": "2026-10-05",
+     "u": "https://www.mining.com/rio-tinto-founders-factory-back-five-mining-startups/",
+     "s": "力拓（ ASX ， LON ： RIO ）和Founders Factory将通过其采矿技术加速器计划投资于五家采矿初创公司，以支持早期...",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Rio Tinto, Founders Factory back five mining startups"
+    },
+    {
      "t": "SEC 6-K（外资发行人报告）",
      "d": "2026-10-01",
      "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000039/",
@@ -2906,15 +2915,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "CMRG tells some steel mills to halt talks with Rio Tinto, sources say"
-    },
-    {
-     "t": "力拓表示，铁矿石矿山的枯竭将支撑未来十年的价格",
-     "d": "2026-08-05",
-     "u": "https://www.mining.com/web/depletion-of-iron-ore-mines-will-underpin-next-decades-prices-rio-tinto-executive-says/",
-     "s": "Iron ore mine depletion is set to strengthen the market prices in the next decade, according to a Rio Tinto executive.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Iron ore mine depletion to underpin prices next decade, Rio Tinto says"
     }
    ]
   },
@@ -2956,7 +2956,7 @@
      "t": "必和必拓的Escondida重启缓解铜市场紧张",
      "d": "2026-09-25",
      "u": "https://www.mining.com/bhps-escondida-restart-eases-tight-copper-market/",
-     "s": "BHP’s Escondida in Chile, the world’s largest copper mine, is gradually resuming operations after a fatal accident halted activity just as …",
+     "s": "矿山停产、中国库存低迷和即将到来的假期暂停使铜市场几乎没有供应中断的空间。",
      "k": "news",
      "src": "mining",
      "t_en": "BHP’s Escondida restart eases tight copper market"
