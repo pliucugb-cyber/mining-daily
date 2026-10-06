@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-06",
+ "updated_at": "2026-10-07",
  "companies": [
   {
    "name": "紫金矿业",
@@ -372,7 +372,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "chrome",
+   "method": "html",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -890,7 +890,7 @@
      "t": "002155，发布最新公告，涉及重大资产重组！猪价连涨4周，上市猪企8月销量环比回暖",
      "d": "2026-09-09",
      "u": "https://finance.sina.com.cn/stock/zqgd/2026-09-09/doc-inirfums3608064.shtml",
-     "s": "2026-09-09 19:31 湖南黄金，重大资产重组获批！今日股价涨停",
+     "s": "自今年7月反弹以来，猪价整体呈回升态势。湖南黄金：重大资产重组获得湖南省国资委批复湖南黄金（002155）今日（9月9日）发布公告称，当日，公司收到控股股东湖南省矿产资源集团有限责任公司转发的湖南省国资委的批复，原则同意公司通过发行股份的方...",
      "k": "news"
     }
    ]
@@ -3331,6 +3331,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "英美矿业合资企业Codelco重组团队",
+     "d": "2026-10-06",
+     "u": "https://www.mining.com/web/codelco-restructures-team-for-anglo-american-mine-jv-document-says/",
+     "s": "两家公司于6月下旬达成最终协议，共同运营这些矿床，目标是平均增加约12万吨...",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Codelco restructures team for Anglo American mine JV"
+    },
+    {
      "t": "消息人士称，中国国有铁矿石买家与英美资源集团达成供应协议",
      "d": "2026-08-14",
      "u": "https://www.mining.com/web/china-state-iron-ore-buyer-has-supply-deal-with-anglo-american-sources-say/",
@@ -3401,15 +3410,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Chile antitrust watchdog approves Codelco-Anglo American mining plan"
-    },
-    {
-     "t": "英美资源集团将于6月从瑞士交易所退市",
-     "d": "2026-03-23",
-     "u": "https://www.mining.com/web/anglo-american-to-delist-from-swiss-exchange-in-june/",
-     "s": "Anglo plans to maintain its primary London listing and secondary listings in Johannesburg, Toronto, and New York.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Anglo American to delist from Swiss Exchange in June"
     }
    ]
   },
