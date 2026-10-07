@@ -534,9 +534,15 @@ setTimeout(() => {
     // 改为数据无关的结构断言：每条卡片必含 摘要 / 占位 / 折叠 之一（不允许空白卡片）。
     const cards14 = document.querySelectorAll('#companyList .co-item');
     const blank14 = Array.from(cards14).filter(c =>
-      !c.querySelector('.co-summary') && !c.querySelector('.co-summary-empty') && !c.querySelector('.co-exp'));
+      !c.querySelector('.co-summary') && !c.querySelector('.co-summary-empty') && !c.querySelector('.co-exp')
+      && !c.querySelector('.co-reg-title'));   // 2026-10-07：SEC 备案紧凑行（.co-item-reg）自带标题+公司名+日期，非空白
     check('每条卡片都有摘要/占位/折叠之一（无空白卡片；.co-summary-empty 仍为缺摘要时的诚实占位）',
           blank14.length === 0, 'blank=' + blank14.length);
+    // 2026-10-07 正向：SEC 备案占位（k=reg 且零摘要）渲染为紧凑行 .co-item-reg，不占整卡（去掉空摘要占位与已读按钮）
+    const regRows = Array.from(document.querySelectorAll('#companyList .co-item-reg'));
+    check('SEC 备案占位渲染为紧凑行（.co-item-reg 每条含标题+公司名）',
+          regRows.every(el => el.querySelector('.co-reg-title') && el.querySelector('.co-reg-co')),
+          'regRows=' + regRows.length);
 
     // ---------- 15) P1/P2 优化回归（2026-09-26）：未读筛选 / 关注置顶 / 矿种标签 / sticky ----------
     // P2 矿种标签：2026-09-26 用户拍板「删掉」—— 卡片不再渲染矿种标签（回归 v5 ② 去矿种维度契约）

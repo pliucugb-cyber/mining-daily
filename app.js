@@ -7348,6 +7348,18 @@ function toggleTheme(){
     // 仍是稳定键）；已读条目整体弱化，且只显示「标为未读」。
     var isRead=coReadHas(primary);
     var isReg=(it.k==='reg');
+    // 2026-10-07：SEC 备案占位（k=reg 且零摘要）压成单行 —— 不再占整卡，去掉空摘要占位与已读按钮。
+    // 依据：8-K/10-Q/6-K 这类条目「标题即表单名 + 零摘要 + 只指向 EDGAR」，整卡渲染等于纯占版面。
+    // 保留「该公司近有 SEC 备案」的信号，去掉视觉噪音。
+    if(isReg && !(it.s||'').trim()){
+      return '<div class="co-item co-item-reg'+(isRead?' read':'')+'" data-url="'+esc(primary)+'">'+
+        '<div class="co-reg-row"><span class="co-dot"></span>'+
+        '<a class="co-reg-title" href="'+esc(primary)+'" target="_blank" rel="noopener noreferrer" title="查看 SEC 原文">'+
+          esc(tb.head||'(无标题)')+'</a>'+
+        '<button type="button" class="co-src co-reg-co" data-name="'+esc(it.name)+'">'+esc(coDisplayName(it))+'</button>'+
+        '<span class="co-reg-date">'+esc(it.d||'')+'</span>'+
+        '<span class="co-src-tag co-src-reg">监管披露</span>'+ex+'</div></div>';
+    }
     var srcTag=isReg
       ? '<span class="co-src-tag co-src-reg">监管披露</span>'
       : (it.src?('<span class="co-src-tag co-src-'+esc(it.src)+'">'+esc(srcLabel(it.src))+'</span>'):'');
