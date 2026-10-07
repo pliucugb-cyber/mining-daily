@@ -2866,6 +2866,21 @@ body.dark .co-dot{background:#818cf8}
 .co-src-tag{font-style:normal;color:#0f766e;border:1px solid #99f6e4;background:#ccfbf1;border-radius:999px;padding:0 var(--s2);font-size:var(--fs-caption);font-weight:600}
 /* 2026-09-27：监管披露（SEC/公告类）专用徽标 —— 与「股票新闻/矿业媒体」区分，明确非公司动态新闻 */
 .co-src-reg{color:#b45309;border-color:#fcd34d;background:#fef3c7}
+/* ==== 2026-10-07 SEC 备案占位压成单行 ====
+   依据：8-K/10-Q/6-K 这类 k=reg 且零摘要的条目，标题即表单名、只指向 EDGAR；
+   整卡渲染等于占版面（原 .co-item 每条 contain-intrinsic-size 120px），故改单行紧凑样式，
+   保留「该公司有 SEC 备案」信号，去掉空摘要占位与已读按钮的噪音。 */
+.co-item-reg{padding:5px var(--s5);min-height:0;contain-intrinsic-size:auto 34px}
+.co-item-reg:hover{background:var(--surface-2)}
+.co-reg-row{display:flex;align-items:center;gap:var(--s2);min-width:0;flex-wrap:wrap}
+.co-reg-row .co-dot{margin-top:0;width:5px;height:5px}
+.co-reg-title{font-size:var(--fs-meta);color:var(--ink-700);text-decoration:none;font-weight:600;min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.co-reg-title:hover{color:#4f46e5;text-decoration:underline}
+.co-reg-co{font-size:var(--fs-caption)}
+.co-reg-date{font-size:var(--fs-caption);color:var(--ink-400)}
+.co-item-reg.read .co-reg-title{color:var(--ink-300);font-weight:var(--fw-regular)}
+body.dark .co-reg-title{color:var(--ink-300)}
+body.dark .co-reg-date{color:var(--ink-400)}
 /* 正文默认 2 行折叠，点「展开全文」看完整内容 */
 .co-body{margin:2px 0 0 14px;font-size:calc(var(--fs-body) - 1px);color:var(--ink-500);line-height:1.62;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
@@ -2949,6 +2964,7 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
 @media(max-width:768px){
   .co-feed-head{padding:var(--s2) var(--s4)}
   .co-item{padding:var(--s3) var(--s4)}
+  .co-item-reg{padding:4px var(--s4)}
   .co-day-h{padding:6px var(--s4)}
   /* 2026-09-27 修复：日期分组表头原 sticky top:0（z-index:1），滚动时滑进手机吸顶栏
      #mdTop（sticky、z-index:230、高 --md-top-h）下方被整块遮住 —— 表头看起来"消失"。
@@ -3055,7 +3071,7 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
 <script src="news-data.js?v=c32931cd" defer></script>
 <script src="lme-data.js?v=ba4e80ec" defer></script>
 <script src="price-history.js?v=06326616" defer></script>
-<script src="app.js?v=caa81512" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=6e12fb60" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
