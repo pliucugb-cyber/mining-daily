@@ -1,7 +1,7 @@
 {
  "month": "2026-10",
- "updated_at": "2026-10-09T00:15:24+08:00",
- "count": 106,
+ "updated_at": "2026-10-09T09:54:20+08:00",
+ "count": 107,
  "news": [
   {
    "id": "f18bd621a7ea",
@@ -24,8 +24,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "国际矿业动态",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "国际矿业动态"
   },
   {
    "id": "ec0d28515fee",
@@ -46,8 +46,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "行业动态",
-   "region": "国内"
+   "region": "国内",
+   "orig_category": "行业动态"
   },
   {
    "id": "e8671f018860",
@@ -74,8 +74,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "找矿成果与勘查技术",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "找矿成果与勘查技术"
   },
   {
    "id": "b10695b5e5fc",
@@ -95,8 +95,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "行业动态",
-   "region": "国内"
+   "region": "国内",
+   "orig_category": "行业动态"
   },
   {
    "id": "943729a12c02",
@@ -117,8 +117,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "政策与监管",
-   "region": "国内"
+   "region": "国内",
+   "orig_category": "政策与监管"
   },
   {
    "id": "8cdb8d2245da",
@@ -139,8 +139,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "国际矿业动态",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "国际矿业动态"
   },
   {
    "id": "817d1d3b242b",
@@ -161,8 +161,28 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "行业动态",
-   "region": "国内"
+   "region": "国内",
+   "orig_category": "行业动态"
+  },
+  {
+   "id": "6f6b782737a2",
+   "title": "关于子公司收购沙金河金矿探矿权的进展公告",
+   "url": "https://static.cninfo.com.cn/finalpage/2026-10-08/1225589910.PDF",
+   "source": "巨潮资讯网·盛达资源",
+   "orig_date": "10-08",
+   "orig_date_full": "2026-10-08",
+   "report_date": "2026-10-08",
+   "category": "并购与投资",
+   "is_new": true,
+   "summary": "盛达资源（000603）披露《关于子公司收购沙金河金矿探矿权的进展公告》，涉及矿业权交易。",
+   "embed": "ok",
+   "tags": [
+    "金",
+    "政策",
+    "矿权"
+   ],
+   "first_seen": "2026-10-08",
+   "last_seen": "2026-10-08"
   },
   {
    "id": "6ed676463176",
@@ -187,8 +207,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "市场与价格",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "市场与价格"
   },
   {
    "id": "665b35cf078b",
@@ -208,8 +228,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "国际矿业动态",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "国际矿业动态"
   },
   {
    "id": "5d8385f38896",
@@ -229,8 +249,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "政策与监管",
-   "region": "国内"
+   "region": "国内",
+   "orig_category": "政策与监管"
   },
   {
    "id": "300e97db8e04",
@@ -260,8 +280,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "市场与价格",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "市场与价格"
   },
   {
    "id": "1b29487fa605",
@@ -284,8 +304,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "并购与投资",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "并购与投资"
   },
   {
    "id": "008d1023ee67",
@@ -305,8 +325,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "找矿成果与勘查技术",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "找矿成果与勘查技术"
   },
   {
    "id": "de88a7538e7d",
@@ -325,8 +345,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "市场与价格",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "市场与价格"
   },
   {
    "id": "9930a32b443b",
@@ -346,8 +366,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "并购与投资",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "并购与投资"
   },
   {
    "id": "7ad66079fbec",
@@ -366,8 +386,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "并购与投资",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "并购与投资"
   },
   {
    "id": "3ef54977c313",
@@ -390,8 +410,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "找矿成果与勘查技术",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "找矿成果与勘查技术"
   },
   {
    "id": "37898e9368ab",
@@ -410,8 +430,8 @@
    ],
    "first_seen": "2026-10-08",
    "last_seen": "2026-10-08",
-   "orig_category": "国际矿业动态",
-   "region": "国际"
+   "region": "国际",
+   "orig_category": "国际矿业动态"
   },
   {
    "id": "f58a368bcd16",

@@ -115,6 +115,11 @@ SKIP_PATTERNS = [
     re.compile(r"pliucugb-cyber\.github\.io", re.I),
     re.compile(r"api\.deepseek\.com", re.I),
     re.compile(r"mining-daily-qa\.netlify\.app", re.I),
+    # 2026-10-09 补：推广阶段0（2026-10-07 引入）的两个埋点 URL。
+    # 它们出现在 index.html 的 <script src> 与注释里，不是新闻来源；
+    # 缺失会让 --check-file --fail-on-error 报 BLOCKED 2 条（实测 rc=1）。
+    re.compile(r"static\.cloudflareinsights\.com", re.I),  # Cloudflare Web Analytics 信标
+    re.compile(r"gc\.zgo\.at|goatcounter\.com", re.I),     # GoatCounter（含 YOURCODE 占位符）
 ]
 
 

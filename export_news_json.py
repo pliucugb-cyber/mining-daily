@@ -336,7 +336,7 @@ def write_index(data_dir):
                    'total': sum(m['count'] for m in months),
                    'months': months}, f, ensure_ascii=False, indent=2)
 
-def write_news_data_js(data_dir, out_path):
+def write_news_data_js(data_dir, out_path, report_date=''):
     """生成前端问答检索条的数据源 news-data.js（window.NEWS_DATA）
 
     用短字段名压体积（d/t/s/u/g/c/m），因为要随日报一起进浏览器。
@@ -419,7 +419,13 @@ def write_news_data_js(data_dir, out_path):
         'm': (r.get('summary', '') or '')[:160],   # 2026-09-13：放宽到 160，矿权登记摘要含「许可证号/权利人/面积/有效期/发证机关」须完整进入前端解析
         'n': r.get('first_seen', ''),   # 收录日期（今日要闻条用 n==report_date 识别当日新增）
     } for r in rows]
-    payload = {'updated': datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),
+    # 2026-10-09 修：updated 原用 datetime.now()（wall clock），但 app.js 的 refDate() 拿它当
+    # 「今天」的基准，用于矿权专区的 14 日窗口过滤与紧迫度评分。若 export 跑在次日凌晨
+    # （本轮实测 10-09 00:15 产出 10-08 报），updated 会比报告日超前 1 天 → 窗口整体右移，
+    # 把恰好卡在边界的含截止期条目挤出 → 首屏 8 行全无 .rr-due（test_smoke ⑨ 段 FAIL）。
+    # 改为锚定报告日 06:10（与历史 20 天口径一致），彻底与时点解耦。
+    _upd = (report_date + ' 06:10') if report_date else datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+    payload = {'updated': _upd,
                'schema': '1.2-slim', 'total': len(slim), 'news': slim}
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write('window.NEWS_DATA='
@@ -518,7 +524,7 @@ def main():
         log.info('    %s  +%d  ~%d  =%d', month, s['added'], s['updated'], s['total'])
     # 前端问答检索条数据源（页面加载不到时自动降级为 DOM 提取，失败不阻塞）
     try:
-        n, size = write_news_data_js(DATA_DIR, NEWS_DATA_JS)
+        n, size = write_news_data_js(DATA_DIR, NEWS_DATA_JS, report_date)
         log.info('[frontend] %s', NEWS_DATA_JS)
         log.info('  %d 条 | %.1f KB（网页问答检索条数据源）', n, size / 1024.0)
     except Exception as e:

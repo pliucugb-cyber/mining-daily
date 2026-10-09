@@ -1,12 +1,12 @@
 {
   "meta": {
     "report_date": "2026-10-08",
-    "generated_at": "2026-10-09T00:15:26+08:00",
-    "total": 534,
-    "new_today": 18,
+    "generated_at": "2026-10-09T09:54:20+08:00",
+    "total": 535,
+    "new_today": 19,
     "archive": 516,
-    "page_total": 534,
-    "page_new_count": 18,
+    "page_total": 535,
+    "page_new_count": 19,
     "sources": [
       "MINING.COM",
       "SMM 国际站",
@@ -16,6 +16,7 @@
       "中国有色金属报",
       "全球矿产资源信息系统",
       "巨潮资讯网",
+      "巨潮资讯网·盛达资源",
       "深圳证券交易所",
       "自然资源部",
       "长江有色网",
@@ -88,6 +89,26 @@
       ]
     },
     {
+      "id": "f18bd621a7ea",
+      "title": "刚果（金）启动全国航空地质填图计划",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202610/t20261008_10329509.htm",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "10-08",
+      "orig_date_full": "2026-10-08",
+      "report_date": "2026-10-08",
+      "category": "找矿成果与勘查技术",
+      "is_new": true,
+      "summary": "全球矿产资源信息系统援引矿业周刊（Miningweekly）转路透社报道，刚果（金）国家地质调查局（SGNC）周一宣布启动全国性航空地质填图计划，以加深对本国矿产资源的认识、降低勘查风险并为勘查程度不高地区吸引投资。该国是世界最大产钴国和非洲最大产铜国，但详查区域占国土面积不足十分之一。这项名为 PC2G-RDC 的计划将开展高精度航空物探调查，由西班牙物探公司艾克斯卡利伯（Xcalibur）提供支持，重点区域包括中刚果省、宽果省、奎卢省和大开赛地区，并继续推进大加丹加地区已有工作。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "钴",
+        "找矿",
+        "国际"
+      ]
+    },
+    {
       "id": "943729a12c02",
       "title": "自然资源部就规范探矿权招标出让公开征求意见",
       "url": "https://www.mnr.gov.cn/gk/tzgg/202610/t20261008_2939647.html",
@@ -120,6 +141,22 @@
       "tags": [
         "锂",
         "政策"
+      ]
+    },
+    {
+      "id": "37898e9368ab",
+      "title": "AME 报告：加拿大扩大勘查税收优惠或带来 330 亿加元经济增量",
+      "url": "https://www.mining.com/ame-report-sees-23b-economic-boost-from-new-canadian-mines",
+      "source": "MINING.COM",
+      "orig_date": "10-07",
+      "orig_date_full": "2026-10-07",
+      "report_date": "2026-10-08",
+      "category": "政策与监管",
+      "is_new": true,
+      "summary": "MINING.COM 报道，加拿大矿产勘查协会（AME）就联邦政府承诺扩大「加拿大勘查支出（CEE）」适用范围、拓宽关键矿产勘查税收抵免（METC）发布经济影响评估。据安永报告，该承诺未来十年可创造最多 34,000 个全职岗位、每年新增 16 亿加元矿产勘查支出；若推动 3 至 5 座矿山投产，连同更高的勘查支出，预计带来最多 330 亿加元（约 231 亿美元）经济增量，政府每投入 1 加元可获 5 倍 GDP 回报。AME 称全国有 171 座矿山等待商业化生产。（原题：AME report sees $23B economic boost from new Canadian mines）",
+      "embed": "ok",
+      "tags": [
+        "找矿"
       ]
     },
     {
@@ -241,6 +278,24 @@
       ]
     },
     {
+      "id": "6f6b782737a2",
+      "title": "关于子公司收购沙金河金矿探矿权的进展公告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-08/1225589910.PDF",
+      "source": "巨潮资讯网·盛达资源",
+      "orig_date": "10-08",
+      "orig_date_full": "2026-10-08",
+      "report_date": "2026-10-08",
+      "category": "并购与投资",
+      "is_new": true,
+      "summary": "盛达资源（000603）披露《关于子公司收购沙金河金矿探矿权的进展公告》，涉及矿业权交易。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "政策",
+        "矿权"
+      ]
+    },
+    {
       "id": "8cdb8d2245da",
       "title": "美国拟借助国际开发融资机构助智利提升铜冶炼能力",
       "url": "https://geoglobal.mnr.gov.cn/zx/kydt/zhyw/202610/t20261008_10329508.htm",
@@ -248,66 +303,13 @@
       "orig_date": "10-08",
       "orig_date_full": "2026-10-08",
       "report_date": "2026-10-08",
-      "category": "国际矿业动态",
+      "category": "并购与投资",
       "is_new": true,
       "summary": "全球矿产资源信息系统援引 BNAmericas 网站报道，美国国际开发融资公司（IDFC）正在评估在智利建设新铜精炼厂的可行性，以推进新建关键矿产供应链。美国驻智利大使布兰登·贾德在智利太平洋基金会线上会议上称，IDFC 正同多个实体磋商在智利建设炼厂的可行性，以便该国冶炼更多铜并控制供应链关键环节；2026 年中以来 IDFC 一直在智利寻找能提高铜附加值的可行项目。报道称，因成本高昂智利铜冶炼能力有限，IDFC 的参与有助于降低精炼环节风险，其方式可包括持有项目股权。",
       "embed": "ok",
       "tags": [
         "铜",
         "金",
-        "国际"
-      ]
-    },
-    {
-      "id": "665b35cf078b",
-      "title": "智利 Centinela 铜矿 700 余名工人罢工，铜供应风险上升",
-      "url": "https://news.smm.cn/news/104146739",
-      "source": "上海有色网",
-      "orig_date": "10-08",
-      "orig_date_full": "2026-10-08",
-      "report_date": "2026-10-08",
-      "category": "国际矿业动态",
-      "is_new": true,
-      "summary": "上海有色网援引文华财经报道，10 月 7 日智利安托法加斯塔（Antofagasta）旗下 Centinela 铜矿 700 多名工人开始罢工，令全球最大产铜国再添一层供应威胁。Minera Esperanza 工会和 Distrito Centinela 工会称，智利劳工监察局主持的调解未能解决薪酬争议。当日伦敦金属交易所铜价回升，罢工引发的供应担忧抵消了美元走强的压力；今年以来 LME 三个月期铜涨幅已超过 16%。",
-      "embed": "ok",
-      "tags": [
-        "铜",
-        "国际"
-      ]
-    },
-    {
-      "id": "37898e9368ab",
-      "title": "AME 报告：加拿大扩大勘查税收优惠或带来 330 亿加元经济增量",
-      "url": "https://www.mining.com/ame-report-sees-23b-economic-boost-from-new-canadian-mines",
-      "source": "MINING.COM",
-      "orig_date": "10-07",
-      "orig_date_full": "2026-10-07",
-      "report_date": "2026-10-08",
-      "category": "国际矿业动态",
-      "is_new": true,
-      "summary": "MINING.COM 报道，加拿大矿产勘查协会（AME）就联邦政府承诺扩大「加拿大勘查支出（CEE）」适用范围、拓宽关键矿产勘查税收抵免（METC）发布经济影响评估。据安永报告，该承诺未来十年可创造最多 34,000 个全职岗位、每年新增 16 亿加元矿产勘查支出；若推动 3 至 5 座矿山投产，连同更高的勘查支出，预计带来最多 330 亿加元（约 231 亿美元）经济增量，政府每投入 1 加元可获 5 倍 GDP 回报。AME 称全国有 171 座矿山等待商业化生产。（原题：AME report sees $23B economic boost from new Canadian mines）",
-      "embed": "ok",
-      "tags": [
-        "找矿"
-      ]
-    },
-    {
-      "id": "f18bd621a7ea",
-      "title": "刚果（金）启动全国航空地质填图计划",
-      "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202610/t20261008_10329509.htm",
-      "source": "全球矿产资源信息系统",
-      "orig_date": "10-08",
-      "orig_date_full": "2026-10-08",
-      "report_date": "2026-10-08",
-      "category": "国际矿业动态",
-      "is_new": true,
-      "summary": "全球矿产资源信息系统援引矿业周刊（Miningweekly）转路透社报道，刚果（金）国家地质调查局（SGNC）周一宣布启动全国性航空地质填图计划，以加深对本国矿产资源的认识、降低勘查风险并为勘查程度不高地区吸引投资。该国是世界最大产钴国和非洲最大产铜国，但详查区域占国土面积不足十分之一。这项名为 PC2G-RDC 的计划将开展高精度航空物探调查，由西班牙物探公司艾克斯卡利伯（Xcalibur）提供支持，重点区域包括中刚果省、宽果省、奎卢省和大开赛地区，并继续推进大加丹加地区已有工作。",
-      "embed": "ok",
-      "tags": [
-        "铜",
-        "金",
-        "钴",
-        "找矿",
         "国际"
       ]
     },
@@ -332,23 +334,6 @@
       ]
     },
     {
-      "id": "9930a32b443b",
-      "title": "纳米比亚 Elizabeth Bay 钻石矿重启，计划投资 5,000 万美元",
-      "url": "https://www.mining.com/namibia-diamond-mine-revival-draws-50m-investment",
-      "source": "MINING.COM",
-      "orig_date": "10-07",
-      "orig_date_full": "2026-10-07",
-      "report_date": "2026-10-08",
-      "category": "并购与投资",
-      "is_new": true,
-      "summary": "MINING.COM 报道，荷兰私募投资机构 Kenzoll Capital 与纳米比亚注册的 MSF Commercials 合作，重启 Elizabeth Bay 钻石矿，计划投资 5,000 万美元，部分资金还将用于其他矿种的勘查。该矿（原名 Elizabeth Bay，位于 Sperrgebiet 禁区）拥有 1,050 万克拉陆上与海上钻石资源量。重启之际纳米比亚钻石出口大幅下滑：由 2022 年的 51 亿纳米比亚元（约 3.069 亿美元）降至 2025 年的 17 亿纳米比亚元（约 1.023 亿美元），降幅约 67%。Kenzoll Capital 在纳米比亚累计投资已超过 1,000 万美元。（原题：Namibia diamond mine revival draws $50M investment）",
-      "embed": "ok",
-      "tags": [
-        "金",
-        "找矿"
-      ]
-    },
-    {
       "id": "7ad66079fbec",
       "title": "Gold Mountain 拟重启巴西二战时期钨矿，对价至多 300 万雷亚尔",
       "url": "https://www.mining.com/gold-mountain-weighs-revival-of-wartime-brazil-tungsten-mine",
@@ -362,6 +347,40 @@
       "embed": "ok",
       "tags": [
         "钨"
+      ]
+    },
+    {
+      "id": "665b35cf078b",
+      "title": "智利 Centinela 铜矿 700 余名工人罢工，铜供应风险上升",
+      "url": "https://news.smm.cn/news/104146739",
+      "source": "上海有色网",
+      "orig_date": "10-08",
+      "orig_date_full": "2026-10-08",
+      "report_date": "2026-10-08",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "上海有色网援引文华财经报道，10 月 7 日智利安托法加斯塔（Antofagasta）旗下 Centinela 铜矿 700 多名工人开始罢工，令全球最大产铜国再添一层供应威胁。Minera Esperanza 工会和 Distrito Centinela 工会称，智利劳工监察局主持的调解未能解决薪酬争议。当日伦敦金属交易所铜价回升，罢工引发的供应担忧抵消了美元走强的压力；今年以来 LME 三个月期铜涨幅已超过 16%。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "国际"
+      ]
+    },
+    {
+      "id": "9930a32b443b",
+      "title": "纳米比亚 Elizabeth Bay 钻石矿重启，计划投资 5,000 万美元",
+      "url": "https://www.mining.com/namibia-diamond-mine-revival-draws-50m-investment",
+      "source": "MINING.COM",
+      "orig_date": "10-07",
+      "orig_date_full": "2026-10-07",
+      "report_date": "2026-10-08",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "MINING.COM 报道，荷兰私募投资机构 Kenzoll Capital 与纳米比亚注册的 MSF Commercials 合作，重启 Elizabeth Bay 钻石矿，计划投资 5,000 万美元，部分资金还将用于其他矿种的勘查。该矿（原名 Elizabeth Bay，位于 Sperrgebiet 禁区）拥有 1,050 万克拉陆上与海上钻石资源量。重启之际纳米比亚钻石出口大幅下滑：由 2022 年的 51 亿纳米比亚元（约 3.069 亿美元）降至 2025 年的 17 亿纳米比亚元（约 1.023 亿美元），降幅约 67%。Kenzoll Capital 在纳米比亚累计投资已超过 1,000 万美元。（原题：Namibia diamond mine revival draws $50M investment）",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "找矿"
       ]
     },
     {
