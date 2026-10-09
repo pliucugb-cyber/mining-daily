@@ -354,7 +354,10 @@ setTimeout(() => {
   // 百度统计接入（2026-09-13 由 GoatCounter 迁移）：数字在 tongji.baidu.com 后台看，页脚不回显实时数字
   check('⑩ 已接入百度统计（hm.baidu.com/hm.js 存在于源码）', /hm\.baidu\.com\/hm\.js/.test(html));
   check('⑩ 百度统计站点 ID 与 tongji 后台逐字一致（防装错代码）', /hm\.baidu\.com\/hm\.js\?d28d60ab8b38f6641816d109448723ff/.test(html));
-  check('⑩ 旧 GoatCounter 脚本已清除（无 gc.zgo.at / goatcounter.com）', !/gc\.zgo\.at|goatcounter\.com/.test(html));
+  // 2026-10-09：hero 埋点段（推广阶段0）把 GoatCounter 作为「备选方案」写在 HTML 注释里说明，
+  // 断言意图是「无**生效**的 GoatCounter 脚本」，故先剥掉 HTML 注释再判定（否则注释里的说明文字会误报）。
+  const htmlNoComment = html.replace(/<!--[\s\S]*?-->/g, '');
+  check('⑩ 旧 GoatCounter 脚本已清除（无 gc.zgo.at / goatcounter.com）', !/gc\.zgo\.at|goatcounter\.com/.test(htmlNoComment));
   check('⑩ 矿权区标题不再自称「结构化卡片」', !/结构化卡片/.test((doc.getElementById('rightsSection') || {}).textContent || ''));
 
   console.log('\n===== \u246a \u6536\u85cf/\u5386\u53f2\u7b5b\u9009\u5b9a\u4f4d\uff082026-09-09 \u51cc\u6668\uff09 =====');

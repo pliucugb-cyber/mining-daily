@@ -1,8 +1,26 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-01T10:41:11+08:00",
-  "count": 3,
+  "updated_at": "2026-10-09T08:49:37+08:00",
+  "count": 4,
   "news": [
+    {
+      "id": "686f25120b5d",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-08/1225589910.PDF",
+      "title": "关于子公司收购沙金河金矿探矿权的进展公告",
+      "source": "巨潮资讯网·盛达资源",
+      "orig_date": "10-08",
+      "orig_date_full": "2026-10-08",
+      "report_date": "2026-10-08",
+      "category": "并购与投资",
+      "company": "盛达资源",
+      "sec_code": "000603",
+      "ma_type": "矿业权交易",
+      "summary": "盛达资源（000603）披露《关于子公司收购沙金河金矿探矿权的进展公告》，涉及矿业权交易。",
+      "tags": [
+        "并购",
+        "金"
+      ]
+    },
     {
       "id": "e8a80e43551b",
       "url": "https://static.cninfo.com.cn/finalpage/2026-10-01/1225590744.PDF",

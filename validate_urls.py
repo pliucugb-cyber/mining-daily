@@ -43,6 +43,11 @@ DOMAIN_COOLDOWN = 0.5
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
 
+# 2026-10-09：本机 Windows 系统代理（注册表 ProxyEnable=1 / ProxyServer=127.0.0.1:7890）常开着但代理进程掉线，
+# urllib.request.urlopen 会走 getproxies()（读注册表而非环境变量）→ 全部请求被劫持到死端口，报 10061，
+# 表现为「535/535 全失效」的假警报。改用显式空 ProxyHandler 的直连 opener。
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
 
 def extract_news_items():
     """从 index.html 提取所有新闻条目的 (url, title, src, date)。
@@ -113,7 +118,7 @@ def fetch(url, last_domain_ts):
             'Accept': 'application/pdf,*/*;q=0.8',
         })
         try:
-            with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+            with _OPENER.open(req, timeout=TIMEOUT) as resp:
                 ct = resp.headers.get('Content-Type', '')
                 if resp.status == 200 and ('pdf' in ct.lower() or resp.getheader('Content-Length')):
                     return 200, int(resp.headers.get('Content-Length', 0)), '[PDF]'
@@ -129,7 +134,7 @@ def fetch(url, last_domain_ts):
         'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
     })
     try:
-        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+        with _OPENER.open(req, timeout=TIMEOUT) as resp:
             body = resp.read()
             text = body.decode('utf-8', errors='ignore')
             return resp.status, len(body), text[:200_000]

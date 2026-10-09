@@ -61,20 +61,28 @@ PLATE_MAP = {"SZZB": "szse", "SHZB": "shse", "HKB": "hkex",
 
 ctx = ssl.create_default_context()   # 2026-09-09 安全整改 P0：恢复 TLS 证书校验（此前全局关闭校验可被中间人篡改数据）
 
+# 2026-10-09：本机 Windows 系统代理（注册表 ProxyEnable=1 / ProxyServer=127.0.0.1:7890）常开着但代理进程掉线，
+# urllib.request.getproxies() 读的是**注册表**而非环境变量，`env -u HTTP_PROXY` 对它无效 →
+# 所有请求被劫持到 127.0.0.1:7890 报 WinError 10061。改用显式空 ProxyHandler 的直连 opener。
+_OPENER = urllib.request.build_opener(
+    urllib.request.ProxyHandler({}),
+    urllib.request.HTTPSHandler(context=ctx),
+)
+
 
 def http_post(url, params):
     req = urllib.request.Request(url, data=urllib.parse.urlencode(params).encode(), method="POST")
     req.add_header("User-Agent", "Mozilla/5.0")
     req.add_header("Referer", "https://www.cninfo.com.cn/")
     req.add_header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-    with urllib.request.urlopen(req, timeout=25, context=ctx) as r:
+    with _OPENER.open(req, timeout=25) as r:
         return json.loads(r.read().decode("utf-8", "ignore"))
 
 
 def http_get_json(url):
     req = urllib.request.Request(url)
     req.add_header("User-Agent", "Mozilla/5.0")
-    with urllib.request.urlopen(req, timeout=25, context=ctx) as r:
+    with _OPENER.open(req, timeout=25) as r:
         return json.loads(r.read().decode("utf-8", "ignore"))
 
 
