@@ -60,6 +60,14 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
 CTX = ssl.create_default_context()   # 2026-09-09 安全整改 P0：恢复 TLS 证书校验（此前全局关闭校验可被中间人篡改数据）
 
+# 2026-10-09 修：绕过系统代理。urllib 的 getproxies() 读的是 Windows 注册表
+# （HKCU\...\Internet Settings 的 ProxyEnable/ProxyServer），**不是环境变量**，
+# 所以 `env -u HTTP_PROXY` 完全拦不住。本机该键常驻指向一个已停的本地端口
+# （实测 127.0.0.1:61347 closed）→ 所有源 urllib 请求一律报 WinError 10061
+# "目标计算机积极拒绝"，整批 0 产出（假故障）。空 ProxyHandler 强制直连。
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}),
+                                      urllib.request.HTTPSHandler(context=CTX))
+
 TIMEOUT = 20
 # 2026-09-08 提升：原 40 会被主源打满（实测中国有色金属报当日正好 40 条触顶，
 # 意味着还有内容被丢弃）。改为 120 全局默认，主源再靠源级 max_items 单独放大。
@@ -526,7 +534,7 @@ def http_get(url, timeout=TIMEOUT, retries=2):
                 "Accept-Encoding": "gzip",
                 "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
             })
-            with urllib.request.urlopen(req, timeout=timeout, context=CTX) as r:
+            with _OPENER.open(req, timeout=timeout) as r:
                 raw = r.read()
                 if r.headers.get("Content-Encoding") == "gzip":
                     try:
@@ -564,7 +572,7 @@ def http_post(url, data, timeout=TIMEOUT, retries=2, referer=""):
             if referer:
                 headers["Referer"] = referer
             req = urllib.request.Request(url, data=body, headers=headers)
-            with urllib.request.urlopen(req, timeout=timeout, context=CTX) as r:
+            with _OPENER.open(req, timeout=timeout) as r:
                 raw = r.read()
                 if r.headers.get("Content-Encoding") == "gzip":
                     try:
@@ -869,7 +877,7 @@ def _post_json(url, payload, referer="", timeout=TIMEOUT, retries=1):
                 "Referer": referer,
             }
             req = urllib.request.Request(url, data=payload, headers=headers)
-            with urllib.request.urlopen(req, timeout=timeout, context=CTX) as r:
+            with _OPENER.open(req, timeout=timeout) as r:
                 raw = r.read()
                 if r.headers.get("Content-Encoding") == "gzip":
                     try:

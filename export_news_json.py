@@ -295,7 +295,7 @@ def merge_into_months(news, data_dir, report_date):
         rows = sorted(store.values(),
                       key=lambda x: (x.get('orig_date_full') or '', x.get('id') or ''),
                       reverse=True)
-        with open(path, 'w', encoding='utf-8') as f:
+        with open(path, 'w', encoding='utf-8', newline='\n') as f:
             json.dump({'month': month,
                        'updated_at': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S+08:00'),
                        'count': len(rows),
@@ -330,7 +330,7 @@ def write_index(data_dir):
                        'date_from': dates[0] if dates else '',
                        'date_to': dates[-1] if dates else '',
                        'days_covered': len(dates)})
-    with open(os.path.join(data_dir, 'index.json'), 'w', encoding='utf-8') as f:
+    with open(os.path.join(data_dir, 'index.json'), 'w', encoding='utf-8', newline='\n') as f:
         json.dump({'updated_at': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S+08:00'),
                    'schema_version': '1.1',
                    'total': sum(m['count'] for m in months),
@@ -427,7 +427,7 @@ def write_news_data_js(data_dir, out_path, report_date=''):
     _upd = (report_date + ' 06:10') if report_date else datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
     payload = {'updated': _upd,
                'schema': '1.2-slim', 'total': len(slim), 'news': slim}
-    with open(out_path, 'w', encoding='utf-8') as f:
+    with open(out_path, 'w', encoding='utf-8', newline='\n') as f:
         f.write('window.NEWS_DATA='
                 + json.dumps(payload, ensure_ascii=False, separators=(',', ':'))
                 + ';')
@@ -510,7 +510,7 @@ def main():
         },
         'news': news,
     }
-    with open(JSON_PATH, 'w', encoding='utf-8') as f:
+    with open(JSON_PATH, 'w', encoding='utf-8', newline='\n') as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
     log.info('[snapshot] %s', JSON_PATH)
