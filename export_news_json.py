@@ -232,6 +232,35 @@ def parse_all(html, report_date=''):
         items.append(item)
     return items
 
+def detect_indent(path, default=2):
+    """探测已有月库的 JSON 缩进（空格数），用于原样回写、避免整文件假 diff。
+
+    背景（2026-10-09）：三个月的月库缩进并不一致（08/09 月为 2 空格、10 月为 1 空格，
+    系历史人工重格式化遗留）。此前 export 固定写 indent=2，每次跑完 10 月库都要人工
+    转回 indent=1，漏了就会产生 2380 行的整文件假 diff。改为「读什么缩进就写什么缩进」，
+    新旧文件都不会被无谓改写。
+
+    判据：取文件第一个缩进行（顶层 key 之后的第一行，形如 `  "month": ...`）的前导空格数。
+    括号包裹的 JSON（无换行缩进）或探测失败时回退 default。
+    """
+    if not os.path.exists(path):
+        return default
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            for _ in range(5):          # 只看头部几行，避免读整个大文件
+                line = f.readline()
+                if not line:
+                    break
+                if line.strip().startswith('{') or line.strip().startswith('['):
+                    continue
+                s = line.rstrip('\r\n')
+                if s.strip():
+                    return len(s) - len(s.lstrip(' '))
+    except Exception:
+        pass
+    return default
+
+
 def load_month(path):
     if not os.path.exists(path):
         return {}
@@ -295,11 +324,14 @@ def merge_into_months(news, data_dir, report_date):
         rows = sorted(store.values(),
                       key=lambda x: (x.get('orig_date_full') or '', x.get('id') or ''),
                       reverse=True)
+        # 原样缩进回写：08/09 月库是 2 空格、10 月库是 1 空格，读什么写什么，
+        # 避免「固定 indent=2」把 10 月库整文件改写成人肉假 diff（2026-10-09）。
+        _ind = detect_indent(path, default=2)
         with open(path, 'w', encoding='utf-8', newline='\n') as f:
             json.dump({'month': month,
                        'updated_at': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S+08:00'),
                        'count': len(rows),
-                       'news': rows}, f, ensure_ascii=False, indent=2)
+                       'news': rows}, f, ensure_ascii=False, indent=_ind)
         stats['added'] += added
         stats['updated'] += updated
         stats['months'][month] = {'added': added, 'updated': updated, 'total': len(rows)}
