@@ -667,6 +667,41 @@ jsdom **不评估 `@media`**，响应式必须用真实 Chrome。探针 `tmp/rvp
 - 真实 Chrome 探针 **25 条全绿**（`%TEMP%\md_rvprobe.py`）；
 - 全量回归 **12 项零失败**；补跑 `test_ux_20260910`(41) / `test_view_switch`(22) / `test_p2_20260910`(30) / `test_p02_visibility`(19) / `test_qa_features`(56) / `test_perf_appjs_20260910`(14) / `test_fav_history_aggregate`(29) 均零失败；
 - `preflight_check.py` 全绿，build `20260912-1105`。
+
+### 17.6 采编侧必填：矿权摘要须含期限字段（2026-10-09）
+
+**背景**：`test_smoke_0908.js` ⑨ 段的 `.rr-due` 断言长期 1 条 FAIL（`due=0 rows=8`）。根因排查（2026-10-09）：
+`data/news_2026-09.json` 的 118 宗矿权条目中 **45 宗（38%）摘要不含任何期限字段**，散落在 16 个日期上
+（09-29 那批恰好 8 条全缺、又排在 30 日窗口最前 → 前 8 行全无 `.rr-due`）。经 `git stash` 复跑 HEAD 版页面同样
+FAIL → **确认非回归，而是采编规则长期漏写期限**。后果不止少一行渲染：`app.js` 的紧迫度评分与桌面列表态
+排序（近 7 日到期置顶）对这些条目**全程失效**，它们恒沉底。
+
+**规则（新报起生效）**：矿权条目摘要**必须**写明期限字段，措辞须与 `app.js` 的 4 级降级正则逐字对齐
+（**勿自创表述**，如只写「公告期」「有效期至」而不含下列关键词会被判为无期限）：
+
+| 矿权类型 | 必写措辞（正则命中） |
+| --- | --- |
+| 结果公示 / 转让公示 | `公示期 2026年9月30日 至 2026年10月19日`（无起止时至少 `公示期 2026年9月30日`，`deadline` 取该日） |
+| 挂牌出让 | `挂牌期 2026年11月19日 至 2026年12月4日`（**必须写「挂牌期」**，写「挂牌时间」不命中） |
+| 竞价 / 报价出让 | `竞价期 … 至 …` / `报价期 … 至 …` |
+| 拍卖 | `拍卖会定于 2026年11月19日` 或 `拍卖时间 2026年11月19日`（**不给区间**，只给拍卖日） |
+| 有截标环节 | `报名截止 2026年11月19日` / `交纳截止 …` / `截止 …`（兜底项，前四项可用时优先用前四项） |
+
+**不建议的写法**：`公告期 09-30 起`（无「公示期/挂牌期」关键词）、只写 `2026-09-30 至 10-19`（无前缀词）、
+`有效期 3 年`（这是登记结果类字段，`validity` 独立提取，不参与 `deadline`）。
+
+**生效范围**：**仅新报起**；历史 45 条**不补**、不回补 `data/news_2026-*.json`——补写会扰动已上线的
+`rightsSection` 排序与紧迫度颜色（见 §17.1 用户既有偏好），且属「改历史数据」高风险动作。
+所以 `test_smoke_0908.js` ⑨ 段这 1 条 FAIL 在新报逐步覆盖窗口前**会继续存在，属已知数据侧现象，不是缺陷**。
+
+**字段可溯**：期限一律来自 `ky.mnr.gov.cn` 公告原文（挂牌/拍卖公告正文有明确期限段）；采编时**必须读原文**
+而非标题，标题通常不含期限。样例：辽宁宽甸大石门铅多金属矿（转让公示，公示期 2026-09-30 至 10-19）；
+吉林长春长炮村铜矿（挂牌出让，挂牌期 2026-11-19 至 12-04）。
+
+**下游联动**：`app.js` 的 `parseRights` 由 `deadline` 派生卡片 badge（`.rc-deadline`，`rc-urgent`/`rc-soon`）
+与列表态 `.rr-due`，并为排序条 `data-sk="deadline"` 提供排序键。摘要无期限 ⇒ 该条目在「按截止日排序」时
+恒沉底（`null` 沉底，见 §42.3）。
+
 ---
 
 ## §18 P0 真 bug 修复：app.js 自愈信标回到末行（2026-09-12 11:2x，build `20260912-1120`）
@@ -2101,7 +2136,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - 现行形态是**同一套 DOM 由 `#rightsCards.rv-cards` 切形态**：卡片＝桌面自适应多列网格（默认），列表＝紧凑行 + `.rr-due` 截止期；手机端恒为卡片、`.rights-views` 在 ≤768px `display:none`；偏好存 `localStorage['mdRightsView']`。
 - 排序条：`.rights-cols` 必须是 `#rightsCards` 的**第一个子元素**（`renderRightsSection` 注入 innerHTML），内含 3 个 `.rc-sort` chip（`data-sk` 依次 `""` / `deadline` / `price`，默认激活 `data-sk=""`；激活态带 `.is-on` + `aria-pressed`，文案带 ↑/↓）+ `.rc-sort-hint`；每行须有 `.rr-amount`（**条数 == 行数**，文本「N 万元」或「—」）；仅桌面列表态可见（基础 `display:none`，卡片态与 ≤768px 均不出现）。排序值须与 `.rr-amount` 同源（都用 `r.price`），缺值（price/deadline 为 null）恒沉底。
 - **不得存在**：`#rightsTable` 系列 / `.rights-view-btn` / `.rights-card`（2026-09-08 删掉的表格视图，禁令不变）。
-- **回退指纹**：① 排序条或 `.rr-amount` 缺失；② chip 不是 3 个 / 激活态与箭头不同步；③ 存在 `mdRightsSort` 键（**排序必须不持久化**，刷新即回默认紧迫度）；④ 重新引入 `rightsSort.key==="mineral"` 分支或 `var mineralHtml=`（09-12 已删的死代码）；⑤ 卡片态或 ≤768px 能看到 `.rights-cols` / `.rr-amount`；⑥ 点 chip 未重渲染（误用「只改类名」的视图切换路径）。
+- **回退指纹**：① 排序条或 `.rr-amount` 缺失；② chip 不是 3 个 / 激活态与箭头不同步；③ 存在 `mdRightsSort` 键（**排序必须不持久化**，刷新即回默认紧迫度）；④ 重新引入 `rightsSort.key==="mineral"` 分支或 `var mineralHtml=`（09-12 已删的死代码）；⑤ 卡片态或 ≤768px 能看到 `.rights-cols` / `.rr-amount`；⑥ 点 chip 未重渲染（误用「只改类名」的视图切换路径）；⑦ **矿权摘要漏写期限字段**（新报起必填，见 §17.6）→ `.rr-due` 渲染不出、紧迫度评分与按截止日排序同时失效（2026-10-09 查明：09 月库 118 宗中 45 宗缺，属采编侧长期漏写，非前端缺陷）。
 - 保留 `injectRightsResultSummary()` 结果聚合兜底；重建须用当日 `generate_YYYYMMDD.py`（`gen_today.py` 已废弃），内置 `strip_rights_html()` 剥离主列表矿权条。
 - **登记结果分支（2026-09-13 新增，源 kyreg_tk / kyreg_ck）**：同站 `ky.mnr.gov.cn/dj/tk/`、`/dj/ck/` 结构化表格（与出让/转让/结果互补，详见 fetch_news.py 的 `parse_table` / `fetch_table_pages`）。`parseRights` 识别标题 `【探矿权·|【采矿权·` → `rightsType="register"`、`method="登记"`；从摘要按「面积 X.XXXXX」「有效期 …」「探矿权人/采矿权人 …」「发证机关 …」提取 `area`/`validity`/`holder`/`authority`，矿种取标题末尾括号。`renderRightsSection` 的 grid4 走独立分支：展示 **矿种 / 面积 / 有效期 / 权利人**，底部 `.rc-extra` 显示 **发证机关**，**不渲染价格/截标日/紧迫度徽标**（登记无截止日）。金额列（`.rr-amount`）对登记恒为「—」（无交易价，仍满足「条数 == 行数」契约）；按价格/到期日排序时恒沉底。筛选器「出让方式」新增 **登记结果** 选项可单独隔离；矿种筛选对登记按 `r.mineral` 子串命中。回退指纹：① 登记条目被误判为 `other` 导致卡片满屏「—」；② 删掉「登记结果」筛选选项；③ 登记卡片错显「起始价/截标日」等交易字段。
 
