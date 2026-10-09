@@ -2080,6 +2080,41 @@ body:not(.ec-on) #eventCalendar{display:none}
   //                ② 同一个线上版本只触发一次（localStorage 记住，跨会话也生效）；
   //                ③ 复用 hardReset 的 sessionStorage 标志 + 离线跳过，杜绝循环刷新。
   function mdVerNum(v){ return String(v||'').replace(/[^0-9]/g,''); }
+  // ===== 2026-10-09：缓存陈旧「可见化」+ 网络恢复自愈 =====
+  // 事故背景：sw.js 对 HTML/数据走 network-first，网络不通时回落缓存（为了离线可看）。
+  // 但这条回落路径是**静默**的：页面照常完整渲染，顶上只挂一条琥珀色「非致命提示（可忽略）」，
+  // 而那个「强制重新加载（清缓存）」按钮恰恰在琥珀态被 mdSetBannerMode 隐藏了。
+  // 结果：用户对着两天前的旧数据，却被明确告知「可忽略」，且没有任何自救入口。
+  // 本次修四处：
+  //   ① 线上版本更高 → 仍自动清缓存重载（原逻辑，保留）；
+  //   ② 探测请求**本身失败**（域名不通/被拦）→ 明确挂出「无法确认是否最新」+ 保留按钮；
+  //   ③ 已自动重载过却仍是旧版（网络来回抖）→ 也挂出告警并留按钮；
+  //   ④ online / 切回前台时重探：github.io 在国内时通时不通，一通就自动爬出新版。
+  function mdStaleBanner(detail){
+    var el=document.getElementById('mdBootWarn'); if(!el)return;
+    // 关键：级别用 'warn' 而非 'info' —— mdSetBannerMode 只在 info 态藏 .md-boot-act，
+    // 用 warn 才能把「强制重新加载（清缓存）」按钮留给用户。
+    el.setAttribute('data-md-level','warn');
+    el.setAttribute('role','status'); el.setAttribute('aria-live','polite');
+    el.style.background='#b45309'; el.style.color='#fff';
+    mdSetBannerMode(el,'warn');
+    var lead=el.querySelector('.md-boot-lead'), tail=el.querySelector('.md-boot-tail');
+    var w=el.querySelector('.md-boot-which'), d=el.querySelector('.md-boot-detail'), g=el.querySelector('.md-boot-diag');
+    if(lead)lead.textContent='⚠️ 无法确认当前内容是否为最新';
+    if(w)w.textContent='';
+    if(tail)tail.textContent='，你可能正在看本地缓存的旧版。';
+    if(d)d.textContent=detail||'';
+    if(g){ try{ g.textContent=mdDiagLine(); }catch(e){ g.textContent=''; } }
+    el.style.display='flex';
+    window.__mdStaleText=detail||'';
+  }
+  function mdClearStale(){
+    window.__mdStaleText='';
+    try{
+      var el=document.getElementById('mdBootWarn');
+      if(el&&el.getAttribute('data-md-level')==='warn'&&!mdDegraded()&&!mdStuckRegions().length) el.style.display='none';
+    }catch(e){}
+  }
   function mdVersionProbe(){
     try{
       if(navigator.onLine===false)return;
@@ -2091,12 +2126,20 @@ body:not(.ec-on) #eventCalendar{display:none}
         var mm=/CACHE_NAME\s*=\s*['"]mining-daily-([0-9]{8}-[0-9]{4})['"]/.exec(txt||'');
         if(!mm)return;
         var remote=mm[1];
-        if(!(mdVerNum(remote)>mdVerNum(cur)))return;
-        try{ if(localStorage.getItem('md_ver_probe')===remote)return; }catch(e){}
+        if(!(mdVerNum(remote)>mdVerNum(cur))){ mdClearStale(); return; }   // 本机已是最新 → 撤下陈旧告警
+        try{ if(localStorage.getItem('md_ver_probe')===remote){
+          mdStaleBanner('线上已是 '+remote+'，本机仍是 '+cur+'（此前自动清缓存重载未成功，多半是请求被中断）。点右侧按钮重试。');
+          return;
+        } }catch(e){}
         try{ localStorage.setItem('md_ver_probe',remote); }catch(e){}
         try{ console.info('[md] 线上已有新版本 '+remote+'（本地 '+cur+'），清缓存后重载'); }catch(e){}
         hardReset();
-      }).catch(function(){});
+      }).catch(function(){
+        // 探测请求失败 = 本机此刻够不到线上（域名不通/被拦/断网）。页面很可能正由 Service Worker
+        // 从缓存喂旧版 —— 这必须让用户看见，而不是「不影响当前浏览，可忽略」。
+        mdStaleBanner('无法连接线上站点（本机 build '+cur+'），无法确认是否有新版本。网络恢复后会自动重探，也可点右侧按钮立即重试。');
+        try{ console.warn('[md] 版本探测失败：线上不可达，当前可能为缓存旧版（本机 build '+cur+'）'); }catch(e){}
+      });
     }catch(e){}
   }
   window.mdVersionProbe=mdVersionProbe;
@@ -2104,6 +2147,13 @@ body:not(.ec-on) #eventCalendar{display:none}
   try{
     if(document.readyState==='complete') setTimeout(mdVersionProbe,4000);
     else window.addEventListener('load',function(){ setTimeout(mdVersionProbe,4000); });
+  }catch(e){}
+  // 网络恢复 / 切回前台 → 重探一次（github.io 在国内时通时不通，一通就自动爬出新版）
+  try{
+    window.addEventListener('online',function(){ setTimeout(mdVersionProbe,1500); });
+    document.addEventListener('visibilitychange',function(){
+      if(document.visibilityState==='visible') setTimeout(mdVersionProbe,1500);
+    });
   }catch(e){}
 
   function showBootWarn(name){
@@ -2174,6 +2224,7 @@ body:not(.ec-on) #eventCalendar{display:none}
         return;
       }
       mdClearRegionAnnotations();                            // 组件已恢复 → 清标注
+      if(window.__mdStaleText){ mdStaleBanner(window.__mdStaleText); return; }   // 2026-10-09：缓存陈旧告警优先于良性提示，且必须保住自救按钮
       var n=(window.__mdErrors||[]).length;
       if(n>(window.__mdInfoShownCount||0)){ mdShowInfo(n); window.__mdInfoShownCount=n; } // 良性→黄条
       else if(n===0){ var e3=document.getElementById('mdBootWarn'); if(e3&&e3.getAttribute('data-md-level')==='info') e3.style.display='none'; }
