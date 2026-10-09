@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-07",
+ "updated_at": "2026-10-09",
  "companies": [
   {
    "name": "紫金矿业",
@@ -138,6 +138,20 @@
    "rank": 11,
    "items": [
     {
+     "t": "金冠铜业多措并举强化秋季消防安全管控",
+     "d": "2026-10-08",
+     "u": "http://www.tlys.cn/news.aspx?cid=24583&classid=383",
+     "s": "一是围绕高温炉体重点区域，及时清理包装废料、粉尘油污、废弃杂物等易燃物品，从源头消除火灾隐患。二是严格执行动火审批制度，做好隔离或覆盖措施，安排专人监护施工过程，确保完工后无余火隐患。三是严控用电安全，严禁私拉乱接电线、超负荷用电，定期检查配电箱、线路、开关、设备散热情况，对发现的问题及时整改到位。",
+     "k": "news"
+    },
+    {
+     "t": "安庆铜矿实现党员轮训全覆盖",
+     "d": "2026-10-08",
+     "u": "http://www.tlys.cn/news.aspx?cid=24582&classid=383",
+     "s": "一是抓实理论研学，淬炼党性修养。紧扣学习主线，开设学习习近平总书记关于树立和践行正确政绩观的重要论述、习近平党建思想等课程，推动党员深学细悟、夯实理论武装。二是用好红色资源，砥砺初心使命。采取专题辅导与现场教学相结合方式，组织学员前往红二十八军军政旧址，实地接受革命传统教育。",
+     "k": "news"
+    },
+    {
      "t": "金隆铜业“PHMGPT多模态故障诊断工业智能体”入选省级特色工业智能体名单",
      "d": "2026-09-30",
      "u": "http://www.tlys.cn/news.aspx?cid=24577&classid=383",
@@ -198,13 +212,6 @@
      "d": "2026-09-23",
      "u": "http://www.tlys.cn/news.aspx?cid=24554&classid=383",
      "s": "米拉多铜矿：一是紧扣网络安全宣传周主题，面向全体员工普及网络防护、网络诈骗等知识，引导员工时刻绷紧网络安全之弦。二是对服务器、OA平台等逐项检查，优化防护策略，完善应急预案，提升网络故障应急处置能力。 三是修订完善网络安全、设备运维等制度，压实网络安全主体责任，不断提升海外矿山网络安全防护水平。",
-     "k": "news"
-    },
-    {
-     "t": "铜冠冶化加强在建项目管理",
-     "d": "2026-09-22",
-     "u": "http://www.tlys.cn/news.aspx?cid=24547&classid=383",
-     "s": "一是加强组织领导，成立7个工程项目组、20个技改项目组，项目负责人在授权范围内统筹管理各项工作，确保有序推进。二是加强现场管控，对项目施工区域进行作业围护，设置安全通道，规范材料堆放，做到统一标牌、统一标准、统一内容，推动项目现场管理规范化。",
      "k": "news"
     }
    ]
@@ -544,7 +551,7 @@
      "t": "云铝股份：截至六月末股东人数为十五万七千八百五十一户",
      "d": "2026-09-05",
      "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-09-05/doc-iniqtspw3752095.shtml",
-     "s": "投资者提问：截止8月底股东人数多少？董秘回答(云铝股份SZ000807)：您好，首先感谢您对云铝股份的关心、支持和信任。关于股东人数，公司按照信息披露相关规定，在定期报告中予以披露，截至2026年6月末最后一个交易日的股东人数为157,85...",
+     "s": "2026-09-04 17:00 云铝股份9月4日现1笔大宗交易 总成交金额8408.92万元 溢价率为0.19%",
      "k": "news"
     }
    ]
@@ -885,13 +892,6 @@
      "u": "https://finance.sina.com.cn/jjxw/2026-09-10/doc-inirhrrh3253499.shtml",
      "s": "本公司董事会及全体董事、高级管理人员保证公告内容的真实、准确和完整，对公告的虚假记载、误导性陈述或者重大遗漏负连带责任。 湖南黄金股份有限公司（以下简称公司）拟通过发行股份方式购买交易对方湖南黄金集团有限责任公司、湖南天岳投资集团有限...",
      "k": "news"
-    },
-    {
-     "t": "002155，发布最新公告，涉及重大资产重组！猪价连涨4周，上市猪企8月销量环比回暖",
-     "d": "2026-09-09",
-     "u": "https://finance.sina.com.cn/stock/zqgd/2026-09-09/doc-inirfums3608064.shtml",
-     "s": "自今年7月反弹以来，猪价整体呈回升态势。湖南黄金：重大资产重组获得湖南省国资委批复湖南黄金（002155）今日（9月9日）发布公告称，当日，公司收到控股股东湖南省矿产资源集团有限责任公司转发的湖南省国资委的批复，原则同意公司通过发行股份的方...",
-     "k": "news"
     }
    ]
   },
@@ -916,6 +916,13 @@
      "d": "2026-09-08",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1109",
      "s": "9月3日， “可持续锂电池行业工作组”（Sustainable Lithium Battery Industry Working Group）在第四届零碳协同创新大会上正式启动。",
+     "k": "news"
+    },
+    {
+     "t": "天齐锂业荣获第二十六届中国专利优秀奖",
+     "d": "2026-09-07",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1107",
+     "s": "近日，国家知识产权局正式发布第二十六届中国专利奖授奖决定，天齐锂业发明专利《联合制备电动汽车级碳酸锂和单水氢氧化锂的方法》荣获中国专利优秀奖。 查看详情 ",
      "k": "news"
     },
     {
@@ -1145,6 +1152,13 @@
    "rank": 3,
    "items": [
     {
+     "t": "北方稀土(600111)深度研究报告：依托白云鄂博资源禀赋的轻稀土龙头 量价齐升业绩再创新高",
+     "d": "2026-10-07",
+     "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/844695962204/index.phtml",
+     "s": "",
+     "k": "news"
+    },
+    {
      "t": "【稀土要闻】北方稀土启动2026年度合规认证内审工作 夯实合规体系运行成效",
      "d": "2026-09-30",
      "u": "https://finance.sina.com.cn/roll/2026-09-30/doc-initrfst6814373.shtml",
@@ -1190,7 +1204,7 @@
      "t": "北方稀土：第九届董事会第十六次会议决议公告",
      "d": "2026-09-18",
      "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-09-18/doc-inisheny8357638.shtml",
-     "s": "证券日报网讯 9月18日，北方稀土发布公告称，公司于2026年9月18日召开第九届董事会第十六次会议，审议通过《关于聘任公司高级管理人员的议案》。...",
+     "s": "2026-09-18 19:41 【稀土要闻】内蒙古大学专家学者莅临北方稀土调研交流",
      "k": "news"
     }
    ]
@@ -1505,6 +1519,15 @@
    "rank": 25,
    "items": [
     {
+     "t": "纽蒙特首席执行官敦促黄金行业遵守纪律，尽管价格上涨",
+     "d": "2026-10-07",
+     "u": "https://www.mining.com/web/newmont-ceo-urges-discipline-in-gold-industry-despite-higher-prices/",
+     "s": "2025年，由于避险需求，黄金大幅上涨， 2026年1月创下每盎司5,595 $的历史新高，并帮助Newmont等生产商报告……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Newmont CEO urges discipline in gold industry despite higher prices"
+    },
+    {
      "t": "纽蒙特宣布2026年第三季度业绩电话会议| NEM股票新闻",
      "d": "2026-09-24",
      "u": "https://www.stocktitan.net/news/NEM/newmont-announces-third-quarter-2026-results-conference-4lzn26njfi30.html",
@@ -1629,15 +1652,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Newmont’s Red Chris Block Cave Project Receives Major Regulatory Approvals | NEM Stock News"
-    },
-    {
-     "t": "Newmont支持的Awalé在科特迪瓦的Odienné钻探新的黄金",
-     "d": "2026-05-04",
-     "u": "https://www.mining.com/newmont-backed-awale-drills-new-gold-discovery-at-odienne-in-cote-divoire/",
-     "s": "Fremen的新发现凸显了Odienné的前景，它位于Birimian绿岩带相对未开发的部分……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Newmont-backed Awalé drills new gold discovery at Odienné in Côte d’Ivoire"
     }
    ]
   },
@@ -2109,8 +2123,8 @@
    "items": [
     {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-09-01",
-     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002470/",
+     "d": "2026-10-08",
+     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002704/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -2521,17 +2535,17 @@
      "k": "news"
     },
     {
+     "t": "中色股份：以练促学，持续提升基层岗位履职能力",
+     "d": "2026-10-01",
+     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/10/I1558035195934801920.html",
+     "s": "为纵深推进深化作风建设专项行动，中色股份将岗位基本功提升作为作风建设重要实践载体，引导广大员工夯实基本常识、工作原则和逻辑方法，持续锤炼判断力、执行力、合作力，锻造一支拉得出、顶得上、打得赢的干部职工队伍，为公司全面落实集团战略部署，谱写高质量发展新篇章筑牢人才支撑。",
+     "k": "news"
+    },
+    {
      "t": "中国有色集团参加第23届中国—东盟博览会开幕式",
      "d": "2026-09-01",
      "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/9/I1554451320377704448.html",
      "s": "9月17日，第23届中国—东盟博览会、中国—东盟商务与投资峰会在广西南宁开幕。中共中央政治局常委、国务院副总理丁薛祥出席开幕式并致辞。缅甸、越南、老挝等东盟国家领导人和高级官员，以及东盟秘书长出席。中国有色矿业集团有限公司应邀参加开幕式。",
-     "k": "news"
-    },
-    {
-     "t": "第23届中国-东盟博览会丨一图解锁中国有色集团·中色股份展厅",
-     "d": "2026-09-01",
-     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/9/I1554449510468419584.html",
-     "s": "",
      "k": "news"
     },
     {
@@ -2755,13 +2769,6 @@
      "u": "https://finance.sina.com.cn/stock/hkstock/hkstocknews/2026-08-25/doc-inippmes5499286.shtml",
      "s": "8月21日晚间，国有大型有色矿业龙头企业中国有色矿业(01258)发布2026年中期业绩报告。报告显示，公司依托完整的铜钴采选冶炼全产业链布局、海外优质资源储备，精准把握2026年上半年铜、硫酸等大宗商品价格高位上行的行业机遇，实现营收、净...",
      "k": "news"
-    },
-    {
-     "t": "中国有色矿业发布中期业绩 股东应占利润4.34亿美元同比增加64.68%",
-     "d": "2026-08-24",
-     "u": "https://finance.sina.com.cn/stock/hkstock/ggscyd/2026-08-24/doc-inipkkzy2051741.shtml",
-     "s": "中国有色矿业（01258）发布截至2026年6月30日止6个月中期业绩，该集团取得收益22.61亿美元，同比增加29.09%；公司拥有人应占利润4.34亿美元，同比增加64.68%；每股盈利11.11美仙，拟派发中期股息每股1.1113...",
-     "k": "news"
     }
    ]
   },
@@ -2935,6 +2942,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "必和必拓将关闭的澳大利亚镍厂出售给Gold Fields",
+     "d": "2026-10-07",
+     "u": "https://www.mining.com/web/bhp-sells-shuttered-australian-nickel-plant-to-gold-fields/",
+     "s": "Gold Fields一直在寻求收购该地区的黄金开采基础设施和矿山。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "BHP sells shuttered Australian nickel plant to Gold Fields"
+    },
+    {
      "t": "必和必拓智利Escondida矿的主管拒绝了报价，为罢工铺平了道路",
      "d": "2026-09-30",
      "u": "https://www.mining.com/web/supervisors-at-bhps-escondida-mine-in-chile-reject-offer-paving-the-way-for-a-strike/",
@@ -3050,15 +3066,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Albemarle taps BHP veteran Udd as next CEO"
-    },
-    {
-     "t": "必和必拓在中国铁矿石压力下退出商业主管职位",
-     "d": "2026-09-02",
-     "u": "https://www.mining.com/bhp-commercial-chief-exits-amid-china-iron-ore-strain/",
-     "s": "Rag Udd’s departure leaves new CEO Brandon Craig with a critical leadership vacancy as Beijing pushes miners for better terms.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP commercial chief exits amid China iron ore strain"
     }
    ]
   },
@@ -3331,6 +3338,24 @@
    "rank": 99,
    "items": [
     {
+     "t": "MMG指责欧盟反垄断监管机构无视支持英美协议的证据",
+     "d": "2026-10-08",
+     "u": "https://www.mining.com/web/mmg-accuses-eu-antitrust-regulators-of-ignoring-evidence-backing-anglo-american-deal/",
+     "s": "在为期一天的听证会上， MMG和英美资源集团在欧盟反垄断监管机构面前为这笔价值5亿美元的交易进行了辩护，其中包括...",
+     "k": "news",
+     "src": "mining",
+     "t_en": "MMG accuses EU antitrust regulators of ignoring evidence backing Anglo American deal"
+    },
+    {
+     "t": "英美资源集团威胁称，如果欧盟阻止向MMG出售镍矿，将关闭巴西镍矿业务",
+     "d": "2026-10-07",
+     "u": "https://www.mining.com/web/anglo-american-threatens-to-close-brazilian-nickel-operation-if-eu-blocks-sale-to-mmg/",
+     "s": "Anglo American Brazil首席运营官Ruben Fernandes和该公司在巴西的首席财务官Cristina Morgan将寻求说服欧洲委员会……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Anglo American threatens to close Brazilian nickel operation if EU blocks sale to MMG"
+    },
+    {
      "t": "英美矿业合资企业Codelco重组团队",
      "d": "2026-10-06",
      "u": "https://www.mining.com/web/codelco-restructures-team-for-anglo-american-mine-jv-document-says/",
@@ -3392,24 +3417,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Anglo American’s first-quarter copper output rises"
-    },
-    {
-     "t": "英美资源集团（ Anglo American ）为煤炭销售吸引了三名竞标者",
-     "d": "2026-04-23",
-     "u": "https://www.mining.com/anglo-american-draws-three-bidders-for-coal-sale/",
-     "s": "Fresh interest emerges in Anglo’s steelmaking coal assets after a fire derailed a $3.8B deal with Peabody.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Anglo American draws three bidders for coal sale"
-    },
-    {
-     "t": "智利反垄断监管机构批准Codelco-Anglo美国采矿计划",
-     "d": "2026-03-25",
-     "u": "https://www.mining.com/web/chile-antitrust-watchdog-approves-codelco-anglo-american-mining-plan/",
-     "s": "Chile is the world’s top producer of copper and Anglo American is a major operator in the Andean country.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Chile antitrust watchdog approves Codelco-Anglo American mining plan"
     }
    ]
   },
@@ -3501,6 +3508,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 348
+  "items": 349
  }
 }

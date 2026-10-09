@@ -1,8 +1,17 @@
 {
- "date": "2026-10-07",
+ "date": "2026-10-08",
  "has_history": true,
- "history_days": 15,
- "alerts": [],
- "summary": "15 个品种单日涨跌幅均未超过 3%，无显著异动。",
- "max_severity": "none"
+ "history_days": 14,
+ "alerts": [
+  {
+   "commodity": "白银",
+   "market": "上金所 Ag(T+D)",
+   "move": "-3.79%",
+   "severity": "medium",
+   "detail": "白银（上金所 Ag(T+D)）最新收报 14,412.00，单日 -3.79%（数据日期 2026-10-08）。",
+   "type": "price"
+  }
+ ],
+ "summary": "今日异动 1 项：白银 -3.79%（上金所 Ag(T+D)）。",
+ "max_severity": "medium"
 }
