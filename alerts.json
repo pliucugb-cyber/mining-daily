@@ -1,8 +1,16 @@
 {
- "date": "2026-10-08",
+ "date": "2026-10-09",
  "has_history": true,
  "history_days": 14,
  "alerts": [
+  {
+   "commodity": "锡",
+   "market": "LME 03",
+   "move": "-5.11%",
+   "severity": "high",
+   "detail": "LME 锡（LME 03）最新收报 51,495.00 美元/吨，单日 -5.11%（数据日期 10-07）。",
+   "type": "price"
+  },
   {
    "commodity": "白银",
    "market": "上金所 Ag(T+D)",
@@ -12,6 +20,6 @@
    "type": "price"
   }
  ],
- "summary": "今日异动 1 项：白银 -3.79%（上金所 Ag(T+D)）。",
- "max_severity": "medium"
+ "summary": "今日异动 2 项：锡 -5.11%（LME 03）；白银 -3.79%（上金所 Ag(T+D)）。",
+ "max_severity": "high"
 }

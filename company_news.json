@@ -379,7 +379,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -3440,7 +3440,7 @@
      "t": "First Quantum提供Cobre Panamá的最新信息",
      "d": "2026-09-30",
      "u": "https://www.first-quantum.com/news/first-quantum-provides-update-on-cobre-panama-3/",
-     "s": "公司期待巴拿马政府就今天宣布建议后的下一步行动提供指导。",
+     "s": "",
      "k": "news",
      "t_en": "First Quantum Provides Update on Cobre Panamá"
     },
