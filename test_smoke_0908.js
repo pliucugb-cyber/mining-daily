@@ -278,9 +278,17 @@ setTimeout(() => {
   } catch (e) { check('⑨ 点「列表」切紧凑行 / 点「卡片」切回（含按钮态与 aria-pressed）', false, e.message); }
 
   // 列表态截止期：每条带 deadline 的行都渲染 .rr-due（与卡片 badge 同源文案，避免两个口径）
+  // 2026-10-10：原断言 `dueN > 0 && dueN <= dueRows` 在「首屏 8 条恰好都不含可解析截止期」时误报 FAIL
+  //（默认排序把已过期 deadline 排在无 deadline 条目之后，故首屏可能全为无截止期条目——属数据形态，非缺陷）。
+  // 改为按数据算期望值：渲染出的 .rr-due 条数 === 首屏展示行中含 deadline 的行数（比原断言更强，不放水）。
   const dueRows = rc9 ? rc9.querySelectorAll('.rights-row').length : 0;
   const dueN = rc9 ? rc9.querySelectorAll('.rr-due').length : 0;
-  check('⑨ 列表态截止期元素 .rr-due 随行渲染', dueN > 0 && dueN <= dueRows, 'due=' + dueN + ' rows=' + dueRows);
+  const dueFull = (doc.defaultView && doc.defaultView.__rightsFullList) || [];
+  const dueShown = dueFull.slice(0, 8); // RIGHTS_COLLAPSE_AT 默认折叠 8 条
+  const dueExp = dueShown.filter(function (r) { return r && r.deadline; }).length;
+  check('⑨ 列表态截止期元素 .rr-due 随行渲染',
+    dueN <= dueRows && (dueFull.length ? dueN === dueExp : dueN > 0),
+    'due=' + dueN + ' exp=' + dueExp + ' rows=' + dueRows);
   // CSS 契约：卡片态自适应多列网格 / 列表态显示 .rr-due / 手机隐藏切换器
   check('⑨ CSS：桌面卡片态为自适应多列网格',
     /#rightsCards\.rv-cards\{display:grid;grid-template-columns:repeat\(auto-fill,minmax\(330px,1fr\)\)/.test(html));

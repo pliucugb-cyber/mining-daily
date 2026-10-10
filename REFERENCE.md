@@ -2508,13 +2508,13 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 |---|---|---|
 | `node test_brief_layers.js` | **91** | 简报分层渲染（jsdom；含裁剪态持久化 §40） |
 | `node test_smoke_0908.js` | **104** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1；**2026-09-14 新增「百度统计 ID 与后台逐字一致」+1**；**2026-09-25 新增 ⑬ 点击分区 +18（78→96）**；**2026-09-26 新增 ⑭ 顶栏配色契约 +6（96→102）**；**同日补 ⑭ 垂直居中 +2（102→104）**；**2026-09-25 §42.27 公司 P1/P2：`test_company_section.js` 116→135**） |
-| `node test_mobile_ux_batch.js` | **222** | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13）；**2026-09-24 注入按钮形态修复 +6（208→215）**；**2026-09-24 展开全文+已读弱化 +7（215→222）** |
+| `node test_mobile_ux_batch.js` | **226**（2026-10-10 实测；原记 222） | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13）；**2026-09-24 注入按钮形态修复 +6（208→215）**；**2026-09-24 展开全文+已读弱化 +7（215→222）** |
 | `node test_qa_features.js` | **61** | AI 搜核心函数 / 流式接线 / 语音（含「音量条已删、调节柄已换」） |
 | `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |
 | `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
 | `node test_price_heatmap.js` | **126** | 价格区热力图：静态契约（容器顺序 / pre-paint 位置 / 选择器）+ jsdom 运行时（16 色块、方向与 `.pc-chg` 一致、alpha 单调、红涨绿跌、2 分组、图例 >=7、点击开走势图、视图持久化）+ 反向用例；**价格区间榜**：三态互斥 / 两栏固定 / 空栏占位 / 红涨绿跌 / 条形归一 / 跨度日数回归锁 / `__mdPriceRank` 等（§42.14 / §42.15） |
 | `node test_event_calendar.js` | **29 PASS** | 事件·数据日历：默认隐藏态（开关 `EC_ENABLED=false`）+ 开关往返恢复隐藏 + 静态容器 `#eventCalendar` 存活（重建边界）+ 未被 `refreshSectionVisibility` 隐藏（防回归）+ 标题派生日期 + 无日期/无事件词排除 + 未来升序在前/过去降序在后 + 即将≤90天 + 类型标签（会议/政策/数据/截止）+ 外链 `target=_blank` + 空占位「暂无已收录的近期事件」（§42.16） |
-| `node test_company_section.js` | **165 PASS** | 矿业公司动态（v7 + v11：标题层级重设计/右栏分组可折叠/文案精简；单栏 + sticky 修复 + 搜新闻兜底 + 已读态回归 + 数据洁净回归）：跨列布局（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**）（companySection/installGuide 为 `.news-grid` 直接子级、col-rail 显式定位）+ 288px 侧栏无矿种维度 + 默认近 90 天 + 分页 60 + 日期分组 + 长 t 拆标题/正文 2 行 clamp + 展开全文 + 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端）+ **无逐条 `.co-host` 域名行** + 切「全部」并连续「加载更多」渲染全量 + 未收录公司折叠组（已清零）+ 点公司收敛 + **forcedAll 自动放宽** + hash 路由 `#co=` 深链 + 搜索过滤 + 移动端 `#coNavSel` **中国/海外** 两组 optgroup + 中国/**海外** 两组导航（组内按 `rank` 升序；中资港股并入中国组，2026-09-26 晚）+ **命名（2026-09-26 晚）**（海外显示 `zh（en）`；中国组 A 股 + 中资港股仅中文，`name` 仍主键）+ **媒体源披露**（选中公司头部 sub 显示「来源：新浪财经 / 官网 RSS / 公司官网」；**海外双源逐条 `.co-src-tag` 披露 SEC披露 / 股票新闻 / 矿业媒体**，根因 `flatten` 透传 `src` + `build_agg_items` 无条件补 EDGAR，§42.32**）+ 豁免显隐 + `switchView('company')` 视图隔离 + **公司视图已读态（独立 key `mining_daily_read_co_urls` + `.read` 弱化 + 标为已读/未读按钮）+ 数据洁净（摘要无电头/地址/征集代理残片 + 无空白卡片）** + 无 JS 错误（§42.19 / §42.26 / §42.27 / §42.29 / §42.31 / §42.32） |
+| `node test_company_section.js` | **179 PASS**（2026-10-10 实测；原记 165 已过时） | 矿业公司动态（v7 + v11：标题层级重设计/右栏分组可折叠/文案精简；单栏 + sticky 修复 + 搜新闻兜底 + 已读态回归 + 数据洁净回归）：跨列布局（**v7：新闻流单栏 + #companySection overflow:clip + 右栏 sticky top:10px + 搜索占位含「内容」+ 暂未收录「搜新闻」链接**）（companySection/installGuide 为 `.news-grid` 直接子级、col-rail 显式定位）+ 288px 侧栏无矿种维度 + 默认近 90 天 + 分页 60 + 日期分组 + 长 t 拆标题/正文 2 行 clamp + 展开全文 + 链接 `dec()` 解码 + `rel=noreferrer` + 摘要 `.co-summary`（仿新闻端）+ **无逐条 `.co-host` 域名行** + 切「全部」并连续「加载更多」渲染全量 + 未收录公司折叠组（已清零）+ 点公司收敛 + **forcedAll 自动放宽** + hash 路由 `#co=` 深链 + 搜索过滤 + 移动端 `#coNavSel` **中国/海外** 两组 optgroup + 中国/**海外** 两组导航（组内按 `rank` 升序；中资港股并入中国组，2026-09-26 晚）+ **命名（2026-09-26 晚）**（海外显示 `zh（en）`；中国组 A 股 + 中资港股仅中文，`name` 仍主键）+ **媒体源披露**（选中公司头部 sub 显示「来源：新浪财经 / 官网 RSS / 公司官网」；**海外双源逐条 `.co-src-tag` 披露 SEC披露 / 股票新闻 / 矿业媒体**，根因 `flatten` 透传 `src` + `build_agg_items` 无条件补 EDGAR，§42.32**）+ 豁免显隐 + `switchView('company')` 视图隔离 + **公司视图已读态（独立 key `mining_daily_read_co_urls` + `.read` 弱化 + 标为已读/未读按钮）+ 数据洁净（摘要无电头/地址/征集代理残片 + 无空白卡片）** + 无 JS 错误（§42.19 / §42.26 / §42.27 / §42.29 / §42.31 / §42.32） |
 | `node test_sw_cache_update.js` | **39** | SW network-first / 注册 URL 固定 / **首装不自动刷新（app.js + index.html 双守卫，含 jsdom 行为双例）** |
 | `PY test_pwa_install.py` | **51 PASS** | PWA 静态闸门（manifest / head / 三时机 / 键漂移 / 尺寸真实性 / 只讲手机 / 对照表 9 行） |
 | `node test_pwa_install_behavior.js` | **43 PASS** | PWA 行为（jsdom 派发 `beforeinstallprompt`；含 ⑨ 面板内展开不得关面板、③b 浏览器识别：Edge 用 `EdgA/` UA 不得误报成安卓 Chrome / vivo 不得谎报成 Chrome） |
@@ -2531,6 +2531,23 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **改过 CSS 断点或 `@media`** → 必须用**真实 Chrome**（jsdom 不评估 `@media`）。
 - **涉及点击热区 / `cursor` / 整卡点击打开原文 / `setupCardOpen` / `.news-summary` 可选性（§42.28）** → 必跑 `node test_smoke_0908.js`（⑬ 段）+ `PY preflight_check.py`。该段含**反向对照**：改动前点摘要必 `window.open` 新标签页（本机实测复现用户痛点）。⚠️ 本机 headless Chrome 被**环境管控**（`--dump-dom` 零输出，见 `headless-chrome-responsive-probe` 技能「退路」节），故 §42.28 的证据等级 = **jsdom 级联计算值**（`.news-item`→`default`、`.news-title`→`pointer`、`.news-summary`→`text`/`text`）+ 源码正则 + `:active` 态源码断言；**不含**真实布局几何（本次改动无布局变化，故可接受）。
 - 全量闸门（如有）＝根目录全部 `test_*.js` + `test_*.py`（**不写死条数**，以实际文件为准；2026-09-13 盘点为 24 个 node / 9 个 python —— 原「21 + 9」已随新增测试漂移）。
+
+### 42.9.1 测试统一入口与时限保障（2026-10-10 立）
+
+**为什么**：06:00 轮节后上线退化到 09:00–10:50；2026-10-10 在测试阶段挂死 71 分钟导致会话被平台掐断、当天 09:13 才上线。用户要求 **08:30 前看到当天内容**。
+
+**统一跑法**：`PY runq.py run_tests_all.py`
+- 默认跑 §42.9 核心集（16 个）；`--all` 跑全量闸门；`<子串>...` 过滤。
+- **单例超时 240s**（超时即 `taskkill /F /T` 杀整棵进程树）、**总预算 2100s**（超预算剩余记 SKIP、有界退出）。
+- 进程内自起 `http://127.0.0.1:8899` 静态服务（`test_p3_*` 需要），免手动起 server；端口被占则复用。
+- 输出仅「每测试一行 + TOTAL」；完整日志 `tmp/run_tests_all_<ts>.log`（明细 JSON 同目录）；退出码 **0=全过 / 1=有失败或超时 / 2=有 SKIP**。
+- ⚠️ **不要**再用 bash `for f in test_*.js` 手写循环（无超时，一个挂死拖垮整轮）。
+
+**执行顺序铁律**：主链路 → `validate_urls.py` → `verify_numbers.py --strict` → **`deploy_pages.py`（先上线）** → **`run_tests_all.py`（后测试）** → commit/push。
+- 测试失败**不回滚线上**，另行修复后重新生成+重部署。
+- 部署后再测试可顺带消除 `test_sw_cache_update.js` 的**部署前假 FAIL**（`CACHE_NAME` 未同步 → 38/1；`deploy_pages.py` 跑完即 39/0）。
+
+**起跑时间**：automation `5cdcdfff-4524-4083-9453-9f6577c7c7d6` 已由 06:00 改为 **05:30**（`FREQ=DAILY;BYHOUR=5;BYMINUTE=30`）；notify 文案统一「**矿业日报05:30**」（prompt 内遗留的「06:00」为历史标签）。目标 **07:30 前上线**，硬底线 **08:30**。
 
 ### 42.10 验证方法与已知的「假 FAIL」坑（从两条 prompt 的节流规则迁入）
 
