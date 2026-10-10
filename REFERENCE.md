@@ -2564,6 +2564,33 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **测试**：`test_automation_lock.py`（**23 PASS / 0 FAIL**，已并入 `run_tests_all.py` 核心集）——锁住「第二实例必被拒」「pid 消失但心跳新鲜仍 LOCKED」「过期可接管」「--force」「源码守卫（防回退）」。
 
+### 42.9.3 外部看门狗（08:30 交付保障，2026-10-10 立）
+
+**背景**：§42.9.1 的「05:30 起跑 + 先部署后测试」是主保障，但 10-10 证明 **08:00 兜底任务会因平台侧启动失败秒退**
+（success:false、会话 jsonl 0 字节）⇒「8:30 一定有内容」不能只靠平台侧 agent 任务，须加**外部**看门狗。
+
+**三层结构（勿拆）**：
+1. **感知层 `watchdog.py`**（零 LLM、零业务副作用）：抓线上 `index.html`，解析头部 `.date-badge`（权威）与
+   `<meta name="build-version">`（兜底），对比本机 `index.html`，给出判定 ——
+   `FRESH`(0) 线上=今天 / `STALE_DEPLOY`(1) 本机=今天但线上不是（**只需重跑 `deploy_pages.py`**）/
+   `STALE_GENERATE`(2) 两边都不是（→ 按 `docs/PIPELINE.md` 补跑整条链路）/ `UNREACHABLE`(3) 抓不到 /
+   `LOCAL_OK`(0) 仅 `--local-only`。
+   ⚠️ 一律 `build_opener(ProxyHandler({}))` 直连（本机注册表代理常驻且会掉线，见 memory §12）；
+   `fetch()` 带 **daemon 线程硬墙钟**（默认 45s）——实测计划任务上下文里 DNS/连接会无视 socket timeout 挂死。
+2. **平台层 automation `edc70345-e657-4255-a6b9-a0267387a734`「矿业资讯 08:30 看门狗补跑」**：
+   `check --json` → `FRESH` 即止；`STALE_DEPLOY` 只部署；`STALE_GENERATE` 读 `docs/PIPELINE.md` 补跑；`LOCKED` 让路。
+3. **OS 层 Windows 计划任务 `mining-daily-watchdog`**（每天 08:30，真·外部，平台挂了也响应）：
+   跑 `watchdog.py alert --local-only --skip-if-locked` —— 只判本机（**不联网、不会卡**），本机非今日则
+   响 Windows Notify + 落 `.watchdog_alert.json`；检测到活动锁则静默（不误报）。
+
+**回退指纹（命中即「看门狗被拆」）**：① `watchdog.py` 缺失，或用了裸 `urllib.request.urlopen(`（会走死注册表代理）；
+② 判定退化为「只看线上 HTTP 200」（丢掉 `STALE_DEPLOY`/`STALE_GENERATE` 的区分）；③ 缺 `--local-only`（OS 层会卡网络）；
+④ 缺 `--skip-if-locked`（活跃运行被误报）；⑤ automation `edc70345…` 或计划任务 `mining-daily-watchdog` 被删；
+⑥ `docs/PIPELINE.md` 缺失（补跑无步骤可依）。
+
+**测试**：`test_watchdog.py`（**37 PASS / 0 FAIL**，已并入 `run_tests_all.py` 核心集）——纯函数（解析/判定/退出码/local-only）
++ 源码守卫（防回退：直连 opener、无裸 urlopen、硬墙钟、两个开关）。
+
 ### 42.10 验证方法与已知的「假 FAIL」坑（从两条 prompt 的节流规则迁入）
 
 **A. 简报 / 要闻类改动要验渲染**：jsdom 不实现 `fetch`，直接 `JSDOM.fromURL` 会拿不到 `morning_report.json`（简报保持隐藏）；验证须在 `beforeParse` 里把 Node 的 `fetch` 桥进 `window`，并起本地 `http.server` 用 `http://` 加载（`file://` 也不行）。⚠️ jsdom 不做布局，`scrollHeight` 恒为 0，会让「内容超高→默认收起」分支静默跳过 —— 须覆盖 `HTMLElement.prototype.scrollHeight`。

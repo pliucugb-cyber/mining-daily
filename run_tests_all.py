@@ -75,6 +75,7 @@ CORE = [
     'test_kyregister.py',
     'test_price_history_unclosed.py',
     'test_automation_lock.py',
+    'test_watchdog.py',
 ]
 
 SUMMARY_RE = re.compile(r'(PASS|FAIL|通过|失败)', re.I)

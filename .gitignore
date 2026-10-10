@@ -70,6 +70,8 @@ netlify/.site.json
 .automation.lock
 .last_run_status.json
 .preflight_status.json
+# 外部看门狗告警记录（watchdog.py alert 落盘；纯运行时状态）
+.watchdog_alert.json
 
 # ===== 本地 node_modules（仅测试用 junction，指向托管 node workspace，不入库）=====
 node_modules/
