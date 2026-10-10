@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-10",
+ "updated_at": "2026-10-11",
  "companies": [
   {
    "name": "紫金矿业",
@@ -134,7 +134,7 @@
    "news_url": "http://www.tlys.cn/list.aspx?parentclassid=67&classid=383",
    "method": "html",
    "unreach": "",
-   "stale": false,
+   "stale": true,
    "rank": 11,
    "items": [
     {
@@ -379,7 +379,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "chrome",
+   "method": "html",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -551,7 +551,7 @@
      "t": "云铝股份：截至六月末股东人数为十五万七千八百五十一户",
      "d": "2026-09-05",
      "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-09-05/doc-iniqtspw3752095.shtml",
-     "s": "2026-09-04 17:00 云铝股份9月4日现1笔大宗交易 总成交金额8408.92万元 溢价率为0.19%",
+     "s": "投资者提问：截止8月底股东人数多少？董秘回答(云铝股份SZ000807)：您好，首先感谢您对云铝股份的关心、支持和信任。关于股东人数，公司按照信息披露相关规定，在定期报告中予以披露，截至2026年6月末最后一个交易日的股东人数为157,85...",
      "k": "news"
     }
    ]
@@ -605,17 +605,24 @@
    "rank": 20,
    "items": [
     {
+     "t": "天山铝业再次入围中国民营企业500强",
+     "d": "2026-10-10",
+     "u": "http://www.tslyjt.com/info/1123",
+     "s": "近日，2026中国民营企业500强发布会在天津隆重举行。天山铝业集团凭借扎实的经营底盘与稳健的综合实力，位列中国民营企业500强第449位、中国制造业民营企业500强第322位。",
+     "k": "news"
+    },
+    {
+     "t": "天山铝业获批设立国家级博士后科研工作站",
+     "d": "2026-10-10",
+     "u": "http://www.tslyjt.com/info/1119",
+     "s": "近日，天山铝业有限公司成功获批设立国家级博士后科研工作站，标志着企业高层次人才引育、产学研协同创新平台建设迈上新台阶。工作站将立足电解铝全产业链发展需求，紧扣安全生产、技术创新、节能降耗、绿色发展主线，持续培育壮大新质生产力，为企业高质量发展注入强劲智力动能。",
+     "k": "news"
+    },
+    {
      "t": "天山铝业公司生产稳定高效运行车间一线热火朝天赶产保供",
      "d": "2026-04-03",
      "u": "http://www.tslyjt.com/info/1102",
      "s": "目前，公司 140万吨电解铝绿色低碳能效提升改造项目首批电解槽顺利达产，新槽建设全面铺开。",
-     "k": "news"
-    },
-    {
-     "t": "科技创新结硕果 绿色智造启新程",
-     "d": "2026-04-03",
-     "u": "http://www.tslyjt.com/info/1101",
-     "s": "2025年，天山铝业集团始终高度重视科技创新工作，坚定不移实施创新驱动发展战略，将技术攻关摆在企业发展核心位置，聚焦绿色低碳转型、高端精深加工突破与智能化升级提速，在关键技术研发、科技成果转化、行业荣誉评定等领域接连实现重大突破，以硬核科创实力全面赋能企业高质量发展，充分彰显行业龙头的责任与担当。",
      "k": "news"
     }
    ]
@@ -637,7 +644,7 @@
    "rank": 5,
    "items": [
     {
-     "t": "山东黄金集团召开安全生产工作专题会议",
+     "t": "集团召开安全生产工作专题会议",
      "d": "",
      "u": "https://www.sd-gold.com/cmscontent/5811.html",
      "s": "9月30日上午，山东黄金集团召开安全生产工作专题会议，深入学习贯彻习近平总书记关于安全生产的重要指示精神，传达学习全国、全省安全生产视频会议精神和省国资委会议要求，分析当前形势任务，安排部署下步工作。",
@@ -648,13 +655,6 @@
      "d": "",
      "u": "https://www.sd-gold.com/cmscontent/5810.html",
      "s": "张晓海指出，今年以来，集团上下坚决落实省委、省人民政府的工作要求，主动担当作为，强化保障举措，狠抓推进落实，组织领导更加有力，制度机制逐步健全，数智赋能不断强化，工作成果持续凸显，取得了明显工作成效。",
-     "k": "news"
-    },
-    {
-     "t": "集团与交通银行举行工作会谈并签署全面战略合作协议",
-     "d": "",
-     "u": "https://www.sd-gold.com/cmscontent/5809.html",
-     "s": "9月18日上午，山东黄金集团与交通银行在上海举行工作会谈并签署全面战略合作协议。山东黄金集团党委书记、董事长张晓海与交通银行党委书记、董事长任德奇围绕积极服务国家战略、全面深化务实合作、共促高质量发展等进行深入交流并见证签约。",
      "k": "news"
     },
     {
@@ -1086,13 +1086,6 @@
      "u": "https://www.huayou.com/news/corporate-news/758",
      "s": "9月22日，全国工商联发布“2026中国民营企业500强”“2026中国制造业民营企业500强”榜单。华友控股集团再次上榜，位列中国民营企业500强第78位，上升23位；中国制造业民营企业500强第57位，上升13位。",
      "k": "news"
-    },
-    {
-     "t": "华友钴业联合发起《全球矿业可持续发展联合倡议》",
-     "d": "2026-09-15",
-     "u": "https://www.huayou.com/news/corporate-news/755",
-     "s": "近日，在联合国全球契约组织（UNGC）第二届全球企业高质量共建“一带一路”（新加坡）峰会上，华友钴业、友山科技等18家全球矿业及产业链企业共同发起《全球矿业可持续发展联合倡议（GMSA）》。",
-     "k": "news"
     }
    ]
   },
@@ -1152,6 +1145,27 @@
    "rank": 3,
    "items": [
     {
+     "t": "【稀土要闻】北方稀土稀土纺织科技成果亮相中国国际纺纱展",
+     "d": "2026-10-10",
+     "u": "https://finance.sina.com.cn/roll/2026-10-10/doc-iniututh0706039.shtml",
+     "s": "（来源：你好北方稀土）日前，2026中国国际纺织纱线（秋冬）展览会在上海国家会展中心启幕，包头稀土研究院天津分院（以下简称天津分院）携手中纺院天津纺科登陆通用技术新材展团稀土专区，将多年持续科研攻关的稀土纺织系列创新成果集中对外展示，让越来...",
+     "k": "news"
+    },
+    {
+     "t": "【财闻联播】9连板大牛股，发布风险提示！北方稀土、包钢股份，集体涨价",
+     "d": "2026-10-09",
+     "u": "https://finance.sina.com.cn/stock/zqgd/2026-10-09/doc-iniurvzz6666610.shtml",
+     "s": "★ 宏观动态★ 中共中央、国务院印发《关于发展新质生产力的意见》部署19项重点举措为加快发展新质生产力，中共中央、国务院印发《关于发展新质生产力的意见》。意见部署19项重点举措，涉及大力推进科技创新、推动科技创新和产业创新深度融合、着力推进...",
+     "k": "news"
+    },
+    {
+     "t": "北方稀土：南北协同循环向新",
+     "d": "2026-10-09",
+     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-10-09/doc-iniurfep7841866.shtml",
+     "s": "近年来，北方稀土紧扣循环经济发展要求，将稀土二次资源综合利用作为产业升级重要抓手，依托南北协同布局、深化优势互补，全力打通“开采——冶炼——应用——回收——再生”全产业链条，通过规模化布局、智能化提升、全流程绿色管控，持续提升资源综合利用率...",
+     "k": "news"
+    },
+    {
      "t": "北方稀土(600111)深度研究报告：依托白云鄂博资源禀赋的轻稀土龙头 量价齐升业绩再创新高",
      "d": "2026-10-07",
      "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/844695962204/index.phtml",
@@ -1184,27 +1198,6 @@
      "d": "2026-09-27",
      "u": "https://finance.sina.com.cn/roll/2026-09-27/doc-inithqqa0049030.shtml",
      "s": "下一步，北方稀土将在当好高质量建设“两个稀土基地”主力军、加速建成世界一流稀土领军企业的征程中，统筹推进价值创造、价值发现、价值传播、价值经营、价值分享等价值链各环节工作，畅通价值传递渠道，推动发展成果与投资者共享，持续增强投资者对公司的认知度与认可度，实现公司内在价值与资本市场表现良性互促。",
-     "k": "news"
-    },
-    {
-     "t": "北方稀土磁材公司钕铁硼速凝合金项目试生产 8台熔炼炉全线贯通",
-     "d": "2026-09-23",
-     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-09-23/doc-inisuhkm8615399.shtml",
-     "s": "北方稀土磁材公司高性能钕铁硼速凝合金项目8台熔炼炉已实现全线贯通，进入试生产阶段，产能正在有序释放，预计今年年底实现全线投产。该项目于2025年4月25日正式启动，是高质量建设“两个稀土基地”的重要支撑。面对钕铁硼速凝合金市场持续扩容，包钢...",
-     "k": "news"
-    },
-    {
-     "t": "【稀土要闻】北方稀土：深耕新兴产业赛道 激活发展新质动能",
-     "d": "2026-09-20",
-     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-09-20/doc-inisnsst2438792.shtml",
-     "s": "面向未来， 北方稀土 将持续深耕新 能源 、氢能 储能 、具身智能等新兴产业赛道，围绕 稀土 全元素、全品类组织科研攻关，持续丰富高端 稀土 新材料与终端产品供给，完善 稀土 全产业链体系，为加速建成世界一流 稀土 领军企业、当好高质量建设“两个 稀土 基地”主力军增势赋能。",
-     "k": "news"
-    },
-    {
-     "t": "北方稀土：第九届董事会第十六次会议决议公告",
-     "d": "2026-09-18",
-     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-09-18/doc-inisheny8357638.shtml",
-     "s": "2026-09-18 19:41 【稀土要闻】内蒙古大学专家学者莅临北方稀土调研交流",
      "k": "news"
     }
    ]
@@ -1537,15 +1530,6 @@
      "t_en": "Newmont Announces Third Quarter 2026 Results Conference Call | NEM Stock News"
     },
     {
-     "t": "黄金巨头正在返还创纪录的现金，而不是建造新矿| NEM股票新闻",
-     "d": "2026-09-17",
-     "u": "https://www.stocktitan.net/news/NEM/gold-majors-are-returning-record-cash-instead-of-building-new-9q7ymo93e9no.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Gold Majors Are Returning Record Cash Instead of Building New Mines | NEM Stock News"
-    },
-    {
      "t": "Newmont任命Peter Beaven为董事会成员| NEM股票新闻",
      "d": "2026-08-20",
      "u": "https://www.stocktitan.net/news/NEM/newmont-appoints-peter-beaven-to-board-of-x4qyau1twtcs.html",
@@ -1652,6 +1636,15 @@
      "k": "news",
      "src": "agg",
      "t_en": "Newmont’s Red Chris Block Cave Project Receives Major Regulatory Approvals | NEM Stock News"
+    },
+    {
+     "t": "Newmont宣布下一阶段交付的关键高管任命| NEM股票新闻",
+     "d": "2026-06-15",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-announces-key-executive-appointments-for-the-next-phase-of-3as7qadnby6p.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Newmont Announces Key Executive Appointments for the Next Phase of Delivery | NEM Stock News"
     }
    ]
   },
@@ -1735,15 +1728,6 @@
      "t_en": "Multiple unions threaten strikes at Barrick’s flagship Mali gold mine, documents show"
     },
     {
-     "t": "黄金巨头正在返还创纪录的现金，而不是建造新矿| B股新闻",
-     "d": "2026-09-17",
-     "u": "https://www.stocktitan.net/news/B/gold-majors-are-returning-record-cash-instead-of-building-new-9q7ymo93e9no.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Gold Majors Are Returning Record Cash Instead of Building New Mines | B Stock News"
-    },
-    {
      "t": "Agnico Eagle没有加入Barrick IPO的计划",
      "d": "2026-09-15",
      "u": "https://www.mining.com/agnico-eagle-has-no-plans-to-join-barricks-ipo/",
@@ -1814,6 +1798,15 @@
      "k": "news",
      "src": "mining",
      "t_en": "Gold price holds jobs-shock gain, Barrick craters"
+    },
+    {
+     "t": "巴里克，纽蒙特与$ 19.5亿的交易解决纠纷",
+     "d": "2026-08-10",
+     "u": "https://www.mining.com/barrick-newmont-settle-dispute-with-1-95b-deal/",
+     "s": "争议结束时，巴里克报告第二季度调整后的盈利与分析师的估计相匹配，因为生产成本较高， …",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Barrick, Newmont settle dispute with $1.95B deal"
     }
    ]
   },
@@ -1859,15 +1852,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Freeport Declares Quarterly Cash Dividends on Common Stock | FCX Stock News"
-    },
-    {
-     "t": "智利铜产量创下19年来最低纪录| FCX股票新闻",
-     "d": "2026-09-17",
-     "u": "https://www.stocktitan.net/news/FCX/copper-hit-a-record-high-as-chile-posts-its-weakest-output-in-19-ml51mgq5pud7.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Copper Hit a Record High as Chile Posts Its Weakest Output in 19 Years | FCX Stock News"
     },
     {
      "t": "SEC 10-Q（季度报告）",
@@ -1977,15 +1961,6 @@
    "stale": false,
    "rank": 28,
    "items": [
-    {
-     "t": "智利铜产量创下19年来最低纪录| SCCO股票新闻",
-     "d": "2026-09-17",
-     "u": "https://www.stocktitan.net/news/SCCO/copper-hit-a-record-high-as-chile-posts-its-weakest-output-in-19-ml51mgq5pud7.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Copper Hit a Record High as Chile Posts Its Weakest Output in 19 Years | SCCO Stock News"
-    },
     {
      "t": "SEC 10-Q（季度报告）",
      "d": "2026-07-31",
@@ -2203,15 +2178,6 @@
    "rank": 29,
    "items": [
     {
-     "t": "锑市场面临11月27日中国出口管制截止日期| AEM股票新闻",
-     "d": "2026-10-05",
-     "u": "https://www.stocktitan.net/news/AEM/antimony-market-faces-a-nov-27-export-control-deadline-from-b3yjbydljmq1.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Antimony Market Faces a Nov. 27 Export-Control Deadline from China | AEM Stock News"
-    },
-    {
      "t": "SEC 6-K（外资发行人报告）",
      "d": "2026-09-29",
      "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926111750/",
@@ -2282,6 +2248,15 @@
      "k": "news",
      "src": "mining",
      "t_en": "Agnico Eagle keeps 2026 target despite 370,000-ounce loss"
+    },
+    {
+     "t": "AGNICO Eagle报告2026年第二季度业绩-创纪录的季度自由现金流反映了稳健的运营业绩；",
+     "d": "2026-07-29",
+     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-reports-second-quarter-2026-results-record-quarterly-85mw5jmf8iz0.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "AGNICO EAGLE REPORTS SECOND QUARTER 2026 RESULTS - RECORD QUARTERLY FREE CASH FLOW REFLECTS SOLID OPERATIONAL PERFORMANCE; RECORD QUARTERLY SHAREHOLDER RETURNS | AEM Stock News"
     },
     {
      "t": "Agnico Eagle暂停魁北克矿坑开采，旗帜生产受到打击",
@@ -2429,6 +2404,13 @@
    "rank": 99,
    "items": [
     {
+     "t": "路通民心 共促发展｜Bikita矿业索塞拉购物中心至恩丹巴尼道路修缮项目正式开工",
+     "d": "2026-10-10",
+     "u": "http://www.sinomine.cn/xwdti/428.html",
+     "s": "此次道路修缮项目是Bikita矿业 ESG体系建设的重要一环，也是公司长期推进社区投入计划的延续。",
+     "k": "news"
+    },
+    {
      "t": "中矿资源Bikita钽铌回收二厂项目隆重开工 津巴布韦矿业部部长及马辛戈省长出席",
      "d": "2026-09-26",
      "u": "http://www.sinomine.cn/xwdti/427.html",
@@ -2440,13 +2422,6 @@
      "d": "2026-09-22",
      "u": "http://www.sinomine.cn/xwdti/426.html",
      "s": "2026年9月21日，中矿卡通巴矿业有限公司（以下简称“卡通巴矿业”）选矿厂完成建设期各项工作任务，正式进入生产运营阶段。",
-     "k": "news"
-    },
-    {
-     "t": "擘画非洲新蓝图 开启协同新征程",
-     "d": "2026-09-20",
-     "u": "http://www.sinomine.cn/xwdti/424.html",
-     "s": "作为中南非中心“赋能服务、深化协同”职能的首次重要实践，仪式上举行了首批配套企业战略合作签约仪式。王治伟总经理代表中南非中心与五家服务型企业签署战略合作协议。通过构建上下游配套企业集群，一个资源共享、优势互补的产业生态圈正加快形成，集团在非业务领域正式开启区域协同化、系统化布局。",
      "k": "news"
     }
    ]
@@ -2668,6 +2643,13 @@
    "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "不通过就关停？五矿资源5亿美元并购何去何从？",
+     "d": "2026-10-08",
+     "u": "https://finance.sina.com.cn/stock/relnews/hk/2026-10-08/doc-iniupnux4326370.shtml",
+     "s": "2025年2月， 中国五矿 集团 控股的 五矿资源（ MMG ） 与 英美资源集团 达成协议，收购其位于巴西的镍铁业务。交易资产包括 两座镍铁生产厂 以及两个绿地开发项目，交易金额约为 5亿美元 （约合 26亿雷亚尔） 。",
+     "k": "news"
+    },
     {
      "t": "低碳镍铁外流引担忧！五矿资源巴西镍资产收购博弈升级，11 月底出裁决",
      "d": "2026-09-18",
@@ -3508,6 +3490,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 349
+  "items": 347
  }
 }
