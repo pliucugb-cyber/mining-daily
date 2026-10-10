@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-09",
+ "updated_at": "2026-10-10",
  "companies": [
   {
    "name": "紫金矿业",
@@ -1672,6 +1672,15 @@
    "rank": 27,
    "items": [
     {
+     "t": "Barrick将于11月9日公布2026年第三季度业绩| B股新闻",
+     "d": "2026-10-09",
+     "u": "https://www.stocktitan.net/news/B/barrick-to-report-third-quarter-2026-results-on-november-myy5xzslmc4k.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Barrick to Report Third Quarter 2026 Results on November 9 | B Stock News"
+    },
+    {
      "t": "Barrick在坦桑尼亚获得15年北马拉采矿许可证",
      "d": "2026-10-05",
      "u": "https://www.mining.com/barrick-secures-15-year-north-mara-mining-licences-in-tanzania/",
@@ -1805,15 +1814,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Gold price holds jobs-shock gain, Barrick craters"
-    },
-    {
-     "t": "巴里克，纽蒙特与$ 19.5亿的交易解决纠纷",
-     "d": "2026-08-10",
-     "u": "https://www.mining.com/barrick-newmont-settle-dispute-with-1-95b-deal/",
-     "s": "争议结束时，巴里克报告第二季度调整后的盈利与分析师的估计相匹配，因为生产成本较高， …",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick, Newmont settle dispute with $1.95B deal"
     }
    ]
   },
@@ -3230,6 +3230,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "嘉能可看到电气化趋势推动澳大利亚房源的强劲增长",
+     "d": "2026-10-09",
+     "u": "https://www.mining.com/web/glencore-sees-electrification-trend-driving-strong-uptake-for-australia-listing/",
+     "s": "它也是世界上最大的动力煤生产商之一，由于授权限制，前几年可能阻碍了煤炭的吸收，但Nagle表示……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Glencore sees electrification trend driving strong uptake for Australia listing"
+    },
+    {
      "t": "嘉能可表示，今年的交易利润将超过50 $",
      "d": "2026-10-02",
      "u": "https://www.mining.com/web/glencore-says-trading-profits-will-top-5-billion-this-year/",
@@ -3309,15 +3318,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Glencore can bring $236 million UK lawsuit against refinery, court rules"
-    },
-    {
-     "t": "探索杰富瑞与嘉能可围绕Radiant长达数月的争吵",
-     "d": "2026-09-20",
-     "u": "https://www.mining.com/web/inside-jefferies-months-long-tussle-with-glencore-over-radiant/",
-     "s": "Still, Radiant World later defaulted on that agreement, Jefferies claimed in the same document.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Inside Jefferies’ months-long tussle with Glencore over Radiant"
     }
    ]
   },
