@@ -2549,6 +2549,21 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 **起跑时间**：automation `5cdcdfff-4524-4083-9453-9f6577c7c7d6` 已由 06:00 改为 **05:30**（`FREQ=DAILY;BYHOUR=5;BYMINUTE=30`）；notify 文案统一「**矿业日报05:30**」（prompt 内遗留的「06:00」为历史标签）。目标 **07:30 前上线**，硬底线 **08:30**。
 
+### 42.9.2 自动化互斥锁（心跳版，2026-10-10 P1 修复）
+
+**背景**：`automation_lock.py` 原判定 `_recent(ttl) and alive`，但锁里的 `pid` 是**执行 acquire 的短命子进程**
+——acquire 一返回该进程即退出 → `alive` 恒为 False → **第二个实例必然抢占成功**，本该防 05:30/08:00 并发的保护完全不存在
+（实测：`acquire testA` 后 1 秒 `check testA` → STALE；再 `acquire testB` → ACQUIRED）。
+**佐证**：10-10 08:00 轮与 06:00 轮**确实并发执行**（08:00:45 启动的那次 run 在 06:00 轮仍在跑时就开始）⇒ 该锁是真需要。
+
+**修法（心跳 + 纯时间戳，不再看 pid）**：
+- 锁新鲜度 = `now - max(started, beat) < ttl`；新鲜即 LOCKED，过期才可抢占。`DEFAULT_TTL = 60` 分钟。
+- **心跳落点**＝`runq.py`：每次跑脚本前后调 `automation_lock.heartbeat()` 刷新 `beat`（纯尽力而为，异常吞掉）。
+- 新增 `renew <name>`（同名刷新心跳）与 `acquire --force`（应急强制接管）。**既有协议串不变**（ACQUIRED/LOCKED/RELEASED/FREE/STALE）。
+- 挂死/被杀 → 心跳停止 → 超 ttl 判 STALE → 下一轮可自动接管；`--force`/`release` 供人工应急。
+
+**测试**：`test_automation_lock.py`（**23 PASS / 0 FAIL**，已并入 `run_tests_all.py` 核心集）——锁住「第二实例必被拒」「pid 消失但心跳新鲜仍 LOCKED」「过期可接管」「--force」「源码守卫（防回退）」。
+
 ### 42.10 验证方法与已知的「假 FAIL」坑（从两条 prompt 的节流规则迁入）
 
 **A. 简报 / 要闻类改动要验渲染**：jsdom 不实现 `fetch`，直接 `JSDOM.fromURL` 会拿不到 `morning_report.json`（简报保持隐藏）；验证须在 `beforeParse` 里把 Node 的 `fetch` 桥进 `window`，并起本地 `http.server` 用 `http://` 加载（`file://` 也不行）。⚠️ jsdom 不做布局，`scrollHeight` 恒为 0，会让「内容超高→默认收起」分支静默跳过 —— 须覆盖 `HTMLElement.prototype.scrollHeight`。

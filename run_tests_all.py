@@ -74,6 +74,7 @@ CORE = [
     'test_pwa_install.py',
     'test_kyregister.py',
     'test_price_history_unclosed.py',
+    'test_automation_lock.py',
 ]
 
 SUMMARY_RE = re.compile(r'(PASS|FAIL|通过|失败)', re.I)

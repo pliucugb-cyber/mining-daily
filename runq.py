@@ -39,6 +39,20 @@ _ERR_HINTS = ('Traceback', 'Exception', 'Error', 'ERROR', '❌', '失败', 'FAIL
               '失败:', '错误', '异常')
 
 
+def _heartbeat():
+    """尽力刷新 .automation.lock 的心跳（锁存在时）。
+
+    2026-10-10：automation_lock 改心跳版——只要某次运行还在跑脚本，锁就该保持新鲜，
+    从而正确阻塞 05:30 / 08:00 并发。这是「心跳打点」的唯一自然落点（长脚本都经 runq）。
+    纯尽力而为：锁不存在 / 无 automation_lock / 任何异常 → 静默跳过，绝不影响主流程。
+    """
+    try:
+        from automation_lock import heartbeat
+        heartbeat()
+    except Exception:
+        pass
+
+
 def main():
     if len(sys.argv) < 2:
         print('usage: python runq.py <target.py> [args...]')
@@ -48,12 +62,14 @@ def main():
     target = Path(sys.argv[1]).stem
     log_path = TMP / f'runq_{ts}_{target}.log'
 
+    _heartbeat()
     try:
         proc = subprocess.run(cmd, cwd=str(ROOT), capture_output=True,
                               text=True, encoding='utf-8', errors='replace', timeout=1800)
     except Exception as e:
         print(f'RUNQ_RUN_ERROR: {e}')
         return 3
+    _heartbeat()
 
     full = (proc.stdout or '') + ('\n' + proc.stderr if proc.stderr else '')
     try:
