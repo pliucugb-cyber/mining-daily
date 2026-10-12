@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
-"""B' 全流程编排（cron 入口）。
+"""B' 生成编排（cron 内的"生成"步骤，不负责部署）。
 
-串联：取候选 -> 生成 -> judge/repair -> 数字守门 -> 渲染 -> 部署。
+串联：取候选 -> 生成(LLM) -> judge/repair -> 落盘 site_news -> 渲染整站(generate_site.py) -> 数字守门。
+部署由外部 cron 在 export_news_json / build_static 之后统一调 deploy_pages.py，
+因为 news-data.js 必须等 index.html 生成后才能由 export_news_json 反解写出。
 
-mock 模式：读快照、不碰真实 index.html、不部署，仅验证模块串联与校验生效
+mock 模式：读快照、不调真实 LLM、不写 index.html、不部署，仅验证模块串联与校验生效
            （本地"搭通待激活"用，零成本、不依赖网络/key）。
-激活模式：填 DEEPSEEK_API_KEY + 真实候选池（fetch_news 产出），走完整链路推 gh-pages。
+激活模式：填 DEEPSEEK_API_KEY + 真实候选池（fetch_news 产出），走完整链路写到 index.html。
 """
 import sys
 import os
 import json
+import subprocess
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from bprime import config, llm, generate, judge
 from verify_numbers import load_source_map, verify_new_items
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def _load_candidates(report, mock, data_dir='data'):
@@ -26,6 +31,14 @@ def _load_candidates(report, mock, data_dir='data'):
         d = json.load(open(cand, encoding='utf-8'))
         return d.get('items') or d.get('news') or (d if isinstance(d, list) else [])
     return []
+
+
+def _run(cmd, env=None):
+    """跑子进程，日志直出（cron 场景便于排查），非零退出即抛错。"""
+    print('[run] %s' % ' '.join(cmd))
+    p = subprocess.run(cmd, cwd=ROOT, env=env)
+    if p.returncode != 0:
+        raise RuntimeError('命令失败(rc=%d): %s' % (p.returncode, ' '.join(cmd)))
 
 
 def run(report=None, mock=False, strict=None):
@@ -51,35 +64,33 @@ def run(report=None, mock=False, strict=None):
 
     graded, stats = judge.judge_repair(items, llm_client, src_map, report)
 
-    # 渲染预览（复用 generate_common 真实渲染原语；mock 不碰 index.html）
-    import generate_common
-    seq = []
-    for meta, summary, grade in graded:
-        if grade == 'dropped':
-            continue
-        it = generate_common.ni(meta.get('url', ''), meta.get('source', ''),
-                                meta.get('date', report), meta.get('title', ''), summary,
-                                embed='ok', orig_title=meta.get('orig_title', ''))
-        seq.append((meta.get('category', '行业动态'), it))
-    html = generate_common.render_cat_groups(seq, mark_new=True)
-    preview = os.path.join('data', 'bprime_preview_%s.html' % report)
-    open(preview, 'w', encoding='utf-8').write('<html><body>%s</body></html>' % html)
-    print('[render] 预览 %s（%d 条，dropped 已排除）' % (preview, len(seq)))
+    # 落盘 site_news（仅非 dropped；dropped 不进站点）
+    site_items = [(m, s) for (m, s, g) in graded if g != 'dropped']
+    news_json = generate.dump_site_news(site_items, report)
+    print('[pipeline] 进入站点渲染 %d 条（dropped=%d）'
+          % (len(site_items), stats['dropped']))
 
-    # 数字落地最终守门（复用 verify_new_items；strict 时未落地抛异常）
+    if mock:
+        print('[pipeline] MOCK：跳过 generate_site + 校验（激活后真跑）')
+        print('[pipeline] 完成。分级 auto=%d review=%d dropped=%d'
+              % (stats['auto'], stats['review'], stats['dropped']))
+        return graded, stats
+
+    # 真实渲染整站（generate_site.py 读 index.html 模板并覆盖写回）
+    env = os.environ.copy()
+    if strict:
+        env['VERIFY_NUMBERS_STRICT'] = '1'
+    _run([sys.executable, os.path.join(ROOT, 'generate_site.py'),
+          '--date', report, '--news-json', news_json], env=env)
+
+    # 数字落地最终守门（strict 时未落地抛异常，由调用方决定是否阻断部署）
     try:
-        verify_new_items(seq, report, strict=strict, src_map_override=src_map)
+        verify_new_items(site_items, report, strict=strict, src_map_override=src_map)
     except AssertionError as e:
         print('[pipeline] ⚠️ 数字守门未通过：%s' % e)
         if strict:
-            print('[pipeline] strict 模式：中止（不部署）')
+            print('[pipeline] strict 模式：中止（不部署）。请人工核对后重跑或放宽 strict')
             return graded, stats
-
-    # 部署
-    if mock:
-        print('[deploy] MOCK 模式：跳过 deploy_pages.py（激活后真推 gh-pages）')
-    else:
-        print('[deploy] 调用 deploy_pages.py ...')  # 激活时：os.system('python deploy_pages.py')
 
     print('[pipeline] 完成。分级 auto=%d review=%d dropped=%d'
           % (stats['auto'], stats['review'], stats['dropped']))
@@ -88,9 +99,9 @@ def run(report=None, mock=False, strict=None):
 
 if __name__ == '__main__':
     import argparse
-    ap = argparse.ArgumentParser(description='B\' 无人化日报 pipeline')
+    ap = argparse.ArgumentParser(description='B\' 生成编排（不含部署）')
     ap.add_argument('--report')
-    ap.add_argument('--mock', action='store_true', help='离线模式：读快照、不部署')
+    ap.add_argument('--mock', action='store_true', help='离线模式：读快照、不写 index.html')
     ap.add_argument('--strict', action='store_true', help='数字未落地即中止')
     a = ap.parse_args()
     run(report=a.report, mock=a.mock, strict=a.strict)

@@ -6,6 +6,7 @@
 """
 import sys
 import os
+import json
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from bprime import config, llm
 
@@ -31,3 +32,27 @@ def generate_summaries(candidates, llm_client, report):
         out.append((meta, summary))
     print('[generate] 生成 %d 条摘要' % len(out))
     return out
+
+
+def dump_site_news(items, report, path=None):
+    """把 (meta, summary) 序列落盘为 generate_site.py 可消费的 site_news JSON。
+
+    schema: [{url, source, date, title, summary, orig_title, category, region}]
+    report 缺省时回退到各条 meta 自身的 date。
+    """
+    path = path or os.path.join('data', 'site_news_%s.json' % report)
+    out = []
+    for meta, summary in items:
+        out.append({
+            'url': meta.get('url', ''),
+            'source': meta.get('source', ''),
+            'date': meta.get('date', report),
+            'title': meta.get('title', ''),
+            'summary': summary,
+            'orig_title': meta.get('orig_title', ''),
+            'category': meta.get('category', ''),
+            'region': meta.get('region', ''),
+        })
+    json.dump(out, open(path, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    print('[generate] 写出 site_news %s（%d 条）' % (path, len(out)))
+    return path
