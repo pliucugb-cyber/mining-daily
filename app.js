@@ -6452,21 +6452,39 @@ else { setupNewsFilterBar(); setupExportButtons(); }
         picked=uniq;
       }
       var html='';
-      // 2026-09-08 晚：全量展示（列表限高 185px 滚动），去掉「另有 N 场会议」死文本——
-      // 有多少展多少，放不下用户自己滚，条目链接全部可点。
-      picked.forEach(function(el){
-        var t=titleOf(el).trim(),u=urlOf(el),d=dateOf(el);
-        html+='<li><a href="'+safeHref(u)+'" target="_blank" rel="noopener" title="'+esc(t)+'">'+esc(t)+'</a>'
-            +(d?'<span class="expo-mini-date">'+esc(d)+'</span>':'')+'</li>';
-      });
-      // 桌面端侧栏迷你卡：仅桌面展示；移动端隐藏（列表由「会议」tab 承担）。
-      if(isDesktop() && box && ul){ ul.innerHTML=html; box.style.display=''; }
-      // 条目移入隐藏容器：仍在 DOM 内（保留已读/收藏/搜索），但主区不再重复展示。
-      // 关键：移动端也必须执行本步，否则会展条目既出现在主信息流、又在「会议」tab 出现双份（A4 重复根因）。
-      // —— 不按主列表 URL 过滤「会议」tab（移动端会清空该 tab），正解即让 vault 迁移在移动端也执行。
+      // 2026-10-13：只展示近 14 天的会展（过期自动下线），并瘦身为「默认 3 条 + 展开」。
+      //   旧会展（9 月那批）会一直挂在卡片上 → 显旧；本条闸门与热榜 HOT_MAX_AGE 同思路。
+      //   时效基准取数据 updated（取不到用本机今天）；无日期的条目保守保留。
+      var _base=(function(){try{var u=window.NEWS_DATA&&window.NEWS_DATA.updated;var m=u&&String(u).match(/(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);}catch(e){}var _t=new Date();return new Date(_t.getFullYear(),_t.getMonth(),_t.getDate());})();
+      function _daysAgo(ds){var m=/^(\d{1,2})-(\d{1,2})$/.exec(ds||'');if(!m)return null;var cand=new Date(_base.getFullYear(),+m[1]-1,+m[2]);if(cand-_base>36*86400000)cand=new Date(_base.getFullYear()-1,+m[1]-1,+m[2]);return Math.round((_base-cand)/86400000);}
+      var recent=picked.filter(function(el){var n=_daysAgo(dateOf(el));return n===null||(n>=0&&n<=14);});
+      // 条目一律移入隐藏容器：仍在 DOM 内（保留已读/收藏/搜索），且消除与主列表/「会议」tab 的重复。
+      // 关键：无论是否展示都迁移，维持 2026-09-11 A4 去重语义不变；移动端也必须执行本步。
       var vault=document.getElementById('expoVault');
       if(!vault){ vault=document.createElement('div'); vault.id='expoVault'; vault.style.display='none'; document.body.appendChild(vault); }
       picked.forEach(function(el){ el.classList.remove('is-new'); vault.appendChild(el); });
+      // 卡片：默认 EXPO_SHOW 条，超出折叠；无近期会展则整块隐藏（仅桌面注入迷你卡）。
+      var EXPO_SHOW=3;
+      if(isDesktop() && box && ul){
+        if(!recent.length){ box.style.display='none'; ul.innerHTML=''; }
+        else{
+          var _html='';
+          recent.forEach(function(el,idx){
+            var t=titleOf(el).trim(),u=urlOf(el),d=dateOf(el);
+            _html+='<li'+(idx>=EXPO_SHOW?' class="expo-extra" hidden':'')+'><a href="'+safeHref(u)+'" target="_blank" rel="noopener" title="'+esc(t)+'">'+esc(t)+'</a>'
+                +(d?'<span class="expo-mini-date">'+esc(d)+'</span>':'')+'</li>';
+          });
+          if(recent.length>EXPO_SHOW){ _html+='<li class="expo-more"><button type="button" class="expo-more-btn">展开全部 '+recent.length+' 条 ▾</button></li>'; }
+          ul.innerHTML=_html;
+          box.style.display='';
+          var _mb=ul.querySelector('.expo-more-btn');
+          if(_mb){ _mb.onclick=function(){
+            var open=ul.classList.toggle('expo-open');
+            Array.prototype.slice.call(ul.querySelectorAll('.expo-extra')).forEach(function(li){ if(open)li.removeAttribute('hidden'); else li.setAttribute('hidden',''); });
+            _mb.textContent=open?'收起 ▴':('展开全部 '+recent.length+' 条 ▾');
+          }; }
+        }
+      }
       if(typeof refresh==='function'){ try{refresh();}catch(e){} }
     }catch(e){}
   }

@@ -172,12 +172,27 @@ setTimeout(() => {
   const mini = doc.getElementById('expoMini');
   check('侧栏迷你卡容器存在', !!mini);
   check('迷你卡在右栏 col-rail 内', !!(mini && mini.closest('.col-rail')));
-  // 2026-09-08 晚：全量展示 + 限高滚动，「另有 N 场」死文本已删
-  const miniItems = [...doc.querySelectorAll('#expoMiniList li')];
+  // 2026-10-13 改：会展卡加「时效闸门（近14天）＋瘦身（默认3条+展开）」。
+  //   卡片条目数不再等于 vault 数：vault 仍收纳全部会展条目（维持 A4 去重），卡片只展示近期项且默认折叠。
+  const miniItems = [...doc.querySelectorAll('#expoMiniList li:not(.expo-more)')];
   check('迷你卡无「另有 N 场」残留行', doc.querySelectorAll('#expoMiniList .expo-mini-more').length === 0);
   check('迷你卡条目全部带链接（可点击）', miniItems.every(li => li.querySelector('a[href]')));
   const vaultAll = doc.querySelectorAll('#expoVault .news-item').length;
-  check('迷你卡条目数 = 移入 vault 条数（无截断）', miniItems.length === vaultAll, 'list=' + miniItems.length + ' vault=' + vaultAll);
+  check('迷你卡条目数 <= vault 条数（时效闸门收敛，非无脑截断）', miniItems.length <= vaultAll, 'list=' + miniItems.length + ' vault=' + vaultAll);
+  const _expoDaysAgo = (mmdd) => {
+    const m = /^(\d{1,2})-(\d{1,2})$/.exec(mmdd || ''); if (!m) return null;
+    const now = new Date(); const base = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let cand = new Date(base.getFullYear(), +m[1] - 1, +m[2]);
+    if (cand - base > 36 * 86400000) cand = new Date(base.getFullYear() - 1, +m[1] - 1, +m[2]);
+    return Math.round((base - cand) / 86400000);
+  };
+  const _stale = miniItems.filter(li => {
+    const d = ((li.querySelector('.expo-mini-date') || {}).textContent || '').trim();
+    const n = _expoDaysAgo(d); return n !== null && n > 14;
+  }).length;
+  const _visible = miniItems.filter(li => !li.hasAttribute('hidden')).length;
+  check('迷你卡无 >14 天旧会展（时效闸门生效）', _stale === 0, '越界=' + _stale);
+  check('迷你卡默认可见条目 <=3（瘦身）', _visible <= 3, '可见=' + _visible);
   let expoDup = 0;
   const expoTitles = miniItems.map(li => (li.querySelector('a') || {}).textContent || '').filter(Boolean);
   for (let i = 0; i < expoTitles.length; i++)

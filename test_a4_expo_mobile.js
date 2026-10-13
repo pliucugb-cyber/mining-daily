@@ -27,15 +27,19 @@ const { JSDOM } = require('jsdom');
 const APPJS = fs.readFileSync(path.join(__dirname, 'app.js'), 'utf-8');
 
 function buildDom(isDesktop) {
+  // 2026-10-13：改用本机今天的 MM-DD，使会展条目通过「近 14 天」时效闸门
+  //   （原固定 09-11 在闸门上线后会过期 → 迷你卡会被判空，断言误伤）。
+  const _today = new Date();
+  const mmdd = String(_today.getMonth() + 1).padStart(2, '0') + '-' + String(_today.getDate()).padStart(2, '0');
   const html = `<!DOCTYPE html><html><head></head><body>
     <div id="todaySection">
       <div class="news-item" data-expo="1">
         <a class="news-title" href="https://example.com/m1">2026 国际矿业大会将于北京召开</a>
-        <span class="news-meta">09-11</span>
+        <span class="news-meta">${mmdd}</span>
       </div>
       <div class="news-item" data-plain="1">
         <a class="news-title" href="https://example.com/p1">某矿企第三季度利润预增</a>
-        <span class="news-meta">09-11</span>
+        <span class="news-meta">${mmdd}</span>
       </div>
     </div>
     <div id="archiveSection"></div>
