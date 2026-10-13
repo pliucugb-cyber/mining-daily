@@ -131,8 +131,33 @@ def parse_result(content):
     return out
 
 
+def _detect_indent(path, default=2):
+    """探测已有月库的 JSON 缩进（空格数），原样回写以避免整文件假 diff。
+
+    月库缩进随历史人工重格式化漂移（08/09/10 月均为 2 空格；此前 export 固定 indent=2、
+    classify 固定 indent=1，两者不一致会在 export 后互相踩出数千行假 diff）。改为
+    「读什么缩进就写什么缩进」，与 export_news_json.detect_indent 口径一致。
+    """
+    if not os.path.exists(path):
+        return default
+    try:
+        with io.open(path, 'r', encoding='utf-8') as f:
+            for _ in range(5):
+                line = f.readline()
+                if not line:
+                    break
+                if line.startswith(' ') and '"' in line:
+                    n = len(line) - len(line.lstrip(' '))
+                    if n > 0:
+                        return n
+    except Exception:
+        pass
+    return default
+
+
 def atomic_write_json(path, data):
-    buf = json.dumps(data, ensure_ascii=False, indent=1).encode('utf-8')
+    ind = _detect_indent(path, default=2)
+    buf = json.dumps(data, ensure_ascii=False, indent=ind).encode('utf-8')
     assert len(buf) > 200, '写出内容异常小，疑似编码失败：%d' % len(buf)
     tmp = path + '.tmp'
     with open(tmp, 'wb') as f:
