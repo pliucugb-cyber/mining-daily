@@ -15,6 +15,7 @@
   /api/ai-analyze   GET  AI 深度解析（deepseek 调用，每日配额 30/机，结果缓存到 data/ai_analysis_<date>.json）
 """
 import json
+import math
 import glob
 import os
 import re
@@ -297,8 +298,49 @@ NORMAL_KW = ['找矿', '勘查', '探矿', '重要', '规划', '增量', '分红
              '成果', '进展', '签约', '投产', '扩建', '增资', '中标', '出让',
              '成交', '创', '新高', '领先']
 
+# 【2026-10-13 重做】打分参数（与 app.js computeHotNewsLocal 严格同步）
+HOT_REC_MAX = 60        # 时效项满分
+HOT_REC_TAU = 7         # 时效衰减常数（天）：rec = 60·e^(-天数/7)
+HOT_SRC_MUL = 2         # 来源权重乘数（原为 ×10 —— 权重压制时效的主因）
+HOT_KW_BONUS = 15       # 标题命中热词
+NORM_KW_BONUS = 4       # 标题命中普通词
+HOT_MAX_AGE = 14        # ① 时效闸门（天）
+HOT_FALLBACK_AGE = 30   # ① 兜底闸门（天）：主池填不满时放宽
+HOT_SRC_CAP = 2         # ② 同一来源在候选池中的上限条数
+_NEAR_NOISE_SRC = re.compile(r'^矿业权市场')
+_NEAR_NOISE_TAIL = re.compile(r'公示\s*$|公告\s*$|变更登记|登记结果')
+_NEAR_NOISE_TITLE = re.compile(
+    r'(探矿权|采矿权|矿业权)[^。]{0,25}?'
+    r'(挂牌出让|协议出让|出让公告|转让公示|转让情况公示|出让公示'
+    r'|出让结果公示|成交结果公示|转让信息|变更登记)')
+
+
+def _hot_is_noise(s, t):
+    """③ 热榜降噪：矿权挂牌/转让/出让「公示·公告」这类程序性条目不进热榜。
+
+    只作用于热榜候选池，不影响其它模块的完整展示；标题命中 HOT_KW 的一律放行。
+    """
+    if not t:
+        return True
+    if any(kw in t for kw in HOT_KW):
+        return False
+    if _NEAR_NOISE_SRC.search(s) and _NEAR_NOISE_TAIL.search(t):
+        return True
+    if _NEAR_NOISE_TITLE.search(t):
+        return True
+    return False
+
 
 def _compute_hot_news(today, n=10):
+    """矿业热榜 Top N —— 时效主导打分。
+
+    2026-10-13 重做。旧公式 score = 来源权重×10 + max(0, 30-天数×4) + 热词20/普通词5：
+    权重项最高 120 分、时效项最高 30 分且 8 天以上直接归零 ⇒ 来源权重压倒时效，
+    自然资源部（权重 12）任何一条旧稿保底 120 分，把当日新稿（多数来源权重 3、最多 60 分）
+    永远挤出前 5，热榜长期停在 9 月的稿子上。
+    新公式 score = 时效(60·e^(-天数/7)) + 来源权重×2 + 热词15/普通词4，
+    另加 ① 时效闸门 ② 来源多样性 ③ 程序性公告降噪。参数与 app.js 同步。
+    """
     rows = load_news()
     if not rows:
         return []
@@ -306,7 +348,7 @@ def _compute_hot_news(today, n=10):
         today_dt = datetime.strptime(today, '%Y-%m-%d')
     except Exception:
         today_dt = datetime.now()
-    scored = []
+    near, far = [], []
     for r in rows:
         t = str(r.get('title') or r.get('t') or '').strip()
         s = str(r.get('source') or r.get('s') or '').strip()
@@ -317,30 +359,49 @@ def _compute_hot_news(today, n=10):
         # 兼容 orig_date 格式 "MM-DD" 或 "YYYY-MM-DD"
         if len(d) == 5 and d[2] == '-':
             d = today[:4] + '-' + d
+        if _hot_is_noise(s, t):
+            continue
         try:
             days_diff = (today_dt - datetime.strptime(d, '%Y-%m-%d')).days
         except Exception:
             days_diff = 0
         if days_diff < 0:
             days_diff = 0
-        recency = max(0, 30 - days_diff * 4)
-        src_w = SOURCE_WEIGHTS.get(s, 3)
-        hot_bonus = 20 if any(kw in t for kw in HOT_KW) else 0
-        normal_bonus = 5 if (hot_bonus == 0 and any(kw in t for kw in NORMAL_KW)) else 0
-        score = src_w * 10 + recency + hot_bonus + normal_bonus
-        scored.append({
-            'd': d, 't': t, 's': s, 'u': u,
-            'score': score, 'hot': hot_bonus > 0,
-        })
-    scored.sort(key=lambda x: (x['score'], x['d']), reverse=True)
-    seen, out = set(), []
-    for it in scored:
-        if it['u'] in seen:
-            continue
-        seen.add(it['u'])
-        out.append(it)
-        if len(out) >= n:
-            break
+        recency = HOT_REC_MAX * math.exp(-days_diff / HOT_REC_TAU)
+        hot = any(kw in t for kw in HOT_KW)
+        if hot:
+            kw_bonus = HOT_KW_BONUS
+        else:
+            kw_bonus = NORM_KW_BONUS if any(kw in t for kw in NORMAL_KW) else 0
+        item = {
+            'd': d, 't': t, 's': s, 'u': u, 'hot': hot,
+            'score': round(recency + SOURCE_WEIGHTS.get(s, 3) * HOT_SRC_MUL + kw_bonus, 1),
+        }
+        if days_diff <= HOT_MAX_AGE:
+            near.append(item)
+        elif days_diff <= HOT_FALLBACK_AGE:
+            far.append(item)
+    near.sort(key=lambda x: (x['score'], x['d']), reverse=True)
+    far.sort(key=lambda x: (x['score'], x['d']), reverse=True)
+    seen, per, out = set(), {}, []
+
+    def take(lst, cap):
+        for it in lst:
+            if len(out) >= n:
+                return
+            if it['u'] in seen:
+                continue
+            if cap and per.get(it['s'], 0) >= HOT_SRC_CAP:
+                continue
+            seen.add(it['u'])
+            per[it['s']] = per.get(it['s'], 0) + 1
+            out.append(it)
+
+    take(near, True)              # 主池：优先保证来源多样性
+    if len(out) < n:
+        take(near, False)         # 主池：多样性已到顶的来源用来补满
+    if len(out) < n:
+        take(far, False)          # 兜底池：信源整体停更时兜底
     for i, it in enumerate(out):
         it['rank'] = i + 1
     return out

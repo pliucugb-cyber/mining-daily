@@ -2681,6 +2681,35 @@ function hotShuffle(){
 var HOT_SRC_W={'自然资源部':12,'中国地质调查局':10,'中国地质学会':8,'中国有色金属工业协会':8,'中国黄金协会':8,'中国稀土行业协会':7,'中国有色网':7,'矿业权市场':6,'全球矿产资源':5,'上海联合矿权交易所':5,'上海期货交易所':6,'中国矿业报':7,'中国矿业网':6,'中国黄金集团':6,'紫金矿业':5,'中国黄金网':6,'矿冶集团':6,'中国稀土集团':7,'中国煤炭工业协会':6,'中国石油和化学工业联合会':6,'中国冶金矿山企业协会':7,'中国地质大学':5};
 var HOT_KW=['突破','重大','战略','世界第一','首次','关键矿产','新一轮','标志性','历史最好','历史新高','刷新','龙头','全球第一','亚洲第一','国内首台','首套','首发','首发阵容'];
 var NORMAL_KW=['找矿','勘查','探矿','重要','规划','增量','分红','成果','进展','签约','投产','扩建','增资','中标','出让','成交','创','新高','领先'];
+// ===== 2026-10-13 重做：打分改为「时效主导」 =====
+// 旧公式 score = 来源权重×10 + max(0,30-天数×4) + 热词20/普通词5
+//   权重项最高 120 分，时效项最高 30 分且 8 天以上直接归零 ⇒ 来源权重压倒时效：
+//   自然资源部（权重 12）任何一条旧稿保底 120 分，把当日新稿（多数来源权重 3、最多 60 分）
+//   永远挤出前 5 —— 热榜长期停在 9 月的稿子上，看起来"好久没更新"。
+// 新公式 score = 时效(60·e^(-天数/7)) + 来源权重×2 + 热词15/普通词4
+//   时效 0 天 60 分、7 天 22 分、14 天 8 分；权重项最高 24 分，退为加成。
+//   例：今天一条普通来源热词稿 = 60+6+15 = 81 分，稳压 41 天前自然资源部旧稿（3+24+15=42）。
+// 另加三条闸门：① 时效闸门 ② 来源多样性 ③ 程序性公告降噪。
+// 参数与 server.py 的 _compute_hot_news 保持同步。
+var HOT_REC_MAX=60;        // 时效项满分
+var HOT_REC_TAU=7;         // 时效衰减常数（天）：rec = 60·e^(-天数/7)
+var HOT_SRC_MUL=2;         // 来源权重乘数（原为 ×10 —— 权重压制时效的主因）
+var HOT_KW_BONUS=15;       // 标题命中热词（HOT_KW）
+var NORM_KW_BONUS=4;       // 标题命中普通词（NORMAL_KW）
+var HOT_MAX_AGE=14;        // ① 时效闸门（天）：超过则不进热榜主池
+var HOT_FALLBACK_AGE=30;   // ① 兜底闸门（天）：主池填不满一屏时放宽，避免信源停更把榜单抽空
+var HOT_SRC_CAP=2;         // ② 同一来源在候选池中的上限条数（避免单一来源包场）
+// ③ 热榜降噪：矿权挂牌/转让/出让「公示·公告」这类程序性条目不进热榜。
+//   只作用于热榜候选池，不影响「矿权交易」等其它模块的完整展示；
+//   标题命中 HOT_KW 的（如"重大突破"）一律放行，避免误杀真新闻。
+function mdHotIsNoise(n){
+  var s=String((n&&n.s)||''),t=String((n&&n.t)||'');
+  if(!t)return true;
+  for(var i=0;i<HOT_KW.length;i++){if(t.indexOf(HOT_KW[i])>=0)return false;}
+  if(/^矿业权市场/.test(s)&&/公示\s*$|公告\s*$|变更登记|登记结果/.test(t))return true;
+  if(/(探矿权|采矿权|矿业权)[^。]{0,25}?(挂牌出让|协议出让|出让公告|转让公示|转让情况公示|出让公示|出让结果公示|成交结果公示|转让信息|变更登记)/.test(t))return true;
+  return false;
+}
 function computeHotNewsLocal(n){
   n=n||10;
   // 2026-09-11 加固：数据源不再只认 QA_ROWS。QA_ROWS 由中段的 qaInitData() 填充，
@@ -2696,30 +2725,41 @@ function computeHotNewsLocal(n){
   }
   var td=new Date(today+'T00:00:00');
   if(isNaN(td.getTime()))td=new Date();
-  var scored=[];
-  for(var i=0;i<rows.length;i++){
+  // 先算出候选（含距今天数），再按时效闸门分「主池 / 兜底池」两轮取材。
+  var near=[],far=[],i;
+  for(i=0;i<rows.length;i++){
     var r=rows[i];
     var t=String(r.t||'').trim(),s=String(r.s||'').trim(),u=String(r.u||'').trim(),d=String(r.d||'').trim();
     if(!t||!u||!d)continue;
     if(d.length===5&&d.charAt(2)==='-')d=today.slice(0,4)+'-'+d;
+    if(mdHotIsNoise(r))continue;
     var diff=0;
     try{var dd=new Date(d+'T00:00:00');if(!isNaN(dd.getTime()))diff=Math.round((td-dd)/86400000);}catch(e){diff=0;}
     if(diff<0)diff=0;
-    var rec=Math.max(0,30-diff*4);
-    var srcW=HOT_SRC_W[s]||3;
-    var hot=false,hotB=0,k;
-    for(k=0;k<HOT_KW.length;k++){if(t.indexOf(HOT_KW[k])>=0){hot=true;hotB=20;break;}}
-    var normB=0;
-    if(!hot){for(k=0;k<NORMAL_KW.length;k++){if(t.indexOf(NORMAL_KW[k])>=0){normB=5;break;}}}
-    scored.push({d:d,t:t,s:s,u:u,score:srcW*10+rec+hotB+normB,hot:hot});
+    var rec=HOT_REC_MAX*Math.exp(-diff/HOT_REC_TAU);
+    var hot=false,k;
+    for(k=0;k<HOT_KW.length;k++){if(t.indexOf(HOT_KW[k])>=0){hot=true;break;}}
+    var kwB=0;
+    if(hot){kwB=HOT_KW_BONUS;}
+    else{for(k=0;k<NORMAL_KW.length;k++){if(t.indexOf(NORMAL_KW[k])>=0){kwB=NORM_KW_BONUS;break;}}}
+    var it={d:d,t:t,s:s,u:u,hot:hot};
+    it.score=Math.round((rec+(HOT_SRC_W[s]||3)*HOT_SRC_MUL+kwB)*10)/10;
+    if(diff<=HOT_MAX_AGE)near.push(it);else if(diff<=HOT_FALLBACK_AGE)far.push(it);
   }
-  scored.sort(function(a,b){if(b.score!==a.score)return b.score-a.score;return b.d<a.d?-1:(b.d>a.d?1:0);});
-  var seen={},out=[];
-  for(var j=0;j<scored.length;j++){
-    if(seen[scored[j].u])continue;
-    seen[scored[j].u]=1;out.push(scored[j]);
-    if(out.length>=n)break;
+  function byScore(a,b){if(b.score!==a.score)return b.score-a.score;return b.d<a.d?-1:(b.d>a.d?1:0);}
+  near.sort(byScore);far.sort(byScore);
+  var out=[],seen={},per={};
+  function take(list,cap){
+    for(var j=0;j<list.length&&out.length<n;j++){
+      var x=list[j];
+      if(seen[x.u])continue;
+      if(cap&&(per[x.s]||0)>=HOT_SRC_CAP)continue;
+      seen[x.u]=1;per[x.s]=(per[x.s]||0)+1;out.push(x);
+    }
   }
+  take(near,true);                  // 主池：优先保证来源多样性
+  if(out.length<n)take(near,false); // 主池：多样性已到顶的来源用来补满
+  if(out.length<n)take(far,false);  // 兜底池：信源整体停更时兜底
   for(var m=0;m<out.length;m++)out[m].rank=m+1;
   return out;
 }
