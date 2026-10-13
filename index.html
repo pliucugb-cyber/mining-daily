@@ -1457,6 +1457,13 @@ body.dark .expo-mini{border-top-color:var(--line-1)}
 body.dark .expo-mini-head{color:#8fa3b5}
 body.dark .expo-mini-list a{color:var(--ink-700)}
 body.dark .expo-mini-list li:hover{background:#1c2734}
+/* 2026-10-13 会展卡瘦身：默认 3 条，「展开全部」按钮展开其余（regen-proof：位于 <style>，生成脚本只换 today/archive 段） */
+.expo-mini-list li.expo-extra[hidden]{display:none!important}
+.expo-mini-list li.expo-more{padding:var(--s1) 0 0;text-align:center}
+.expo-mini-list li.expo-more:hover{background:transparent}
+.expo-more-btn{background:none;border:none;color:#b45009;font-size:var(--fs-meta);cursor:pointer;padding:2px 6px}
+.expo-more-btn:hover{text-decoration:underline}
+body.dark .expo-more-btn{color:#e0a26a}
 /* ==================== 2026-09-06 晚：日报 PDF 导出打印样式 ==================== */
 @media print{
   html,body{background:var(--surface)!important}
@@ -3152,7 +3159,7 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
 <script src="news-data.js?v=b09462f6" defer></script>
 <script src="lme-data.js?v=444e5f0a" defer></script>
 <script src="price-history.js?v=1440b735" defer></script>
-<script src="app.js?v=6bb70d18" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="app.js?v=65f66af7" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
