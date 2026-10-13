@@ -4,8 +4,8 @@
     {
       "key": "smm",
       "name": "上海有色网 SMM",
-      "count": 15,
-      "baseline_median": 14.5,
+      "count": 12,
+      "baseline_median": 15.0,
       "status": "ok",
       "note": ""
     },
@@ -21,7 +21,7 @@
       "key": "geoglobal",
       "name": "全球矿产资源信息系统",
       "count": 4,
-      "baseline_median": 2.0,
+      "baseline_median": 4.0,
       "status": "ok",
       "note": ""
     },
@@ -44,8 +44,8 @@
     {
       "key": "cnmn",
       "name": "中国有色金属报",
-      "count": 96,
-      "baseline_median": 97.0,
+      "count": 97,
+      "baseline_median": 96.0,
       "status": "ok",
       "note": ""
     },
@@ -76,8 +76,8 @@
     {
       "key": "cninfo",
       "name": "巨潮资讯网 上市公司公告",
-      "count": 19,
-      "baseline_median": 18.5,
+      "count": 22,
+      "baseline_median": 19.0,
       "status": "ok",
       "note": ""
     },
@@ -93,7 +93,7 @@
       "key": "mnr_policy",
       "name": "自然资源部 通知公告",
       "count": 3,
-      "baseline_median": 2.5,
+      "baseline_median": 3.0,
       "status": "ok",
       "note": ""
     },
@@ -124,15 +124,15 @@
     {
       "key": "cjys",
       "name": "长江有色网",
-      "count": 15,
-      "baseline_median": 15.5,
+      "count": 10,
+      "baseline_median": 15.0,
       "status": "ok",
       "note": ""
     },
     {
       "key": "szse",
       "name": "深圳证券交易所 上市公司公告",
-      "count": 4,
+      "count": 6,
       "baseline_median": 4.0,
       "status": "ok",
       "note": ""
