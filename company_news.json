@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-13",
+ "updated_at": "2026-10-14",
  "companies": [
   {
    "name": "紫金矿业",
@@ -393,7 +393,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -3076,8 +3076,8 @@
    "items": [
     {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-02",
-     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004828/",
+     "d": "2026-10-13",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004898/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -3219,6 +3219,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "嘉能可股票将在澳大利亚开始交易，因为矿商希望提振估值",
+     "d": "2026-10-13",
+     "u": "https://www.mining.com/web/glencore-shares-to-start-trading-in-australia-as-miner-hopes-to-boost-valuation/",
+     "s": "Nagle上周告诉记者，在澳大利亚加深本地业务，生产煤炭、铜、锌、铅和镍，可能会产生业务运营……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Glencore shares to start trading in Australia as miner hopes to boost valuation"
+    },
+    {
      "t": "嘉能可看到电气化趋势推动澳大利亚房源的强劲增长",
      "d": "2026-10-09",
      "u": "https://www.mining.com/web/glencore-sees-electrification-trend-driving-strong-uptake-for-australia-listing/",
@@ -3298,15 +3307,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Nth Cycle signs 10-year, $1 billion offtake deal with Glencore"
-    },
-    {
-     "t": "嘉能可可以对炼油厂提起2.36亿美元的英国诉讼，法院规则",
-     "d": "2026-09-21",
-     "u": "https://www.mining.com/web/glencore-can-bring-236-million-uk-lawsuit-against-refinery-court-rules/",
-     "s": "Commodities trader Glencore (LON: GLEN) can bring a lawsuit against the now-insolvent Prax’s Lindsey refinery over around $236 million worth of crude …",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Glencore can bring $236 million UK lawsuit against refinery, court rules"
     }
    ]
   },

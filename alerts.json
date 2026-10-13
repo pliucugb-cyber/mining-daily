@@ -1,17 +1,17 @@
 {
- "date": "2026-10-13",
+ "date": "2026-10-14",
  "has_history": true,
- "history_days": 14,
+ "history_days": 15,
  "alerts": [
   {
-   "commodity": "碳酸锂",
-   "market": "GFEX 主连",
-   "move": "-10.48%",
-   "severity": "high",
-   "detail": "碳酸锂（GFEX 主连）最新收报 104,740.00，单日 -10.48%（数据日期 2026-10-12）。",
+   "commodity": "锡",
+   "market": "LME 03",
+   "move": "-3.40%",
+   "severity": "medium",
+   "detail": "LME 锡（LME 03）最新收报 51,400.00 美元/吨，单日 -3.40%（数据日期 10-13）。",
    "type": "price"
   }
  ],
- "summary": "今日异动 1 项：碳酸锂 -10.48%（GFEX 主连）。",
- "max_severity": "high"
+ "summary": "今日异动 1 项：锡 -3.40%（LME 03）。",
+ "max_severity": "medium"
 }
