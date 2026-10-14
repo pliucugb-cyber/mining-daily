@@ -4,8 +4,8 @@
     {
       "key": "smm",
       "name": "上海有色网 SMM",
-      "count": 11,
-      "baseline_median": 15.0,
+      "count": 12,
+      "baseline_median": 14.5,
       "status": "ok",
       "note": ""
     },
@@ -45,7 +45,7 @@
       "key": "cnmn",
       "name": "中国有色金属报",
       "count": 97,
-      "baseline_median": 96.5,
+      "baseline_median": 97.0,
       "status": "ok",
       "note": ""
     },
@@ -100,7 +100,7 @@
     {
       "key": "miningrights",
       "name": "矿业权市场（自然资源部）",
-      "count": 15,
+      "count": 14,
       "baseline_median": 15.0,
       "status": "ok",
       "note": ""
@@ -124,10 +124,10 @@
     {
       "key": "cjys",
       "name": "长江有色网",
-      "count": 0,
-      "baseline_median": 15.0,
+      "count": 1,
+      "baseline_median": 14.5,
       "status": "suspect",
-      "note": "产出 0 条，基线中位数 15 条；自动重抓仍仅 0 条，疑似源故障或被限流，需人工确认"
+      "note": "产出 1 条，基线中位数 14 条；自动重抓仍仅 1 条，疑似源故障或被限流，需人工确认"
     },
     {
       "key": "szse",

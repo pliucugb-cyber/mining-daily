@@ -1,0 +1,145 @@
+{
+  "report_date": "2026-10-15",
+  "sources": [
+    {
+      "key": "smm",
+      "name": "上海有色网 SMM",
+      "count": 14,
+      "baseline_median": 14.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "metal",
+      "name": "SMM 国际站（英文）",
+      "count": 0,
+      "baseline_median": 0.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "geoglobal",
+      "name": "全球矿产资源信息系统",
+      "count": 0,
+      "baseline_median": 4.0,
+      "status": "suspect",
+      "note": "产出 0 条，基线中位数 4 条；自动重抓仍仅 0 条，疑似源故障或被限流，需人工确认"
+    },
+    {
+      "key": "mining",
+      "name": "MINING.COM",
+      "count": 3,
+      "baseline_median": 1.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "chinania",
+      "name": "中国有色金属工业协会",
+      "count": 14,
+      "baseline_median": 13.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "cnmn",
+      "name": "中国有色金属报",
+      "count": 97,
+      "baseline_median": 97.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "cgs",
+      "name": "中国地质调查局",
+      "count": 0,
+      "baseline_median": 2.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "chinamining",
+      "name": "中国矿业网",
+      "count": 0,
+      "baseline_median": 0.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "zgkyb",
+      "name": "中国矿业报",
+      "count": 0,
+      "baseline_median": 0.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "cninfo",
+      "name": "巨潮资讯网 上市公司公告",
+      "count": 30,
+      "baseline_median": 19.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "mnr_news",
+      "name": "自然资源部 要闻播报",
+      "count": 1,
+      "baseline_median": 0.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "mnr_policy",
+      "name": "自然资源部 通知公告",
+      "count": 2,
+      "baseline_median": 3.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "miningrights",
+      "name": "矿业权市场（自然资源部）",
+      "count": 14,
+      "baseline_median": 15.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "kyreg_tk",
+      "name": "探矿权登记结果（自然资源部）",
+      "count": 2,
+      "baseline_median": 3.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "kyreg_ck",
+      "name": "采矿权登记结果（自然资源部）",
+      "count": 0,
+      "baseline_median": 0.0,
+      "status": "ok",
+      "note": ""
+    },
+    {
+      "key": "cjys",
+      "name": "长江有色网",
+      "count": 0,
+      "baseline_median": 14.0,
+      "status": "suspect",
+      "note": "产出 0 条，基线中位数 14 条；自动重抓仍仅 0 条，疑似源故障或被限流，需人工确认"
+    },
+    {
+      "key": "szse",
+      "name": "深圳证券交易所 上市公司公告",
+      "count": 12,
+      "baseline_median": 4.0,
+      "status": "ok",
+      "note": ""
+    }
+  ],
+  "suspicious": [
+    "geoglobal",
+    "cjys"
+  ]
+}
