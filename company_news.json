@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-15",
+ "updated_at": "2026-10-16",
  "companies": [
   {
    "name": "紫金矿业",
@@ -386,7 +386,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -2931,6 +2931,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "必和必拓起诉斯彭斯铜矿工会“非法”停产",
+     "d": "2026-10-15",
+     "u": "https://www.mining.com/web/bhp-sues-union-at-spence-copper-mine-over-illegal-stoppages/",
+     "s": "在诉讼中，必和必拓声称，由于6月和7月的“两次非法停工” ，矿山作业受到“重大”影响，并寻求合作……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "BHP sues union at Spence copper mine over ‘illegal’ stoppages"
+    },
+    {
      "t": "必和必拓避免对全球最大铜矿进行罢工",
      "d": "2026-10-14",
      "u": "https://www.mining.com/bhp-averts-strike-at-worlds-biggest-copper-mine-2/",
@@ -3046,15 +3055,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Lithium giant Albemarle names BHP’s Ragnar Udd as next CEO"
-    },
-    {
-     "t": "必和必拓、KGHM联手在全球范围内寻找铜",
-     "d": "2026-09-08",
-     "u": "https://www.mining.com/bhp-kghm-join-forces-in-global-hunt-for-copper/",
-     "s": "The agreement expands an existing relationship between BHP and KGHM in Chile , where Craig said the companies have worked together to improve their co…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP, KGHM join forces in global hunt for copper"
     }
    ]
   },
@@ -3076,8 +3076,8 @@
    "items": [
     {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-14",
-     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004914/",
+     "d": "2026-10-15",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004934/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -3327,6 +3327,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "Wanblad告诉英国《金融时报》，科技巨头来敲一块英美资源作为铜稀缺的叮咬",
+     "d": "2026-10-15",
+     "u": "https://www.mining.com/tech-giants-come-knocking-for-a-piece-of-anglo-american-as-copper-scarcity-bites-wanblad-tells-ft/",
+     "s": "镍销售和Teck合并是投资组合简化的剩余两个部分， Anglo也在为De Bee寻求约10亿美元……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Tech giants come knocking for a piece of Anglo American as copper scarcity bites, Wanblad tells FT"
+    },
+    {
      "t": "前英美资源集团高管力拓任命ICMM首位女性首席执行官",
      "d": "2026-10-14",
      "u": "https://www.mining.com/former-rio-tinto-anglo-american-executive-named-icmms-first-woman-ceo/",
@@ -3397,15 +3406,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Anglo American, Codelco to add 2.7Mt copper with no new mine"
-    },
-    {
-     "t": "英美资源集团以高达39亿$的价格出售澳大利亚煤矿",
-     "d": "2026-05-18",
-     "u": "https://www.mining.com/web/anglo-american-to-sell-australian-coal-mines-for-up-to-3-9b/",
-     "s": "“Through this transaction, we will complete our exit from steelmaking coal,” Anglo CEO Duncan Wanblad said in a statement.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Anglo American to sell Australian coal mines for up to $3.9B"
     }
    ]
   },
