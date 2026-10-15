@@ -2155,39 +2155,11 @@ body:not(.ec-on) #eventCalendar{display:none}
     if(document.readyState==='complete') setTimeout(mdVersionProbe,4000);
     else window.addEventListener('load',function(){ setTimeout(mdVersionProbe,4000); });
   }catch(e){}
-  // 2026-10-14：启动失败自愈（同事实测事故的补齐）。
-  //   事故形态：github.io 国内时通时不通 → SW 把缓存 HTML 喂给页面（看着正常），但页面引用的
-  //   带 ?v= 内容指纹脚本在 SW 缓存里 miss（预缓存键是裸路径）→ 503 → app.js 从未执行 →
-  //   红条「app.js 未执行」。此时版本探针判定「线上==本地」不动作，这条路径一直没人管。
-  //   策略：网络可达（唯一 query 探针穿透 SW 缓存）→ 自动 hardReset 一次（会话级防循环）；
-  //         网络不可达 → 绝不重置（清了缓存弱网用户连页面都没了），只留红条+按钮，等 online 再试。
-  function mdAutoHealBoot(why){
-    try{
-      if(!/未执行|核心数据缺失/.test(String(why||'')))return;
-      try{ if(sessionStorage.getItem(RESET_FLAG)==='1')return; }catch(e){}
-      if(navigator.onLine===false)return;
-      var now=Date.now();
-      if(window.__mdHealInFlight||now-(window.__mdHealLastTry||0)<8000)return;   // 防抖：8s 内不重复探
-      window.__mdHealInFlight=true; window.__mdHealLastTry=now;
-      fetch('sw.js?heal='+now,{cache:'no-store'}).then(function(r){
-        window.__mdHealInFlight=false;
-        if(!r.ok)throw new Error('http '+r.status);
-        return r.text();
-      }).then(function(){
-        try{ console.info('[md] 启动失败但线上可达，自动清缓存重载一次（'+why+'）'); }catch(e){}
-        hardReset();
-      }).catch(function(){
-        try{ console.warn('[md] 启动失败且线上不可达，保留离线缓存，待网络恢复自动重试'); }catch(e){}
-      });
-    }catch(e){}
-  }
-  window.mdAutoHealBoot=mdAutoHealBoot;
   // 网络恢复 / 切回前台 → 重探一次（github.io 在国内时通时不通，一通就自动爬出新版）
-  //   2026-10-14：顺带对「启动失败」再跑一次自愈（脚本加载失败不会自行重试，必须整页重载）
   try{
-    window.addEventListener('online',function(){ setTimeout(mdVersionProbe,1500); setTimeout(function(){ try{ mdAutoHealBoot(mdDegraded()); }catch(e){} },2000); });
+    window.addEventListener('online',function(){ setTimeout(mdVersionProbe,1500); });
     document.addEventListener('visibilitychange',function(){
-      if(document.visibilityState==='visible'){ setTimeout(mdVersionProbe,1500); setTimeout(function(){ try{ mdAutoHealBoot(mdDegraded()); }catch(e){} },2000); }
+      if(document.visibilityState==='visible') setTimeout(mdVersionProbe,1500);
     });
   }catch(e){}
 
@@ -2247,7 +2219,7 @@ body:not(.ec-on) #eventCalendar{display:none}
   function mdSyncBanner(){
     try{
       var why=mdDegraded();
-      if(why){ try{ mdAutoHealBoot(why); }catch(e){} showBootWarn(why); return; }   // 整页级（app.js 未执行/核心数据缺失）→ 红条；先自愈再挂条
+      if(why){ showBootWarn(why); return; }                 // 整页级（app.js 未执行/核心数据缺失）→ 红条
       var el=document.getElementById('mdBootWarn');
       if(el&&el.getAttribute('data-md-level')==='error') el.style.display='none'; // 建议③：恢复即隐藏
       // 建议④：仅单个组件未渲染 → 只标注该组件（amber 非阻塞），绝不挂全屏红条
@@ -2474,7 +2446,6 @@ body:not(.ec-on) #eventCalendar{display:none}
       +' · 数据 news='+(d.data.news==='缺失'?'缺失':d.data.news+'条')
       +' lme='+(d.data.lme?'有':'无')+' 历史='+(d.data.priceHistory?'有':'无')
       +' · 区块 热榜'+(d.regions.hot?'OK':'空')+' 简报'+(d.regions.brief?'OK':'空')+' 要闻'+(d.regions.digest?'OK':'空')
-      +' · 网络'+(d.online?'在线':'离线')+' SW'+(d.sw==='受控'?'受控':'未受控')
       +' · 提示'+(d.errors.length)+'条';
   }
   function mdFallbackCopy(txt,btn){
