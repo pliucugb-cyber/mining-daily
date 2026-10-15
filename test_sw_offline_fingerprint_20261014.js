@@ -167,8 +167,9 @@ function dispatchFetch(sw, url, mode) {
   const healCalls = () => win.__fetchCalls.filter(u => /sw\.js\?heal=/.test(u)).length;
 
   check('mdAutoHealBoot 已挂到 window', typeof win.mdAutoHealBoot === 'function');
+  var _bv = (html.match(/name="build-version" content="([^"]+)"/) || [])[1] || '';
   check('内联自愈段存在（build-version 已 bump）',
-    /20261014-1530/.test(html), 'build-version=20261014-1530');
+    !!_bv && swSrc.indexOf('mining-daily-' + _bv) >= 0, 'build-version=' + _bv);
 
   // 用例1：线上可达 → 自动 hardReset（sessionStorage 置位，整页重载）
   win.sessionStorage.removeItem(RESET_FLAG);
