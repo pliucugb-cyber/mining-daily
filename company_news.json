@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-14",
+ "updated_at": "2026-10-15",
  "companies": [
   {
    "name": "紫金矿业",
@@ -138,6 +138,13 @@
    "rank": 11,
    "items": [
     {
+     "t": "金新铜业启用无人机智能巡检系统护航大修",
+     "d": "2026-10-14",
+     "u": "http://www.tlys.cn/news.aspx?cid=24609&classid=383",
+     "s": "日前，金新铜业针对大修期间现场人员多、交叉作业多等难题，利用无人机智能巡检系统，对全厂各区域每小时巡检一次，全方位扫描检修现场劳保品穿戴、高空作业等情况及火情隐患。通过无人机智能巡检，能及时化解现场安全隐患，减少检修人员的不安全行为，有效保障大修安全顺利进行。",
+     "k": "news"
+    },
+    {
      "t": "安庆铜矿尾砂处置能力实现新突破",
      "d": "2026-10-13",
      "u": "http://www.tlys.cn/news.aspx?cid=24604&classid=383",
@@ -212,20 +219,6 @@
      "d": "2026-10-08",
      "u": "http://www.tlys.cn/news.aspx?cid=24583&classid=383",
      "s": "一是围绕高温炉体重点区域，及时清理包装废料、粉尘油污、废弃杂物等易燃物品，从源头消除火灾隐患。二是严格执行动火审批制度，做好隔离或覆盖措施，安排专人监护施工过程，确保完工后无余火隐患。三是严控用电安全，严禁私拉乱接电线、超负荷用电，定期检查配电箱、线路、开关、设备散热情况，对发现的问题及时整改到位。",
-     "k": "news"
-    },
-    {
-     "t": "安庆铜矿实现党员轮训全覆盖",
-     "d": "2026-10-08",
-     "u": "http://www.tlys.cn/news.aspx?cid=24582&classid=383",
-     "s": "一是抓实理论研学，淬炼党性修养。紧扣学习主线，开设学习习近平总书记关于树立和践行正确政绩观的重要论述、习近平党建思想等课程，推动党员深学细悟、夯实理论武装。二是用好红色资源，砥砺初心使命。采取专题辅导与现场教学相结合方式，组织学员前往红二十八军军政旧址，实地接受革命传统教育。",
-     "k": "news"
-    },
-    {
-     "t": "金隆铜业“PHMGPT多模态故障诊断工业智能体”入选省级特色工业智能体名单",
-     "d": "2026-09-30",
-     "u": "http://www.tlys.cn/news.aspx?cid=24577&classid=383",
-     "s": "日前，安徽省工业和信息化厅公布2026年度安徽省特色工业大模型及工业智能体名单，由金隆铜业与安徽容知日新科技公司联合申报的“PHMGPT多模态故障诊断工业智能体”成功入选，成为全省26个省级特色工业智能体之一。",
      "k": "news"
     }
    ]
@@ -393,7 +386,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "chrome",
+   "method": "html",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -559,13 +552,6 @@
      "d": "2026-09-11",
      "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-09-11/doc-inirnaix2129592.shtml",
      "s": "投资者提问：贵司半年报披露主要产品产量数据：报告期内，公司生产氧化铝 65.06 万吨，铝商品 162.16 万吨，炭素制品 39.08万吨。而在财务报表部分中，主营业务收入分三部分：电解铝、铝加工、其他。二者口径并不一致。请问：铝商品中电...",
-     "k": "news"
-    },
-    {
-     "t": "云铝股份：截至六月末股东人数为十五万七千八百五十一户",
-     "d": "2026-09-05",
-     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-09-05/doc-iniqtspw3752095.shtml",
-     "s": "2026-09-04 17:00 云铝股份9月4日现1笔大宗交易 总成交金额8408.92万元 溢价率为0.19%",
      "k": "news"
     }
    ]
@@ -1152,6 +1138,34 @@
    "rank": 3,
    "items": [
     {
+     "t": "北方稀土(600111)：26Q3业绩表现亮眼 产品产量再创新高",
+     "d": "2026-10-14",
+     "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/845320501742/index.phtml",
+     "s": "",
+     "k": "news"
+    },
+    {
+     "t": "【稀土要闻】聚力全链布局 创新多元赛道 北方稀土新材料产业迸发高质量发展新动能",
+     "d": "2026-10-14",
+     "u": "https://finance.sina.com.cn/roll/2026-10-14/doc-inivezmn1231090.shtml",
+     "s": "构建稀土永磁材料“全”图谱发展态势。北方稀土充分整合技术、人才、平台、资源叠加优势，精准对接市场差异化需求，打造高中低端梯度化产品格局，稳步推进北方磁材钕铁硼速凝合金项目建设，保障新能源汽车、大功率风电等领域的材料稳定供给；",
+     "k": "news"
+    },
+    {
+     "t": "北方稀土：预计前三季度实现归母净利润逾36亿元",
+     "d": "2026-10-14",
+     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-10-14/doc-inivevcn4484955.shtml",
+     "s": "中证报中证网讯(记者王佳飞)近日，北方稀土发布2026年前三季度业绩预增公告。公司预计前三季度实现归母净利润36.2亿元至36.8亿元，同比增加20.8亿元至21.4亿元，增幅134.95%至138.84%；扣非净利润36.3亿元至36.9...",
+     "k": "news"
+    },
+    {
+     "t": "北方稀土前三季度净利润大幅预增135%至139%",
+     "d": "2026-10-13",
+     "u": "https://finance.sina.com.cn/roll/2026-10-13/doc-iniuzuyr8196217.shtml",
+     "s": "来源：上海证券报·中国证券网上证报中国证券网讯（记者 武斌）在稀土产品价格高位震荡、主要产品产量创新高及加工成本持续优化等多重因素支撑下，北方稀土预计前三季度经营业绩大幅跃升。10月12日晚，北方稀土发布业绩预增公告，前三季度，公司预计实现...",
+     "k": "news"
+    },
+    {
      "t": "中国北方稀土（集团）高科技股份有限公司2026年前三季度业绩预增公告",
      "d": "2026-10-13",
      "u": "https://finance.sina.com.cn/jjxw/2026-10-13/doc-iniuzqsq0351447.shtml",
@@ -1176,28 +1190,7 @@
      "t": "【喜报】北方稀土预计2026年前三季度实现归母净利润同比大幅增加134.95%到138.84%",
      "d": "2026-10-12",
      "u": "https://finance.sina.com.cn/roll/2026-10-12/doc-iniuyhxi8473581.shtml",
-     "s": "（来源：你好北方稀土）10月12日，北方稀土发布2026年前三季度业绩预增公告，经初步测算，预计实现归属于母公司所有者的净利润36.2亿元到36.8亿元，同比大幅增加134.95%到138.84%，环比增加37%到43%；预计实现归属于母公...",
-     "k": "news"
-    },
-    {
-     "t": "北方稀土(600111.SH)：预计前三季度净利同比增加134.95%到138.84%",
-     "d": "2026-10-12",
-     "u": "https://finance.sina.com.cn/stock/bxjj/2026-10-12/doc-iniuyhxf7259245.shtml",
-     "s": "格隆汇10月12日丨北方稀土(600111.SH)公布，财务部门初步测算，预计2026年前三季度实现归属于母公司所有者的净利润36.2亿元到36.8亿元，同比增加134.95%到138.84%。预计2026年前三季度实现归属于母公司所有者的...",
-     "k": "news"
-    },
-    {
-     "t": "北方稀土：预计2026年前三季度净利润36.2亿元到36.8亿元，同比增长134.95%到138.84%",
-     "d": "2026-10-12",
-     "u": "https://finance.sina.com.cn/7x24/2026-10-12/doc-iniuyhxf7251419.shtml",
-     "s": "新浪财经为您带来：北方稀土公告，预计2026年前三季度归属于母公司所有者的净利润36.2亿元到36.8亿元，同比增长134.95%到138.84%；扣除非经常性损益的净利润36.3亿元到36.9亿元，同比增长166.64%到171.04%。2025年前三季度归母净利润为15.",
-     "k": "news"
-    },
-    {
-     "t": "四季度包头稀土精矿交易价格同比环比双双上行",
-     "d": "2026-10-11",
-     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-10-11/doc-iniuvpan0540366.shtml",
-     "s": "2026-10-10 22:27 北方稀土、包钢股份，双双公告",
+     "s": "2026-10-12 17:26 北方稀土：预计前三季度归母净利润同比增长134.95%-138.84%",
      "k": "news"
     }
    ]
@@ -2517,17 +2510,17 @@
      "k": "news"
     },
     {
+     "t": "“传有色奋斗薪火·做挺膺担当青年”",
+     "d": "2026-10-01",
+     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/10/I1559616608261898240.html",
+     "s": "为深入学习贯彻习近平总书记关于青年工作的重要思想，深化青年精神素养提升工程，引领广大团员青年传承有色奋斗精神、激励青年挺膺担当，10月12日，中色股份团委组织开展“传有色奋斗薪火·做挺膺担当青年”主题活动。",
+     "k": "news"
+    },
+    {
      "t": "中色股份：以练促学，持续提升基层岗位履职能力",
      "d": "2026-10-01",
      "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/10/I1558035195934801920.html",
      "s": "为纵深推进深化作风建设专项行动，中色股份将岗位基本功提升作为作风建设重要实践载体，引导广大员工夯实基本常识、工作原则和逻辑方法，持续锤炼判断力、执行力、合作力，锻造一支拉得出、顶得上、打得赢的干部职工队伍，为公司全面落实集团战略部署，谱写高质量发展新篇章筑牢人才支撑。",
-     "k": "news"
-    },
-    {
-     "t": "中国有色集团参加第23届中国—东盟博览会开幕式",
-     "d": "2026-09-01",
-     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/9/I1554451320377704448.html",
-     "s": "9月17日，第23届中国—东盟博览会、中国—东盟商务与投资峰会在广西南宁开幕。中共中央政治局常委、国务院副总理丁薛祥出席开幕式并致辞。缅甸、越南、老挝等东盟国家领导人和高级官员，以及东盟秘书长出席。中国有色矿业集团有限公司应邀参加开幕式。",
      "k": "news"
     },
     {
@@ -2651,6 +2644,20 @@
    "rank": 99,
    "items": [
     {
+     "t": "五矿资源(01208)第三季度铜总产量同比增长3%达13.12万吨",
+     "d": "2026-10-14",
+     "u": "https://finance.sina.com.cn/stock/hkstock/ggscyd/2026-10-14/doc-inivevci8429743.shtml",
+     "s": "五矿资源(01208)发布公告，2026年第三季度，铜总产量(包括电解铜及铜精矿含铜)同比增长3%，达到13.12万吨，主要得益于Kinsevere及 Khoemacau产量提升。锌总产量同比下降5%，至5.59万吨，主要反映出Rosebe...",
+     "k": "news"
+    },
+    {
+     "t": "五矿资源(01208.HK)公司事件点评报告：矿山经营稳健 铜矿增量关注Khoemacau矿山扩建",
+     "d": "2026-10-08",
+     "u": "https://stock.finance.sina.com.cn/hkstock/view/hk_report.php?reportid=845232129038",
+     "s": "",
+     "k": "news"
+    },
+    {
      "t": "不通过就关停？五矿资源5亿美元并购何去何从？",
      "d": "2026-10-08",
      "u": "https://finance.sina.com.cn/stock/relnews/hk/2026-10-08/doc-iniupnux4326370.shtml",
@@ -2697,13 +2704,6 @@
      "d": "2026-09-08",
      "u": "https://finance.sina.com.cn/stock/relnews/hk/2026-09-08/doc-inirapza6069689.shtml",
      "s": "金吾财讯|港股铜矿股盘初走强，截至发稿，五矿资源(01208)涨4.82%，洛阳钼业(03993)涨4.52%，江西铜业股份(00358)涨4.26%，紫金矿业(02899)涨2.56%，中国有色矿业(01258)涨2.07%，中国黄金...",
-     "k": "news"
-    },
-    {
-     "t": "【券商聚焦】开源证券首予五矿资源（01208）买入评级 指铜产量释放驱动增长",
-     "d": "2026-08-18",
-     "u": "https://finance.sina.com.cn/stock/relnews/hk/2026-08-18/doc-inintpiw0113286.shtml",
-     "s": "金吾财讯|开源证券发布研报指，五矿资源(01208)作为中国五矿旗下海外基本金属开发旗舰平台，坐拥多个世界级矿山。Las Bambas为全球前十大铜矿之一，2025年铜产量41.1万吨，已进入稳定运营阶段；Khoemacau铜资源量达7...",
      "k": "news"
     }
    ]
@@ -2756,7 +2756,7 @@
      "t": "从业绩爆发到价值释放：解读中国有色矿业(01258)2026年中期高增长密码",
      "d": "2026-08-25",
      "u": "https://finance.sina.com.cn/stock/hkstock/hkstocknews/2026-08-25/doc-inippmes5499286.shtml",
-     "s": "2026-08-24 10:10 铜业股走高 洛阳钼业（03993）领涨3.18% 机构料长期AI带动下铜需求增速维持高位",
+     "s": "8月21日晚间，国有大型有色矿业龙头企业中国有色矿业(01258)发布2026年中期业绩报告。报告显示，公司依托完整的铜钴采选冶炼全产业链布局、海外优质资源储备，精准把握2026年上半年铜、硫酸等大宗商品价格高位上行的行业机遇，实现营收、净...",
      "k": "news"
     }
    ]
@@ -2778,6 +2778,33 @@
    "rank": 99,
    "items": [
     {
+     "t": "前英美资源集团高管力拓任命ICMM首位女性首席执行官",
+     "d": "2026-10-14",
+     "u": "https://www.mining.com/former-rio-tinto-anglo-american-executive-named-icmms-first-woman-ceo/",
+     "s": "ICMM表示， Cameron-Johansson是在经过“严格的竞争”遴选程序后被任命的。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Former Rio Tinto, Anglo American executive named ICMM’s first woman CEO"
+    },
+    {
+     "t": "SEC 6-K（外资发行人报告）",
+     "d": "2026-10-14",
+     "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000041/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
+    {
+     "t": "力拓有望在第三季度铁矿石销售额高于预期后释放50 $的资本",
+     "d": "2026-10-13",
+     "u": "https://www.mining.com/web/rio-tinto-on-track-to-release-5-billion-in-capital-after-q3-iron-ore-sales-top-estimates/",
+     "s": "这家全球最大的铁矿石生产商售出了85块。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Rio Tinto on track to release $5 billion in capital after Q3 iron ore sales top estimates"
+    },
+    {
      "t": "Rio Tinto ，创始人工厂支持五家采矿初创公司",
      "d": "2026-10-05",
      "u": "https://www.mining.com/rio-tinto-founders-factory-back-five-mining-startups/",
@@ -2785,15 +2812,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Rio Tinto, Founders Factory back five mining startups"
-    },
-    {
-     "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-01",
-     "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000039/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
     },
     {
      "t": "力拓确保贝尔湾铝冶炼厂运营至2031年",
@@ -2893,24 +2911,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Rio Tinto, BHP summoned to critical minerals meeting with Trump"
-    },
-    {
-     "t": "ENAMI表示，力拓锂业项目的中国反垄断审查被推迟",
-     "d": "2026-08-06",
-     "u": "https://www.mining.com/web/enami-says-china-antitrust-review-of-rio-tinto-lithium-project-delayed/",
-     "s": "The project requires an estimated investment of over $3 billion.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "ENAMI says China antitrust review of Rio Tinto lithium project delayed"
-    },
-    {
-     "t": "消息人士称， CMRG告诉一些钢厂停止与力拓的谈判",
-     "d": "2026-08-06",
-     "u": "https://www.mining.com/web/cmrg-tells-some-steel-mills-to-halt-talks-with-rio-tinto-sources-say/",
-     "s": "CMRG has already targeted Australia’s other top iron ore producers — , Fortescue and privately held Hancock Prospecting, owned by…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "CMRG tells some steel mills to halt talks with Rio Tinto, sources say"
     }
    ]
   },
@@ -2930,6 +2930,24 @@
    "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "必和必拓避免对全球最大铜矿进行罢工",
+     "d": "2026-10-14",
+     "u": "https://www.mining.com/bhp-averts-strike-at-worlds-biggest-copper-mine-2/",
+     "s": "必和必拓（ ASX ， LON ： BHP ）和智利埃斯孔迪达矿的监管工会已达成初步协议，以避免在世界各地发生罢工。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "BHP averts strike at world’s biggest copper mine"
+    },
+    {
+     "t": "必和必拓智利埃斯孔迪达矿井主管在合同谈判失败后罢工",
+     "d": "2026-10-14",
+     "u": "https://www.mining.com/web/supervisors-at-bhps-escondida-mine-in-chile-to-strike-after-contract-talks-fail/",
+     "s": "工会表示，它提出了最终报价，其中包括90 ％的公司提案以及包括加薪和生产奖金在内的关键工会要求。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Supervisors at BHP’s Escondida mine in Chile to strike after contract talks fail"
+    },
     {
      "t": "必和必拓将关闭的澳大利亚镍厂出售给Gold Fields",
      "d": "2026-10-07",
@@ -3037,24 +3055,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "BHP, KGHM join forces in global hunt for copper"
-    },
-    {
-     "t": "宝武眼中必和必拓大型金宝铁矿股份",
-     "d": "2026-09-04",
-     "u": "https://www.mining.com/baowu-eyes-stake-in-bhps-massive-jimblebar-iron-ore-mine/",
-     "s": "BHP owns 85% of Jimblebar, while Japanese trading houses Itochu and Mitsui hold minority interests. The mine, valued at about $3.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Baowu eyes stake in BHP’s massive Jimblebar iron ore mine"
-    },
-    {
-     "t": "Albemarle任命必和必拓资深人士Udd为下一任首席执行官",
-     "d": "2026-09-03",
-     "u": "https://www.mining.com/albemarle-taps-bhp-veteran-udd-as-next-ceo/",
-     "s": "Albemarle , the world’s largest lithium producer, has named BHP executive Ragnar Udd as its next CEO as surging energy-storage d…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Albemarle taps BHP veteran Udd as next CEO"
     }
    ]
   },
@@ -3076,8 +3076,8 @@
    "items": [
     {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-13",
-     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004898/",
+     "d": "2026-10-14",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004914/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -3219,10 +3219,19 @@
    "rank": 99,
    "items": [
     {
+     "t": "嘉能可股票在ASX首次亮相时交易更高，因为投资者关注铜",
+     "d": "2026-10-14",
+     "u": "https://www.mining.com/web/glencore-shares-trade-higher-on-asx-debut-as-investors-eye-copper/",
+     "s": "智利运营部门达成的暂定劳动力协议缓解了当务之急的供应问题，因为全国范围内的采矿中断日益严重。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Glencore shares trade higher on ASX debut as investors eye copper"
+    },
+    {
      "t": "嘉能可股票将在澳大利亚开始交易，因为矿商希望提振估值",
      "d": "2026-10-13",
      "u": "https://www.mining.com/web/glencore-shares-to-start-trading-in-australia-as-miner-hopes-to-boost-valuation/",
-     "s": "Nagle上周告诉记者，在澳大利亚加深本地业务，生产煤炭、铜、锌、铅和镍，可能会产生业务运营……",
+     "s": "嘉能可首席执行官表示，在澳大利亚更深入的本地业务可能会带来商机。",
      "k": "news",
      "src": "mining",
      "t_en": "Glencore shares to start trading in Australia as miner hopes to boost valuation"
@@ -3298,15 +3307,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Radiant World sent Mizuho fake Glencore email, court filing says"
-    },
-    {
-     "t": "第N个周期与嘉能可签署10年10亿美元的承购协议",
-     "d": "2026-09-22",
-     "u": "https://www.mining.com/nth-cycle-signs-10-year-1-billion-offtake-deal-with-glencore/",
-     "s": "Nth Cycle的技术旨在用于其品牌为“Oyster”的便携式系统中，利用电化学工艺选择性地提取N…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Nth Cycle signs 10-year, $1 billion offtake deal with Glencore"
     }
    ]
   },
@@ -3326,6 +3326,15 @@
    "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "前英美资源集团高管力拓任命ICMM首位女性首席执行官",
+     "d": "2026-10-14",
+     "u": "https://www.mining.com/former-rio-tinto-anglo-american-executive-named-icmms-first-woman-ceo/",
+     "s": "ICMM表示， Cameron-Johansson是在经过“严格的竞争”遴选程序后被任命的。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Former Rio Tinto, Anglo American executive named ICMM’s first woman CEO"
+    },
     {
      "t": "MMG指责欧盟反垄断监管机构无视支持英美协议的证据",
      "d": "2026-10-08",
@@ -3397,15 +3406,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Anglo American to sell Australian coal mines for up to $3.9B"
-    },
-    {
-     "t": "英美资源集团第一季度铜产量上升",
-     "d": "2026-04-28",
-     "u": "https://www.mining.com/web/anglo-americans-first-quarter-copper-output-rises/",
-     "s": "The miner expects to produce between 700,000 and 760,000 tons of copper for the year.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Anglo American’s first-quarter copper output rises"
     }
    ]
   },
