@@ -69,8 +69,15 @@ html, _n_title = re.subn(r'<title>[^<]*</title>',
 assert _n_title == 1, 'title 替换次数异常: %d' % _n_title
 assert '<title>%s · %s</title>' % (SITE_NAME, REPORT) in html, '站点标题格式不符'
 
-html, _n_badge = re.subn(r'(<span class="date-badge"[^>]*>)2026年10月\d{2}日 星期.',
-                         r'\g<1>2026年10月12日 星期一', html)
+# 2026-10-16 修复：原实现把替换串硬编码为「2026年10月12日 星期一」，且正则锚死
+# 「2026年10月\d{2}日 星期.」——每天生成出的 badge 都是 10-12（与 09-26 同类事故），
+# 跨月（11 月起）还会 assert 失败。改为按 --date 现算中文日期，彻底去掉日期硬编码。
+_rep_dt = datetime.date.fromisoformat(REPORT)
+_BADGE_CN = '%d年%02d月%02d日 %s' % (
+    _rep_dt.year, _rep_dt.month, _rep_dt.day,
+    ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'][_rep_dt.weekday()])
+html, _n_badge = re.subn(r'(<span class="date-badge"[^>]*>)[^<]*(</span>)',
+                         lambda m: m.group(1) + _BADGE_CN + m.group(2), html)
 assert _n_badge == 1, 'date-badge 替换次数异常: %d' % _n_badge
 now = datetime.datetime.now().strftime('%H:%M')
 html = re.sub(r'今日新增（2026-\d{2}-\d{2} 抓取）', '今日新增（%s 抓取）' % GRAB, html)
