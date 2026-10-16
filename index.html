@@ -2233,8 +2233,10 @@ body:not(.ec-on) #eventCalendar{display:none}
     mdSetBannerMode(el,'info');
     var lead=el.querySelector('.md-boot-lead'), tail=el.querySelector('.md-boot-tail');
     var d=el.querySelector('.md-boot-detail'), g=el.querySelector('.md-boot-diag');
+    var which=el.querySelector('.md-boot-which');
     if(lead)lead.textContent=leadText||('ℹ️ 有 '+n+' 条非致命提示');
     if(tail)tail.textContent='（不影响当前浏览，可忽略）';
+    if(which)which.textContent='';   // 修复：info 态必须清掉红条时期写入的 which 标题，否则残留「（app.js 未执行）」与「app.js=已执行」自相矛盾
     if(d)d.textContent=''; if(g){ try{ g.textContent=mdDiagLine(); }catch(e){ g.textContent=''; } }
     el.style.display='flex';
     clearTimeout(window.__mdInfoTimer);
