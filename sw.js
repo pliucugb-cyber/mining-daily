@@ -92,6 +92,19 @@ function safeMatch(req) {
   } catch (e) { return Promise.resolve(null); }
 }
 
+// 2026-10-14：缓存匹配放宽到「去查询串」再试一次。
+//   页面引用资源带 ?v= 内容指纹（每次部署都变），而预缓存清单写的是裸路径（BASE+'app.js'）；
+//   网络一不通，safeMatch(req) 带全串必然 miss → 直接 503 → <script onerror> →
+//   整页「app.js 未执行」红条（2026-10-14 同事实测事故：github.io 国内时通时不通，
+//   HTML 回落缓存能显示，四个指纹脚本却全 503，热榜/简报/要闻全空）。
+//   只出现在兜底路径（网络已失败之后）：在线时仍以网络为准，不会喂旧内容。
+function matchFlexible(req, url) {
+  return safeMatch(req).then(function (c) {
+    if (c) return c;
+    try { return safeMatch(url.origin + url.pathname); } catch (e) { return null; }
+  });
+}
+
 // 取网络并顺手写缓存；任何失败都不向外抛（返回缓存副本或 503），保证 respondWith 永不拒绝。
 function fetchCached(req, fallback) {
   return fetch(req).then(function (res) {
@@ -111,7 +124,7 @@ function fetchCached(req, fallback) {
 // 成功则顺手写缓存；网络失败才退回缓存/离线兜底。
 // 注意：cache:'no-cache' 只会触发条件请求，不会像 'reload' 那样每次全量重下，
 //      因此既保证「在线必拿新版」，又不会明显拖慢刷新。
-function networkFirst(req, pathname) {
+function networkFirst(req, pathname, url) {
   return fetch(req, { cache: 'no-cache' }).then(function (res) {
     if (res && res.ok && res.type === 'basic') {
       var copy = res.clone();
@@ -119,7 +132,7 @@ function networkFirst(req, pathname) {
     }
     return res;
   }).catch(function () {
-    return safeMatch(req).then(function (c) {
+    return matchFlexible(req, url).then(function (c) {
       return c || offlineFallback(pathname);
     });
   });
@@ -180,19 +193,19 @@ self.addEventListener('fetch', event => {
   // （且旧页引用的 app.js 版本戳与线上不一致，新旧混装 → 区块永久停在「加载中…」）。
   // 现在改为向网络再验证后再返回；仅在完全取不到网络时才用缓存（离线可看）。
   if (isHtml) {
-    event.respondWith(networkFirst(req, url.pathname));
+    event.respondWith(networkFirst(req, url.pathname, url));
     return;
   }
   if (DATA_FILES.indexOf(url.pathname) >= 0) {
     // 数据文件与 app.js：network-first（刷新即见最新）+ 写缓存（离线兜底）。
     // 去掉 cache:'reload' 改用 no-cache 条件验证：未变更时 304 秒回、变更时才下载新内容。
-    event.respondWith(networkFirst(req, url.pathname));
+    event.respondWith(networkFirst(req, url.pathname, url));
     return;
   }
 
   // 其余静态资源（图标、manifest 等）：stale-while-revalidate（先用缓存秒开，后台静默更新）
   event.respondWith(
-    safeMatch(req).then(function (cached) {
+    matchFlexible(req, url).then(function (cached) {
       var network = fetchCached(req, cached);
       return cached || network;
     }).catch(function () {
