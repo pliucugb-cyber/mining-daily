@@ -69,9 +69,12 @@ fi
 
 echo "==> [5/7] 安装 crontab（每天北京时间 06:15 跑全链路）"
 # 系统已设 Asia/Shanghai，故 06:15 即本地 15 6 * * *。
-# 流程：注入 env → 抓新闻(含正文) → 抓 LME/价格/公司 → bprime 生成(LLM+校验+渲染 index.html)
-#       → export_news_json(写 news-data.js) → build_static(热榜/AI) → 部署 gh-pages
-CRON_LINE="15 6 * * *  set -a; . ~/.mining-daily.env; set +a; cd $REPO_DIR && python3 fetch_news.py --fetch-detail --report-date \"\$(date +\\%Y-\\%m-\\%d)\" --quiet && python3 fetch_lme.py && python3 fetch_price_history.py && python3 fetch_company.py && python3 -m bprime.pipeline --date \"\$(date +\\%Y-\\%m-\\%d)\" && python3 export_news_json.py && python3 build_static.py && python3 deploy_pages.py >> data/cron_bprime.log 2>&1"
+# 收敛（2026-10-16）：① 每轮开头 git reset --hard origin/main，确保云站始终以最新 main 为底座，
+#   自动继承主链路的 10-14 修复（matchFlexible / mdAutoHealBoot）及以后所有修复；
+# ② 云链路不再调 deploy_pages.py，gh-pages 唯主链路一个写者，停止两条线互相覆盖。
+# 流程：注入 env → 拉最新 main → 抓新闻(含正文) → 抓 LME/价格/公司 → bprime 生成(LLM+校验+渲染)
+#       → export_news_json(写 news-data.js) → build_static(热榜/AI)；本站 nginx 直接服务本地生成的最新站点。
+CRON_LINE="15 6 * * *  set -a; . ~/.mining-daily.env; set +a; cd $REPO_DIR && git fetch -q origin main && git reset --hard origin/main && python3 fetch_news.py --fetch-detail --report-date \"\$(date +\\%Y-\\%m-\\%d)\" --quiet && python3 fetch_lme.py && python3 fetch_price_history.py && python3 fetch_company.py && python3 -m bprime.pipeline --date \"\$(date +\\%Y-\\%m-\\%d)\" && python3 export_news_json.py && python3 build_static.py >> data/cron_bprime.log 2>&1"
 # 去重：清掉旧 mining-daily 行再写，避免重复叠加
 ( crontab -l 2>/dev/null | grep -v "mining-daily" || true ) | { cat; echo "$CRON_LINE"; } | crontab -
 echo "    ✅ crontab 已写入（北京 06:15 / UTC 22:15）"
@@ -100,14 +103,15 @@ echo "      set -a; . ~/.mining-daily.env; set +a"
 echo "      python3 fetch_news.py --fetch-detail --report-date \$(date +%Y-%m-%d) --quiet"
 echo "      python3 fetch_lme.py && python3 fetch_price_history.py && python3 fetch_company.py"
 echo "      python3 -m bprime.pipeline --date \$(date +%Y-%m-%d)"
-echo "      python3 export_news_json.py && python3 build_static.py && python3 deploy_pages.py"
+echo "      python3 export_news_json.py && python3 build_static.py"
+echo "      （云链路不再 deploy gh-pages；gh-pages 由主链路 deploy_pages.py 统一发布）"
 
 echo ""
 echo "============================================================"
 echo "✅ B' 全链路部署脚本执行完毕"
 echo "请完成三件事后方可自动运行："
 echo "  1) 编辑 ~/.mining-daily.env，填入真实 DEEPSEEK_API_KEY / LME_TOKEN"
-echo "  2) 把部署公钥加到 GitHub Deploy keys（写权限）"
+echo "  2) （可选）把部署公钥加到 GitHub Deploy keys——云链路已不再推 gh-pages，仅在你想恢复云站自部署时才需写权限"
 echo "  3) 按第 7 步手动跑通一次，确认 data/cron_bprime.log 无报错"
 echo "决策与回滚：本机 WB 每日自动化先保留不删；云链路稳定 7-14 天后再停 WB，"
 echo "          届时云出任何问题，WB 一键恢复，日报不断更。"
