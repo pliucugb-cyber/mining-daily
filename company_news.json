@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-17",
+ "updated_at": "2026-10-18",
  "companies": [
   {
    "name": "紫金矿业",
@@ -400,7 +400,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
