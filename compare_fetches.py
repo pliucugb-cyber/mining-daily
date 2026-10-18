@@ -6,13 +6,15 @@
 #   （尤其国内政府源，GitHub 服务器在境外，访问可能受限）。
 #
 # 用法：
-#   python3 compare_fetches.py                  # 对比今天
+#   python3 compare_fetches.py                  # 对比今天（默认 draft/fetch）
 #   python3 compare_fetches.py --date 2026-09-13
 #   python3 compare_fetches.py --date 2026-09-13 --quiet   # 只输出告警
+#   python3 compare_fetches.py --gh-branch server/fetch   # 对比境内 bprime 服务器候选池
 #
 # 数据来源：
 #   本机 WB 候选池： <repo>/data/news_candidates_YYYY-MM-DD.json （WorkBuddy 本地生成，gitignore）
-#   GitHub 候选池：  origin/draft/fetch:data/news_candidates_YYYY-MM-DD.json （Actions 推送）
+#   GitHub 候选池：  origin/<gh-branch>:data/news_candidates_YYYY-MM-DD.json
+#                   （默认 draft/fetch = GitHub Actions 境外探针；server/fetch = 境内 bprime 服务器）
 #
 # 依赖：纯标准库。需本地已配置 SSH 能拉取 origin/draft/fetch。
 import argparse, json, os, subprocess, sys, datetime
@@ -40,15 +42,15 @@ def load_wb(date):
     return json.load(open(p, encoding='utf-8')), None
 
 
-def load_gh(date):
+def load_gh(date, branch='draft/fetch'):
     env = dict(os.environ)
     env['GIT_SSH_COMMAND'] = SSH
-    subprocess.run(['git', 'fetch', 'origin', 'draft/fetch'],
+    subprocess.run(['git', 'fetch', 'origin', branch],
                    cwd=REPO, capture_output=True, text=True, env=env, timeout=120)
-    o = subprocess.run(['git', 'show', f'origin/draft/fetch:data/news_candidates_{date}.json'],
+    o = subprocess.run(['git', 'show', f'origin/{branch}:data/news_candidates_{date}.json'],
                        cwd=REPO, capture_output=True, text=True, env=env)
     if o.returncode != 0:
-        return None, 'GitHub draft/fetch 候选池读取失败（今天 Actions 可能还没跑或失败了）'
+        return None, f'GitHub {branch} 候选池读取失败（今天可能还没跑或失败了）'
     return json.loads(o.stdout), None
 
 
@@ -74,11 +76,14 @@ def sources_meta():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--date', default=datetime.date.today().strftime('%Y-%m-%d'))
+    ap.add_argument('--gh-branch', default='draft/fetch',
+                   help='对照的 GitHub 候选池分支；默认 draft/fetch（GitHub Actions 境外探针）；'
+                        '境内 bprime 服务器对照用 server/fetch')
     ap.add_argument('--quiet', action='store_true', help='只输出告警/结论')
     args = ap.parse_args()
 
     wb, err1 = load_wb(args.date)
-    gh, err2 = load_gh(args.date)
+    gh, err2 = load_gh(args.date, args.gh_branch)
     if wb is None:
         print('⚠️', err1); sys.exit(2)
     if gh is None:
