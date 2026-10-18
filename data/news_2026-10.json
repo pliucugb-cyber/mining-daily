@@ -1,6 +1,6 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-18T05:38:20+08:00",
+  "updated_at": "2026-10-18T08:14:44+08:00",
   "count": 342,
   "news": [
     {
@@ -11,7 +11,7 @@
       "orig_date": "10-17",
       "orig_date_full": "2026-10-17",
       "report_date": "2026-10-18",
-      "category": "国际矿业动态",
+      "category": "政策与监管",
       "is_new": true,
       "summary": "MINING.COM 报道，格陵兰议会一致通过决议，禁止海底矿产开采，相关备忘录有效期至 2029 年底、可按两年一期延长，立法预计 2027 年上半年通过。该决议出台于美国总统特朗普宣布将在格陵兰启动大规模油气与矿产勘探的次日；格陵兰 Tanbreez 项目拥有 2820 万吨 TREO 资源量。（原题：Greenland to introduce ban on seabed mining）",
       "embed": "ok",
@@ -21,8 +21,8 @@
       ],
       "first_seen": "2026-10-18",
       "last_seen": "2026-10-18",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "e732c8af0021",
@@ -168,8 +168,8 @@
       ],
       "first_seen": "2026-10-18",
       "last_seen": "2026-10-18",
-      "orig_category": "行业动态",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "efad48350edd",
@@ -254,8 +254,8 @@
       ],
       "first_seen": "2026-10-18",
       "last_seen": "2026-10-18",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "cdfa68e63f85",
@@ -306,8 +306,8 @@
       ],
       "first_seen": "2026-10-18",
       "last_seen": "2026-10-18",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "9c9007fa5dec",
@@ -370,8 +370,8 @@
       ],
       "first_seen": "2026-10-18",
       "last_seen": "2026-10-18",
-      "orig_category": "市场与价格",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "954877f0aa72",
@@ -437,8 +437,8 @@
       ],
       "first_seen": "2026-10-18",
       "last_seen": "2026-10-18",
-      "orig_category": "行业动态",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "5b3b53c72132",
@@ -459,8 +459,8 @@
       ],
       "first_seen": "2026-10-18",
       "last_seen": "2026-10-18",
-      "orig_category": "政策与监管",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "政策与监管"
     },
     {
       "id": "57d2a537aabc",
@@ -670,8 +670,8 @@
       ],
       "first_seen": "2026-10-18",
       "last_seen": "2026-10-18",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "f31b283f7749",
@@ -782,8 +782,8 @@
       ],
       "first_seen": "2026-10-18",
       "last_seen": "2026-10-18",
-      "orig_category": "行业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "行业动态"
     },
     {
       "id": "ca2f95cb93e6",
@@ -2196,8 +2196,8 @@
       ],
       "first_seen": "2026-10-18",
       "last_seen": "2026-10-18",
-      "orig_category": "行业动态",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "9c2012bef1f9",
