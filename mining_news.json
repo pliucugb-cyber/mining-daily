@@ -1,7 +1,7 @@
 {
   "meta": {
     "report_date": "2026-10-18",
-    "generated_at": "2026-10-18T05:38:20+08:00",
+    "generated_at": "2026-10-18T08:14:44+08:00",
     "total": 539,
     "new_today": 13,
     "archive": 526,
@@ -86,6 +86,23 @@
         "政策",
         "找矿",
         "矿权",
+        "国际"
+      ]
+    },
+    {
+      "id": "ef29a7c9278c",
+      "title": "格陵兰议会一致通过海底采矿禁令，效力延续至 2029 年底",
+      "url": "https://www.mining.com/greenland-to-introduce-ban-on-seabed-mining",
+      "source": "MINING.COM",
+      "orig_date": "10-17",
+      "orig_date_full": "2026-10-17",
+      "report_date": "2026-10-18",
+      "category": "政策与监管",
+      "is_new": true,
+      "summary": "MINING.COM 报道，格陵兰议会一致通过决议，禁止海底矿产开采，相关备忘录有效期至 2029 年底、可按两年一期延长，立法预计 2027 年上半年通过。该决议出台于美国总统特朗普宣布将在格陵兰启动大规模油气与矿产勘探的次日；格陵兰 Tanbreez 项目拥有 2820 万吨 TREO 资源量。（原题：Greenland to introduce ban on seabed mining）",
+      "embed": "ok",
+      "tags": [
+        "找矿",
         "国际"
       ]
     },
@@ -242,23 +259,6 @@
       "tags": [
         "金",
         "技术"
-      ]
-    },
-    {
-      "id": "ef29a7c9278c",
-      "title": "格陵兰议会一致通过海底采矿禁令，效力延续至 2029 年底",
-      "url": "https://www.mining.com/greenland-to-introduce-ban-on-seabed-mining",
-      "source": "MINING.COM",
-      "orig_date": "10-17",
-      "orig_date_full": "2026-10-17",
-      "report_date": "2026-10-18",
-      "category": "国际矿业动态",
-      "is_new": true,
-      "summary": "MINING.COM 报道，格陵兰议会一致通过决议，禁止海底矿产开采，相关备忘录有效期至 2029 年底、可按两年一期延长，立法预计 2027 年上半年通过。该决议出台于美国总统特朗普宣布将在格陵兰启动大规模油气与矿产勘探的次日；格陵兰 Tanbreez 项目拥有 2820 万吨 TREO 资源量。（原题：Greenland to introduce ban on seabed mining）",
-      "embed": "ok",
-      "tags": [
-        "找矿",
-        "国际"
       ]
     },
     {
