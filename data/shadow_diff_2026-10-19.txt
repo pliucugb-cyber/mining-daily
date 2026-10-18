@@ -1,0 +1,107 @@
+================================================================
+影子模式对比报告  (report=2026-10-19)
+----------------------------------------------------------------
+【全站对比】(含归档, 仅供参考)
+  云: 链接701 文本673 | 线上: 链接541 文本541
+  链接相似度 62.1% | 标题相似度 50.8%
+----------------------------------------------------------------
+【今日链接对比】(仅含今天URL日期链接)
+  云今日链接 2 | 线上今日链接 0
+  今日链接相似度: 0.0%
+  今日线上独有 0 条 | 无日期 45 条 | 归档漂移 20 条(已排除)
+     ? https://news.metal.com/en/newscontent/104123584-smm-news-lithium-argentina-closes-18
+     ? https://news.metal.com/en/newscontent/104123586-smm-news-critical-metals-confirms-eu
+     ? https://news.metal.com/en/newscontent/104123591-smm-news-lithium-africa-samples-198-
+     ? https://news.metal.com/en/newscontent/104123723-lg-energy-solution-signs-lithium-sup
+     ? https://news.metal.com/en/newscontent/104123729-miit-ndrc-push-industrialization-of-
+     ? https://news.metal.com/en/newscontent/104123742-chilean-copper-output-to-stay-low-di
+     ? https://news.metal.com/en/newscontent/104155236-caspin-boosts-kelpie-tin-resource-by
+     ? https://news.metal.com/en/newscontent/104155244-landslide-at-codelcos-el-teniente-mi
+     ? https://news.metal.com/en/newscontent/104155269-centinela-strike-could-cut-november-
+     ? https://news.metal.com/en/newscontent/104157698-lme-zinc-inventory-surges-to-144100-
+     ? https://news.metal.com/en/newscontent/104160266-antofagasta-reports-7-rise-in-q3-cop
+     ? https://news.metal.com/en/newscontent/104160267-perus-august-2026-exports-copper-gol
+     ? https://news.metal.com/en/newscontent/104160533-trump-tariff-threat-builds-us-copper
+     ? https://news.metal.com/en/newscontent/104161994-tungsten-sharp-price-drop-amid-beari
+     ? https://news.metal.com/en/newscontent/104162326-rare-earth-prices-move-sideways-inqu
+     ? https://news.metal.com/en/newscontent/104162853-china-proposes-tighter-solar-technol
+     ? https://news.metal.com/en/newscontent/104162863-national-magnesium-inventory-down-35
+     ? https://news.metal.com/en/newscontent/104162865-30000-mt-alumina-traded-at-426mt-fob
+     ? https://news.metal.com/en/newscontent/104162926-smm-chromium-flash-south-africas-aug
+     ? https://news.smm.cn/news/104123021
+----------------------------------------------------------------
+【标题深查】(线上独有标题, 模糊匹配云版标题池)
+  🔁 同故事异标题 54 条（措辞/来源前缀差异, 非漏抓）
+     ≈[0.72] *ST威领：西藏山南锑金资源要约收购公司股份（第三次提示）
+        云版: *ST威领：关于西藏山南锑金资源有限公司要约收购要约收购公司股份完成过户的公告
+     ≈[0.70] 1—8月我国钴产品进出口格局分化
+        云版: 1—8月我国钴产品进出口数据分析及后市展望
+     ≈[0.68] Bikita矿业津巴布韦道路修缮项目开工
+        云版: Bikita矿业索塞拉购物中心至恩丹巴尼道路修缮项目正式开工
+     ≈[0.78] Centinela铜矿罢工或使11月产量减半
+        云版: 工会：罢工或致智利Centinela铜矿11月产量减半
+     ≈[0.56] 《矿产资源目录》发布，含174个矿种、119个亚矿种
+        云版: 《矿产资源目录》发布
+     ≈[0.97] 两项涉镁标准入选2026年度工业节能降碳标准研究项目清单
+        云版: 两项涉镁标准入选2026年度工业节能降碳标准研究项目公示清单
+     ≈[0.73] 中国有色金属企业信心指数报告（2026年三季度）
+        云版: 中国有色金属产业月度景气指数报告（2026年9月）
+     ≈[0.98] 中国铜业复杂锌基资源绿色冶炼技术达国际领先水平
+        云版: 中国铜业复杂锌基资源绿色冶炼技术达到国际领先水平
+     ≈[0.75] 中钨高新预计前三季度净利润同比增219%~241%
+        云版: 中钨高新：前三季度净利润同比预增219%-241%钨精矿均价同比上涨
+     ≈[0.67] 中铝贵州分公司8021电池铝箔用扁锭试制达标，具备市场化供货能力
+        云版: 中铝贵州分公司成功研发8021电池铝箔用扁锭
+     ≈[0.72] 云南富民签约两个钛产业项目，总投资6.1亿元
+        云版: 云南富民新签约两个钛产业项目
+     ≈[0.60] 五矿山达克铜矿光伏项目支架安装完成75%
+        云版: 五矿中亚南亚山达克铜矿加速推进光伏支架安装施工
+     ≈[0.81] 供应压力显现，铜价将震荡走强
+        云版: 供应压力增加铜价将震荡走强
+     ≈[0.71] 内盘金属集体下挫，碳酸锂跌破10万元关口
+        云版: 内盘金属集体下挫碳酸锂跌破10万元沪银多晶硅沪锡跌幅居前【SMM日评】
+     ≈[0.95] 协会：8月锂行业运行情况
+        云版: 8月份锂行业运行情况
+  ❌ 真漏抓 78 条（云版无近似标题）
+     - [0.43] 2026年中国铜加工产业年度大会在铜陵召开聚焦算力金属
+     - [0.37] 2026年全球矿产勘查预算强劲回升
+     - [0.51] 8月锂行业运行情况：碳酸锂价格月内上涨约10.7%
+     - [0.35] Caspin将Kelpie锡矿资源量提升45%
+     - [0.36] CriticalMetals8.35亿美元收购欧洲锂业进入表决阶段
+     - [0.32] Electra与WMC签署五年合作，为安大略钴精炼厂融资
+     - [0.31] Equinox与Orla合并后三季度黄金产量增34%
+     - [0.25] Exiro牵头财团取得淡水河谷曼尼托巴镍矿81.1%股权
+     - [0.44] Fortuna塞内加尔DiambaSud金矿钻探见高品位并延深
+     - [0.40] GEM：到2035年锂铜钴供给缺口显著
+     - [0.29] Hycroft内华达金矿钻遇迄今最高金品位
+     - [0.36] ICSG：全球精炼铜过剩到2027年将增两倍以上
+     - [0.39] LG新能源与SmackoverLithium签署10年碳酸锂供应协议
+     - [0.44] LME锌库存连续三日大增，升至14.41万吨
+     - [0.37] LithiumAfrica科特迪瓦Agboville项目见1.98%氧化锂
+     - [0.31] Minnova拟投7600万加元重启曼尼托巴PL金矿
+     - [0.55] SMM日评：基本金属普涨沪铅领涨2.03%沪银涨近4%
+     - [0.26] SSR以4.64亿美元收购Roxmore，提升内华达金矿价值
+     - [0.35] Sprott：全球铜矿产量或出现2017年以来首次下降
+     - [0.19] USGS：深海硫化物矿石暴露空气后可自燃
+     - [0.20] 两部门就技术出口目录修订征求意见，光伏12项技术拟设出口前登记
+     - [0.24] 中国五矿拟增资广西关键金属集团华锡有色实控人将变更
+     - [0.44] 中国有色金属工业协会与韩国矿害矿业公团签署谅解备忘录
+     - [0.41] 中金黄金预计前三季度净利润55.2亿至58亿元
+     - [0.38] 中铝国际前三季度新签合同217.88亿元，海外同比增14.76%
+     - [0.24] 伍德麦肯兹：六大铁矿石生产商十年耗竭储量111亿吨
+     - [0.55] 伦铜12周内第11次周线上涨中国洋山铜溢价创近四年新高
+     - [0.41] 伦铝三连跌创年内低点，伦锡大跌2.3%
+     - [0.26] 全国镁锭库存环比降3.52%，价格创年内新低、两家原镁厂停产
+     - [0.40] 关税威胁推升美国铜库存破100万吨，COMEX—LME价差收窄至310美元/吨
+     - [0.29] 加拿大15个金矿项目受困审批年潜在收入约110亿美元
+     - [0.33] 加拿大新规：关键矿产领域少数股权投资将强制预先申报
+     - [0.38] 包头稀土高新区以「研发贷」破解轻资产科创企业融资难
+     - [0.30] 华友钴业完成回购1653.07万股，耗资6.01亿元
+     - [0.32] 南美铜矿热潮面临1700亿美元现实检验
+     - [0.47] 南非8月铬矿出口降10.75%，高碳铬铁出口增20%
+     - [0.38] 国际钨业协会柏林会议：中国目标2030年钨回收率提至45%
+     - [0.26] 埃尔多拉多希腊铜金矿列入欧盟战略项目
+     - [0.29] 安彩高科1.14亿元出售贵金属铑粉已完成交割
+     - [0.35] 安托法加斯塔三季度铜产量增7%，维持全年指引
+----------------------------------------------------------------
+⚠️ 预警：真漏抓标题 78 条，需排查 fetch/过滤。
