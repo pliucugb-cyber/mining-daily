@@ -94,7 +94,7 @@ def main():
 
     if not args.quiet:
         print(f'对比日期 {args.date}')
-        print(f'WorkBuddy 本机: {len(wb["news"])} 条 | GitHub draft/fetch: {len(gh["news"])} 条')
+        print(f'WorkBuddy 本机: {len(wb["news"])} 条 | GitHub {branch}: {len(gh["news"])} 条')
         print()
         print('%-14s %-22s %6s %6s %+6s' % ('信源', '名称', 'WB', 'GH', '差'))
         print('-' * 58)
