@@ -140,7 +140,7 @@ SOURCES = [
     {
         "key": "metal",
         "name": "SMM 国际站（英文）",
-        "list_url": "https://news.metal.com/en",
+        "list_url": "https://news.metal.com/",
         "kind": "html",
         "link_re": r"/en/newscontent/(\d+-[A-Za-z0-9\-]+)",
         "href_tpl": "https://news.metal.com/en/newscontent/{g1}",
@@ -148,7 +148,7 @@ SOURCES = [
         "source": "SMM 国际站",
         "foreign": True,
         "enabled": True,
-        "note": "中国团队运营、境内直连无墙的英文源，补国际视角且无需翻墙",
+        "note": "中国团队运营、境内直连无墙的英文源，补国际视角且无需翻墙；列表页用根路径 /（/en 会 308 跳 /，Python<3.11 的 urllib 不跟随 308 会整源失败）",
     },
     {
         "key": "geoglobal",
