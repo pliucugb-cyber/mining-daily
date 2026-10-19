@@ -1175,6 +1175,20 @@ MIN_BASELINE = 4      # 基线中位数低于此值的源不参与异常判定�
 DROP_RATIO = 0.3      # 产出低于基线中位数 30% 视为疑似失败
 KEEP_SAMPLES = 10     # 每个源保留最近 10 次产出样本
 
+# 高产出源的期望日产出（仅用于健康判定，不参与抓取）。
+# 为什么需要它：基线是自学习的，一个源若「从第一次运行起就失败」，它的基线中位数
+# 会恒为 0，此后每天 0 条都会被判为正常——2026-10 云侧 metal 就是这样静默失败
+# 20 天的（Python 3.10 不跟随 308）。这里只列常态产出远高于阈值的源，取常态量的
+# 约一半作为下限，避免周末/节假日的自然下滑误报。
+EXPECT_MIN = {
+    "metal": 10,      # 常态 20~23
+    "smm": 6,         # 常态 11~14
+    "cnmn": 40,       # 常态 86~96
+    "cninfo": 8,      # 常态 16~30
+    "chinania": 8,    # 常态 12~20
+}
+EXPECT_WARN_RATIO = 0.3   # 低于期望下限的 30% 视为结构性失败
+
 
 def _median(xs):
     if not xs:
@@ -1217,9 +1231,25 @@ def check_health(report, targets, all_items, run_source_fn, args):
         n = orig.get(key, 0)
         samples = bl.get(key) or []
         med = _median(samples)
+        fetch_st = str(orig_status.get(key, ""))
+        fetch_failed = fetch_st.startswith("fetch-fail")
+        expect_min = int(EXPECT_MIN.get(key, 0) or 0)
+
+        # 三条触发条件，任一命中即「自动重抓一轮」再判定。
+        # ①抓取报错 ②低于该源期望下限 ③低于自身历史基线——三者互补：
+        # ①覆盖确定性故障（如 308/403），②覆盖基线为 0 永远不触发的盲区，
+        # ③覆盖曾正常、如今骤降的源。
+        reasons = []
+        if fetch_failed:
+            reasons.append("抓取报错：%s" % fetch_st.replace("fetch-fail:", "").strip()[:60])
+        if expect_min and n < expect_min * EXPECT_WARN_RATIO:
+            reasons.append("产出 %d 条，低于期望下限 %d 条的 %.0f%%"
+                           % (n, expect_min, EXPECT_WARN_RATIO * 100))
+        if samples and med >= MIN_BASELINE and n < med * DROP_RATIO:
+            reasons.append("产出 %d 条，低于基线中位数 %.0f 条" % (n, med))
 
         status, note = "ok", ""
-        if samples and med >= MIN_BASELINE and n < med * DROP_RATIO:
+        if reasons:
             # 疑似失败：自动重抓一轮（限流/瞬时故障往往重试一次即可恢复）
             items2, _st = run_source_fn(cfg, args.report_date, args.days,
                                         args.fetch_detail)
@@ -1230,11 +1260,12 @@ def check_health(report, targets, all_items, run_source_fn, args):
                 status = "recovered"
             else:
                 status = "suspect"
-                note = ("产出 %d 条，基线中位数 %.0f 条；自动重抓仍仅 %d 条，"
-                        "疑似源故障或被限流，需人工确认" % (n, med, len(items2)))
+                note = ("%s；自动重抓仍仅 %d 条，疑似源故障/页面结构变化或被限流，"
+                        "需人工确认" % ("；".join(reasons), len(items2)))
 
         health.append({"key": key, "name": name, "count": n,
-                       "baseline_median": med, "status": status, "note": note})
+                       "baseline_median": med, "expect_min": expect_min,
+                       "fetch_status": fetch_st, "status": status, "note": note})
 
         base_st = orig_status.get(key, "")
         if status == "recovered":
@@ -1245,10 +1276,12 @@ def check_health(report, targets, all_items, run_source_fn, args):
             disp = base_st
         new_report.append((key, name, n, disp))
 
-        # 滚动维护基线样本
-        s = bl.setdefault(key, [])
-        s.append(n)
-        bl[key] = s[-KEEP_SAMPLES:]
+        # 滚动维护基线样本。硬失败（fetch-fail，且重抓也没救回来）不记样：
+        # 否则连续几天的 0 会把基线中位数压到 0，反而把「一直在失败」洗成正常。
+        if (not fetch_failed) or status == "recovered":
+            s = bl.setdefault(key, [])
+            s.append(n)
+            bl[key] = s[-KEEP_SAMPLES:]
 
     if not getattr(args, "dry_run", False):
         _save_baseline(bl)   # dry-run 不污染基线（手动测试用）
