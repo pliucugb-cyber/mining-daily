@@ -88,6 +88,10 @@ git commit -m "shadow diff $D" >/dev/null 2>&1 || true
 git push origin HEAD:shadow-reports >/dev/null 2>&1 || echo "[warn] push shadow report 失败"
 
 # —— 推送当天候选池到 server/fetch（云端质量对比的数据源）——
-if [ -x /opt/md-src/push_server_fetch.sh ]; then
-  /opt/md-src/push_server_fetch.sh "$D" || echo "[warn] push server/fetch 失败"
+#   注意：git 里 .sh 的权限位可能是 644（从 Windows 提交会丢执行位），
+#   故统一用 `bash <file>` 调用，不依赖可执行位。
+if [ -f /opt/md-src/push_server_fetch.sh ]; then
+  bash /opt/md-src/push_server_fetch.sh "$D" || echo "[warn] push server/fetch 失败"
+else
+  echo "[warn] push_server_fetch.sh 不存在，跳过 server/fetch 推送"
 fi
