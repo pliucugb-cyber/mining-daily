@@ -3394,3 +3394,32 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - `SITES` 600259 更名回广晟有色 → 标签与新闻自称「中稀有色」不一致；`alias` 移除则旧名检索失效。
 - `_sim_dedup` 被删 → 「增资 3.06 亿」等被拆成多条的同源新闻重新发散。
 - `company_news.json` 回退到 `82795cc` 之前快照 → 全量回到 406 条且含错配。
+
+### §42.48 会议日程模块：右栏「会议日程」+「会议资讯」两段结构（2026-10-21 · build 20261021-1900）
+
+**① 问题与决策**
+- 旧「近期会展」卡靠 `isExpo` 关键词从**新闻标题**里"捡"会议条目：10 月库 407 条仅命中 3 条（其中 2 条是同一场会的不同源），过 14 天闸门只剩 1 条 → 卡片常年空、内容几乎不变动。
+- 根因＝**方向错了**：装的是"已召开会议的事后报道"，而会议预告有权威且稳定的出处（各主办方官网的通知公告），不该等新闻来填。
+- 决策：卡片改为**两段结构**——上半区「会议日程」＝独立数据源驱动的**未来/进行中会议**；下半区「会议资讯」＝**仍是新闻派生**（2026-10-13 既定契约未破）。
+
+**② 必留指纹（生成侧重建不得丢）**
+- `index.html`：右栏 `#expoMini` 内须含 `#expoConfList`（日程列表容器）、`#expoNewsHead`（「会议资讯」子标题）、`#expoConfFoot`（数据截至页脚）；`<script src="conference-data.js" defer>` 标签；`.expo-conf-*` / `.expo-sub-head-in` / `.meeting-conf*` 样式块。
+- `app.js`：`mdConfBase` / `mdConfItems` / `mdConfWhen` / `mdConfCountdown` / `window.__mdConf` / `confRowHtml` / `renderConf`；移动端 `mdMeetingConfHtml`（在 `#meetingSection` 内注入 `.meeting-conf` 块）。**生成脚本一律不改 app.js**。
+- `deploy_pages.py`：`REQUIRED` 与 `BUST_FILES` 均须含 `conference-data.js`（缺文件拒绝部署 ＋ 内容指纹防「新页旧脚本」混装）。
+
+**③ 数据流与维护**
+- 唯一数据源＝`data/conferences.json`（`manual` 人工区 ＋ `auto` 自动区）；`conference-data.js` 是**生成物**，勿直接改。
+- 人工条目改 `data/conferences.json` 的 manual 区；**自动抓取永不覆盖/删除 manual 区**。
+- 每日刷新＝`python fetch_conferences.py`（源注册表 `data/conference_sources.json`；多源：Mining Journal / Global Mining Review / 中国地质学会·会议通知公告 / 中国有色网·会展信息。PDAC 页有 Cloudflare 保护，脚本直连 403，暂不启用）。
+
+**④ 抓取器红线（勿改坏）**
+- **绝不猜日期**：抽不到日期就是 `v:'tbd'`（进「日期待定」区），由人工补。日期抽取必须用**锚定式**正则（「将于…」「会议时间：」「定于…」），**不得取正文第一个日期**——那通常是发布日期或报名截止日。
+- **过期会议不进日程**（结束日 < 今天即剔除；官方通知降级为 tbd 保留）。
+- **事后报道不进日程**（「…在烟台召开」「圆满/落幕/收官」类标题剔除）。
+- **人工优先**：同一场会多源命中只留人工那条（可回填其缺失的日期/地点）。
+- **抓取失败不退化**：单源失败只跳过该源；全源失败则**保留上一次数据不落盘**并以非 0 退出。
+- 标题归一化判重时**不得吞掉会议名本体**（旧版 `关于(召开|…)[^，,。；;]{0,30}` 会把整条会议名吃光 → 归一后为空 → 判重失效，"（二号通知）"与"（三号通知）"两条会被当成两场会）。
+
+**⑤ 测试**
+- `node test_conference_schedule.js` —— **49 PASS / 0 FAIL** 为基线（桌面卡片两段结构与折叠/倒计时/顺序、移动端会议 tab 注入、静态契约：数据源分区/多源注册表/抓取器红线/部署登记）。
+- 相关回归：`test_expo_recency_20261013.js`（14/0，14 天闸门契约）、`test_a4_expo_mobile.js`（10/0，vault 去重契约）、`test_smoke_0908.js`（106/0）。

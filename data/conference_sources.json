@@ -1,0 +1,62 @@
+{
+  "updated": "2026-10-21",
+  "note": "会议日程数据源注册表。增源＝加一条配置（一般不用改代码）。parser 对应 fetch_conferences.py 里的适配器；priority 越小越权威（判重时优先保留）。抓取失败的源自动跳过，不影响其它源；人工条目永不被覆盖。",
+  "sources": [
+    {
+      "id": "miningjournal",
+      "name": "Mining Journal 会议日历",
+      "url": "https://www.mining-journal.com/events",
+      "parser": "miningjournal",
+      "priority": 1,
+      "scope": "intl",
+      "publisher": "Mining Journal",
+      "enabled": true,
+      "note": "国际矿业会议主日历，字段最干净（name/date/location 独立）"
+    },
+    {
+      "id": "gmr",
+      "name": "Global Mining Review 会议日历",
+      "url": "https://globalminingreview.com/events",
+      "parser": "gmr",
+      "priority": 2,
+      "scope": "intl",
+      "publisher": "Global Mining Review",
+      "enabled": true,
+      "note": "Next.js RSC 页面，解析较脆；失败自动跳过"
+    },
+    {
+      "id": "geosociety",
+      "name": "中国地质学会·会议通知公告",
+      "url": "https://geosociety.org.cn/?v1=v14&v4=v21&v2=6aaa40e337c88&v3=v41",
+      "parser": "geo_notice",
+      "priority": 1,
+      "scope": "cn",
+      "publisher": "中国地质学会",
+      "enabled": true,
+      "note": "栏目 id 随站点改版可能变；失效时改这里 url。列表页只给标题，日期/地点由详情页补"
+    },
+    {
+      "id": "cnmn_expo",
+      "name": "中国有色网·会展信息",
+      "url": "https://www.cnmn.com.cn/ShowNewsList.aspx?id=79",
+      "parser": "cn_list",
+      "priority": 1,
+      "scope": "cn",
+      "publisher": "中国有色金属报",
+      "tag": "会议",
+      "enabled": true,
+      "note": "有色行业会议/年会/展会预告，标题常自带日期与地点"
+    },
+    {
+      "id": "pdac_industry",
+      "name": "PDAC 行业会议日历",
+      "url": "https://www.pdac.ca/members/member-resources/industry-events",
+      "parser": "pdac",
+      "priority": 1,
+      "scope": "intl",
+      "publisher": "PDAC",
+      "enabled": false,
+      "note": "Cloudflare 保护，脚本直连 403 → 暂不启用；页面质量最高（含 40+ 场），留作人工/WebFetch 通道"
+    }
+  ]
+}
