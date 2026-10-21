@@ -223,6 +223,15 @@ function runE(done) {
   const aj = rd('app.js');
   check('[E18] app.js 暴露 mdConf 供移动端复用', aj.indexOf('window.__mdConf') >= 0);
   check('[E19] app.js 移动端会议 tab 注入日程', aj.indexOf('mdMeetingConfHtml') >= 0);
+  // E20 致命回归防线：2026-10-21 实际踩过 —— render_js 用 "\n".join 拼数组漏了逗号，
+  //     生成的 conference-data.js 语法非法 → 线上 <script> 解析失败 → window.CONFERENCE_DATA
+  //     未定义 → 会议日程卡整块空白（页面不报错，最难发现）。故此处必须断言生成物可解析。
+  let cdsrc = '';
+  try { cdsrc = rd('conference-data.js'); } catch (e) { }
+  let parseOk = false;
+  try { new Function('window', cdsrc)({ }); parseOk = true; } catch (e) { }
+  check('[E20] conference-data.js 可被解析（漏逗号会语法错）', parseOk);
+  check('[E21] 生成器条目间带逗号（",\\n".join）', fc.indexOf('",\\n".join(lines)') >= 0 || fc.indexOf("',\\n'.join(lines)") >= 0);
   done();
 }
 

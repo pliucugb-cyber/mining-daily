@@ -561,7 +561,7 @@ def render_js(data):
             parts.append("%s:'%s'" % (k, str(v).replace('\\', '\\\\').replace("'", "\\'")))
         lines.append('    { ' + ', '.join(parts) + ' }')
     updated = data.get('updated', '')
-    body = "\n".join(lines)
+    body = ",\n".join(lines)          # ⚠️ 条目之间必须有逗号，否则生成的 JS 语法非法
     return (
         "/* conference-data.js —— 【自动生成，勿直接改】\n"
         " * 数据源：data/conferences.json（manual 人工 + auto 自动）\n"
