@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-21",
+  "updated": "2026-10-22",
   "note": "唯一数据源。manual=人工维护（fetch_conferences.py 永不覆盖/删除）；auto=自动抓取（脚本重写）。conference-data.js 由本文件生成，勿直接改。",
   "manual": [
     {
