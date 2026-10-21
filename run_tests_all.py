@@ -70,6 +70,7 @@ CORE = [
     'test_hotrank_20261013.js',
     'test_sw_offline_fingerprint_20261014.js',
     'test_expo_recency_20261013.js',
+    'test_conference_schedule.js',
     'test_sw_cache_update.js',
     'test_pwa_install_behavior.js',
     'test_rights_register.js',

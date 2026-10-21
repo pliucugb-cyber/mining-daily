@@ -6424,6 +6424,98 @@ else { setupNewsFilterBar(); setupExportButtons(); }
     }
     return false;
   }
+  // ===== 会议日程（2026-10-21 新增，独立数据源 conference-data.js）=====
+  // 背景：原「近期会展」只靠 isExpo 关键词从新闻里"捡"会议条目 —— 10 月库 407 条仅命中 3 条
+  //      （其中 2 条是同一场会的不同源），过 14 天闸门只剩 1 条 → 卡片常年空。
+  //      会议预告有权威且稳定的出处（中国地质学会会议通知公告、主办方官网、国际会议固定日程），
+  //      不该等新闻来填。故上半区改为独立数据源，下半区仍保留新闻派生的「会议资讯」。
+  var CONF_SHOW = 5;
+  function confBase(){
+    try{
+      var d = window.CONFERENCE_DATA && window.CONFERENCE_DATA.updated;
+      var m = d && String(d).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if(m) return new Date(+m[1], +m[2]-1, +m[3]);
+    }catch(e){}
+    var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate());
+  }
+  function confItems(){
+    var D = window.CONFERENCE_DATA;
+    if(!D || !D.items || !D.items.length) return {dated:[], tbd:[], base:confBase()};
+    var base = confBase(), dated = [], tbd = [];
+    for(var i=0;i<D.items.length;i++){
+      var it = D.items[i]; if(!it || !it.t) continue;
+      var sm = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(it.s || '');
+      if(!sm){ tbd.push(it); continue; }          // 日期待定的官方通知 → 单独归区
+      var sd = new Date(+sm[1], +sm[2]-1, +sm[3]);
+      var em = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(it.e || '');
+      var ed = em ? new Date(+em[1], +em[2]-1, +em[3]) : sd;
+      if(ed < base) continue;                    // 已结束 → 不展示（永不显旧）
+      it._sd = sd; it._ed = ed; it._dd = Math.round((sd - base)/86400000);
+      dated.push(it);
+    }
+    dated.sort(function(a,b){ return a._sd - b._sd; });
+    tbd.sort(function(a,b){ return String(a.t).localeCompare(String(b.t), 'zh'); });
+    return {dated:dated, tbd:tbd, base:base};
+  }
+  function confWhen(it, base){
+    var sm = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(it.s || '');
+    if(!sm) return '待定';
+    var y=+sm[1], mo=+sm[2], d=+sm[3];
+    var em = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(it.e || '');
+    var head = (y !== base.getFullYear() ? (y+'.') : '') + mo + '.' + d;
+    if(em){
+      var y2=+em[1], mo2=+em[2], d2=+em[3];
+      if(y2===y && mo2===mo) return head + (d2!==d ? '-'+d2 : '');
+      if(y2===y) return head + '-' + mo2 + '.' + d2;
+      return head + '-' + y2 + '.' + mo2 + '.' + d2;
+    }
+    return head;
+  }
+  function confCountdown(it){
+    if(it._dd < 0) return '进行中';
+    if(it._dd === 0) return '今天开始';
+    if(it._dd === 1) return '明天开始';
+    if(it._dd < 45) return '还有 ' + it._dd + ' 天';
+    return '还有 ' + Math.round(it._dd/30) + ' 个月';
+  }
+  function renderConf(){
+    var cl = document.getElementById('expoConfList');
+    if(!cl) return 0;
+    var R = confItems();
+    var all = R.dated.concat(R.tbd);
+    if(!all.length){ cl.innerHTML = ''; return 0; }
+    var html = '';
+    for(var i=0;i<all.length;i++){
+      var it = all[i], over = i >= CONF_SHOW, dated = (it._dd !== undefined);
+      var t = String(it.t);
+      var title = it.u ? ('<a href="'+safeHref(it.u)+'" target="_blank" rel="noopener" title="'+esc(t)+'">'+esc(t)+'</a>') : esc(t);
+      var when = dated ? confWhen(it, R.base) : '待定';
+      var place = dated ? (it.p || '') : (it.p || '日期待定');
+      var cd = dated ? ('<span class="expo-conf-cd'+(it._dd<0?' on':'')+'">'+esc(confCountdown(it))+'</span>') : '';
+      html += '<li class="expo-conf-item'+(over?' expo-extra':'')+(dated?'':' expo-conf-tbd')+'"'+(over?' hidden':'')+'>'
+        + '<span class="expo-conf-when"><b>'+esc(when)+'</b><i>'+esc(place)+'</i></span>'
+        + '<div class="expo-conf-main">'+title
+        + '<div class="expo-conf-meta">'+(it.tag?'<span class="expo-conf-tag">'+esc(it.tag)+'</span>':'')
+        + (it.o?'<span class="expo-conf-org">'+esc(it.o)+'</span>':'')+'</div>'
+        + (it.note?'<div class="expo-conf-note">'+esc(it.note)+'</div>':'')+'</div>'+cd+'</li>';
+    }
+    if(all.length > CONF_SHOW){
+      html += '<li class="expo-more"><button type="button" class="expo-more-btn">展开全部 '+all.length+' 场 ▾</button></li>';
+    }
+    cl.innerHTML = html;
+    var foot = document.getElementById('expoConfFoot');
+    if(foot){
+      var D = window.CONFERENCE_DATA || {};
+      foot.textContent = '数据截至 ' + (D.updated || '—') + ' · 共 ' + all.length + ' 场 · 以官方通知为准';
+    }
+    var btn = cl.querySelector('.expo-more-btn');
+    if(btn){ btn.onclick = function(){
+      var open = cl.classList.toggle('expo-open');
+      Array.prototype.slice.call(cl.querySelectorAll('.expo-extra')).forEach(function(li){ if(open) li.removeAttribute('hidden'); else li.setAttribute('hidden',''); });
+      btn.textContent = open ? '收起 ▴' : ('展开全部 ' + all.length + ' 场 ▾');
+    }; }
+    return all.length;
+  }
   function init(){
     try{
       var box=document.getElementById('expoMini');
@@ -6436,7 +6528,8 @@ else { setupNewsFilterBar(); setupExportButtons(); }
           if(isExpo(titleOf(el))) picked.push(el);
         });
       });
-      if(!picked.length) return;
+      var _hasConf = !!(window.CONFERENCE_DATA && window.CONFERENCE_DATA.items && window.CONFERENCE_DATA.items.length);
+      if(!picked.length && !_hasConf) return;
       // 跨源去重：同一场会议常被多家媒体报道，标题高度相似只留最早一条
       // （与本期要闻 mdPickDistinct 同一套相似度，复用 window.mdTitleSim）
       var sim=(typeof window.mdTitleSim==='function')?window.mdTitleSim:null;
@@ -6466,7 +6559,8 @@ else { setupNewsFilterBar(); setupExportButtons(); }
       // 卡片：默认 EXPO_SHOW 条，超出折叠；无近期会展则整块隐藏（仅桌面注入迷你卡）。
       var EXPO_SHOW=3;
       if(isDesktop() && box && ul){
-        if(!recent.length){ box.style.display='none'; ul.innerHTML=''; }
+        var confN = renderConf();
+        if(!recent.length && !confN){ box.style.display='none'; ul.innerHTML=''; }
         else{
           var _html='';
           recent.forEach(function(el,idx){
@@ -6476,6 +6570,8 @@ else { setupNewsFilterBar(); setupExportButtons(); }
           });
           if(recent.length>EXPO_SHOW){ _html+='<li class="expo-more"><button type="button" class="expo-more-btn">展开全部 '+recent.length+' 条 ▾</button></li>'; }
           ul.innerHTML=_html;
+          var _nh=document.getElementById('expoNewsHead');
+          if(_nh){ if(recent.length){ _nh.style.display=''; _nh.removeAttribute('hidden'); } else { _nh.style.display='none'; _nh.setAttribute('hidden',''); } }
           box.style.display='';
           var _mb=ul.querySelector('.expo-more-btn');
           if(_mb){ _mb.onclick=function(){

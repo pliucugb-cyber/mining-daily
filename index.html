@@ -1464,6 +1464,28 @@ body.dark .expo-mini-list li:hover{background:#1c2734}
 .expo-more-btn{background:none;border:none;color:#b45009;font-size:var(--fs-meta);cursor:pointer;padding:2px 6px}
 .expo-more-btn:hover{text-decoration:underline}
 body.dark .expo-more-btn{color:#e0a26a}
+/* 2026-10-21 会议日程（conference-data.js 驱动）：上半区=未来/进行中会议（日期·地点·倒计时），下半区=新闻派生的会议资讯 */
+.expo-sub-head{font-size:var(--fs-nano);color:var(--ink-300);margin:var(--s3) 0 var(--s1);padding-top:var(--s2);border-top:1px dashed var(--line-1);letter-spacing:.4px}
+.expo-conf-list li.expo-conf-item{display:flex;gap:var(--s2);align-items:flex-start;padding:var(--s2) 0;border-bottom:1px solid var(--line-1)}
+.expo-conf-list li.expo-conf-item:last-of-type{border-bottom:none}
+.expo-conf-when{flex:0 0 54px;text-align:center;line-height:1.25;padding-top:1px}
+.expo-conf-when b{display:block;font-size:var(--fs-body);color:var(--brand);font-weight:700;letter-spacing:-.2px}
+.expo-conf-when i{display:block;font-style:normal;font-size:var(--fs-nano);color:var(--ink-300);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.expo-conf-main{flex:1 1 auto;min-width:0}
+.expo-conf-main a{color:var(--ink-900);text-decoration:none;display:block;font-size:var(--fs-body);line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.expo-conf-main a:hover{color:var(--brand)}
+.expo-conf-meta{margin-top:3px;display:flex;gap:var(--s1);align-items:center;min-width:0;font-size:var(--fs-nano);color:var(--ink-300)}
+.expo-conf-tag{flex:0 0 auto;border:1px solid var(--line-2);border-radius:3px;padding:0 4px;color:var(--ink-700)}
+.expo-conf-org{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.expo-conf-note{margin-top:2px;font-size:var(--fs-nano);line-height:1.35;color:var(--ink-300);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.expo-conf-cd{flex:0 0 auto;font-size:var(--fs-nano);color:var(--brand);background:var(--brand-soft);border-radius:3px;padding:1px 5px;white-space:nowrap}
+.expo-conf-cd.on{color:#b45009}
+.expo-conf-list li.expo-conf-tbd .expo-conf-when b{color:var(--ink-300);font-size:var(--fs-nano);font-weight:600}
+.expo-conf-foot{margin-top:var(--s2);font-size:var(--fs-nano);color:var(--ink-300);opacity:.85}
+body.dark .expo-conf-main a{color:var(--ink-700)}
+body.dark .expo-conf-tag{border-color:var(--line-2);color:var(--ink-700)}
+body.dark .expo-conf-cd{background:#1e2b38;color:#e0a26a}
+body.dark .expo-sub-head{color:#8fa3b5;border-top-color:var(--line-1)}
 /* ==================== 2026-09-06 晚：日报 PDF 导出打印样式 ==================== */
 @media print{
   html,body{background:var(--surface)!important}
@@ -3160,7 +3182,7 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
     <li class="hotlist-loading" data-page-node-id="pCHzCgmA1AxRMAIr3oHdfe">热榜加载中…</li>
   </ol>
 </div>
-<div class="expo-mini" id="expoMini" style="display:none"><div class="expo-mini-head">🎪 近期会展</div><ul class="expo-mini-list" id="expoMiniList"></ul></div>
+<div class="expo-mini" id="expoMini" style="display:none"><div class="expo-mini-head">🎪 会议日程</div><ul class="expo-mini-list expo-conf-list" id="expoConfList"></ul><div class="expo-conf-foot" id="expoConfFoot"></div><div class="expo-sub-head" id="expoNewsHead" hidden>会议资讯 · 已召开报道</div><ul class="expo-mini-list" id="expoMiniList"></ul></div>
 </aside>
 </div>
 <!-- 移动端 PWA 安装浮条 -->
@@ -3188,6 +3210,7 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
 </div>
 <!-- 全库新闻数据（供问答检索条使用；文件缺失时自动降级为页面内检索，不影响日报本身） -->
 <script src="news-data.js" defer></script>
+<script src="conference-data.js" defer></script>
 <script src="lme-data.js" defer></script>
 <script src="price-history.js" defer></script>
 <script src="app.js" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>

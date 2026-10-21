@@ -61,6 +61,7 @@ REQUIRED = [
     'index.html',
     'app.js',
     'news-data.js',
+    'conference-data.js',   # 会议日程数据源（2026-10-21 新增）
     'lme-data.js',
     'price-history.js',
     'sw.js',
@@ -124,7 +125,7 @@ def run(cmd, cwd=None, check=True):
 # 注意：只改工作副本 tmp/ghpages 里的 index.html，**不动源文件**——
 #   本地开发与 jsdom 测试仍用无后缀 URL（各测试用 `src="app.js"[^>]*` 匹配，两者都兼容）。
 #   sw.js 的注册 URL 仍必须是 './sw.js'，绝不可加指纹（加了会导致 SW 反复重装）。
-BUST_FILES = ['app.js', 'news-data.js', 'lme-data.js', 'price-history.js']
+BUST_FILES = ['app.js', 'news-data.js', 'conference-data.js', 'lme-data.js', 'price-history.js']
 
 
 def bust_asset_versions():
