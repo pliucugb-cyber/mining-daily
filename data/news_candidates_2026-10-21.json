@@ -1,21 +1,81 @@
 {
   "report_date": "2026-10-21",
-  "count": 201,
+  "count": 246,
   "news": [
     {
-      "id": "632d8850b996",
-      "url": "https://news.smm.cn/news/104169114",
-      "title": "工信部将修订铜铝等行业规范条例 坚决遏制低水平重复建设 聚焦汽车安全、光伏储能等",
+      "id": "a19ac92b0cbc",
+      "url": "https://news.smm.cn/news/104169235",
+      "title": "【10.21锂电快讯】天齐锂业前三季度净利预增超2734%|理想推出电池保障计划",
       "source": "上海有色网",
       "orig_date": "10-21",
       "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": true,
-      "summary": "工信部将修订铜铝等行业规范条例 坚决遏制低水平重复建设 聚焦汽车安全、光伏储能等__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首",
+      "summary": "【10.21锂电快讯】天齐锂业前三季度净利预增超2734%|理想推出电池保障计划__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首",
       "embed": "ok",
       "tags": [
-        "铜",
+        "锂"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "smm"
+    },
+    {
+      "id": "9b27501193a6",
+      "url": "https://news.smm.cn/news/104170951",
+      "title": "黄金迟迟未能突破，高盛揭示短期利率压力与长期储备需求之争",
+      "source": "上海有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "黄金迟迟未能突破，高盛揭示短期利率压力与长期储备需求之争__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精选快讯有色专题会议活",
+      "embed": "ok",
+      "tags": [
+        "金"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "smm"
+    },
+    {
+      "id": "15b0233c94e8",
+      "url": "https://news.smm.cn/news/104169342",
+      "title": "矿业巨头墨西哥集团：金属涨价推高利润，下调铜产量指引",
+      "source": "上海有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "矿业巨头墨西哥集团：金属涨价推高利润，下调铜产量指引__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精选快讯有色专题会议活动行",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "铜"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "smm"
+    },
+    {
+      "id": "b75022c9aea7",
+      "url": "https://news.smm.cn/news/104169275",
+      "title": "国际铝业协会（IAI）：全球9月原铝产量同比下降1.4%至601.4万吨",
+      "source": "上海有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "国际铝业协会（IAI）：全球9月原铝产量同比下降1.4%至601.4万吨__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精选快",
+      "embed": "ok",
+      "tags": [
         "铝"
       ],
       "first_seen": "2026-10-21",
@@ -24,19 +84,19 @@
       "fetch_src": "smm"
     },
     {
-      "id": "4bfeb5887eaa",
-      "url": "https://news.smm.cn/news/104166391",
-      "title": "SMM：从错配到对冲——2027年锂电产业链的成本控制之道【锂电池原材料大会】",
+      "id": "c3a6917a0adc",
+      "url": "https://news.smm.cn/news/104169262",
+      "title": "沪铝库存连降十八周",
       "source": "上海有色网",
       "orig_date": "10-21",
       "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": true,
-      "summary": "SMM：从错配到对冲——2027年锂电产业链的成本控制之道【锂电池原材料大会】__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页",
+      "summary": "沪铝库存连降十八周__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精选快讯有色专题会议活动行业动态金融市场宏观视野辟谣专区策略",
       "embed": "ok",
       "tags": [
-        "锂"
+        "铝"
       ],
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-21",
@@ -44,22 +104,19 @@
       "fetch_src": "smm"
     },
     {
-      "id": "84679d931752",
-      "url": "https://news.smm.cn/news/104168770",
-      "title": "金属涨跌互现 沪锡、碳酸锂领涨 欧线集运重挫 焦煤沪金钯跌幅居前【SMM日评】",
+      "id": "2c9d1169620d",
+      "url": "https://news.smm.cn/news/104170941",
+      "title": "宁德时代回应市场担忧：行业需求没有那么悲观 接下来产能利用率仍将处于较高水平",
       "source": "上海有色网",
       "orig_date": "10-21",
       "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": true,
-      "summary": "金属涨跌互现 沪锡、碳酸锂领涨 欧线集运重挫 焦煤沪金钯跌幅居前【SMM日评】__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页",
+      "summary": "宁德时代回应市场担忧：行业需求没有那么悲观 接下来产能利用率仍将处于较高水平__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精",
       "embed": "ok",
       "tags": [
-        "金",
-        "钯",
-        "锂",
-        "锡"
+        "有色"
       ],
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-21",
@@ -67,19 +124,19 @@
       "fetch_src": "smm"
     },
     {
-      "id": "f447dca28739",
-      "url": "https://news.smm.cn/news/104162334",
-      "title": "SMM三大盛会圆满收官！锂电原材料大会|负极产业年会|固态电池年会现场干货一览",
+      "id": "fce3eed9e899",
+      "url": "https://news.smm.cn/news/104170389",
+      "title": "鞍钢重机冶金设备制造公司铸造分厂生产用圆钢等采购招标公告",
       "source": "上海有色网",
       "orig_date": "10-21",
       "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": true,
-      "summary": "SMM三大盛会圆满收官！锂电原材料大会|负极产业年会|固态电池年会现场干货一览__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页",
+      "summary": "鞍钢重机冶金设备制造公司铸造分厂生产用圆钢等采购招标公告__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精选快讯有色专题会议活",
       "embed": "ok",
       "tags": [
-        "锂"
+        "金"
       ],
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-21",
@@ -87,19 +144,18 @@
       "fetch_src": "smm"
     },
     {
-      "id": "8c49138fcfa7",
-      "url": "https://news.smm.cn/news/104169136",
-      "title": "铜价今年强势跑赢黄金，AI回调也未必能够终结这轮涨势？",
+      "id": "a91964972c9b",
+      "url": "https://news.smm.cn/news/104170350",
+      "title": "电解铜板采购招标公告",
       "source": "上海有色网",
       "orig_date": "10-21",
       "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": true,
-      "summary": "铜价今年强势跑赢黄金，AI回调也未必能够终结这轮涨势？__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精选快讯有色专题会议活动",
+      "summary": "电解铜板采购招标公告__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精选快讯有色专题会议活动行业动态金融市场宏观视野辟谣专区策",
       "embed": "ok",
       "tags": [
-        "金",
         "铜"
       ],
       "first_seen": "2026-10-21",
@@ -108,60 +164,20 @@
       "fetch_src": "smm"
     },
     {
-      "id": "727c7af822e3",
-      "url": "https://news.smm.cn/news/104168810",
-      "title": "章源钨业下调10月下半月长单报价 黑钨精矿采购价降至34.4万元/标吨",
+      "id": "95a37e4eabc9",
+      "url": "https://news.smm.cn/news/104170306",
+      "title": "低碳硅锰铁招标公告",
       "source": "上海有色网",
       "orig_date": "10-21",
       "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": true,
-      "summary": "章源钨业下调10月下半月长单报价 黑钨精矿采购价降至34.4万元/标吨__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精选快讯",
+      "summary": "低碳硅锰铁招标公告__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精选快讯有色专题会议活动行业动态金融市场宏观视野辟谣专区策略",
       "embed": "ok",
       "tags": [
-        "钨"
-      ],
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "foreign": false,
-      "fetch_src": "smm"
-    },
-    {
-      "id": "62acb01c5465",
-      "url": "https://news.smm.cn/news/104166482",
-      "title": "金田股份：前三季度净利润同比增长21.18% 营收增长主要系铜价上涨所致",
-      "source": "上海有色网",
-      "orig_date": "10-21",
-      "orig_date_full": "2026-10-21",
-      "report_date": "2026-10-21",
-      "category": "行业动态",
-      "is_new": true,
-      "summary": "金田股份：前三季度净利润同比增长21.18% 营收增长主要系铜价上涨所致__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精选快",
-      "embed": "ok",
-      "tags": [
-        "金",
-        "铜"
-      ],
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "foreign": false,
-      "fetch_src": "smm"
-    },
-    {
-      "id": "6e2c67d49ae7",
-      "url": "https://news.smm.cn/news/104169115",
-      "title": "铜价高位仍难解供给缺口，机构测算：矿商需3320亿美元新投资才能避免供给冲击",
-      "source": "上海有色网",
-      "orig_date": "10-21",
-      "orig_date_full": "2026-10-21",
-      "report_date": "2026-10-21",
-      "category": "行业动态",
-      "is_new": true,
-      "summary": "铜价高位仍难解供给缺口，机构测算：矿商需3320亿美元新投资才能避免供给冲击__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页精",
-      "embed": "ok",
-      "tags": [
-        "铜"
+        "硅",
+        "锰"
       ],
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-21",
@@ -238,7 +254,7 @@
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": true,
-      "summary": "金属普涨 伦锡领涨 伦铜、伦锌、伦铅及沪银走强 纽金、纽银周线收阳【隔夜行情】__上海有色网 上海有色行情资讯商机策略因思直播公告登录免费注册在线客服微信扫一扫手机有色掌上有色为有色金属行业量身打造的APP-SMM官方出品扫码下载查看详情今日有色热点资讯 深度解析 独家调研微信扫一扫关注021-31330333服务时间：工作日9:00-18:00资讯公告首页",
+      "summary": "金属普涨 伦锡领涨 伦铜、伦锌、伦铅及沪银走强 纽金、纽银周线收阳【隔夜行情】",
       "embed": "ok",
       "tags": [
         "金",
@@ -272,6 +288,670 @@
       "last_seen": "2026-10-21",
       "foreign": false,
       "fetch_src": "smm"
+    },
+    {
+      "id": "84864f0e60ac",
+      "url": "https://news.metal.com/newscontent/104163631-smm-analysisphilippines-indonesia-nickel-ore-prices-weaken-as-rainy-season-supply-tightens-and-hpm-falls",
+      "title": "【SMM Analysis】Philippines & Indonesia Nickel Ore Prices Weaken as Rainy-Season Supply Tightens and HPM FallsPhilippines: Nickel Ore Prices Continue to Decline as Rainy-Season Supply Tightness Fails to Offset Weak Demand On the pricing front, Philippine nickel ore prices continued to decline across all grades this week, extending the market’s bearish trend. For low-grade ore, 0.7% Ni, Al ≥5% fell to US$16–17/t, with a midpoint of US$16.5/t, down US$1/t from the previous period. 0.7% Ni, Al <5% declined to US$22–24/t, with a midpoint of US$23/t, also down US$1/t. 0.9% Ni, Al 7% min dropped to US$15–17/wmt, with a midpoint of US$16/wmt, down US$1/wmt, while 0.9% Ni, Al 7% max declined to US$22–23/wmt, with a midpoint of US$22.5/wmt, likewise down US$1/wmt. The decline was more pronounced for medium- to high-grade ore. 1.3% Ni fell to US$27–29/wmt, with a midpoint of US$28/wmt; 1.4% Ni declined to US$37–39/wmt, with a midpoint of US$38/wmt; 1.5% Ni dropped to US$44–47/wmt, with a midpoint of US$45.5/wmt; and 1.8% Ni fell to US$72–74/wmt, with a midpoint of US$73/wmt. All of these grades were down US$2/wmt from the previous period. The continued weakness in Philippine nickel ore prices is mainly driven by cautious downstream procurement and broader pressure across the regional nickel ore market. Downstream raw material inventories in China remain relatively ample and are estimated to be sufficient for around two months. Spot purchases are therefore largely limited to essential restocking needs. With no significant increase in demand, buyers have shown limited willingness to accept higher-priced imported ore, placing continued downward pressure on quotations from Philippine mines. At the same time, freight rates from the Philippines to China remain relatively high, meaning reductions in FOB prices have not fully translated into a stronger purchasing advantage on a CIF basis, further limiting buying interest in imported ore. On the weather front, major nickel-producing regions in the Philippines continue to be affected by the Intertropical Convergence Zone (ITCZ) and seasonal rainfall. Parts of Palawan, Visayas, and Mindanao have continued to experience rainfall and thunderstorms. Zambales has been more noticeably affected by the rainy season, with mining operations, inland transportation, and port loading disrupted at some mines, reducing actual shipment capacity. In comparison, areas such as Palawan have maintained a certain level of shipments. As a result, overall Philippine supply has not yet faced a widespread shortage, although regional supply divergence has become more pronounced. From a supply-demand and market sentiment perspective, reduced supply from Zambales has so far failed to provide meaningful price support. The main reasons remain ample downstream inventories in China and weak demand for imported ore. Meanwhile, continued declines in Indonesian nickel ore prices have further weakened the competitiveness of Philippine ore in the Indonesian market. With Indonesia’s second-half October HPM officially lowered, the regional pricing center has moved further downward. If Indonesian domestic ore prices remain under pressure, Philippine miners may need to further adjust FOB quotations to maintain transaction volumes. In the short term, the Philippine nickel ore market is expected to remain weak. Key factors to monitor include the recovery of shipments from Zambales, actual shipment volumes from Palawan, freight rates to China, and movements in Indonesian nickel ore prices. Indonesia: Nickel Ore Prices Accelerate Downward as Second-Half October HPM Is Cut Across the Board On the pricing front, Indonesian nickel ore spot prices continued to weaken this week. According to the latest SMM data, average prices for Ni 1.2% Limonite, Ni 1.3% Saprolite, Ni 1.4% Saprolite, Ni 1.5% Saprolite, and Ni 1.6% Saprolite were US$25.5, US$27.5, US$47.1, US$52.5, and US$57.1/wmt, respectively. Compared with the previous levels of US$26.5, US$28.5, US$51.8, US$58.5, and US$63.4/wmt, prices fell by US$1.0, US$1.0, US$4.7, US$6.0, and US$6.3/wmt, respectively. The steeper declines in medium- to high-grade saprolite indicate that the market’s pricing center has shifted further downward. On the policy pricing front, Indonesia’s Ministry of Energy and Mineral Resources (ESDM) has officially published the nickel ore benchmark prices for the second half of October 2026. The nickel HMA for the second half of October was set at US$15,847.67/t, down US$475/t, or 2.91%, from US$16,322.67/t in the first half of October. Corresponding HPM prices were also lowered. Ni 1.2% was set at US$22.44/wmt, down US$0.75/wmt; Ni 1.3% at US$44.58/wmt, down US$1.49/wmt; Ni 1.4% at US$50.05/wmt, down US$1.61/wmt; Ni 1.5% at US$54.48/wmt, down US$1.74/wmt; and Ni 1.6% at US$59.12/wmt, down US$1.88/wmt. The renewed decline in both HMA and HPM has provided miners with a lower pricing benchmark and further reinforced bearish market expectations. On the supply side, supplementary 2026 RKAB quotas are being released gradually, and market attention has shifted from quota approval itself to whether additional quotas can actually be converted into higher production and shipments. New RKAB approvals will not immediately translate into spot supply, as mines still need to arrange equipment deployment, road maintenance, stockpile preparation, and logistics. However, as mines receiving additional quotas gradually resume or expand production, actual nickel ore supply could increase further during the fourth quarter. Against the backdrop of weak demand, expectations of additional supply continue to weigh on ore prices. On the demand side, raw material inventories at Indonesian smelters remain relatively sufficient and are estimated to cover around two months of consumption. As a result, there is limited incentive for aggressive near-term restocking, and spot purchases are mainly focused on meeting essential production requirements. At the same time, the current price correction is showing clear differentiation by ore grade. Prices for Ni 1.4–1.6% saprolite have fallen much more sharply than those for low-grade limonite, suggesting that the previously relatively tight high-grade ore market structure is changing and that bargaining power is shifting further toward buyers. Regarding El Niño and water availability, Indonesia is currently facing persistent dry conditions and shortages of industrial water rather than the heavy rainfall experienced in the Philippines. Industrial water constraints in nickel-processing hubs such as Morowali have already affected operations at some smelting facilities. According to SMM surveys, the operating rates of some RKEF production lines have fallen to around 30–40% of normal levels since September 22. However, the impact currently remains limited to certain production lines and does not represent a broad reduction across the entire industrial park. The main impact of water shortages on the nickel ore market is on the demand side. As RKEF production lines reduce operating rates, their nickel ore consumption declines accordingly, reducing spot purchasing demand from some smelters. Given that raw material inventories are already relatively ample, if water restrictions persist for an extended period, actual ore consumption by smelters could fall further below previous expectations. At present, expectations of increased supply from additional RKAB quotas are coinciding with weaker demand caused by reduced RKEF operating rates, placing pressure on spot ore prices from both sides of the supply-demand balance. From a policy and market sentiment perspective, the 2.91% decline in second-half October HMA, broad-based cuts in HPM across all grades, continued release of additional RKAB quotas, and ample smelter inventories leave little room for a meaningful near-term recovery in ore prices. In particular, the significant decline in Ni 1.4–1.6% saprolite spot prices this week indicates that expectations of lower HPM levels and increased supply are already being reflected in actual market quotations. Meanwhile, low operating rates at some RKEF lines in Morowali are further reducing ore consumption and keeping market sentiment cautious. Looking ahead, the Indonesian nickel ore market is expected to remain weak in the short term. Following the official reduction in the second-half October HPM, market attention will shift to the extent to which the new benchmark prices are transmitted into actual mine transactions and how quickly additional RKAB quotas are converted into real production and shipments. On the demand side, key factors to watch include smelter inventory drawdowns, water availability in Morowali, and operating rates at affected RKEF lines. If mine supply continues to increase while smelter purchasing demand remains constrained by high inventories and water shortages, spot nickel ore prices could face further downside pressure.Oct 19, 2026 10:31 (GMT+8)",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Philippine and Indonesian nickel ore prices weakened due to the rainy season in the Philippines and a drop in High-Pressure Acid Leaching (HPM) prices in Indonesia. In the Philippi",
+      "embed": "ok",
+      "tags": [
+        "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "55d1b2f0aa90",
+      "url": "https://news.metal.com/newscontent/104161994-smm-analysis-multiple-headwinds-hit-tungsten-prices-yet-medium-and-long-term-outlook-remains-intact",
+      "title": "[SMM Analysis] Multiple Headwinds Hit Tungsten Prices, Yet Medium and Long-Term Outlook Remains IntactSMM, October 15: Since July, China's tungsten market has consolidated in a narrow range, with shrinking transaction volumes and downstream demand in the seasonal off-season. Market activity has been largely guided by long-term contract transactions. Entering September, the market expected downstream demand from sectors such as cemented carbide to improve. In early September, upstream tungsten raw material enterprises held firm on quotes, market confidence was moderate, and industry long-term contract prices remained firm overall. However, demand was slow to materialize, and market demand performance was mediocre. Some enterprises had a large backlog of long-term contract deliveries from earlier periods, reducing procurement volumes, and market transactions showed no improvement. APT enterprises were the first to initiate production cuts and destocking. Some enterprises faced cash flow difficulties and sold at discounts to secure liquidity. Before the National Day holiday, downstream stockpiling enthusiasm in China was lackluster, and market transactions hit a freezing point. Mining and smelting enterprises moved to mitigate risk by increasing shipments, resulting in panic selling in the market, with transaction prices trending downward. On the last trading day of September, SMM 65% wolframite concentrates closed at 377,000 yuan/standard tonne, down 39,500 yuan/standard tonne from the beginning of September. SMM APT closed at 550,000 yuan/mt, down 46,500 yuan/mt from early September, with spot orders in the market mainly executed at discounts to list prices. After returning from the National Day holiday, a major Chinese enterprise released long-term contract prices, but industry long-term contract procurement volumes shrank sharply. Market supply liquidity surged dramatically. Smelters, with inventory at high levels from earlier periods and fixed order volumes dropping sharply, faced a full-scale panic sell-off across the market, accelerating the decline across the entire tungsten industry chain. As of October 15, the SMM guidance price for 65% wolframite concentrates closed at 302,000 yuan/standard tonne, down 75,000 yuan/standard tonne within the month and down 71.3% from the mid-March high. APT prices closed at 470,000 yuan/mt, down 80,000 yuan/mt within the month and down 69% from the mid-March high, erasing all gains for the year. The major bearish factors facing the tungsten market in October are as follows: Supply side: Tungsten ore imports surged, breaking the narrative of tight domestic quota balance In 2026, China's total tungsten concentrate mining quota remains tightened, and domestic primary tungsten ore production is mainly down YoY. According to SMM sample data calculations, China's total tungsten concentrate production in the first three quarters of 2026 fell 7.84% YoY. With tightened quota controls and ore grades declining year by year, domestic tungsten concentrate supply is unlikely to see growth in the short term. Due to safety inspections in Luanchuan and other reasons, some tungsten-molybdenum mines have been shut down for extended periods, and the timeline for new projects to reach production has lengthened. China's total tungsten concentrate supply for 2026 is expected to reach 101,000 standard tonnes, down 6.1% YoY. However, domestic mining trading enterprises have stepped up efforts to source and purchase ore overseas. From January to August, China's tungsten concentrate imports surged sharply. According to customs data, China's total tungsten product imports from January to August 2026 amounted to approximately 25,000 mt, up 116% YoY. Based on SMM calculations using actual grades of tungsten concentrate imports from various countries, China's cumulative tungsten concentrate imports in 2026 totaled approximately 17,400 standard tonnes, up 118% YoY. SMM expects China's total tungsten concentrate imports for 2026 to reach 37,000 mt, up 80% YoY, equivalent to approximately 27,000 standard tonnes, an increase of 13,000 standard tonnes YoY, effectively offsetting the decline in domestic tungsten concentrate production. Smelting: Smelters hold high inventory, and increased working capital needs have led to heavier selling pressure in the market Since Q2, although production operating rates in the APT industry have declined, procurement volumes from downstream cemented carbide enterprises have fallen. End-users in the industry mainly consumed previous inventory in H1, and concentrated industry restocking has been slow. Inventory of mainstream smelting products such as APT has accumulated severely. According to incomplete SMM statistics, APT producer inventory in China was nearly 4,000 mt at end-September. In October, mainstream industry players reduced long-term contract procurement volumes to further release liquidity. APT shipments were blocked, corporate cash collection fell short of expectations, and working capital pressure rose significantly. To accelerate payments and reduce inventory depreciation risk, some smelters proactively cut prices to sell and cash out, markedly intensifying selling pressure in the spot market and further driving down the price negotiation center for APT and upstream tungsten concentrates. Demand: Weak consumption in traditional application fields; export market unlikely to see growth Against the backdrop of tungsten prices consolidating at highs in H1 2026, the trend of reduced alloying and material substitution in the cemented carbide industry has become increasingly evident—downstream tool and mold enterprises are widely adopting tungsten-reduced formulations, while ceramic tools and coated hard materials are accelerating the replacement of low and mid-end tungsten-based alloys. Coupled with sluggish manufacturing recovery, operating rates at traditional cemented carbide enterprises remain low and willingness to restock raw materials is subdued. In 2026, tungsten consumption growth in AI/PCB applications has accelerated, but total tungsten usage still accounts for a relatively small share of overall downstream tungsten consumption. Based on SMM estimates from production data of major domestic PCB micro-drill and tungsten hexafluoride producers, total tungsten consumption in the PCB micro-drill and tungsten hexafluoride segments in 2026 is approximately 3,800 mt in metal content, up about 30% YoY, accounting for only about 4.6% of China's total tungsten consumption. Traditional cutting tools, mining, and machining segments remain the main consumers, but performance is weak. Export market: High overseas premiums under controls are unlikely to boost exports of tungsten intermediate products and finished goods Since June 2026, the Ministry of Commerce has intensively introduced dual-use item control policies: adding 10 US military-industrial and rare earth enterprises to the embargo list; improving reporting mechanisms for violations involving strategic minerals such as tungsten, molybdenum, and rare earths; adding 40 Japanese military-related entities in two tiers, subject to comprehensive embargoes and strict case-by-case approvals; and working with customs to tighten clearance verification for precision machine tools, comprehensively strengthening export controls on strategic minerals and military-industrial equipment. Exports of dual-use tungsten intermediate products are unlikely to see growth. In January-August, China's total exports of tungsten intermediate products were approximately 9,071 mt, down about 15% YoY cumulatively. Domestic cemented carbide blade products have had a price advantage over overseas products since H2 this year, but exports have still not shown growth expectations. In January-August, China's total exports of cemented carbide blades were 1,967 mt, down 15% YoY, which may be related to weak operating rates in overseas end-user manufacturing and trade volume fluctuations caused by tariff volatility. Overall, the rapid decline in tungsten prices this round was essentially the result of the bursting of the previous price bubble combined with a synchronized inventory cycle, as market sentiment quickly shifted from holding back supply in anticipation of higher prices to prioritizing cash. The sustained price drop triggered panic selling across the industry chain, with ore traders, smelters, and some cemented carbide supporting enterprises selling ahead of schedule to reduce risk, further amplifying the negative feedback loop. Downstream cemented carbide enterprises maintained only just-in-time procurement, no longer making precautionary restocking, with orders placed on an as-needed basis. Long-term contract negotiations dragged on with wide pricing disagreements, and while spot cargo supply increased, effective transactions remained sluggish, with most deals involving passive selling at concessions. In the short term, the market is in a phase of inventory destocking and sentiment repair, and the tungsten market in October is likely to be dominated by an accelerated bottoming-out trend. For prices to stop falling, the industry chain needs to show the following signals: first, a broader expansion of voluntary production cuts in APT and tungsten concentrates, with deep losses at the smelting stage triggering spontaneous output reductions to ease spot selling pressure; second, marginal improvement in downstream cemented carbide orders, with the traditional manufacturing mini-peak season in Q4 driving a recovery in orders for cutting tools and mining tools, as well as low-price-driven restocking at lower levels; third, a slowdown in the arrival pace of imported tungsten ore, as price inversion in China suppresses purchases of overseas ore and weakens the impact of import growth; and fourth, a contraction in recycled tungsten supply, as low prices reduce recycling incentives and lessen the substitution of recycled materials for primary tungsten. On the export front, Chinese tungsten products now have a price advantage, and overseas pre-Christmas stockpiling presents potential growth. However, approval restrictions on dual-use items remain in place, and only non-controlled categories such as ordinary cemented carbide inserts and tungsten powder are expected to see modest volume increases, which are unlikely to dominate the market trend. Coupled with sluggish manufacturing recovery outside China, overseas APT prices have followed the decline, and the price spread between Chinese and overseas markets is narrowing only slowly. From a medium and long-term perspective, China's policy of controlling total tungsten concentrate mining volume remains unchanged, primary ore production continues to decline, and supply rigidity persists due to falling ore grades and long commissioning cycles for new projects. Tungsten's strategic resource attributes remain intact, and supply is expected to stay in contraction through 2027. Emerging demand from downstream PCB micro-drills, tungsten hexafluoride, and PV tungsten wire continues to grow, but the volume is not yet enough to offset weakness in traditional cemented carbide consumption. Once manufacturing recovers and inventories are fully digested, the medium and long-term supply-demand tight balance logic for tungsten is expected to re-emerge.Oct 16, 2026 12:17 (GMT+8)",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "SMM analysis reveals that despite multiple headwinds, including increased tungsten ore imports and weak demand from traditional sectors, the medium and long-term outlook for tungst",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "钨",
+        "钼"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "c563fa7d21c9",
+      "url": "https://news.metal.com/newscontent/104164719-vedanta-invests-600m-to-double-south-africa-zinc-capacity-to-500000-tons-amid-rising-prices",
+      "title": "Vedanta Invests $600M to Double South Africa Zinc Capacity to 500,000 Tons Amid Rising PricesVedanta will invest $600 million to double Gamsberg’s annual zinc capacity in South Africa to 500,000 tonnes, amid a 23% year-on-year rise in LME zinc prices driven by supply constraints and industrial demand.Oct 19, 2026 12:33 (GMT+8)",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Vedanta will invest $600 million to double Gamsberg’s annual zinc capacity in South Africa to 500,000 tonnes, amid a 23% year-on-year rise in LME zinc prices driven by supply const",
+      "embed": "ok",
+      "tags": [
+        "锌"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "8c7f0debfb9e",
+      "url": "https://news.metal.com/newscontent/104168708-smm-analysis-china-sulphur-and-sulphuric-acid-import-and-export-data-for-september",
+      "title": "[SMM Analysis] China Sulphur and Sulphuric Acid Import and Export Data for SeptemberIn September 2026, China's monthly sulphur imports totalled 140,866.876 mt in physical content, down 48.27% MoM and down 82.24% YoY, with major suppliers including South Korea, Japan, Kazakhstan, Vietnam, Brunei and Saudi Arabia. China's monthly sulphuric acid exports totalled 33,873.364 mt in physical content, up 1,268.927% MoM and down 92.13% YoY, with major destinations including Chile, Angola, Cambodia, Ghana, Singapore, Hong Kong, China, Zimbabwe and Thailand.22 hours ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "In September 2026, China's monthly sulphur imports totalled 140,866.876 mt in physical content, down 48.27% MoM and down 82.24% YoY, with major suppliers including South Korea, Jap",
+      "embed": "ok",
+      "tags": [
+        "有色"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "d6a2a9a92f65",
+      "url": "https://news.metal.com/newscontent/104166378-smm-analysis-asian-molybdenum-oxide-offers-rise-as-china-returnscan-the-rally-hold",
+      "title": "[SMM Analysis] Asian Molybdenum Oxide Offers Rise as China Returns—Can the Rally Hold?During China’s 2026 National Day holiday, overseas molybdenum prices were stable before firming. Busan 57% molybdenum oxide indications rose to $33.25–33.40/lb Mo on October 7, although higher levels await transaction confirmation. Ferromolybdenum trading remained subdued. Accidents and labour disruptions at Chilean mines increased supply uncertainty, but no measurable losses were confirmed. SMM expects prices to remain elevated and rangebound after the holiday......Oct 19, 2026 17:22 (GMT+8)",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "During China’s 2026 National Day holiday, overseas molybdenum prices were stable before firming. Busan 57% molybdenum oxide indications rose to $33.25–33.40/lb Mo on October 7, alt",
+      "embed": "ok",
+      "tags": [
+        "钼"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "818ce98eb254",
+      "url": "https://news.metal.com/newscontent/104162853-china-proposes-tighter-solar-technology-export-controls-what-next-for-the-ex-china-region-smm-analysis",
+      "title": "China Proposes Tighter Solar Technology Export Controls: What Next for the Ex-China Region? [SMM Analysis]On 16 October, China's Ministry of Commerce (MOFCOM) and Ministry of Science and Technology announced proposed revisions to the Catalogue of Technologies Prohibited and Restricted from Export, alongside temporary pre-export registration requirements for the technologies concerned. The solar sector accounts for 12 technologies covering polysilicon, wafer and cell manufacturing. Certain key and core equipment incorporating these technologies also falls within the scope.Oct 16, 2026 18:21 (GMT+8)",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "On 16 October, China's Ministry of Commerce (MOFCOM) and Ministry of Science and Technology announced proposed revisions to the Catalogue of Technologies Prohibited and Restricted ",
+      "embed": "ok",
+      "tags": [
+        "有色"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "1e8a7b889f27",
+      "url": "https://news.metal.com/newscontent/104162687-smm-analysis-silver-falls-nearly-20-from-recent-peak-why-solar-cell-prices-are-not-tracking-lower",
+      "title": "[SMM Analysis] Silver Falls Nearly 20% From Recent Peak: Why Solar Cell Prices Are Not Tracking Lower?Silver prices fell 19.6% from August 27 to October 15, lowering solar cell costs, yet cell prices held steady. SMM data show 210R prices steady at RMB 0.310/W, while 210N prices rose and 183 prices edged down. Production line upgrades and output cuts tightened supply, while export orders and utility-scale demand supported key formats. Near-term pricing remains driven by supply-demand fundamentals.Oct 16, 2026 17:16 (GMT+8)",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Silver prices fell 19.6% from August 27 to October 15, lowering solar cell costs, yet cell prices held steady. SMM data show 210R prices steady at RMB 0.310/W, while 210N prices ro",
+      "embed": "ok",
+      "tags": [
+        "银"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "4c295ed8fa8d",
+      "url": "https://news.metal.com/newscontent/104170983-smm-analysis-september-imports-of-nickel-sulphate-from-indonesia-and-other-countries-grew-driving-a-rebound-in-total-imports",
+      "title": "[SMM Analysis] September Imports of Nickel Sulphate from Indonesia and Other Countries Grew, Driving a Rebound in Total Imports2 mins ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "According to the latest data from China Customs, China's total nickel sulphate imports in September 2026 were 5,411 mt in metal content, up 20% MoM but down 17% YoY. China's nickel",
+      "embed": "ok",
+      "tags": [
+        "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "e97d5d12b449",
+      "url": "https://news.metal.com/newscontent/104170971-ningbo-zinc-trader-quotes-stable-transactions-unimproved-mom-smm-midday-commentary",
+      "title": "Ningbo Zinc: Trader Quotes Stable, Transactions Unimproved MoM [SMM Midday Commentary]4 mins ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "[Ningbo Zinc: Trader Quotes Stable, Transactions Unchanged MoM] Mainstream brand 0# zinc traded at around 25,605-25,675 yuan/mt in the Ningbo market. Conventional brands in Ningbo ",
+      "embed": "ok",
+      "tags": [
+        "锌"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "9f3223e39451",
+      "url": "https://news.metal.com/newscontent/104170960-smm-nickel-intermediate-product-daily-review-mhp-and-high-grade-nickel-matte-nickel-prices-decline-on-october-21",
+      "title": "[SMM Nickel Intermediate Product Daily Review] MHP and high-grade nickel matte nickel prices decline on October 21As of now, the FOB price of Indonesian MHP nickel is $12,797/mt Ni, and the FOB price of Indonesian MHP cobalt is $25,442/mt Co. The MHP payables (against the SMM battery-grade nickel sulphate index) are 79.5-80.5, and the payable indicator for the cobalt element in MHP (against SMM refined cobalt (Rotterdam warehouse)) is 57. The FOB price of Indonesian high-grade nickel matte is $14,135/mt Ni.6 mins ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "As of now, the FOB price of Indonesian MHP nickel is $12,797/mt Ni, and the FOB price of Indonesian MHP cobalt is $25,442/mt Co. The MHP payables (against the SMM battery-grade nic",
+      "embed": "ok",
+      "tags": [
+        "钴",
+        "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "422e726b365d",
+      "url": "https://news.metal.com/newscontent/104170974-smm-pv-news-baita-village-in-yixing-pioneers-a-nationwide-innovation-of-whole-village-contiguous-development-",
+      "title": "[SMM PV News] Baita Village in Yixing pioneers a nationwide innovation of \"whole-village contiguous development + medium-voltage grid connection + direct green electricity supply,\" unlocking a new track for distributed PV.Recently, Jiangsu Province's first medium-voltage grid-connected \"whole-village contiguous + green electricity direct supply\" distributed PV project was launched in Baita Village, Yixing. With a total installed capacity of 563.66 kW, the project breaks away from the old model of scattered household PV grid connections, adopting centralized development with the entire village as a unit to achieve the physical direct supply of green electricity to the production lines of export enterprises, setting a benchmark for whole-village contiguous PV development in Jiangsu.6 mins ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "[SMM PV News] Baita Village in Yixing pioneers a nationwide innovation of \"whole-village contiguous development + medium-voltage grid connection + direct green electricity supply,\" unlocking a new track for distributed PV.Recently, Jiangsu Province's first medium-voltage grid-connected \"whole-village contiguous + green electricity direct supply\" distributed PV project was launched in Baita Village, Yixing. With a total installed capacity of 563.66 kW, the project breaks away from the old model of scattered household PV grid connections, adopting centralized development with the entire village as a unit to achieve the physical direct supply of green electricity to the production lines of export enterprises, setting a benchmark for whole-village contiguous PV development in Jiangsu.6 mins ago",
+      "embed": "ok",
+      "tags": [
+        "有色"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "5c424050899b",
+      "url": "https://news.metal.com/newscontent/104170962-shanghai-zinc-futures-zinc-prices-continue-to-consolidate-market-trading-sluggish-smm-midday-commentary",
+      "title": "Shanghai Zinc: Futures Zinc Prices Continue to Consolidate, Market Trading Sluggish [SMM Midday Commentary][Shanghai Zinc: Futures Zinc Prices Continue to Consolidate, Market Trading Sluggish] Today, mainstream transaction prices for #0 zinc were concentrated at 25,625-25,725 yuan/mt, with no transactions for Shuangyan. Mainstream transaction prices for #1 zinc were at 25,555-25,655 yuan/mt. In early trading, the market quoted a premium of 40-70 yuan/mt against the SMM average price, with no quotes against futures yet.7 mins ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "[Shanghai Zinc: Futures Zinc Prices Continue to Consolidate, Market Trading Sluggish] Today, mainstream transaction prices for #0 zinc were concentrated at 25,625-25,725 yuan/mt, w",
+      "embed": "ok",
+      "tags": [
+        "锌"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "14f83b1701eb",
+      "url": "https://news.metal.com/newscontent/104170953-smm-nickel-sulphate-daily-review-on-october-21-downstream-purchasing-sentiment-was-sluggish-and-nickel-sulphate-prices-declined",
+      "title": "[SMM Nickel Sulphate Daily Review] On October 21, downstream purchasing sentiment was sluggish, and nickel sulphate prices declined.On October 21, the SMM battery-grade nickel sulphate average price declined.10 mins ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "[SMM Nickel Sulphate Daily Review] On October 21, downstream purchasing sentiment was sluggish, and nickel sulphate prices declined.On October 21, the SMM battery-grade nickel sulphate average price declined.10 mins ago",
+      "embed": "ok",
+      "tags": [
+        "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "b1247850a776",
+      "url": "https://news.metal.com/newscontent/104170940-smm-pv-flash-chery-unveils-solar-powered-car-with-air-water-harvesting-technology-achieving-a-single-day-peak-power-generation-of-6-kwh",
+      "title": "[SMM PV Flash] Chery unveils solar-powered car with air water harvesting technology, achieving a single-day peak power generation of 6 kWhOn October 20, the 2026 Chery Global Innovation Conference was officially held at the Chery Global Innovation Center in Wuhu. Centered on the theme \"Change — Rebuilding a Better World with AI, Bringing Life Back to Life,\" the conference unveiled a technology cluster comprising 11 core technologies, including Robotaxi, V2G + Xunlong instant charging + wireless charging, eVTOL, chips, CheryMind, the Chery All-Dimensional World Engine (CHERY AWE), solid-state batteries, the Lingxi 8D intelligent cockpit, solar vehicles + atmospheric water harvesting, native 48V low-voltage electrical systems, and intelligent driving units. Chery unveiled its solar vehicle + atmospheric water harvesting technology. The solar vehicle adopts an industry-leading flexible PV car cover technology, weighing only 1.5 kg/m², with a thickness of 1 mm and the ability to be rolled up to a diameter of 63 mm. It can be flexibly integrated onto the roof and hood, with an attachment area of ≥4 m², a vehicle power output of ≥640 W, and a maximum daily power generation of 6 kWh. Paired with an integrated PV controller, the generated electricity is directly fed into the power battery, with transmission losses kept within 10%, achieving an efficient closed energy loop.14 mins ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "[SMM PV Flash] Chery unveils solar-powered car with air water harvesting technology, achieving a single-day peak power generation of 6 kWhOn October 20, the 2026 Chery Global Innovation Conference was officially held at the Chery Global Innovation Center in Wuhu. Centered on the theme \"Change — Rebuilding a Better World with AI, Bringing Life Back to Life,\" the conference unveiled a technology cluster comprising 11 core technologies, including Robotaxi, V2G + Xunlong instant charging + wireless charging, eVTOL, chips, CheryMind, the Chery All-Dimensional World Engine (CHERY AWE), solid-state batteries, the Lingxi 8D intelligent cockpit, solar vehicles + atmospheric water harvesting, native 48V low-voltage electrical systems, and intelligent driving units. Chery unveiled its solar vehicle + atmospheric water harvesting technology. The solar vehicle adopts an industry-leading flexible PV car cover technology, weighing only 1.5 kg/m², with a thickness of 1 mm and the ability to be rolled up to a diameter of 63 mm. It can be flexibly integrated onto the roof and hood, with an attachment area of ≥4 m², a vehicle power output of ≥640 W, and a maximum daily power generation of 6 kWh. Paired with an integrated PV controller, the generated electricity is directly fed into the power battery, with transmission losses kept within 10%, achieving an efficient closed energy loop.14 mins ago",
+      "embed": "ok",
+      "tags": [
+        "有色"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "2f3d657d1483",
+      "url": "https://news.metal.com/newscontent/104170936-smm-pv-flash-first-unit-of-green-electricity-generated-hunan-leiyang-pv-project-successfully-connected-to-grid",
+      "title": "[SMM PV Flash] First Unit of Green Electricity Generated! Hunan Leiyang PV Project Successfully Connected to GridOn October 16, as the first kilowatt-hour of green electricity was generated from the solar panels, the 100 MW PV power project in Donghuwei Township, Leiyang City, Hunan Province, invested and constructed by China Energy Engineering Group Gezhouba Mechanical & Electrical Co., Ltd., successfully achieved its first grid connection. The project is located in Donghuwei Township, Leiyang City, Hunan Province, with a planned installed capacity of 100 MW. It is equipped with 640 W monocrystalline silicon bifacial double-glass modules and 320 kW string inverters, along with a 110 kV booster station and transmission network, establishing an efficient and complete power generation system.16 mins ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "[SMM PV Flash] First Unit of Green Electricity Generated! Hunan Leiyang PV Project Successfully Connected to GridOn October 16, as the first kilowatt-hour of green electricity was generated from the solar panels, the 100 MW PV power project in Donghuwei Township, Leiyang City, Hunan Province, invested and constructed by China Energy Engineering Group Gezhouba Mechanical & Electrical Co., Ltd., successfully achieved its first grid connection. The project is located in Donghuwei Township, Leiyang City, Hunan Province, with a planned installed capacity of 100 MW. It is equipped with 640 W monocrystalline silicon bifacial double-glass modules and 320 kW string inverters, along with a 110 kV booster station and transmission network, establishing an efficient and complete power generation system.16 mins ago",
+      "embed": "ok",
+      "tags": [
+        "硅"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "34d664b6924c",
+      "url": "https://news.metal.com/newscontent/104170933-smm-pv-flash-datang-150-mw-pv-power-generation-project-announced",
+      "title": "[SMM PV Flash] Datang 150 MW PV Power Generation Project AnnouncedOn October 10, the Aba Prefecture Ecological Environment Bureau of Sichuan Province issued a public notice regarding the acceptance of the environmental impact assessment documents for the Chishajiao (Phase II) PV power generation project in Mao County, Aba Prefecture. According to the notice, the project is located in Wadi Town and Shaba Town, Mao County, Aba Prefecture, Sichuan Province, with a total investment of 630.8886 million yuan. The project is to be constructed by Datang (Aba) New Energy Development Co., Ltd. The total land area of the project is 1.5825 km², with a total AC-side installed capacity of 150 MW. A total of 42 PV arrays (including inverters and box transformers) are designed, comprising 41 arrays of 3.63 MW and 1 array of 1.32 MW. Each array adopts a scheme of 650 Wp monocrystalline silicon bifacial double-glass PV modules + fixed mounting structures + inverters + box-type transformers. In addition, the project plans to build a new 220 kV booster station. Seven 35 kV buried cable collector lines will connect to the 220 kV booster station, after which one outgoing transmission line will be aggregated and connected to the Jinlongtan Hydropower Station (this environmental impact assessment does not include the 220 kV outgoing transmission line). The construction period is approximately 9 months.16 mins ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "[SMM PV Flash] Datang 150 MW PV Power Generation Project AnnouncedOn October 10, the Aba Prefecture Ecological Environment Bureau of Sichuan Province issued a public notice regarding the acceptance of the environmental impact assessment documents for the Chishajiao (Phase II) PV power generation project in Mao County, Aba Prefecture. According to the notice, the project is located in Wadi Town and Shaba Town, Mao County, Aba Prefecture, Sichuan Province, with a total investment of 630.8886 million yuan. The project is to be constructed by Datang (Aba) New Energy Development Co., Ltd. The total land area of the project is 1.5825 km², with a total AC-side installed capacity of 150 MW. A total of 42 PV arrays (including inverters and box transformers) are designed, comprising 41 arrays of 3.63 MW and 1 array of 1.32 MW. Each array adopts a scheme of 650 Wp monocrystalline silicon bifacial double-glass PV modules + fixed mounting structures + inverters + box-type transformers. In addition, the project plans to build a new 220 kV booster station. Seven 35 kV buried cable collector lines will connect to the 220 kV booster station, after which one outgoing transmission line will be aggregated and connected to the Jinlongtan Hydropower Station (this environmental impact assessment does not include the 220 kV outgoing transmission line). The construction period is approximately 9 months.16 mins ago",
+      "embed": "ok",
+      "tags": [
+        "硅"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "aefd346d75f1",
+      "url": "https://news.metal.com/newscontent/104170938-adc12-aluminum-alloy-spot-prices-hold-steady-market-continues-range-bound-consolidation-adc12-price-daily-commentary",
+      "title": "ADC12 aluminum alloy spot prices hold steady; market continues range-bound consolidation [ADC12 Price Daily Commentary]17 mins ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "ADC12 aluminum alloy spot prices hold steady; market continues range-bound consolidation [ADC12 Price Daily Commentary]17 mins ago",
+      "embed": "ok",
+      "tags": [
+        "铝"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "54de79c6aa59",
+      "url": "https://news.metal.com/newscontent/104170813-nanchang-aluminum-billet-processing-fees-fall-on-october-21",
+      "title": "Nanchang Aluminum Billet Processing Fees Fall on October 211 hour ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Nanchang Aluminum Billet Processing Fees Fall on October 211 hour ago",
+      "embed": "ok",
+      "tags": [
+        "铝"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "88acdebaf6d9",
+      "url": "https://news.metal.com/newscontent/104170812-wuxi-aluminum-billet-processing-fees-fall-on-october-21",
+      "title": "Wuxi Aluminum Billet Processing Fees Fall on October 211 hour ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Wuxi Aluminum Billet Processing Fees Fall on October 211 hour ago",
+      "embed": "ok",
+      "tags": [
+        "铝"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "d98004cdce67",
+      "url": "https://news.metal.com/newscontent/104170811-foshan-aluminum-billet-processing-fees-rise-on-october-21",
+      "title": "Foshan Aluminum Billet Processing Fees Rise on October 21On October 21, Foshan aluminum billet Φ90 was quoted at RMB 23,910/t, with processing fee at RMB 380/t (up RMB 30 from the previous trading day); Φ120 at RMB 23,860/t, with processing fee at RMB 330/t (up RMB 30); Φ178 at RMB 23,860/t, with processing fee at RMB 330/t (up RMB 30). SMM A00 aluminum spot (Foshan) stood at RMB 23,530/t.1 hour ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Foshan Aluminum Billet Processing Fees Rise on October 21On October 21, Foshan aluminum billet Φ90 was quoted at RMB 23,910/t, with processing fee at RMB 380/t (up RMB 30 from the previous trading day); Φ120 at RMB 23,860/t, with processing fee at RMB 330/t (up RMB 30); Φ178 at RMB 23,860/t, with processing fee at RMB 330/t (up RMB 30). SMM A00 aluminum spot (Foshan) stood at RMB 23,530/t.1 hour ago",
+      "embed": "ok",
+      "tags": [
+        "铝"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "f2c6e7178f42",
+      "url": "https://news.metal.com/newscontent/104170797-market-tug-of-war-continues-as-platinum-consolidates-spot-market-consumption-slightly-weakens-smm-daily-review",
+      "title": "Market tug-of-war continues as platinum consolidates; spot market consumption slightly weakens [SMM daily review]1 hour ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Market tug-of-war continues as platinum consolidates; spot market consumption slightly weakens [SMM daily review]1 hour ago",
+      "embed": "ok",
+      "tags": [
+        "铂"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "f617b5ebfab7",
+      "url": "https://news.metal.com/newscontent/104170716-smm-nickel-midday-review-nickel-prices-surged-24-on-october-21-as-production-cuts-news-drove-bears-to-aggressively-cover-their-short-positions",
+      "title": "[SMM Nickel Midday Review] Nickel prices surged 2.4% on October 21, as production cuts news drove bears to aggressively cover their short positions1 hour ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "[SMM Nickel Midday Review] Nickel prices surged 2.4% on October 21, as production cuts news drove bears to aggressively cover their short positions1 hour ago",
+      "embed": "ok",
+      "tags": [
+        "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "2527dbe2d879",
+      "url": "https://news.metal.com/newscontent/104170662-smm-analysis-chinas-lead-acid-battery-imports-and-exports-in-september-external-demand-recovers-imports-recede",
+      "title": "[SMM Analysis] China's Lead-acid Battery Imports and Exports in September: \"External Demand Recovers, Imports Recede\"[SMM Analysis] China's Lead-acid Battery Imports and Exports in September: \"External Demand Recovers, Imports Recede\" SMM, October 21: According to the latest data from the General Administration of Customs, China's lead-acid battery exports rebounded to 20.6587 million units in September 2026, up 5.59% MoM and up 20.92% YoY.1 hour ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "[SMM Analysis] China's Lead-acid Battery Imports and Exports in September: \"External Demand Recovers, Imports Recede\"[SMM Analysis] China's Lead-acid Battery Imports and Exports in September: \"External Demand Recovers, Imports Recede\" SMM, October 21: According to the latest data from the General Administration of Customs, China's lead-acid battery exports rebounded to 20.6587 million units in September 2026, up 5.59% MoM and up 20.92% YoY.1 hour ago",
+      "embed": "ok",
+      "tags": [
+        "铅"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "29c74b9f9927",
+      "url": "https://news.metal.com/newscontent/104170532-tianjin-zinc-futures-rebound-downstream-still-bearish-smm-midday-comment",
+      "title": "Tianjin Zinc: Futures rebound, downstream still bearish [SMM midday comment][Tianjin Zinc: Futures Rebound, Downstream Still Bearish] In the Tianjin market, mainstream transactions for #0 zinc ingot were at 25,550-25,680 yuan/mt, Zijin transactions were at 25,640-25,760 yuan/mt, and #1 zinc ingot transactions were around 25,430-25,530 yuan/mt. Zijin was quoted at a premium of 90-120 yuan/mt against the 2611 contract, while Huzinc was quoted at 27,105 yuan/mt. #0 zinc ingot was quoted at a premium of 0-40 yuan/mt against the 2611 contract. The Tianjin market was quoted at a discount of 15 yuan/mt against the Shanghai market.1 hour ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Tianjin Zinc: Futures rebound, downstream still bearish [SMM midday comment][Tianjin Zinc: Futures Rebound, Downstream Still Bearish] In the Tianjin market, mainstream transactions for #0 zinc ingot were at 25,550-25,680 yuan/mt, Zijin transactions were at 25,640-25,760 yuan/mt, and #1 zinc ingot transactions were around 25,430-25,530 yuan/mt. Zijin was quoted at a premium of 90-120 yuan/mt against the 2611 contract, while Huzinc was quoted at 27,105 yuan/mt. #0 zinc ingot was quoted at a premium of 0-40 yuan/mt against the 2611 contract. The Tianjin market was quoted at a discount of 15 yuan/mt against the Shanghai market.1 hour ago",
+      "embed": "ok",
+      "tags": [
+        "锌"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "2eb70d7a3066",
+      "url": "https://news.metal.com/newscontent/104170527-chinas-antimony-oxide-exports-surge-806-mom-1761-yoy-in-september-2026",
+      "title": "China's Antimony Oxide Exports Surge 80.6% MoM, 176.1% YoY in September 2026In September 2026, China exported 307 tonnes of antimony oxide (HS Code 28258000 “Oxides of antimony”), rising by 80.6% month-on-month from 170 tonnes in August and surging 176.1% year-on-year from 111.2 tonnes in September 2025. Imports for the month stood at merely 4.21 tonnes, resulting in a net export volume of 302.79 tonnes.1 hour ago",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "China's Antimony Oxide Exports Surge 80.6% MoM, 176.1% YoY in September 2026In September 2026, China exported 307 tonnes of antimony oxide (HS Code 28258000 “Oxides of antimony”), rising by 80.6% month-on-month from 170 tonnes in August and surging 176.1% year-on-year from 111.2 tonnes in September 2025. Imports for the month stood at merely 4.21 tonnes, resulting in a net export volume of 302.79 tonnes.1 hour ago",
+      "embed": "ok",
+      "tags": [
+        "锑"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "fc07535c71d0",
+      "url": "https://news.metal.com/newscontent/104163055-supply-marginal-increase-vs-low-inventory-destocking-aluminum-price-upside-limited-smm-aluminum-morning-meeting-summary",
+      "title": "1Supply marginal increase vs. low inventory destocking; aluminum price upside limited [SMM Aluminum Morning Meeting Summary]",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "1Supply marginal increase vs. low inventory destocking; aluminum price upside limited [SMM Aluminum Morning Meeting Summary]",
+      "embed": "ok",
+      "tags": [
+        "铝"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "0dd4b1cf6843",
+      "url": "https://news.metal.com/newscontent/104168925-chinese-6b-battery-investment-in-morocco-reshapes-eu-lithium-demand-amid-tariff-shifts",
+      "title": "2Chinese $6B Battery Investment in Morocco Reshapes EU Lithium Demand Amid Tariff Shifts",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "2Chinese $6B Battery Investment in Morocco Reshapes EU Lithium Demand Amid Tariff Shifts",
+      "embed": "ok",
+      "tags": [
+        "锂"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "ec4578c9869a",
+      "url": "https://news.metal.com/newscontent/104169170-sep-secondary-copper-scrap-imports-surge-over-30-mom-as-import-window-openssmm-analysis",
+      "title": "3Sep secondary copper scrap imports surge over 30% MoM as import window opens【SMM Analysis】",
+      "source": "SMM 国际站",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "3Sep secondary copper scrap imports surge over 30% MoM as import window opens【SMM Analysis】",
+      "embed": "ok",
+      "tags": [
+        "铜"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "metal"
+    },
+    {
+      "id": "3f8e27a908de",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202610/t20261021_10341247.htm",
+      "title": "ILZSG：2027年全球铅锌将过剩",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "ILZSG：2027年全球铅锌将过剩 繁体版 --> --> English --> --> 电子邮件 返回主站 首页 资讯 国别 矿权地 图库 --> 图书 --> 图书 世界矿产资源年评 --> 您现在的位置：首页 > 资讯 > 矿业动态 > 行业运行动态 ILZSG：2027年全球铅锌将过剩 时间:2026-10-21 08:38:00 字体[ 大 中",
+      "embed": "ok",
+      "tags": [
+        "铅",
+        "锌"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "geoglobal"
+    },
+    {
+      "id": "40ffda644819",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kcykf/xfx/202610/t20261021_10341246.htm",
+      "title": "秘鲁北部成为油气勘探热点",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "秘鲁北部成为油气勘探热点 繁体版 --> --> English --> --> 电子邮件 返回主站 首页 资讯 国别 矿权地 图库 --> 图书 --> 图书 世界矿产资源年评 --> 您现在的位置：首页 > 资讯 > 全球矿产勘查与开发 > 新发现 秘鲁北部成为油气勘探热点 时间:2026-10-21 08:10:00 字体[ 大 中 小] [ 打印 ]",
+      "embed": "ok",
+      "tags": [
+        "有色"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "geoglobal"
+    },
+    {
+      "id": "5461a96b6af3",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kczygl/zcdt/202610/t20261021_10341249.htm",
+      "title": "政府介入关键矿产但重构供应链困难",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "政府介入关键矿产但重构供应链困难 繁体版 --> --> English --> --> 电子邮件 返回主站 首页 资讯 国别 矿权地 图库 --> 图书 --> 图书 世界矿产资源年评 --> 您现在的位置：首页 > 资讯 > 国外矿产资源管理 > 政策动态 政府介入关键矿产但重构供应链困难 时间:2026-10-21 08:50:00 字体[ 大 中 小",
+      "embed": "ok",
+      "tags": [
+        "有色"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "geoglobal"
+    },
+    {
+      "id": "2e4bb50fdf83",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202610/t20261021_10341248.htm",
+      "title": "阿克拉拉公司彭科稀土矿经济性上升",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "阿克拉拉公司彭科稀土矿经济性上升 繁体版 --> --> English --> --> 电子邮件 返回主站 首页 资讯 国别 矿权地 图库 --> 图书 --> 图书 世界矿产资源年评 --> 您现在的位置：首页 > 资讯 > 矿业公司 > 矿业公司融投资 阿克拉拉公司彭科稀土矿经济性上升 时间:2026-10-21 08:41:00 字体[ 大 中 小]",
+      "embed": "ok",
+      "tags": [
+        "稀土"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "geoglobal"
+    },
+    {
+      "id": "ae02c9774c7a",
+      "url": "https://www.mining.com/vulcan-elements-teams-up-with-north-carolina-researchers-to-advance-rare-earth-magnets-tech",
+      "title": "Vulcan Elements teams up with North Carolina researchers to advance rare earth magnets tech",
+      "source": "MINING.COM",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "The company said the partnership converges two research fields that are foundational to national security: rare earth magnets and quantum mechanics.",
+      "embed": "ok",
+      "tags": [
+        "稀土"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": true,
+      "fetch_src": "mining"
     },
     {
       "id": "5c2552144b42",
@@ -394,6 +1074,26 @@
       "fetch_src": "mining"
     },
     {
+      "id": "2a18d81ca3a7",
+      "url": "https://www.chinania.org.cn/html/xiehuidongtai/xiehuidongtai/2026/1021/62222.html",
+      "title": "中国有色金属工业协会党委书记敖宏拜访国际有色金属研究组",
+      "source": "中国有色金属工业协会",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "当地时间10月16日，中国有色金属工业协会党委书记敖宏在葡萄牙里斯本拜访国际有色金属研究组，与秘书长卡米拉·斯卢佩克围绕中国有色金属行业发展情况和全球有色金属消费趋势，以及研究组研究方向进行交流。",
+      "embed": "ok",
+      "tags": [
+        "金"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "chinania"
+    },
+    {
       "id": "8e6e640f3488",
       "url": "https://www.chinania.org.cn/html/xiehuidongtai/xiehuidongtai/2026/1017/62189.html",
       "title": "2026上海衍生品市场论坛有色分论坛举行",
@@ -454,6 +1154,27 @@
       "fetch_src": "chinania"
     },
     {
+      "id": "d67ea04f3775",
+      "url": "https://www.chinania.org.cn/html/xiehuidongtai/xiehuidongtai/2026/1021/62223.html",
+      "title": "“中国铝业杯”第十八届全国有色金属行业职业技能竞赛决赛开幕",
+      "source": "中国有色金属工业协会",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "10月20日，由中国有色金属工业协会、中国就业培训技术指导中心、中国机械冶金建材工会全国委员会主办的2026年全国行业职业技能竞赛——“中国铝业杯”第十八届全国有色金属行业职业技能竞赛决赛在云南鹤庆开幕，位于云南建水的分会场以视频连线方式同步举行开幕式。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "铝"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "chinania"
+    },
+    {
       "id": "c0f5025b947c",
       "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1020/62204.html",
       "title": "铜资源量约1.1亿吨、金资源量4610吨 紫金矿业靠科技重构矿业增长的逻辑",
@@ -468,6 +1189,26 @@
       "tags": [
         "金",
         "铜"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "chinania"
+    },
+    {
+      "id": "b60d5d25c5a5",
+      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1021/62225.html",
+      "title": "携“未来之矿业”愿景与亚马孙数字艺术 淡水河谷将九赴进博会",
+      "source": "中国有色金属工业协会",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "11月5日—10日，举世瞩目的中国国际进口博览会（以下简称“进博会”）即将第9次在上海举办，“全勤生”巴西淡水河谷公司将以“启‘十五五’新程，塑未来之矿业”为主题再度参展。",
+      "embed": "ok",
+      "tags": [
+        "有色"
       ],
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-21",
@@ -556,46 +1297,6 @@
       "fetch_src": "chinania"
     },
     {
-      "id": "4674f801a1a5",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1020/62208.html",
-      "title": "新疆有色集团安排部署第四季度安全生产工作",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-20",
-      "orig_date_full": "2026-10-20",
-      "report_date": "2026-10-21",
-      "category": "行业动态",
-      "is_new": false,
-      "summary": "10月12日，新疆有色集团召开2026年第4次安委会、环委会会议。会议学习习近平总书记关于安全生产重要论述，传达国家和新疆维吾尔自治区国资委安全生产相关文件，组织观看事故警示教育片；总结第三季度安全生产工作、安排部署第四季度安全生产工作。",
-      "embed": "ok",
-      "tags": [
-        "有色"
-      ],
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "foreign": false,
-      "fetch_src": "chinania"
-    },
-    {
-      "id": "a2775d4689d9",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1020/62207.html",
-      "title": "填补行业精细化智能管控技术空白 金属矿物全体积成分在线检测分析技术在冶炼配料精益智能管控中的应用研讨会在烟台召开",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-20",
-      "orig_date_full": "2026-10-20",
-      "report_date": "2026-10-21",
-      "category": "行业动态",
-      "is_new": false,
-      "summary": "10月10日，金属矿物全体积成分在线检测分析技术在冶炼配料精益智能管控中的应用研讨会在山东省烟台市召开。",
-      "embed": "ok",
-      "tags": [
-        "金"
-      ],
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "foreign": false,
-      "fetch_src": "chinania"
-    },
-    {
       "id": "7407472822a0",
       "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1019/62199.html",
       "title": "9月钛市场回顾及后市展望",
@@ -625,7 +1326,7 @@
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": false,
-      "summary": "中国钨钼产业月度景气指数监测结果显示，2026年9月，中国钨钼产业景气指数为40.2，较8月回落12.6个百分点，重新回到“正常”区间；先行指数为51.5，较8月回落19.7个百分点；一致指数为71.7，较8月回落2.2个百分点。",
+      "summary": "中国钨钼产业月度景气指数报告（2026年9月）",
       "embed": "ok",
       "tags": [
         "钨",
@@ -878,16 +1579,36 @@
       "fetch_src": "chinania"
     },
     {
-      "id": "becec50ba8e0",
-      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474680",
-      "title": "2026上海衍生品市场论坛有色分论坛举行",
+      "id": "0b7f21f6966a",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474789",
+      "title": "中国有色金属工业协会党委书记敖宏拜访国际有色金属研究组",
       "source": "中国有色金属报",
       "orig_date": "10-21",
       "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": true,
-      "summary": "2026上海衍生品市场论坛有色分论坛举行重点新闻-有色金属新闻-中国有色网-中国有色金属报主办 中国有色金属报社主办 在线投稿 图片频道--> 广告服务 首页 要闻 重点新闻 政策法规 铜镍铅锌 铝 稀有稀土 有色市场 科技 镁钛 地矿 建设 党建工作 企业文化 《资源再生》杂志 专题--> 行情报价 钛微媒报价 上海金属报价 长江有色金属现货市场行情 南海",
+      "summary": "中国有色金属工业协会党委书记敖宏拜访国际有色金属研究组",
+      "embed": "ok",
+      "tags": [
+        "金"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cnmn"
+    },
+    {
+      "id": "2771e71a4966",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474791",
+      "title": "携“未来之矿业”愿景与亚马孙数字艺术 淡水河谷将九赴进博会",
+      "source": "中国有色金属报",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "携“未来之矿业”愿景与亚马孙数字艺术 淡水河谷将九赴进博会",
       "embed": "ok",
       "tags": [
         "有色"
@@ -898,81 +1619,20 @@
       "fetch_src": "cnmn"
     },
     {
-      "id": "67388890792c",
-      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474677",
-      "title": "坚定信心促消费 深化合作谱新篇 2026扩大铝应用论坛召开",
+      "id": "e4e87634fc59",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474790",
+      "title": "“中国铝业杯”第十八届全国有色金属行业职业技能竞赛决赛开幕",
       "source": "中国有色金属报",
       "orig_date": "10-21",
       "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": true,
-      "summary": "坚定信心促消费 深化合作谱新篇 2026扩大铝应用论坛召开",
-      "embed": "ok",
-      "tags": [
-        "铝"
-      ],
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "foreign": false,
-      "fetch_src": "cnmn"
-    },
-    {
-      "id": "198439cd9090",
-      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474730",
-      "title": "2026年中国国际镍钴工业年会召开",
-      "source": "中国有色金属报",
-      "orig_date": "10-21",
-      "orig_date_full": "2026-10-21",
-      "report_date": "2026-10-21",
-      "category": "行业动态",
-      "is_new": true,
-      "summary": "2026年中国国际镍钴工业年会召开重点新闻-有色金属新闻-中国有色网-中国有色金属报主办 中国有色金属报社主办 在线投稿 图片频道--> 广告服务 首页 要闻 重点新闻 政策法规 铜镍铅锌 铝 稀有稀土 有色市场 科技 镁钛 地矿 建设 党建工作 企业文化 《资源再生》杂志 专题--> 行情报价 钛微媒报价 上海金属报价 长江有色金属现货市场行情 南海有色现",
-      "embed": "ok",
-      "tags": [
-        "钴",
-        "镍"
-      ],
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "foreign": false,
-      "fetch_src": "cnmn"
-    },
-    {
-      "id": "576e8cc53673",
-      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474731",
-      "title": "铜资源量约1.1亿吨、金资源量4610吨 紫金矿业靠科技重构矿业增长的逻辑",
-      "source": "中国有色金属报",
-      "orig_date": "10-21",
-      "orig_date_full": "2026-10-21",
-      "report_date": "2026-10-21",
-      "category": "行业动态",
-      "is_new": true,
-      "summary": "铜资源量约1.1亿吨、金资源量4610吨 紫金矿业靠科技重构矿业增长的逻辑",
+      "summary": "“中国铝业杯”第十八届全国有色金属行业职业技能竞赛决赛开幕",
       "embed": "ok",
       "tags": [
         "金",
-        "铜"
-      ],
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "foreign": false,
-      "fetch_src": "cnmn"
-    },
-    {
-      "id": "54dde5d5bb50",
-      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474729",
-      "title": "有色行业多名选手取得佳绩 全国总工会第二届班组长大赛冶金赛道决赛举行",
-      "source": "中国有色金属报",
-      "orig_date": "10-21",
-      "orig_date_full": "2026-10-21",
-      "report_date": "2026-10-21",
-      "category": "行业动态",
-      "is_new": true,
-      "summary": "有色行业多名选手取得佳绩 全国总工会第二届班组长大赛冶金赛道决赛举行",
-      "embed": "ok",
-      "tags": [
-        "金"
+        "铝"
       ],
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-21",
@@ -3384,19 +4044,20 @@
       "fetch_src": "cninfo"
     },
     {
-      "id": "1f4e916927e2",
-      "url": "https://ky.mnr.gov.cn/kyqcrgg/tkq/202610/t20261020_10338752.htm",
-      "title": "2026年克州本级权限第二批探矿权 公开挂牌出让变更公告",
+      "id": "e3a4935e53d1",
+      "url": "https://ky.mnr.gov.cn/kyqcrgg/tkq/202610/t20261021_10340002.htm",
+      "title": "江西省抚州市临川区金山东区铜多金属矿勘查探矿权挂牌出让公告",
       "source": "矿业权市场",
-      "orig_date": "10-20",
-      "orig_date_full": "2026-10-20",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "矿权市场",
-      "is_new": false,
-      "summary": "2026年克州本级权限第二批探矿权 公开挂牌出让变更公告 注册 登录 中国政府网 矿业权市场 首页 机构 动态 公开 服务 互动 数据 专题 您现在的位置：首页 > 矿业权招拍挂出让公告 > 探矿权出让公告 当前位置: 矿业权招拍挂出让公告 > 探矿权出让公告 --> 2026年克州本级权限第二批探矿权 公开挂牌出让变更公告 发布时间：2026-10-19|",
+      "is_new": true,
+      "summary": "江西省抚州市临川区金山东区铜多金属矿勘查探矿权挂牌出让公告 注册 登录 中国政府网 矿业权市场 首页 机构 动态 公开 服务 互动 数据 专题 您现在的位置：首页 > 矿业权招拍挂出让公告 > 探矿权出让公告 当前位置: 矿业权招拍挂出让公告 > 探矿权出让公告 --> 江西省抚州市临川区金山东区铜多金属矿勘查探矿权挂牌出让公告 发布时间：2026-10-2",
       "embed": "ok",
       "tags": [
-        "有色"
+        "金",
+        "铜"
       ],
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-21",
@@ -3404,16 +4065,16 @@
       "fetch_src": "miningrights"
     },
     {
-      "id": "442bea53edee",
-      "url": "https://ky.mnr.gov.cn/kyqcrgg/tkq/202610/t20261020_10338749.htm",
-      "title": "江西省大余县高岭铜多金属矿勘查探矿权挂牌出让公告",
+      "id": "18439b7bb7ca",
+      "url": "https://ky.mnr.gov.cn/kyqcrgg/tkq/202610/t20261021_10340001.htm",
+      "title": "云南省大姚县菜西拉铜多金属矿普查探矿权挂牌出让公告",
       "source": "矿业权市场",
-      "orig_date": "10-20",
-      "orig_date_full": "2026-10-20",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "矿权市场",
-      "is_new": false,
-      "summary": "江西省大余县高岭铜多金属矿勘查探矿权挂牌出让公告 注册 登录 中国政府网 矿业权市场 首页 机构 动态 公开 服务 互动 数据 专题 您现在的位置：首页 > 矿业权招拍挂出让公告 > 探矿权出让公告 当前位置: 矿业权招拍挂出让公告 > 探矿权出让公告 --> 江西省大余县高岭铜多金属矿勘查探矿权挂牌出让公告 发布时间：2026-10-19| 公告部门： 江",
+      "is_new": true,
+      "summary": "云南省大姚县菜西拉铜多金属矿普查探矿权挂牌出让公告 注册 登录 中国政府网 矿业权市场 首页 机构 动态 公开 服务 互动 数据 专题 您现在的位置：首页 > 矿业权招拍挂出让公告 > 探矿权出让公告 当前位置: 矿业权招拍挂出让公告 > 探矿权出让公告 --> 云南省大姚县菜西拉铜多金属矿普查探矿权挂牌出让公告 发布时间：2026-10-20| 公告部门：",
       "embed": "ok",
       "tags": [
         "金",
@@ -3435,46 +4096,6 @@
       "category": "矿权市场",
       "is_new": false,
       "summary": "内蒙古自治区科尔沁左翼后旗章棍塔拉地区三号勘查区一区块玻璃用砂矿采矿权网上挂牌出让公告 注册 登录 中国政府网 矿业权市场 首页 机构 动态 公开 服务 互动 数据 专题 您现在的位置：首页 > 矿业权招拍挂出让公告 > 采矿权出让公告 当前位置: 矿业权招拍挂出让公告 > 采矿权出让公告 --> 内蒙古自治区科尔沁左翼后旗章棍塔拉地区三号勘查区一区块玻璃用",
-      "embed": "ok",
-      "tags": [
-        "有色"
-      ],
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "foreign": false,
-      "fetch_src": "miningrights"
-    },
-    {
-      "id": "7190e4bf524e",
-      "url": "https://ky.mnr.gov.cn/kyqcrgg/ckq/202610/t20261020_10338744.htm",
-      "title": "内蒙古自治区科尔沁左翼后旗雅玛吐嘎查四号勘查区一区块玻...",
-      "source": "矿业权市场",
-      "orig_date": "10-20",
-      "orig_date_full": "2026-10-20",
-      "report_date": "2026-10-21",
-      "category": "矿权市场",
-      "is_new": false,
-      "summary": "内蒙古自治区科尔沁左翼后旗雅玛吐嘎查四号勘查区一区块玻璃用砂矿采矿权网上挂牌出让公告 注册 登录 中国政府网 矿业权市场 首页 机构 动态 公开 服务 互动 数据 专题 您现在的位置：首页 > 矿业权招拍挂出让公告 > 采矿权出让公告 当前位置: 矿业权招拍挂出让公告 > 采矿权出让公告 --> 内蒙古自治区科尔沁左翼后旗雅玛吐嘎查四号勘查区一区块玻璃用砂矿",
-      "embed": "ok",
-      "tags": [
-        "有色"
-      ],
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "foreign": false,
-      "fetch_src": "miningrights"
-    },
-    {
-      "id": "a03e0e000fe4",
-      "url": "https://ky.mnr.gov.cn/kyqcrgg/ckq/202610/t20261020_10338743.htm",
-      "title": "内蒙古自治区科尔沁左翼后旗雅玛吐嘎查二号勘查区一区块玻...",
-      "source": "矿业权市场",
-      "orig_date": "10-20",
-      "orig_date_full": "2026-10-20",
-      "report_date": "2026-10-21",
-      "category": "矿权市场",
-      "is_new": false,
-      "summary": "内蒙古自治区科尔沁左翼后旗雅玛吐嘎查二号勘查区一区块玻璃用砂矿采矿权挂牌出让公告 注册 登录 中国政府网 矿业权市场 首页 机构 动态 公开 服务 互动 数据 专题 您现在的位置：首页 > 矿业权招拍挂出让公告 > 采矿权出让公告 当前位置: 矿业权招拍挂出让公告 > 采矿权出让公告 --> 内蒙古自治区科尔沁左翼后旗雅玛吐嘎查二号勘查区一区块玻璃用砂矿采矿",
       "embed": "ok",
       "tags": [
         "有色"
@@ -3636,7 +4257,7 @@
       "report_date": "2026-10-21",
       "category": "矿权市场",
       "is_new": false,
-      "summary": "关于巴林右旗鼎煜矿业有限责任公司巴林石矿采矿权垂直投影...",
+      "summary": "关于巴林右旗鼎煜矿业有限责任公司巴林石矿采矿权垂直投影范围深部和上部勘查的协议出让公示 注册 登录 中国政府网 矿业权市场 首页 机构 动态 公开 服务 互动 数据 专题 您现在的位置：首页 > 矿业权协议出让公示 > 探矿权协议出让公示 关于巴林右旗鼎煜矿业有限责任公司巴林石矿采矿权垂直投影范围深部和上部勘查的协议出让公示 发布时间：2026-10-12|",
       "embed": "ok",
       "tags": [
         "有色"
@@ -3656,7 +4277,7 @@
       "report_date": "2026-10-21",
       "category": "矿权市场",
       "is_new": false,
-      "summary": "黑龙江省杜尔伯特蒙古族自治县杜热6井采矿权协议出让公示",
+      "summary": "黑龙江省杜尔伯特蒙古族自治县杜热6井采矿权协议出让公示 注册 登录 中国政府网 矿业权市场 首页 机构 动态 公开 服务 互动 数据 专题 您现在的位置：首页 > 矿业权协议出让公示 > 采矿权协议出让公示 黑龙江省杜尔伯特蒙古族自治县杜热6井采矿权协议出让公示 发布时间：2026-10-15| 公示部门： 大庆市自然资源局 | 【大 中 小】【打印】【关闭",
       "embed": "ok",
       "tags": [
         "有色"
@@ -3768,6 +4389,26 @@
       "fetch_src": "miningrights"
     },
     {
+      "id": "90626223395d",
+      "url": "https://ky.mnr.gov.cn/zrgs/ckzrgs/202610/t20261021_10339993.htm",
+      "title": "横峰县童湾里石英矿 采矿权变更（转移）登记公示",
+      "source": "矿业权市场",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "矿权市场",
+      "is_new": true,
+      "summary": "横峰县童湾里石英矿 采矿权变更（转移）登记公示",
+      "embed": "ok",
+      "tags": [
+        "有色"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "miningrights"
+    },
+    {
       "id": "1b7ca9186856",
       "url": "https://ky.mnr.gov.cn/zrgs/ckzrgs/202610/t20261020_10338735.htm",
       "title": "包头市宝源煤焦有限责任公司煤矿采矿权转让公示",
@@ -3818,26 +4459,6 @@
       "category": "矿权市场",
       "is_new": false,
       "summary": "武安市德鑫矿业有限公司采矿权转让公示",
-      "embed": "ok",
-      "tags": [
-        "有色"
-      ],
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "foreign": false,
-      "fetch_src": "miningrights"
-    },
-    {
-      "id": "1d72ea6c3c50",
-      "url": "https://ky.mnr.gov.cn/zrgs/ckzrgs/202610/t20261020_10338731.htm",
-      "title": "寿光永康化学工业有限公司第三分公司采矿权转让公示",
-      "source": "矿业权市场",
-      "orig_date": "10-20",
-      "orig_date_full": "2026-10-20",
-      "report_date": "2026-10-21",
-      "category": "矿权市场",
-      "is_new": false,
-      "summary": "寿光永康化学工业有限公司第三分公司采矿权转让公示",
       "embed": "ok",
       "tags": [
         "有色"
@@ -3953,20 +4574,307 @@
       "fetch_src": "kyreg_tk"
     },
     {
-      "id": "3268a76f9e33",
-      "url": "https://www.ccmn.cn/news/ZX003/202610/88d5ceaf3db9477c88e0d630a6191880.html",
-      "title": "● LME金属期货普遍上涨 伦镍领涨收于近三周高位",
+      "id": "a7d7765da089",
+      "url": "https://www.ccmn.cn/news/ZX018/202610/c7c6ae7ec84a4d76b5b9c5d254aa15fb.html",
+      "title": "10月21日长江有色金属现货行情",
       "source": "长江有色网",
       "orig_date": "10-21",
       "orig_date_full": "2026-10-21",
       "report_date": "2026-10-21",
       "category": "行业动态",
       "is_new": true,
-      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布LME金属期货普遍上涨 伦镍领涨收于近三周高位",
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布10月21日长江有色金属现货行情",
+      "embed": "ok",
+      "tags": [
+        "金"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "de63b8551164",
+      "url": "https://www.ccmn.cn/news/ZX003/202610/558c65f3c4664394881ef237d49a12a2.html",
+      "title": "【今日铜价上涨710元/吨：矿端最紧，价格弹性仍在】",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布今日铜价上涨710元/吨：矿端最紧，价格弹性仍在",
+      "embed": "ok",
+      "tags": [
+        "铜"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "b269e380ce58",
+      "url": "https://www.ccmn.cn/news/ZX018/202610/33818d4801a643f494a0cb5f42aa25d4.html",
+      "title": "● 逆势反弹3150元！全球镍过剩背景下沪镍2611持仓155642手压顶，底部信号还是空头回补",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布逆势反弹3150元！全球镍过剩背景下沪镍2611持仓155642手压顶，底部信号还是空头回补",
+      "embed": "ok",
+      "tags": [
+        "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "d4cba7782c88",
+      "url": "https://www.ccmn.cn/news/ZX018/202610/fdd8fd7d217441669a50bc3443af1ff0.html",
+      "title": "● 纯镍涨3200、镍盐却纹丝不动！不锈钢压价撞电池镍钝化，镍定价逻辑撕裂",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布纯镍涨3200、镍盐却纹丝不动！不锈钢压价撞电池镍钝化，镍定价逻辑撕裂",
+      "embed": "ok",
+      "tags": [
+        "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "d5dadc658aa9",
+      "url": "https://www.ccmn.cn/news/ZX018/202610/62972327ed7c47768d9b4a05415c7dea.html",
+      "title": "● 镍价单日上涨3200元！沪镍2611持仓155642手高企，现货升水重估至1960元",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布镍价单日上涨3200元！沪镍2611持仓155642手高企，现货升水重估至1960元",
+      "embed": "ok",
+      "tags": [
+        "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "5fa90f6a984b",
+      "url": "https://www.ccmn.cn/news/ZX018/202610/e9fa196856a4499fbbdb39a3fe53bcc8.html",
+      "title": "● 镍强钢弱再反转！沪镍2611飙涨3010元、不锈钢2611跟涨270元，300系成本锚上移",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布镍强钢弱再反转！沪镍2611飙涨3010元、不锈钢2611跟涨270元，300系成本锚上移",
+      "embed": "ok",
+      "tags": [
+        "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "ea9f7efdb67e",
+      "url": "https://www.ccmn.cn/news/ZX018/202610/3bef5aa5a90d4c9cad672eba9024cf7e.html",
+      "title": "● 倒挂未解！不锈钢2611最新13640、无锡304硬扛14600，期现背离僵局何破",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布倒挂未解！不锈钢2611最新13640、无锡304硬扛14600，期现背离僵局何破",
+      "embed": "ok",
+      "tags": [
+        "锡"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "e39c75b93ea5",
+      "url": "https://www.ccmn.cn/news/ZX018/202610/96d8b68e458142158d6fc788641d68c1.html",
+      "title": "● 期现结构一夜反转！白银2612由升水139元转为现货升水9元，钯金持稳258元勾勒双属性拉扯",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布期现结构一夜反转！白银2612由升水139元转为现货升水9元，钯金持稳258元勾勒双属性拉扯",
       "embed": "ok",
       "tags": [
         "金",
+        "钯",
+        "银"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "df1a56ac9b26",
+      "url": "https://www.ccmn.cn/news/ZX003/202610/41c7dbfb86584b7db637dd76b103802e.html",
+      "title": "● 镍锡领涨，铜铝共振：矿端收紧与算力需求重塑有色格局",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布镍锡领涨，铜铝共振：矿端收紧与算力需求重塑有色格局",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "铝",
+        "锡",
         "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "7a2401c69764",
+      "url": "https://www.ccmn.cn/news/ZX003/202610/1b11d0bea375448d90db9f6691f7946d.html",
+      "title": "● 10 月 21 日电解锰小幅回升，均价19000 元 ，市场挺价情绪升温",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布10 月 21 日电解锰小幅回升，均价19000 元 ，市场挺价情绪升温",
+      "embed": "ok",
+      "tags": [
+        "锰"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "3d83fc138016",
+      "url": "https://www.ccmn.cn/news/ZX018/202610/32a6fdb72979421b8581de14d5a52684.html",
+      "title": "● 固态电池大连邢台双双落地 碳酸锂2701却跌破10万元至96000元",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布固态电池大连邢台双双落地 碳酸锂2701却跌破10万元至96000元",
+      "embed": "ok",
+      "tags": [
+        "锂"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "81889b99c177",
+      "url": "https://www.ccmn.cn/news/ZX018/202610/65fe768aca224ea1a1885ba813845500.html",
+      "title": "● 锗价连续2日上调累涨1400元 小金属板块分化格局固化",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "长江有色金属网(ccmn.cn)金属资讯频道权威发布锗价连续2日上调累涨1400元 小金属板块分化格局固化",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "锗"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "9c4b9e31992c",
+      "url": "https://www.ccmn.cn/news/ZX003/202610/965f4a65118740d2ba0fef6fd8292c09.html",
+      "title": "● 长江有色：21日银价迎来反弹行情，市场交投情绪回暖",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "● 长江有色：21日银价迎来反弹行情，市场交投情绪回暖",
+      "embed": "ok",
+      "tags": [
+        "银"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "a4b59a9816f0",
+      "url": "https://www.ccmn.cn/news/ZX003/202610/ddf47a22f7cf45c9ae46ecc342f69de5.html",
+      "title": "● 宏观修复与供给约束共振 铜锡镍大幅领涨",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "● 宏观修复与供给约束共振 铜锡镍大幅领涨",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "锡",
+        "镍"
+      ],
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "foreign": false,
+      "fetch_src": "cjys"
+    },
+    {
+      "id": "a749e039d30d",
+      "url": "https://www.ccmn.cn/news/ZX018/202610/01ea848b92a04b92bed35e323b8f2280.html",
+      "title": "● 电气化推高铜需求！铜矿品位持续走低，机构预警 2040 年或现千万吨级缺口",
+      "source": "长江有色网",
+      "orig_date": "10-21",
+      "orig_date_full": "2026-10-21",
+      "report_date": "2026-10-21",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "● 电气化推高铜需求！铜矿品位持续走低，机构预警 2040 年或现千万吨级缺口",
+      "embed": "ok",
+      "tags": [
+        "铜"
       ],
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-21",
