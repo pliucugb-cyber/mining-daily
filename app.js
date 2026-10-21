@@ -3649,10 +3649,34 @@ function mdInitMeetingSection(){
     mdRenderMeetingSection();
   }catch(e){}
 }
+// 移动端「会议」tab 顶部的「会议日程」（与右栏卡片同源 conference-data.js）
+function mdMeetingConfHtml(){
+  try{
+    var R = mdConfItems();
+    if(!R.dated.length) return '';
+    var h = '<div class="meeting-conf"><div class="meeting-conf-head">📌 会议日程 · 共 '+R.dated.length+' 场</div><ul class="meeting-conf-list">';
+    for(var i=0;i<Math.min(R.dated.length,10);i++){
+      var it = R.dated[i];
+      var meta = [];
+      if(it.p) meta.push(it.p);
+      if(it.o) meta.push(it.o);
+      if(it.note) meta.push(it.note);
+      meta.push(mdConfCountdown(it));
+      h += '<li><span class="mc-when">'+esc(mdConfWhen(it,R.base))+'</span>'
+        + '<div class="mc-main"><a href="'+safeHref(it.u||'')+'" target="_blank" rel="noopener">'+esc(it.t)+'</a>'
+        + '<div class="mc-meta">'+esc(meta.join(' · '))+'</div></div></li>';
+    }
+    h += '</ul>';
+    if(R.tbd.length) h += '<div class="meeting-conf-tbd">另有 '+R.tbd.length+' 场官方通知日期待定</div>';
+    h += '</div>';
+    return h;
+  }catch(e){ return ''; }
+}
 function mdRenderMeetingSection(){
   var sec=document.getElementById('meetingSection'); if(!sec) return;
   var body=sec.querySelector('.meeting-body'); if(!body) return;
-  if(!window.QA_ROWS||!QA_ROWS.length){ body.innerHTML='<div class="meeting-empty">会议会展内容加载中…</div>'; return; }
+  var _conf = mdMeetingConfHtml();
+  if(!window.QA_ROWS||!QA_ROWS.length){ body.innerHTML=_conf+'<div class="meeting-empty">会议会展内容加载中…</div>'; return; }
   // 2026-09-11 IA评审 A4：暂缓实施，见下方注释（已回退）。
   // 起因：≤1100px 时侧栏会展迷你卡的 vault 迁移不执行（侧栏 IIFE 早退），会展条目留在今日主列表，
   //       会议 tab 又从这里独立取数 → 同一场会两处出现。
@@ -3671,8 +3695,8 @@ function mdRenderMeetingSection(){
     items.push(r);
   }
   var cnt=document.getElementById('meetingCount'); if(cnt) cnt.textContent=items.length+'条';
-  if(!items.length){ body.innerHTML='<div class="meeting-empty">暂无会议会展相关资讯</div>'; return; }
-  body.innerHTML=items.map(function(r){
+  if(!items.length){ body.innerHTML=_conf+'<div class="meeting-empty">暂无会议会展相关资讯</div>'; return; }
+  body.innerHTML=_conf+items.map(function(r){
     var t=esc(String(r.t||'')); var u=safeHref(String(r.u||'#')); var s=esc(String(r.s||'')); var d=String(r.d||'');
     return '<div class="news-item" data-url="'+u+'"><div class="news-head"><span class="dot"></span><a class="news-title" href="'+u+'" target="_blank" rel="noopener">'+t+'</a></div><div class="news-meta"><span class="src">'+s+'</span> · '+(d?d.slice(5):'')+'</div></div>';
   }).join('');
@@ -6385,6 +6409,58 @@ function setupExportButtons(){
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setupNewsFilterBar(); setupExportButtons(); });
 else { setupNewsFilterBar(); setupExportButtons(); }
 
+// ===== 会议日程（2026-10-21，独立数据源 conference-data.js）=====
+// 提到顶层：右栏卡片（桌面）与移动端「会议」tab 共用同一套取数/日期/倒计时
+function mdConfBase(){
+  try{
+    var d = window.CONFERENCE_DATA && window.CONFERENCE_DATA.updated;
+    var m = d && String(d).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(m) return new Date(+m[1], +m[2]-1, +m[3]);
+  }catch(e){}
+  var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate());
+}
+function mdConfItems(){
+  var D = window.CONFERENCE_DATA;
+  if(!D || !D.items || !D.items.length) return {dated:[], tbd:[], base:mdConfBase()};
+  var base = mdConfBase(), dated = [], tbd = [];
+  for(var i=0;i<D.items.length;i++){
+    var it = D.items[i]; if(!it || !it.t) continue;
+    var sm = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(it.s || '');
+    if(!sm){ tbd.push(it); continue; }          // 日期待定的官方通知 → 单独归区
+    var sd = new Date(+sm[1], +sm[2]-1, +sm[3]);
+    var em = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(it.e || '');
+    var ed = em ? new Date(+em[1], +em[2]-1, +em[3]) : sd;
+    if(ed < base) continue;                    // 已结束 → 不展示（永不显旧）
+    it._sd = sd; it._ed = ed; it._dd = Math.round((sd - base)/86400000);
+    dated.push(it);
+  }
+  dated.sort(function(a,b){ return a._sd - b._sd; });
+  tbd.sort(function(a,b){ return String(a.t).localeCompare(String(b.t), 'zh'); });
+  return {dated:dated, tbd:tbd, base:base};
+}
+function mdConfWhen(it, base){
+  var sm = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(it.s || '');
+  if(!sm) return '待定';
+  var y=+sm[1], mo=+sm[2], d=+sm[3];
+  var em = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(it.e || '');
+  var head = (y !== base.getFullYear() ? (y+'.') : '') + mo + '.' + d;
+  if(em){
+    var y2=+em[1], mo2=+em[2], d2=+em[3];
+    if(y2===y && mo2===mo) return head + (d2!==d ? '-'+d2 : '');
+    if(y2===y) return head + '-' + mo2 + '.' + d2;
+    return head + '-' + y2 + '.' + mo2 + '.' + d2;
+  }
+  return head;
+}
+function mdConfCountdown(it){
+  if(it._dd < 0) return '进行中';
+  if(it._dd === 0) return '今天开始';
+  if(it._dd === 1) return '明天开始';
+  if(it._dd < 45) return '还有 ' + it._dd + ' 天';
+  return '还有 ' + Math.round(it._dd/30) + ' 个月';
+}
+window.__mdConf = { items:mdConfItems, when:mdConfWhen, countdown:mdConfCountdown };
+
 /* ===== 会展预告（2026-09-08 改造：主区独立区块 → 左侧栏迷你卡）=====
    背景：候选池里会议/论坛/展会/年会类条目占比高（SMM 源尤其多），但它们不是
    「行业事件」，混在今日新增里会挤掉真正的行情与项目动态。
@@ -6424,6 +6500,75 @@ else { setupNewsFilterBar(); setupExportButtons(); }
     }
     return false;
   }
+  // ===== 会议日程（2026-10-21 新增，独立数据源 conference-data.js）=====
+  // 背景：原「近期会展」只靠 isExpo 关键词从新闻里"捡"会议条目 —— 10 月库 407 条仅命中 3 条
+  //      （其中 2 条是同一场会的不同源），过 14 天闸门只剩 1 条 → 卡片常年空。
+  //      会议预告有权威且稳定的出处（中国地质学会会议通知公告、主办方官网、国际会议固定日程），
+  //      不该等新闻来填。故上半区改为独立数据源，下半区仍保留新闻派生的「会议资讯」。
+  var CONF_SHOW = 5;
+
+
+
+
+  function confRowHtml(it, base, over, group){
+    var t = String(it.t);
+    var title = it.u ? ('<a href="'+safeHref(it.u)+'" target="_blank" rel="noopener" title="'+esc(t)+'">'+esc(t)+'</a>') : esc(t);
+    var dated = (it._dd !== undefined);
+    var when = dated ? mdConfWhen(it, base) : '待定';
+    var place = dated ? (it.p || '') : (it.p || '日期待定');
+    var cd = dated ? ('<span class="expo-conf-cd'+(it._dd<0?' on':'')+'">'+esc(mdConfCountdown(it))+'</span>') : '';
+    var cls = 'expo-conf-item' + (over ? ' expo-extra expo-g-'+group : '') + (dated ? '' : ' expo-conf-tbd');
+    return '<li class="'+cls+'"'+(over?' hidden':'')+'>'
+      + '<span class="expo-conf-when"><b>'+esc(when)+'</b><i>'+esc(place)+'</i></span>'
+      + '<div class="expo-conf-main">'+title
+      + '<div class="expo-conf-meta">'+(it.tag?'<span class="expo-conf-tag">'+esc(it.tag)+'</span>':'')
+      + (it.o?'<span class="expo-conf-org">'+esc(it.o)+'</span>':'')+'</div>'
+      + (it.note?'<div class="expo-conf-note">'+esc(it.note)+'</div>':'')+'</div>'+cd+'</li>';
+  }
+  function renderConf(){
+    var cl = document.getElementById('expoConfList');
+    if(!cl) return 0;
+    var R = mdConfItems();
+    var dated = R.dated, tbd = R.tbd;
+    if(!dated.length && !tbd.length){ cl.innerHTML = ''; return 0; }
+    var CONF_SHOW = 5, CONF_TBD_SHOW = 3;
+    var html = '', nDated = dated.length, nTbd = tbd.length;
+    for(var i=0;i<dated.length;i++){
+      html += confRowHtml(dated[i], R.base, i >= CONF_SHOW, 'dated');
+    }
+    if(dated.length > CONF_SHOW){
+      html += '<li class="expo-more"><button type="button" class="expo-more-btn expo-btn-dated">展开全部 '+nDated+' 场 ▾</button></li>';
+    }
+    if(tbd.length){
+      html += '<li class="expo-sub-head expo-sub-head-in">日期待定 · 官方通知</li>';
+      for(var j=0;j<tbd.length;j++){
+        html += confRowHtml(tbd[j], R.base, j >= CONF_TBD_SHOW, 'tbd');
+      }
+      if(tbd.length > CONF_TBD_SHOW){
+        html += '<li class="expo-more"><button type="button" class="expo-more-btn expo-btn-tbd">展开全部 '+nTbd+' 条 ▾</button></li>';
+      }
+    }
+    cl.innerHTML = html;
+    var foot = document.getElementById('expoConfFoot');
+    if(foot){
+      var D = window.CONFERENCE_DATA || {};
+      foot.textContent = '数据截至 ' + (D.updated || '—') + ' · 共 ' + (nDated + nTbd) + ' 场 · 以官方通知为准';
+    }
+    var bDated = cl.querySelector('.expo-btn-dated');
+    if(bDated){ bDated.onclick = function(){
+      var open = cl.classList.toggle('expo-open-dated');
+      Array.prototype.slice.call(cl.querySelectorAll('.expo-g-dated')).forEach(function(li){ if(open) li.removeAttribute('hidden'); else li.setAttribute('hidden',''); });
+      bDated.textContent = open ? '收起 ▴' : ('展开全部 ' + nDated + ' 场 ▾');
+    }; }
+    var bTbd = cl.querySelector('.expo-btn-tbd');
+    if(bTbd){ bTbd.onclick = function(){
+      var open = cl.classList.toggle('expo-open-tbd');
+      Array.prototype.slice.call(cl.querySelectorAll('.expo-g-tbd')).forEach(function(li){ if(open) li.removeAttribute('hidden'); else li.setAttribute('hidden',''); });
+      bTbd.textContent = open ? '收起 ▴' : ('展开全部 ' + nTbd + ' 条 ▾');
+    }; }
+    return nDated + nTbd;
+  }
+
   function init(){
     try{
       var box=document.getElementById('expoMini');
@@ -6436,7 +6581,8 @@ else { setupNewsFilterBar(); setupExportButtons(); }
           if(isExpo(titleOf(el))) picked.push(el);
         });
       });
-      if(!picked.length) return;
+      var _hasConf = !!(window.CONFERENCE_DATA && window.CONFERENCE_DATA.items && window.CONFERENCE_DATA.items.length);
+      if(!picked.length && !_hasConf) return;
       // 跨源去重：同一场会议常被多家媒体报道，标题高度相似只留最早一条
       // （与本期要闻 mdPickDistinct 同一套相似度，复用 window.mdTitleSim）
       var sim=(typeof window.mdTitleSim==='function')?window.mdTitleSim:null;
@@ -6466,7 +6612,8 @@ else { setupNewsFilterBar(); setupExportButtons(); }
       // 卡片：默认 EXPO_SHOW 条，超出折叠；无近期会展则整块隐藏（仅桌面注入迷你卡）。
       var EXPO_SHOW=3;
       if(isDesktop() && box && ul){
-        if(!recent.length){ box.style.display='none'; ul.innerHTML=''; }
+        var confN = renderConf();
+        if(!recent.length && !confN){ box.style.display='none'; ul.innerHTML=''; }
         else{
           var _html='';
           recent.forEach(function(el,idx){
@@ -6476,6 +6623,8 @@ else { setupNewsFilterBar(); setupExportButtons(); }
           });
           if(recent.length>EXPO_SHOW){ _html+='<li class="expo-more"><button type="button" class="expo-more-btn">展开全部 '+recent.length+' 条 ▾</button></li>'; }
           ul.innerHTML=_html;
+          var _nh=document.getElementById('expoNewsHead');
+          if(_nh){ if(recent.length){ _nh.style.display=''; _nh.removeAttribute('hidden'); } else { _nh.style.display='none'; _nh.setAttribute('hidden',''); } }
           box.style.display='';
           var _mb=ul.querySelector('.expo-more-btn');
           if(_mb){ _mb.onclick=function(){

@@ -1,0 +1,56 @@
+/* conference-data.js —— 【自动生成，勿直接改】
+ * 数据源：data/conferences.json（manual 人工 + auto 自动）
+ * 生成器：fetch_conferences.py（python fetch_conferences.py --export-only 可重新生成）
+ * 维护：人工条目请改 data/conferences.json 的 manual 区，脚本永不覆盖该区。
+ * 字段：s/e 起止日期 · t 标题 · p 地点 · o 主办方 · tag 分类 · u 官方链接
+ *       note 补充信息 · v 日期可信度（ok/tbd）
+ */
+window.CONFERENCE_DATA = {
+  updated: '2026-10-21',
+  source: '多源自动抓取 + 人工维护（详见 data/conference_sources.json）',
+  items: [
+    { s:'2026-10-27', e:'2026-10-29', t:'IMARC 2026 国际矿业与资源大会', p:'悉尼 ICC', o:'IMARC', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'澳方年度最大矿业展会', v:'ok' }
+    { s:'2026-11-03', e:'2026-11-06', t:'MRMR 2026 矿产资源与储量会议', p:'地点待确认', o:'MRMR', tag:'资源储量', u:'https://globalminingreview.com/events', note:'聚焦 JORC/NI 43-101 等资源储量报告规范', v:'ok' }
+    { s:'2026-11-05', e:'2026-11-06', t:'2026中国（广西）—东盟矿业合作大会', p:'南宁国际会展中心', o:'广西自治区政府 · 自治区自然资源厅', tag:'矿业大会', u:'https://dnr.gxzf.gov.cn/xwzx/zrzx/t28231172.shtml', note:'11/6-7 同场广西国际矿业展览会；特设 AI+找矿专题、老挝/东帝汶/加纳 3 场国家矿业专场', v:'ok' }
+    { s:'2026-11-16', e:'2026-11-18', t:'2026年全国城市地质学术年会', p:'海南博鳌', o:'中国地质学会城市地质专业委员会', tag:'城市地质', u:'https://geosociety.org.cn/', note:'主题：筑牢城市地质安全基底 赋能地下空间开发利用', v:'ok' }
+    { s:'2026-11-16', e:'2026-11-17', t:'The Mining Show 2026', p:'地点待确认', o:'The Mining Show', tag:'国际矿业', u:'https://globalminingreview.com/events', v:'ok' }
+    { s:'2026-11-17', e:'2026-11-17', t:'FT Metals & Mining Summit: India 2026', p:'印度', o:'Financial Times', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'聚焦关键矿产与矿业政策改革', v:'ok' }
+    { s:'2026-11-18', e:'2026-11-30', t:'矿冶工程论坛：科技创新引领 开创矿产资源新格局', p:'湖南·长沙', o:'山东黄金 · 中南大学 · 东北大学 · 中国地大(北京) · 中国矿大(北京) · 北科大', tag:'勘查技术', u:'http://www.kygczz.com/CN/news/news962.shtml', note:'11 月中下旬，具体日期待二号通知；四大专题：成矿理论／成矿带勘查进展／金属矿开采／资源综合利用与绿色智能', v:'tbd' }
+    { s:'2026-11-18', e:'2026-11-21', t:'第一届境外矿产勘查与矿业投资大会', p:'厦门悦华酒店', o:'中国地质学会 · 紫金矿业', tag:'矿业投资', u:'http://www.cnmn.com.cn/ShowNews1.aspx?id=474389', note:'18日报到、19-20 报告、21 紫金山—古田野外考察；★报名优惠截止 10-30（会员 1500／非会员 1900）', v:'ok' }
+    { s:'2026-11-19', e:'2026-11-19', t:'SMM AICE 2026 东南亚（越南）铝业大会定档，11月越南见！', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=473849', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'ok' }
+    { s:'2026-12-01', e:'2026-12-01', t:'Resourcing Tomorrow 2026', p:'地点待确认', o:'Resourcing Tomorrow', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'2300+ 矿业与投资方参会', v:'ok' }
+    { s:'2027-01-12', e:'2027-01-12', t:'Future Minerals Forum 2027', p:'利雅得', o:'Future Minerals Forum', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'政府与投资方政策对接为主', v:'ok' }
+    { s:'2027-01-24', e:'2027-01-25', t:'Vancouver Resource Investment Conference', p:'温哥华会展中心', o:'VRIC', tag:'矿业投资', u:'https://www.pdac.ca/members/member-resources/industry-events', v:'ok' }
+    { s:'2027-01-25', e:'2027-01-28', t:'AME Roundup 2027', p:'温哥华会展中心', o:'AME', tag:'矿业投资', u:'https://www.pdac.ca/members/member-resources/industry-events', note:'矿业投资与并购路演', v:'ok' }
+    { s:'2027-02-08', e:'2027-02-11', t:'Mining Indaba 2027', p:'开普敦 CTICC', o:'Mining Indaba', tag:'国际矿业', u:'https://www.pdac.ca/members/member-resources/industry-events', note:'非洲矿业投资年度第一会', v:'ok' }
+    { s:'2027-02-28', e:'2027-03-03', t:'MINEXCHANGE 2027', p:'丹佛', o:'MINEXCHANGE', tag:'国际矿业', u:'https://globalminingreview.com/events', v:'ok' }
+    { s:'2027-03-07', e:'2027-03-10', t:'PDAC 2027 矿业勘探与开采大会', p:'多伦多 MTCC', o:'PDAC', tag:'国际矿业', u:'https://www.pdac.ca/members/member-resources/industry-events', note:'★全球最大矿业会展，3.2 万人／140 国参与', v:'ok' }
+    { s:'2027-04-20', e:'2027-04-23', t:'Expomin 2027', p:'智利', o:'Expomin', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'拉美矿业展，日期以主办方为准', v:'tbd' }
+    { s:'2027-04-22', e:'2027-05-01', t:'Geological Society of Nevada Symposium', p:'美国内华达·斯帕克斯', o:'Geological Society of Nevada', tag:'国际矿业', u:'https://www.pdac.ca/members/member-resources/industry-events', v:'ok' }
+    { s:'2027-05-17', e:'2027-05-19', t:'Geoconvention 2027', p:'加拿大卡尔加里', o:'Canadian Society of Exploration Geophysicists', tag:'勘查技术', u:'https://www.pdac.ca/members/member-resources/industry-events', note:'物探技术年度会议', v:'ok' }
+    { s:'2027-06-29', e:'2027-06-30', t:'Future of Mining Australia 2027', p:'珀斯 Crown', o:'Future of Mining', tag:'国际矿业', u:'https://www.mining-journal.com/events', v:'ok' }
+    { s:'2027-10-23', e:'2027-10-28', t:'Exploration 27', p:'多伦多 MTCC', o:'Exploration 27', tag:'勘查技术', u:'https://www.pdac.ca/members/member-resources/industry-events', note:'勘探技术年度大会', v:'ok' }
+    { t:'2026 SMM 第十一届导体线缆工业展览会暨电工材料产业年会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474462', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' }
+    { t:'2026 SMM金属矿业大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474298', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' }
+    { t:'2026 SMM（第十一届）亚太镍铬锰不锈钢大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474482', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' }
+    { t:'2026SMM铅锌年会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474575', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' }
+    { t:'2026年全国铀矿地质会议', p:'待定', o:'中国地质学会', tag:'铀矿', u:'https://geosociety.org.cn/', note:'一号通知已发（2026-07-29），日期待公告', v:'tbd' }
+    { t:'2026高碑店国际绿色智慧健康建筑博览会启幕', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474140', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' }
+    { t:'2027 SMM贵金属年会暨金银产业峰会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474042', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' }
+    { t:'2027 SMM铂族金属供需交易大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474043', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' }
+    { t:'9月10日，上海开幕！SMM（第八届）汽车供应链大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=473755', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' }
+    { t:'中国地质学会2026年度全国地学科普研讨会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6a8e48ca73d2c&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于召开中国地质学会2026年度全国地学科普研讨会的通知（二号通知）', v:'tbd' }
+    { t:'中国地质学会地质学史专业委员会第34届学术年会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6abdc00c46646&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于召开中国地质学会地质学史专业委员会第34届学术年会的通知（第二号）', v:'tbd' }
+    { t:'中国地质学会水文地质、健康地质与矿物中药（原医学地质）专业委员会 2026年年会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6ab1ecc234c40&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于召开中国地质学会水文地质、健康地质与矿物中药（原医学地质）专业委员会 2026年年会的通知 （二号通知）', v:'tbd' }
+    { t:'全国生态地球化学交流研讨会', p:'待定', o:'中国地质学会', tag:'勘查技术', u:'https://geosociety.org.cn/', note:'已发通知且有地点变更公告（2026-09-30），日期待确认', v:'tbd' }
+    { t:'城市地质与地下空间可持续开发利用关键技术研讨会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6a8cea78bb213&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于组织参加城市地质与地下空间可持续开发利用关键技术研讨会的通知（二号通知）', v:'tbd' }
+    { t:'第三届 “新一轮找矿突破战略行动绿色勘查高质量发展大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474319', note:'有色行业会议/年会/展会预告，标题常自带日期与地点 · 原标题：关于召开第三届 “新一轮找矿突破战略行动绿色勘查高质量发展大会” 的通知', v:'tbd' }
+    { t:'第三届全国稀有金属特种材料技术交流会”将于10月16-18日在宁夏·银川市召开', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474387', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' }
+    { t:'第二十七届全国洞穴学术会议', p:'待定', o:'中国地质学会', tag:'学术会议', u:'https://geosociety.org.cn/', note:'二号通知已发（2026-09-20），日期待公告', v:'tbd' }
+    { t:'第二十二届全国数学地质与地学信息学术研讨会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6ad04b5b76e82&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于召开第二十二届全国数学地质与地学信息学术研讨会的通知（二号通知）', v:'tbd' }
+    { t:'第二届全国生态地质学术研讨会', p:'待定', o:'中国地质学会', tag:'勘查技术', u:'https://geosociety.org.cn/', note:'二号通知已发（2026-08-21），日期待公告', v:'tbd' }
+    { t:'第二届刘国昌讲座', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6ad1e5c4e913d&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于召开第二届刘国昌讲座的通知', v:'tbd' }
+    { t:'第四届数据驱动与地学发展全国学术研讨会', p:'待定', o:'中国地质学会', tag:'数智勘查', u:'https://geosociety.org.cn/', note:'二号通知已发（2026-08-20），日期待公告', v:'tbd' }
+    { t:'非常规能源富集理论与勘查开采技术学术研讨会', p:'待定', o:'中国地质学会', tag:'勘查技术', u:'https://geosociety.org.cn/', note:'二号通知已发（2026-08-20），日期待公告', v:'tbd' }
+  ]
+};
