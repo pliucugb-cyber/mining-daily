@@ -6,7 +6,7 @@ fetch_price_history.py — 拉取各品种近 15 个交易日日 K 收盘价，�
       price_history_detail.json (同内容存档，便于溯源)
 数据源:
   国内主力/上金所/GFEX → 新浪财经 InnerFuturesNewService.getDailyKLine（CU0/AL0/.../LC0）
-  LME 六大金属       → 东方财富 push2his 日K（109.LCPT 等；东财限流时自动保留旧数据）
+  LME 六大金属       → 东方财富 push2his 日K（109.LCPT 等；东财限流/末点停住时改取新浪外盘兜底）
 注意: 电解钴为 SMM 现货报价，无连续日 K，不入图（前端该卡片不可点击）。
 """
 import json, time, subprocess, datetime, os, sys, re
@@ -37,11 +37,26 @@ INSTRUMENTS = [
 ]
 INSTRUMENTS = INSTRUMENTS[1:]
 
+# LME 六品种 → 新浪外盘期货代码（东财日K限流时的兜底源）
+SINA_GLOBAL = {
+    "lcpt": "CAD",  # LME 铜
+    "lalt": "AHD",  # LME 铝
+    "lznt": "ZSD",  # LME 锌
+    "lldt": "PBD",  # LME 铅
+    "lnkt": "NID",  # LME 镍
+    "ltnt": "SND",  # LME 锡
+}
+
 EM_API = ("https://push2his.eastmoney.com/api/qt/stock/kline/get?secid={sec}"
           "&klt=101&fqt=0&lmt=" + str(BARS) + "&end=20500101"
           "&fields1=f1,f2,f3,f4,f5,f6&fields2=f51,f52,f53,f54,f55")
 SINA_API = ("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20t=/"
             "InnerFuturesNewService.getDailyKLine?symbol={sym}")
+# 2026-10-22：东财 push2his 日K 会限流（本机实测整段返回空/断连，脚本只能落 em_kline_cache），
+# 于是 LME 序列连同价格卡一起卡在缓存末日（当时已连续 3 天停在 10-19）。
+# 兜底源＝新浪外盘期货日K（同一品种的连续合约，字段 date/close），无 key、不限流。
+SINA_GLOBAL_API = ("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20t=/"
+                   "GlobalFuturesService.getGlobalFuturesDailyKLine?symbol={sym}")
 
 
 def curl(url, timeout=20):
@@ -77,6 +92,29 @@ def fetch_sina(sym, retry=3):
                         raise
                     raw = raw[:idx + 1] + ']'
             pts = [[x["d"], round(float(x["c"]), 2)] for x in arr[-BARS:]]
+            return pts
+        except Exception as e:
+            if i == retry - 1:
+                raise
+            time.sleep(1.5 * (i + 1))
+
+
+def fetch_sina_global(sym, retry=2):
+    """新浪外盘期货日K → [(date, close)]；东财 push2his 限流时的 LME 兜底源。"""
+    for i in range(retry):
+        try:
+            t = curl(SINA_GLOBAL_API.format(sym=sym), timeout=15)
+            a = t.find("var t=(")
+            if a < 0:
+                raise RuntimeError("jsonp 无 var t= 标记 len=%d" % len(t))
+            a += len("var t=(")
+            b = t.rfind("]);")
+            if b <= a:
+                raise RuntimeError("jsonp 无 ]); 收尾 len=%d" % len(t))
+            arr = json.loads(t[a:b + 1])
+            pts = [[x["date"], round(float(x["close"]), 2)] for x in arr[-BARS:]]
+            if len(pts) < 2:
+                raise RuntimeError("返回点数不足 %d" % len(pts))
             return pts
         except Exception as e:
             if i == retry - 1:
@@ -229,8 +267,28 @@ def main():
     series, failed = {}, []
     ref = lme_ref_date()          # LME 未收盘 bar 的判别基准（见 drop_unclosed_lme_bar）
     for slug, kind, code, name, unit in INSTRUMENTS:
+        src = ""
         try:
-            pts = fetch_sina(code) if kind == "sina" else fetch_em(code)
+            if kind == "sina":
+                pts, src = fetch_sina(code), "sina"
+            else:
+                # 东财优先；它限流时会静默落到 em_kline_cache（末点停住不动），
+                # 所以再拿一次新浪外盘，谁末点更新就用谁（同日以东财为准）。
+                em_err = None
+                try:
+                    pts, src = fetch_em(code), "eastmoney"
+                except Exception as e_em:
+                    pts, em_err = None, e_em
+                try:
+                    pts_sg = fetch_sina_global(SINA_GLOBAL[slug])
+                except Exception as e_sg:
+                    pts_sg = None
+                    if pts is None and em_err is not None:
+                        raise RuntimeError("东财 %s / 新浪外盘 %s" % (em_err, e_sg))
+                if pts_sg and (pts is None or pts_sg[-1][0] > pts[-1][0]):
+                    pts, src = pts_sg, "sina-global"
+                if pts is None:
+                    raise em_err
         except Exception as e:
             failed.append("%s(%s): %s" % (name, code, e))
             if slug in old and len(old[slug].get("points", [])) >= 2:
@@ -239,7 +297,6 @@ def main():
                       % (name, code, len(old[slug]["points"]), old[slug]["points"][-1][0]))
             continue
         if len(pts) >= 2:
-            src = "sina" if kind == "sina" else "eastmoney"
             # 新浪夜盘延迟：若旧数据(Eastmoney)有更新的交易日，拼接到尾部保持连续
             if slug in old:
                 extra = [p for p in old[slug].get("points", []) if p[0] > pts[-1][0]]
@@ -260,7 +317,7 @@ def main():
         time.sleep(0.8)
     payload = {
         "updated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "note": "日K收盘价。国内主力=新浪财经、LME=东方财富 push2his；电解钴为SMM现货无连续日K不入图",
+        "note": "日K收盘价。国内主力=新浪财经、LME=东方财富 push2his（限流时新浪外盘兜底）；电解钴为SMM现货无连续日K不入图",
         "series": series,
     }
     js = ("// price-history.js — 由 fetch_price_history.py 自动生成，勿手改\n"
