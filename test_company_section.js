@@ -366,7 +366,10 @@ setTimeout(() => {
           /动态加载|域名已失效/.test((document.querySelector('.co-empty-note') || {}).textContent || ''));
 
     // ---------- 8) 首条卡片结构 ----------
-    const items = document.querySelectorAll('#companyList .co-item');
+    // 2026-10-22：SEC 零摘要备案（k=reg）按 2026-10-07 裁定压成单行占位（无 .co-title/.co-actions），
+    // 它可能排在新闻流最前；本节断言的「首条卡片结构」只针对常规条目。
+    const items = Array.from(document.querySelectorAll('#companyList .co-item'))
+      .filter(el => !el.classList.contains('co-item-reg'));
     const first = items[0];
     check('首条含新闻标题', !!(first && first.querySelector('.co-title') && first.querySelector('.co-title').textContent.trim().length > 0));
     check('首条含公司来源名（co-src 可点选公司）',
@@ -506,7 +509,9 @@ setTimeout(() => {
     check('updateActiveSection 函数存在', typeof window.updateActiveSection === 'function');
     // ---------- 13) 公司视图已读态（2026-09-24 新增，独立于新闻流） ----------
     // #2 用户诉求：点开新闻毫无反馈 → 补「标为已读/未读」+ 已读弱化，且不与新闻流已读串号。
-    const fItem = document.querySelector('#companyList .co-item');
+    // 2026-10-22：跳过 SEC 零摘要单行占位（无操作按钮），取首个常规条目
+    const fItem = Array.from(document.querySelectorAll('#companyList .co-item'))
+      .filter(el => !el.classList.contains('co-item-reg'))[0];
     check('卡片带 data-url（已读集合键）', !!(fItem && fItem.getAttribute('data-url')));
     check('卡片含「标为已读 / 标为未读」操作按钮', document.querySelectorAll('#companyList .btn-co-read').length >= 1);
     const rb = fItem && fItem.querySelector('.btn-co-read');

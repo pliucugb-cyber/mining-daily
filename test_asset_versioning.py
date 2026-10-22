@@ -86,7 +86,7 @@ try:
         check('%s 已带指纹 ?v=%s' % (name, h),
               ('src="%s?v=%s"' % (name, h)) in out,
               '内容不变则 URL 不变；一变就换 URL，缓存无法再喂旧版')
-    check('返回的 marks 覆盖 4 个脚本', len(marks) == 4, '实际 %d 个' % len(marks))
+    check('返回的 marks 覆盖 5 个脚本（含 price-history.js）', len(marks) == 5, '实际 %d 个' % len(marks))
 
     # 幂等：再来一次不应产生 app.js?v=a?v=b 这类叠加
     dp.bust_asset_versions()
