@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-22",
+ "updated_at": "2026-10-23",
  "companies": [
   {
    "name": "紫金矿业",
@@ -400,7 +400,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -1575,6 +1575,33 @@
    "rank": 25,
    "items": [
     {
+     "t": "纽蒙特报告2026年第三季度业绩，第三季度调整后净收入创纪录；",
+     "d": "2026-10-22",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-reports-third-quarter-2026-results-with-record-third-quarter-ldp1hb4lilt7.html",
+     "s": "有望实现全年指引；提供红色Chris Block洞穴项目的最新情况| NEM股票新闻",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Newmont Reports Third Quarter 2026 Results with Record Third Quarter Adjusted Net Income; Positioned to Achieve Full-Year Guidance; Provides Update on Red Chris Block Cave Project | NEM Stock News"
+    },
+    {
+     "t": "SEC 10-Q（季度报告）",
+     "d": "2026-10-22",
+     "u": "https://www.sec.gov/Archives/edgar/data/1164727/000116472726000043/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
+    {
+     "t": "SEC 8-K（重大事项披露）",
+     "d": "2026-10-22",
+     "u": "https://www.sec.gov/Archives/edgar/data/1164727/000116472726000041/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
+    {
      "t": "纽蒙特首席执行官敦促黄金行业遵守纪律，尽管价格上涨",
      "d": "2026-10-07",
      "u": "https://www.mining.com/web/newmont-ceo-urges-discipline-in-gold-industry-despite-higher-prices/",
@@ -1600,15 +1627,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Newmont Appoints Peter Beaven to Board of Directors | NEM Stock News"
-    },
-    {
-     "t": "SEC 8-K（重大事项披露）",
-     "d": "2026-08-20",
-     "u": "https://www.sec.gov/Archives/edgar/data/1164727/000110465926099237/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
     },
     {
      "t": "Newmont在内华达州第三个黄金项目上支持探险家Headwater",
@@ -1656,15 +1674,6 @@
      "t_en": "Newmont Reports Robust Second Quarter 2026 Results; Remains on Track to Achieve Full Year Guidance | NEM Stock News"
     },
     {
-     "t": "SEC 10-Q（季度报告）",
-     "d": "2026-07-23",
-     "u": "https://www.sec.gov/Archives/edgar/data/1164727/000116472726000036/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
-    },
-    {
      "t": "纽蒙特宣布2026年第二季度业绩电话会议| NEM股票新闻",
      "d": "2026-07-01",
      "u": "https://www.stocktitan.net/news/NEM/newmont-announces-second-quarter-2026-results-conference-jd2504ptc0xj.html",
@@ -1699,15 +1708,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Newmont’s Red Chris Block Cave Project Receives Major Regulatory Approvals | NEM Stock News"
-    },
-    {
-     "t": "Newmont宣布下一阶段交付的关键高管任命| NEM股票新闻",
-     "d": "2026-06-15",
-     "u": "https://www.stocktitan.net/news/NEM/newmont-announces-key-executive-appointments-for-the-next-phase-of-3as7qadnby6p.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Newmont Announces Key Executive Appointments for the Next Phase of Delivery | NEM Stock News"
     }
    ]
   },
@@ -2025,6 +2025,15 @@
    "rank": 28,
    "items": [
     {
+     "t": "南部铜矿重量$ 6.8亿Cuajone矿扩建",
+     "d": "2026-10-22",
+     "u": "https://www.mining.com/southern-copper-weighs-680m-cuajone-mine-expansion/",
+     "s": "Highland Valley Copper的集体协议于9月30日到期。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Southern Copper weighs $680M Cuajone mine expansion"
+    },
+    {
      "t": "SEC 8-K（重大事项披露）",
      "d": "2026-10-21",
      "u": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926117588/",
@@ -2131,15 +2140,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Southern Copper warns US-China trade war could hit copper in short-term"
-    },
-    {
-     "t": "南方铜业称20人在秘鲁采矿项目的袭击中受伤",
-     "d": "2025-03-17",
-     "u": "https://www.mining.com/web/southern-copper-says-20-injured-in-attack-at-peru-mining-project/",
-     "s": "秘鲁是主要的黄金和铜供应国，由于高价格、新技术和临时供应，这两种金属吸引了更多的非正规运营商。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper says 20 injured in attack at Peru mining project"
     }
    ]
   },
@@ -2987,9 +2987,18 @@
    "rank": 99,
    "items": [
     {
+     "t": "必和必拓主席指出加拿大的税收激励措施呼吁进行投资改革",
+     "d": "2026-10-22",
+     "u": "https://www.mining.com/web/bhp-chair-points-to-canada-tax-incentives-in-call-for-investment-reforms/",
+     "s": "必和必拓目前从其南澳大利亚业务中生产的铀约占全球铀供应量的5%。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "BHP chair points to Canada tax incentives in call for investment reforms"
+    },
+    {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-21",
-     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526426886/",
+     "d": "2026-10-22",
+     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526428335/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -3017,7 +3026,7 @@
      "t": "必和必拓避免对全球最大铜矿进行罢工",
      "d": "2026-10-14",
      "u": "https://www.mining.com/bhp-averts-strike-at-worlds-biggest-copper-mine-2/",
-     "s": "必和必拓（ ASX ， LON ： BHP ）和智利埃斯孔迪达矿的监管工会已达成初步协议，以避免在世界各地发生罢工。",
+     "s": "智利业务部门在11小时内达成的劳动协议缓解了当务之急的供应问题，因为全国范围内的采矿中断日益严重。",
      "k": "news",
      "src": "mining",
      "t_en": "BHP averts strike at world’s biggest copper mine"
@@ -3102,24 +3111,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "BHP faces arbitration in Port Hedland wage dispute"
-    },
-    {
-     "t": "随着劳动争议的扩大，必和必拓面临由澳大利亚工会资助的工人集体诉讼",
-     "d": "2026-09-10",
-     "u": "https://www.mining.com/web/bhp-faces-worker-class-action-funded-by-australian-union-as-labour-disputes-widen/",
-     "s": "The Mining and Energy Union (MEU) said the class action seeks compensation for mineworkers who were unlawfully required to work on the Christmas and B…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP faces worker class action funded by Australian union as labour disputes widen"
-    },
-    {
-     "t": "锂业巨头Albemarle任命必和必拓的Ragnar Udd为下一任首席执行官",
-     "d": "2026-09-08",
-     "u": "https://www.mining.com/web/lithium-giant-albemarle-names-bhps-ragnar-udd-as-next-ceo/",
-     "s": "Lithium prices plunged from record highs in 2023 after a surge in production, particularly in China, created a glut and forced producers to cut costs,…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Lithium giant Albemarle names BHP’s Ragnar Udd as next CEO"
     }
    ]
   },
@@ -3246,15 +3237,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Vale posts profit fall, lifts base metals outlook and unveils buyback"
-    },
-    {
-     "t": "淡水河谷董事会成员在治理紧张局势中辞职",
-     "d": "2026-07-27",
-     "u": "https://www.mining.com/web/vale-board-member-gasparino-steps-down-amid-governance-tensions/",
-     "s": "巴西矿业公司淡水河谷的董事会成员马塞洛·加斯帕里诺（ Marcelo Gasparino ）周一表示，他已向公司董事会提交辞呈，这是最新的事态发展……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale board member steps down amid governance tensions"
     }
    ]
   },
@@ -3287,7 +3269,7 @@
      "t": "嘉能可股票在ASX首次亮相时交易更高，因为投资者关注铜",
      "d": "2026-10-14",
      "u": "https://www.mining.com/web/glencore-shares-trade-higher-on-asx-debut-as-investors-eye-copper/",
-     "s": "智利运营部门达成的暂定劳动力协议缓解了当务之急的供应问题，因为全国范围内的采矿中断日益严重。",
+     "s": "Highland Valley Copper的集体协议于9月30日到期。",
      "k": "news",
      "src": "mining",
      "t_en": "Glencore shares trade higher on ASX debut as investors eye copper"
@@ -3553,6 +3535,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 356
+  "items": 354
  }
 }

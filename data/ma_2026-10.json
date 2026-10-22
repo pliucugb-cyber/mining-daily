@@ -1,8 +1,43 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-15T08:49:06+08:00",
-  "count": 18,
+  "updated_at": "2026-10-23T05:39:25+08:00",
+  "count": 20,
   "news": [
+    {
+      "id": "9e8af92dbf0f",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-23/1225617420.PDF",
+      "title": "关于拟收购境外公司51%股权并签署相关协议的公告",
+      "source": "巨潮资讯网·南矿集团",
+      "orig_date": "10-23",
+      "orig_date_full": "2026-10-23",
+      "report_date": "2026-10-23",
+      "category": "并购与投资",
+      "company": "南矿集团",
+      "sec_code": "001360",
+      "ma_type": "股权/资产收购",
+      "summary": "南矿集团（001360）披露《关于拟收购境外公司51%股权并签署相关协议的公告》，涉及股权/资产收购。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "2f3787912dde",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-23/1225617035.PDF",
+      "title": "紫金矿业集团股份有限公司关于协议受让赤峰吉隆黄金矿业集团股份有限公司A股及认购其定向增发H股完成交割的公告",
+      "source": "巨潮资讯网·紫金矿业",
+      "orig_date": "10-23",
+      "orig_date_full": "2026-10-23",
+      "report_date": "2026-10-23",
+      "category": "并购与投资",
+      "company": "紫金矿业",
+      "sec_code": "601899",
+      "ma_type": "股权转让",
+      "summary": "紫金矿业（601899）披露《紫金矿业集团股份有限公司关于协议受让赤峰吉隆黄金矿业集团股份有限公司A股及认购其定向增发H股完成交割的公告》，涉及股权转让。",
+      "tags": [
+        "并购",
+        "金"
+      ]
+    },
     {
       "id": "e4e541a16a74",
       "url": "https://static.cninfo.com.cn/finalpage/2026-10-15/1225604560.PDF",
