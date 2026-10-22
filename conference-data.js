@@ -6,7 +6,7 @@
  *       note 补充信息 · v 日期可信度（ok/tbd）
  */
 window.CONFERENCE_DATA = {
-  updated: '2026-10-22',
+  updated: '2026-10-23',
   source: '多源自动抓取 + 人工维护（详见 data/conference_sources.json）',
   items: [
     { s:'2026-10-27', e:'2026-10-29', t:'IMARC 2026 国际矿业与资源大会', p:'悉尼 ICC', o:'IMARC', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'澳方年度最大矿业展会', v:'ok' },
@@ -46,6 +46,7 @@ window.CONFERENCE_DATA = {
     { t:'城市地质与地下空间可持续开发利用关键技术研讨会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6a8cea78bb213&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于组织参加城市地质与地下空间可持续开发利用关键技术研讨会的通知（二号通知）', v:'tbd' },
     { t:'第三届 “新一轮找矿突破战略行动绿色勘查高质量发展大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474319', note:'有色行业会议/年会/展会预告，标题常自带日期与地点 · 原标题：关于召开第三届 “新一轮找矿突破战略行动绿色勘查高质量发展大会” 的通知', v:'tbd' },
     { t:'第三届全国稀有金属特种材料技术交流会”将于10月16-18日在宁夏·银川市召开', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474387', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
+    { t:'第九届国际矿业权信息交流大会会议', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474813', note:'有色行业会议/年会/展会预告，标题常自带日期与地点 · 原标题：第九届国际矿业权信息交流大会会议通知', v:'tbd' },
     { t:'第二十七届全国洞穴学术会议', p:'待定', o:'中国地质学会', tag:'学术会议', u:'https://geosociety.org.cn/', note:'二号通知已发（2026-09-20），日期待公告', v:'tbd' },
     { t:'第二十二届全国数学地质与地学信息学术研讨会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6ad04b5b76e82&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于召开第二十二届全国数学地质与地学信息学术研讨会的通知（二号通知）', v:'tbd' },
     { t:'第二届全国生态地质学术研讨会', p:'待定', o:'中国地质学会', tag:'勘查技术', u:'https://geosociety.org.cn/', note:'二号通知已发（2026-08-21），日期待公告', v:'tbd' },
