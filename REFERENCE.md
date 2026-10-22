@@ -3403,7 +3403,7 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - 决策：卡片改为**两段结构**——上半区「会议日程」＝独立数据源驱动的**未来/进行中会议**；下半区「会议资讯」＝**仍是新闻派生**（2026-10-13 既定契约未破）。
 
 **② 必留指纹（生成侧重建不得丢）**
-- `index.html`：右栏 `#expoMini` 内须含 `#expoConfList`（日程列表容器）、`#expoNewsHead`（「会议资讯」子标题）、`#expoConfFoot`（数据截至页脚）；`<script src="conference-data.js" defer>` 标签；`.expo-conf-*` / `.expo-sub-head-in` / `.meeting-conf*` 样式块。
+- `index.html`：右栏 `#expoMini` 内须含 `#expoConfList`（日程列表容器）、`#expoNewsHead`（「会议资讯」子标题）、`#expoConfFoot`（数据截至页脚）；`<script src="conference-data.js" defer>` 标签；`.expo-conf-*` / `.expo-sub-head-in` / `.expo-news-thin` / `.meeting-conf*` 样式块。
 - `app.js`：`mdConfBase` / `mdConfItems` / `mdConfWhen` / `mdConfCountdown` / `window.__mdConf` / `confRowHtml` / `renderConf`；移动端 `mdMeetingConfHtml`（在 `#meetingSection` 内注入 `.meeting-conf` 块）。**生成脚本一律不改 app.js**。
 - `deploy_pages.py`：`REQUIRED` 与 `BUST_FILES` 均须含 `conference-data.js`（缺文件拒绝部署 ＋ 内容指纹防「新页旧脚本」混装）。
 
@@ -3422,5 +3422,11 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - ⚠️ **生成物必须能被解析**：`render_js` 拼 `items` 数组时**条目之间必须有逗号**（用 `",\n".join`）。2026-10-21 实际踩过：漏逗号 → `conference-data.js` 语法非法 → 线上 `<script>` 解析失败 → `window.CONFERENCE_DATA` 未定义 → **会议日程卡整块静默空白（页面不报错，最难发现）**。守护断言见 `test_conference_schedule.js` 的 E20/E21。
 
 **⑤ 测试**
-- `node test_conference_schedule.js` —— **49 PASS / 0 FAIL** 为基线（桌面卡片两段结构与折叠/倒计时/顺序、移动端会议 tab 注入、静态契约：数据源分区/多源注册表/抓取器红线/部署登记）。
-- 相关回归：`test_expo_recency_20261013.js`（14/0，14 天闸门契约）、`test_a4_expo_mobile.js`（10/0，vault 去重契约）、`test_smoke_0908.js`（106/0）。
+- `node test_conference_schedule.js` —— **54 PASS / 0 FAIL** 为基线（桌面卡片两段结构与折叠/倒计时/顺序、移动端会议 tab 注入、静态契约：数据源分区/多源注册表/抓取器红线/部署登记；含 C5「仅 1-2 条新闻会展时 `#expoNewsHead` 挂 `expo-news-thin`」与 C6/C7「≥3 条恢复分段」）。
+- 相关回归：`test_expo_recency_20261013.js`（14/0，14 天闸门契约）、`test_a4_expo_mobile.js`（10/0，vault 去重契约）、`test_smoke_0908.js`（104/0）、`test_site_hero_toggle.js`（12/0，hero 文字链 + 真 toggle）。
+- 以上均已注册进 `run_tests_all.py` 的 CORE。
+
+**⑥ 界面两次迭代（2026-10-22 / 2026-10-23）**
+- **10-22 UI 重排**（commit `e9b04d7`）：条目两层结构——顶层 `.expo-conf-top`（日期+地点｜倒计时右对齐），标题独占 `.expo-conf-main`（line-clamp:2），标签与主办合并 `.expo-conf-meta`，备注弱化 1 行；日期列由 54px 定宽改 auto+nowrap（修「10.27-29」折行）；移动端 `.mc-when` 66px+nowrap。默认限量 **5 条有日期 + 3 条日期待定**。
+- **10-23「会议资讯」轻标题**：新闻会展仅 1-2 条时（14 天闸门后常见）给 `#expoNewsHead` 挂 `expo-news-thin`（去虚线上边框与上间距，降为轻量小标题）；≥3 条恢复分段感。**不整块隐藏**——桌面右栏是这些条目唯一可见面（`#expoVault` 仅可搜索），内容不能丢。逻辑在 `app.js` expo IIFE 的 `init()` 内（`classList.toggle('expo-news-thin', recent.length<=2)`）。
+- **10-23 hero「关于本站」**（commit 见 git log）：按钮由段外独立描边 pill **并入定位句末做文字链**（虚线 underline）；并修掉自 2026-10-08（`fb05b94`）起就存在的**空操作 bug**——原内联脚本 `var o=!d.hasAttribute('hidden'); if(o){保持展开}else{保持收起}` 逻辑写反，点击永远重新确认当前状态（线上实测 hidden 恒 true）。守护：`test_site_hero_toggle.js` B 组。

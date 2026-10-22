@@ -1468,6 +1468,9 @@ body.dark .expo-more-btn{color:#e0a26a}
    2026-10-22 重排：去掉 54px 窄日期列（"10.27-29" 会被折行）、标题放开 2 行、
    地点与主办合并一行、备注压到 1 行弱化、分隔线与标签降噪。 */
 .expo-sub-head{font-size:var(--fs-nano);color:var(--ink-300);margin:var(--s3) 0 var(--s1);padding-top:var(--s2);border-top:1px dashed var(--line-1);letter-spacing:.4px}
+/* 2026-10-23：新闻会展仅 1-2 条时（14 天闸门后常见）→ 去掉虚线上边框与上间距，
+   降为"轻量小标题"挂在条目上方，避免"一个分段头 + 一条孤条目"显得残破；≥3 条恢复分段感 */
+.expo-news-thin{margin:var(--s2) 0 0;padding-top:0;border-top:none}
 .expo-conf-list li.expo-conf-item{display:block;padding:var(--s2) 0;border-bottom:1px solid var(--line-1)}
 .expo-conf-list li.expo-conf-item:hover{background:#f6f9fc}
 .expo-conf-top{display:flex;align-items:baseline;gap:var(--s2)}
@@ -2683,8 +2686,11 @@ body.dark .qa-msg-bubble tbody tr:nth-child(even){background:var(--surface)}
 .site-hero{margin:var(--s3) 0 var(--s4);padding:var(--s4) var(--s5);background:linear-gradient(135deg,var(--brand-soft),var(--bg));border:1px solid var(--line-2);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
 .site-hero-tag{font-size:var(--fs-body);color:var(--ink-700);margin:0}
 .site-hero-tag b{color:var(--brand-ink)}
-.site-hero-toggle{margin-top:var(--s2);background:transparent;border:1px solid var(--brand);color:var(--brand-ink);border-radius:var(--r-md);padding:4px 12px;font-size:var(--fs-meta);cursor:pointer;font-weight:600}
-.site-hero-toggle:hover{background:var(--brand-soft)}
+/* 2026-10-23：原为带边框独立 pill 按钮（简报区唯一描边按钮，视觉重量突兀且位置孤立）
+   → 并入定位句末做文字链（虚线 underline，hover 转实线），不再独占一行 */
+.site-hero-toggle{font-family:inherit;font-size:var(--fs-meta);font-weight:600;color:var(--brand-ink);background:none;border:none;padding:0;margin:0;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;line-height:1.4;vertical-align:baseline}
+.site-hero-toggle:hover{text-decoration-style:solid;color:var(--brand)}
+.site-hero-dot{color:var(--ink-300)}
 .site-hero-detail{margin-top:var(--s3);padding-top:var(--s3);border-top:1px dashed var(--line-2)}
 .site-hero-detail p{font-size:var(--fs-meta);color:var(--ink-500);line-height:1.7;margin:0 0 var(--s2)}
 .site-hero-detail a{color:var(--brand-ink);text-decoration:underline}
@@ -2751,15 +2757,17 @@ body[data-filter-mode="fav"] .site-hero,body[data-filter-mode="history"] .site-h
 <!-- ==================== 今日情报简报（9-06 新增：数据取自 morning_report.json，随每日日报一同生成）==================== -->
 <!-- 2026-10-07 推广阶段0：站点定位 hero（落地页核心） -->
 <section class="site-hero" id="siteHero">
-  <p class="site-hero-tag">⛏️ 面向 <b>矿业投并与地勘从业者</b> 的一站式每日资讯聚合 · 数据每日自动更新</p>
-  <button class="site-hero-toggle" id="siteHeroToggle" type="button" aria-expanded="false">关于本站 ▾</button>
+  <p class="site-hero-tag">⛏️ 面向 <b>矿业投并与地勘从业者</b> 的一站式每日资讯聚合 · 数据每日自动更新<span class="site-hero-dot"> · </span><button class="site-hero-toggle" id="siteHeroToggle" type="button" aria-expanded="false">关于本站 ▾</button></p>
   <div class="site-hero-detail" id="siteHeroDetail" hidden>
     <p>矿业资讯速览 聚合：有色 / 黑色金属价格、LME 实时行情、43 家矿业公司动态、全球并购与政策、地勘规范要点速读。面向固体矿产勘查与岩土工程勘察从业者、矿业投并人士，辅助日常情报跟踪与决策参考。</p>
     <p>数据来源见各板块标注；反馈与合作请在 GitHub 仓库提交 issue，或联系站点维护者。</p>
   </div>
 </section>
 <script>
-(function(){var t=document.getElementById('siteHeroToggle'),d=document.getElementById('siteHeroDetail');if(t&&d){t.addEventListener('click',function(){var o=!d.hasAttribute('hidden');if(o){d.removeAttribute('hidden');t.setAttribute('aria-expanded','true');t.textContent='关于本站 ▴';}else{d.setAttribute('hidden','');t.setAttribute('aria-expanded','false');t.textContent='关于本站 ▾';}});}})();
+/* 2026-10-23 修：原逻辑写反了——var o=!d.hasAttribute('hidden')（o=当前是否展开），
+   却写成 if(o){保持展开}else{保持收起} → 点击永远重新确认当前状态，「关于本站」自 2026-10-08
+   上线起就是空操作（线上已实测确认：hidden 恒 true）。现改为真正的 toggle。 */
+(function(){var t=document.getElementById('siteHeroToggle'),d=document.getElementById('siteHeroDetail');if(t&&d){t.addEventListener('click',function(){var open=d.hasAttribute('hidden');if(open){d.removeAttribute('hidden');t.setAttribute('aria-expanded','true');t.textContent='关于本站 ▴';}else{d.setAttribute('hidden','');t.setAttribute('aria-expanded','false');t.textContent='关于本站 ▾';}});}})();
 </script>
 
 <div class="brief-strip" id="briefStrip" data-page-node-id="uiXcXoG33rQd2Ofr4IRinO">

@@ -11,7 +11,8 @@
  *   A 桌面卡片：有日期会议默认 5 条可见、其余折叠；「日期待定」独立成区并限量；
  *     倒计时文案正确；按开始日期升序；展开按钮只展开自己那组；页脚与官方链接。
  *   B 无会议数据 → 卡片整块隐藏。
- *   C 有会议数据 + 有新闻会展 → expoMiniList 仍装新闻条目（不破 10-13 契约）、「会议资讯」子标题可见。
+ *   C 有会议数据 + 有新闻会展 → expoMiniList 仍装新闻条目（不破 10-13 契约）、「会议资讯」子标题可见；
+ *     仅 1-2 条时子标题挂 expo-news-thin 轻量化（去虚线上边框），≥3 条恢复分段感（2026-10-23）。
  *   D 移动端「会议」tab：#meetingSection 内含会议日程块（与右栏同源）。
  *   E 静态契约：conferences.json manual/auto 分区、源注册表多源、fetch_conferences.py 关键机制、
  *     deploy_pages.py 登记 conference-data.js。
@@ -161,6 +162,26 @@ function runC(done) {
     check('[C3] 新闻会展仍在 #expoMiniList（10-13 契约不破）', ul && ul.querySelectorAll('li').length >= 1,
       'li=' + (ul ? ul.querySelectorAll('li').length : 'n/a'));
     check('[C4] 「会议资讯」子标题可见', nh && !nh.hidden && nh.style.display !== 'none');
+    check('[C5] 仅 1 条新闻会展时子标题挂 expo-news-thin（轻量小标题，2026-10-23）',
+      nh && nh.classList.contains('expo-news-thin'), nh ? nh.className : 'n/a');
+    done();
+  }, 1000);
+}
+
+// ===== C2 有会议数据 + 3 条新闻会展 → 子标题恢复分段感（不挂 thin）=====
+function runC2(done) {
+  const news = item('2026 智能矿山论坛举行', '10-20')
+    + item('第二届矿业投资大会落幕', '10-19')
+    + item('某矿区勘查技术研讨会召开', '10-18');
+  const { doc } = buildDom(news, ITEMS);
+  setTimeout(() => {
+    console.log('===== C2 有会议数据 + 3 条新闻会展 =====');
+    const ul = doc.getElementById('expoMiniList');
+    const nh = doc.getElementById('expoNewsHead');
+    check('[C6] 新闻会展 3 条仍在 #expoMiniList', ul && ul.querySelectorAll('li').length >= 3,
+      'li=' + (ul ? ul.querySelectorAll('li').length : 'n/a'));
+    check('[C7] ≥3 条时子标题不挂 expo-news-thin（恢复分段感）',
+      nh && !nh.classList.contains('expo-news-thin'), nh ? nh.className : 'n/a');
     done();
   }, 1000);
 }
@@ -238,11 +259,13 @@ function runE(done) {
 runA(() => {
   runB(() => {
     runC(() => {
-      runD(() => {
-        runE(() => {
-          console.log('\n===== 汇总 =====');
-          console.log('  通过 ' + pass + ' / 失败 ' + fail);
-          process.exit(fail ? 1 : 0);
+      runC2(() => {
+        runD(() => {
+          runE(() => {
+            console.log('\n===== 汇总 =====');
+            console.log('  通过 ' + pass + ' / 失败 ' + fail);
+            process.exit(fail ? 1 : 0);
+          });
         });
       });
     });
