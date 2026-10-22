@@ -44,7 +44,9 @@ echo "[$(date '+%F %T')] shadow start $D"
 
 # —— 抓取（境外源 + 行情 + 价格/公司）——
 FETCH_RC=0
-python3 fetch_news.py --fetch-detail --report-date "$D" --quiet || FETCH_RC=$?
+# 2026-10-22：显式 --days 2，对齐本机 05:30 管线（本机用 --days 2、云端此前用默认 1，
+# 导致云端少抓 D-1 窗口、信源级对比持续虚高）。翻页由 fetch_news.py 的 page_base 配置负责。
+python3 fetch_news.py --fetch-detail --report-date "$D" --days 2 --quiet || FETCH_RC=$?
 if [ "$FETCH_RC" -ne 0 ]; then
   echo "[$(date '+%F %T')] [warn] fetch_news 退出码 $FETCH_RC（某源可能失败，见 data/fetch_health_$D.json）"
 fi

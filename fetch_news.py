@@ -125,6 +125,10 @@ ANNOUNCE_NOISE = [
 SOURCES = [
     {
         "key": "smm",
+        # 2026-10-22 翻页：page_base 的 {n} 从 2 起（page0=list_url）。URL 为猜测，
+        # 需云端验证；拼错自动回退单页（page>0 取不到即 break），不影响抓取。
+        "page_base": "https://news.smm.cn/?page={n}",
+        "max_pages": 4,
         "name": "上海有色网 SMM",
         "list_url": "https://news.smm.cn/",
         "kind": "html",
@@ -139,6 +143,10 @@ SOURCES = [
     },
     {
         "key": "metal",
+        # 2026-10-22 翻页：page_base 的 {n} 从 2 起（page0=list_url）。URL 为猜测，
+        # 需云端验证；拼错自动回退单页（page>0 取不到即 break），不影响抓取。
+        "page_base": "https://news.metal.com/?page={n}",
+        "max_pages": 4,
         "name": "SMM 国际站（英文）",
         "list_url": "https://news.metal.com/",
         "kind": "html",
@@ -152,6 +160,10 @@ SOURCES = [
     },
     {
         "key": "geoglobal",
+        # 2026-10-22 翻页：page_base 的 {n} 从 2 起（page0=list_url）。URL 为猜测，
+        # 需云端验证；拼错自动回退单页（page>0 取不到即 break），不影响抓取。
+        "page_base": "https://geoglobal.mnr.gov.cn/?page={n}",
+        "max_pages": 4,
         "name": "全球矿产资源信息系统",
         "list_url": "https://geoglobal.mnr.gov.cn/",
         "kind": "html",
@@ -198,6 +210,10 @@ SOURCES = [
     },
     {
         "key": "cnmn",
+        # 2026-10-22 翻页：page_base 的 {n} 从 2 起（page0=list_url）。URL 为猜测，
+        # 需云端验证；拼错自动回退单页（page>0 取不到即 break），不影响抓取。
+        "page_base": "https://www.cnmn.com.cn/?page={n}",
+        "max_pages": 4,
         "name": "中国有色金属报",
         "list_url": "https://www.cnmn.com.cn/",
         "kind": "html",
@@ -212,6 +228,10 @@ SOURCES = [
     },
     {
         "key": "cgs",
+        # 2026-10-22 翻页：page_base 的 {n} 从 2 起（page0=list_url）。URL 为猜测，
+        # 需云端验证；拼错自动回退单页（page>0 取不到即 break），不影响抓取。
+        "page_base": "https://www.cgs.gov.cn/?page={n}",
+        "max_pages": 4,
         "name": "中国地质调查局",
         "list_url": "https://www.cgs.gov.cn/",
         "kind": "html",
@@ -387,6 +407,10 @@ SOURCES = [
     # -------------------------------------------------------------------
     {
         "key": "cjys",
+        # 2026-10-22 翻页：page_base 的 {n} 从 2 起（page0=list_url）。URL 为猜测，
+        # 需云端验证；拼错自动回退单页（page>0 取不到即 break），不影响抓取。
+        "page_base": "https://www.ccmn.cn/?page={n}",
+        "max_pages": 4,
         "name": "长江有色网",
         "list_url": "https://www.ccmn.cn/",
         "kind": "html",
@@ -754,6 +778,41 @@ def fetch_table_pages(cfg, report_date, days):
     return raw, "ok(%d rows)" % len(raw)
 
 
+def fetch_list_pages(cfg, report_date, days):
+    """kind='html'/'rss' 的多页抓取：首页 list_url，其后按 page_base 拼页。
+
+    仅当 cfg 含 page_base + max_pages 时启用；否则返回 None，由调用方走单页。
+    与 fetch_table_pages 对齐但更稳：
+    - page 0 永远用 list_url（与旧单页行为完全一致，不破坏任何现有源）；
+    - page>=1 用 page_base.format(n=page+1) 拼 URL（page 0 已是首页，第 1 个附加页
+      对应站点第 2 页，故 n 从 2 起；若站点第 2 页是 ?page=1，请在配置里改写 page_base）；
+    - 某页 __ERR__ 或 0 新链接即停止，单页失败不会拖垮整源；
+    - 跨页 URL 去重：某页未产出任何新链接即视为末页/重复页，停止，防误跟死循环。
+    """
+    page_base = cfg.get("page_base")
+    max_pages = int(cfg.get("max_pages", 0))
+    if not page_base or max_pages <= 0:
+        return None
+    base = cfg["list_url"]
+    raw, seen = [], set()
+    for page in range(0, max_pages):
+        url = base if page == 0 else page_base.format(n=page + 1)
+        h = http_get(url, timeout=20, retries=1)
+        if h.startswith("__ERR__"):
+            if page == 0:
+                return None  # 首页都挂了，回退单页（fetch-fail 由调用方报）
+            break
+        page_items = (parse_rss(h, cfg) if cfg["kind"] == "rss"
+                      else parse_html(h, cfg))
+        new = [r for r in page_items if r["url"] not in seen]
+        if not new:
+            break  # 末页或重复页
+        for r in new:
+            seen.add(r["url"])
+        raw.extend(new)
+    return raw
+
+
 def parse_cninfo(cfg, report_date, days):
     """巨潮资讯网公告检索（kind='cninfo'）。
 
@@ -1050,13 +1109,18 @@ def run_source(cfg, report_date, days, use_detail):
         if st.startswith("fetch-fail"):
             return [], st
     else:
-        html_text = http_get(cfg["list_url"])
-        if html_text.startswith("__ERR__"):
-            return [], "fetch-fail: " + html_text[7:][:60]
-        if cfg["kind"] == "rss":
-            raw = parse_rss(html_text, cfg)
+        # html/rss 多页抓取：若源配置了 page_base+max_pages 则翻页，否则单页（旧行为）
+        multi = fetch_list_pages(cfg, report_date, days)
+        if multi is None:
+            html_text = http_get(cfg["list_url"])
+            if html_text.startswith("__ERR__"):
+                return [], "fetch-fail: " + html_text[7:][:60]
+            if cfg["kind"] == "rss":
+                raw = parse_rss(html_text, cfg)
+            else:
+                raw = parse_html(html_text, cfg)
         else:
-            raw = parse_html(html_text, cfg)
+            raw = multi
 
     cutoff = (datetime.date.fromisoformat(report_date)
               - datetime.timedelta(days=max(0, days - 1))).isoformat()
