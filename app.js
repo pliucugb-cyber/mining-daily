@@ -6514,16 +6514,20 @@ window.__mdConf = { items:mdConfItems, when:mdConfWhen, countdown:mdConfCountdow
     var t = String(it.t);
     var title = it.u ? ('<a href="'+safeHref(it.u)+'" target="_blank" rel="noopener" title="'+esc(t)+'">'+esc(t)+'</a>') : esc(t);
     var dated = (it._dd !== undefined);
-    var when = dated ? mdConfWhen(it, base) : '待定';
-    var place = dated ? (it.p || '') : (it.p || '日期待定');
+    var when = dated ? mdConfWhen(it, base) : '日期待定';
+    var place = (it.p && it.p !== '待定') ? it.p : '';
     var cd = dated ? ('<span class="expo-conf-cd'+(it._dd<0?' on':'')+'">'+esc(mdConfCountdown(it))+'</span>') : '';
     var cls = 'expo-conf-item' + (over ? ' expo-extra expo-g-'+group : '') + (dated ? '' : ' expo-conf-tbd');
     return '<li class="'+cls+'"'+(over?' hidden':'')+'>'
-      + '<span class="expo-conf-when"><b>'+esc(when)+'</b><i>'+esc(place)+'</i></span>'
+      + '<div class="expo-conf-top">'
+      + '<span class="expo-conf-when"><b>'+esc(when)+'</b>'+(place?'<i>'+esc(place)+'</i>':'')+'</span>'
+      + cd+'</div>'
       + '<div class="expo-conf-main">'+title
-      + '<div class="expo-conf-meta">'+(it.tag?'<span class="expo-conf-tag">'+esc(it.tag)+'</span>':'')
-      + (it.o?'<span class="expo-conf-org">'+esc(it.o)+'</span>':'')+'</div>'
-      + (it.note?'<div class="expo-conf-note">'+esc(it.note)+'</div>':'')+'</div>'+cd+'</li>';
+      + ((it.tag||it.o) ? ('<div class="expo-conf-meta">'
+          + (it.tag?'<span class="expo-conf-tag">'+esc(it.tag)+'</span>':'')
+          + (it.o?'<span class="expo-conf-org">'+esc(it.o)+'</span>':'')+'</div>') : '')
+      + (it.note?'<div class="expo-conf-note">'+esc(it.note)+'</div>':'')
+      + '</div></li>';
   }
   function renderConf(){
     var cl = document.getElementById('expoConfList');

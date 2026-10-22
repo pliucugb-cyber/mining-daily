@@ -1464,26 +1464,32 @@ body.dark .expo-mini-list li:hover{background:#1c2734}
 .expo-more-btn{background:none;border:none;color:#b45009;font-size:var(--fs-meta);cursor:pointer;padding:2px 6px}
 .expo-more-btn:hover{text-decoration:underline}
 body.dark .expo-more-btn{color:#e0a26a}
-/* 2026-10-21 会议日程（conference-data.js 驱动）：上半区=未来/进行中会议（日期·地点·倒计时），下半区=新闻派生的会议资讯 */
+/* 2026-10-22 会议日程卡（conference-data.js 驱动）：上半区=未来/进行中会议（日期·地点·倒计时），下半区=新闻派生的会议资讯
+   2026-10-22 重排：去掉 54px 窄日期列（"10.27-29" 会被折行）、标题放开 2 行、
+   地点与主办合并一行、备注压到 1 行弱化、分隔线与标签降噪。 */
 .expo-sub-head{font-size:var(--fs-nano);color:var(--ink-300);margin:var(--s3) 0 var(--s1);padding-top:var(--s2);border-top:1px dashed var(--line-1);letter-spacing:.4px}
-.expo-conf-list li.expo-conf-item{display:flex;gap:var(--s2);align-items:flex-start;padding:var(--s2) 0;border-bottom:1px solid var(--line-1)}
-.expo-conf-list li.expo-conf-item:last-of-type{border-bottom:none}
-.expo-conf-when{flex:0 0 54px;text-align:center;line-height:1.25;padding-top:1px}
-.expo-conf-when b{display:block;font-size:var(--fs-body);color:var(--brand);font-weight:700;letter-spacing:-.2px}
-.expo-conf-when i{display:block;font-style:normal;font-size:var(--fs-nano);color:var(--ink-300);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.expo-conf-main{flex:1 1 auto;min-width:0}
-.expo-conf-main a{color:var(--ink-900);text-decoration:none;display:block;font-size:var(--fs-body);line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.expo-conf-main a:hover{color:var(--brand)}
-.expo-conf-meta{margin-top:3px;display:flex;gap:var(--s1);align-items:center;min-width:0;font-size:var(--fs-nano);color:var(--ink-300)}
-.expo-conf-tag{flex:0 0 auto;border:1px solid var(--line-2);border-radius:3px;padding:0 4px;color:var(--ink-700)}
-.expo-conf-org{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.expo-conf-note{margin-top:2px;font-size:var(--fs-nano);line-height:1.35;color:var(--ink-300);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.expo-conf-cd{flex:0 0 auto;font-size:var(--fs-nano);color:var(--brand);background:var(--brand-soft);border-radius:3px;padding:1px 5px;white-space:nowrap}
+.expo-conf-list li.expo-conf-item{display:block;padding:var(--s2) 0;border-bottom:1px solid var(--line-1)}
+.expo-conf-list li.expo-conf-item:hover{background:#f6f9fc}
+.expo-conf-top{display:flex;align-items:baseline;gap:var(--s2)}
+.expo-conf-when{flex:0 1 auto;min-width:0;display:flex;align-items:baseline;gap:6px;line-height:1.3}
+.expo-conf-when b{flex:0 0 auto;font-size:var(--fs-meta);color:var(--brand);font-weight:700;letter-spacing:-.2px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.expo-conf-when i{font-style:normal;min-width:0;font-size:var(--fs-nano);color:var(--ink-300);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.expo-conf-cd{margin-left:auto;flex:0 0 auto;font-size:var(--fs-nano);color:var(--brand);background:var(--brand-soft);border-radius:3px;padding:0 5px;white-space:nowrap}
 .expo-conf-cd.on{color:#b45009}
-.expo-conf-list li.expo-conf-tbd .expo-conf-when b{color:var(--ink-300);font-size:var(--fs-nano);font-weight:600}
-.expo-conf-foot{margin-top:var(--s2);font-size:var(--fs-nano);color:var(--ink-300);opacity:.85}
+.expo-conf-main{margin-top:3px;min-width:0}
+.expo-conf-main a{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:var(--fs-body);line-height:1.35;color:var(--ink-900);text-decoration:none}
+.expo-conf-main a:hover{color:var(--brand)}
+.expo-conf-meta{margin-top:4px;display:flex;gap:6px;align-items:center;min-width:0;font-size:var(--fs-nano);color:var(--ink-300)}
+.expo-conf-tag{flex:0 0 auto;border:1px solid var(--line-2);border-radius:3px;padding:0 4px;color:var(--ink-300)}
+.expo-conf-org{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.expo-conf-note{margin-top:2px;font-size:var(--fs-nano);line-height:1.35;color:var(--ink-300);opacity:.85;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.expo-conf-list li.expo-conf-tbd .expo-conf-when b{color:var(--ink-300);font-weight:600}
+.expo-conf-foot{margin-top:var(--s2);font-size:var(--fs-nano);color:var(--ink-300);opacity:.8}
+.expo-sub-head-in{margin:var(--s2) 0 0;padding-top:var(--s2);border-top:1px dashed var(--line-1)}
+.expo-mini-list li.expo-more{padding:var(--s1) 0 0;text-align:center}
+body.dark .expo-conf-list li.expo-conf-item:hover{background:#1c2734}
 body.dark .expo-conf-main a{color:var(--ink-700)}
-body.dark .expo-conf-tag{border-color:var(--line-2);color:var(--ink-700)}
+body.dark .expo-conf-tag{border-color:var(--line-2);color:#8fa3b5}
 body.dark .expo-conf-cd{background:#1e2b38;color:#e0a26a}
 body.dark .expo-sub-head{color:#8fa3b5;border-top-color:var(--line-1)}
 /* 2026-10-21 移动端「会议」tab 顶部的会议日程（与右栏卡片同源 conference-data.js） */
@@ -1492,7 +1498,7 @@ body.dark .expo-sub-head{color:#8fa3b5;border-top-color:var(--line-1)}
 .meeting-conf-list{list-style:none;margin:0;padding:0}
 .meeting-conf-list li{display:flex;gap:var(--s2);padding:var(--s2) 0;border-bottom:1px solid var(--line-1)}
 .meeting-conf-list li:last-child{border-bottom:none}
-.mc-when{flex:0 0 58px;font-size:var(--fs-meta);font-weight:700;color:var(--brand);line-height:1.3}
+.mc-when{flex:0 0 66px;font-size:var(--fs-meta);font-weight:700;color:var(--brand);line-height:1.3;font-variant-numeric:tabular-nums;white-space:nowrap}
 .mc-main{flex:1 1 auto;min-width:0}
 .mc-main a{color:var(--ink-900);text-decoration:none;font-size:var(--fs-body);line-height:1.4;display:block}
 .mc-main a:hover{color:var(--brand)}
