@@ -6628,7 +6628,15 @@ window.__mdConf = { items:mdConfItems, when:mdConfWhen, countdown:mdConfCountdow
           if(recent.length>EXPO_SHOW){ _html+='<li class="expo-more"><button type="button" class="expo-more-btn">展开全部 '+recent.length+' 条 ▾</button></li>'; }
           ul.innerHTML=_html;
           var _nh=document.getElementById('expoNewsHead');
-          if(_nh){ if(recent.length){ _nh.style.display=''; _nh.removeAttribute('hidden'); } else { _nh.style.display='none'; _nh.setAttribute('hidden',''); } }
+          if(_nh){
+            if(recent.length){
+              _nh.style.display=''; _nh.removeAttribute('hidden');
+              // 2026-10-23：仅 1-2 条时挂 expo-news-thin（去虚线上边框/上间距，降为轻量小标题）。
+              // 背景：14 天闸门后新闻派生源常年只剩 1 条，"分段头+孤条目"显得残破；
+              // 不整块隐藏是因为桌面右栏是这些条目唯一可见面（ vault 仅可搜索），内容不能丢。
+              _nh.classList.toggle('expo-news-thin', recent.length<=2);
+            } else { _nh.style.display='none'; _nh.setAttribute('hidden',''); _nh.classList.remove('expo-news-thin'); }
+          }
           box.style.display='';
           var _mb=ul.querySelector('.expo-more-btn');
           if(_mb){ _mb.onclick=function(){
