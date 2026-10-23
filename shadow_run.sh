@@ -85,9 +85,44 @@ cp /opt/md-src/data/shadow_diff_$D.txt /var/www/mining-daily/
 echo "[$(date '+%F %T')] shadow done"
 
 cd /opt/md-src
-git add -f data/shadow_diff_$D.txt
-git commit -m "shadow diff $D" >/dev/null 2>&1 || true
-git push origin HEAD:shadow-reports >/dev/null 2>&1 || echo "[warn] push shadow report 失败"
+# 影子报告：shadow-reports 与 main 已分叉（merge-base 0b5abf5），直接推 HEAD 必然
+# non-FF 被拒（见 fix_shadow_push_2026-10-23.md）。改用 commit-tree 以「远端
+# shadow-reports 自身 tip」为父构造 FF 提交（与 push_server_fetch.sh v3 同构）。
+# 失败不静默吞错，保留 stderr 便于排查。
+if ! git fetch -q origin shadow-reports 2>/dev/null; then
+  echo "[warn] fetch origin shadow-reports 失败，本轮跳过影子报告推送"
+else
+  base=""
+  if git rev-parse -q --verify FETCH_HEAD >/dev/null 2>&1; then
+    base=FETCH_HEAD
+  fi
+  blob=$(git hash-object -w "data/shadow_diff_$D.txt")
+  [ -n "$blob" ] || echo "[error] shadow_diff hash-object 失败（跳过推送）"
+  idx=$(mktemp); trap 'rm -f "$idx"' EXIT
+  GIT_INDEX_FILE="$idx" git read-tree --empty
+  if [ -n "$base" ]; then
+    GIT_INDEX_FILE="$idx" git read-tree "$base"
+  fi
+  GIT_INDEX_FILE="$idx" git update-index --add --cacheinfo "100644,$blob,data/shadow_diff_$D.txt"
+  stree=$(GIT_INDEX_FILE="$idx" git write-tree)
+  [ -n "$stree" ] || echo "[error] shadow write-tree 失败（跳过推送）"
+  if [ -n "$base" ] && [ -n "$blob" ] && [ -n "$stree" ]; then
+    scommit=$(git -c user.email=server@miningdaily.local -c user.name=mining-daily-server \
+              commit-tree "$stree" -p "$base" -m "shadow diff $D")
+  elif [ -z "$base" ] && [ -n "$blob" ] && [ -n "$stree" ]; then
+    # 分支尚不存在（首次）：无父根提交
+    scommit=$(git -c user.email=server@miningdaily.local -c user.name=mining-daily-server \
+              commit-tree "$stree" -m "shadow diff $D")
+  else
+    scommit=""
+  fi
+  if [ -n "$scommit" ]; then
+    git push origin "$scommit:refs/heads/shadow-reports" \
+      || echo "[error] push shadow-reports 失败（检查 Deploy key 写权限）"
+  else
+    echo "[error] shadow commit-tree 失败，禁止推送（防误删分支）"
+  fi
+fi
 
 # —— 推送当天候选池到 server/fetch（云端质量对比的数据源）——
 #   注意：git 里 .sh 的权限位可能是 644（从 Windows 提交会丢执行位），
