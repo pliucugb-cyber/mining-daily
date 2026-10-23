@@ -1,8 +1,63 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-23T05:39:25+08:00",
-  "count": 20,
+  "updated_at": "2026-10-24T05:37:46+08:00",
+  "count": 23,
   "news": [
+    {
+      "id": "ae3a54e22ad0",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-24/1225621414.PDF",
+      "title": "关于以债转股方式对全资子公司增资的公告",
+      "source": "巨潮资讯网·大中矿业",
+      "orig_date": "10-24",
+      "orig_date_full": "2026-10-24",
+      "report_date": "2026-10-24",
+      "category": "并购与投资",
+      "company": "大中矿业",
+      "sec_code": "001203",
+      "ma_type": "增资/认购",
+      "summary": "大中矿业（001203）披露《关于以债转股方式对全资子公司增资的公告》，涉及增资/认购。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "2c8e97b830d0",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-24/1225619785.PDF",
+      "title": "明泰铝业关于使用向特定对象发行股票部分闲置募集资金进行现金管理的公告",
+      "source": "巨潮资讯网·明泰铝业",
+      "orig_date": "10-24",
+      "orig_date_full": "2026-10-24",
+      "report_date": "2026-10-24",
+      "category": "并购与投资",
+      "company": "明泰铝业",
+      "sec_code": "601677",
+      "ma_type": "投资/资本运作",
+      "summary": "明泰铝业（601677）披露《明泰铝业关于使用向特定对象发行股票部分闲置募集资金进行现金管理的公告》，涉及投资/资本运作。",
+      "tags": [
+        "并购",
+        "金",
+        "铝"
+      ]
+    },
+    {
+      "id": "17295c5fb44b",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-24/1225619787.PDF",
+      "title": "东吴证券关于明泰铝业使用向特定对象发行股票部分闲置募集资金进行现金管理的核查意见",
+      "source": "巨潮资讯网·明泰铝业",
+      "orig_date": "10-24",
+      "orig_date_full": "2026-10-24",
+      "report_date": "2026-10-24",
+      "category": "并购与投资",
+      "company": "明泰铝业",
+      "sec_code": "601677",
+      "ma_type": "投资/资本运作",
+      "summary": "明泰铝业（601677）披露《东吴证券关于明泰铝业使用向特定对象发行股票部分闲置募集资金进行现金管理的核查意见》，涉及投资/资本运作。",
+      "tags": [
+        "并购",
+        "金",
+        "铝"
+      ]
+    },
     {
       "id": "9e8af92dbf0f",
       "url": "https://static.cninfo.com.cn/finalpage/2026-10-23/1225617420.PDF",

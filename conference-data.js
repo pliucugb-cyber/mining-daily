@@ -6,7 +6,7 @@
  *       note 补充信息 · v 日期可信度（ok/tbd）
  */
 window.CONFERENCE_DATA = {
-  updated: '2026-10-23',
+  updated: '2026-10-24',
   source: '多源自动抓取 + 人工维护（详见 data/conference_sources.json）',
   items: [
     { s:'2026-10-27', e:'2026-10-29', t:'IMARC 2026 国际矿业与资源大会', p:'悉尼 ICC', o:'IMARC', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'澳方年度最大矿业展会', v:'ok' },
@@ -35,6 +35,7 @@ window.CONFERENCE_DATA = {
     { t:'2026 SMM（第十一届）亚太镍铬锰不锈钢大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474482', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2026SMM铅锌年会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474575', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2026年全国铀矿地质会议', p:'待定', o:'中国地质学会', tag:'铀矿', u:'https://geosociety.org.cn/', note:'一号通知已发（2026-07-29），日期待公告', v:'tbd' },
+    { t:'2026年国际纳米地球科学大会暨第四届中国纳米地球科学学术研讨会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6adb39652d357&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于举办2026年国际纳米地球科学大会暨第四届中国纳米地球科学学术研讨会的通知', v:'tbd' },
     { t:'2026高碑店国际绿色智慧健康建筑博览会启幕', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474140', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2027 SMM贵金属年会暨金银产业峰会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474042', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2027 SMM铂族金属供需交易大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474043', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
