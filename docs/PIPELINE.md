@@ -45,6 +45,31 @@ PY fetch_news.py --report-date <今日> --days 2      # 不加 --merge
 产出 `data/news_candidates_<今日>.json`（≈150–200 条）。**不 commit、不 deploy**。
 ⚠️ `--source <key>` 会**覆盖**候选池与 `fetch_health_<今日>.json` ⇒ 补抓前后都要 `cp` 备份/还原。
 
+## 3.5 并集候选池（覆盖率优化，2026-10-23 起）
+
+本机 05:30 抓取早于境内云 07:30，部分滚动源（ccmn / mining 等）当日新稿会被本机漏掉；
+境外 runner（draft/fetch）还能补回境内云也漏的英文源条目。把三端并起来，甄选原料覆盖率最高。
+
+```
+PY union_candidates.py --date <今日>
+```
+
+- 产出 `data/news_candidates_union_<今日>.json`：已合并 **本机 + 境内云 server/fetch + 境外 runner draft/fetch** 三端、按文章 id 去重，与候选池同 schema（`report_date/count/news`）。
+- **甄选原料改用并集池**：第 4 步采集优先从 `news_candidates_union_<今日>.json` 挑；若并集取数失败（SSH / 网络）则回退本机候选池。
+- 并集池每项带两个非破坏性元信息字段：
+  - `_branches`：如 `['server@2026-10-23','draft@2026-10-23']` —— 哪些分支@日期贡献了这条；
+  - `_from`：主来源分支（winner）。
+  - 含 `wb` 即本机也抓到；**`_branches` 无 `wb` = 仅云端/境外独有**（本地漏抓），甄选时重点核对。
+- 去重键口径（与盯梢 compare_fetches 一致）：先抽 query 里的 `?id=`/`?lic=`（cnmn / kyreg_tk 这类 id 在 query 中），再抽路径 `/(\d{6,})[-_]`，都没有用完整 URL 兜底。
+- ⚠️ **时序硬约束**：05:30 跑时境内云「今日」池尚未推送，脚本会依次回退到前 1/2 天并标注 `@日期`；**真正补齐当日滚动差靠云推送后的刷新一轮**（见下方「08:00 并集刷新」）。
+- 并集池同样 **gitignore、不 commit、不 deploy**（与候选池一致）；重新序列化同候用 `indent=1 + LF` 即可（本脚本已按 1 写）。
+
+### 08:00 并集刷新（补齐当日滚动差，需用户授权启用）
+境内云 07:30 跑完、境外 runner 亦已推送后，重跑 `union_candidates.py`（此时三端「今日」池齐全），
+对 `news_candidates_union_<今日>.json` 中 **`_branches` 无 `wb` 且 `orig_date_full == 今日`** 的条目做增量甄选，
+把值得收的写进当日 `generate_<YYYYMMDD>.py` 的 `new_items`、重生成 `index.html`、重部署。
+（该步改动当日生成脚本与线上，属发布动作，需单独授权，不默认并入 05:30 主链路。）
+
 ## 4. 采集与整理（LLM 判断环节）
 
 优先从候选池挑，真实发生 + 信源合规 + 链接可达；**覆盖七桶不偏科**。
