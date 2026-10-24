@@ -319,6 +319,19 @@ new_items = [
                 'Halo 获智利 Playa Verde 尾矿铜项目关键许可',
                 'Halo Minerals（AIM: HALO）取得智利 Playa Verde 铜金尾矿项目关键采矿许可，其子公司 Minera Playa Verde 可自 Chañaral 海滩（含城区段）疏浚含矿物料，智利住建部未提出异议。项目设计年处理约 500 万吨物料、年产可付铜 8,600 吨（阴极铜与精矿），预计年现金流约 5,000 万美元；公司尚未作出最终投资决定。',
                 orig_title='Halo Minerals clears key hurdle at Chile copper project')),
+
+    # ── 🌐 国际矿业动态（08:20 并集补稿：云端独有，本机 05:30 漏抓） ──
+    (CAT_GJ, ni('https://www.mining.com/bannerman-pulls-trigger-on-353m-uranium-mine',
+                'MINING.COM', '10-24',
+                'Bannerman 批准纳米比亚 Etango 铀矿建设，融资 3.53 亿美元',
+                'Bannerman Resources 批准纳米比亚 Etango 铀矿项目建设，建设资金已落实且不含项目债务，首产目标定为 2028 年。Etango 为露天铀矿项目，建设获批标志着项目进入实质性开发阶段。',
+                orig_title='Bannerman pulls trigger on $353M uranium mine')),
+
+    (CAT_GJ, ni('https://www.mining.com/moon-river-lifts-davidson-value-to-879m-tungsten-output-jumps',
+                'MINING.COM', '10-24',
+                'Moon River 将 Davidson 钨矿估值提至 8.79 亿美元，钨产量跃升',
+                'Moon River 更新加拿大不列颠哥伦比亚省 Davidson 钨矿项目经济评估，项目估值升至 8.79 亿美元、钨产量显著提升；但项目仍处初步评估阶段，尚未形成矿产储量。',
+                orig_title='Moon River lifts Davidson value to $879M, tungsten output jumps')),
 ]
 
 # ============ 并购关键词重归类 ============

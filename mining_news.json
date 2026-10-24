@@ -1,12 +1,12 @@
 {
   "meta": {
     "report_date": "2026-10-24",
-    "generated_at": "2026-10-24T08:13:30+08:00",
-    "total": 522,
-    "new_today": 24,
+    "generated_at": "2026-10-24T08:23:17+08:00",
+    "total": 524,
+    "new_today": 26,
     "archive": 498,
-    "page_total": 522,
-    "page_new_count": 24,
+    "page_total": 524,
+    "page_new_count": 26,
     "sources": [
       "MINING.COM",
       "SMM 国际站",
@@ -61,6 +61,37 @@
         "找矿",
         "技术"
       ]
+    },
+    {
+      "id": "579769059058",
+      "title": "阿克拉拉彭科稀土项目税后净现值 3.44 亿加元",
+      "url": "https://news.smm.cn/news/104171846",
+      "source": "上海有色网",
+      "orig_date": "10-23",
+      "orig_date_full": "2026-10-23",
+      "report_date": "2026-10-24",
+      "category": "找矿成果与勘查技术",
+      "is_new": true,
+      "summary": "阿克拉拉资源（Aclara Resources）智利彭科稀土项目最新初步经济评价显示，税后净现值 3.44 亿加元（约 2.43 亿美元），产前投资 2.44 亿加元（约 1.78 亿美元）。评价采用 8% 折现率（2021 年为 5%），露天采坑可采年限延长 3 年至 17 年，内部收益率升至 26.1%；净现值上升主要因矿石量增 55% 至 3,080 万吨。探明加推定资源量 3,580 万吨、TREO 品位 0.2095%、稀土氧化物量 75,025 吨、增 19%。",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "国际"
+      ]
+    },
+    {
+      "id": "9b11c2da6f87",
+      "title": "萨里托甘石墨项目可研：年产 5 万吨，税前净现值 1.32 亿美元",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202610/t20261023_10343559.htm",
+      "source": "全球矿产资源信息系统",
+      "orig_date": "10-23",
+      "orig_date_full": "2026-10-23",
+      "report_date": "2026-10-24",
+      "category": "找矿成果与勘查技术",
+      "is_new": true,
+      "summary": "萨里托甘石墨公司（Sarytogan Graphite）公布哈萨克斯坦萨里托甘石墨项目可研结果，项目具备年产 5 万吨石墨精矿潜力：2 万吨三种规格（最大粒径 15 微米）精矿、1 万吨未分级精矿、2 万吨超纯细粉及球形纯化石墨。仅计上游产品，按均价 805 美元/吨测算税前净现值 1.32 亿美元（1.89 亿澳元）、内部收益率 19.8%、总资本支出 8,050 万美元。",
+      "embed": "ok",
+      "tags": []
     },
     {
       "id": "2c7311ae4951",
@@ -132,6 +163,24 @@
       "tags": [
         "锂",
         "政策"
+      ]
+    },
+    {
+      "id": "1eabcb9bdfc1",
+      "title": "Halo 获智利 Playa Verde 尾矿铜项目关键许可",
+      "url": "https://www.mining.com/halo-minerals-clears-key-hurdle-at-chile-copper-project",
+      "source": "MINING.COM",
+      "orig_date": "10-24",
+      "orig_date_full": "2026-10-24",
+      "report_date": "2026-10-24",
+      "category": "政策与监管",
+      "is_new": true,
+      "summary": "Halo Minerals（AIM: HALO）取得智利 Playa Verde 铜金尾矿项目关键采矿许可，其子公司 Minera Playa Verde 可自 Chañaral 海滩（含城区段）疏浚含矿物料，智利住建部未提出异议。项目设计年处理约 500 万吨物料、年产可付铜 8,600 吨（阴极铜与精矿），预计年现金流约 5,000 万美元；公司尚未作出最终投资决定。（原题：Halo Minerals clears key hurdle at Chile copper project）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "国际"
       ]
     },
     {
@@ -312,12 +361,62 @@
       "orig_date": "10-23",
       "orig_date_full": "2026-10-23",
       "report_date": "2026-10-24",
-      "category": "行业动态",
+      "category": "国际矿业动态",
       "is_new": true,
       "summary": "海德鲁（Norsk Hydro）三季度调整后 EBITDA 同比增长 51.6% 至 90.9 亿挪威克朗（约 9.743 亿美元），低于分析师平均预期的 95.3 亿挪威克朗。公司同时下调资本支出，并预判四季度铝业务盈利走弱，成本压力与铝价震荡是主要压制因素。",
       "embed": "ok",
       "tags": [
         "铝",
+        "市场"
+      ]
+    },
+    {
+      "id": "f572dde3540f",
+      "title": "林甸资源坎甘昆德稀土矿 12 月产出首批精矿",
+      "url": "https://news.smm.cn/news/104171905",
+      "source": "上海有色网",
+      "orig_date": "10-23",
+      "orig_date_full": "2026-10-23",
+      "report_date": "2026-10-24",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "林甸资源（Lindian Resources）按计划推进 12 月产出首批独居石精矿，目前矿石储备已由 9 月的 2.4 万吨增至 14.9 万吨，并力争 11 月第一周实现场地通电。坎甘昆德设计年产 TREO 品位 55% 的稀土精矿 1.53 万吨，分阶段扩产至年产 12 万吨，第一阶段矿山服务年限预计 45 年。",
+      "embed": "ok",
+      "tags": [
+        "稀土"
+      ]
+    },
+    {
+      "id": "1af17e7bab3f",
+      "title": "Bannerman 批准纳米比亚 Etango 铀矿建设，融资 3.53 亿美元",
+      "url": "https://www.mining.com/bannerman-pulls-trigger-on-353m-uranium-mine",
+      "source": "MINING.COM",
+      "orig_date": "10-24",
+      "orig_date_full": "2026-10-24",
+      "report_date": "2026-10-24",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Bannerman Resources 批准纳米比亚 Etango 铀矿项目建设，建设资金已落实且不含项目债务，首产目标定为 2028 年。Etango 为露天铀矿项目，建设获批标志着项目进入实质性开发阶段。（原题：Bannerman pulls trigger on $353M uranium mine）",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "铀"
+      ]
+    },
+    {
+      "id": "213747f3c162",
+      "title": "Moon River 将 Davidson 钨矿估值提至 8.79 亿美元，钨产量跃升",
+      "url": "https://www.mining.com/moon-river-lifts-davidson-value-to-879m-tungsten-output-jumps",
+      "source": "MINING.COM",
+      "orig_date": "10-24",
+      "orig_date_full": "2026-10-24",
+      "report_date": "2026-10-24",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Moon River 更新加拿大不列颠哥伦比亚省 Davidson 钨矿项目经济评估，项目估值升至 8.79 亿美元、钨产量显著提升；但项目仍处初步评估阶段，尚未形成矿产储量。（原题：Moon River lifts Davidson value to $879M, tungsten output jumps）",
+      "embed": "ok",
+      "tags": [
+        "钨",
         "市场"
       ]
     },
@@ -374,71 +473,6 @@
       "tags": [
         "金",
         "市场"
-      ]
-    },
-    {
-      "id": "f572dde3540f",
-      "title": "林甸资源坎甘昆德稀土矿 12 月产出首批精矿",
-      "url": "https://news.smm.cn/news/104171905",
-      "source": "上海有色网",
-      "orig_date": "10-23",
-      "orig_date_full": "2026-10-23",
-      "report_date": "2026-10-24",
-      "category": "国际矿业动态",
-      "is_new": true,
-      "summary": "林甸资源（Lindian Resources）按计划推进 12 月产出首批独居石精矿，目前矿石储备已由 9 月的 2.4 万吨增至 14.9 万吨，并力争 11 月第一周实现场地通电。坎甘昆德设计年产 TREO 品位 55% 的稀土精矿 1.53 万吨，分阶段扩产至年产 12 万吨，第一阶段矿山服务年限预计 45 年。",
-      "embed": "ok",
-      "tags": [
-        "稀土"
-      ]
-    },
-    {
-      "id": "579769059058",
-      "title": "阿克拉拉彭科稀土项目税后净现值 3.44 亿加元",
-      "url": "https://news.smm.cn/news/104171846",
-      "source": "上海有色网",
-      "orig_date": "10-23",
-      "orig_date_full": "2026-10-23",
-      "report_date": "2026-10-24",
-      "category": "国际矿业动态",
-      "is_new": true,
-      "summary": "阿克拉拉资源（Aclara Resources）智利彭科稀土项目最新初步经济评价显示，税后净现值 3.44 亿加元（约 2.43 亿美元），产前投资 2.44 亿加元（约 1.78 亿美元）。评价采用 8% 折现率（2021 年为 5%），露天采坑可采年限延长 3 年至 17 年，内部收益率升至 26.1%；净现值上升主要因矿石量增 55% 至 3,080 万吨。探明加推定资源量 3,580 万吨、TREO 品位 0.2095%、稀土氧化物量 75,025 吨、增 19%。",
-      "embed": "ok",
-      "tags": [
-        "稀土",
-        "国际"
-      ]
-    },
-    {
-      "id": "9b11c2da6f87",
-      "title": "萨里托甘石墨项目可研：年产 5 万吨，税前净现值 1.32 亿美元",
-      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202610/t20261023_10343559.htm",
-      "source": "全球矿产资源信息系统",
-      "orig_date": "10-23",
-      "orig_date_full": "2026-10-23",
-      "report_date": "2026-10-24",
-      "category": "国际矿业动态",
-      "is_new": true,
-      "summary": "萨里托甘石墨公司（Sarytogan Graphite）公布哈萨克斯坦萨里托甘石墨项目可研结果，项目具备年产 5 万吨石墨精矿潜力：2 万吨三种规格（最大粒径 15 微米）精矿、1 万吨未分级精矿、2 万吨超纯细粉及球形纯化石墨。仅计上游产品，按均价 805 美元/吨测算税前净现值 1.32 亿美元（1.89 亿澳元）、内部收益率 19.8%、总资本支出 8,050 万美元。",
-      "embed": "ok",
-      "tags": []
-    },
-    {
-      "id": "1eabcb9bdfc1",
-      "title": "Halo 获智利 Playa Verde 尾矿铜项目关键许可",
-      "url": "https://www.mining.com/halo-minerals-clears-key-hurdle-at-chile-copper-project",
-      "source": "MINING.COM",
-      "orig_date": "10-24",
-      "orig_date_full": "2026-10-24",
-      "report_date": "2026-10-24",
-      "category": "国际矿业动态",
-      "is_new": true,
-      "summary": "Halo Minerals（AIM: HALO）取得智利 Playa Verde 铜金尾矿项目关键采矿许可，其子公司 Minera Playa Verde 可自 Chañaral 海滩（含城区段）疏浚含矿物料，智利住建部未提出异议。项目设计年处理约 500 万吨物料、年产可付铜 8,600 吨（阴极铜与精矿），预计年现金流约 5,000 万美元；公司尚未作出最终投资决定。（原题：Halo Minerals clears key hurdle at Chile copper project）",
-      "embed": "ok",
-      "tags": [
-        "铜",
-        "金",
-        "国际"
       ]
     },
     {

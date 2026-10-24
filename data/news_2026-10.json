@@ -1,7 +1,7 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-24T08:13:30+08:00",
-  "count": 492,
+  "updated_at": "2026-10-24T08:23:17+08:00",
+  "count": 494,
   "news": [
     {
       "id": "d3fe1532b7ce",
@@ -72,6 +72,27 @@
       "orig_category": "行业动态"
     },
     {
+      "id": "213747f3c162",
+      "title": "Moon River 将 Davidson 钨矿估值提至 8.79 亿美元，钨产量跃升",
+      "url": "https://www.mining.com/moon-river-lifts-davidson-value-to-879m-tungsten-output-jumps",
+      "source": "MINING.COM",
+      "orig_date": "10-24",
+      "orig_date_full": "2026-10-24",
+      "report_date": "2026-10-24",
+      "category": "技术与勘查",
+      "is_new": true,
+      "summary": "Moon River 更新加拿大不列颠哥伦比亚省 Davidson 钨矿项目经济评估，项目估值升至 8.79 亿美元、钨产量显著提升；但项目仍处初步评估阶段，尚未形成矿产储量。（原题：Moon River lifts Davidson value to $879M, tungsten output jumps）",
+      "embed": "ok",
+      "tags": [
+        "钨",
+        "市场"
+      ],
+      "first_seen": "2026-10-24",
+      "last_seen": "2026-10-24",
+      "orig_category": "国际矿业动态",
+      "region": "国际"
+    },
+    {
       "id": "1eabcb9bdfc1",
       "title": "Halo 获智利 Playa Verde 尾矿铜项目关键许可",
       "url": "https://www.mining.com/halo-minerals-clears-key-hurdle-at-chile-copper-project",
@@ -92,6 +113,27 @@
       "last_seen": "2026-10-24",
       "region": "国际",
       "orig_category": "国际矿业动态"
+    },
+    {
+      "id": "1af17e7bab3f",
+      "title": "Bannerman 批准纳米比亚 Etango 铀矿建设，融资 3.53 亿美元",
+      "url": "https://www.mining.com/bannerman-pulls-trigger-on-353m-uranium-mine",
+      "source": "MINING.COM",
+      "orig_date": "10-24",
+      "orig_date_full": "2026-10-24",
+      "report_date": "2026-10-24",
+      "category": "项目与产能",
+      "is_new": true,
+      "summary": "Bannerman Resources 批准纳米比亚 Etango 铀矿项目建设，建设资金已落实且不含项目债务，首产目标定为 2028 年。Etango 为露天铀矿项目，建设获批标志着项目进入实质性开发阶段。（原题：Bannerman pulls trigger on $353M uranium mine）",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "铀"
+      ],
+      "first_seen": "2026-10-24",
+      "last_seen": "2026-10-24",
+      "orig_category": "国际矿业动态",
+      "region": "国际"
     },
     {
       "id": "ff77a8848a6a",
