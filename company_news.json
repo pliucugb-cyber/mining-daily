@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-24",
+ "updated_at": "2026-10-25",
  "companies": [
   {
    "name": "紫金矿业",
@@ -414,7 +414,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -2226,15 +2226,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Grid Metals, Teck Resources team up to explore nickel sulphide project in Manitoba"
-    },
-    {
-     "t": "Teck Resources再次下调铜产量预测",
-     "d": "2024-10-24",
-     "u": "https://www.mining.com/web/teck-resources-cuts-copper-production-forecast-again/",
-     "s": "随着运营的持续增长，智利的Quebrada Blanca (QB)矿在本季度录得创纪录的产量。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Teck Resources cuts copper production forecast again"
     }
    ]
   },
@@ -3152,7 +3143,7 @@
      "t": "淡水河谷表示，成本飙升使10%的铁矿石陷入赤字",
      "d": "2026-10-16",
      "u": "https://www.mining.com/vale-says-soaring-costs-put-10-of-iron-ore-in-the-red/",
-     "s": "淡水河谷（纽约证券交易所代码： VALE ）首席执行官Gustavo Pimenta周五表示，与中东冲突相关的能源和货运成本激增......",
+     "s": "由于中国需求疲软和新供应将价格推至两年低点，不断上涨的燃料和运输费用挤压了生产商。",
      "k": "news",
      "src": "mining",
      "t_en": "Vale says soaring costs put 10% of iron ore in the red"
@@ -3535,6 +3526,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 354
+  "items": 353
  }
 }
