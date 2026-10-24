@@ -1,6 +1,6 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-24T05:37:53+08:00",
+  "updated_at": "2026-10-24T08:13:30+08:00",
   "count": 492,
   "news": [
     {
@@ -21,8 +21,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "市场与价格",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "ac0aaf0ce998",
@@ -44,8 +44,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "并购与投资",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "并购与投资"
     },
     {
       "id": "331678c13edd",
@@ -68,8 +68,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "行业动态",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "1eabcb9bdfc1",
@@ -90,8 +90,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "ff77a8848a6a",
@@ -131,8 +131,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "f0f193a6d13a",
@@ -220,8 +220,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "市场与价格",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "c1acddfd0a8b",
@@ -240,8 +240,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "b62210e08290",
@@ -261,8 +261,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "行业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "行业动态"
     },
     {
       "id": "b5ac04a6bc7d",
@@ -345,8 +345,8 @@
       "tags": [],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "96b1870d8023",
@@ -410,8 +410,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "并购与投资",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "并购与投资"
     },
     {
       "id": "80c6e597ed4c",
@@ -431,8 +431,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "并购与投资",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "73ae457358fe",
@@ -452,8 +452,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "政策与监管",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "政策与监管"
     },
     {
       "id": "6e21fd290c46",
@@ -509,7 +509,7 @@
       "orig_date": "10-23",
       "orig_date_full": "2026-10-23",
       "report_date": "2026-10-24",
-      "category": "国际矿业动态",
+      "category": "市场与价格",
       "is_new": true,
       "summary": "乌干达财政部报告显示，8 月商品出口额由上年同期的 11 亿美元增至 15 亿美元，同比增长 36%，金和其他商品出口增长是主要推力。当月贵金属出口额达 8.89 亿美元、同比增长 68.9%，乌干达已逐步成为地区黄金加工与贸易中心。",
       "embed": "ok",
@@ -518,8 +518,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "599d7523d2f0",
@@ -539,8 +539,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "找矿成果与勘查技术",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "57b225ec0c7c",
@@ -580,8 +580,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "564225fc888c",
@@ -623,8 +623,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "政策与监管",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "政策与监管"
     },
     {
       "id": "488168d25c6c",
@@ -710,8 +710,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "找矿成果与勘查技术",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "2f693e96964a",
@@ -752,8 +752,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "行业动态",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "2c7311ae4951",
@@ -777,8 +777,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "政策与监管",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "政策与监管"
     },
     {
       "id": "2918c982d800",
@@ -798,8 +798,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "市场与价格",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "28e5b57d4cbf",
@@ -820,8 +820,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "行业动态",
-      "region": "国内"
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "1e699fd40d79",
@@ -906,8 +906,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "并购与投资",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "08329961e945",
@@ -928,8 +928,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "政策与监管",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "政策与监管"
     },
     {
       "id": "0032fb8a4639",
@@ -949,8 +949,8 @@
       ],
       "first_seen": "2026-10-24",
       "last_seen": "2026-10-24",
-      "orig_category": "市场与价格",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "fc7a45f0b4f8",
