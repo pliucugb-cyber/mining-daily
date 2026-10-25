@@ -77,3 +77,36 @@ curl -X POST https://<你的站点>.netlify.app/api/qa \
 
 `workers.dev` 域名在本项目所在网络实测 `http_code=000`（不可达），
 而 `*.netlify.app` 实测可达。故改用 Netlify。`worker/` 目录的 CF 版本保留作备选。
+
+
+---
+
+## 安全加固（2026-10-25 · 外部系统审查 A01/A02）
+
+### 代码侧已修（`edge-functions/qa.js`，需重新部署后生效）
+
+| 项 | 旧行为 | 新行为 |
+|---|---|---|
+| origin 白名单 | 两条正则放行**任意** `*.github.io` / `*.netlify.app` 子域 | 精确到 `ALLOWED_ORIGINS` 两个本站 origin + localhost |
+| POST 鉴权 | `isAllowedOrigin` 只用于构造 CORS 头，请求本身不拒绝（curl 不受 CORS 约束） | `/api/qa` 的 POST 先过来源闸门：不合法/缺失 Origin → **403，不读 body、不触达上游** |
+| 请求体 | 零校验：体积/条数/字符/角色均无限制 | 64KB 字节上限（413）、≤30 条消息、单条 ≤4000 字符、总 ≤24000 字符、角色白名单 system/user/assistant（400） |
+| max_tokens / temperature | 客户端直传，可传负数/超大值 | 服务端钳制：tokens 1–4000，temperature 0–2 |
+| 上游超时 | 无，可永久悬挂 | 非流式 30s、流式 90s（`AbortSignal.timeout`） |
+| 兜底透明度 | 上游失败返回 200 + 同构 JSON，前端当 AI 成功渲染并写缓存 | 前端（app.js B06）显式标注「AI 暂不可用，以下为基础检索提示」+ 原因，不进答案缓存 |
+
+守护测试：`node test_qa_proxy.js`（26 断言，vm 沙箱 + mock 上游，零真实额度消耗）。
+
+### ⚠️ 平台侧待办（需 Netlify 账号操作者执行，代码改不动这些）
+
+1. **重新部署**：以上代码修改要 `netlify deploy --prod`（或推送触发自动构建）后才生效。
+   部署后自检：`curl -X POST https://mining-daily-qa.netlify.app/api/qa -H 'Content-Type: application/json' -d '{"question":"x"}'`
+   应返回 **403 origin not allowed**（无 Origin 头）；带合法 Origin 才放行。
+2. **确认 Key 只在环境变量里**：Netlify 后台 Site settings → Environment variables → `DEEPSEEK_API_KEY`。
+   仓库与页面任何位置不得出现 Key（`/api/health` 只回 `has_key` 布尔）。
+3. **预算/速率防护**（Netlify 免费版无内置限流，代码侧已挡异常来源与超限体，但挡不住
+   分布式的合法外观请求）：
+   - DeepSeek 开放平台设置**月度预算 + 用量告警**（最有效的一道）；
+   - 如后续用量增长，考虑在 Netlify 前加 Cloudflare（Rate Limiting 规则）或迁移到带配额的后端。
+4. **不要做的事**：不要把共享密钥写进前端（公开静态页等于公开）；不要把 CORS 当鉴权
+   （非浏览器客户端不受其约束——这正是本次加固的根因）。
+

@@ -76,6 +76,7 @@ CORE = [
     'test_card_keytag.js',
     'test_sw_cache_update.js',
     'test_data_quality_gate.js',   # 2026-10-25 外部审查整改批（A03/A04/A06/A07/C01/D03）
+    'test_qa_proxy.js',           # 2026-10-25 A01/A02 Netlify AI 代理加固（mock 上游，零真实额度）
     'test_pwa_install_behavior.js',
     'test_rights_register.js',
     'test_data_integrity.js',

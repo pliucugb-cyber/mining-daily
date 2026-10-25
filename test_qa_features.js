@@ -51,6 +51,38 @@ setTimeout(() => {
   check('qaFinishAnswer 已定义', typeof window.qaFinishAnswer === 'function');
   check('qaStreamPump 已定义', typeof window.qaStreamPump === 'function');
   check('qaApplyJson 已定义', typeof window.qaApplyJson === 'function');
+
+  console.log('\n===== B06：代理兜底显式识别（2026-10-25）=====');
+  // qa.js 上游失败返回 HTTP200 + 同构 JSON + _fallback/_warning；旧实现把它当
+  // 正常 AI 回答渲染并写缓存。现在必须显式标注、ok=false（不进缓存/不出重试按钮）。
+  (function(){
+    var doc=window.document;
+    function mkMsg(){
+      var m=doc.createElement('div');m.className='qa-msg';
+      m.innerHTML='<div class=qa-msg-meta></div>';
+      var b=doc.createElement('div');m.appendChild(b);doc.body.appendChild(m);
+      return {msg:m,bubble:b};
+    }
+    var c1=mkMsg(),raw1='';
+    try{
+      window.qaApplyJson({ok:true,status:200,d:{
+        choices:[{message:{role:'assistant',content:'关键词兜底答案：铜是有色金属。'}}],
+        _fallback:true,_warning:'DEEPSEEK_API_KEY 未配置'}},c1.bubble,c1.msg,'铜的用途',[],null);
+      raw1=c1.msg.dataset.raw||'';
+    }catch(e){raw1='ERR:'+e.message;}
+    check('代理兜底（_fallback）文案显式标注「AI 暂不可用」',raw1.indexOf('AI 暂不可用')>=0,raw1.slice(0,44));
+    check('兜底文案附 _warning 原因',raw1.indexOf('DEEPSEEK_API_KEY 未配置')>=0);
+    var meta1=c1.msg.querySelector('.qa-msg-meta');
+    check('兜底 meta 不显示为 DeepSeek 成功',!!meta1&&meta1.textContent.indexOf('DeepSeek ·')<0,meta1?meta1.textContent.slice(0,40):'null');
+    var c2=mkMsg(),raw2='';
+    try{
+      window.qaApplyJson({ok:true,status:200,d:{choices:[{message:{role:'assistant',content:'真实 AI 回答内容'}}]}},c2.bubble,c2.msg,'铜的用途',[],null);
+      raw2=c2.msg.dataset.raw||'';
+    }catch(e){raw2='ERR:'+e.message;}
+    check('正常 AI 回复不受影响（无兜底标注）',raw2==='真实 AI 回答内容',raw2.slice(0,30));
+    var meta2=c2.msg.querySelector('.qa-msg-meta');
+    check('正常回复 meta 仍显示 DeepSeek 通路',!!meta2&&meta2.textContent.indexOf('DeepSeek ·')>=0);
+  })();
   // 2026-09-10 性能优化：应用逻辑已外置为 app.js(defer)，qaDeepseekCall/qaTryStreamOrJson 现位于 app.js
   const src = fs.readFileSync(path.join(__dirname, 'app.js'), 'utf-8');
   check('qaDeepseekCall 已切换为流式入口', /qaDeepseekCall[\s\S]{0,400}qaTryStreamOrJson/.test(src) || src.indexOf('qaTryStreamOrJson') >= 0);

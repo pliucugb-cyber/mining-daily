@@ -19,14 +19,89 @@
  * 部署：见 ../README.md
  */
 
-// ── 允许的跨域来源（防 Key 被任意第三方站点盗用额度）──
+// ── 允许的跨域来源（2026-10-25 A01：精确到本站，不再放行任意子域）──
+// 旧实现两条正则放行**任意** GitHub 用户 Pages 与**任意** Netlify 子域——
+// 攻击者自建一个 *.github.io 页面即可持本站 AI 额度；且 isAllowedOrigin 此前
+// 只用于构造 CORS 响应头，POST 本身不拒绝，而非浏览器客户端（curl/脚本）
+// 根本不受 CORS 约束。CORS 不是鉴权：① 白名单精确到站点 ② 消耗额度的
+// POST 加来源闸门 ③ 无 Origin 头一律拒绝（浏览器跨站/同源 POST 必带 Origin）。
+const ALLOWED_ORIGINS = [
+  'https://pliucugb-cyber.github.io',      // GitHub Pages 主站（本站唯一正式入口）
+  'https://mining-daily-qa.netlify.app',   // Netlify 边缘函数自身（前端 QA_API_BASE 指向它）
+  // 若日后绑定自定义域名，在此追加完整 origin（不要再用通配子域）
+];
 function isAllowedOrigin(origin) {
   if (!origin) return false;
-  if (/^https:\/\/[\w.-]+\.github\.io$/.test(origin)) return true;        // GitHub Pages
-  if (/^https:\/\/[\w.-]+\.netlify\.app$/.test(origin)) return true;      // Netlify 自身
+  if (ALLOWED_ORIGINS.indexOf(origin) >= 0) return true;
   if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true; // 本地调试
-  // 若日后绑定自定义域名，在此追加
   return false;
+}
+
+// 来源闸门：不合法/缺失 Origin 的请求直接 403，不触达上游、不消耗额度。
+function originGate(request) {
+  const origin = request.headers.get('Origin');
+  if (!isAllowedOrigin(origin)) {
+    return new Response(JSON.stringify({ error: 'origin not allowed' }),
+      { status: 403, headers: corsHeaders(origin) });
+  }
+  return null;
+}
+
+// ── 请求体资源上限与参数约束（2026-10-25 A02）──
+// 旧实现对 body 零校验：体积/条数/字符/角色均无限制，max_tokens/temperature
+// 客户端直传（可传负数或超大值），上游 fetch 无超时。
+const MAX_BODY_BYTES = 64 * 1024;    // 请求体上限 64KB（正常提问远小于此）
+const MAX_MESSAGES = 30;             // 对话条数上限
+const MAX_MSG_CHARS = 4000;          // 单条消息字符上限
+const MAX_TOTAL_CHARS = 24000;       // 全部消息字符总上限
+const ALLOWED_ROLES = ['system', 'user', 'assistant'];
+const MAX_TOKENS_CAP = 4000;         // max_tokens 服务端钳制上限
+const MIN_TOKENS_CAP = 1;
+const TEMP_MIN = 0, TEMP_MAX = 2;    // temperature 服务端钳制范围
+const UPSTREAM_TIMEOUT_MS = 30000;   // 非流式上游超时
+const UPSTREAM_STREAM_TIMEOUT_MS = 90000;  // 流式上游超时（SSE 长回答需放宽，仍防永久悬挂）
+
+function validateBody(body, rawText) {
+  /** 返回 null 表示通过，否则返回错误原因字符串（调用方转 400/413）。 */
+  const bytes = new TextEncoder().encode(rawText).length;
+  if (bytes > MAX_BODY_BYTES) {
+    return '请求体过大（' + bytes + ' 字节 > ' + MAX_BODY_BYTES + '）';
+  }
+  const msgs = Array.isArray(body.messages) ? body.messages : null;
+  const q = String(body.question || '').trim();
+  if (!msgs && !q) return '缺少 messages 或 question 字段';
+  if (msgs) {
+    if (msgs.length > MAX_MESSAGES) {
+      return '消息条数超限（' + msgs.length + ' > ' + MAX_MESSAGES + '）';
+    }
+    let total = 0;
+    for (const m of msgs) {
+      if (!m || typeof m.content !== 'string') return '消息格式非法（缺少字符串 content）';
+      if (ALLOWED_ROLES.indexOf(m.role) < 0) {
+        return '非法消息角色：' + String(m.role).slice(0, 20);
+      }
+      if (m.content.length > MAX_MSG_CHARS) {
+        return '单条消息过长（' + m.content.length + ' > ' + MAX_MSG_CHARS + ' 字符）';
+      }
+      total += m.content.length;
+    }
+    if (total > MAX_TOTAL_CHARS) {
+      return '消息总长超限（' + total + ' > ' + MAX_TOTAL_CHARS + ' 字符）';
+    }
+  }
+  if (q && q.length > MAX_MSG_CHARS) return '问题过长';
+  return null;
+}
+
+function clampParams(body) {
+  /** max_tokens/temperature 钳制到服务端合法区间（不因越界报错，夹取即可）。 */
+  let mt = parseInt(body.max_tokens, 10);
+  if (!isFinite(mt)) mt = 1000;
+  mt = Math.min(Math.max(mt, MIN_TOKENS_CAP), MAX_TOKENS_CAP);
+  let tp = parseFloat(body.temperature);
+  if (!isFinite(tp)) tp = 0.3;
+  tp = Math.min(Math.max(tp, TEMP_MIN), TEMP_MAX);
+  return { max_tokens: mt, temperature: tp };
 }
 
 function corsHeaders(origin) {
@@ -93,6 +168,7 @@ async function callDeepSeek(apiKey, payload) {
       'Authorization': 'Bearer ' + apiKey,
     },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),   // 2026-10-25 A02：上游超时可控退出
   });
 
   const data = await resp.json().catch(() => ({}));
@@ -120,6 +196,9 @@ async function callDeepSeekStream(apiKey, payload) {
       'Accept': 'text/event-stream',
     },
     body: JSON.stringify(body),
+    // 2026-10-25 A02：流式超时放宽到 90s——SSE 是长连接，超时按整个流计时，
+    // 取「覆盖绝大多数完整回答、又能防永久悬挂」的折中；前端另有 35s AbortController。
+    signal: AbortSignal.timeout(UPSTREAM_STREAM_TIMEOUT_MS),
   });
   return resp;
 }
@@ -148,12 +227,32 @@ export default async (request, context) => {
         { status: 405, headers: corsHeaders(origin) });
     }
 
+    // 2026-10-25 A01：来源闸门先于一切解析（不合法来源不读 body、不触达上游）
+    const gate = originGate(request);
+    if (gate) return gate;
+
+    // 2026-10-25 A02：读原始文本做字节级体积校验，再解析 JSON
+    let rawText = '';
+    try {
+      rawText = await request.text();
+    } catch (e) {
+      return new Response(JSON.stringify({ error: '无法读取请求体' }),
+        { status: 400, headers: corsHeaders(origin) });
+    }
     let body = {};
     try {
-      body = await request.json();
+      body = JSON.parse(rawText);
     } catch (e) {
-      body = {};
+      return new Response(JSON.stringify({ error: 'JSON 解析失败' }),
+        { status: 400, headers: corsHeaders(origin) });
     }
+    const vErr = validateBody(body, rawText);
+    if (vErr) {
+      const tooBig = vErr.indexOf('过大') >= 0;
+      return new Response(JSON.stringify({ error: vErr }),
+        { status: tooBig ? 413 : 400, headers: corsHeaders(origin) });
+    }
+    const safeParams = clampParams(body);
 
     // 取出「用户问题」用于兜底文案（透传模式下从最后一条 user 消息里取）
     let question = String(body.question || '').trim();
@@ -184,8 +283,8 @@ export default async (request, context) => {
           // Phase B：流式转发 DeepSeek SSE，前端边收边渲染
           const dsResp = await callDeepSeekStream(apiKey, {
             messages: msgs,
-            max_tokens: body.max_tokens || 1000,
-            temperature: body.temperature == null ? 0.3 : body.temperature,
+            max_tokens: safeParams.max_tokens,
+            temperature: safeParams.temperature,
           });
           if (!dsResp.ok) {
             const d = await dsResp.json().catch(() => ({}));
@@ -203,8 +302,8 @@ export default async (request, context) => {
         }
         data = await callDeepSeek(apiKey, {
           messages: msgs,
-          max_tokens: body.max_tokens || 1000,
-          temperature: body.temperature == null ? 0.3 : body.temperature,
+          max_tokens: safeParams.max_tokens,
+          temperature: safeParams.temperature,
         });
       } else {
         // ② 简化模式：question + context
@@ -224,8 +323,8 @@ export default async (request, context) => {
             { role: 'system', content: '你是资深矿业行业分析师。回答简洁专业、用中文，不编造数据。' },
             { role: 'user', content: user },
           ],
-          max_tokens: body.max_tokens || 800,
-          temperature: body.temperature == null ? 0.3 : body.temperature,
+          max_tokens: safeParams.max_tokens,
+          temperature: safeParams.temperature,
         });
       }
       return new Response(JSON.stringify(data), { status: 200, headers: corsHeaders(origin) });
