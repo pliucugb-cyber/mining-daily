@@ -211,13 +211,16 @@ setTimeout(() => {
 
   console.log('\n===== ⑨ 会议 tab + 会议会展区块 =====');
   const mctabs = doc.querySelectorAll('#mdTop .mctab');
-  check('顶部分类 Tab 共 5 个（含会议/矿业公司）', mctabs.length === 5, '实际 ' + mctabs.length);
+  check('顶部分类 Tab 共 6 个（含会议/事件/矿业公司）', mctabs.length === 6, '实际 ' + mctabs.length);
   let hasMeeting = false;
   mctabs.forEach(t => { if (t.getAttribute('data-cat') === 'meeting') hasMeeting = true; });
   check('存在「会议」分类 tab', hasMeeting);
   let hasCompany = false;
   mctabs.forEach(t => { if (t.getAttribute('data-cat') === 'company') hasCompany = true; });
   check('存在「矿业公司」分类 tab', hasCompany);
+  let hasEvent = false;
+  mctabs.forEach(t => { if (t.getAttribute('data-cat') === 'event') hasEvent = true; });
+  check('存在「事件」分类 tab（2026-10-25 事件跟踪模块）', hasEvent);
   check('会议会展区块已注入 DOM', !!doc.getElementById('meetingSection'));
   const rs = doc.getElementById('rightsSection');
   const ms = doc.getElementById('meetingSection');
@@ -267,7 +270,7 @@ setTimeout(() => {
   const homeLabel = homeTab ? ((homeTab.querySelector('span:last-child') || {}).textContent || '') : '';
   check('底部首页 tab 标签为「首页」（原「推荐」已改名，避免与顶部分类重复）', homeLabel === '首页', '实际「' + homeLabel + '」');
   const topCats = doc.querySelectorAll('#mdTop .mctab');
-  check('顶部分类栏仍有 5 个分类（推荐/热榜/往期/会议/矿业公司）', topCats.length === 5, '实际 ' + topCats.length);
+  check('顶部分类栏仍有 6 个分类（推荐/热榜/往期/会议/事件/矿业公司）', topCats.length === 6, '实际 ' + topCats.length);
   function clickGo(go){ const b = doc.querySelector('#mobileTabBar .mtab[data-go="' + go + '"]'); if (b) b.dispatchEvent(new window.Event('click', { bubbles: true })); }
   check('初始（首页）顶部分类栏可见（无 md-hide-catbar）', !doc.body.classList.contains('md-hide-catbar'));
   clickGo('price');

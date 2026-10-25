@@ -122,7 +122,12 @@ function makeServer(stripSections, port) {
       res.end('404');
       return;
     }
-    res.writeHead(200, { 'Content-Type': MIME[path.extname(name)] || 'application/octet-stream' });
+    // 2026-10-25 修既有 flake：每个响应都带 Connection: close。
+    // 页面桥接 fetch 用 undici，会复用 keep-alive 连接；而简报 fetch 发生在 app.js
+    // 执行完（实测 8-10s）之后，远超本服务器默认 keep-alive 空闲超时 → undici 复用
+    // 已被服务器关掉的连接 → fetch reject → ⑥ 组该用例 6 条断言连坐（干净树 3 抽 1 败，
+    // 138.9s，与产品代码无关）。关掉 keep-alive 后每次请求都是新连接，竞态消失。
+    res.writeHead(200, { 'Content-Type': MIME[path.extname(name)] || 'application/octet-stream', 'Connection': 'close' });
     fs.createReadStream(p).pipe(res);
   });
 }

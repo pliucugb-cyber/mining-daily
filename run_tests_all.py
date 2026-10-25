@@ -71,6 +71,7 @@ CORE = [
     'test_sw_offline_fingerprint_20261014.js',
     'test_expo_recency_20261013.js',
     'test_conference_schedule.js',
+    'test_event_track.js',
     'test_site_hero_toggle.js',
     'test_card_keytag.js',
     'test_sw_cache_update.js',

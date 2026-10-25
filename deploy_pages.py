@@ -62,6 +62,7 @@ REQUIRED = [
     'app.js',
     'news-data.js',
     'conference-data.js',   # 会议日程数据源（2026-10-21 新增）
+    'event-data.js',        # 事件跟踪数据源（2026-10-25 新增）
     'lme-data.js',
     'price-history.js',
     'sw.js',
@@ -125,7 +126,7 @@ def run(cmd, cwd=None, check=True):
 # 注意：只改工作副本 tmp/ghpages 里的 index.html，**不动源文件**——
 #   本地开发与 jsdom 测试仍用无后缀 URL（各测试用 `src="app.js"[^>]*` 匹配，两者都兼容）。
 #   sw.js 的注册 URL 仍必须是 './sw.js'，绝不可加指纹（加了会导致 SW 反复重装）。
-BUST_FILES = ['app.js', 'news-data.js', 'conference-data.js', 'lme-data.js', 'price-history.js']
+BUST_FILES = ['app.js', 'news-data.js', 'conference-data.js', 'event-data.js', 'lme-data.js', 'price-history.js']
 
 
 def bust_asset_versions():
@@ -211,6 +212,37 @@ def validate_sw_js(required_version=None):
         log('[deploy_pages] ⚠️ 未找到 node，跳过 sw.js 语法校验（仅校验 CACHE_NAME 形状）')
     log('[deploy_pages] sw.js 校验通过（CACHE_NAME=%s）' % m.group(1))
     return m.group(1)
+
+
+def validate_data_js():
+    """对部署清单里所有 *-data.js 做 node --check 语法校验；不合格抛 RuntimeError（拒绝部署）。
+
+    2026-10-21 事故根治点：conference-data.js 曾被 render_js 拼出非法 JS（条目间漏逗号）
+    → 线上 <script> 解析失败 → window.CONFERENCE_DATA 未定义 → 卡片整块静默空白、
+    页面不报错。数据文件是生成物、日常没人去读它，只有部署闸门能在上线前拦住。
+    test_event_track.js D11 用 vm 求值守护的是 event-data.js 单个文件；
+    这里覆盖全清单，且拦在部署路径上（sw.js 同款 fail-fast）。
+    """
+    node = _node_exe()
+    if not node:
+        log('[deploy_pages] ⚠️ 未找到 node，跳过 *-data.js 语法校验')
+        return
+    targets = [f for f in REQUIRED if f.endswith('-data.js')]
+    if not targets:
+        return
+    for f in targets:
+        p = os.path.join(ROOT, f)
+        if not os.path.isfile(p):
+            continue  # 缺文件由 REQUIRED 检查负责，这里只查语法
+        r = subprocess.run([node, '--check', p],
+                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if r.returncode != 0:
+            raise RuntimeError(
+                '%s 语法校验失败（node --check）：\n%s'
+                '数据文件是生成物，语法错误会让前端 window.XXX_DATA 未定义、'
+                '对应卡片静默空白（页面不报错）。请先修复再部署。'
+                % (f, r.stdout.decode('utf-8', errors='replace')))
+        log('[deploy_pages] %s 语法校验通过' % f)
 
 
 def sync_sw_cache_name():
@@ -333,6 +365,9 @@ def main():
     if missing:
         log('[deploy_pages] 缺少必需文件，已终止：%s' % ', '.join(missing))
         return 2
+
+    # 1.5) *-data.js 语法闸门：生成物语法坏 → 前端静默空白，上线前必须拦住
+    validate_data_js()
 
     # 2) 准备工作副本
     os.makedirs(WORK, exist_ok=True)

@@ -1017,6 +1017,7 @@ body[data-filter-mode="fav"] #favview-bar,body[data-filter-mode="history"] #favv
   body[data-md-cat="rights"]:not([data-filter-mode]) #rightsSection{display:block!important}
   body[data-md-cat="archive"]:not([data-filter-mode]) #archiveSection{display:block!important}
   body[data-md-cat="meeting"]:not([data-filter-mode]) #meetingSection{display:block!important}
+body[data-md-cat="event"]:not([data-filter-mode]) #eventSection{display:block!important}
   /* ③ 页脚仅「推荐」下显示；其余分类下隐藏数据来源+版权 */
   body[data-md-cat]:not([data-md-cat="tuijian"]):not([data-filter-mode]) .footer{display:none!important}
   /* ④ 往期 tab 下隐藏与推荐追更窗口重叠的条目（按日期硬切分） */
@@ -1511,6 +1512,44 @@ body.dark .expo-sub-head{color:#8fa3b5;border-top-color:var(--line-1)}
 .expo-sub-head-in{margin:var(--s2) 0 0;padding-top:var(--s2);border-top:1px dashed var(--line-1)}
 body.dark .meeting-conf{background:#141f2b;border-color:var(--line-1)}
 body.dark .mc-main a{color:var(--ink-700)}
+
+/* 2026-10-25 事件跟踪卡（event-data.js 驱动）：长生命周期叙事时间线，无 14 天闸门 */
+.event-track{margin-top:var(--s3);border:1px solid var(--line-1);border-radius:var(--r-lg);background:var(--surface);padding:var(--s3)}
+.event-track-head{font-size:var(--fs-body);font-weight:700;color:var(--ink-900);display:flex;align-items:center;gap:6px;line-height:1.3}
+.event-track-head .et-count{margin-left:auto;font-size:var(--fs-nano);color:var(--ink-300);font-weight:500}
+.event-track-list{list-style:none;margin:var(--s2) 0 0;padding:0}
+.et-item{padding:var(--s2) 0;border-bottom:1px solid var(--line-1)}
+.et-item:last-child{border-bottom:none}
+.et-top{display:flex;align-items:flex-start;gap:6px}
+.et-dot{flex:0 0 auto;width:8px;height:8px;border-radius:50%;margin-top:5px}
+.et-dot.ongoing{background:#1f9d8b}
+.et-dot.watch{background:#d99100}
+.et-dot.done{background:#2e9e4f}
+.et-dot.stop{background:#9aa6b2}
+.et-title{flex:1 1 auto;min-width:0;font-size:var(--fs-body);font-weight:600;color:var(--ink-900);line-height:1.35;text-decoration:none}
+.et-cat{flex:0 0 auto;font-size:var(--fs-nano);color:var(--ink-300);border:1px solid var(--line-2);border-radius:3px;padding:0 4px;margin-top:2px;white-space:nowrap}
+.et-updated{font-size:var(--fs-nano);color:var(--ink-300);margin:3px 0 0 14px}
+.et-summary{font-size:var(--fs-nano);color:var(--ink-300);line-height:1.45;margin:3px 0 0 14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.et-tl{list-style:none;margin:var(--s2) 0 0 14px;border-left:2px solid var(--line-1);padding-left:var(--s3)}
+.et-tl li{position:relative;padding:0 0 var(--s2) 0;font-size:var(--fs-nano);line-height:1.45;color:var(--ink-300)}
+.et-tl li::before{content:'';position:absolute;left:calc(-1 * var(--s3) - 4px);top:5px;width:7px;height:7px;border-radius:50%;background:var(--line-2)}
+.et-tl-date{color:var(--ink-900);font-weight:600;font-variant-numeric:tabular-nums}
+.et-tl-detail{margin-top:1px;opacity:.92}
+.et-tl-news{margin-top:2px}
+.et-tl-news a{color:var(--brand);text-decoration:none}
+.et-tl-news a:hover{text-decoration:underline}
+.et-tl-src{margin-top:1px;opacity:.8}
+.et-more{margin:var(--s1) 0 0 14px}
+.et-more-btn{background:none;border:none;color:#b45009;font-size:var(--fs-nano);cursor:pointer;padding:2px 6px}
+.et-more-btn:hover{text-decoration:underline}
+.event-track-foot{margin-top:var(--s2);font-size:var(--fs-nano);color:var(--ink-300);opacity:.85}
+body.dark .event-track{background:#141f2b}
+body.dark .et-title{color:var(--ink-700)}
+body.dark .et-dot.ongoing{background:#2bbba6}
+body.dark .et-dot.watch{background:#e0a26a}
+body.dark .et-dot.done{background:#46b966}
+body.dark .et-dot.stop{background:#7e8a96}
+body.dark .et-more-btn{color:#e0a26a}
 /* ==================== 2026-09-06 晚：日报 PDF 导出打印样式 ==================== */
 @media print{
   html,body{background:var(--surface)!important}
@@ -1954,6 +1993,7 @@ body.dark #mdOffline{background:#2a1a10;color:#fdba74;border-bottom-color:#4a2e1
 /* 2026-09-10 移动端「从各维度优化」：chip 折叠 / 底部 SVG 导航 / 顶部搜索 / AI 浮动 */
 /* 会议会展区块：仅手机顶部分类「会议」tab 显示，桌面始终隐藏（数据由 app.js 运行时注入，避开生成区） */
 #meetingSection{display:none}
+#eventSection{display:none}
 /* P0-1：移动端 chip 强制单行横滑（覆盖 L1250 flex-wrap:wrap，本块源码顺序更靠后） */
 @media(max-width:768px){
   /* P0-2：14 个 chip 折叠进「筛选 ▾」，默认隐藏，展开后单行横滑 */
@@ -3213,6 +3253,7 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
   </ol>
 </div>
 <div class="expo-mini" id="expoMini" style="display:none"><div class="expo-mini-head">🎪 会议日程</div><ul class="expo-mini-list expo-conf-list" id="expoConfList"></ul><div class="expo-conf-foot" id="expoConfFoot"></div><div class="expo-sub-head" id="expoNewsHead" hidden>会议资讯 · 已召开报道</div><ul class="expo-mini-list" id="expoMiniList"></ul></div>
+<div class="event-track" id="eventTrack" style="display:none"><div class="event-track-head">🔭 事件跟踪<span class="et-count" id="eventTrackCount"></span></div><ul class="event-track-list" id="eventTrackList"></ul><div class="event-track-foot" id="eventTrackFoot"></div></div>
 </aside>
 </div>
 <!-- 移动端 PWA 安装浮条 -->
@@ -3241,6 +3282,7 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
 <!-- 全库新闻数据（供问答检索条使用；文件缺失时自动降级为页面内检索，不影响日报本身） -->
 <script src="news-data.js" defer></script>
 <script src="conference-data.js" defer></script>
+<script src="event-data.js" defer></script>
 <script src="lme-data.js" defer></script>
 <script src="price-history.js" defer></script>
 <script src="app.js" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>

@@ -2513,9 +2513,9 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 
 | 命令 | 期望 | 覆盖 |
 |---|---|---|
-| `node test_brief_layers.js` | **91** | 简报分层渲染（jsdom；含裁剪态持久化 §40） |
+| `node test_brief_layers.js` | **91** | 简报分层渲染（jsdom；含裁剪态持久化 §40）。**2026-10-25 修既有 flake**：测试桥接用 undici fetch 连本地 Node http 服务器，简报 fetch 发生在 app.js 执行完（实测 8-10s）之后，远超服务器 keep-alive 空闲超时 → undici 复用已被关掉的连接 → fetch reject → ⑥ 组该用例 6 条断言连坐（**干净树 3 抽 1 败、138.9s，与产品代码无关**）。修法＝`makeServer` 每个响应带 `Connection: close`，每次请求都用新连接；修后 3 连过（67-75s，略慢于复用连接）。 |
 | `node test_smoke_0908.js` | **104** | 全站冒烟（含矿权双视图 8 + 列表排序 9；2026-09-13 价格区新增视图切换器 +2；2026-09-14 修 ⑩ 取样口径只累加「N条新增」子类，-1；**2026-09-14 新增「百度统计 ID 与后台逐字一致」+1**；**2026-09-25 新增 ⑬ 点击分区 +18（78→96）**；**2026-09-26 新增 ⑭ 顶栏配色契约 +6（96→102）**；**同日补 ⑭ 垂直居中 +2（102→104）**；**2026-09-25 §42.27 公司 P1/P2：`test_company_section.js` 116→135**） |
-| `node test_mobile_ux_batch.js` | **226**（2026-10-10 实测；原记 222） | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13）；**2026-09-24 注入按钮形态修复 +6（208→215）**；**2026-09-24 展开全文+已读弱化 +7（215→222）** |
+| `node test_mobile_ux_batch.js` | **226**（2026-10-25 实测；原记 222） | AI 搜 ⑮52 + ⑯22、⑧「我的」独立页 16 + ⑧b 清空 4、⑰六条增强 6、⑱沉浸式 6、输入区调节柄 + 语音条已删 4（2026-09-13）；**2026-09-24 注入按钮形态修复 +6（208→215）**；**2026-09-24 展开全文+已读弱化 +7（215→222）**；**2026-10-25 事件跟踪模块新增「事件」分类 tab，顶部分类栏 5 → 6 个（⑨/⑪ 两处计数断言同步更新，并补「事件」tab 存在性断言）** |
 | `node test_qa_features.js` | **61** | AI 搜核心函数 / 流式接线 / 语音（含「音量条已删、调节柄已换」） |
 | `node test_fav_history_aggregate.js` | **37** | 收藏·浏览记录聚合 + 左侧目录 `#favToc`（锚点数 == 时间分组数） |
 | `node test_price_unit_dedup.js` | **17** | 价格区单位去重：同单位隐藏 8+6、异单位（元/克、元/千克）保留、CSV 仍读得到单位（§42.13） |
@@ -3437,3 +3437,46 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **10-22 UI 重排**（commit `e9b04d7`）：条目两层结构——顶层 `.expo-conf-top`（日期+地点｜倒计时右对齐），标题独占 `.expo-conf-main`（line-clamp:2），标签与主办合并 `.expo-conf-meta`，备注弱化 1 行；日期列由 54px 定宽改 auto+nowrap（修「10.27-29」折行）；移动端 `.mc-when` 66px+nowrap。默认限量 **5 条有日期 + 3 条日期待定**。
 - **10-23「会议资讯」轻标题**：新闻会展仅 1-2 条时（14 天闸门后常见）给 `#expoNewsHead` 挂 `expo-news-thin`（去虚线上边框与上间距，降为轻量小标题）；≥3 条恢复分段感。**不整块隐藏**——桌面右栏是这些条目唯一可见面（`#expoVault` 仅可搜索），内容不能丢。逻辑在 `app.js` expo IIFE 的 `init()` 内（`classList.toggle('expo-news-thin', recent.length<=2)`）。
 - **10-23 hero「关于本站」**（commit 见 git log）：按钮由段外独立描边 pill **并入定位句末做文字链**（虚线 underline）；并修掉自 2026-10-08（`fb05b94`）起就存在的**空操作 bug**——原内联脚本 `var o=!d.hasAttribute('hidden'); if(o){保持展开}else{保持收起}` 逻辑写反，点击永远重新确认当前状态（线上实测 hidden 恒 true）。守护：`test_site_hero_toggle.js` B 组。
+
+---
+
+### §42.49 事件跟踪模块：右栏「事件跟踪」+ 移动端「事件」tab（2026-10-25）
+
+**① 问题与决策**
+- ChatGPT 站审「最建议增加事件跟踪」：**散落进每日归档、14 天后即下线的「同一件事的连续进展」无法长期追踪**（如美国铜关税博弈横跨 9-10 → 10-24 共 4 条新闻，分散在 4 天的日报里）。
+- 决策：**复刻「会议日程」范式**（§42.48）——独立数据源 + 生成物 JS + 右栏卡片 IIFE + 部署/测试接入，零改造平移。方案文档 `docs/event-track-plan.md`（含数据模型/集成点/5 阶段实施/6 条红线）。
+
+**② 数据流与维护**
+- 唯一数据源＝`data/events.json`（`manual` 已采纳上线 + `review` 待审核候选）；`event-data.js`（`window.EVENT_DATA`）是**生成物，勿直接改**；生成器 `fetch_events.py`。
+- `python fetch_events.py`（等同 `--export-only`）重新生成；`--suggest` 扫新闻库产候选进 review 区；`--suggest --dry-run` 只算不写（测试/预览用）。
+- **人工区永不覆盖/删除**（与会议 manual 同规矩）。
+- 字段：`id / title / summary / category / status / priority / started / entities / keywords / timeline[]`；timeline 节点＝`date / title / detail / news[] / source / milestone`。
+
+**③ ⚠️ 关联新闻主键是 URL 不是 id（2026-10-25 关键设计修正，勿改回 id）**
+- 方案原设计「时间线只存新闻 id、渲染时现查」，**落地前发现走不通**：`news-data.js` 是 slim schema（`d/t/s/u/g/c/m/n`），**没有 id 字段**；id 只存在于全库 `data/news_YYYY-MM.json`（`make_id` = `md5(url)[:12]`）。按 id 现查会 **100% 落空 → 卡片静默无链接**。
+- 改为**按 URL 现查**（`newsByUrl` 匹配 `r.u`）：url 才是前端唯一可现查的稳定主键（id 只是它的派生）。
+- 守护：`test_event_track.js` **D8/D9** —— 每个 URL 必须真实存在于新闻库，且 `md5(url)[:12]` 与库条目 id 一致。**这条护栏当场抓出一个臆造**：写种子时我把公示编号「赣自然探转公示〔2026〕60号」误读成「公示期 60 日」并写进 detail——回原文核对后删除。**种子事实必须逐条回到新闻摘要，不许凭印象写。**
+
+**④ 与会议日程的本质差异（勿改坏）**
+- **无 14 天闸门**：事件是长生命周期叙事，active（进行中/观察中）按 started 倒序常驻，已达成/已终止只降级到后面，**不因过期下线**（守护 A17：2026-01-05 的旧事件仍渲染）。
+- **时间线默认只显示最新 1 节点**，其余 `hidden` + 「展开时间线 ▾」按钮（右栏卡片不能无限长）；展开/收起**只影响自己那条**（A14）。单节点事件不出按钮（A12）。
+- **状态色点**：进行中 teal `#1f9d8b` / 观察中 amber `#d99100` / 已达成 green `#2e9e4f` / 已终止 grey `#9aa6b2`，亮暗各一套（`body.dark` 覆盖）。
+- 计数徽标口径＝**active 件数（进行中+观察中）**，不是总件数（A5）。
+
+**⑤ 自动建议的「强命中资格」（2026-10-25 踩坑，最重要的一条红线）**
+- 首版 `--suggest`「关键词命中即产候选」→ **46 条节点建议几乎全是误配**：仅凭「探矿权」把辽宁闹沟里金铜矿转让公示挂到江西安远铂矿事件上；仅凭「伦铜」「COMEX」把价格快讯挂到铜关税事件；新铝时代事件关键词含泛词「收购」，**一口气误挂 34 条并购新闻**。与站审点名的「分类误标」同根同源。
+- 修正：`GENERIC_TOKENS` 泛词表（探矿权/采矿权/矿业权/转让/出让/挂牌/成交/收购/拟收购/增资/并购/股权/关税/条款/伦铜/沪铜/comex/lme/铜价/铝价/铜/铝/镍/锡/锌/铅/金/银/稀土/锂/煤/铁矿/矿山/矿业/公司/集团/公告/公示/通知/亿元/万吨/资源量/储量/花旗/高盛/渣打/摩根/惠誉/瑞银/德银/美银/预测/展望/目标价/评级/看多/看空/**白宫**）——**只参与排序打分，永不作为命中资格**；资格一律看**强命中数 ≥ 2**（`QUALIFY_STRONG`）。同库重跑：**节点误配 46 → 0**。
+- 窗口与上限：只建议事件最新节点之后 **60 天**内的新闻；每事件上限 **8** 条；新事件候选只取最近 **30 天**、上限 **25** 条。
+- **人工闸门**：候选只进 `review` 区，`render_js` **只渲染 manual**；必须人工移入 manual 才上线，绝不静默上线（E9 守护）。
+- 守护：`test_event_track.js` **E1-E9**（4 个泛词用例强命中=0、2 个正对照≥2、min_score≥2、dry-run 不落盘、review 不进生成物）。
+
+**⑥ 启动闸门（时序健壮性，勿删）**
+- 事件 IIFE 的 `boot()` 等 `window.EVENT_DATA` 就绪再 `init()`（最多 3s，超时也照常 init 渲染空态），另有 `load` 兜底（**仅在该容器仍为空时**补渲染，避免把用户已展开的时间线重置掉）。
+- 踩坑背景：jsdom `resources:'usable'` 下**不保证 defer 脚本顺序**，`init()` 曾抢跑 → 卡片静默空白；真实浏览器里 `app.js` 是最后一个 defer 脚本，首次即成功，轮询只是兜底。**教训：任何"数据脚本 + 渲染 IIFE"的组合都要有"等数据就绪"这一步。**
+
+**⑦ 部署与测试**
+- `deploy_pages.py`：`REQUIRED` 与 `BUST_FILES` 均须含 `event-data.js`（缺文件拒绝部署 ＋ `?v=` 指纹防「新页旧脚本」混装）。守护 D13/D14。
+- **`sw.js` 未加 event-data.js**（与 `conference-data.js` 同一先例，2026-10-21 起）：预缓存清单保持小；离线时事件卡优雅留空；`?v=` 指纹保证不会喂陈旧副本。
+- **`*-data.js` 语法闸门（2026-10-25 新增，根治 2026-10-21 事故）**：`deploy_pages.py` 加 `validate_data_js()`——对 `REQUIRED` 里所有 `*-data.js` 跑 `node --check`，不合格抛 RuntimeError **拒绝部署**（fail-fast，与 `sw.js` 闸门同款）。背景：`conference-data.js` 曾被 `render_js` 拼出非法 JS（条目间漏逗号）→ 线上 `<script>` 解析失败 → `window.CONFERENCE_DATA` 未定义 → **卡片整块静默空白、页面不报错**；数据文件是生成物、日常没人读它，只有部署闸门能在上线前拦住。test D11（vm 求值数条目）守护单个文件，这里覆盖全清单。已实测：坏 `event-data.js` 被拦、报错含文件名与 node 输出，好文件放行。
+- `node test_event_track.js` —— **67 PASS / 0 FAIL** 为基线（A 桌面卡片 19 + B 空态 3 + C 移动端 tab 与静态契约 18 + D 数据契约 16 + E 建议精度 10）；已注册 `run_tests_all.py` 的 CORE。
+- ⚠️ **探针自戒（害我误判三轮）**：jsdom `beforeParse` 里注册 DOM 事件监听时，**回调体只能碰 Node 侧变量**——曾因回调里用了裸 `document` 抛 `ReferenceError`，把站点自己的 `DOMContentLoaded` 监听器打断，让我误判"模块根本没渲染"。另：断言前除等 `readyState==='complete'`，还要**再等一等让 load 兜底的 `setTimeout(0)` 跑完**（或直接轮询等 `li` 出现）。
