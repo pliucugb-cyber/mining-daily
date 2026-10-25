@@ -135,8 +135,10 @@ console.log('===== C01：SW activate 只删本站前缀缓存 =====');
 try {
   const swSrc = read('sw.js');
   const deleted = [];
+  // 当前 CACHE_NAME 由 sw.js 现读（随每日 build-version 变化），不写死某天字面量
+  const _cacheName = (swSrc.match(/CACHE_NAME\s*=\s*['"]([^'"]+)['"]/) || [])[1] || 'mining-daily-current';
   const keys = ['mining-daily-20261024-1200', 'other-app-cache',
-                'pliucugb-cyber.github.io/other-repo', 'mining-daily-20261025-0539'];
+                'pliucugb-cyber.github.io/other-repo', _cacheName];
   const sandbox = {
     console: { log() {}, warn() {}, error() {} },
     caches: {
@@ -167,7 +169,7 @@ try {
     check('activate 删除了本站旧版本缓存', deleted.indexOf('mining-daily-20261024-1200') >= 0, 'deleted=' + JSON.stringify(deleted));
     check('activate 未删同 origin 其他站点缓存（other-app-cache）', deleted.indexOf('other-app-cache') < 0);
     check('activate 未删其他 Pages 路径缓存（/other-repo）', deleted.indexOf('pliucugb-cyber.github.io/other-repo') < 0);
-    check('activate 未删当前 CACHE_NAME', deleted.indexOf('mining-daily-20261025-0539') < 0);
+    check('activate 未删当前 CACHE_NAME', deleted.indexOf(_cacheName) < 0);
 
     console.log('===== A05/C05：部署入口单一发布命令 =====');
     const dpSrc = read('deploy_pages.py');

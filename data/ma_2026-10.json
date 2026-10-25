@@ -1,8 +1,26 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-24T05:37:46+08:00",
-  "count": 23,
+  "updated_at": "2026-10-26T05:37:13+08:00",
+  "count": 24,
   "news": [
+    {
+      "id": "cf0c9401d725",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-26/1225621873.PDF",
+      "title": "华友钴业关于子公司受让权利义务暨收购Atlantic Lithium Limited股权的进展公告",
+      "source": "巨潮资讯网·华友钴业",
+      "orig_date": "10-26",
+      "orig_date_full": "2026-10-26",
+      "report_date": "2026-10-26",
+      "category": "并购与投资",
+      "company": "华友钴业",
+      "sec_code": "603799",
+      "ma_type": "股权/资产收购",
+      "summary": "华友钴业（603799）披露《华友钴业关于子公司受让权利义务暨收购Atlantic Lithium Limited股权的进展公告》，涉及股权/资产收购。",
+      "tags": [
+        "并购",
+        "钴"
+      ]
+    },
     {
       "id": "ae3a54e22ad0",
       "url": "https://static.cninfo.com.cn/finalpage/2026-10-24/1225621414.PDF",
