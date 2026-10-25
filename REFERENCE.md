@@ -3480,3 +3480,67 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - **`*-data.js` 语法闸门（2026-10-25 新增，根治 2026-10-21 事故）**：`deploy_pages.py` 加 `validate_data_js()`——对 `REQUIRED` 里所有 `*-data.js` 跑 `node --check`，不合格抛 RuntimeError **拒绝部署**（fail-fast，与 `sw.js` 闸门同款）。背景：`conference-data.js` 曾被 `render_js` 拼出非法 JS（条目间漏逗号）→ 线上 `<script>` 解析失败 → `window.CONFERENCE_DATA` 未定义 → **卡片整块静默空白、页面不报错**；数据文件是生成物、日常没人读它，只有部署闸门能在上线前拦住。test D11（vm 求值数条目）守护单个文件，这里覆盖全清单。已实测：坏 `event-data.js` 被拦、报错含文件名与 node 输出，好文件放行。
 - `node test_event_track.js` —— **67 PASS / 0 FAIL** 为基线（A 桌面卡片 19 + B 空态 3 + C 移动端 tab 与静态契约 18 + D 数据契约 16 + E 建议精度 10）；已注册 `run_tests_all.py` 的 CORE。
 - ⚠️ **探针自戒（害我误判三轮）**：jsdom `beforeParse` 里注册 DOM 事件监听时，**回调体只能碰 Node 侧变量**——曾因回调里用了裸 `document` 抛 `ReferenceError`，把站点自己的 `DOMContentLoaded` 监听器打断，让我误判"模块根本没渲染"。另：断言前除等 `readyState==='complete'`，还要**再等一等让 load 兜底的 `setTimeout(0)` 跑完**（或直接轮询等 `li` 出现）。
+
+
+### §42.50 外部系统审查整改（2026-10-25，报告 mining-daily-system-audit-20261025.md，基线 ced8e2e）
+
+28 项审查结论逐条回代码取证后分三批整改（提交 `359c3ff` / `2f8e2c4` / `0cce6da`）。原则：
+每批独立提交、mock 验证故障路径、不碰平台密钥、无法复现的不直接改。
+
+**批① 数据质量与构建可靠性（`359c3ff`，守护 `test_data_quality_gate.js` 34 断言）**
+- A03：严格模式数字校验异常被吞 → 分类处理：AssertionError=业务不通过、其它=工具故障，
+  strict 下两者 `sys.exit(1)`/`raise SystemExit`；非 strict 明确标记"未验证"。
+  波及 `generate_site.py` / `generate_20261025.py` / `bprime/pipeline.py` 三处。
+- A04：`verify_numbers.py` 重构——月库 glob 不再写死 `news_2026-*`（批量动态化 44 个按日脚本，
+  2027 新年集体失配病根）；读当日并集池 `news_candidates_union_<date>` 并留出处；
+  `_put` 改（强度×来源优先级）二元组大者胜，**强基准永远覆盖弱摘要**（旧"先到先得"让
+  候选池 RSS 摘要永久挡住月库正文）；三档覆盖率披露 + `stats_out`；CLI 无基准 rc=3
+  不再显示"全部通过"。
+- A06：`fetch_news.py` 零候选也落盘带 `status`（empty/degraded/failed）+run_id 的文件，
+  全源失败 rc=2（`sys.exit(main())` 传出）；`daily.yml` 两处 glob+files[-1] 改按
+  `REPORT_DATE` 精确定位当日文件（旧实现还会误匹配 union 池——字典序 u>2 恒居末位）。
+- A07：日期兜底改语义——解析失败不再填 report_date 冒充"今日发布"，`date_conf`
+  四级（raw/extracted/detail/unknown）；未来日期检查从 3/16 源扩展到全源并计数。
+- C01：`sw.js` activate 只删 `mining-daily-` 前缀缓存（CacheStorage 按 origin 共享，
+  GitHub Pages 同账号多路径互删）。vm 沙箱真跑 activate 硬验收。
+- D02：README 弃用 `generate_daily.py` 引用清除；PIPELINE.md 的 `classify_llm.py`
+  补 `archive/analysis/` 真实路径。
+- D03：`build_static.py` 热榜公式对齐 server.py/app.js 2026-10-13 重做版
+  （云站 shadow_run.sh 真实调用它，公式不同＝线上两套排序）。
+
+**批② AI 代理加固（`2f8e2c4`，守护 `test_qa_proxy.js` 26 断言，vm+mock 上游零额度）**
+- A01：`qa.js` origin 白名单从任意 `*.github.io`/`*.netlify.app` 子域精确到
+  `ALLOWED_ORIGINS`（本站 Pages + Netlify 函数自身 + localhost）；`/api/qa` POST 加
+  来源闸门，不合法/缺失 Origin → 403 且不读 body 不触达上游。
+  **教训：CORS 不是鉴权**——非浏览器客户端本就不受其约束，旧实现 isAllowedOrigin
+  只用于构造响应头等于没有校验。
+- A02：请求体 64KB(413)/≤30 条/单条≤4000 字符/总≤24000/角色白名单(400)；
+  max_tokens 钳 1-4000、temperature 钳 0-2；上游 `AbortSignal.timeout`
+  （非流式 30s/流式 90s）。
+- B06：`app.js` qaApplyJson 识别 `_fallback/_warning`，显式展示"AI 暂不可用，
+  以下为基础检索提示"+原因；ok=false → 不进答案缓存、不出重新生成、meta 不走
+  DeepSeek 口径。旧实现把代理兜底关键词答案当 AI 成功渲染并写缓存。
+- `netlify/README.md`：平台侧待办清单（**需账号持有者操作**：重新部署、
+  Key 只在环境变量、DeepSeek 预算告警、免费版无限流需前置 Cloudflare）。
+
+**批③ 部署入口单一发布命令（`0cce6da`）**
+- A05：`deploy_pages.py` push 前跑 QUICK_TESTS（三测试约 1 分钟）不过不推；
+  新增 `verify_online()`——推送后轮询线上 index.html?cb= 直到 build-version 与
+  app.js?v= 指纹都等于本次值（有界 240s）；区分「推送成功」(return 0) 与
+  「发布验收成功」，超时/指纹混装 return 3 并给手工复核命令。
+- C05：gh-pages 提交信息带 `source <sha> · build <version>[ · remote <sha>]` 可追溯可回滚；
+  push 前 fetch 检测远端本部署器之外的提交（单一发布者策略告警），仍 -X ours 合并。
+- ⚠️ **行尾坑（2026-10-25 实踩）**：补丁脚本向 CRLF 文件插入函数时忘了把新函数体
+  的行尾也从 LF 转过去 → 混合行尾 → 后续补丁锚点全部失配。**补丁脚本必须探测行尾并
+  统一转换新内容**；`test_data_quality_gate.js` 已加 deploy_pages.py 行尾统一断言。
+
+**未做项与后续批次（审查报告剩余）**
+- B02（多种"新增"口径并存）/ B03（矿权统计阶段口径）/ B04（HTML↔JSON 双向导出漂移）/
+  D04（真机可访问性矩阵）/ D05（首屏密度）/ D06（AI 数据流披露）：报告自标"待复现/待验证"，
+  按纪律先复现再改，未动手。
+- C02（network-first 对 404/500 直接返回、无应用超时）、C04（bprime review 条目进渲染输入、
+  strict 失败退出码）：已确认成立，留待后续批。
+- D01（CI 无质量门禁、CORE 25 vs npm test 8 口径不一、Path.exists 静默过滤）：
+  run_tests_all.py 的 CORE 已扩到 27；npm test 与 daily.yml 门禁待单独一批。
+- D03 的"拆 app.js（464KB）/ 收敛 44+44 个按日脚本"：报告自注"先测再决定"，
+  且按日脚本是 regen-proof 约定的一部分，**不主动动**。
