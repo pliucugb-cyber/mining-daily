@@ -5963,6 +5963,18 @@ function qaApplyJson(res,bubble,msg,q,ctx,dateIntent){
     }else{
       text='DeepSeek 调用失败：'+em+'\n\n可点「🔄 重新生成」重试，或切换到「检索」面板查看本地资讯。';
     }
+  }else if(d&&d._fallback){
+    // 2026-10-25 B06：代理端降级兜底（无 Key / 上游超时/5xx）——HTTP 200 + 同构 JSON。
+    // 旧实现在此被当正常 AI 回答渲染（meta 显示「DeepSeek · 通路=代理」）并写入答案缓存，
+    // 用户无从得知这只是关键词模板。显式标注 + ok=false：
+    //   - 文案头部明示「AI 暂不可用，以下为基础检索提示」并附 _warning 原因；
+    //   - ok=false → meta 走兜底口径、不出「重新生成」按钮、不写答案缓存。
+    // SSE 流式路径不涉及：流式失败时 qa.js 返回 JSON fallback，content-type 非
+    // event-stream，前端自动落回 qaApplyJson 走到本分支。
+    var fc=((((d.choices||[])[0]||{}).message||{}).content||'').trim();
+    var fw=(d&&d._warning)?('（'+String(d._warning).slice(0,120)+'）'):'';
+    text='ℹ️ **AI 暂不可用，以下为基础检索提示**'+fw+'\n\n'+fc;
+    ok=false;
   }else{
     var content=((((d.choices||[])[0]||{}).message||{}).content||'').trim();
     if(!content){text='模型未返回内容';}else{text=content;ok=true;}
