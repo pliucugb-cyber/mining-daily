@@ -181,6 +181,20 @@ jobs:
               print('✅ 全部启用源均有产出')
           PY
 
+      - name: Nightly 测试（Linux 跨平台验证，不阻断抓取）
+        # 2026-10-25 D01：本 workflow 是「阶段一·只抓取」，从不生成页面/部署，
+        # 测试红不会把坏代码带上线——那道闸门在本机 deploy_pages.py 的 QUICK_TESTS。
+        # 这一步的价值是免费的 nightly CI：每天在 Linux 上跑一遍全量测试，
+        # 专门暴露 Windows 本机发现不了的跨平台问题（CRLF / 路径 / 进程模型）。
+        # continue-on-error：初期只观察不阻断，确认稳定后再考虑升级为硬门禁。
+        # 依赖：node_modules 不入库（.gitignore），runner 上用 npm ci 按 lock 精确安装。
+        continue-on-error: true
+        run: |
+          node --version
+          python3 --version
+          npm ci
+          python3 run_tests_all.py --all --per-test 240 --budget 1500
+
       - name: 推送到 draft 分支
         run: |
           git config user.email "actions@github.com"

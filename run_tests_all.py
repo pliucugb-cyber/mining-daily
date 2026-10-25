@@ -38,6 +38,7 @@ import sys
 import json
 import time
 import glob
+import signal
 import socket
 import threading
 import subprocess
@@ -136,18 +137,28 @@ def _start_probe_server():
 
 
 def _kill_tree(pid):
+    # 2026-10-25 D01：跨平台杀进程树。Windows 用 taskkill /T（整棵树）；
+    # POSIX 用 killpg——要求子进程自是进程组组长（Popen 处 start_new_session=True），
+    # 否则 getpgid 拿到父进程组会误杀自己。
     try:
-        subprocess.run(['taskkill', '/F', '/T', '/PID', str(pid)],
-                       capture_output=True, timeout=20)
+        if os.name == 'nt':
+            subprocess.run(['taskkill', '/F', '/T', '/PID', str(pid)],
+                           capture_output=True, timeout=20)
+        else:
+            os.killpg(os.getpgid(pid), signal.SIGKILL)
     except Exception:
-        pass
+        try:
+            os.kill(pid, signal.SIGKILL)
+        except Exception:
+            pass
 
 
 def _run_one(path, per_test, env):
     exe = [NODE, path] if path.endswith('.js') else [PY, path]
     t0 = time.time()
     p = subprocess.Popen(exe, cwd=str(ROOT), env=env,
-                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                         start_new_session=(os.name != 'nt'))  # POSIX 自成进程组，超时杀整树安全
     timed_out = False
     try:
         out, _ = p.communicate(timeout=per_test)

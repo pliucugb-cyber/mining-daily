@@ -7,8 +7,9 @@
  *   Key 永不出现在前端代码或页面里。同事打开页面直接用，无需自己填 Key。
  *
  * 接口：
- *   GET  /api/health  → { ok, has_key, model }
- *   POST /api/qa      → 透传模式返回 DeepSeek 原始 JSON；简化模式返回 {answer, refs}
+ *   GET  /api/health   → { ok, has_key, model }
+ *   GET  /api/balance  → 账号余额（告警监控用；只回数字，不回 Key）
+ *   POST /api/qa       → 透传模式返回 DeepSeek 原始 JSON；简化模式返回 {answer, refs}
  *
  * 两种调用约定：
  *   ① 透传模式（前端默认）：{ messages:[{role,content}...], max_tokens, temperature }
@@ -219,6 +220,51 @@ export default async (request, context) => {
       model: key ? 'deepseek-chat' : 'disabled',
       time: new Date().toISOString(),
     }), { status: 200, headers: corsHeaders(origin) });
+  }
+
+  if (url.pathname === '/api/balance') {
+    // 2026-10-25 余额告警：供每日定时任务查询账号余额。
+    // 设计约定：① 与 /api/qa 同样过来源闸门（余额数字不公开暴露，自动化请求需带合法 Origin 头）；
+    // ② 只透出告警需要的字段，Key 与多余信息不回传；③ HTTP 层一律 200，
+    //    业务状态放 ok 字段——监控端区分「接口可达」与「查不到余额」两种失败。
+    if (request.method !== 'GET' && request.method !== 'HEAD') {
+      return new Response(JSON.stringify({ error: 'method not allowed' }),
+        { status: 405, headers: corsHeaders(origin) });
+    }
+    const gate = originGate(request);
+    if (gate) return gate;
+
+    const balKey = Deno.env.get('DEEPSEEK_API_KEY');
+    if (!balKey) {
+      return new Response(JSON.stringify({ ok: false, reason: 'no_key' }),
+        { status: 200, headers: corsHeaders(origin) });
+    }
+    try {
+      const resp = await fetch('https://api.deepseek.com/user/balance', {
+        headers: { 'Authorization': 'Bearer ' + balKey, 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+      });
+      const data = await resp.json().catch(() => ({}));
+      if (!resp.ok) {
+        const msg = (data && data.error && data.error.message) || ('HTTP ' + resp.status);
+        return new Response(JSON.stringify({ ok: false, reason: msg }),
+          { status: 200, headers: corsHeaders(origin) });
+      }
+      const infos = Array.isArray(data.balance_infos) ? data.balance_infos : [];
+      const cny = infos.find((b) => b.currency === 'CNY') || infos[0] || {};
+      return new Response(JSON.stringify({
+        ok: true,
+        is_available: !!data.is_available,
+        currency: cny.currency || 'CNY',
+        total_balance: cny.total_balance != null ? cny.total_balance : null,
+        topped_up_balance: cny.topped_up_balance != null ? cny.topped_up_balance : null,
+        granted_balance: cny.granted_balance != null ? cny.granted_balance : null,
+        time: new Date().toISOString(),
+      }), { status: 200, headers: corsHeaders(origin) });
+    } catch (e) {
+      return new Response(JSON.stringify({ ok: false, reason: (e && e.message) ? e.message : String(e) }),
+        { status: 200, headers: corsHeaders(origin) });
+    }
   }
 
   if (url.pathname === '/api/qa') {

@@ -19,7 +19,7 @@
 
 | 文件 | 作用 |
 |---|---|
-| `edge-functions/qa.js` | 代理主体：`/api/health`、`/api/qa`，无 Key 时自动降级关键词兜底 |
+| `edge-functions/qa.js` | 代理主体：`/api/health`、`/api/balance`（余额查询）、`/api/qa`，无 Key 时自动降级关键词兜底 |
 | `../netlify.toml` | **仓库根目录**（不是本目录）：路由 `/api/*` + 安全响应头 |
 | `public/index.html` | 占位首页（本站点实际只提供 API） |
 
@@ -67,6 +67,21 @@ curl -X POST https://<你的站点>.netlify.app/api/qa \
 ```
 
 `has_key:false` 说明环境变量没配好，此时问答会降级为关键词兜底（功能仍在，只是不是 AI 生成）。
+
+## 余额查询（/api/balance，2026-10-25 新增）
+
+DeepSeek 官方无月度预算功能（按量付费、余额扣完自动停、不会欠费），故只需
+"快用完时提醒"。`GET /api/balance` 供每日定时任务查询：
+
+- 与 `/api/qa` **同来源闸门**——脚本调用必须带合法 Origin 头
+- 只回 `is_available / currency / total_balance` 等告警字段，Key 不回传
+- HTTP 层恒 200，业务状态看 `ok` 字段（`ok:false` 时 `reason` 给原因）
+
+```bash
+curl -s https://mining-daily-qa.netlify.app/api/balance \
+  -H 'Origin: https://pliucugb-cyber.github.io'
+# 期望：{"ok":true,"is_available":true,"currency":"CNY","total_balance":"110.00",...}
+```
 
 ## 更换 / 作废 Key
 

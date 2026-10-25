@@ -3541,6 +3541,33 @@ navigator.serviceWorker.addEventListener('controllerchange',function(){
 - C02（network-first 对 404/500 直接返回、无应用超时）、C04（bprime review 条目进渲染输入、
   strict 失败退出码）：已确认成立，留待后续批。
 - D01（CI 无质量门禁、CORE 25 vs npm test 8 口径不一、Path.exists 静默过滤）：
-  run_tests_all.py 的 CORE 已扩到 27；npm test 与 daily.yml 门禁待单独一批。
+  **已完成（2026-10-25 晚，见 §42.51）**：npm test 改走 run_tests_all.py 统一口径；
+  daily.yml 加 nightly 全量测试 step（continue-on-error 观察期）；run_tests_all.py
+  跨平台化（_kill_tree POSIX killpg + Popen start_new_session）。
 - D03 的"拆 app.js（464KB）/ 收敛 44+44 个按日脚本"：报告自注"先测再决定"，
   且按日脚本是 regen-proof 约定的一部分，**不主动动**。
+
+### §42.51 DeepSeek 余额告警与 nightly CI（2026-10-25 晚）
+
+**余额告警链路**：DeepSeek 官方**无月度预算功能**（按量付费、余额扣完自动停、
+返回 402、不会欠费——官方文档核实）。唯一官方只读接口 `GET /user/balance`。
+- qa.js 新增 `GET /api/balance`：与 `/api/qa` 同来源闸门（余额数字不公开暴露，
+  定时任务请求须带合法 Origin 头）；只透出 `is_available/currency/total_balance`
+  等告警字段，Key 不回传；HTTP 层恒 200、业务状态放 `ok` 字段（监控可区分
+  「接口可达」与「查不到余额」两种失败）。守护：test_qa_proxy.js 增 10 断言（26→36）。
+- Key 纪律不变：仍只存 Netlify 环境变量一份，本地/仓库零副本——余额查询经
+  Netlify 中转而非本地直连，正是为了守住这条纪律。
+- 每日定时任务（WorkBuddy 自动化）：curl 带合法 Origin 查余额，低于 ¥20 通知刘三。
+
+**nightly CI（D01 落地）**：daily.yml「阶段一·只抓取」workflow 增加 nightly step：
+`npm ci`（lock 精确安装 jsdom，node_modules 不入库）+ `python3 run_tests_all.py
+--all --per-test 240 --budget 1500`，continue-on-error 观察期。定位澄清：
+本 workflow 从不生成页面/部署，**测试红不会把坏代码带上线**——上线闸门在本机
+deploy_pages.py 的 QUICK_TESTS；nightly 的价值是免费 Linux 跨平台回归
+（专抓 Windows 本机发现不了的 CRLF/路径/进程模型问题），挂红 GitHub 默认发邮件。
+- 跨平台修正：`_kill_tree` 从 taskkill 改为平台分流（POSIX `killpg`）；
+  Popen 加 `start_new_session=(os.name != 'nt')`——**子进程不自成进程组时
+  killpg 会连父进程一起杀**，这是本次改动最易踩的坑。
+- npm test 口径修正：原为 8 个测试的硬编码串联（漏注册 conference/event/
+  data_quality/qa_proxy/hero 五套新守护），改为 `python run_tests_all.py`——
+  测试清单以 CORE 注册表为唯一口径，npm test 与 nightly 自动跟随，杜绝再次漂移。

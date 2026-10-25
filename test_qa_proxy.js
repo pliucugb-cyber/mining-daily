@@ -7,6 +7,8 @@
  *   ④ 上游 fetch 带 AbortSignal.timeout
  *   ⑤ 上游失败 → 200 + _fallback:true（B06 前端识别的依据）
  *   ⑥ 合法 origin + 正常请求 → 200 + 上游收到 clamp 后的参数
+ *   ⑦ /api/balance：合法 Origin → 200+余额字段；无 Origin → 403；POST → 405；
+ *      上游异常 → 200+ok:false（监控可区分可达性与业务状态）；响应不含 Key
  * 运行：node test_qa_proxy.js
  */
 const fs = require('fs');
@@ -37,6 +39,15 @@ function makeSandbox() {
     fetch: (url, opts) => {
       upstreamCalls.push({ url: String(url), body: opts && opts.body ? JSON.parse(opts.body) : null,
                            signal: !!(opts && opts.signal) });
+      if (String(url).indexOf('/user/balance') >= 0) {
+        if (upstreamMode === 'http500') {
+          return Promise.resolve({ ok: false, status: 500, json: () => Promise.resolve({ error: { message: 'balance 500' } }) });
+        }
+        return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({
+          is_available: true,
+          balance_infos: [{ currency: 'CNY', total_balance: '110.00', granted_balance: '10.00', topped_up_balance: '100.00' }],
+        }) });
+      }
       if (upstreamMode === 'fail') {
         return Promise.reject(Object.assign(new Error('The operation was aborted due to timeout'),
           { name: 'TimeoutError' }));
@@ -147,6 +158,36 @@ const OK_MSGS = [{ role: 'system', content: '你是矿业分析师' }, { role: '
   r = await call(new Request('https://mining-daily-qa.netlify.app/api/health', { headers: { Origin: 'https://pliucugb-cyber.github.io' } }));
   d = await r.json();
   check('/api/health → has_key=true（不消耗额度的探测放行）', r.status === 200 && d.has_key === true);
+
+  console.log('===== /api/balance：余额告警端点 =====');
+  upstreamCalls.length = 0; upstreamMode = 'ok';
+  r = await call(new Request('https://mining-daily-qa.netlify.app/api/balance', {
+    headers: { Origin: 'https://pliucugb-cyber.github.io' },
+  }));
+  d = await r.json();
+  check('合法 Origin GET /api/balance → 200', r.status === 200, 'status=' + r.status);
+  check('余额端点 ok=true', d.ok === true);
+  check('解析出 CNY total_balance=110.00', d.currency === 'CNY' && d.total_balance === '110.00', 'got=' + d.total_balance);
+  check('is_available 透出', d.is_available === true);
+  check('触达的是 DeepSeek 余额接口', upstreamCalls.length === 1 && upstreamCalls[0].url.indexOf('/user/balance') >= 0);
+  check('响应不含 Key 明文', JSON.stringify(d).indexOf('test-key-not-real') < 0);
+
+  r = await call(new Request('https://mining-daily-qa.netlify.app/api/balance', {}));
+  check('无 Origin 查余额 → 403（与 /api/qa 同闸门）', r.status === 403, 'status=' + r.status);
+  check('被拒的余额查询未触达上游', upstreamCalls.length === 1, 'upstream=' + upstreamCalls.length);
+
+  r = await call(new Request('https://mining-daily-qa.netlify.app/api/balance', {
+    method: 'POST', headers: { Origin: 'https://pliucugb-cyber.github.io' }, body: '{}',
+  }));
+  check('POST /api/balance → 405', r.status === 405, 'status=' + r.status);
+
+  upstreamMode = 'http500';
+  r = await call(new Request('https://mining-daily-qa.netlify.app/api/balance', {
+    headers: { Origin: 'https://pliucugb-cyber.github.io' },
+  }));
+  d = await r.json();
+  check('余额上游 500 → HTTP 200 + ok:false（监控可区分）', r.status === 200 && d.ok === false, 'status=' + r.status + ' ok=' + d.ok);
+  upstreamMode = 'ok';
 
   console.log('\nQA-PROXY ' + pass + ' PASS / ' + fail + ' FAIL');
   process.exit(fail ? 1 : 0);
