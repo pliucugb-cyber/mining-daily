@@ -462,18 +462,22 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
     });
     function escA(s){return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
     function escT(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+    // 阶段拆分：挂牌（出让/招拍挂公告） vs 成交/转让结果 —— 与简报「今日矿权新增 N 宗（全阶段）」口径区分开，避免读者误以为数字打架
+    var _isGua=function(t){ return /挂牌|拍卖公告|出让公告|招拍挂|矿业权出让/.test(t||''); };
+    var gua=results.filter(function(r){ return _isGua(r.t||r.title||''); });
+    var deal=results.filter(function(r){ return !_isGua(r.t||r.title||''); });
     var html;
     if(results.length===1){
       var fr=results[0];
       var fUrl=escA(fr.u||fr.url||'#rightsSection');
-      var fTitle=escT((fr.t||fr.title||'').trim()) || '今日矿权出让结果';
+      var fTitle=escT((fr.t||fr.title||'').trim()) || (gua.length?'今日矿权挂牌结果':'今日矿权成交/转让结果');
       // 矿权结果摘要不参与「今日新增」计数（2026-09-09）：它是对 rightsSection 的汇总提示，
       // 不是独立新闻条目；若加 is-new，顶部统计会把简报「今日收录 N 条」多算 1 条。
       html='<div class="news-item rights-summary-item" data-url="'+fUrl+'" data-rights-summary="1" data-embed="ok">'
          + '<div class="news-head"><span class="dot"></span><span class="badge-rights">矿权</span>'
          + '<a class="news-title" href="'+fUrl+'">'+fTitle+'</a></div>'
          + '<div class="news-meta"><span class="src">矿业权市场</span> · '+today.slice(5)+'</div>'
-         + '<div class="news-summary">今日矿权交易专区更新 1 宗出让/转让结果，点击标题查看原公告。</div>'
+         + '<div class="news-summary">今日矿权交易专区更新 1 宗'+(gua.length?'挂牌':'成交/转让结果')+'，点击标题查看原公告。</div>'
          + '</div>';
     } else {
       // 多宗：列出全部原公告标题（各带链接），而非只取首条 +「等 X 宗」
@@ -484,9 +488,9 @@ function safeHref(u){if(u==null)return '';var s=String(u).trim();if(!s)return ''
       }).join('');
       html='<div class="news-item rights-summary-item" data-url="#rightsSection" data-rights-summary="1" data-embed="ok">'
          + '<div class="news-head"><span class="dot"></span><span class="badge-rights">矿权</span>'
-         + '<span class="news-title">今日矿权出让/转让结果共 '+results.length+' 宗</span></div>'
+         + '<span class="news-title">今日矿权：挂牌 '+gua.length+' 宗 · 成交/转让 '+deal.length+' 宗（共 '+results.length+' 宗）</span></div>'
          + '<div class="news-meta"><span class="src">矿业权市场</span> · '+today.slice(5)+'</div>'
-         + '<div class="news-summary">今日矿权交易专区更新 '+results.length+' 宗出让/转让结果：'+links+'</div>'
+         + '<div class="news-summary">今日矿权交易专区更新 '+results.length+' 宗（挂牌 '+gua.length+' · 成交/转让 '+deal.length+'）：'+links+'</div>'
          + '</div>';
     }
     var todaySection=document.getElementById('todaySection');
@@ -1865,17 +1869,23 @@ function syncSubCounts(){
     if(!sec)return;
     var isToday=(secId==='todaySection');
     sec.querySelectorAll('.sub-cat').forEach(function(cat){
-      var total=0, fresh=0, node=cat.nextElementSibling;
+      var total=0, fresh=0, back=0, node=cat.nextElementSibling;
       while(node && !(node.classList&&node.classList.contains('sub-cat'))){
         if(node.classList&&node.classList.contains('news-item')&&!node.classList.contains('arch-fav')){
           total++;
           if(node.classList.contains('is-new'))fresh++;
+          if(node.querySelector('.badge-backfill'))back++;
         }
         node=node.nextElementSibling;
       }
       var c=cat.querySelector('.sub-count');
       if(c){
-        if(isToday) c.textContent = fresh>0 ? (fresh+'条新增') : (total+'条');
+        if(isToday){
+          if(fresh>0 && back>0) c.textContent=fresh+'条新增（补录'+back+'）';
+          else if(fresh>0) c.textContent=fresh+'条新增';
+          else if(back>0) c.textContent=back+'条补录';
+          else c.textContent=total+'条';
+        }
         else c.textContent = total+'条';
       }
     });
@@ -2282,27 +2292,34 @@ function briefKeyTier(txt){
 // 新闻卡片 / 公司动态卡片 → 重要度标签（2026-09-28 Phase B1 评审落地）。
 // 复用同一份高信号关键词，按语义归为 找矿突破 / 重大政策 / 供应风险 / 重点 四类；
 // 命中才标注，普通条目不打标（与今日简报层级同源，避免视觉噪声）。
-function cardKeyTag(txt){
+function cardKeyTag(txt, cat){
   if(!txt) return '';
+  // 市场与价格 / 并购与投资 类目不挂「重大政策」「供应风险」：价格预测、交易动态不是政策或供应中断
+  var noPolicy = (cat==='market'||cat==='capital');
   var G=[
+    ['机构观点',['预测','展望','预期','预计','目标价','研报','投行','花旗','渣打','高盛','摩根','惠誉','标普','穆迪','机构称','分析称','机构预测','市场预估','看涨','看跌','下调','上调','评级']],
     ['找矿突破',['找矿突破','增储','储量','找矿','探获','勘查','勘探','新矿','探矿','钻探验证']],
     ['重大政策',['232条款','出口管制','关税','关键矿产','战略性矿产','法案','条例','监管','部委','国务院','工信部']],
     ['供应风险',['制裁','禁运','断供','减产','停产','罢工','封盘','闭矿','矿难','安全事故','供应风险','供应中断']],
     ['重点',['联合国','收购','合并','上市','首发','重组','投产','协议','LME','重大','获批','签约','合作']]
   ];
   for(var i=0;i<G.length;i++){ var lbl=G[i][0], kws=G[i][1];
+    if(noPolicy && (lbl==='重大政策'||lbl==='供应风险')) continue;
     for(var j=0;j<kws.length;j++){ if(txt.indexOf(kws[j])>=0) return lbl; } }
   return '';
 }
 function mdDecorateKeyTags(){
   try{
+    var _catByUrl={};
+    try{ (window.NEWS_DATA&&window.NEWS_DATA.news||[]).forEach(function(r){ if(r&&(r.u||r.url)) _catByUrl[r.u||r.url]=r.c||r.category||''; }); }catch(e){}
     var items=document.querySelectorAll('.news-item:not([data-keytag]), .co-item:not([data-keytag])');
     for(var i=0;i<items.length;i++){
       var el=items[i]; el.setAttribute('data-keytag','1');
       var titleEl=el.querySelector('.news-title, .co-title');
       var sumEl=el.querySelector('.news-summary, .co-summary, .co-body');
       var txt=(titleEl?titleEl.textContent:'')+' '+(sumEl?sumEl.textContent:'');
-      var tag=cardKeyTag(txt); if(!tag) continue;
+      var cat=_catByUrl[el.getAttribute('data-url')||'']||'';
+      var tag=cardKeyTag(txt, cat); if(!tag) continue;
       var isCo=el.classList.contains('co-item');
       var box=el.querySelector(isCo?'.co-tags':'.news-tags');
       if(!box){
