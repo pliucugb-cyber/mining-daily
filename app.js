@@ -3268,7 +3268,7 @@ function mdMobileTopTabs(){
   // 2026-09-24 E2：窄屏日期短格式 MM-DD 周X（≤360px 不再截断，纯展示处理）
   try{ var _dm=dateTxt.match(/(\d{4})[-/年](\d{1,2})[-/月](\d{1,2})/); if(_dm){ var _d=new Date(+_dm[1], +_dm[2]-1, +_dm[3]); var _wd=['周日','周一','周二','周三','周四','周五','周六'][_d.getDay()]; dateTxt=_dm[2]+'-'+_dm[3]+' '+_wd; } }catch(e){}
   // 2026-09-27：新增「矿业公司」分类 tab（复用桌面 data-view 机制，见 mdSelectCat）
-  var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期'],['meeting','会议'],['company','矿业公司']];
+  var cats=[['tuijian','推荐'],['hot','热榜'],['archive','往期'],['meeting','会议'],['event','事件'],['company','矿业公司']];
   // 2026-09-12 检索统一（用户定夺）：顶栏不再注入搜索按钮 —— 原 #mdSearchBtn 恒不可见（见上方 mdOpenSearch 注释），
   //   是死控件。检索能力统一收进底部「AI 搜」tab 打开的面板，顶栏保持「品牌名 + 日期」的干净两栏。
   var html='<div class="md-top-brand"><span class="md-brand">⛏️ 矿业资讯速览</span><span class="md-date">'+dateTxt+'</span></div>'
@@ -6670,6 +6670,169 @@ window.__mdConf = { items:mdConfItems, when:mdConfWhen, countdown:mdConfCountdow
     document.addEventListener('DOMContentLoaded',function(){ setTimeout(init,0); });
   else setTimeout(init,0);
   window.__expoIsExpo=isExpo;
+// ===== 事件跟踪（2026-10-25，独立数据源 event-data.js）=====
+// 与「会议日程」同源：数据驱动渲染、regen-proof（HTML/CSS 在 index.html 静态区，每日生成不动）。
+// 差异一：事件是长生命周期叙事，无 14 天闸门；active（进行中/观察中）按 started 倒序常驻，
+//         已达成/已终止 降级到后面（不删、不因过期下线）。
+// 差异二：关联新闻按 URL 现查 window.NEWS_DATA —— news-data.js 是 slim schema
+//         （d/t/s/u/g/c/m/n），没有 id 字段，URL 才是前端唯一可现查的稳定主键
+//         （全库 data/news_YYYY-MM.json 的 id = md5(url)[:12]，由 test_event_track.js 校验）。
+(function(){
+  var STATUS_DOT = {'进行中':'ongoing','观察中':'watch','已达成':'done','已终止':'stop'};
+  var ACTIVE = {'进行中':1,'观察中':1};
+  function newsByUrl(u){
+    if(!u) return null;
+    var rows = (window.NEWS_DATA && window.NEWS_DATA.news) || [];
+    for(var i=0;i<rows.length;i++){ if(rows[i] && rows[i].u===u) return rows[i]; }
+    return null;
+  }
+  function daysAgo(ds, base){
+    if(!ds) return null;
+    var m=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(ds);
+    if(!m) return null;
+    var d=new Date(+m[1],+m[2]-1,+m[3]);
+    return Math.round((base - d)/86400000);
+  }
+  function lastUpdate(ev){
+    var tl=ev.timeline||[]; var mx='';
+    for(var i=0;i<tl.length;i++){ var d=tl[i].date||''; if(d>mx) mx=d; }
+    return mx || ev.started || '';
+  }
+  function fmtAgo(n){
+    if(n===null||n===undefined) return '';
+    if(n<=0) return '今天更新';
+    if(n===1) return '昨天更新';
+    return n+' 天前更新';
+  }
+  // 生成单个事件卡片 HTML（右栏与移动端 tab 同源）
+  function eventItemHtml(ev, base){
+    var st=ev.status||'';
+    var dot=STATUS_DOT[st]||'stop';
+    var lu=lastUpdate(ev);
+    var ago=fmtAgo(daysAgo(lu, base));
+    var tl=(ev.timeline||[]).slice().sort(function(a,b){ return (b.date||'')<(a.date||'')?-1:1; });
+    var tlHtml='';
+    var showN=Math.min(tl.length,1);
+    for(var i=0;i<tl.length;i++){
+      var node=tl[i];
+      var news='';
+      var urls=node.news||[];
+      for(var j=0;j<urls.length;j++){
+        var r=newsByUrl(urls[j]);
+        if(r && r.u){ news+='<a href="'+safeHref(r.u)+'" target="_blank" rel="noopener">'+esc(r.t||'')+'</a>'; }
+      }
+      tlHtml+='<li'+(i>=showN?' class="et-tl-extra" hidden':'')+'>'
+        +'<span class="et-tl-date">'+esc(node.date||'')+'</span> '
+        +esc(node.title||'')
+        +(node.detail?'<div class="et-tl-detail">'+esc(node.detail)+'</div>':'')
+        +(news?'<div class="et-tl-news">'+news+'</div>':'')
+        +(node.source?'<div class="et-tl-src">来源：'+esc(node.source)+'</div>':'')
+        +'</li>';
+    }
+    var hasMore=tl.length>showN;
+    var html='<li class="et-item" data-status="'+esc(st)+'">'
+      +'<div class="et-top"><span class="et-dot '+dot+'"></span>'
+      +'<span class="et-title">'+esc(ev.title||'')+'</span>'
+      +'<span class="et-cat">'+esc(ev.category||'')+'</span></div>'
+      +(ago?'<div class="et-updated">'+ago+'</div>':'')
+      +(ev.summary?'<div class="et-summary">'+esc(ev.summary)+'</div>':'')
+      +(tlHtml?'<ul class="et-tl">'+tlHtml+'</ul>':'')
+      +(hasMore?'<div class="et-more"><button type="button" class="et-more-btn">展开时间线 ▾</button></div>':'')
+      +'</li>';
+    return html;
+  }
+  // 渲染事件列表到指定容器（右栏 #eventTrackList 或移动端 #eventTabList 同源）
+  function renderInto(listEl, footEl, opts){
+    if(!listEl) return 0;
+    opts=opts||{};
+    var D=window.EVENT_DATA;
+    if(!D||!D.items||!D.items.length){ if(opts.hideIfEmpty!==false) listEl.innerHTML=''; return 0; }
+    var base=new Date(); base=new Date(base.getFullYear(),base.getMonth(),base.getDate());
+    // 排序：active（进行中/观察中）在前，按 started 倒序；closed（已达成/已终止）在后
+    var items=D.items.slice().sort(function(a,b){
+      var aa=ACTIVE[a.status]?0:1, bb=ACTIVE[b.status]?0:1;
+      if(aa!==bb) return aa-bb;
+      var sa=a.started||'', sb=b.started||'';
+      return sa<sb?1:-1;
+    });
+    var html='';
+    for(var i=0;i<items.length;i++){ html+=eventItemHtml(items[i], base); }
+    listEl.innerHTML=html;
+    if(footEl){
+      var aN=D.items.filter(function(e){return ACTIVE[e.status];}).length;
+      footEl.textContent='数据截至 '+(D.updated||'—')+' · 共 '+D.items.length+' 件 · 人工维护';
+    }
+    Array.prototype.slice.call(listEl.querySelectorAll('.et-more-btn')).forEach(function(btn){
+      btn.onclick=function(){
+        var li=btn.closest('.et-item'); if(!li) return;
+        var open=li.classList.toggle('et-open');
+        Array.prototype.slice.call(li.querySelectorAll('.et-tl-extra')).forEach(function(n){ if(open)n.removeAttribute('hidden'); else n.setAttribute('hidden',''); });
+        btn.textContent=open?'收起时间线 ▴':'展开时间线 ▾';
+      };
+    });
+    return items.length;
+  }
+  function activeCount(){
+    return (window.EVENT_DATA&&window.EVENT_DATA.items)?window.EVENT_DATA.items.filter(function(e){return ACTIVE[e.status];}).length:0;
+  }
+  function renderDesktop(){
+    var box=document.getElementById('eventTrack');
+    if(!box) return;
+    var n=renderInto(document.getElementById('eventTrackList'), document.getElementById('eventTrackFoot'), {hideIfEmpty:true});
+    var cnt=document.getElementById('eventTrackCount');
+    if(cnt){ var a=activeCount(); cnt.textContent=a?('· '+a+' 件追踪中'):''; }
+    box.style.display = n ? '' : 'none';
+  }
+  // 移动端「事件」tab（与右栏卡片同源 event-data.js）：注入 #eventSection
+  function mdInitEventSection(){
+    try{
+      if(document.getElementById('eventSection')) return;
+      var anchor=document.getElementById('meetingSection')||document.getElementById('rightsSection');
+      if(!anchor) return;
+      var sec=document.createElement('div'); sec.className='section'; sec.id='eventSection'; sec.style.display='none';
+      sec.innerHTML='<div class="section-title"><span class="icon">🔭</span> 事件跟踪<span class="news-count" id="eventCount"></span></div><ul class="event-track-list" id="eventTabList"></ul><div class="event-track-foot" id="eventTabFoot"></div>';
+      if(anchor.nextSibling) anchor.parentNode.insertBefore(sec, anchor.nextSibling); else anchor.parentNode.appendChild(sec);
+      mdRenderEventTab();
+    }catch(e){}
+  }
+  function mdRenderEventTab(){
+    var sec=document.getElementById('eventSection'); if(!sec) return;
+    var n=renderInto(document.getElementById('eventTabList'), document.getElementById('eventTabFoot'), {hideIfEmpty:false});
+    var cnt=document.getElementById('eventCount');
+    if(cnt) cnt.textContent = n ? (n+'件') : '暂无';
+  }
+  function init(){
+    try{ renderDesktop(); }catch(e){}
+    try{ mdInitEventSection(); }catch(e){}
+  }
+  // 启动：等 event-data.js 就绪再渲染。真实浏览器里 app.js 是最后一个 defer 脚本，
+  // EVENT_DATA 必然已就绪（首次即成功）；jsdom（resources:usable）资源加载异步、
+  // 不保证 defer 顺序，靠轮询兜底。最多等 3s，超时也照常 init（渲染空态、卡片隐藏），
+  // 绝不白屏、绝不抛错。
+  function boot(){
+    var tries=0;
+    (function wait(){
+      if(window.EVENT_DATA || tries>=60){ init(); return; }
+      tries++; setTimeout(wait,50);
+    })();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ setTimeout(boot,0); });
+  else setTimeout(boot,0);
+  // load 兜底：若启动时数据未就绪导致空渲染，load 后补一次。
+  // 仅在该容器仍为空时补，避免把用户已展开的时间线重置掉。
+  window.addEventListener('load',function(){
+    setTimeout(function(){
+      try{
+        var l=document.getElementById('eventTrackList');
+        if(l && !l.children.length) renderDesktop();
+        var t=document.getElementById('eventTabList');
+        if(t && !t.children.length) mdRenderEventTab();
+      }catch(e){}
+    },0);
+  });
+  window.__mdEvent = { renderInto: renderInto, newsByUrl: newsByUrl, renderDesktop: renderDesktop, mdRenderEventTab: mdRenderEventTab, activeCount: activeCount };
+})();
+
 })();
 
 /* ===== 主题切换（2026-09-05 新增）=====
