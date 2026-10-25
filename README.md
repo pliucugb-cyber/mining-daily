@@ -43,8 +43,11 @@ python fetch_lme.py
 python fetch_news.py
 
 # 3. 生成当日页面（自动化流程）
-python generate_common.py   # 公共骨架
-python generate_daily.py    # 当日生成器
+#    当日生成器是按日脚本 generate_YYYYMMDD.py（示例 generate_20261025.py），
+#    由上一个按日脚本复制改 REPORT 日期而来；generate_common.py 是被 import 的
+#    公共骨架，不单独运行。日常发布由 WorkBuddy 日更任务自动完成，
+#    手动补跑/完整顺序见 docs/PIPELINE.md。
+python generate_20261025.py  # 当日生成器（日期按需替换）
 
 # 4. 本地预览
 python -m http.server 8080

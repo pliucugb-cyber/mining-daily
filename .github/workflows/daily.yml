@@ -88,25 +88,43 @@ jobs:
           python3 fetch_news.py --report-date "${{ steps.date.outputs.report_date }}" --quiet
 
       - name: 汇总本轮产物
+        # 2026-10-25 A06b：严格按 report_date 定位当日候选池。
+        # 旧实现 glob+files[-1] 有两个坑：①残留历史文件时会统计到非报告日的池；
+        # ②glob 通配会匹配 news_candidates_union_<date>.json，而字典序 'u'>'2'
+        # 使 union 文件恒居 files[-1]——汇总的一直是并集池而非当日池。
+        env:
+          REPORT_DATE: ${{ steps.date.outputs.report_date }}
         run: |
           echo "=== 本轮产出文件 ==="
-          ls -lh data/news_candidates_*.json 2>/dev/null || echo "(无候选池)"
+          ls -lh "data/news_candidates_${REPORT_DATE}.json" 2>/dev/null || echo "(无当日候选池)"
           ls -lh lme_data.json 2>/dev/null || echo "(无行情数据)"
           echo ""
           echo "=== 候选池条数 ==="
           python3 - <<'PY'
-          import json, glob, os
-          files = sorted(glob.glob('data/news_candidates_*.json'))
-          if not files:
-              print('无候选池文件'); raise SystemExit(0)
-          p = files[-1]
+          import json, os
+          D = os.environ['REPORT_DATE']
+          p = 'data/news_candidates_%s.json' % D
+          if not os.path.exists(p):
+              print('当日候选池不存在：%s' % p)
+              print('（抓取步骤未落盘——零产出也会写 status 文件，不存在即抓取步骤本身失败，请往上看日志）')
+              raise SystemExit(0)
           d = json.load(open(p, encoding='utf-8'))
+          st = d.get('status', 'ok')
           news = d.get('news', [])
           foreign = sum(1 for i in news if i.get('foreign'))
-          print(f'{os.path.basename(p)}：候选 {len(news)} 条（境外 {foreign} 条）')
+          print('%s：候选 %d 条（境外 %d 条）status=%s' % (os.path.basename(p), len(news), foreign, st))
+          if st == 'failed':
+              print('⚠️ status=failed：全部启用源抓取失败，这不是「当天无内容」')
+          elif st == 'degraded':
+              print('⚠️ status=degraded：部分源失败/疑似失败，当日零候选，需人工确认')
+          elif st == 'empty':
+              print('status=empty：所有源正常抓取，当天确实无新内容')
           PY
 
       - name: 信源产出报告
+        # 2026-10-25 A06b：同上，按 report_date 精确选当日文件
+        env:
+          REPORT_DATE: ${{ steps.date.outputs.report_date }}
         run: |
           # 目的：识别在 GitHub（境外）服务器上哑掉的信源。
           # 连续多日零产出的源很可能是被墙 / 反爬 / 地域限流，而非「当天确实无内容」。
@@ -121,12 +139,15 @@ jobs:
           all_src = {c['key']: c for c in m.SOURCES}
           enabled = {k: c for k, c in all_src.items() if c.get('enabled')}
 
-          # 2) 统计本轮候选池
-          files = sorted(glob.glob('data/news_candidates_*.json'))
-          if not files:
-              print('无候选池，无法统计'); raise SystemExit(0)
-          pool = json.load(open(files[-1], encoding='utf-8'))
+          # 2) 统计本轮候选池（2026-10-25 A06b：按 report_date 定位，不再 glob+files[-1]）
+          p = 'data/news_candidates_%s.json' % os.environ['REPORT_DATE']
+          if not os.path.exists(p):
+              print('当日候选池不存在：%s，无法统计' % p); raise SystemExit(0)
+          pool = json.load(open(p, encoding='utf-8'))
           news = pool.get('news', [])
+          st = pool.get('status', 'ok')
+          if st != 'ok':
+              print('（当日候选池 status=%s，news 为空属预期）' % st)
 
           got = {}
           for i in news:

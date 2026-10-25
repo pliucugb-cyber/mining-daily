@@ -122,7 +122,7 @@ def load_news_pool():
     """合并全库新闻（与 news-data.js 同源），返回 (news_list, by_id)。"""
     pool = []
     by_id = {}
-    for fn in sorted(glob.glob(os.path.join(ROOT, 'data', 'news_2026-*.json'))):
+    for fn in sorted(glob.glob(os.path.join(ROOT, 'data', 'news_????-??.json'))):
         try:
             d = json.load(open(fn, encoding='utf-8'))
         except Exception:
@@ -202,7 +202,7 @@ def load_news_pool():
     """合并全库新闻（与 news-data.js 同源），返回 (news_list, by_id)。"""
     pool = []
     by_id = {}
-    for fn in sorted(glob.glob(os.path.join(ROOT, 'data', 'news_2026-*.json'))):
+    for fn in sorted(glob.glob(os.path.join(ROOT, 'data', 'news_????-??.json'))):
         try:
             d = json.load(open(fn, encoding='utf-8'))
         except Exception:

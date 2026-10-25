@@ -84,13 +84,21 @@ def run(report=None, mock=False, strict=None):
           '--date', report, '--news-json', news_json], env=env)
 
     # 数字落地最终守门（strict 时未落地抛异常，由调用方决定是否阻断部署）
+    # 2026-10-25 A03：strict 失败必须非零退出——旧实现只打印"中止"后 return，
+    # 进程退出码仍是 0，外层 cron / shadow_run.sh 无法感知失败，"不部署"
+    # 从未被真正执行。SystemExit(2) 与 generate_site.py 的 sys.exit(1) 区分：
+    # 此处是编排层守门（站点已渲染，但绝不能再往下走部署）。
     try:
         verify_new_items(site_items, report, strict=strict, src_map_override=src_map)
     except AssertionError as e:
         print('[pipeline] ⚠️ 数字守门未通过：%s' % e)
         if strict:
-            print('[pipeline] strict 模式：中止（不部署）。请人工核对后重跑或放宽 strict')
-            return graded, stats
+            raise SystemExit('[pipeline] strict 模式：数字守门未通过，中止（不部署）。'
+                             '请人工核对后重跑或放宽 strict')
+    except Exception as e:
+        print('[pipeline] ⚠️ 数字校验器故障：%s' % e)
+        if strict:
+            raise SystemExit('[pipeline] strict 模式：校验器故障，中止（不部署）')
 
     print('[pipeline] 完成。分级 auto=%d review=%d dropped=%d'
           % (stats['auto'], stats['review'], stats['dropped']))

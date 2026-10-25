@@ -161,7 +161,13 @@ self.addEventListener('activate', event => {
     Promise.resolve()
       .then(() => caches.keys())
       .then(keys => Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+        // 2026-10-25 C01：只删本站命名空间内的旧缓存。
+        // CacheStorage 按 origin 共享（不按 path）：GitHub Pages 同账号下其他项目
+        // 站点（pliucugb-cyber.github.io/<其他仓库>）若也注册了 SW，本站 activate
+        // 会把它家的缓存一并删掉，对方激活时同样回删本站（互删，直到双方各自重装）。
+        // CACHE_NAME 形如 'mining-daily-<build-version>'，此前缀即本站命名空间，
+        // 与 deploy_pages.py sync_sw_cache_name() 的派生规则同源，改派生规则时同步改这里。
+        keys.filter(k => k.startsWith('mining-daily-') && k !== CACHE_NAME).map(k => caches.delete(k))
       ))
       .then(() => self.clients.claim())            // 立即接管所有打开的页面
       .then(() => self.clients.matchAll({ type: 'window' }))

@@ -11,6 +11,7 @@
 - 境外条目保留英文原题（data-orig-title + 摘要末尾「原题：…」）
 """
 import re, datetime, json, glob, os
+import sys
 from source_whitelist import is_allowed
 from generate_common import (
     ni, card, _replace_block, split_items, item_url, strip_new, _esc, render_cat_groups,
@@ -162,7 +163,7 @@ arch_keep = [(cat, strip_new(it)) for cat, it in arch_items
 
 # ── URL → (内容类, 地域) 索引：让存量条目也能按新分类体系重新分桶 ──
 _url_theme = {}
-for _fn in sorted(glob.glob('data/news_2026-*.json')):
+for _fn in sorted(glob.glob('data/news_????-??.json')):  # 2026-10-25 A04a：年份不写死，2027 起可读
     try:
         _lib = json.load(open(_fn, encoding='utf-8'))['news']
     except Exception:
@@ -197,7 +198,7 @@ LIB_SKIP = {'矿权交易', '并购与投资'}
 _lib_item = partial(_lib_item_raw, cat_map=CAT_MAP)
 
 _lib_pool = []
-for _fn in sorted(glob.glob('data/news_2026-*.json')):
+for _fn in sorted(glob.glob('data/news_????-??.json')):  # 2026-10-25 A04a：年份不写死，2027 起可读
     try:
         _lib = json.load(open(_fn, encoding='utf-8'))['news']
     except Exception:
@@ -242,14 +243,30 @@ merge_seq = [x for x in merge_seq if item_url(x[1]) not in new_seen_url]
 merge_seq = dedup_same_event(merge_seq)
 
 # ============ 3.6 数字落地校验（复用 verify_numbers） ============
+# 2026-10-25 A03：严格模式下校验失败/校验器故障必须非零退出、不写正式产物。
+# 旧实现 except Exception 打印"跳过"后继续 → B' pipeline 的 strict 守门被吞、
+# 退出码 0、页面照写。分类处理：
+#   AssertionError = 业务不通过（有正文级数字未落地）
+#   其它 Exception = 工具故障（基准读取/提取逻辑坏）
+# strict 下两者都终止；非 strict 下工具故障明确标记"未验证"而非静默跳过。
+_STRICT_NUM = os.environ.get('VERIFY_NUMBERS_STRICT') == '1'
 try:
     from verify_numbers import verify_new_items
-    _num_issues = verify_new_items(new_items, REPORT,
-                                   strict=os.environ.get('VERIFY_NUMBERS_STRICT') == '1')
+    _num_stats = {}
+    _num_issues = verify_new_items(new_items, REPORT, strict=_STRICT_NUM,
+                                   stats_out=_num_stats)
     if _num_issues:
         print('[num-warn] 共 %d 条摘要存在数字未在源文找到，请人工核对' % len(_num_issues))
+except AssertionError as _e:
+    if _STRICT_NUM:
+        print('[verify_numbers] 严格模式：数字落地校验未通过，终止生成（不写 index.html）：%s' % _e)
+        sys.exit(1)
+    print('[num-warn] %s' % _e)
 except Exception as _e:
-    print('[verify_numbers] 跳过: %s' % _e)
+    if _STRICT_NUM:
+        print('[verify_numbers] 严格模式：数字校验器故障，终止生成（不写 index.html）：%s' % _e)
+        sys.exit(1)
+    print('[verify_numbers] 警告：数字校验未执行（工具故障）：%s' % _e)
 _new_titles = [item_title(it) for _c, it in new_items]
 if _new_titles:
     merge_seq = [x for x in merge_seq

@@ -132,7 +132,7 @@ arch_keep = [(cat, strip_new(it)) for cat, it in arch_items
 
 # ── URL → (内容类, 地域) 索引：让存量条目也能按新分类体系重新分桶 ──
 _url_theme = {}
-for _fn in sorted(glob.glob('data/news_2026-*.json')):
+for _fn in sorted(glob.glob('data/news_????-??.json')):
     try:
         _lib = json.load(open(_fn, encoding='utf-8'))['news']
     except Exception:
@@ -167,7 +167,7 @@ LIB_SKIP = {'矿权交易', '并购与投资'}
 _lib_item = partial(_lib_item_raw, cat_map=CAT_MAP)
 
 _lib_pool = []
-for _fn in sorted(glob.glob('data/news_2026-*.json')):
+for _fn in sorted(glob.glob('data/news_????-??.json')):
     try:
         _lib = json.load(open(_fn, encoding='utf-8'))['news']
     except Exception:

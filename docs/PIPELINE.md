@@ -105,7 +105,7 @@ PY inject_ma.py --report-date <今日> --days 30
 
 ```
 PY export_news_json.py                 # 刷新 NEWS_DATA.updated
-PY classify_llm.py                     # 只补 region 空的新条目，幂等
+PY archive/analysis/classify_llm.py    # 只补 region 空的新条目，幂等（2026-10-25 D02：文件在 archive/analysis/ 下，根目录没有）
 PY runq.py fetch_company.py            # 全量重采 44 家公司 → company_news.json（失败不阻断）
 ```
 ⚠️ `export_news_json.py` 与 `classify_llm.py` 写月库为 `indent=1`，而月库既定格式是 `indent=2` + LF ⇒ 跑完**须重序列化**：

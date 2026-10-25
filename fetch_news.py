@@ -851,7 +851,9 @@ def parse_cninfo(cfg, report_date, days):
             try:
                 d = datetime.datetime.fromtimestamp(int(ts) / 1000).strftime("%Y-%m-%d")
             except Exception:
-                d = report_date
+                # 2026-10-25 A07：API 未给/给错时间戳 → publication_date 未知，
+                # 不再填 report_date 冒充「今日发布」（主循环会记 date_conf=unknown）。
+                d = ""
             adjunct = (a.get("adjunctUrl") or "").lstrip("/")
             if not adjunct:
                 continue
@@ -1128,6 +1130,7 @@ def run_source(cfg, report_date, days, use_detail):
     extra_exclude = cfg.get("extra_exclude") or []
     items, seen_url, seen_title = [], set(), set()
     dropped_extra = 0
+    future_skipped = 0   # 2026-10-25 A07：未来日期排除计数（全源统一拦截后的可观测性）
     for r in raw:
         if len(items) >= limit:
             break
@@ -1155,21 +1158,32 @@ def run_source(cfg, report_date, days, use_detail):
         # 时回详情页取。长江有色的 URL 形如 /news/ZX003/202609/<hash>.html，hash
         # 以 09/16 开头时会被 extract_date 误读成 09-09 / 09-16 这类**未来日期**，
         # 所以该源必须强制回查详情页，不能信 URL。
+        # 2026-10-25 A07：日期语义修正——
+        # ① 解析失败不再填 report_date 冒充「今日发布」：publication_date 可空，
+        #    另记 date_conf（日期来源置信度）与 first_seen（今日收录）；
+        #    is_new 只认真实原文日期，未知日期的条目允许「今日收录、原文日期未知」。
+        # ② 未来日期检查从「仅 force_date_from_detail / use_raw_date 两个开关的
+        #    3/16 个源」扩展到**所有源**：URL 误读出未来日期不是某源特产
+        #    （长江有色 hash 误读只是已发现的一例），此前其余 13 个源无人拦截。
         d = ""
+        date_conf = "unknown"
         if cfg.get("use_raw_date") and r.get("date"):
             d = r["date"]                # 登记表自带「公告日期」列，权威直接采用
+            date_conf = "raw"
         elif not cfg.get("force_date_from_detail"):
             d = extract_date(url, r.get("date", ""), "", title)
+            if d:
+                date_conf = "extracted"
         if (not d or cfg.get("force_date_from_detail")) and cfg.get("date_from_detail"):
-            d = _date_from_detail(url) or d
-        if not d:
-            d = report_date
-        if cfg.get("force_date_from_detail") and d > report_date:
-            continue        # 未来日期必是 URL 误读，宁可丢也不收
-        if cfg.get("use_raw_date") and d > report_date:
-            continue        # 登记表公告日期若晚于报告日，属数据异常，不入
-        if d < cutoff:
-            continue
+            _dd = _date_from_detail(url)
+            if _dd:
+                d = _dd
+                date_conf = "detail"
+        if d and d > report_date:
+            future_skipped += 1
+            continue        # 未来日期必是 URL/详情误读，宁可丢也不收（全源统一）
+        if d and d < cutoff:
+            continue        # 日期未知（d=""）的条目不做 cutoff 过滤：保守收录、不冒充今日
         summary = r.get("summary") or ""
         if use_detail and not summary and len(items) < DETAIL_LIMIT:
             summary = fetch_detail_summary(url)
@@ -1178,8 +1192,9 @@ def run_source(cfg, report_date, days, use_detail):
             "url": url,
             "title": title,
             "source": cfg["source"],
-            "orig_date": d[5:],
+            "orig_date": d[5:] if d else "",
             "orig_date_full": d,
+            "date_conf": date_conf,
             "report_date": report_date,
             "category": cfg["category"],
             "is_new": d == report_date,
@@ -1192,6 +1207,8 @@ def run_source(cfg, report_date, days, use_detail):
             "fetch_src": cfg["key"],
         })
     note = "ok(%d raw -> %d kept" % (len(raw), len(items))
+    if future_skipped:
+        note += ", 未来日期排除 %d" % future_skipped
     if dropped_extra:
         note += ", 源级排除 %d" % dropped_extra
     if len(items) >= limit:
@@ -1425,14 +1442,46 @@ def main():
                       ensure_ascii=False, indent=2)
         log.info("健康报告已写入：%s" % hp)
 
-    if args.dry_run or not all_items:
+    if args.dry_run:
         if not args.quiet:
             for i in all_items[:25]:
                 log.info("  [%s|%s] %s" % (i["fetch_src"], i["orig_date"], i["title"][:52]))
                 log.info("      %s" % i["url"][:96])
-        if not all_items:
-            log.info("  （无候选：可能是当天确实无新内容，或源结构变化需调整 link_re）")
         return
+
+    # 2026-10-25 A06a：零候选也必须落盘「带状态」的当日文件。
+    # 旧实现直接 return、退出码 0、不写当天空池 → 下游 daily.yml 的
+    # glob+files[-1] 会把历史某天的池当成当日产出；「当天确实无新增」
+    # 与「全部源失败」在产物上完全无法区分，整条 workflow 全绿。
+    if not all_items:
+        failed = [h for h in health
+                  if str(h.get("fetch_status", "")).startswith("fetch-fail")]
+        suspect = [h for h in health if h.get("status") == "suspect"]
+        enabled_n = len([c for c in SOURCES if c.get("enabled")]) or len(health)
+        all_failed = bool(health) and len(failed) >= enabled_n
+        status = "failed" if all_failed else ("degraded" if (failed or suspect) else "empty")
+        os.makedirs(DATA_DIR, exist_ok=True)
+        cand_path = os.path.join(DATA_DIR, "news_candidates_%s.json" % args.report_date)
+        with open(cand_path, "w", encoding="utf-8") as f:
+            json.dump({"report_date": args.report_date, "count": 0,
+                       "status": status,
+                       "run_id": datetime.datetime.now().strftime("%Y%m%d-%H%M%S"),
+                       "sources_total": len(health),
+                       "sources_failed": [h["key"] for h in failed],
+                       "sources_suspect": [h["key"] for h in suspect],
+                       "news": []}, f, ensure_ascii=False, indent=2)
+        log.info("候选池已写入（零候选，status=%s）：%s" % (status, cand_path))
+        if all_failed:
+            log.error("全部 %d 个启用源抓取失败——这不是「当天无内容」，"
+                      "请检查网络/源结构（status=failed，退出码 2）" % enabled_n)
+            return 2
+        if status == "degraded":
+            log.info("部分源失败/疑似失败（failed=%d suspect=%d），当日零候选，"
+                     "需人工确认是源故障还是确实无内容"
+                     % (len(failed), len(suspect)))
+        else:
+            log.info("所有源均正常抓取但零候选：当天确实无新内容（status=empty）")
+        return 0
 
     os.makedirs(DATA_DIR, exist_ok=True)
     cand_path = os.path.join(DATA_DIR, "news_candidates_%s.json" % args.report_date)
@@ -1458,4 +1507,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())   # 2026-10-25 A06a：零候选/全源失败的退出码必须能传出到 workflow
