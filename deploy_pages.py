@@ -245,6 +245,77 @@ def validate_data_js():
         log('[deploy_pages] %s 语法校验通过' % f)
 
 
+# ── A05：单一发布命令的前置测试闸门与发布验收（2026-10-25）──
+# 原则：先验证、再打包、再推送、最后等待线上可见；区分「推送成功」与「发布验收成功」。
+# 旧实现 push 成功即拿本地 commit 输出「线上版本」，Pages 边缘传播滞后时
+# 线上实际还是旧版，调用方却收到成功信号。
+QUICK_TESTS = ['test_sw_cache_update.js', 'test_data_quality_gate.js', 'test_qa_proxy.js']
+VERIFY_TIMEOUT_S = 240          # 线上验收轮询上限（GitHub Pages 边缘传播通常 <1min）
+VERIFY_INTERVAL_S = 15
+SITE_URL = 'https://pliucugb-cyber.github.io/mining-daily/'
+
+
+def run_quick_tests():
+    """推送前跑快速测试集（约 1 分钟）。任一失败 → 拒绝推送。
+
+    找不到 node 时降级为警告跳过（云链路等无 node 环境仍可部署），
+    但本机部署默认启用；--skip-tests 可显式跳过（不推荐）。
+    """
+    node = _node_exe()
+    if not node:
+        log('[deploy_pages] 警告：未找到 node，跳过快速测试闸门'
+            '（本机部署建议先跑 python run_tests_all.py 全量）')
+        return True
+    for t in QUICK_TESTS:
+        if not os.path.isfile(os.path.join(ROOT, t)):
+            log('[deploy_pages] 警告：测试文件缺失：%s（跳过）' % t)
+            continue
+        log('[deploy_pages] 运行快速测试：%s …' % t)
+        p = subprocess.run([node, t], cwd=ROOT,
+                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        lines = p.stdout.decode('utf-8', errors='replace').strip().split('\n')
+        tail = lines[-1][:120] if lines else '(无输出)'
+        if p.returncode != 0:
+            log('[deploy_pages] 快速测试失败：%s → %s' % (t, tail))
+            log('[deploy_pages] 按 A05 原则：测试不通过不推送。修复后重试，'
+                '或确认知情后加 --skip-tests。')
+            return False
+        log('[deploy_pages] 通过：%s → %s' % (t, tail))
+    return True
+
+
+def verify_online(build_version, app_fp):
+    """轮询线上 index.html，直到 build-version 与 app.js 指纹都等于本次部署值。
+
+    返回 (ok, detail)。不看 HTTP 200 就算成功——必须比对版本与指纹，
+    防止「 Pages 还在serve 旧版」与「新 HTML + 旧 app.js 混装」被当成发布成功。
+    """
+    import urllib.request
+    deadline = time.time() + VERIFY_TIMEOUT_S
+    last = '(尚未请求)'
+    while time.time() < deadline:
+        try:
+            url = SITE_URL + 'index.html?cb=verify-%d' % int(time.time())
+            req = urllib.request.Request(url, headers={'Cache-Control': 'no-cache'})
+            with urllib.request.urlopen(req, timeout=20) as r:
+                html = r.read().decode('utf-8', errors='replace')
+            m = re.search(r'<meta name="build-version" content="([^"]+)"', html)
+            bv = m.group(1) if m else ''
+            fm = re.search(r'src="app\.js\?v=([0-9a-f]+)"', html)
+            fp = fm.group(1) if fm else ''
+            last = 'build=%s app.js?v=%s' % (bv or '(无)', fp or '(无)')
+            if bv == build_version and (not app_fp or fp == app_fp):
+                return True, last
+            if bv == build_version and app_fp and fp != app_fp:
+                return False, '指纹不匹配（新页旧脚本混装）：线上 app.js?v=%s ≠ 本地 %s' % (fp, app_fp)
+        except Exception as e:
+            last = '请求失败：%s' % str(e)[:100]
+        log('[deploy_pages] 线上尚未出现预期版本（%s），%ds 后重试…' % (last, VERIFY_INTERVAL_S))
+        time.sleep(VERIFY_INTERVAL_S)
+    return False, '超时 %ds 未生效（最后状态：%s）' % (VERIFY_TIMEOUT_S, last)
+
+
+
 def sync_sw_cache_name():
     """2026-09-10 P1：SW 的 CACHE_NAME 由 index.html 的 build-version 自动派生。
 
@@ -356,9 +427,16 @@ def sync_site_title():
 
 def main():
     force = '--force' in sys.argv
+    skip_tests = '--skip-tests' in sys.argv
+    skip_verify = '--skip-verify' in sys.argv
     # 4.0) 先按 build-version 同步 SW 缓存名与站点标题，再复制文件（保证推上去的就是新的）
     sync_sw_cache_name()
     sync_site_title()
+
+    # 本次部署的 build-version（验收基准，从 index.html 读，与 SW 缓存名同源）
+    with io.open(os.path.join(ROOT, 'index.html'), encoding='utf-8') as f:
+        _m = re.search(r'<meta name="build-version" content="([^"]+)"', f.read())
+    build_version = _m.group(1) if _m else ''
 
     # 1) 校验必需文件齐全
     missing = [f for f in REQUIRED if not os.path.isfile(os.path.join(ROOT, f))]
@@ -368,6 +446,11 @@ def main():
 
     # 1.5) *-data.js 语法闸门：生成物语法坏 → 前端静默空白，上线前必须拦住
     validate_data_js()
+
+    # 1.6) 前置测试闸门（A05）：先验证再打包推送，测试不过不 push
+    if not skip_tests:
+        if not run_quick_tests():
+            return 2
 
     # 2) 准备工作副本
     os.makedirs(WORK, exist_ok=True)
@@ -424,14 +507,29 @@ def main():
         with open(nojekyll, 'w') as f:
             f.write('')
 
-    # 5) 提交（工作区有变更才提交）
+    # 5) 远端变化检测（C05：单一发布者策略——gh-pages 只应由本脚本从 main 写）
+    run('git fetch origin %s' % BRANCH, cwd=WORK, check=False)
+    code, cnt = run('git rev-list --count %s..FETCH_HEAD' % BRANCH, cwd=WORK, check=False)
+    remote_note = ''
+    if code == 0 and cnt.strip().isdigit() and int(cnt.strip()) > 0:
+        log('[deploy_pages] 警告：远端 %s 有 %s 个本部署器之外的提交'
+            '（单一发布者策略下不应出现，请确认没有其他任务/人工在推 gh-pages）。'
+            % (BRANCH, cnt.strip()))
+        code, rsha = run('git rev-parse --short FETCH_HEAD', cwd=WORK, check=False)
+        remote_note = ' · remote ' + (rsha.strip() if code == 0 else '?')
+
+    # 6) 提交（工作区有变更才提交）；信息带 source SHA + build-version，可追溯可回滚
     run('git add -A', cwd=WORK)
     code, status = run('git status --porcelain', cwd=WORK)
     if status.strip():
         import datetime
         stamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
-        run('git commit -m "站点更新 %s"' % stamp, cwd=WORK)
-        log('[deploy_pages] 已生成本地提交。')
+        code, src_sha = run('git rev-parse --short HEAD', cwd=ROOT, check=False)
+        src_sha = src_sha.strip() if code == 0 and src_sha.strip() else 'unknown'
+        run('git commit -m "站点更新 %s（source %s · build %s%s）"'
+            % (stamp, src_sha, build_version or '?', remote_note), cwd=WORK)
+        log('[deploy_pages] 已生成本地提交（source=%s build=%s%s）。'
+            % (src_sha, build_version or '?', remote_note))
     else:
         log('[deploy_pages] 工作区与上一次提交一致。')
 
@@ -456,11 +554,36 @@ def main():
             log('[deploy_pages] 排查：检查 ~/.ssh/config 是否正确、公钥是否已加到 GitHub、网络是否可达。')
             return 1
 
-    log('[deploy_pages] 推送成功。')
+    log('[deploy_pages] 推送成功（gh-pages）。')
     code, out = run('git log -1 --format="%h %s"', cwd=WORK)
-    log('[deploy_pages] 线上版本：%s' % out.strip())
-    log('[deploy_pages] 站点地址：https://pliucugb-cyber.github.io/mining-daily/')
-    return 0
+    log('[deploy_pages] 本地 gh-pages 顶端：%s' % out.strip())
+
+    # 7) 发布验收（A05）：等线上真正出现本次 build-version + app.js 指纹，
+    #    不能拿「推送成功」冒充「上线成功」。
+    if skip_verify:
+        log('[deploy_pages] 已按 --skip-verify 跳过线上验收（请自行复核 build-version）。')
+        log('[deploy_pages] 站点地址：%s' % SITE_URL)
+        return 0
+    app_fp = ''
+    try:
+        with io.open(os.path.join(WORK, 'index.html'), encoding='utf-8') as f:
+            _fm = re.search(r'src="app\.js\?v=([0-9a-f]+)"', f.read())
+        app_fp = _fm.group(1) if _fm else ''
+    except Exception:
+        pass
+    log('[deploy_pages] 等待 Pages 生效并验收（build=%s app.js?v=%s，上限 %ds）…'
+        % (build_version or '?', app_fp or '?', VERIFY_TIMEOUT_S))
+    ok, detail = verify_online(build_version, app_fp)
+    if ok:
+        log('[deploy_pages] 发布验收通过：%s' % detail)
+        log('[deploy_pages] 站点地址：%s' % SITE_URL)
+        return 0
+    log('[deploy_pages] 发布验收未通过：%s' % detail)
+    log('[deploy_pages] gh-pages 已推送成功，但线上未在 %ds 内出现预期版本。'
+        % VERIFY_TIMEOUT_S)
+    log('[deploy_pages] 请稍后手工复核：curl -s "%sindex.html?cb=<时间戳>" | findstr build-version'
+        % SITE_URL)
+    return 3
 
 
 if __name__ == '__main__':

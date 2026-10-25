@@ -168,6 +168,55 @@ try {
     check('activate 未删同 origin 其他站点缓存（other-app-cache）', deleted.indexOf('other-app-cache') < 0);
     check('activate 未删其他 Pages 路径缓存（/other-repo）', deleted.indexOf('pliucugb-cyber.github.io/other-repo') < 0);
     check('activate 未删当前 CACHE_NAME', deleted.indexOf('mining-daily-20261025-0539') < 0);
+
+    console.log('===== A05/C05：部署入口单一发布命令 =====');
+    const dpSrc = read('deploy_pages.py');
+    check('deploy_pages.py 含前置快速测试闸门 run_quick_tests',
+      dpSrc.indexOf('def run_quick_tests') >= 0 && dpSrc.indexOf('QUICK_TESTS') >= 0);
+    check('快速测试集含 SW/数据质量/QA 代理三个测试',
+      dpSrc.indexOf("'test_sw_cache_update.js'") >= 0 && dpSrc.indexOf("'test_data_quality_gate.js'") >= 0 && dpSrc.indexOf("'test_qa_proxy.js'") >= 0);
+    check('测试不过不推送（return 2）',
+      /if not run_quick_tests\(\):\s*\n\s*return 2/.test(dpSrc.replace(/\r\n/g, '\n')));
+    check('提交信息带 source SHA + build-version + 远端变化记录（C05 可追溯）',
+      dpSrc.indexOf('source %s · build %s') >= 0 && dpSrc.indexOf('remote_note') >= 0);
+    check('推送后内建线上验收 verify_online（比对 build-version + app.js 指纹）',
+      dpSrc.indexOf('def verify_online') >= 0 && dpSrc.indexOf('VERIFY_TIMEOUT_S') >= 0);
+    check('区分「推送成功」与「发布验收成功」（验收失败 return 3）',
+      dpSrc.indexOf('return 3') >= 0 && dpSrc.indexOf('推送成功（gh-pages）') >= 0);
+    // 行尾统一为 CRLF：2026-10-25 曾因补丁插入 LF 行造成混合行尾、后续补丁锚点全失配
+    const dpRaw = fs.readFileSync(path.join(ROOT, 'deploy_pages.py'));
+    check('deploy_pages.py 行尾统一（无混合 CRLF/LF）',
+      dpRaw.indexOf(Buffer.from('\r\n')) >= 0 &&
+      dpRaw.toString('utf-8').split('\n').length - 1 === (dpRaw.toString('utf-8').match(/\r\n/g) || []).length);
+
+    // verify_online 函数级（mock urllib，spawn python 探针）
+    try {
+      const out = execFileSync('python', ['-c', `
+import sys
+sys.path.insert(0, '.')
+import deploy_pages as dp
+import urllib.request
+class R:
+    def __init__(self, b): self._b = b.encode('utf-8')
+    def read(self): return self._b
+    def __enter__(self): return self
+    def __exit__(self, *a): return False
+NEW = '<meta name="build-version" content="20261025-9999"><script src="app.js?v=abc12345" defer></script>'
+MIX = '<meta name="build-version" content="20261025-9999"><script src="app.js?v=dead1234" defer></script>'
+OLD = '<meta name="build-version" content="20261024-1200"><script src="app.js?v=dead1234" defer></script>'
+urllib.request.urlopen = lambda req, timeout=20: R(NEW)
+r1 = dp.verify_online('20261025-9999', 'abc12345')
+urllib.request.urlopen = lambda req, timeout=20: R(MIX)
+r2 = dp.verify_online('20261025-9999', 'abc12345')
+dp.VERIFY_TIMEOUT_S = 2; dp.VERIFY_INTERVAL_S = 1
+urllib.request.urlopen = lambda req, timeout=20: R(OLD)
+r3 = dp.verify_online('20261025-9999', 'abc12345')
+ok = r1[0] is True and r2[0] is False and '混装' in r2[1] and r3[0] is False and '超时' in r3[1]
+print('OK' if ok else 'BAD %s %s %s' % (r1, r2, r3))
+`], { cwd: ROOT, encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] });
+      check('verify_online：新版放行/混装拦截/旧版超时',
+        out.indexOf('OK') >= 0 && out.indexOf('BAD') < 0, out.trim().slice(-60));
+    } catch (e) { check('verify_online 探针', false, String(e).slice(0, 80)); }
     console.log('\nDATA-QUALITY-GATE ' + pass + ' PASS / ' + fail + ' FAIL');
     process.exit(fail ? 1 : 0);
   }).catch((e) => { check('activate 沙箱执行', false, String(e).slice(0, 100)); process.exit(1); });
