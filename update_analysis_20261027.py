@@ -204,6 +204,8 @@ rights_highlights = '；'.join(
     '%s（%s）' % (r['title'].split('探矿权')[0].split('采矿权')[0][:18], r.get('orig_date', ''))
     for r in (rk_new or rights)[:4]) or '无'
 _RK_WIN = [r for r in rights if (r.get('orig_date_full') or '') >= '2026-10-14']
+# 前端口径：矿权卡片只渲染「矿业权市场」官方公告（app.js getRightsData），海外矿权新闻不进卡片
+_RK_CARDS = [r for r in _RK_WIN if r.get('source') == '矿业权市场' or 'ky.mnr.gov.cn' in (r.get('url') or '')]
 rights_text = ('矿权交易专区近 14 日窗口累计 %d 宗（挂牌/协议/转让/结果）；' % len(_RK_WIN) +
                ('今日新增 %d 宗：%s。' % (len(rk_new), rights_highlights) if rk_new
                 else '今日无新增合规矿权公告，最新一批：%s。' % rights_highlights))
@@ -296,7 +298,7 @@ BRIEF_DIGEST = [
     {'cat': '并购与投资', 'k': '兴业银锡',
      't': '兴业银锡披露收购威领股份进展公告，具体对价与审批安排以公告为准。'},
     {'cat': '矿权市场', 'k': '',
-     't': '矿权专区近 14 日窗口累计 %d 宗；今日 ky.mnr 无新增合规公告。' % len(_RK_WIN)},
+     't': '矿权专区近 14 日累计 %d 宗；今日 ky.mnr 无新增合规公告，另收海外勘探中标 1 宗。' % len(_RK_CARDS)},
 ]
 
 
