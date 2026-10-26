@@ -6,7 +6,7 @@
  *       note 补充信息 · v 日期可信度（ok/tbd）
  */
 window.CONFERENCE_DATA = {
-  updated: '2026-10-26',
+  updated: '2026-10-27',
   source: '多源自动抓取 + 人工维护（详见 data/conference_sources.json）',
   items: [
     { s:'2026-10-27', e:'2026-10-29', t:'IMARC 2026 国际矿业与资源大会', p:'悉尼 ICC', o:'IMARC', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'澳方年度最大矿业展会', v:'ok' },
