@@ -426,6 +426,10 @@ SOURCES = [
         "foreign": False,
         "enabled": True,
         "max_items": 60,
+        # 2026-10-26 修：本源当天稿件多在 05:30 之后才发布，而 --days 默认 1（只收当天发布）
+        # ⇒ 早班恒为 0 条（10-25、10-26 连续两天 "34 raw -> 0 kept"，源级排除后全被日期过滤）。
+        # 当晚 22:26 复跑同一源得 15 条（全部 10-26），证明源站正常、非反爬。放宽到 3 天覆盖周末积压。
+        "lookback": 3,
         # URL 只精确到 /202609/（无日），且 hash 头两位会被误读成「日」，必须强制回查详情页
         "date_from_detail": True,
         "force_date_from_detail": True,
