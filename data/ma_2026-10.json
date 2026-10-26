@@ -1,8 +1,42 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-26T05:37:13+08:00",
-  "count": 24,
+  "updated_at": "2026-10-27T05:43:42+08:00",
+  "count": 26,
   "news": [
+    {
+      "id": "efdbdec747fa",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-27/1225625639.PDF",
+      "title": "关于向全资子公司增资的公告",
+      "source": "巨潮资讯网·无锡振华",
+      "orig_date": "10-27",
+      "orig_date_full": "2026-10-27",
+      "report_date": "2026-10-27",
+      "category": "并购与投资",
+      "company": "无锡振华",
+      "sec_code": "605319",
+      "ma_type": "增资/认购",
+      "summary": "无锡振华（605319）披露《关于向全资子公司增资的公告》，涉及增资/认购。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "b388a9c9b977",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-27/1225626813.PDF",
+      "title": "关于对外投资收购威领股份的进展公告",
+      "source": "巨潮资讯网·兴业银锡",
+      "orig_date": "10-27",
+      "orig_date_full": "2026-10-27",
+      "report_date": "2026-10-27",
+      "category": "并购与投资",
+      "company": "兴业银锡",
+      "sec_code": "000426",
+      "ma_type": "股权/资产收购",
+      "summary": "兴业银锡（000426）披露《关于对外投资收购威领股份的进展公告》，涉及股权/资产收购。",
+      "tags": [
+        "并购"
+      ]
+    },
     {
       "id": "cf0c9401d725",
       "url": "https://static.cninfo.com.cn/finalpage/2026-10-26/1225621873.PDF",
