@@ -314,6 +314,11 @@ new_items = [
                 'Globe Metals 马拉维 Kanyika 铌项目启动提前开采，目标 2028 年初投产',
                 'Globe Metals & Mining 宣布马拉维 Kanyika 铌项目已开始提前开采，按每批约 5,000 吨挖掘并堆存矿化物料供后续选厂调试，同时提供品位验证大样与非矿石料用于道路、地基与厂区平台。规划采区推定品位约 0.45% 五氧化二铌、0.015% 五氧化二钽，公司仍以 2028 年初首次产出为目标。',
                 orig_title="Early mining begins at Malawi's Kanyika project")),
+    (CAT_GJ, ni('https://www.mining.com/bc-tory-landslide-raises-mining-hopes-rights-fears',
+                'MINING.COM', '10-27',
+                '加拿大不列颠哥伦比亚省保守党大胜，矿业盼加速审批、原住民权益引担忧',
+                '不列颠哥伦比亚省保守党在省选中以压倒性优势胜出，矿业界期待新政府加快矿山许可审批、加大勘探激励；与此同时，原住民团体对土地权利与环评程序可能弱化表达担忧。该省是加拿大重要矿产与勘探基地，政策走向将影响铜、金及关键矿产项目的推进节奏。',
+                orig_title='British Columbia Conservative landslide raises mining hopes, Indigenous rights fears')),
 ]
 
 
