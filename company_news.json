@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-27",
+ "updated_at": "2026-10-28",
  "companies": [
   {
    "name": "紫金矿业",
@@ -442,7 +442,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -1974,6 +1974,24 @@
    "rank": 26,
    "items": [
     {
+     "t": "Freeport 2026年第三季度和九个月财务和运营业绩发布于其网站| FCX股票新闻",
+     "d": "2026-10-27",
+     "u": "https://www.stocktitan.net/news/FCX/freeport-third-quarter-and-nine-month-2026-financial-and-operating-l58z387e0kn6.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Freeport Third-Quarter and Nine-Month 2026 Financial and Operating Results Release Available on Its Website | FCX Stock News"
+    },
+    {
+     "t": "SEC 8-K（重大事项披露）",
+     "d": "2026-10-27",
+     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000045/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
+    {
      "t": "Freeport提供2026年第三季度运营更新| FCX股票新闻",
      "d": "2026-10-02",
      "u": "https://www.stocktitan.net/news/FCX/freeport-provides-third-quarter-2026-operational-vkuik38lgh0h.html",
@@ -1981,15 +1999,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Freeport Provides Third-Quarter 2026 Operational Update | FCX Stock News"
-    },
-    {
-     "t": "SEC 8-K（重大事项披露）",
-     "d": "2026-10-02",
-     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000043/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
     },
     {
      "t": "Freeport宣布发放普通股季度现金股息| FCX股票新闻",
@@ -3605,6 +3614,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 364
+  "items": 365
  }
 }
