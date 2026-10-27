@@ -1,12 +1,12 @@
 {
   "meta": {
     "report_date": "2026-10-27",
-    "generated_at": "2026-10-27T05:44:43+08:00",
-    "total": 553,
-    "new_today": 21,
+    "generated_at": "2026-10-27T08:48:45+08:00",
+    "total": 554,
+    "new_today": 22,
     "archive": 532,
-    "page_total": 553,
-    "page_new_count": 21,
+    "page_total": 554,
+    "page_new_count": 22,
     "sources": [
       "MINING.COM",
       "SMM 国际站",
@@ -414,6 +414,25 @@
         "铌",
         "钽",
         "政策"
+      ]
+    },
+    {
+      "id": "357b708f1125",
+      "title": "加拿大不列颠哥伦比亚省保守党大胜，矿业盼加速审批、原住民权益引担忧",
+      "url": "https://www.mining.com/bc-tory-landslide-raises-mining-hopes-rights-fears",
+      "source": "MINING.COM",
+      "orig_date": "10-27",
+      "orig_date_full": "2026-10-27",
+      "report_date": "2026-10-27",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "不列颠哥伦比亚省保守党在省选中以压倒性优势胜出，矿业界期待新政府加快矿山许可审批、加大勘探激励；与此同时，原住民团体对土地权利与环评程序可能弱化表达担忧。该省是加拿大重要矿产与勘探基地，政策走向将影响铜、金及关键矿产项目的推进节奏。（原题：British Columbia Conservative landslide raises mining hopes, Indigenous rights fears）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "政策",
+        "找矿"
       ]
     },
     {
