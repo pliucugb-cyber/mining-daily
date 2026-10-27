@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-27",
+  "updated": "2026-10-28",
   "note": "唯一数据源。manual=人工维护（fetch_conferences.py 永不覆盖/删除）；auto=自动抓取（脚本重写）。conference-data.js 由本文件生成，勿直接改。",
   "manual": [
     {
@@ -544,13 +544,13 @@
   "source_stats": [
     {
       "id": "miningjournal",
-      "status": "FAIL(fetch failed: https://www.mining-journal.com/events (<urlope)",
-      "count": 0
+      "status": "OK",
+      "count": 3
     },
     {
       "id": "gmr",
-      "status": "FAIL(fetch failed: https://globalminingreview.com/events (<urlope)",
-      "count": 0
+      "status": "OK",
+      "count": 3
     },
     {
       "id": "geosociety",

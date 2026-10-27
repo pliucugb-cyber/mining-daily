@@ -1,8 +1,27 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-27T05:43:42+08:00",
-  "count": 26,
+  "updated_at": "2026-10-28T05:39:05+08:00",
+  "count": 27,
   "news": [
+    {
+      "id": "d4657ac13915",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-28/1225629776.PDF",
+      "title": "河南豫光金铅股份有限公司关于向特定对象发行A股股票申请获得上海证券交易所审核通过的公告",
+      "source": "巨潮资讯网·豫光金铅",
+      "orig_date": "10-28",
+      "orig_date_full": "2026-10-28",
+      "report_date": "2026-10-28",
+      "category": "并购与投资",
+      "company": "豫光金铅",
+      "sec_code": "600531",
+      "ma_type": "投资/资本运作",
+      "summary": "豫光金铅（600531）披露《河南豫光金铅股份有限公司关于向特定对象发行A股股票申请获得上海证券交易所审核通过的公告》，涉及投资/资本运作。",
+      "tags": [
+        "并购",
+        "金",
+        "铅"
+      ]
+    },
     {
       "id": "efdbdec747fa",
       "url": "https://static.cninfo.com.cn/finalpage/2026-10-27/1225625639.PDF",
