@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-28",
+ "updated_at": "2026-10-29",
  "companies": [
   {
    "name": "紫金矿业",
@@ -17,6 +17,13 @@
    "stale": false,
    "rank": 1,
    "items": [
+    {
+     "t": "巨龙铜业:探索高海拔矿山数智转型 多项智能化应用落地见效",
+     "d": "2026-10-28",
+     "u": "https://www.zjky.cn/news/news-detail-123008.htm",
+     "s": "磨矿浮选参数自主调控、运输台账自动采集、化验检测全程留痕……在地处世界屋脊的巨龙铜业，一项项智慧化建设正从蓝图变为现实，在高海拔特殊工况下，探索出一条属于高原矿山的数智转型之路。",
+     "k": "news"
+    },
     {
      "t": "紫金矿业向巴青灾区捐赠1000万元 矿山救援队连夜奔抵震区",
      "d": "2026-10-24",
@@ -51,13 +58,6 @@
      "u": "https://www.zjky.cn/news/news-detail-122971.htm",
      "s": "近日，中证指数有限公司发布2026年9月期上市公司ESG评价结果，紫金矿业由上年同期的BBB级上调至AAA级，达到中证ESG最高档。",
      "k": "news"
-    },
-    {
-     "t": "紫金矿业入选2026年中国工业数据治理“领跑者”企业",
-     "d": "2026-09-17",
-     "u": "https://www.zjky.cn/news/news-detail-122962.htm",
-     "s": "在国家数据局等部委指导下，中国工业经济联合会自2024年起每年在全国范围内开展中国工业数据治理“领跑者”企业评选，旨在落实党中央、国务院关于数字中国建设和产业数字化转型的重大决策部署，发挥优秀企业榜样带动作用，搭建工业数据交流平台和产业生态圈。",
-     "k": "news"
     }
    ]
   },
@@ -77,6 +77,13 @@
    "stale": false,
    "rank": 6,
    "items": [
+    {
+     "t": "新华社：废坡生新绿！看德兴铜矿的绿色蝶变",
+     "d": "2026-10-28",
+     "u": "https://www.jxcc.com/news/details_474_7578.html",
+     "s": "10月27日，新华社发布《矿山搭观景台，废坡生新绿——德兴铜矿绿色蝶变记》报道，展现记者走进德兴铜矿，探寻矿山绿色发展之路。报道详细介绍德铜坚持边开采、边修复，创新生态治理方式，推动资源循环利用，实现矿山绿色蝶变。",
+     "k": "news"
+    },
     {
      "t": "《江西新闻联播》聚焦江铜 科技赋能先进制造业向新而行",
      "d": "2026-09-30",
@@ -118,13 +125,6 @@
      "u": "https://www.jxcc.com/news/details_474_6993.html",
      "s": "这种“研发在南昌、市场在全国”的局面，正是省会引领战略要达到的目标。南昌目前已培育形成4个千亿产业、2个跨区域国家级先进制造业集群，为纵深实施省会引领战略提供了产业底座。",
      "k": "news"
-    },
-    {
-     "t": "《江西日报》头版头条：超3000亿元！江铜集团上半年营收再创新高",
-     "d": "2026-07-15",
-     "u": "https://www.jxcc.com/news/details_474_7000.html",
-     "s": "7月12日，《江西日报》头版头条刊发报道《超3000亿元！江铜集团上半年营收再创新高》，重点关注江铜集团聚力科技创新与产 业创新深度融合，今年1至6月完成营业收入3150亿元，创历史同期新高，圆满完成双过半目标任务。",
-     "k": "news"
     }
    ]
   },
@@ -144,6 +144,41 @@
    "stale": false,
    "rank": 11,
    "items": [
+    {
+     "t": "工程公司打破壁垒聚合力保障金新大修节点",
+     "d": "2026-10-28",
+     "u": "http://www.tlys.cn/news.aspx?cid=24657&classid=383",
+     "s": "金新铜业年度大修期间，工程公司紧扣“自修强基、降本增效”目标，打破项目部属地壁垒，统筹整合内部维修力量，盘活骨干人力资源，建立跨区域系统作战调度机制。",
+     "k": "news"
+    },
+    {
+     "t": "米拉多铜矿强化合同规范化管理",
+     "d": "2026-10-28",
+     "u": "http://www.tlys.cn/news.aspx?cid=24656&classid=383",
+     "s": "一是开展双语合同专项排查，重点核查合同期限、延期条款、付款条件、违约责任等关键条款中西文表述一致性，增加语言优先级条款，建立问题排查台账。二是严格执行双语合同“三审”机制，建立“业务人员初审、翻译复核、主办人员终审”的审核流程，确保关键条款及中西文一一对应。",
+     "k": "news"
+    },
+    {
+     "t": "安庆铜矿完成年度检修工作",
+     "d": "2026-10-27",
+     "u": "http://www.tlys.cn/news.aspx?cid=24652&classid=383",
+     "s": "日前，安庆铜矿顺利完成年度检修工作。该矿坚持统筹谋划部署，成立检修、安全、应急救援三个领导小组，从项目、技术、安全、质量等方面制定检修计划并严格落实，压紧各方各级职责，保质保量完成36大项60子项检修任务。",
+     "k": "news"
+    },
+    {
+     "t": "庐江矿业、金冠铜业等召开三季度经济活动分析会",
+     "d": "2026-10-27",
+     "u": "http://www.tlys.cn/news.aspx?cid=24651&classid=383",
+     "s": "庐江矿业：一是聚焦预算引领，抓实全面预算管理，提前谋划2027年预算编制，切实发挥预算对经营管理的统筹指导作用。二是坚持目标导向，全面客观分析前三季度经营成效，锚定全年目标任务，强化成本管控意识，规范费用归集口径。三是强化执行刚性，压实责任、闭环管控，持续提升工作执行力，推进各项部署落地见效。",
+     "k": "news"
+    },
+    {
+     "t": "米拉多铜矿启动奖学金资助项目",
+     "d": "2026-10-27",
+     "u": "http://www.tlys.cn/news.aspx?cid=24650&classid=383",
+     "s": "日前，米拉多铜矿与项目影响区30名优秀学生签署奖学金援助协议，帮助受资助学生继续完成学业。长期以来，米拉多铜矿坚持深度属地化发展理念，将教育帮扶作为赋能属地长远发展、深化企地共生的重要抓手，构建起多层次、多维度的教育帮扶体系，全方位赋能属地教育发展，不断夯实企业与社区互信共赢发展根基。",
+     "k": "news"
+    },
     {
      "t": "金威铜业3项发明专利获国家授权",
      "d": "2026-10-26",
@@ -206,41 +241,6 @@
      "u": "http://www.tlys.cn/news.aspx?cid=24632&classid=383",
      "s": "日前，米拉多铜矿与铜达依米镇政府签署基米河谷社区沿河道路援助协议。基米河谷社区是该矿直接影响区社区之一，居民出行使用紧临北采场的道路。沿河道路建成后，将显著改善社区通行条件，便利农牧产品运输和居民出行，并有效规避社区出行与北矿生产之间的潜在矛盾。",
      "k": "news"
-    },
-    {
-     "t": "张家港铜业多措并举做好四季度工作",
-     "d": "2026-10-21",
-     "u": "http://www.tlys.cn/news.aspx?cid=24631&classid=383",
-     "s": "一是严格执行生产计划，根据市场变化及时调整原料结构，增加粗杂铜和阳极板采购量，确保电解系统稳定生产，坚定不移完成全年产量目标。二是抢抓市场机遇，充分发挥市场和区位优势，采取灵活的营销策略，加强营销引导，提高产品价格竞争力，增加企业经营效益。",
-     "k": "news"
-    },
-    {
-     "t": "集团公司与安徽理工大学、同济大学签署战略合作协议",
-     "d": "2026-10-20",
-     "u": "http://www.tlys.cn/news.aspx?cid=24626&classid=383",
-     "s": "蒋培进对三方达成战略合作表示祝贺。他指出，集团公司将以此次战略合作为契机，进一步深化与安徽理工大学、同济大学的交流合作，围绕深井矿山安全高效开采、智能矿山建设、绿色冶炼、固废利用等开展联合攻关，努力打造产学研深度融合示范样板。",
-     "k": "news"
-    },
-    {
-     "t": "冬瓜山铜矿加强顶帮板管理",
-     "d": "2026-10-20",
-     "u": "http://www.tlys.cn/news.aspx?cid=24625&classid=383",
-     "s": "一是完善顶帮板管理制度，制定顶帮板管理手册，修订顶帮板分级分类、巷道巡回检查等制度，不断完善安全管理制度体系。二是组织开展顶帮板分级管理专项检查，覆盖采掘、支护等作业点，采取“单位自查+专业抽查”方式，逐项闭环整改问题隐患。",
-     "k": "news"
-    },
-    {
-     "t": "铜冠铜箔开展消防专项检查",
-     "d": "2026-10-20",
-     "u": "http://www.tlys.cn/news.aspx?cid=24624&classid=383",
-     "s": "日前，铜冠铜箔开展聚氨酯泡沫夹芯板、疏散通道安全出口、新建扩建改建工程消防专项检查，现场逐一核对夹芯板材质类型，查看疏散通道畅通、安全出口合规、应急门开启情况等。下一步，该公司将严格落实消防安全管理责任，把好消防安全关，全方位闭环管理，进一步提高防范化解火灾风险隐患的能力。",
-     "k": "news"
-    },
-    {
-     "t": "赵荣升到金新铜业指导大修工作",
-     "d": "2026-10-19",
-     "u": "http://www.tlys.cn/news.aspx?cid=24621&classid=383",
-     "s": "10月15日，集团公司党委委员、副总经理赵荣升到金新铜业指导大修工作，实地察看熔炼车间放渣口五米平台施工现场，并听取该公司关于大修进展情况汇报。",
-     "k": "news"
     }
    ]
   },
@@ -261,10 +261,38 @@
    "rank": 19,
    "items": [
     {
+     "t": "云南铜业：前三季度减值为存货跌价准备依据充分合规",
+     "d": "2026-10-28",
+     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-10-28/doc-iniwukpz5974217.shtml",
+     "s": "投资者提问：目前铜价还处于历史高位，工作在三季报中却大幅减值，请问减值的依据是什么？董秘回答(云南铜业SZ000878)：尊敬的投资者您好，感谢您对公司的关注。公司前三季度计提的减值主要为存货跌价准备。存货按成本与可变现净值孰低计量，当成本...",
+     "k": "news"
+    },
+    {
+     "t": "云南铜业：前三季营收增长24.78%，归母净利增长47.86%",
+     "d": "2026-10-27",
+     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-10-27/doc-iniwsmws6978278.shtml",
+     "s": "10月26日晚间，云南铜业(000878.SZ)发布三季报。2026年前三季度，公司营业收入1638.55亿元，同比增长24.78%；归属于上市公司股东的净利润26.00亿元，同比增长47.86%；扣非归母净利润25.18亿元，同比增长79...",
+     "k": "news"
+    },
+    {
+     "t": "云南铜业十大流通股东格局生变：北向资金等增持，迪庆开投等减持",
+     "d": "2026-10-27",
+     "u": "https://finance.sina.com.cn/stock/aiassist/sdltgdbh/2026-10-27/doc-iniwruys2087068.shtml",
+     "s": "10月27日消息，云南铜业公告显示，截止2026年9月30日，相较于上一报告期，十大流通股东发生了以下变化：2位股东增持，4位股东减持。增持的股东中，北向资金本期较上期自持股份增持23.2%至4476.37万股；南方有色金属ETF联接A本期...",
+     "k": "news"
+    },
+    {
      "t": "云南铜业股份有限公司2026年第三季度报告",
      "d": "2026-10-27",
      "u": "https://finance.sina.com.cn/roll/2026-10-27/doc-iniwqtpi5126691.shtml",
      "s": "证券代码：000878 证券简称：云南铜业 公告编号：2026-073本公司及董事会全体成员保证信息披露的内容真实、准确、完整，没有虚假记载、误导性陈述或重大遗漏。重要内容提示：1.董事会及董事、高级管理人员保证季度报告的真实、准确、完整...",
+     "k": "news"
+    },
+    {
+     "t": "云南铜业(000878.SZ)发布前三季度业绩，归母净利润26亿元，同比增长47.86%",
+     "d": "2026-10-27",
+     "u": "https://finance.sina.com.cn/stock/hkstock/ggscyd/2026-10-27/doc-iniwreay2145611.shtml",
+     "s": "云南铜业(000878.SZ)披露2026年第三季度报告，前三季度公司实现营业收入1638.55亿元，同比增长24.78%;归母净利润26亿元，同比增长47.86%;扣非净利润25.18亿元，同比增长79.90%;基本每股收益1.0832元...",
      "k": "news"
     },
     {
@@ -308,13 +336,6 @@
      "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-10-16/doc-inivmpqz6911960.shtml",
      "s": "尊敬的投资者您好，感谢您对公司的关注。公司主要生产和销售的产品为阴极铜，矿山企业自产铜精矿中含有黄金、白银及稀散金属；在铜精矿开采过程中，会伴生少量钨金属。",
      "k": "news"
-    },
-    {
-     "t": "云南铜业股份有限公司 关于为控股子公司提供借款担保事项的进展公告",
-     "d": "2026-09-28",
-     "u": "https://finance.sina.com.cn/jjxw/2026-09-28/doc-initimtm8934363.shtml",
-     "s": "上述内容详见公司于2026年3月27日刊登在指定信息披露媒体上的《云南铜业股份有限公司关于2026年度为控股子公司提供担保计划的公告》（公告编号：2026-016）。",
-     "k": "news"
     }
    ]
   },
@@ -334,6 +355,34 @@
    "stale": false,
    "rank": 16,
    "items": [
+    {
+     "t": "罗东川：更大力度推动稳增长和高质量发展 为实现全年目标任务提供有力支撑",
+     "d": "2026-10-28",
+     "u": "https://www.westmining.com/mtzx/xkxw/202610/t20261028_34076.html",
+     "s": "10月9日上午，省委书记罗东川在西宁市城中区、甘河工业园区调研重大项目和经济稳增长工作时强调，要深入贯彻习近平总书记对青海工作重大要求，全面落实党中央决策部署和省委工作要求，完整准确全面贯彻新发展理念，统筹稳投资、促消费、强产业、抓政策，狠抓重大项目推进，强化对重点地区、行业、企业支持帮扶力度，锚定…",
+     "k": "news"
+    },
+    {
+     "t": "西矿集团召开安徽茶亭铜多金属矿采选工程可研报告评审会",
+     "d": "2026-10-28",
+     "u": "https://www.westmining.com/mtzx/xkxw/202610/t20261028_34075.html",
+     "s": "资源管理中心讯 近日，集团公司组织召开《安徽西矿玉龙茶亭矿业有限公司安徽省宣州区茶亭铜多金属矿（上长村矿段）采选工程可行性研究报告》评审会。集团公司党委书记、董事长王海丰参加会议。",
+     "k": "news"
+    },
+    {
+     "t": "筑牢合规根基 护航行稳致远｜西矿集团召开合规管理体系认证工作启动会",
+     "d": "2026-10-28",
+     "u": "https://www.westmining.com/mtzx/xkxw/202610/t20261028_34074.html",
+     "s": "宣传部讯 10月14日，公司召开合规管理体系认证工作启动会。会议深入学习贯彻习近平法治思想，落实国务院国资委穿透式监管及省国资委法治国企建设工作部署，标志着公司合规管理体系认证工作正式启动。",
+     "k": "news"
+    },
+    {
+     "t": "喜报｜青海铜业斩获2026年中国创新方法大赛青海区域赛二等奖！",
+     "d": "2026-10-28",
+     "u": "https://www.westmining.com/mtzx/xkxw/202610/t20261028_34072.html",
+     "s": "青海铜业讯 近日，2026年中国创新方法大赛青海区域赛落下帷幕，青海铜业有限责任公司参赛项目《基于TRIZ创新方法的铜冶炼污酸中铼资源高效回收技术》荣获二等奖，这是公司深耕科技创新、推进资源综合利用取得的又一项重要实践成果。",
+     "k": "news"
+    },
     {
      "t": "《生态湖盐》《生态湖盐评价技术规范》两项团体标准启动会在西宁召开",
      "d": "2026-09-24",
@@ -442,7 +491,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "chrome",
+   "method": "html",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -583,6 +632,13 @@
    "rank": 13,
    "items": [
     {
+     "t": "云铝股份6项科技成果通过评价",
+     "d": "2026-10-27",
+     "u": "https://finance.sina.com.cn/roll/2026-10-27/doc-iniwrqsv8911501.shtml",
+     "s": "10月23日，云铝股份委托中国有色金属工业协会召开科技成果评价会，对公司申报的六项科技成果开展评价鉴定。经综合评价，公司三项科技成果达到国际领先水平，三项科技成果达到国际先进水平，标志着公司在绿色铝冶炼、高端铝合金材料、铝产业智能化装备...",
+     "k": "news"
+    },
+    {
      "t": "云铝股份：在建工程以存量项目为主 后续将依规披露新项目计划",
      "d": "2026-10-26",
      "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-10-26/doc-iniwqpfm5199172.shtml",
@@ -622,27 +678,6 @@
      "d": "2026-10-15",
      "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/845382688093/index.phtml",
      "s": "",
-     "k": "news"
-    },
-    {
-     "t": "云铝股份：将结合发展战略及经营实际统筹考虑回购计划",
-     "d": "2026-09-21",
-     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-09-21/doc-inisqetx0759935.shtml",
-     "s": "您好，首先感谢您对云铝股份的关心、支持和信任。感谢您的建议，公司将会根据整体发展战略及经营实际统筹考虑，若有回购计划，公司将严格按照监管规则和法律法规要求，履行信息披露义务。",
-     "k": "news"
-    },
-    {
-     "t": "云铝股份：公司铝产品可广泛应用于多领域作为原材料",
-     "d": "2026-09-20",
-     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-09-20/doc-inisnhca6711597.shtml",
-     "s": "2026-09-20 16:48 云铝股份：未生产氮化铝产品 铝制品应用多领域",
-     "k": "news"
-    },
-    {
-     "t": "云铝股份：未生产氮化铝产品 铝制品应用多领域",
-     "d": "2026-09-20",
-     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-09-20/doc-inisnhca6711594.shtml",
-     "s": "投资者提问：公司有氮化铝应用于AI光模块、GPU算力散热、功率半导体IGBT、车载、军工射频，高纯铝粉体、中游陶瓷基板/铝金属化基板吗？董秘回答(云铝股份SZ000807)：您好，首先感谢您对云铝股份的关心、支持和信任。公司未生产氮化铝产品...",
      "k": "news"
     }
    ]
@@ -983,20 +1018,6 @@
      "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-10-19/doc-inivtynp6182794.shtml",
      "s": "尊敬的投资者，您好！为严格恪守信息披露公平原则，公司股东户数相关信息仅在定期报告中统一披露。敬请理解，感谢您对公司的关注！",
      "k": "news"
-    },
-    {
-     "t": "行业研究周报：加息预期降温，金属价格企稳 | 东吴金属刘奕町团队",
-     "d": "2026-10-12",
-     "u": "https://finance.sina.com.cn/roll/2026-10-12/doc-iniuxwim7297496.shtml",
-     "s": "2026-10-11 20:04 43亿元！湖南黄金重大资产重组获批！",
-     "k": "news"
-    },
-    {
-     "t": "43亿元！湖南黄金重大资产重组获批！",
-     "d": "2026-10-11",
-     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-10-11/doc-iniuwcyi8846958.shtml",
-     "s": "近日，湖南黄金股份有限公司重大资产重组获得湖南省国资委批复。湖南黄金公告称，公司收到控股股东湖南省矿产资源集团有限责任公司转发的《湖南省国资委关于湖南黄金股份有限公司发行股份购买资产并募集配套资金暨关联交易有关事项的批复》（湘国资产权函〔2...",
-     "k": "news"
     }
    ]
   },
@@ -1316,7 +1337,7 @@
      "t": "北方稀土：前三季度净利润约36.46亿元 同比增长136.55%",
      "d": "2026-10-23",
      "u": "https://finance.sina.com.cn/roll/2026-10-23/doc-iniwffen4953244.shtml",
-     "s": "来源：上海证券报·中国证券网上证智讯 10月23日晚间，中国北方稀土（集团）高科技股份有限公司发布2026年第三季度报告称，公司前三季度实现营业收入约413.33亿元，同比增长36.45%；归属于上市公司股东的净利润约36.46亿元，同比增...",
+     "s": "2026-10-23 16:25 【喜报】净利润同比增长136.55%！北方稀土2026年前三季度主要业绩指标同比大幅增长",
      "k": "news"
     },
     {
@@ -1324,20 +1345,6 @@
      "d": "2026-10-23",
      "u": "https://finance.sina.com.cn/roll/2026-10-23/doc-iniweywu2720050.shtml",
      "s": "（来源：你好北方稀土）10月23日，北方稀土发布2026年第三季度报告。报告显示，北方稀土前三季度实现营业收入413.33亿元，同比增长36.45%；利润总额51.95亿元，同比大幅增长101.07%；归属于上市公司股东的净利润36.46亿...",
-     "k": "news"
-    },
-    {
-     "t": "北方稀土(600111.SH)：前三季归母净利36.46亿元 同比增长136.55%",
-     "d": "2026-10-23",
-     "u": "https://finance.sina.com.cn/stock/bxjj/2026-10-23/doc-iniweywq4954405.shtml",
-     "s": "2026-10-23 15:38 北方稀土：第三季度归母净利润15.93亿元，同比增长161.13%",
-     "k": "news"
-    },
-    {
-     "t": "北方稀土：第三季度归母净利润15.93亿元，同比增长161.13%",
-     "d": "2026-10-23",
-     "u": "https://finance.sina.com.cn/jjxw/2026-10-23/doc-iniweywu2666674.shtml",
-     "s": "北方稀土10月23日公告，2026年第三季度实现营业收入155.34亿元，同比增长35.96%；归母净利润15.93亿元，同比增长161.13%；基本每股收益0.4407元。前三季度实现营业收入413.33亿元，同比增长36.45%；归母净...",
      "k": "news"
     }
    ]
@@ -2325,9 +2332,18 @@
    "rank": 29,
    "items": [
     {
+     "t": "AGNICO EAGLE报告2026年第三季度业绩-稳健的运营业绩推动了强劲的自由现金流生成；",
+     "d": "2026-10-28",
+     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-reports-third-quarter-2026-results-strong-free-cash-hew7o0uvs8fv.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "AGNICO EAGLE REPORTS THIRD QUARTER 2026 RESULTS - STRONG FREE CASH FLOW GENERATION DRIVEN BY SOLID OPERATIONAL PERFORMANCE; ON TRACK TO ACHIEVE 2026 PRODUCTION AND COST GUIDANCE | AEM Stock News"
+    },
+    {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-09-29",
-     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926111750/",
+     "d": "2026-10-28",
+     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926119671/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -2395,15 +2411,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Agnico Eagle keeps 2026 target despite 370,000-ounce loss"
-    },
-    {
-     "t": "AGNICO Eagle报告2026年第二季度业绩-创纪录的季度自由现金流反映了稳健的运营业绩；",
-     "d": "2026-07-29",
-     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-reports-second-quarter-2026-results-record-quarterly-85mw5jmf8iz0.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "AGNICO EAGLE REPORTS SECOND QUARTER 2026 RESULTS - RECORD QUARTERLY FREE CASH FLOW REFLECTS SOLID OPERATIONAL PERFORMANCE; RECORD QUARTERLY SHAREHOLDER RETURNS | AEM Stock News"
     },
     {
      "t": "Agnico Eagle暂停魁北克矿坑开采，旗帜生产受到打击",
@@ -2739,9 +2746,9 @@
     },
     {
      "t": "中稀有色(600259)：业绩兑现良好 稀土央企重估正当时",
-     "d": "2026-08-26",
+     "d": "2026-08-27",
      "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/841130851437/index.phtml",
-     "s": "2026-08-26 16:16 中稀有色2026年半年度营收25.06亿元，同比下降6.38%",
+     "s": "",
      "k": "news"
     }
    ]
@@ -2904,6 +2911,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "力拓（ Rio Tinto ）在人才短缺的情况下关注56 ％的首席执行官加薪",
+     "d": "2026-10-28",
+     "u": "https://www.mining.com/rio-tinto-eyes-56-ceo-pay-hike-amid-talent-crunch/",
+     "s": "根据德勤4月份的一份报告，富时100指数公司的首席执行官薪酬中位数在2025年同比增长18% ，达到589万英镑。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Rio Tinto eyes 56% CEO pay hike amid talent crunch"
+    },
+    {
      "t": "力拓将向昆士兰铝土矿项目投资19亿$",
      "d": "2026-10-22",
      "u": "https://www.mining.com/web/rio-tinto-to-invest-1-9-billion-in-queensland-bauxite-project/",
@@ -3019,24 +3035,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Rio Tinto wins Aboriginal consent for Winu copper mine"
-    },
-    {
-     "t": "力拓从三菱嘉能可收购Aurukun铝土矿项目",
-     "d": "2026-09-08",
-     "u": "https://www.mining.com/rio-tinto-acquires-aurukun-bauxite-project-from-glencore-mitsubishi/",
-     "s": "力拓 已同意收购昆士兰州的Aurukun铝土矿项目，该项目之前是嘉能可（ LON ： GLEN ）和MITS的合资企业……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto acquires Aurukun bauxite project from Glencore, Mitsubishi"
-    },
-    {
-     "t": "力拓的Barton加入Carney的$ 1T投资计划",
-     "d": "2026-09-01",
-     "u": "https://www.mining.com/rios-barton-joins-carneys-1t-investment-drive/",
-     "s": "Barton will serve as chair part-time for three years while Grewal’s CEO appointment is full-time for five years.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto’s Barton joins Carney’s $1T investment drive"
     }
    ]
   },
@@ -3336,6 +3334,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "嘉能可， CNGR回归$ 3.8亿巴西镍矿$ 4000万",
+     "d": "2026-10-28",
+     "u": "https://www.mining.com/glencore-cngr-back-380m-brazil-nickel-mine-with-40m/",
+     "s": "Centaurus表示，其高级债务融资流程进展顺利，新的股权承诺帮助其完成了……所需的一揽子融资计划。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Glencore, CNGR back $380M Brazil nickel mine with $40M"
+    },
+    {
      "t": "美国支持的刚果矿业集团在“最后阶段”与嘉能可达成协议",
      "d": "2026-10-23",
      "u": "https://www.mining.com/web/us-backed-group-congo-mines-deal-with-glencore-in-final-phases/",
@@ -3415,15 +3422,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Glencore sets Oct. 14 date for Australian market debut"
-    },
-    {
-     "t": "Glencore在袭击后停止了Cerrejón煤炭铁路",
-     "d": "2026-09-23",
-     "u": "https://www.mining.com/glencore-halts-cerrejon-coal-railway-after-attack/",
-     "s": "9月22日晚，一列火车在瓜希拉省北部乌里维亚附近受到袭击。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Glencore halts Cerrejón coal railway after attack"
     }
    ]
   },
@@ -3543,6 +3541,14 @@
    "rank": 99,
    "items": [
     {
+     "t": "第一批Quantum Minerals公布2026年第三季度业绩",
+     "d": "2026-10-28",
+     "u": "https://www.first-quantum.com/news/first-quantum-minerals-reports-third-quarter-2026-results/",
+     "s": "安大略省多伦多（ 2026年10月28日） – First Quantum Minerals Ltd.",
+     "k": "news",
+     "t_en": "First Quantum Minerals Reports Third Quarter 2026 Results"
+    },
+    {
      "t": "First Quantum提供Cobre Panamá的最新信息",
      "d": "2026-09-30",
      "u": "https://www.first-quantum.com/news/first-quantum-provides-update-on-cobre-panama-3/",
@@ -3562,7 +3568,7 @@
      "t": "首份量子矿业2026年第二季度业绩报告",
      "d": "2026-07-28",
      "u": "https://www.first-quantum.com/news/first-quantum-minerals-reports-second-quarter-2026-results/",
-     "s": "3已实现铜价包括对冲损失$ 1.58亿，或$ 0。",
+     "s": "1 Realized metal prices are a non-GAAP ratio, do not have standardized meanings under IFRS and might not be comparable to similar financial measures d…",
      "k": "news",
      "t_en": "First Quantum Minerals Reports Second Quarter 2026 Results"
     },
@@ -3597,14 +3603,6 @@
      "s": "安大略省多伦多（ 2026年5月7日） - First Quantum Minerals Ltd.",
      "k": "news",
      "t_en": "First Quantum Minerals Announces Voting Results for the Election of Directors"
-    },
-    {
-     "t": "Quantum Minerals公布2026年第一季度业绩",
-     "d": "2026-04-28",
-     "u": "https://www.first-quantum.com/news/first-quantum-minerals-reports-first-quarter-2026-results/",
-     "s": "2026年全年总资本支出指引从$ 1,000 – $ 11.5亿增加到$ 1,075 – $ 12.5亿，反映了…",
-     "k": "news",
-     "t_en": "First Quantum Minerals Reports First Quarter 2026 Results"
     }
    ]
   }

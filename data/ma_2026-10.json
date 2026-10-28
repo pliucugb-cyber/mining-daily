@@ -1,8 +1,78 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-28T05:39:05+08:00",
-  "count": 27,
+  "updated_at": "2026-10-29T05:39:13+08:00",
+  "count": 31,
   "news": [
+    {
+      "id": "aa08c6ad86b3",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-29/1225635834.PDF",
+      "title": "关于对外投资收购威领股份的进展公告",
+      "source": "巨潮资讯网·兴业银锡",
+      "orig_date": "10-29",
+      "orig_date_full": "2026-10-29",
+      "report_date": "2026-10-29",
+      "category": "并购与投资",
+      "company": "兴业银锡",
+      "sec_code": "000426",
+      "ma_type": "股权/资产收购",
+      "summary": "兴业银锡（000426）披露《关于对外投资收购威领股份的进展公告》，涉及股权/资产收购。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "8165a16a8d33",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-29/1225637143.PDF",
+      "title": "科达制造股份有限公司关于对外投资的公告",
+      "source": "巨潮资讯网·科达制造",
+      "orig_date": "10-29",
+      "orig_date_full": "2026-10-29",
+      "report_date": "2026-10-29",
+      "category": "并购与投资",
+      "company": "科达制造",
+      "sec_code": "600499",
+      "ma_type": "对外投资",
+      "summary": "科达制造（600499）披露《科达制造股份有限公司关于对外投资的公告》，涉及对外投资。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "443b24e41a9a",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-29/1225637723.PDF",
+      "title": "兖矿能源集团股份有限公司关于2026年度第三期中期票据（并购）发行结果的公告",
+      "source": "巨潮资讯网·兖矿能源",
+      "orig_date": "10-29",
+      "orig_date_full": "2026-10-29",
+      "report_date": "2026-10-29",
+      "category": "并购与投资",
+      "company": "兖矿能源",
+      "sec_code": "600188",
+      "ma_type": "并购",
+      "summary": "兖矿能源（600188）披露《兖矿能源集团股份有限公司关于2026年度第三期中期票据（并购）发行结果的公告》，涉及并购。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "3a78801e632f",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-29/1225636858.PDF",
+      "title": "明泰铝业关于使用向特定对象发行股票部分闲置募集资金进行现金管理进展的公告",
+      "source": "巨潮资讯网·明泰铝业",
+      "orig_date": "10-29",
+      "orig_date_full": "2026-10-29",
+      "report_date": "2026-10-29",
+      "category": "并购与投资",
+      "company": "明泰铝业",
+      "sec_code": "601677",
+      "ma_type": "投资/资本运作",
+      "summary": "明泰铝业（601677）披露《明泰铝业关于使用向特定对象发行股票部分闲置募集资金进行现金管理进展的公告》，涉及投资/资本运作。",
+      "tags": [
+        "并购",
+        "金",
+        "铝"
+      ]
+    },
     {
       "id": "d4657ac13915",
       "url": "https://static.cninfo.com.cn/finalpage/2026-10-28/1225629776.PDF",
