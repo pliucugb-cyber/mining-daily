@@ -48,6 +48,9 @@ from logutil import get_logger
 log = get_logger('classify_llm')
 
 ENDPOINT = 'https://mining-daily-qa.netlify.app/api/qa'
+# QA 函数自 2026-10 起强制 Origin 白名单：无 Origin 或非白名单一律 403 origin not allowed。
+# 服务端脚本调用须显式带上站点 Origin（否则分类接口 403、region 断供）。
+ORIGIN = 'https://pliucugb-cyber.github.io'
 
 THEMES = ['矿权出让', '并购与投资', '政策与监管', '会议会展',
           '技术与勘查', '市场与价格', '项目与产能', '企业经营', '行业动态']
@@ -99,7 +102,8 @@ def call_llm(messages, max_tokens=3000, temperature=0.0, retries=3):
         try:
             req = urllib.request.Request(
                 ENDPOINT, data=body,
-                headers={'Content-Type': 'application/json; charset=utf-8'},
+                headers={'Content-Type': 'application/json; charset=utf-8',
+                         'Origin': ORIGIN},
                 method='POST')
             ctx = ssl.create_default_context()   # 严禁关闭 TLS 校验
             with urllib.request.urlopen(req, timeout=180, context=ctx) as resp:
@@ -238,7 +242,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--files', nargs='*', default=None,
                     help='默认自动发现 data/news_YYYY-MM.json（排除候选池）')
-    ap.add_argument('--batch', type=int, default=30)
+    # default 30 → 8：QA 函数对单次请求体有长度上限，30 条×300 字摘要会触发 400 Bad Request。
+    ap.add_argument('--batch', type=int, default=8)
     ap.add_argument('--limit', type=int, default=0)
     ap.add_argument('--force', action='store_true')
     ap.add_argument('--dry-run', action='store_true')
