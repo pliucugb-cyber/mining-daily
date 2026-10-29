@@ -1,28 +1,28 @@
 {
-  "updated_at": "2026-10-29T08:22:45+08:00",
+  "updated_at": "2026-10-30T05:42:03+08:00",
   "schema_version": "1.1",
-  "total": 1339,
+  "total": 1296,
   "months": [
     {
       "month": "2026-08",
-      "count": 58,
+      "count": 43,
       "date_from": "2026-08-24",
       "date_to": "2026-08-31",
       "days_covered": 6
     },
     {
       "month": "2026-09",
-      "count": 667,
+      "count": 629,
       "date_from": "2026-09-01",
       "date_to": "2026-09-30",
       "days_covered": 30
     },
     {
       "month": "2026-10",
-      "count": 614,
+      "count": 624,
       "date_from": "2026-09-30",
-      "date_to": "2026-10-29",
-      "days_covered": 30
+      "date_to": "2026-10-30",
+      "days_covered": 31
     }
   ]
 }
