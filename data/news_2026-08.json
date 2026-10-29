@@ -4,27 +4,6 @@
   "count": 58,
   "news": [
     {
-      "id": "98d035e4e9b4",
-      "title": "中国稀土集团2026年安全环保绿色低碳专题研修班开班",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0831/61861.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-31",
-      "orig_date_full": "2026-08-31",
-      "report_date": "2026-09-29",
-      "category": "会议会展",
-      "is_new": false,
-      "summary": "中国稀土集团举办2026年安全环保绿色低碳专题研修班，推动稀土产业绿色低碳转型与可持续发展。",
-      "embed": "block",
-      "tags": [
-        "稀土",
-        "安全"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-29",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
       "id": "97defcfbc7ae",
       "title": "内蒙古翁牛特旗红石砬子铜多金属勘探探矿权转让公示",
       "url": "https://ky.mnr.gov.cn/zrgs/tkzrgs/202609/t20260901_10302808.htm",
@@ -46,27 +25,6 @@
       "last_seen": "2026-09-06"
     },
     {
-      "id": "8cbd99251b05",
-      "title": "金川镍钴承压奋进攀高逐新",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0831/61862.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-31",
-      "orig_date_full": "2026-08-31",
-      "report_date": "2026-09-29",
-      "category": "行业动态",
-      "is_new": false,
-      "summary": "金川集团镍钴产业在压力中持续奋进，围绕镍、钴等关键矿产提升资源保障与产业竞争力，奋力攀登高质量发展新高度。",
-      "embed": "block",
-      "tags": [
-        "镍",
-        "钴"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-29",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
       "id": "7aa3dccb558c",
       "title": "加拿大矿业公司Auro Metals再获496米厚大矿段 高品位矿段金品位达1.12克/吨",
       "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473461",
@@ -86,27 +44,6 @@
       "first_seen": "2026-09-01",
       "last_seen": "2026-09-29",
       "region": "国际",
-      "orig_category": "行业动态"
-    },
-    {
-      "id": "61812bcdf1e5",
-      "title": "【谱写\"十五五\"有色新篇章】利润总额同比大增98% 中国铝业中期增速再创历史新高",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0831/61856.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-31",
-      "orig_date_full": "2026-08-31",
-      "report_date": "2026-09-29",
-      "category": "企业经营",
-      "is_new": false,
-      "summary": "中国铝业发布中期业绩，利润总额同比大增98%，增速再创历史新高，铝产业高质量发展动能强劲。",
-      "embed": "block",
-      "tags": [
-        "铝",
-        "市场"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-29",
-      "region": "国内",
       "orig_category": "行业动态"
     },
     {
@@ -286,50 +223,6 @@
       "orig_category": "国际矿业动态"
     },
     {
-      "id": "c97886093392",
-      "title": "新疆有色集团持续推进关键金属增储上产（续）",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61849.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-28",
-      "orig_date_full": "2026-08-28",
-      "report_date": "2026-09-26",
-      "category": "技术与勘查",
-      "is_new": false,
-      "summary": "新疆有色集团聚焦铜、镍、锂等关键金属，持续推进增储上产国家级研发项目后续成果转化，攻关硬岩矿产与共伴生资源综合利用。",
-      "embed": "block",
-      "tags": [
-        "铜",
-        "镍",
-        "锂",
-        "找矿",
-        "技术"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-26",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
-      "id": "b388a94dba2c",
-      "title": "中国恩菲设计的太平矿业金矿石建设项目TBM始发",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61850.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-28",
-      "orig_date_full": "2026-08-28",
-      "report_date": "2026-09-26",
-      "category": "项目与产能",
-      "is_new": false,
-      "summary": "8月22日，中国恩菲设计的内蒙古太平矿业浩尧尔忽洞金矿年开采825万吨金矿石建设项目（二标段）TBM始发，标志着项目建设进入关键攻坚阶段。",
-      "embed": "block",
-      "tags": [
-        "金"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-26",
-      "region": "国内",
-      "orig_category": "找矿成果与勘查技术"
-    },
-    {
       "id": "a2eb62f7b95c",
       "title": "第二季度澳大利亚勘查投资创新高",
       "url": "https://geoglobal.mnr.gov.cn/zx/kydt/hyyxdt/202608/t20260828_10301645.htm",
@@ -396,27 +289,6 @@
       ],
       "first_seen": "2026-09-01",
       "last_seen": "2026-09-04"
-    },
-    {
-      "id": "7ad4564fdfd3",
-      "title": "东方测控与中铁资源签署战略合作协议 携手推进矿山智能化高质量发展",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0828/61851.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-28",
-      "orig_date_full": "2026-08-28",
-      "report_date": "2026-09-26",
-      "category": "企业经营",
-      "is_new": false,
-      "summary": "东方测控与中铁资源签署战略合作协议，双方将围绕矿山智能化建设开展深度合作，携手推进矿山智能化高质量发展。",
-      "embed": "block",
-      "tags": [
-        "铁",
-        "技术"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-26",
-      "region": "国内",
-      "orig_category": "行业动态"
     },
     {
       "id": "725677e01bf0",
@@ -489,28 +361,6 @@
       "orig_category": "国际矿业动态"
     },
     {
-      "id": "fcb7b3d4dc16",
-      "title": "\"破\"\"立\"之间见成效——华中铜业的扭亏密码",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61841.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-27",
-      "orig_date_full": "2026-08-27",
-      "report_date": "2026-09-25",
-      "category": "企业经营",
-      "is_new": false,
-      "summary": "面对铜价高位震荡、加工费空间收窄压力，华中铜业1—7月实现盈利131万元，加工费总收入同比增长21.63%，冷轧成品月产量连续两个月突破8000吨。",
-      "embed": "block",
-      "tags": [
-        "铜",
-        "找矿",
-        "市场"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-25",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
       "id": "cf9d1370221b",
       "title": "2026年有色金属行业经济运行报告会暨有色企业统计信息发布会在济南召开",
       "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=473538",
@@ -545,48 +395,6 @@
         "钴",
         "铬",
         "铂"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-25",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
-      "id": "94fcf38b0c86",
-      "title": "改革\"必答题\"的标杆解法——西南铝获评国务院国资委\"双百行动\"标杆企业",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61842.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-27",
-      "orig_date_full": "2026-08-27",
-      "report_date": "2026-09-25",
-      "category": "企业经营",
-      "is_new": false,
-      "summary": "西南铝坚持\"两端发力\"加快产业迭代，布局高性能宽幅铝合金板带、大规格挤压等重点项目，2025年服务国家战略产品产量较2022年增长32%，获评国务院国资委\"双百行动\"标杆企业。",
-      "embed": "block",
-      "tags": [
-        "铝",
-        "金",
-        "市场"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-25",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
-      "id": "9032a1c13ecd",
-      "title": "聚集硬核力量 历时五年攻关 新疆有色国家级研发项目通过验收的背后",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61843.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-27",
-      "orig_date_full": "2026-08-27",
-      "report_date": "2026-09-25",
-      "category": "技术与勘查",
-      "is_new": false,
-      "summary": "新疆有色集团历时五年攻关的国家级研发项目通过验收，聚焦硬岩矿产、有色金属资源综合利用。",
-      "embed": "block",
-      "tags": [
-        "技术"
       ],
       "first_seen": "2026-09-01",
       "last_seen": "2026-09-25",
@@ -638,50 +446,6 @@
       ],
       "first_seen": "2026-09-01",
       "last_seen": "2026-09-03"
-    },
-    {
-      "id": "53d536296ea7",
-      "title": "数字孪生贯通采选全链路 中铁资源鹿鸣矿业两项成果入选国家级新质生产力优秀创新成果名录",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61845.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-27",
-      "orig_date_full": "2026-08-27",
-      "report_date": "2026-09-25",
-      "category": "技术与勘查",
-      "is_new": false,
-      "summary": "中铁资源鹿鸣矿业的数字孪生贯通采选全链路两项创新成果入选国家级新质生产力名录，标志矿山数字化、智能化升级。",
-      "embed": "block",
-      "tags": [
-        "铁",
-        "技术"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-25",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
-      "id": "518c989ed83b",
-      "title": "中铝集团攻克高寒矿区生态修复难题",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0827/61839.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-27",
-      "orig_date_full": "2026-08-27",
-      "report_date": "2026-09-25",
-      "category": "技术与勘查",
-      "is_new": false,
-      "summary": "中铝集团在高寒矿区生态修复领域取得技术突破，为高海拔有色金属矿山绿色开发提供可推广方案。",
-      "embed": "block",
-      "tags": [
-        "铝",
-        "政策",
-        "找矿",
-        "技术"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-25",
-      "region": "国内",
-      "orig_category": "行业动态"
     },
     {
       "id": "4d174c573243",
@@ -987,71 +751,6 @@
       "orig_category": "行业动态"
     },
     {
-      "id": "3de679e9ccea",
-      "title": "紫金矿业主营金属产量稳中有进 价值创造能力持续提升",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/0825/61822.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-25",
-      "orig_date_full": "2026-08-25",
-      "report_date": "2026-09-23",
-      "category": "企业经营",
-      "is_new": false,
-      "summary": "紫金矿业发布2026年半年报：矿产金47吨（同比+13%）、矿产铜53.4万吨、当量碳酸锂4.4万吨（同比+496%）；巨龙铜矿改扩建建成投产，马诺诺锂矿提前投产，\"第三增长极\"形成规模贡献。",
-      "embed": "block",
-      "tags": [
-        "铜",
-        "金",
-        "锂",
-        "市场"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-23",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
-      "id": "2b82e0d4164f",
-      "title": "利好集聚 锡价有望小幅上涨",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/0825/61828.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-25",
-      "orig_date_full": "2026-08-25",
-      "report_date": "2026-09-23",
-      "category": "市场与价格",
-      "is_new": false,
-      "summary": "锡价受供给收紧与电子需求回升支撑，短期有望小幅上涨。",
-      "embed": "block",
-      "tags": [
-        "锡",
-        "市场"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-23",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
-      "id": "2100548c0cef",
-      "title": "下半年财政部将及时谋划出台务实管用的增量政策",
-      "url": "https://www.chinania.org.cn/html/zcfg/zhengcefagui/2026/0825/61821.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-25",
-      "orig_date_full": "2026-08-25",
-      "report_date": "2026-09-23",
-      "category": "政策与监管",
-      "is_new": false,
-      "summary": "财政部表示下半年将及时谋划出台务实管用的增量政策，支撑有色金属产业绿色低碳、智能制造、关键矿产供给。",
-      "embed": "block",
-      "tags": [
-        "政策",
-        "技术"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-23",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
       "id": "1a5fed3814b0",
       "title": "维里迪斯融资开发科罗苏斯稀土矿",
       "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202608/t20260825_10298753.htm",
@@ -1132,27 +831,6 @@
       "last_seen": "2026-09-22",
       "region": "国际",
       "orig_category": "国际矿业动态"
-    },
-    {
-      "id": "d5a41ad01af1",
-      "title": "关于2026年度有色金属企业管理现代化创新成果审定结果的公示",
-      "url": "https://www.chinania.org.cn/html/xiehuidongtai/xiehuitongzhi/2026/0824/61815.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "08-24",
-      "orig_date_full": "2026-08-24",
-      "report_date": "2026-09-22",
-      "category": "企业经营",
-      "is_new": false,
-      "summary": "中国有色金属工业协会对2026年度有色金属企业管理现代化创新成果审定结果进行公示，覆盖有色行业管理创新成果。",
-      "embed": "block",
-      "tags": [
-        "政策",
-        "技术"
-      ],
-      "first_seen": "2026-09-01",
-      "last_seen": "2026-09-22",
-      "region": "国内",
-      "orig_category": "行业动态"
     },
     {
       "id": "950836c35308",

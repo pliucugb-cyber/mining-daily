@@ -1315,7 +1315,13 @@ def check_health(report, targets, all_items, run_source_fn, args):
     health, new_report = [], []
 
     for cfg in targets:
-        key, name = cfg["key"], cfg["name"]
+        key = cfg["key"]
+        # 2026-10-29：已禁用源（enabled=False，如 chinania）不参与健康度检查。
+        # 否则会被判为产出0/疑似失败，误导 08:00 复验环节对其发告警邮件。
+        if not cfg.get("enabled"):
+            new_report.append((key, cfg["name"], 0, "disabled"))
+            continue
+        name = cfg["name"]
         n = orig.get(key, 0)
         samples = bl.get(key) or []
         med = _median(samples)

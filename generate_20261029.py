@@ -158,6 +158,11 @@ for cat, it in prev_today + arch_keep:
     seen_url.add(url)
     merge_seq.append((_reclassify_by_url(cat, it), it))
 
+# 2026-10-29 一次性清理：chinania.org.cn 源已禁用且死链已从月库/前端库清除，
+# 但现有 index.html 往期区仍残留其卡片（arch_keep 继承自旧 html），
+# 此处统一剔除，确保重生成的 index.html 不再渲染该死链。
+merge_seq = [(c, it) for c, it in merge_seq if 'chinania.org.cn' not in it]
+
 merge_seq = dedup_same_event(merge_seq)
 
 # ============ 3.5 从累计库回补 30 天窗口 ============
@@ -301,6 +306,18 @@ new_items = [
                 '劳动力短缺拖累 West Red Lake 旗下 Madsen 金矿，年产指引下调约四分之一',
                 'West Red Lake Gold Mines 将 Madsen 金矿今年产量指引由 3.5 万至 4.5 万盎司下调至 2.7 万至 3.2 万盎司，主因劳动力短缺与老采区残留矿柱回采难度加大。三季度产量环比降 8.4% 至 7,859 盎司，公司股价当日跌 12%。',
                 orig_title='Labour shortage hurts West Lake Gold output')),
+
+    (CAT_GJ, ni('https://www.mining.com/hypromag-usa-pfs-outlines-2-1b-upside-from-rare-earth-magnet-platform-expansion',
+                'MINING.COM', '10-29',
+                'HyProMag USA 完成 PFS，评估稀土永磁平台扩建至年销约 6,000 吨',
+                'HyProMag USA 完成预可行性研究（PFS），评估在得州北莱克首厂之外扩建美国本土稀土永磁制造平台。公司拟以三座区域工厂加中央得州枢纽分阶段扩张，建立钕铁硼（NdFeB）永磁回收与制造供应链。到 2034 年平台可销售材料目标约 6,000 吨/年（较现有增产 4,474 吨/年），其中磁体约 4,192 吨、NdFeB 合金粉 1,305 吨。三座新厂税后 NPV 18.5 亿至 21 亿美元（约 149 亿元人民币），IRR 31%–36%，资本开支约 6.23 亿至 6.56 亿美元，回收期 2.3 至 3 年；2030 年 AISC 约 37.4–41.6 美元/千克，实现售价约 100.5 美元/千克（均美元计价）。叠加北莱克厂整体税后 NPV 达 26 亿至 28 亿美元。',
+                orig_title='HyProMag USA PFS outlines $2.1B upside from rare earth magnet platform expansion')),
+
+    (CAT_GJ, ni('https://www.mining.com/green-manganese-trials-deliver-high-recovery-rates-alongside-zinc-extraction',
+                'MINING.COM', '10-29',
+                'Green Manganese 处理锰铁污泥试验成功，回收锰并提取锌、降毒逾 99.97%',
+                'Green Manganese Technologies 完成对欧洲某锰铁合金厂湿法烟气净化污泥的首次处理试验，在回收锰的同时提取锌，并大幅降低残余固废毒性。该公司闭路水基工艺可从低品位矿石及历史、工业尾矿中回收锰等关键矿物；待处理污泥含锰约 30%、含锌约 6%。ALS Canada 独立分析显示处理后固废中多环芳烃（PAH）降低逾 99.97%，碱性污泥被转化为稳定的近中性固体，可作工程回填。公司称该方案为冶炼厂提供“就地处理烟气流与历史污泥塘并回收金属”的双重收益（美元计价）。',
+                orig_title='Green Manganese trials deliver high recovery rates alongside zinc extraction')),
 ]
 
 

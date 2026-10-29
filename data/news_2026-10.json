@@ -1,7 +1,7 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-29T08:22:45+08:00",
-  "count": 614,
+  "updated_at": "2026-10-29T10:24:28+08:00",
+  "count": 599,
   "news": [
     {
       "id": "b5cb16a3f404",
@@ -23,6 +23,30 @@
       "last_seen": "2026-10-29",
       "region": "国际",
       "orig_category": "找矿成果与勘查技术"
+    },
+    {
+      "id": "522203e82f42",
+      "title": "Green Manganese 处理锰铁污泥试验成功，回收锰并提取锌、降毒逾 99.97%",
+      "url": "https://www.mining.com/green-manganese-trials-deliver-high-recovery-rates-alongside-zinc-extraction",
+      "source": "MINING.COM",
+      "orig_date": "10-29",
+      "orig_date_full": "2026-10-29",
+      "report_date": "2026-10-29",
+      "category": "技术与勘查",
+      "is_new": true,
+      "summary": "Green Manganese Technologies 完成对欧洲某锰铁合金厂湿法烟气净化污泥的首次处理试验，在回收锰的同时提取锌，并大幅降低残余固废毒性。该公司闭路水基工艺可从低品位矿石及历史、工业尾矿中回收锰等关键矿物；待处理污泥含锰约 30%、含锌约 6%。ALS Canada 独立分析显示处理后固废中多环芳烃（PAH）降低逾 99.97%，碱性污泥被转化为稳定的近中性固体，可作工程回填。公司称该方案为冶炼厂提供“就地处理烟气流与历史污泥塘并回收金属”的双重收益（美元计价）。（原题：Green Manganese trials deliver high recovery rates alongside zinc extraction）",
+      "embed": "ok",
+      "tags": [
+        "锌",
+        "金",
+        "锰",
+        "铁",
+        "政策"
+      ],
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "421e9fe6de9b",
@@ -47,6 +71,29 @@
       "last_seen": "2026-10-29",
       "region": "国际",
       "orig_category": "市场与价格"
+    },
+    {
+      "id": "3ebc9d218874",
+      "title": "HyProMag USA 完成 PFS，评估稀土永磁平台扩建至年销约 6,000 吨",
+      "url": "https://www.mining.com/hypromag-usa-pfs-outlines-2-1b-upside-from-rare-earth-magnet-platform-expansion",
+      "source": "MINING.COM",
+      "orig_date": "10-29",
+      "orig_date_full": "2026-10-29",
+      "report_date": "2026-10-29",
+      "category": "项目与产能",
+      "is_new": true,
+      "summary": "HyProMag USA 完成预可行性研究（PFS），评估在得州北莱克首厂之外扩建美国本土稀土永磁制造平台。公司拟以三座区域工厂加中央得州枢纽分阶段扩张，建立钕铁硼（NdFeB）永磁回收与制造供应链。到 2034 年平台可销售材料目标约 6,000 吨/年（较现有增产 4,474 吨/年），其中磁体约 4,192 吨、NdFeB 合金粉 1,305 吨。三座新厂税后 NPV 18.5 亿至 21 亿美元（约 149 亿元人民币），IRR 31%–36%，资本开支约 6.23 亿至 6.56 亿美元，回收期 2.3 至 3 年；2030 年 AISC 约 37.4–41.6 美元/千克，实现售价约 100.5 美元/千克（均美元计价）。叠加北莱克厂整体税后 NPV 达 26 亿至 28 亿美元。（原题：HyProMag USA PFS outlines $2.1B upside from rare earth magnet platform expansion）",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "稀土",
+        "铁",
+        "技术"
+      ],
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "103a382ee3e5",
@@ -4579,50 +4626,6 @@
       "orig_category": "并购与投资"
     },
     {
-      "id": "c31368f4eb09",
-      "title": "联合国启动关键矿产国家支持机制，六国入选首批名单",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/1020/62213.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-20",
-      "orig_date_full": "2026-10-20",
-      "report_date": "2026-10-29",
-      "category": "政策与监管",
-      "is_new": false,
-      "summary": "联合国在 9 月纽约气候峰会上启动关键能源转型矿产国家支持机制，印度尼西亚、赞比亚、几内亚、津巴布韦、马达加斯加和尼日利亚 6 国入选首批名单。机制不提供直接贷款，而以政策设计、法律框架、环境与社会标准建设为抓手，推动 6 国从原矿出口转向本地加工；刚果（金）被列入后续 15 国扩展名单。",
-      "embed": "ok",
-      "tags": [
-        "金",
-        "政策"
-      ],
-      "first_seen": "2026-10-23",
-      "last_seen": "2026-10-29",
-      "region": "国际",
-      "orig_category": "国际矿业动态"
-    },
-    {
-      "id": "c0f5025b947c",
-      "title": "紫金矿业保有铜资源量约 1.1 亿吨、金 4610 吨，分列全球第三、第五",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1020/62204.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-20",
-      "orig_date_full": "2026-10-20",
-      "report_date": "2026-10-29",
-      "category": "技术与勘查",
-      "is_new": false,
-      "summary": "紫金矿业 10 月 17 日在福建上杭召开第八次科技大会，公司当前保有铜资源量约 1.1 亿吨、金资源量 4610 吨，分列全球第三、第五位。「十四五」期间自主勘查新增铜资源量 2346 万吨，吨铜勘查成本 71 元，约为行业平均水平的三分之一；自研「震旦」三维激电系统探测深度超 1500 米，已在 40 余个勘查区应用。",
-      "embed": "ok",
-      "tags": [
-        "铜",
-        "金",
-        "找矿",
-        "国际"
-      ],
-      "first_seen": "2026-10-23",
-      "last_seen": "2026-10-29",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
       "id": "c03dcd0533f2",
       "title": "吉林省磐石市烟筒山镇金及多金属勘查探矿权挂牌出让成交结果公示",
       "url": "https://ky.mnr.gov.cn/jggs/jjgs/202610/t20261020_10338739.htm",
@@ -4962,7 +4965,7 @@
       "source": "中国有色金属报",
       "orig_date": "10-20",
       "orig_date_full": "2026-10-20",
-      "report_date": "2026-10-22",
+      "report_date": "2026-10-29",
       "category": "技术与勘查",
       "is_new": false,
       "summary": "紫金矿业第八次科技大会 10 月 17 日在福建上杭召开。公司目前保有金资源量 4610 吨、铜资源量约 1.1 亿吨，分列全球第五、第三；「十四五」期间自主勘查新增铜资源量 2346 万吨，吨铜勘查成本 71 元，仅为行业平均水平的三分之一。自研「震旦」三维激电系统探测深度超 1500 米，已在 40 余个勘查区应用，助塞尔维亚玛格铜金矿成为近 5 年全球绿地勘查发现的第二大铜矿。",
@@ -4974,7 +4977,7 @@
         "国际"
       ],
       "first_seen": "2026-10-21",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-29",
       "region": "国内",
       "orig_category": "找矿成果与勘查技术"
     },
@@ -5072,7 +5075,7 @@
       "source": "中国有色金属报",
       "orig_date": "10-20",
       "orig_date_full": "2026-10-20",
-      "report_date": "2026-10-22",
+      "report_date": "2026-10-29",
       "category": "政策与监管",
       "is_new": false,
       "summary": "9 月联合国在纽约气候峰会宣布启动关键能源转型矿产国家支持机制，印度尼西亚、赞比亚、几内亚、津巴布韦、马达加斯加和尼日利亚 6 国进入首批名单。机制不提供直接贷款，以政策设计、法律框架、环境与社会标准建设为抓手，推动 6 国从原矿出口转向本地加工与制造；刚果（金）等被列入后续 15 国扩展名单。",
@@ -5083,7 +5086,7 @@
         "国际"
       ],
       "first_seen": "2026-10-21",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-29",
       "region": "国际",
       "orig_category": "政策与监管"
     },
@@ -6579,26 +6582,6 @@
       "orig_category": "行业动态"
     },
     {
-      "id": "d1b9d7b95a61",
-      "title": "9 月中国有色金属产业景气指数 42.7，环比降 3.8 个百分点",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/jqzs/2026/1015/62168.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-15",
-      "orig_date_full": "2026-10-15",
-      "report_date": "2026-10-29",
-      "category": "市场与价格",
-      "is_new": false,
-      "summary": "中国有色金属工业协会监测显示，2026 年 9 月有色金属产业景气指数 42.7，较上月下降 3.8 个百分点，仍处「正常」区间中部；先行指数 88.3、降 1.4 个百分点，一致指数 77.0、降 3.8 个百分点。12 项构成指标中仅商品房销售面积指数处于「偏冷」区间。协会指出，9 月行业主要产品产量保持增长、固定资产投资持续下滑、进出口分化，规模以上企业效益延续大幅增长。",
-      "embed": "ok",
-      "tags": [
-        "市场"
-      ],
-      "first_seen": "2026-10-19",
-      "last_seen": "2026-10-29",
-      "region": "国内",
-      "orig_category": "市场与价格"
-    },
-    {
       "id": "cc6726d058c3",
       "title": "国际钨业协会柏林会议：中国目标 2030 年钨回收率提至 45%",
       "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474630",
@@ -6766,26 +6749,6 @@
       "orig_category": "市场与价格"
     },
     {
-      "id": "8d7ba54d3da8",
-      "title": "工业硅总库存逼近 90 万吨，成本刚性压缩价格下行空间",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/1015/62176.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-15",
-      "orig_date_full": "2026-10-15",
-      "report_date": "2026-10-29",
-      "category": "市场与价格",
-      "is_new": false,
-      "summary": "10 月初国内四大主产区工业硅总产量 4.73 万吨，环比增 810 吨、同比减 6850 吨，增量主要来自新疆；同期多晶硅周产量回落 0.45 万吨至 2.25 万吨，有机硅周产量 4.25 万吨、环比降 6.4%。截至 10 月 8 日社会库存 43.2 万吨、厂库 20.5 万吨、下游原料库存 25.58 万吨，总库存 89.28 万吨。分析认为四季度供需边际转弱，但电价与碳质还原剂涨价推高成本，价格下行空间被压缩。",
-      "embed": "ok",
-      "tags": [
-        "市场"
-      ],
-      "first_seen": "2026-10-19",
-      "last_seen": "2026-10-29",
-      "region": "国内",
-      "orig_category": "市场与价格"
-    },
-    {
       "id": "847cd7be4de6",
       "title": "【探矿权·变更登记】内蒙古呼伦贝尔市扎兰屯市庙尔山锌多金属矿勘探（锌矿）",
       "url": "https://ky.mnr.gov.cn/dj/tk/?lic=DT1507002008073010011422",
@@ -6835,27 +6798,6 @@
       "orig_category": "市场与价格"
     },
     {
-      "id": "7de032303ad8",
-      "title": "中国设定 2030 年钨回收率提高至 45% 目标",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/1015/62175.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-15",
-      "orig_date_full": "2026-10-15",
-      "report_date": "2026-10-17",
-      "category": "政策与监管",
-      "is_new": false,
-      "summary": "中国有色金属工业网报道，9 月柏林国际钨业协会会议上中方代表披露，中国已设定到 2030 年将钨回收率提高至 45% 的目标，标志钨产业重心从依赖矿山开采转向原生与再生资源并重；国际钨业协会测算，按报废回收率口径全球钨回收率约三成，其中欧美国家接近五成、日本约三成、中国约二成。",
-      "embed": "ok",
-      "tags": [
-        "钨",
-        "国际"
-      ],
-      "first_seen": "2026-10-16",
-      "last_seen": "2026-10-17",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
       "id": "6de3ea055e7a",
       "title": "工业硅成本端有强支撑，四季度供需边际转弱",
       "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474631",
@@ -6875,27 +6817,6 @@
       "last_seen": "2026-10-29",
       "region": "国内",
       "orig_category": "市场与价格"
-    },
-    {
-      "id": "6d26fa0a6bc7",
-      "title": "赤峰金通铜业铜冶炼二期工程投产，达产后年产值超 500 亿元",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1015/62167.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-15",
-      "orig_date_full": "2026-10-15",
-      "report_date": "2026-10-29",
-      "category": "项目与产能",
-      "is_new": false,
-      "summary": "中国有色金属工业网报道，赤峰金通铜业铜冶炼工艺升级搬迁改造项目二期工程于 9 月 13 日产出第一块合格阴极铜、实现全流程贯通；该项目达产后公司预计年产值超 500 亿元、年产硫酸可达 200 万吨，采用「富氧侧吹熔炼炉+多枪顶吹吹炼炉+回转式阳极炉」连续炼铜工艺，公司厂区总占地 1042 亩。",
-      "embed": "ok",
-      "tags": [
-        "铜",
-        "金"
-      ],
-      "first_seen": "2026-10-16",
-      "last_seen": "2026-10-29",
-      "region": "国内",
-      "orig_category": "行业动态"
     },
     {
       "id": "68e418d5d6ac",
@@ -7754,27 +7675,6 @@
       "orig_category": "市场与价格"
     },
     {
-      "id": "f54e38247f03",
-      "title": "从中国国际矿业大会看全球矿业调整：融资与并购激增，勘查支出连降四年",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/1013/62157.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-13",
-      "orig_date_full": "2026-10-13",
-      "report_date": "2026-10-29",
-      "category": "行业动态",
-      "is_new": false,
-      "summary": "第 28 届中国国际矿业大会发布的全球矿业发展报告显示，2025 年全球矿业融资额增长 1 倍以上至 214.30 亿美元，并购额增长 150.40% 至 735.20 亿美元，同期全球矿产勘查支出连续第 4 年下降。大会发布《矿业绿色发展天津宣言》，并推出 10 项绿色矿山建设国家标准与首部固体矿产绿色勘查国家标准，自 10 月 1 日起施行。资源国普遍提出本地加工诉求，供应链布局向非洲、中亚、南太平洋等区域延伸。",
-      "embed": "ok",
-      "tags": [
-        "找矿",
-        "国际"
-      ],
-      "first_seen": "2026-10-19",
-      "last_seen": "2026-10-29",
-      "region": "国际",
-      "orig_category": "并购与投资"
-    },
-    {
       "id": "f0bccc3b8429",
       "title": "水口山金信攻克冰铜含铅高难题，综合含铅量降至 7.68%",
       "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474542",
@@ -8629,27 +8529,6 @@
       "orig_category": "找矿成果与勘查技术"
     },
     {
-      "id": "043be31dccb8",
-      "title": "1—8 月我国钴产品进出口数据分析及后市展望",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/1013/62158.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-13",
-      "orig_date_full": "2026-10-13",
-      "report_date": "2026-10-15",
-      "category": "市场与价格",
-      "is_new": false,
-      "summary": "中国有色金属工业协会刊文分析，2026 年 8 月我国自刚果（金）进口钴湿法中间品 2332 吨，同比增长 61.8%、环比下降 51.3%；1—8 月累计进口仅 1.2 万吨、同比大降 85.4%，预计 9—12 月进口可达 4 万吨以上，下半年钴原料供应压力将明显缓解。",
-      "embed": "ok",
-      "tags": [
-        "金",
-        "钴"
-      ],
-      "first_seen": "2026-10-14",
-      "last_seen": "2026-10-15",
-      "region": "国内",
-      "orig_category": "市场与价格"
-    },
-    {
       "id": "fe650b45c705",
       "title": "期现劈叉、升水高位塌方：11 万铜价背后的铜市「虚实博弈」",
       "url": "https://www.ccmn.cn/news/ZX003/202610/0017c82741e74e5bbd636429010b541d.html",
@@ -8928,28 +8807,6 @@
       "orig_category": "国际矿业动态"
     },
     {
-      "id": "79cabeaf9046",
-      "title": "中铝国际贵阳院破解炭素焙烧烟气治理难题",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1012/62144.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-12",
-      "orig_date_full": "2026-10-12",
-      "report_date": "2026-10-29",
-      "category": "技术与勘查",
-      "is_new": false,
-      "summary": "中国有色金属工业协会报道，中铝国际贵阳院在炭素焙烧烟气治理环节取得突破，破解了该工序的环保治理难题。",
-      "embed": "ok",
-      "tags": [
-        "铝",
-        "找矿",
-        "国际"
-      ],
-      "first_seen": "2026-10-13",
-      "last_seen": "2026-10-29",
-      "region": "国内",
-      "orig_category": "行业动态"
-    },
-    {
       "id": "73a48f1f0ac1",
       "title": "辽宁省朝阳县胜利花坤铜多金属矿普查探矿权网上挂牌出让成交结果公示",
       "url": "https://ky.mnr.gov.cn/jggs/jjgs/202610/t20261013_10333297.htm",
@@ -9064,27 +8921,6 @@
       "orig_category": "并购与投资"
     },
     {
-      "id": "57d59298bade",
-      "title": "铝价四季度上行空间受限",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/1012/62140.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-12",
-      "orig_date_full": "2026-10-12",
-      "report_date": "2026-10-29",
-      "category": "市场与价格",
-      "is_new": false,
-      "summary": "中国有色金属工业协会刊文指出，铝价近期维持高位震荡，但美元指数触及 102.53 的阶段性高位、国内库存降幅较前期收窄，预计四季度铝价仍有支撑但上行空间相对受限。",
-      "embed": "ok",
-      "tags": [
-        "铝",
-        "市场"
-      ],
-      "first_seen": "2026-10-14",
-      "last_seen": "2026-10-29",
-      "region": "国内",
-      "orig_category": "市场与价格"
-    },
-    {
       "id": "51e550580791",
       "title": "贵州华仁以激光清理替代人工打磨阳极导杆，年综合效益超 200 万元",
       "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474491",
@@ -9150,27 +8986,6 @@
       "last_seen": "2026-10-29",
       "region": "国内",
       "orig_category": "行业动态"
-    },
-    {
-      "id": "436c4ad014bd",
-      "title": "高库存对上弱需求，镍价震荡偏弱运行",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/1012/62142.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-12",
-      "orig_date_full": "2026-10-12",
-      "report_date": "2026-10-15",
-      "category": "市场与价格",
-      "is_new": false,
-      "summary": "中国有色金属工业协会刊发分析指出，镍市高库存对上弱需求，镍价震荡偏弱运行。",
-      "embed": "ok",
-      "tags": [
-        "镍",
-        "市场"
-      ],
-      "first_seen": "2026-10-13",
-      "last_seen": "2026-10-15",
-      "region": "国内",
-      "orig_category": "市场与价格"
     },
     {
       "id": "33733749418e",
@@ -10318,29 +10133,6 @@
       "orig_category": "国际矿业动态"
     },
     {
-      "id": "c9c443dece14",
-      "title": "永平铜矿六十年接续找矿：从浅表铁矿到铜硫钨多金属基地",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1009/62122.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-09",
-      "orig_date_full": "2026-10-09",
-      "report_date": "2026-10-29",
-      "category": "技术与勘查",
-      "is_new": false,
-      "summary": "中国有色金属工业协会网刊文回顾江西省地质局第八大队在永平铜矿的六十年接续找矿历程：以“就矿找矿”地质理论为指引，运用“顺藤摸瓜、主次转化、平行侧列”三大勘查方法。1961 年在浅表铁矿巷道中揭露厚度超 20 米的原生铜硫矿体，1963—1966 年会战期间首批验证孔单孔揭露 40 米厚工业铜矿体，主攻矿种由铁矿转为铜硫；此后又探明厚层铜钨共生矿体，推动这座老矿山持续增储。",
-      "embed": "ok",
-      "tags": [
-        "铜",
-        "钨",
-        "铁",
-        "找矿"
-      ],
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-29",
-      "region": "国内",
-      "orig_category": "找矿成果与勘查技术"
-    },
-    {
       "id": "c49a4d65d986",
       "title": "McEwen 以 5,500 万美元出售安大略两处非核心金矿资产",
       "url": "https://www.mining.com/mcewens-55m-ontario-asset-sale-fuels-gold-growth-plans",
@@ -10569,9 +10361,9 @@
       "source": "中国有色金属报",
       "orig_date": "10-09",
       "orig_date_full": "2026-10-09",
-      "report_date": "2026-10-09",
+      "report_date": "2026-10-29",
       "category": "技术与勘查",
-      "is_new": true,
+      "is_new": false,
       "summary": "中国有色金属报报道，宝钛集团依托下属宝钛装备设计制造公司自主研发、设计、制造的 3150kW 冷阴极电子束冷床炉（EB 炉），实现 12 吨超大单重纯镍铸锭稳定量产，标志国产 EB 炉在大吨位高端纯镍熔炼工艺与规模化量产技术领域取得实质性突破。纯镍熔点高、熔融态黏度大、流动性差，且在高真空下极易挥发，大吨位连续熔炼是行业公认难题；此前企业引进的德国热阴极 EB 炉存在灯丝易损耗、真空波动大等短板，无法实现大吨位连续稳定熔炼。宝钛集团 2023 年 12 月投产自主研制冷阴极 EB 炉全面替代进口设备，2025 年 3 月启动大吨位纯镍铸锭专项攻坚，通过自制专用打包工装解决异形返回炉料供料不稳定、设备卡滞等行业共性难题，并搭建全维度质量安全保障体系。该成果填补国内大单重纯镍量产技术空白，可直接轧制超宽超长整体镍板材，规避拼接焊缝缺陷。",
       "embed": "ok",
       "tags": [
@@ -10582,9 +10374,9 @@
         "安全"
       ],
       "first_seen": "2026-10-09",
-      "last_seen": "2026-10-09",
-      "orig_category": "行业动态",
-      "region": "国内"
+      "last_seen": "2026-10-29",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "707dded62ca5",
@@ -10816,26 +10608,6 @@
       "orig_category": "并购与投资"
     },
     {
-      "id": "4293420160b3",
-      "title": "机构：关键矿产国际合作从贸易主导向供应链主导转变",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/1009/62127.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-09",
-      "orig_date_full": "2026-10-09",
-      "report_date": "2026-10-29",
-      "category": "行业动态",
-      "is_new": false,
-      "summary": "中国有色金属工业协会网刊文分析 2026 年全球关键矿产合作新动向：7 月韩国与巴西宣布扩大关键矿产全周期合作，8 月澳大利亚与越南同意加强关键矿产供应链合作。文章认为两组合作折射出四层变革——合作模式从贸易主导转向供应链主导、资源国价值诉求集体抬升、制造国主动多元化布局、制度框架与合作机制深度绑定；关键矿产正从商品属性转变为战略纽带。",
-      "embed": "ok",
-      "tags": [
-        "国际"
-      ],
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-29",
-      "region": "国际",
-      "orig_category": "国际矿业动态"
-    },
-    {
       "id": "3e73f89920cc",
       "title": "易控智驾无人驾驶跑通露天煤矿采煤全工艺，逾 600 台无人矿卡投运",
       "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474453",
@@ -11010,31 +10782,6 @@
       "orig_category": "并购与投资"
     },
     {
-      "id": "2b6461f35efd",
-      "title": "机构：全球镍系定价或现“双基准”格局",
-      "url": "https://www.chinania.org.cn/html/hangyetongji/tongji/2026/1009/62126.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-09",
-      "orig_date_full": "2026-10-09",
-      "report_date": "2026-10-29",
-      "category": "市场与价格",
-      "is_new": false,
-      "summary": "中国有色金属工业协会网刊文分析印尼矿产与战略大宗商品交易所（ICOMEX）的影响：该交易所由印尼金融服务管理局监管，牌照 2027 年 1 月 1 日发放、1 月 4 日开启首单交易，首批挂牌品种为锡和镍铁。文章认为，印尼占全球镍供应 60% 以上，而 LME 对二级镍覆盖不足、存在“基准真空带”，ICOMEX 最有希望率先形成“LME 一级镍、ICOMEX 二级镍”的双基准格局；锡短期更可能形成双轨报价但体量有限。",
-      "embed": "ok",
-      "tags": [
-        "镍",
-        "金",
-        "锡",
-        "铁",
-        "矿权",
-        "国际"
-      ],
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-29",
-      "region": "国际",
-      "orig_category": "市场与价格"
-    },
-    {
       "id": "28ecdecdbfc9",
       "title": "Magna Mining 批准重启 Ontario Levack 镍铜矿，目标 2028 年中投产",
       "url": "https://www.mining.com/levack-restart-puts-magna-on-two-mine-path",
@@ -11079,29 +10826,6 @@
       "last_seen": "2026-10-29",
       "region": "国际",
       "orig_category": "并购与投资"
-    },
-    {
-      "id": "20c16f9d8154",
-      "title": "宝钛集团国产 EB 炉量产 12 吨超大单重纯镍铸锭",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1009/62130.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-09",
-      "orig_date_full": "2026-10-09",
-      "report_date": "2026-10-29",
-      "category": "技术与勘查",
-      "is_new": false,
-      "summary": "中国有色金属工业协会网转载报道，宝钛集团依托下属宝钛装备设计制造公司自主研发的 3150kW 冷阴极电子束冷床炉（EB 炉），实现 12 吨超大单重纯镍铸锭稳定量产，标志国产 EB 炉在大吨位高端纯镍熔炼与规模化量产领域取得实质性突破。纯镍熔点高、熔融态黏度大、高真空下易挥发，大吨位连续熔炼是行业公认难题；此前引进的德国热阴极 EB 炉存在灯丝易损耗、真空波动大等短板。该成果填补国内大单重纯镍量产技术空白，可直接轧制超宽超长整体镍板材、规避拼接焊缝缺陷。",
-      "embed": "ok",
-      "tags": [
-        "镍",
-        "钛",
-        "找矿",
-        "技术"
-      ],
-      "first_seen": "2026-10-10",
-      "last_seen": "2026-10-29",
-      "region": "国内",
-      "orig_category": "行业动态"
     },
     {
       "id": "09fc585dd824",
@@ -11285,28 +11009,6 @@
       "last_seen": "2026-10-29",
       "region": "国际",
       "orig_category": "国际矿业动态"
-    },
-    {
-      "id": "817d1d3b242b",
-      "title": "贵州鼎盛鑫锌锗新材料绿色智造项目设计签约，总投资 62.5 亿元",
-      "url": "https://www.chinania.org.cn/html/hangyexinwen/guoneixinwen/2026/1008/62118.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-08",
-      "orig_date_full": "2026-10-08",
-      "report_date": "2026-10-29",
-      "category": "项目与产能",
-      "is_new": false,
-      "summary": "中国有色金属工业协会网站刊发中国有色金属报报道，贵州鼎盛鑫锌锗新材料绿色智造项目工程设计签约仪式 9 月 23 日在赫章鼎盛鑫矿业发展有限公司举行，项目总投资 62.5 亿元。",
-      "embed": "ok",
-      "tags": [
-        "锌",
-        "锗",
-        "技术"
-      ],
-      "first_seen": "2026-10-08",
-      "last_seen": "2026-10-29",
-      "region": "国内",
-      "orig_category": "行业动态"
     },
     {
       "id": "6f6b782737a2",
@@ -13517,32 +13219,6 @@
       "first_seen": "2026-10-02",
       "last_seen": "2026-10-29",
       "region": "国际",
-      "orig_category": "行业动态"
-    },
-    {
-      "id": "0cbfa575d99c",
-      "title": "先进有色金属（稀有）材料产业链共链行动大会在成都召开",
-      "url": "https://www.chinania.org.cn/html/xiehuidongtai/xiehuidongtai/2026/1001/62115.html",
-      "source": "中国有色金属工业协会",
-      "orig_date": "10-01",
-      "orig_date_full": "2026-10-01",
-      "report_date": "2026-10-04",
-      "category": "会议会展",
-      "is_new": false,
-      "summary": "2026 年先进有色金属（稀有）材料现代产业链共链行动大会 9 月 29 日在成都召开，由国务院国资委、工业和信息化部、中国有色金属工业协会和中国铝业集团指导。协会党委书记敖宏指出，2023 年以来国家对镓、锗、锑、铟等实施两用物项出口管制，全行业合规意识明显增强，下一步要筑牢资源安全根基、强化创新协同、共建产业生态。",
-      "embed": "ok",
-      "tags": [
-        "铝",
-        "锑",
-        "镓",
-        "锗",
-        "铟",
-        "技术",
-        "安全"
-      ],
-      "first_seen": "2026-10-03",
-      "last_seen": "2026-10-04",
-      "region": "国内",
       "orig_category": "行业动态"
     },
     {
