@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-29",
+ "updated_at": "2026-10-30",
  "companies": [
   {
    "name": "紫金矿业",
@@ -145,6 +145,27 @@
    "rank": 11,
    "items": [
     {
+     "t": "铜冠冶化年度发明专利授权量创新高",
+     "d": "2026-10-29",
+     "u": "http://www.tlys.cn/news.aspx?cid=24664&classid=383",
+     "s": "今年以来，铜冠冶化《用于焙烧炉抛料口吹扫清灰的装置及其使用方法》《球团矿筛分布料系统优化方法》等6项发明专利获国家授权，年度发明专利授权量创历史新高。下一步，该公司将聚焦专利成果转化应用，结合现场装置运行情况持续完善专利技术，为生产系统长周期稳定运行提供支撑。",
+     "k": "news"
+    },
+    {
+     "t": "铜冠铜箔统筹部署检修工作",
+     "d": "2026-10-29",
+     "u": "http://www.tlys.cn/news.aspx?cid=24663&classid=383",
+     "s": "日前，铜冠铜箔启动年度检修，为期10天，检修项目146项。一是压实组织分工，任务分解到岗。专业部门对接外协施工，工场调配内部维修力量，各项检修专人跟进，确保工作执行到位。二是严抓安环管理，守牢安全红线。全过程开展风险排查，严格落实培训交底和作业票制度，强化现场安全管控。",
+     "k": "news"
+    },
+    {
+     "t": "铜山铜矿加强顶帮板管理",
+     "d": "2026-10-29",
+     "u": "http://www.tlys.cn/news.aspx?cid=24662&classid=383",
+     "s": "一是深化警示教育，全面自查自纠。坚持以案示警，聚焦顶帮板典型事故教育，增强作业人员安全防范意识。二是加强隐患排查，落实管理规定。严查锚杆、锚网、喷浆等施工质量，重点排查顶板裂隙、浮石等隐患，切实做到不安全不生产。三是规范现场处置，严禁冒险作业。严格落实顶帮板三级管理制度，严禁一人单独撬毛违章行为。",
+     "k": "news"
+    },
+    {
      "t": "工程公司打破壁垒聚合力保障金新大修节点",
      "d": "2026-10-28",
      "u": "http://www.tlys.cn/news.aspx?cid=24657&classid=383",
@@ -220,27 +241,6 @@
      "u": "http://www.tlys.cn/news.aspx?cid=24636&classid=383",
      "s": "一是坚持对标对表、层层落实。严格对标集团公司安全管理制度，全面落实安全生产层级负责制，逐级传导安全管理压力，细化各层级岗位安全履职清单，把安全责任分解到岗、落实到人。二是坚持以练促战、以演促改。",
      "k": "news"
-    },
-    {
-     "t": "米拉多铜矿加强矿山水质管理",
-     "d": "2026-10-22",
-     "u": "http://www.tlys.cn/news.aspx?cid=24635&classid=383",
-     "s": "一是统筹机构设置和职能配置，将水处理车间由生产单位划归专业部门管理，着力构建生产水、酸性水及外排水“三水统筹”系统治理新格局。二是紧盯关键工作环节，持续完善酸性水处理系统，提升设备运行能力，强化极端天气条件下系统调节能力，切实保障外排水达标排放和水资源循环利用。",
-     "k": "news"
-    },
-    {
-     "t": "铜冠电工3项发明专利获国家授权",
-     "d": "2026-10-22",
-     "u": "http://www.tlys.cn/news.aspx?cid=24634&classid=383",
-     "s": "今年以来，公司已有《一种多功能铣边机》《一种轧辊更换装置》《一种铸机钢带焊接装置》3项发明专利获国家授权。下一步，该公司将持续推进技术创新与成果转化，围绕生产工艺中的难点与关键环节加大研发投入，以更多具有自主知识产权的核心技术提升市场竞争力。",
-     "k": "news"
-    },
-    {
-     "t": "米拉多铜矿援助社区建设沿河道路",
-     "d": "2026-10-21",
-     "u": "http://www.tlys.cn/news.aspx?cid=24632&classid=383",
-     "s": "日前，米拉多铜矿与铜达依米镇政府签署基米河谷社区沿河道路援助协议。基米河谷社区是该矿直接影响区社区之一，居民出行使用紧临北采场的道路。沿河道路建成后，将显著改善社区通行条件，便利农牧产品运输和居民出行，并有效规避社区出行与北矿生产之间的潜在矛盾。",
-     "k": "news"
     }
    ]
   },
@@ -260,6 +260,13 @@
    "stale": false,
    "rank": 19,
    "items": [
+    {
+     "t": "云南铜业前三季度归母净利润同比增长47.86%",
+     "d": "2026-10-29",
+     "u": "https://finance.sina.com.cn/stock/s/2026-10-29/doc-iniwwaxf5385967.shtml",
+     "s": "（来源：云南铜业股份有限公司）云南铜业近日发布2026年第三季度报告。前三季度，公司实现营业收入1638.55亿元，同比增长24.78%；归母净利润26.0亿元，同比增长47.86%，核心经营指标延续了稳中向好、进中提质的发展态势。今年以来...",
+     "k": "news"
+    },
     {
      "t": "云南铜业：前三季度减值为存货跌价准备依据充分合规",
      "d": "2026-10-28",
@@ -631,6 +638,27 @@
    "stale": false,
    "rank": 13,
    "items": [
+    {
+     "t": "云铝股份公布三季报 前三季净利增加164.01%",
+     "d": "2026-10-30",
+     "u": "https://finance.sina.com.cn/stock/ggzz/2026-10-30/doc-iniwxqyh5799280.shtml",
+     "s": "10月30日消息，云铝股份发布三季度报告。 公告显示，公司前三季度营业收入52,616,131,765.73元，同比增加19.39%，归属上市公司股东的净利润11,611,603,111.18元，同比增加164.01%。...",
+     "k": "news"
+    },
+    {
+     "t": "云铝股份前三季度营收526.16亿元同比增19.39%，归母净利润116.12亿元同比增164.01%",
+     "d": "2026-10-29",
+     "u": "https://finance.sina.com.cn/stock/aiassist/yjbg/2026-10-29/doc-iniwwyaq6018154.shtml",
+     "s": "10月29日，云铝股份发布2026年三季报。报告显示，公司前三季度营业收入为526.16亿元，同比增长19.39%；归母净利润为116.12亿元，同比增长164.01%；扣非归母净利润为115.37亿元，同比增长163.45%；基本每股收益...",
+     "k": "news"
+    },
+    {
+     "t": "云铝股份(000807.SZ)：第三季度净利润39.28亿元 同比增长140.92%",
+     "d": "2026-10-29",
+     "u": "https://finance.sina.com.cn/stock/bxjj/2026-10-29/doc-iniwwyav5207171.shtml",
+     "s": "格隆汇10月29日丨 云铝股份 (000807.SZ)发布2026年第三季度报告，实现营业收入176.35亿元，同比增长17.62%；归属于上市公司股东的净利润39.28亿元，同比增长140.92%；归属于上市公司股东的扣除非经常性损益的净利润39.17亿元，同比增长141.29%；基本每股收益1.",
+     "k": "news"
+    },
     {
      "t": "云铝股份6项科技成果通过评价",
      "d": "2026-10-27",
@@ -1038,17 +1066,24 @@
    "rank": 9,
    "items": [
     {
-     "t": "第四届零碳协同创新大会在蓉举行：共绘零碳生态，协同迈向系统重构与价值共赢 2026年9月3日 ，兴隆湖畔，秋风送爽",
-     "d": "2026-09-09",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1108",
-     "s": "中国市政工程西南设计研究总院党委书记、董事长程鹏，成都市科学技术协会副主席陈钢，国际财务报告准则基金会北京办公室能力建设主管程红粤，CDP全球环境信息研究中心中国区市场总监李蜚等嘉宾，也分别围绕本次大会主题进行了精彩分享。",
+     "t": "锂资源综合利用与新型电池基础锂材料四川省重点实验室2026年度学术委员会会议暨天齐锂业第五届创新季在成都理工大学成功举办",
+     "d": "2026-10-24",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1123",
+     "s": "会上，文华国副校长、刘杨博士分别表示将发挥高校基础研究和企业创新主体优势，深化产学研协同合作。多吉院士代表学术委员会肯定了实验室过去一年的工作进展，希望实验室联动共建单位聚焦关键技术难题，深化协同攻关，产出更多科学价值与产业价值兼具的标志性成果。实验室主任殷志刚作年度工作报告，委员们提出建议；",
      "k": "news"
     },
     {
      "t": "可持续锂电池行业工作组正式启动 天齐锂业担任首个轮值主席",
-     "d": "2026-09-08",
+     "d": "2026-09-09",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1109",
      "s": "9月3日， “可持续锂电池行业工作组”（Sustainable Lithium Battery Industry Working Group）在第四届零碳协同创新大会上正式启动。",
+     "k": "news"
+    },
+    {
+     "t": "第四届零碳协同创新大会在蓉举行：共绘零碳生态，协同迈向系统重构与价值共赢 2026年9月3日 ，兴隆湖畔，秋风送爽",
+     "d": "2026-09-09",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1108",
+     "s": "中国市政工程西南设计研究总院党委书记、董事长程鹏，成都市科学技术协会副主席陈钢，国际财务报告准则基金会北京办公室能力建设主管程红粤，CDP全球环境信息研究中心中国区市场总监李蜚等嘉宾，也分别围绕本次大会主题进行了精彩分享。",
      "k": "news"
     },
     {
@@ -1271,6 +1306,13 @@
    "rank": 3,
    "items": [
     {
+     "t": "北方稀土(600111)2026年三季报点评：产销增长成本优化 Q3业绩环比增长",
+     "d": "2026-10-29",
+     "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/846560006280/index.phtml",
+     "s": "",
+     "k": "news"
+    },
+    {
      "t": "北方稀土(600111)：量价齐升助力前三季度盈利同比高增",
      "d": "2026-10-26",
      "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/846322153565/index.phtml",
@@ -1337,14 +1379,7 @@
      "t": "北方稀土：前三季度净利润约36.46亿元 同比增长136.55%",
      "d": "2026-10-23",
      "u": "https://finance.sina.com.cn/roll/2026-10-23/doc-iniwffen4953244.shtml",
-     "s": "2026-10-23 16:25 【喜报】净利润同比增长136.55%！北方稀土2026年前三季度主要业绩指标同比大幅增长",
-     "k": "news"
-    },
-    {
-     "t": "【喜报】净利润同比增长136.55%！北方稀土2026年前三季度主要业绩指标同比大幅增长",
-     "d": "2026-10-23",
-     "u": "https://finance.sina.com.cn/roll/2026-10-23/doc-iniweywu2720050.shtml",
-     "s": "（来源：你好北方稀土）10月23日，北方稀土发布2026年第三季度报告。报告显示，北方稀土前三季度实现营业收入413.33亿元，同比增长36.45%；利润总额51.95亿元，同比大幅增长101.07%；归属于上市公司股东的净利润36.46亿...",
+     "s": "来源：上海证券报·中国证券网上证智讯 10月23日晚间，中国北方稀土（集团）高科技股份有限公司发布2026年第三季度报告称，公司前三季度实现营业收入约413.33亿元，同比增长36.45%；归属于上市公司股东的净利润约36.46亿元，同比增...",
      "k": "news"
     }
    ]
@@ -2128,7 +2163,7 @@
      "t": "南部铜矿重量$ 6.8亿Cuajone矿扩建",
      "d": "2026-10-22",
      "u": "https://www.mining.com/southern-copper-weighs-680m-cuajone-mine-expansion/",
-     "s": "Highland Valley Copper的集体协议于9月30日到期。",
+     "s": "这家加拿大矿业公司报告称，由于劳资纠纷，其盈利和产量更强劲，而中国的审查使其合并前景蒙上阴影。",
      "k": "news",
      "src": "mining",
      "t_en": "Southern Copper weighs $680M Cuajone mine expansion"
@@ -2261,8 +2296,8 @@
    "items": [
     {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-26",
-     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002840/",
+     "d": "2026-10-29",
+     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002887/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -2911,6 +2946,24 @@
    "rank": 99,
    "items": [
     {
+     "t": "力拓（ Rio Tinto ）在地震事件后暂停了奥尤陶勒盖（ Oyu Tolgoi ）地下铜矿",
+     "d": "2026-10-29",
+     "u": "https://www.mining.com/web/rio-tinto-pauses-oyu-tolgoi-underground-copper-mine-after-seismic-event/",
+     "s": "这名矿工说，有三名员工受伤，没有人员伤亡的报道。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Rio Tinto pauses Oyu Tolgoi underground copper mine after seismic event"
+    },
+    {
+     "t": "力拓向阿根廷锂矿项目注资14 $十亿",
+     "d": "2026-10-29",
+     "u": "https://www.mining.com/rio-tinto-pumps-1-4b-into-lithium-projects-in-argentina/",
+     "s": "在扩张的同时，生产商也面临着控制成本和展示新开采技术的商业可行性的压力。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Rio Tinto pumps $1.4 billion into lithium projects in Argentina"
+    },
+    {
      "t": "力拓（ Rio Tinto ）在人才短缺的情况下关注56 ％的首席执行官加薪",
      "d": "2026-10-28",
      "u": "https://www.mining.com/rio-tinto-eyes-56-ceo-pay-hike-amid-talent-crunch/",
@@ -3017,24 +3070,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Rio Tinto to expand metals trading beyond own output"
-    },
-    {
-     "t": "普睿司曼与力拓合作将低碳铝带到亚马逊数据中心",
-     "d": "2026-09-18",
-     "u": "https://www.mining.com/web/prysmian-rio-tinto-partner-to-bring-low-carbon-aluminum-to-amazon-data-center/",
-     "s": "这些电缆将使用采用ELYSIS “惰性阳极”技术生产的铝，普睿司曼表示，该技术消除了温室气体排放的直接影响。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Prysmian, Rio Tinto partner to bring low-carbon aluminum to Amazon data center"
-    },
-    {
-     "t": "力拓赢得Winu铜矿的原住民同意",
-     "d": "2026-09-10",
-     "u": "https://www.mining.com/rio-tinto-wins-aboriginal-consent-for-winu-copper-mine/",
-     "s": "与Nyangumarta集团达成的协议清除了一个关键障碍，因为力拓的目标是到2030年实现西澳大利亚矿山的首次产量。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto wins Aboriginal consent for Winu copper mine"
     }
    ]
   },
@@ -3334,6 +3369,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "嘉能可钴产量在刚果民主共和国配额下下降52%",
+     "d": "2026-10-29",
+     "u": "https://www.mining.com/glencore-cobalt-output-sinks-52-under-drc-quotas/",
+     "s": "嘉能可的目标是到2035年每年生产160万吨铜，几乎是目前水平的两倍，因为它追求的是电气化的需求。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Glencore cobalt output sinks 52% under DRC quotas"
+    },
+    {
      "t": "嘉能可， CNGR回归$ 3.8亿巴西镍矿$ 4000万",
      "d": "2026-10-28",
      "u": "https://www.mining.com/glencore-cngr-back-380m-brazil-nickel-mine-with-40m/",
@@ -3364,7 +3408,7 @@
      "t": "嘉能可股票在ASX首次亮相时交易更高，因为投资者关注铜",
      "d": "2026-10-14",
      "u": "https://www.mining.com/web/glencore-shares-trade-higher-on-asx-debut-as-investors-eye-copper/",
-     "s": "Highland Valley Copper的集体协议于9月30日到期。",
+     "s": "嘉能可的股票已经在伦敦与约翰内斯堡的另一家二级上市公司进行交易。",
      "k": "news",
      "src": "mining",
      "t_en": "Glencore shares trade higher on ASX debut as investors eye copper"
@@ -3391,7 +3435,7 @@
      "t": "嘉能可表示，今年的交易利润将超过50 $",
      "d": "2026-10-02",
      "u": "https://www.mining.com/web/glencore-says-trading-profits-will-top-5-billion-this-year/",
-     "s": "2026年，由于伊朗战争助长了能源价格的剧烈波动和区域市场之间的重大混乱，贸易商再次获得巨额收益。",
+     "s": "基于股权的计算显示，北京在批准的矿业投资中所占份额为9.2% ，新的锂项目有望提升这一份额。",
      "k": "news",
      "src": "mining",
      "t_en": "Glencore says trading profits will top $5 billion this year"
@@ -3413,15 +3457,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Glencore’s Hunter Valley coal mine cleared to 2045"
-    },
-    {
-     "t": "嘉能可定于10月14日在澳大利亚市场首次亮相",
-     "d": "2026-09-24",
-     "u": "https://www.mining.com/glencore-sets-oct-14-date-for-australian-market-debut/",
-     "s": "8月份宣布的二级上市符合所有监管要求，将在瑞士矿业和大宗商品股票代码GLC下进行交易……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Glencore sets Oct. 14 date for Australian market debut"
     }
    ]
   },
@@ -3612,6 +3647,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 365
+  "items": 370
  }
 }
