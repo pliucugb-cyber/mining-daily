@@ -1,8 +1,42 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-29T05:39:13+08:00",
-  "count": 31,
+  "updated_at": "2026-10-31T05:39:24+08:00",
+  "count": 33,
   "news": [
+    {
+      "id": "b58e8bd83c39",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-31/1225646954.PDF",
+      "title": "关于对外投资形成关联交易的公告",
+      "source": "巨潮资讯网·锡装股份",
+      "orig_date": "10-31",
+      "orig_date_full": "2026-10-31",
+      "report_date": "2026-10-31",
+      "category": "并购与投资",
+      "company": "锡装股份",
+      "sec_code": "001332",
+      "ma_type": "对外投资",
+      "summary": "锡装股份（001332）披露《关于对外投资形成关联交易的公告》，涉及对外投资。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "631beb7ebe1b",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-31/1225649917.PDF",
+      "title": "关于筹划重大资产重组事项的停牌公告",
+      "source": "巨潮资讯网·中国稀土",
+      "orig_date": "10-31",
+      "orig_date_full": "2026-10-31",
+      "report_date": "2026-10-31",
+      "category": "并购与投资",
+      "company": "中国稀土",
+      "sec_code": "000831",
+      "ma_type": "资产重组",
+      "summary": "中国稀土（000831）披露《关于筹划重大资产重组事项的停牌公告》，涉及资产重组。",
+      "tags": [
+        "并购"
+      ]
+    },
     {
       "id": "aa08c6ad86b3",
       "url": "https://static.cninfo.com.cn/finalpage/2026-10-29/1225635834.PDF",
