@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-30",
+ "updated_at": "2026-10-31",
  "companies": [
   {
    "name": "紫金矿业",
@@ -498,7 +498,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -2160,6 +2160,15 @@
    "rank": 28,
    "items": [
     {
+     "t": "SEC 10-Q（季度报告）",
+     "d": "2026-10-30",
+     "u": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926120639/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
+    {
      "t": "南部铜矿重量$ 6.8亿Cuajone矿扩建",
      "d": "2026-10-22",
      "u": "https://www.mining.com/southern-copper-weighs-680m-cuajone-mine-expansion/",
@@ -2172,15 +2181,6 @@
      "t": "SEC 8-K（重大事项披露）",
      "d": "2026-10-21",
      "u": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926117588/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
-    },
-    {
-     "t": "SEC 10-Q（季度报告）",
-     "d": "2026-07-31",
-     "u": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926089169/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -2296,8 +2296,8 @@
    "items": [
     {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-29",
-     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002887/",
+     "d": "2026-10-30",
+     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002897/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -2946,13 +2946,13 @@
    "rank": 99,
    "items": [
     {
-     "t": "力拓（ Rio Tinto ）在地震事件后暂停了奥尤陶勒盖（ Oyu Tolgoi ）地下铜矿",
-     "d": "2026-10-29",
-     "u": "https://www.mining.com/web/rio-tinto-pauses-oyu-tolgoi-underground-copper-mine-after-seismic-event/",
-     "s": "这名矿工说，有三名员工受伤，没有人员伤亡的报道。",
+     "t": "力拓在地震事件后开始重启奥尤陶勒盖地下作业",
+     "d": "2026-10-30",
+     "u": "https://www.mining.com/web/rio-tinto-begins-restarting-oyu-tolgoi-underground-operations-after-seismic-event/",
+     "s": "这名矿工说，有三名员工受伤，没有死亡报告，其中两人继续接受非生命治疗。",
      "k": "news",
      "src": "mining",
-     "t_en": "Rio Tinto pauses Oyu Tolgoi underground copper mine after seismic event"
+     "t_en": "Rio Tinto begins restarting Oyu Tolgoi underground operations after seismic event"
     },
     {
      "t": "力拓向阿根廷锂矿项目注资14 $十亿",
@@ -3243,9 +3243,18 @@
    "rank": 99,
    "items": [
     {
+     "t": "淡水河谷第三季度利润暴跌，铁矿石产量低于预期",
+     "d": "2026-10-30",
+     "u": "https://www.mining.com/web/vale-third-quarter-profit-tumbles-iron-ore-output-misses-forecasts/",
+     "s": "然而，全球最大的铁矿石生产商之一淡水河谷表示，它有信心到达2026年铁矿石的低端……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale third-quarter profit tumbles, iron ore output misses forecasts"
+    },
+    {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-20",
-     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426004954/",
+     "d": "2026-10-30",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426005070/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -3340,15 +3349,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Vale sees iron ore market resilient despite lower prices in China"
-    },
-    {
-     "t": "淡水河谷公布利润下滑，提振贱金属前景并推出回购",
-     "d": "2026-07-30",
-     "u": "https://www.mining.com/web/vale-posts-35-fall-in-q2-net-profit-narrows-nickel-copper-output-outlook/",
-     "s": "在下行方面，淡水河谷今年提高了对铁矿石总成本和生产成本的预测。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale posts profit fall, lifts base metals outlook and unveils buyback"
     }
    ]
   },
