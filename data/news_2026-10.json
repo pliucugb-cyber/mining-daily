@@ -1,6 +1,6 @@
 {
   "month": "2026-10",
-  "updated_at": "2026-10-30T05:42:03+08:00",
+  "updated_at": "2026-10-30T08:33:33+08:00",
   "count": 624,
   "news": [
     {
@@ -21,7 +21,9 @@
         "市场"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国内",
+      "orig_category": "并购与投资"
     },
     {
       "id": "58335d4b2137",
@@ -31,7 +33,7 @@
       "orig_date": "10-30",
       "orig_date_full": "2026-10-30",
       "report_date": "2026-10-30",
-      "category": "国际矿业动态",
+      "category": "行业动态",
       "is_new": true,
       "summary": "奥尤陶勒盖有限责任公司公告，当地时间 10 月 29 日傍晚，井下破碎岩带发生突发地震地质事件并引发局部岩体坍塌，15 名作业人员受伤、暂无死亡报告。矿方随即启动应急响应机制并组织救援，事故原因与对生产的影响仍在评估。（原题：Rock Collapse at Oyu Tolgoi Mine Injures 15 Workers, All Stable After Emergency Response）",
       "embed": "ok",
@@ -41,7 +43,9 @@
         "安全"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "52f5003a5d84",
@@ -51,7 +55,7 @@
       "orig_date": "10-30",
       "orig_date_full": "2026-10-30",
       "report_date": "2026-10-30",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "宝地矿业（601121）公告，控股子公司备战矿业签订重大合同，合同标的、金额及履约期限以公告正文披露为准。备战矿业所属项目此前已取得采矿安全设施设计审查意见书并转入基建期。",
       "embed": "ok",
@@ -61,7 +65,9 @@
         "安全"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "3e1d7ebc84ec",
@@ -71,7 +77,7 @@
       "orig_date": "10-30",
       "orig_date_full": "2026-10-30",
       "report_date": "2026-10-30",
-      "category": "国际矿业动态",
+      "category": "市场与价格",
       "is_new": true,
       "summary": "BMI 在最新报告中指出，厄尔尼诺可能通过极端天气扰动铜、镍生产，影响或延续至 2027 年初。该机构认为，天气风险与矿石品位下降、项目投产延迟叠加，将加大今明两年铜镍供应端的不确定性。（原题：Copper, nickel at risk due to El Niño’s disruptions）",
       "embed": "ok",
@@ -80,7 +86,9 @@
         "镍"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "133886180024",
@@ -90,7 +98,7 @@
       "orig_date": "10-30",
       "orig_date_full": "2026-10-30",
       "report_date": "2026-10-30",
-      "category": "行业动态",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "旭光电子（600353）公告，子公司宁夏北瓷新材料科技实施氮化铝粉体生产工艺提质技改扩产项目，新增氮化铝粉体产能 640 吨/年。项目投资额、建设周期与投产安排以公告正文披露为准。",
       "embed": "ok",
@@ -100,7 +108,9 @@
         "技术"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "f833f1997f81",
@@ -119,7 +129,9 @@
         "市场"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "eb73383566a0",
@@ -129,7 +141,7 @@
       "orig_date": "10-29",
       "orig_date_full": "2026-10-29",
       "report_date": "2026-10-30",
-      "category": "找矿成果与勘查技术",
+      "category": "技术与勘查",
       "is_new": true,
       "summary": "Ironveld 公布南非 Bushveld 杂岩体 21 层既有钻孔岩心的矿物学与地球化学结果：自 55.5 米见矿 15 米、二氧化钛品位 8.11%，自 29.5 米见矿 23 米、品位 7.47%。矿物学工作识别出钛铁矿与含钛磁铁矿、磷灰石共生；公司正评估可分别回收磁铁矿、钛铁矿与含磷精矿的选矿流程，以拓宽项目收入来源。（原题：Ironveld reports titanium-bearing intersections at South Africa’s Layer 21）",
       "embed": "ok",
@@ -138,7 +150,9 @@
         "铁"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "e44741d466ed",
@@ -158,7 +172,9 @@
         "国际"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "ba6b5b72361e",
@@ -168,7 +184,7 @@
       "orig_date": "10-29",
       "orig_date_full": "2026-10-29",
       "report_date": "2026-10-30",
-      "category": "行业动态",
+      "category": "技术与勘查",
       "is_new": true,
       "summary": "中铝国际下属长沙有色冶金设计研究院自主研发的强岩溶区超细矿泥建库安全堆存成套技术，突破强岩溶区存储超细矿泥技术瓶颈、填补国内岩溶区建库技术空白，达到国际领先水平。该技术针对 -200 目占比 95.6%、含水率约 70% 的超细尾矿与岩溶发育库址，首创地下水分区分级导排、地下气压动态平衡等五项核心技术，已在广西华银铝业、广西信发铝电及中铝广西分公司应用。",
       "embed": "ok",
@@ -182,7 +198,9 @@
         "国际"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "b5cb16a3f404",
@@ -233,7 +251,7 @@
       "orig_date": "10-29",
       "orig_date_full": "2026-10-29",
       "report_date": "2026-10-30",
-      "category": "找矿成果与勘查技术",
+      "category": "技术与勘查",
       "is_new": true,
       "summary": "Mule Canyon 金矿公布资源量，重启计划由此进入下一阶段：将把推断资源量升级为更高类别、完成项目经济性评估，并落实重启所需的许可。项目审批与投产时间表以公司后续披露为准。（原题：Mule Canyon gold resource advances restart plans）",
       "embed": "ok",
@@ -241,7 +259,9 @@
         "金"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "874529c967dc",
@@ -271,7 +291,7 @@
       "orig_date": "10-29",
       "orig_date_full": "2026-10-29",
       "report_date": "2026-10-30",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "嘉能可三季度产量报告显示，当季自产铜 20.16 万吨、环比增 2%，前三季度累计 59.86 万吨、同比增 3%；剔除 Mount Isa 停产与 Kidd 矿出售影响后，可比口径同比增 12%，增量主要来自非洲铜矿业务与 Antamina。公司预计全年铜产量接近指引区间下限。（原题：Glencore's self-produced copper up 3% YoY in first three quarters, full-year production expected near lower end of guidance）",
       "embed": "ok",
@@ -280,7 +300,9 @@
         "市场"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "行业动态"
     },
     {
       "id": "5e6b52221221",
@@ -298,7 +320,9 @@
         "金"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "522203e82f42",
@@ -332,7 +356,7 @@
       "orig_date": "10-29",
       "orig_date_full": "2026-10-29",
       "report_date": "2026-10-30",
-      "category": "行业动态",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "西部黄金（601069）公告，控股子公司百源丰所属奥尔托喀讷什三区锰矿已恢复生产。复产安排及对全年产量的具体影响以公司公告与定期报告披露为准。",
       "embed": "ok",
@@ -343,7 +367,9 @@
         "市场"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "421e9fe6de9b",
@@ -420,7 +446,7 @@
       "orig_date": "10-29",
       "orig_date_full": "2026-10-29",
       "report_date": "2026-10-30",
-      "category": "国际矿业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "赞比亚总统 Hichilema 于 10 月 28 日任命 Brenda Tambatamba 为矿业与矿产发展部长，其此前任劳动部长，早年曾在 Barrick 旗下 Lumwana 铜矿负责可持续发展事务。赞政府计划到 2031 年将铜产量提升至 300 万吨，而 2025 年实际产量约 89.03 万吨、同比增约 8%，距目标仍需新增约 211 万吨年产能。（原题：Zambia Appoints New Minister of Mines）",
       "embed": "ok",
@@ -429,7 +455,9 @@
         "市场"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "1ef28332e7b7",
@@ -439,7 +467,7 @@
       "orig_date": "10-29",
       "orig_date_full": "2026-10-29",
       "report_date": "2026-10-30",
-      "category": "并购与投资",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "力拓向阿根廷两座锂项目投入 14 亿美元，两个新项目合计新增年产能 2.5 万吨，以推进其在电池金属领域的增长目标。相关项目为其阿根廷盐湖布局的组成部分，投产节奏与产能爬坡安排以公司披露为准。（原题：Rio Tinto pumps $1.4 billion into lithium projects in Argentina）",
       "embed": "ok",
@@ -447,7 +475,9 @@
         "锂"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "1458b13fdf93",
@@ -457,7 +487,7 @@
       "orig_date": "10-29",
       "orig_date_full": "2026-10-29",
       "report_date": "2026-10-30",
-      "category": "国际矿业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "Eldorado Gold 将 2026 年黄金产量指引下调 18%，并上调资本开支，主因希腊 Skouries 铜金项目进度受阻。消息公布后公司股价下跌，市场关注项目投产时点与成本超支幅度。（原题：Eldorado drops as Skouries setbacks cut gold outlook 18%）",
       "embed": "ok",
@@ -467,7 +497,9 @@
         "市场"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "103a382ee3e5",
@@ -528,7 +560,9 @@
         "技术"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国内",
+      "orig_category": "政策与监管"
     },
     {
       "id": "e3a345a7f36f",
@@ -725,7 +759,9 @@
         "技术"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "7b8d26fcd77b",
@@ -900,7 +936,9 @@
         "政策"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国内",
+      "orig_category": "政策与监管"
     },
     {
       "id": "12921ce135d0",
@@ -1357,7 +1395,9 @@
         "市场"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "767faca4049a",
@@ -1944,7 +1984,9 @@
         "政策"
       ],
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30"
+      "last_seen": "2026-10-30",
+      "region": "国际",
+      "orig_category": "政策与监管"
     },
     {
       "id": "8745c030d5cf",
