@@ -316,6 +316,12 @@ new_items = [
                 'Eldorado 因 Skouries 项目拖累下调 2026 年黄金产量指引 18%',
                 'Eldorado Gold 将 2026 年黄金产量指引下调 18%，并上调资本开支，主因希腊 Skouries 铜金项目进度受阻。消息公布后公司股价下跌，市场关注项目投产时点与成本超支幅度。',
                 orig_title='Eldorado drops as Skouries setbacks cut gold outlook 18%')),
+    (CAT_MA, ni('https://www.mining.com/critical-one-energy-sicc-ink-303-million-antimony-offtake-deal-for-howells-lake-project-in-ontario',
+                'MINING.COM', '10-30',
+                'Critical One Energy 与 SICC 签署 3.03 亿美元锑承购协议，覆盖安大略 Howells Lake 项目',
+                'Critical One Energy 与 SICC 就加拿大安大略省 Howells Lake 锑项目签署价值约 3.03 亿美元（约 21.8 亿元）的锑承购协议（offtake），覆盖该项目锑精矿的包销安排。Howells Lake 是加拿大最大的未开发锑矿，该协议为 Critical One Energy 推进项目后续开发与融资提供了确定性需求支撑。',
+                orig_title='Critical One Energy, SICC ink $303 million antimony offtake deal for Howells Lake project in Ontario')),
+
 ]
 
 
@@ -357,6 +363,7 @@ _PIN_CAT = [
     ('厄尔尼诺', CAT_GJ),
     ('赞比亚', CAT_GJ),
     ('Eldorado', CAT_GJ),
+    ('Howells Lake', CAT_MA),
 ]
 
 
