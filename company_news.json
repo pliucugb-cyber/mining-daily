@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-01",
+ "updated_at": "2026-11-02",
  "companies": [
   {
    "name": "紫金矿业",
@@ -638,6 +638,20 @@
    "stale": false,
    "rank": 13,
    "items": [
+    {
+     "t": "云铝股份(000807)：2026年三季报业绩创历史新高 云南水电铝成本优势显著",
+     "d": "2026-11-01",
+     "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/846838392111/index.phtml",
+     "s": "",
+     "k": "news"
+    },
+    {
+     "t": "云铝股份(000807)：铝价上行成本改善 盈利弹性大幅释放",
+     "d": "2026-10-31",
+     "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/846802466918/index.phtml",
+     "s": "",
+     "k": "news"
+    },
     {
      "t": "云铝股份：平陆运河开通对公司物流优化及市场拓展有促进作用",
      "d": "2026-10-30",
@@ -3703,6 +3717,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 378
+  "items": 380
  }
 }
