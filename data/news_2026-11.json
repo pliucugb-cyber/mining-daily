@@ -1,0 +1,50 @@
+{
+  "month": "2026-11",
+  "updated_at": "2026-11-02T05:46:08+08:00",
+  "count": 2,
+  "news": [
+    {
+      "id": "ed5a67dda397",
+      "title": "全球资源争夺加剧：供应约束取代需求增长主导大宗市场",
+      "url": "https://www.mining.com/global-resource-squeeze-signals-market-shift-report",
+      "source": "MINING.COM",
+      "orig_date": "11-02",
+      "orig_date_full": "2026-11-02",
+      "report_date": "2026-11-02",
+      "category": "市场与价格",
+      "is_new": true,
+      "summary": "Ninety One 最新报告认为，大宗商品已从 2000 年代中国主导的超级周期转向供应约束、地缘碎片化与区域资源安全主导的格局；美国拟建数据中心项目对应约 200 吉瓦电力需求，约相当于旧金山市用电量的 200 倍；过去十年生产商重现金流轻增长，叠加供应链碎片化，使压力难以逆转。（原题：Global resource squeeze signals market shift: report）",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "安全",
+        "国际"
+      ],
+      "first_seen": "2026-11-02",
+      "last_seen": "2026-11-02",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
+    },
+    {
+      "id": "c311168620ed",
+      "title": "Cutifani 警告：矿企创新不足将招致外部收购",
+      "url": "https://www.mining.com/cutifani-warns-mining-sectors-failure-to-innovate-opens-door-to-takeovers",
+      "source": "MINING.COM",
+      "orig_date": "11-01",
+      "orig_date_full": "2026-11-01",
+      "report_date": "2026-11-02",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "前英美资源首席执行官 Mark Cutifani 在悉尼国际矿业与资源会议上表示，矿山平均每年加深 40 米、新项目审批最长需 20 年，行业未能开发应对复杂开采条件的技术；若长期投入不足，业外企业可能收购现有矿企。（原题：Cutifani warns mining sector’s failure to innovate opens door to takeovers）",
+      "embed": "ok",
+      "tags": [
+        "技术",
+        "国际"
+      ],
+      "first_seen": "2026-11-02",
+      "last_seen": "2026-11-02",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
+    }
+  ]
+}
