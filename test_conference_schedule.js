@@ -45,6 +45,16 @@ const ITEMS = [
   { s: '', e: '', t: '日期待定的会议', p: '待定', o: '中国地质学会', tag: '测试', u: 'https://example.com/tbd' }
 ];
 
+// 2026-11-03：C1/C2 的会展条目日期原为硬编码 '10-20'/'10-18'，过了 14 天闸门后被
+// app.js 的 expo IIFE 判为过期而剔除 → C6/C7 每天必假 FAIL。改为「相对今天」动态生成，
+// 断言本身（3 条都在、≥3 条不挂 thin）不变。
+function dAgo(n) {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  const p = x => String(x).padStart(2, '0');
+  return p(d.getMonth() + 1) + '-' + p(d.getDate());
+}
+
 function item(title, dateStr, extra) {
   return `<div class="news-item" ${extra || ''}>
       <a class="news-title" href="https://example.com/${encodeURIComponent(title).slice(0, 12)}">${title}</a>
@@ -148,7 +158,7 @@ function runB(done) {
 
 // ===== C 有会议数据 + 有新闻会展 =====
 function runC(done) {
-  const news = item('2026 智能矿山论坛举行', '10-20', 'data-c="1"');
+  const news = item('2026 智能矿山论坛举行', dAgo(1), 'data-c="1"');
   const { doc } = buildDom(news, ITEMS);
   setTimeout(() => {
     console.log('===== C 有会议数据 + 有新闻会展 =====');
@@ -170,9 +180,9 @@ function runC(done) {
 
 // ===== C2 有会议数据 + 3 条新闻会展 → 子标题恢复分段感（不挂 thin）=====
 function runC2(done) {
-  const news = item('2026 智能矿山论坛举行', '10-20')
-    + item('第二届矿业投资大会落幕', '10-19')
-    + item('某矿区勘查技术研讨会召开', '10-18');
+  const news = item('2026 智能矿山论坛举行', dAgo(1))
+    + item('第二届矿业投资大会落幕', dAgo(2))
+    + item('某矿区勘查技术研讨会召开', dAgo(3));
   const { doc } = buildDom(news, ITEMS);
   setTimeout(() => {
     console.log('===== C2 有会议数据 + 3 条新闻会展 =====');
