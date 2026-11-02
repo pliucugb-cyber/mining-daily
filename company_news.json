@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-02",
+ "updated_at": "2026-11-03",
  "companies": [
   {
    "name": "紫金矿业",
@@ -498,7 +498,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -2395,6 +2395,15 @@
    "rank": 29,
    "items": [
     {
+     "t": "SEC 6-K（外资发行人报告）",
+     "d": "2026-11-02",
+     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926121185/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
+    {
      "t": "AGNICO EAGLE报告2026年第三季度业绩-稳健的运营业绩推动了强劲的自由现金流生成；",
      "d": "2026-10-28",
      "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-reports-third-quarter-2026-results-strong-free-cash-hew7o0uvs8fv.html",
@@ -2402,15 +2411,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "AGNICO EAGLE REPORTS THIRD QUARTER 2026 RESULTS - STRONG FREE CASH FLOW GENERATION DRIVEN BY SOLID OPERATIONAL PERFORMANCE; ON TRACK TO ACHIEVE 2026 PRODUCTION AND COST GUIDANCE | AEM Stock News"
-    },
-    {
-     "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-28",
-     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926119671/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
     },
     {
      "t": "AGNICO EAGLE提供2026年第三季度业绩发布通知和电话会议| AEM股票新闻",
@@ -3016,6 +3016,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "SEC 6-K（外资发行人报告）",
+     "d": "2026-11-02",
+     "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000043/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
+    {
      "t": "力拓在地震事件后开始重启奥尤陶勒盖地下作业",
      "d": "2026-10-30",
      "u": "https://www.mining.com/web/rio-tinto-begins-restarting-oyu-tolgoi-underground-operations-after-seismic-event/",
@@ -3077,15 +3086,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Former Rio Tinto, Anglo American executive named ICMM’s first woman CEO"
-    },
-    {
-     "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-14",
-     "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000041/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
     },
     {
      "t": "力拓有望在第三季度铁矿石销售额高于预期后释放50 $的资本",
@@ -3439,6 +3439,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "嘉能可首席执行官薪酬重组引发新一轮收购猜测",
+     "d": "2026-11-02",
+     "u": "https://www.mining.com/glencore-ceo-pay-shakeup-stirs-fresh-takeover-speculation/",
+     "s": "瑞士矿业和大宗商品巨头嘉能可（ Glencore ） （ LON ： GLEN ）正在寻求股东支持，以改变首席执行官加里·纳格尔（ Gary Nagle ）的薪酬，这可能使...",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Glencore CEO pay shakeup stirs fresh takeover speculation"
+    },
+    {
      "t": "嘉能可钴产量在刚果民主共和国配额下下降52%",
      "d": "2026-10-29",
      "u": "https://www.mining.com/glencore-cobalt-output-sinks-52-under-drc-quotas/",
@@ -3518,15 +3527,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Glencore, Peabody and Heeney Capital weigh Venezuela coal deals"
-    },
-    {
-     "t": "嘉能可猎人谷煤矿清理至2045年",
-     "d": "2026-09-30",
-     "u": "https://www.mining.com/glencores-hunter-valley-coal-mine-cleared-to-2045/",
-     "s": "嘉能可和Yancoal拥有的合资企业Hunter Valley Operations在2025年生产了超过1400万吨煤炭，雇佣了1500多名工人……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Glencore’s Hunter Valley coal mine cleared to 2045"
     }
    ]
   },
