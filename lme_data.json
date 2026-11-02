@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-02",
-  "updated": "2026-11-02 05:30:55",
+  "date": "2026-11-03",
+  "updated": "2026-11-03 05:30:49",
   "source": "东方财富国际期货（LME 主力 03 合约）",
   "currency": "USD",
   "unit": "metric tonne",
@@ -10,60 +10,60 @@
       "zh": "LME 铜",
       "code": "LCPT",
       "name": "综合铜03",
-      "price": 14130.0,
-      "chg": -226.5,
-      "chg_pct": -1.58,
-      "prev": 14356.5
+      "price": 14325.5,
+      "chg": 171.0,
+      "chg_pct": 1.21,
+      "prev": 14154.5
     },
     {
       "slug": "lalt",
       "zh": "LME 铝",
       "code": "LALT",
       "name": "综合铝03",
-      "price": 3062.5,
-      "chg": -16.0,
-      "chg_pct": -0.52,
-      "prev": 3078.5
+      "price": 3097.0,
+      "chg": 28.0,
+      "chg_pct": 0.91,
+      "prev": 3069.0
     },
     {
       "slug": "lznt",
       "zh": "LME 锌",
       "code": "LZNT",
       "name": "综合锌03",
-      "price": 3825.0,
-      "chg": -58.0,
-      "chg_pct": -1.49,
-      "prev": 3883.0
+      "price": 3888.5,
+      "chg": 46.0,
+      "chg_pct": 1.2,
+      "prev": 3842.5
     },
     {
       "slug": "lldt",
       "zh": "LME 铅",
       "code": "LLDT",
       "name": "综合铅03",
-      "price": 1904.5,
-      "chg": -10.5,
-      "chg_pct": -0.55,
-      "prev": 1915.0
+      "price": 1904.0,
+      "chg": -5.5,
+      "chg_pct": -0.29,
+      "prev": 1909.5
     },
     {
       "slug": "lnkt",
       "zh": "LME 镍",
       "code": "LNKT",
       "name": "综合镍03",
-      "price": 15220.0,
-      "chg": -316.0,
-      "chg_pct": -2.03,
-      "prev": 15536.0
+      "price": 15500.0,
+      "chg": 229.0,
+      "chg_pct": 1.5,
+      "prev": 15271.0
     },
     {
       "slug": "ltnt",
       "zh": "LME 锡",
       "code": "LTNT",
       "name": "综合锡03",
-      "price": 48440.0,
-      "chg": -1257.0,
-      "chg_pct": -2.53,
-      "prev": 49697.0
+      "price": 49800.0,
+      "chg": 927.0,
+      "chg_pct": 1.9,
+      "prev": 48873.0
     }
   ]
 }
