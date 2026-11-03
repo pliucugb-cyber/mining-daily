@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-03",
-  "updated": "2026-11-03 05:30:49",
+  "date": "2026-11-04",
+  "updated": "2026-11-04 05:31:23",
   "source": "东方财富国际期货（LME 主力 03 合约）",
   "currency": "USD",
   "unit": "metric tonne",
@@ -10,60 +10,65 @@
       "zh": "LME 铜",
       "code": "LCPT",
       "name": "综合铜03",
-      "price": 14325.5,
-      "chg": 171.0,
-      "chg_pct": 1.21,
-      "prev": 14154.5
+      "price": 14034.0,
+      "chg": -291.5,
+      "chg_pct": -2.03,
+      "prev": 14325.5,
+      "asof": "2026-11-03"
     },
     {
       "slug": "lalt",
       "zh": "LME 铝",
       "code": "LALT",
       "name": "综合铝03",
-      "price": 3097.0,
-      "chg": 28.0,
-      "chg_pct": 0.91,
-      "prev": 3069.0
+      "price": 3040.5,
+      "chg": -53.5,
+      "chg_pct": -1.73,
+      "prev": 3094.0
     },
     {
       "slug": "lznt",
       "zh": "LME 锌",
       "code": "LZNT",
       "name": "综合锌03",
-      "price": 3888.5,
-      "chg": 46.0,
-      "chg_pct": 1.2,
-      "prev": 3842.5
+      "price": 3785.0,
+      "chg": -107.5,
+      "chg_pct": -2.76,
+      "prev": 3892.5
     },
     {
       "slug": "lldt",
       "zh": "LME 铅",
       "code": "LLDT",
       "name": "综合铅03",
-      "price": 1904.0,
-      "chg": -5.5,
-      "chg_pct": -0.29,
-      "prev": 1909.5
+      "price": 1882.0,
+      "chg": -21.0,
+      "chg_pct": -1.1,
+      "prev": 1903.0,
+      "asof": "2026-11-03"
     },
     {
       "slug": "lnkt",
       "zh": "LME 镍",
       "code": "LNKT",
       "name": "综合镍03",
-      "price": 15500.0,
-      "chg": 229.0,
-      "chg_pct": 1.5,
-      "prev": 15271.0
+      "price": 15405.0,
+      "chg": -95.0,
+      "chg_pct": -0.61,
+      "prev": 15500.0,
+      "asof": "2026-11-03"
     },
     {
       "slug": "ltnt",
       "zh": "LME 锡",
       "code": "LTNT",
       "name": "综合锡03",
-      "price": 49800.0,
-      "chg": 927.0,
-      "chg_pct": 1.9,
-      "prev": 48873.0
+      "price": 47380.0,
+      "chg": -2200.0,
+      "chg_pct": -4.44,
+      "prev": 49580.0,
+      "asof": "2026-11-03"
     }
-  ]
+  ],
+  "note": "LME 当日尚未收盘，价格卡沿用最近已收盘交易日（2026-11-03）收盘价"
 }

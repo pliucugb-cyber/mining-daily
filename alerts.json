@@ -1,8 +1,25 @@
 {
- "date": "2026-11-03",
+ "date": "2026-11-04",
  "has_history": true,
  "history_days": 15,
- "alerts": [],
- "summary": "15 个品种单日涨跌幅均未超过 3%，无显著异动。",
- "max_severity": "none"
+ "alerts": [
+  {
+   "commodity": "锡",
+   "market": "LME 03",
+   "move": "-4.44%",
+   "severity": "medium",
+   "detail": "LME 锡（LME 03）最新收报 47,380.00 美元/吨，单日 -4.44%（数据日期 11-03）。",
+   "type": "price"
+  },
+  {
+   "commodity": "沪锡",
+   "market": "SHFE 主连",
+   "move": "-3.33%",
+   "severity": "medium",
+   "detail": "沪锡（SHFE 主连）最新收报 352,960.00，单日 -3.33%（数据日期 2026-11-03）。",
+   "type": "price"
+  }
+ ],
+ "summary": "今日异动 2 项：锡 -4.44%（LME 03）；沪锡 -3.33%（SHFE 主连）。",
+ "max_severity": "medium"
 }
