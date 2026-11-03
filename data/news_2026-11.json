@@ -1,6 +1,6 @@
 {
   "month": "2026-11",
-  "updated_at": "2026-11-04T05:41:18+08:00",
+  "updated_at": "2026-11-04T05:57:18+08:00",
   "count": 38,
   "news": [
     {
@@ -20,7 +20,9 @@
         "政策"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国内",
+      "orig_category": "并购与投资"
     },
     {
       "id": "f97f8ba9b458",
@@ -30,7 +32,7 @@
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
       "report_date": "2026-11-04",
-      "category": "找矿成果与勘查技术",
+      "category": "技术与勘查",
       "is_new": true,
       "summary": "江西省地质调查勘查院基础地质调查所与中国地质科学院联合完成的「铁下找钨：江西省莲花县新发现九曲山钨铁银多金属矿」成果，获评中国地质调查局 2025 年度地质调查十大进展。团队以重力识别隐伏岩体、磁法圈定靶区、音频大地电磁定位成矿层位的「物探+地质」路线，在厚覆盖区圈定 7 组地球物理组合异常。ZK01 设计孔深 650 米、终孔 1,035.57 米，累计见 88 层白钨矿化、边界品位以上矿体 18 条；2025 年 ZK02、ZK03 接续见矿，3 孔合计揭露白钨矿体 77 条，三氧化钨品位 0.07% 以上矿化段累计视厚度 76.29 米。2026 年 ZK05 另见铜矿化线索，ZK501 已于 9 月中旬开钻。",
       "embed": "ok",
@@ -42,7 +44,9 @@
         "找矿"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国内",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "eb77baf07cca",
@@ -52,7 +56,7 @@
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
       "report_date": "2026-11-04",
-      "category": "并购与投资",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "Standard Lithium（TSXV/NYSE-A: SLI）计划在年底前就其 South West Arkansas 锂项目作出最终投资决定，项目资本开支约 14.5 亿美元，建成后将成为 Smackover 层系首个大型锂生产项目。该项目由公司与挪威油气生产商 Equinor 合资的 Smackover Lithium 推进，采用直接提锂（DLE）工艺。（原题：Standard nears lithium investment decision）",
       "embed": "ok",
@@ -60,7 +64,9 @@
         "锂"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "cfd6e06b4342",
@@ -81,7 +87,9 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "c462d8884fbc",
@@ -182,7 +190,9 @@
         "镍"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "a8f3d07412a2",
@@ -202,7 +212,9 @@
         "市场"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "a211f09f6b85",
@@ -222,7 +234,9 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "960df91dfbe0",
@@ -240,7 +254,9 @@
         "铜"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "9184ee265e40",
@@ -250,7 +266,7 @@
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
       "report_date": "2026-11-04",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "云南铜业三季报显示，前三季度实现营业收入 1,638.55 亿元、同比增长 24.78%，归母净利润 26.0 亿元、同比增长 47.86%。公司称铜综合加工成本、铜精矿单位生产成本两项核心指标持续优化；重点地质勘探项目有序推进，资源储备基础不断夯实，一批关键产业升级项目建设加速落地。",
       "embed": "ok",
@@ -260,7 +276,9 @@
         "市场"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "8cc1be70d5d2",
@@ -270,7 +288,7 @@
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
       "report_date": "2026-11-04",
-      "category": "国际矿业动态",
+      "category": "市场与价格",
       "is_new": true,
       "summary": "世界黄金协会数据显示，加拿大三季度黄金产量同比增长 22%，跑赢全球增速，新投产矿山是主要推手。Equinox Gold 位于纽芬兰与拉布拉多的 Valentine 矿山、B2Gold 位于努纳武特的 Goose 矿山投产带动产量上升，同时成本上行推高单盎司生产成本。（原题：Canada gold output jumps 22% as global supply slips）",
       "embed": "ok",
@@ -280,7 +298,9 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "7de6278021a0",
@@ -290,7 +310,7 @@
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
       "report_date": "2026-11-04",
-      "category": "行业动态",
+      "category": "市场与价格",
       "is_new": true,
       "summary": "中国有色金属工业协会陈学森表示，在地缘冲突持续、大宗商品价格波动加剧的外部环境下，依托完备的产业体系，叠加人工智能产业快速扩容与能源转型推进，前三季度行业生产、外贸、效益等核心指标均呈积极向好态势，运行基本面稳固。外贸规模大幅攀升，黄金产品成为核心增量，前三季度有色金属产品进出口总额持续增长。",
       "embed": "ok",
@@ -300,7 +320,9 @@
         "技术"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "7aa142c0ef7c",
@@ -310,7 +332,7 @@
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
       "report_date": "2026-11-04",
-      "category": "国际矿业动态",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "I-80 Gold（TSX/NYSE: IAU）预计全年产量落在 40,000 至 50,000 盎司指引区间的下半区，主因内华达州工人流动导致采矿进度放缓，公司股价下跌。公司维持产量指引不变，但 Granite Creek 高品位矿石接续延迟，Archimedes 矿山部分黄金产量将推迟至 2027 年初。（原题：I-80 Gold's growth faces Nevada labour squeeze）",
       "embed": "ok",
@@ -319,7 +341,9 @@
         "市场"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "5612b262c83d",
@@ -351,7 +375,7 @@
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
       "report_date": "2026-11-04",
-      "category": "国际矿业动态",
+      "category": "市场与价格",
       "is_new": true,
       "summary": "摩根大通认为，通过新项目与扩产，美国年矿产铜产量有望增加 130 万吨、实现翻倍以上，扭转数十年下滑趋势，潜在供应增量位居全球第三、仅次于智利和阿根廷。但该行指出，这些产能多数要到 2030 年之后才能投产。（原题：JPMorgan sees US copper output more than doubling）",
       "embed": "ok",
@@ -361,7 +385,9 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "0ba87074100a",
@@ -371,7 +397,7 @@
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
       "report_date": "2026-11-04",
-      "category": "国际矿业动态",
+      "category": "政策与监管",
       "is_new": true,
       "summary": "11 月 2 日，刚果（金）矿业部长 Louis Watum Kabamba 监督采矿合作社 COMIKAN 成员在卢阿拉巴省 Mutshatsha 地区 Mulondo 矿区恢复作业，该矿距科卢韦齐东南约 42 公里。此前新运营方 PAJECLEM 接手 Chemaf 原有矿权后，手工采矿者被迫撤离并闲置一年有余；经协商，PAJECLEM 让出两个采矿区块给 COMIKAN 矿工，以划清作业范围、避免用地纠纷。（原题：DRC Mines Ministry Facilitates Return of Artisanal Miners to Mulondo Site Through Negotiated Arrangement）",
       "embed": "ok",
@@ -380,7 +406,9 @@
         "矿权"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "fcca6e1849d8",
@@ -462,7 +490,9 @@
         "政策"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国内",
+      "orig_category": "政策与监管"
     },
     {
       "id": "c4b61be2a85f",
@@ -552,7 +582,9 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "a210765c1169",
@@ -627,7 +659,7 @@
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
       "report_date": "2026-11-04",
-      "category": "行业动态",
+      "category": "技术与勘查",
       "is_new": true,
       "summary": "长沙有色冶金设计研究院自主研发的「炼锌渣绿色协同处置及资源高效利用技术」通过中国有色金属工业协会组织的专家评价，整体达到国际领先水平。我国每年产出湿法炼锌渣超 500 万吨，该技术以铅精矿为贵金属捕集剂，使铜、银、铅等有价金属高效进入粗铅。2022 年 6 月该技术在深圳市中金岭南丹霞冶炼厂落地，建成一条年处理 28.7 万吨废渣废料的生产线并运行至今。",
       "embed": "ok",
@@ -641,7 +673,9 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "5e0e3a4d7474",
@@ -651,7 +685,7 @@
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
       "report_date": "2026-11-04",
-      "category": "行业动态",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "10 月 30 日，天赐材料（宜昌）新能源有限公司年产 30 万吨（一期 15 万吨）电解液项目环境影响报告书（征求意见稿）公示。项目位于湖北省宜昌市枝江市姚家港化工园，总投资 67,000 万元，一期建设规模 15 万吨电解液，二期作为规划预留、不纳入本次评价。公司印尼 2 万吨电解液项目预计 2026 年 12 月进入试生产。",
       "embed": "ok",
@@ -661,7 +695,9 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-04"
+      "last_seen": "2026-11-04",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "40ae4aee22d3",
