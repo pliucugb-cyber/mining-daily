@@ -1,7 +1,7 @@
 {
  "month": "2026-11",
- "updated_at": "2026-11-03T05:38:05+08:00",
- "count": 18,
+ "updated_at": "2026-11-03T08:36:13+08:00",
+ "count": 19,
  "news": [
   {
    "id": "c462d8884fbc",
@@ -31,7 +31,7 @@
    "orig_date": "11-03",
    "orig_date_full": "2026-11-03",
    "report_date": "2026-11-03",
-   "category": "国际矿业动态",
+   "category": "市场与价格",
    "is_new": true,
    "summary": "MINING.COM TOP 50 显示，全球市值前 50 矿企自 2 月高点已下跌 26%，市值蒸发 7,120 亿美元；10 月单月缩水 2,260 亿美元、跌幅 10%，9 月缩水 2,640 亿美元，两个月蒸发近 5,000 亿美元，为今年首次低于 2025 年末水平。（原题：$712 billion wiped off world’s biggest mining companies since start of Iran war）",
    "embed": "ok",
@@ -87,6 +87,28 @@
    "orig_category": "并购与投资"
   },
   {
+   "id": "5612b262c83d",
+   "title": "智利铜业前景转弱，Cochilco 将 2027 年铜价预测上调 17% 至 5.95 美元/磅",
+   "url": "https://www.mining.com/chile-copper-outlook-worsens-as-price-forecast-rises",
+   "source": "MINING.COM",
+   "orig_date": "11-03",
+   "orig_date_full": "2026-11-03",
+   "report_date": "2026-11-03",
+   "category": "市场与价格",
+   "is_new": true,
+   "summary": "智利铜业委员会 Cochilco 将 2027 年铜均价预测由 5.10 美元/磅上调 17% 至 5.95 美元/磅（约 1.31 万美元/吨、≈9.4 万元/吨），并将今年均价预测由 5.95 上调至 6.18 美元/磅；同时下调产量预期，预计智利今年铜产量降 8.4%（8 月预测为降 2.6%）至 494 万吨、明年 508 万吨（8 月预测 527 万、555 万吨）。今年前 9 个月智利产铜 363 万吨、同比降 8.5%，BMO 称或录得逾 20 年来最弱年度产量。Cochilco 预计今年精炼铜过剩 14.4 万吨、明年扩至 21.5 万吨。（原题：Chile copper outlook worsens as price forecast rises）",
+   "embed": "ok",
+   "tags": [
+    "铜",
+    "市场",
+    "国际"
+   ],
+   "first_seen": "2026-11-03",
+   "last_seen": "2026-11-03",
+   "orig_category": "市场与价格",
+   "region": "国际"
+  },
+  {
    "id": "fcca6e1849d8",
    "title": "铜冠铜箔前三季度扣非净利增 582%，高端铜箔订单骤增",
    "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=475110",
@@ -115,7 +137,7 @@
    "orig_date": "11-02",
    "orig_date_full": "2026-11-02",
    "report_date": "2026-11-03",
-   "category": "国际矿业动态",
+   "category": "政策与监管",
    "is_new": true,
    "summary": "Gold Fields 宣布其魁北克高品位 Windfall 金矿项目获魁北克环境部颁发的环境许可证书，确认项目已按《环境质量法》完成环境与社会影响评价，可在满足监管条件后开工建设，为 2027 年最终投资决策扫清主要监管障碍。（原题：Gold Fields clears major hurdle for Quebec’s Windfall gold mine）",
    "embed": "ok",
@@ -357,7 +379,7 @@
    "orig_date": "11-02",
    "orig_date_full": "2026-11-02",
    "report_date": "2026-11-03",
-   "category": "国际矿业动态",
+   "category": "项目与产能",
    "is_new": true,
    "summary": "Endeavour Mining 称，10 月 28 日通往 Wona 采坑的坡道部分下沉，影响 Dangouna 与 Aviera 两个井下入口，公司已暂停布基纳法索 Mana 金矿地下开采并撤离人员，无人受伤；该矿原本预计无法完成年度产量目标。（原题：Endeavour halts Burkina gold underground as ramp sinks）",
    "embed": "ok",

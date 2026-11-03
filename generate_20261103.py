@@ -317,6 +317,12 @@ new_items = [
                 '肯尼亚矿业部长 Joho 10 月 30 日对路透表示，已有五家联合体提交开发 Mrima Hill 铌稀土矿床的投标，预计两到三周内确定优先竞标人；投标仅体现投资意向，项目授标、融资与新增矿供应仍取决于技术研究、审批与可行价格。',
                 orig_title='Five groups bid for Kenya’s Mrima Hill niobium project')),
 
+    (CAT_SC, ni('https://www.mining.com/chile-copper-outlook-worsens-as-price-forecast-rises',
+                'MINING.COM', '11-03',
+                '智利铜业前景转弱，Cochilco 将 2027 年铜价预测上调 17% 至 5.95 美元/磅',
+                '智利铜业委员会 Cochilco 将 2027 年铜均价预测由 5.10 美元/磅上调 17% 至 5.95 美元/磅（约 1.31 万美元/吨、≈9.4 万元/吨），并将今年均价预测由 5.95 上调至 6.18 美元/磅；同时下调产量预期，预计智利今年铜产量降 8.4%（8 月预测为降 2.6%）至 494 万吨、明年 508 万吨（8 月预测 527 万、555 万吨）。今年前 9 个月智利产铜 363 万吨、同比降 8.5%，BMO 称或录得逾 20 年来最弱年度产量。Cochilco 预计今年精炼铜过剩 14.4 万吨、明年扩至 21.5 万吨。',
+                orig_title='Chile copper outlook worsens as price forecast rises')),
+
 ]
 
 
