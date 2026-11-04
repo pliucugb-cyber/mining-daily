@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-04",
+ "updated_at": "2026-11-05",
  "companies": [
   {
    "name": "紫金矿业",
@@ -498,7 +498,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -2037,6 +2037,24 @@
    "rank": 26,
    "items": [
     {
+     "t": "Freeport宣布计划提高美国铜和钼产量| FCX股票新闻",
+     "d": "2026-11-04",
+     "u": "https://www.stocktitan.net/news/FCX/freeport-announces-plans-to-boost-u-s-copper-molybdenum-u9wh3s7sqygu.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Freeport Announces Plans to Boost U.S. Copper & Molybdenum Production | FCX Stock News"
+    },
+    {
+     "t": "SEC 8-K（重大事项披露）",
+     "d": "2026-11-04",
+     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000048/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
+    {
      "t": "Freeport 2026年第三季度和九个月财务和运营业绩发布于其网站| FCX股票新闻",
      "d": "2026-10-27",
      "u": "https://www.stocktitan.net/news/FCX/freeport-third-quarter-and-nine-month-2026-financial-and-operating-l58z387e0kn6.html",
@@ -2044,15 +2062,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Freeport Third-Quarter and Nine-Month 2026 Financial and Operating Results Release Available on Its Website | FCX Stock News"
-    },
-    {
-     "t": "SEC 8-K（重大事项披露）",
-     "d": "2026-10-27",
-     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000045/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
     },
     {
      "t": "Freeport提供2026年第三季度运营更新| FCX股票新闻",
@@ -2098,15 +2107,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "CHART: Freeport-McMoRan stock craters on Grasberg ramp-up delay"
-    },
-    {
-     "t": "Freeport 2026年第一季度财务和经营业绩发布可在其网站上查看| FCX股票新闻",
-     "d": "2026-04-23",
-     "u": "https://www.stocktitan.net/news/FCX/freeport-first-quarter-2026-financial-and-operating-results-release-4mngxuhp56in.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Freeport First-Quarter 2026 Financial and Operating Results Release Available on Its Website | FCX Stock News"
     },
     {
      "t": "首席执行官表示，尽管伊朗存在冲突，但Freeport-McMoRan对铜需求充满信心",
