@@ -1,41 +1,33 @@
 {
- "date": "2026-11-05",
+ "date": "2026-11-06",
  "has_history": true,
  "history_days": 15,
  "alerts": [
   {
-   "commodity": "白银",
-   "market": "上金所 Ag(T+D)",
-   "move": "+6.85%",
-   "severity": "high",
-   "detail": "白银（上金所 Ag(T+D)）最新收报 12,453.00，单日 +6.85%（数据日期 2026-11-04）。",
-   "type": "price"
-  },
-  {
    "commodity": "碳酸锂",
    "market": "GFEX 主连",
-   "move": "-3.18%",
-   "severity": "medium",
-   "detail": "碳酸锂（GFEX 主连）最新收报 86,460.00，单日 -3.18%（数据日期 2026-11-04）。",
+   "move": "+5.92%",
+   "severity": "high",
+   "detail": "碳酸锂（GFEX 主连）最新收报 91,580.00，单日 +5.92%（数据日期 2026-11-05）。",
    "type": "price"
   },
   {
-   "commodity": "上海金",
-   "market": "上金所 Au99.99",
-   "move": "+3.05%",
-   "severity": "medium",
-   "detail": "上海金（上金所 Au99.99）最新收报 867.46，单日 +3.05%（数据日期 2026-11-04）。",
+   "commodity": "沪镍",
+   "market": "SHFE 主连",
+   "move": "+5.13%",
+   "severity": "high",
+   "detail": "沪镍（SHFE 主连）最新收报 122,900.00，单日 +5.13%（数据日期 2026-11-05）。",
    "type": "price"
   },
   {
    "commodity": "镍",
    "market": "LME 03",
-   "move": "+3.02%",
+   "move": "+3.40%",
    "severity": "medium",
-   "detail": "LME 镍（LME 03）最新收报 15,870.00 美元/吨，单日 +3.02%（数据日期 11-04）。",
+   "detail": "LME 镍（LME 03）最新收报 16,315.00 美元/吨，单日 +3.40%（数据日期 11-05）。",
    "type": "price"
   }
  ],
- "summary": "今日异动 4 项：白银 +6.85%（上金所 Ag(T+D)）；碳酸锂 -3.18%（GFEX 主连）；上海金 +3.05%（上金所 Au99.99）；镍 +3.02%（LME 03）。",
+ "summary": "今日异动 3 项：碳酸锂 +5.92%（GFEX 主连）；沪镍 +5.13%（SHFE 主连）；镍 +3.40%（LME 03）。",
  "max_severity": "high"
 }

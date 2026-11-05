@@ -1,8 +1,25 @@
 {
   "month": "2026-11",
-  "updated_at": "2026-11-04T05:41:13+08:00",
-  "count": 1,
+  "updated_at": "2026-11-06T05:38:53+08:00",
+  "count": 2,
   "news": [
+    {
+      "id": "5d9326f24deb",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-11-06/1225660317.PDF",
+      "title": "关于对外投资收购威领股份的进展暨取得威领股份控制权的公告",
+      "source": "巨潮资讯网·兴业银锡",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-06",
+      "category": "并购与投资",
+      "company": "兴业银锡",
+      "sec_code": "000426",
+      "ma_type": "股权/资产收购",
+      "summary": "兴业银锡（000426）披露《关于对外投资收购威领股份的进展暨取得威领股份控制权的公告》，涉及股权/资产收购。",
+      "tags": [
+        "并购"
+      ]
+    },
     {
       "id": "9fa4c42a1b94",
       "url": "https://static.cninfo.com.cn/finalpage/2026-11-04/1225655587.PDF",
