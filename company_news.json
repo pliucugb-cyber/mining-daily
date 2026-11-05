@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-05",
+ "updated_at": "2026-11-06",
  "companies": [
   {
    "name": "紫金矿业",
@@ -145,6 +145,27 @@
    "rank": 11,
    "items": [
     {
+     "t": "张家港铜业推行岗位“双确认”安全管理模式",
+     "d": "2026-11-04",
+     "u": "http://www.tlys.cn/news.aspx?cid=25678&classid=383",
+     "s": "张家港铜业针对冶金生产高风险特点，持续深化现场安全精细化管控，推行岗位手指口述+人员定位智能管控“双确认”模式，构建人防和技防立体防护体系，为企业安全生产持续筑牢坚实屏障。",
+     "k": "news"
+    },
+    {
+     "t": "米拉多铜矿召开三季度经济活动分析会",
+     "d": "2026-11-04",
+     "u": "http://www.tlys.cn/news.aspx?cid=25677&classid=383",
+     "s": "一是守牢安全合规底线。压紧压实各层级安全责任，深化隐患排查整治，强化重点灾害防控，坚决防范各类安全事故，切实防范舆情、意识形态等各类风险。二是冲刺全年经营目标。科学组织生产，逐级分解落实指标，抓实铜精矿销售，科学调配电力，保障柴油供应。三是持续深化降本增效。",
+     "k": "news"
+    },
+    {
+     "t": "铜冠铜箔强化员工职业健康管理",
+     "d": "2026-11-04",
+     "u": "http://www.tlys.cn/news.aspx?cid=25676&classid=383",
+     "s": "一是完善防护基础。规范配备劳保用品，定期维护通风、除尘等设备，设置职业病危害告知与警示标识，改善作业环境。二是抓实健康监测。组织职业病危害岗位员工开展岗前、岗中、离岗职业健康体检，建立个人健康档案，动态跟踪健康状况，做到早发现、早干预。三是强化宣传培训。",
+     "k": "news"
+    },
+    {
      "t": "天马山矿开展“三禁止”专项行动",
      "d": "2026-11-03",
      "u": "http://www.tlys.cn/news.aspx?cid=25674&classid=383",
@@ -205,34 +226,6 @@
      "d": "2026-10-29",
      "u": "http://www.tlys.cn/news.aspx?cid=24662&classid=383",
      "s": "一是深化警示教育，全面自查自纠。坚持以案示警，聚焦顶帮板典型事故教育，增强作业人员安全防范意识。二是加强隐患排查，落实管理规定。严查锚杆、锚网、喷浆等施工质量，重点排查顶板裂隙、浮石等隐患，切实做到不安全不生产。三是规范现场处置，严禁冒险作业。严格落实顶帮板三级管理制度，严禁一人单独撬毛违章行为。",
-     "k": "news"
-    },
-    {
-     "t": "工程公司打破壁垒聚合力保障金新大修节点",
-     "d": "2026-10-28",
-     "u": "http://www.tlys.cn/news.aspx?cid=24657&classid=383",
-     "s": "金新铜业年度大修期间，工程公司紧扣“自修强基、降本增效”目标，打破项目部属地壁垒，统筹整合内部维修力量，盘活骨干人力资源，建立跨区域系统作战调度机制。",
-     "k": "news"
-    },
-    {
-     "t": "米拉多铜矿强化合同规范化管理",
-     "d": "2026-10-28",
-     "u": "http://www.tlys.cn/news.aspx?cid=24656&classid=383",
-     "s": "一是开展双语合同专项排查，重点核查合同期限、延期条款、付款条件、违约责任等关键条款中西文表述一致性，增加语言优先级条款，建立问题排查台账。二是严格执行双语合同“三审”机制，建立“业务人员初审、翻译复核、主办人员终审”的审核流程，确保关键条款及中西文一一对应。",
-     "k": "news"
-    },
-    {
-     "t": "安庆铜矿完成年度检修工作",
-     "d": "2026-10-27",
-     "u": "http://www.tlys.cn/news.aspx?cid=24652&classid=383",
-     "s": "日前，安庆铜矿顺利完成年度检修工作。该矿坚持统筹谋划部署，成立检修、安全、应急救援三个领导小组，从项目、技术、安全、质量等方面制定检修计划并严格落实，压紧各方各级职责，保质保量完成36大项60子项检修任务。",
-     "k": "news"
-    },
-    {
-     "t": "庐江矿业、金冠铜业等召开三季度经济活动分析会",
-     "d": "2026-10-27",
-     "u": "http://www.tlys.cn/news.aspx?cid=24651&classid=383",
-     "s": "庐江矿业：一是聚焦预算引领，抓实全面预算管理，提前谋划2027年预算编制，切实发挥预算对经营管理的统筹指导作用。二是坚持目标导向，全面客观分析前三季度经营成效，锚定全年目标任务，强化成本管控意识，规范费用归集口径。三是强化执行刚性，压实责任、闭环管控，持续提升工作执行力，推进各项部署落地见效。",
      "k": "news"
     }
    ]
@@ -498,7 +491,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "chrome",
+   "method": "html",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -600,10 +593,10 @@
    "rank": 14,
    "items": [
     {
-     "t": "南山三家A股上市公司三季报发布，彰显全链协同实力！",
-     "d": "2026-11-01",
-     "u": "https://www.nanshan.com.cn/News_1/509.html",
-     "s": "连日来，南山旗下三家A股上市公司——南山铝业（股票代码：600219）、南山智尚（股票代码：300918）和恒通股份（股票代码：603223）相继发布2026年三季度报告。报告显示，今年前三季度，南山各主营业务板块依旧展现出了稳健的经营能力，传统根基稳固、新赛道加速突围。",
+     "t": "南山铝业亮相2026年德国铝工业展",
+     "d": "2026-10-13",
+     "u": "https://www.nanshan.com.cn/News_1/503.html",
+     "s": "围绕下游市场需求升级、铝板带应用场景拓展、产业智能化、绿色化、融合化发展等核心维度，分享企业发展经验，并详细介绍了南山铝业在绿色低碳生产、节能减排、循环利用等方面的落地实践与阶段性成果，为全球铝产业绿色转型提供中国企业参考方案。",
      "k": "news"
     },
     {
@@ -733,14 +726,7 @@
      "t": "云铝股份：披露2026年中期分红相关权益安排",
      "d": "2026-10-23",
      "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-10-23/doc-iniweyws1913836.shtml",
-     "s": "投资者提问：中期分红什么时候执行？董秘回答(云铝股份SZ000807)：您好，首先感谢您对云铝股份的关心、支持和信任。《云南铝业股份有限公司2026年中期利润分配实施公告》已披露，公司2026年中期分红股权登记日为2026年10月29日，除...",
-     "k": "news"
-    },
-    {
-     "t": "云铝股份：数据创造绿色价值 AI赋能电力交易",
-     "d": "2026-10-21",
-     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-10-21/doc-inivysym6210466.shtml",
-     "s": "AI数智赋能在近日举办的2026届全国精益数智化创新大赛中，云铝股份“碳索绿电鑫云聚能”项目荣获五星作品奖。该项目也是中铝集团在AI赛道唯一的五星作品项目。随着“双碳”战略深入实施、新型电力系统加快建设，新能源快速发展和电力市场化交易不断深...",
+     "s": "2026-10-22 22:02 云铝股份：每10股派8.87元，股权登记日为10月29日",
      "k": "news"
     }
    ]
@@ -1020,6 +1006,13 @@
    "rank": 23,
    "items": [
     {
+     "t": "湖南黄金披露深交所重组问询函核查回复 黄金天岳11宗矿业权整合估值合规性获确认",
+     "d": "2026-11-05",
+     "u": "https://finance.sina.com.cn/stock/aigc/wenxun/2026-11-05/doc-inixsvxn8740002.shtml",
+     "s": "该估值方式符合矿业权评估准则要求，且有A股同行业可比案例支撑，与 山东黄金 此前整合西岭金矿探矿权与三山岛采矿权的操作逻辑一致。经可行性研究论证，一体化开发后矿山达产年平均利润总额可达8.87亿元，不存在上市公司收购亏损矿业权的情况。",
+     "k": "news"
+    },
+    {
      "t": "湖南黄金(002155)：价格波动影响业绩 外延并购拓展成长曲线",
      "d": "2026-10-26",
      "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/846339410041/index.phtml",
@@ -1081,13 +1074,6 @@
      "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-10-22/doc-iniwcafi5939405.shtml",
      "s": "证券日报网讯 10月22日，湖南黄金发布公告称，公司于2026年10月22日召开第七届董事会第二十五次会议，审议通过《2026年第三季度报告》《关于选举副董事长的议案》。...",
      "k": "news"
-    },
-    {
-     "t": "湖南黄金：股东户数信息仅在定期报告中统一披露",
-     "d": "2026-10-19",
-     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-10-19/doc-inivtynp6182794.shtml",
-     "s": "尊敬的投资者，您好！为严格恪守信息披露公平原则，公司股东户数相关信息仅在定期报告中统一披露。敬请理解，感谢您对公司的关注！",
-     "k": "news"
     }
    ]
   },
@@ -1146,7 +1132,7 @@
      "t": "一图看懂 | 天齐锂业2026年半年度报告 查看详情 ",
      "d": "2026-08-28",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1106",
-     "s": "",
+     "s": "Tripartite Joint Venture Agreement Signing Ceremony of Tianqi Lithium, CATL, and Shengtun Group Successfully Held",
      "k": "news"
     },
     {
@@ -1263,6 +1249,13 @@
    "rank": 8,
    "items": [
     {
+     "t": "华友钴业再添2家省级企业技术中心",
+     "d": "2026-11-04",
+     "u": "https://www.huayou.com/news/corporate-news/778",
+     "s": "近日，广西壮族自治区工业和信息化厅公布2026年自治区企业技术中心认定名单，玉林市共有2家企业上榜，均来自华友广西园区——广西华友锂业有限公司、广西华友新材料有限公司。",
+     "k": "news"
+    },
+    {
      "t": "华友钴业2026年度债券发行规模突破百亿 2026年10月，华友钴业年度债券发行规模突破100亿元，位列浙江省民营企业第三位",
      "d": "2026-10-20",
      "u": "https://www.huayou.com/news/corporate-news/774",
@@ -1274,13 +1267,6 @@
      "d": "2026-10-15",
      "u": "https://www.huayou.com/news/corporate-news/770",
      "s": "诚信是立业之本，是华友人永恒不变的共同操守。华友控股将以此为契机，继续把信用体系建设融入战略实施、经营管理、风险防控等各方面全过程，推动实现有效益的可持续增长，助力全球产业发展和绿色低碳转型。",
-     "k": "news"
-    },
-    {
-     "t": "从精细核算到低碳决策｜华友钴业联合发布动力电池产业链碳足迹实践白皮书 近日，2026年汽车碳达峰碳中和标准发展研讨会在乌镇举行",
-     "d": "2026-09-28",
-     "u": "https://www.huayou.com/news/corporate-news/764",
-     "s": "会上，《从精细核算到低碳决策：动力电池产业链碳足迹实践》白皮书正式发布，引发行业广泛关注。白皮书以典型三元电芯为研究样本，结合用电时段与地域特征，逐小时匹配电力碳排放因子，完成从原材料开采到电芯出厂的全链条碳足迹核算。",
      "k": "news"
     }
    ]
@@ -1393,14 +1379,7 @@
      "t": "北方稀土公布三季报 前三季净利增加136.55%",
      "d": "2026-10-24",
      "u": "https://finance.sina.com.cn/stock/ggzz/2026-10-24/doc-iniwfwae5044776.shtml",
-     "s": "10月24日消息，北方稀土发布三季度报告。 公告显示，公司前三季度营业收入41,332,501,328.18元，同比增加36.45%，归属上市公司股东的净利润3,646,096,542.06元，同比增加136.55%。...",
-     "k": "news"
-    },
-    {
-     "t": "北方稀土三季报净利翻倍：机构评价业绩“超预期” 股价近期创年内新低",
-     "d": "2026-10-23",
-     "u": "https://finance.sina.com.cn/jjxw/2026-10-23/doc-iniwfruh5082383.shtml",
-     "s": "今年前三季度，北方稀土经营活动产生的现金流量净额44.55亿元，同比增长63.46%。据此测算，公司Q3单季经营活动现金流净额约32.46亿元，而上半年这一数据为12.08亿元，可见Q3资金大幅回笼。公司表示，主要因销售商品、提供劳务收到的现金不断增加。",
+     "s": "2026-10-23 22:27 北方稀土三季报净利翻倍：机构评价业绩“超预期” 股价近期创年内新低|财报解读",
      "k": "news"
     }
    ]
@@ -2317,8 +2296,8 @@
    "items": [
     {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-30",
-     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002897/",
+     "d": "2026-11-05",
+     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002959/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -2532,6 +2511,14 @@
    "rank": 31,
    "items": [
     {
+     "t": "新闻稿2026年11月4日Albemarle公布2026年第三季度业绩北卡罗来纳州夏洛特2026年11月4日",
+     "d": "2026-11-04",
+     "u": "https://www.albemarle.com/global/en/news/albemarle-reports-third-quarter-2026-results",
+     "s": "归属于Albemarle的净收入为$ 2.97亿，同比增长$ 4.57亿。",
+     "k": "news",
+     "t_en": "Press Releases November 04, 2026 Albemarle Reports Third Quarter 2026 Results CHARLOTTE, N.C., Nov. 4, 2026 /PRNewswire/ -- Albemarle Corpor"
+    },
+    {
      "t": "新闻稿2026年10月26日Albemarle宣布北卡罗来纳州夏洛特的季度普通股股息2026年10月26日 董事会",
      "d": "2026-10-26",
      "u": "https://www.albemarle.com/global/en/news/albemarle-announces-quarterly-common-stock-dividend-8",
@@ -2562,14 +2549,6 @@
      "s": "Ragnar Udd被任命为总裁兼首席执行官，自2027年2月1日起生效Kent Masters担任北卡罗来纳州夏洛特市执行主席，",
      "k": "news",
      "t_en": "Press Releases September 03, 2026 Albemarle Announces CEO Succession Plan Ragnar Udd Appointed President and CEO, Effective February 1, 2027"
-    },
-    {
-     "t": "新闻稿2026年8月5日Albemarle公布2026年第二季度业绩北卡罗来纳州夏洛特2026年8月5日",
-     "d": "2026-08-05",
-     "u": "https://www.albemarle.com/global/en/news/albemarle-reports-second-quarter-2026-results",
-     "s": "归属于Albemarle的净收入为$ 4.8亿，同比增长$ 4.57亿。",
-     "k": "news",
-     "t_en": "Press Releases August 05, 2026 Albemarle Reports Second Quarter 2026 Results CHARLOTTE, N.C., Aug. 5, 2026 /PRNewswire/ -- Albemarle Corpora"
     },
     {
      "t": "在新闻中2026年3月31日锂化学见解：塑造先进橡胶材料锂化学是制作广告的基础",
@@ -2614,6 +2593,13 @@
    "rank": 99,
    "items": [
     {
+     "t": "中矿卡通巴矿业举行师徒带教拜师会以“传帮带”筑牢人才培养根基",
+     "d": "2026-11-05",
+     "u": "http://www.sinomine.cn/xwdti/436.html",
+     "s": "此次拜师会的举行，标志着卡通巴矿业师徒带教培养工作进入实质性执行阶段。公司将以师徒结对为抓手，持续完善人才培养体系，为公司高质量发展提供有力的人才支撑。",
+     "k": "news"
+    },
+    {
      "t": "Bikita矿业持续推进校园营养项目 | 助力属地教育民生发展",
      "d": "2026-10-31",
      "u": "http://www.sinomine.cn/xwdti/434.html",
@@ -2638,13 +2624,6 @@
    "stale": false,
    "rank": 99,
    "items": [
-    {
-     "t": "王彬在白银集团1—9月生产经营分析会上强调： 聚焦全年目标任务不动摇 力拼四...",
-     "d": "2026-10-12",
-     "u": "http://www.bynmc.com/xinwenzhongxin/jituanxinwen/20261012/085215744b46c5c7108.htm",
-     "s": "王彬要求，全集团要坚持靶向施策，在真抓实干中实现“十五五”良好开局。四季度是全年收官冲刺的关键期‌。要对标上级要求，对接新一轮国企改革任务，充分研判市场，坚持问题导向，明确发力方向。要更好巩固当前生产经营稳进向好的态势，稳扎稳打保障生产，对标对表查漏补缺，慎终如始守牢底线，上下同欲谋划未来。",
-     "k": "news"
-    },
     {
      "t": "白银有色集团股份有限公司2026年半年度报告摘要",
      "d": "2026-10-12",
@@ -3009,6 +2988,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "力拓在陆战胜利后向Resolution Copper注资1.44亿美元$",
+     "d": "2026-11-05",
+     "u": "https://www.mining.com/rio-tinto-injects-144m-into-resolution-copper-after-land-battle-win/",
+     "s": "力拓（ ASX ， LON ： RIO ）在获得……的控制权几个月后，批准了一项1.44亿美元的投资，以推进其在亚利桑那州的Resolution Copper项目。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Rio Tinto injects $144 million into Resolution Copper after land battle win"
+    },
+    {
      "t": "力拓支持2000万$的努力，以阻止皮尔巴拉甘蔗蟾蜍",
      "d": "2026-11-03",
      "u": "https://www.mining.com/rio-tinto-backs-20m-effort-to-halt-pilbara-cane-toad-invasion/",
@@ -3124,15 +3112,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Madagascar villagers file claim against Rio Tinto over alleged mine contamination"
-    },
-    {
-     "t": "力拓委托中国首钢钢铁厂进行碳捕集试验",
-     "d": "2026-09-28",
-     "u": "https://www.mining.com/web/rio-tinto-commissions-carbon-capture-trial-at-chinas-shougang-steel-plant/",
-     "s": "该设施旨在捕获炼铁过程中产生的高炉煤气中含有的二氧化碳。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto commissions carbon-capture trial at China’s Shougang steel plant"
     }
    ]
   },
@@ -3432,6 +3411,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "印尼瞄准前Glencore交易员Kurniawan的镍矿帝国",
+     "d": "2026-11-05",
+     "u": "https://www.mining.com/web/indonesia-targets-ex-glencore-trader-kurniawans-nickel-empire/",
+     "s": "印度尼西亚当局正在对前嘉能可（ Glencore Plc ）镍交易商控制或附属的公司采取“立即执法行动” ……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Indonesia targets ex-Glencore trader Kurniawan’s nickel empire"
+    },
+    {
      "t": "嘉能可首席执行官薪酬重组引发新一轮收购猜测",
      "d": "2026-11-02",
      "u": "https://www.mining.com/glencore-ceo-pay-shakeup-stirs-fresh-takeover-speculation/",
@@ -3511,15 +3499,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Glencore says trading profits will top $5 billion this year"
-    },
-    {
-     "t": "嘉能可、Peabody和Heeney Capital权衡委内瑞拉煤炭交易",
-     "d": "2026-09-30",
-     "u": "https://www.mining.com/web/glencore-peabody-and-heeney-capital-weigh-venezuela-coal-deals-bloomberg-news-reports/",
-     "s": "Glencore （伦敦证券交易所代码： GLEN ）、Peabody Energy （纽约证券交易所代码： BTU ）和投资公司Heeney Capital正在权衡在委内瑞拉生产煤炭的交易。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Glencore, Peabody and Heeney Capital weigh Venezuela coal deals"
     }
    ]
   },
@@ -3710,6 +3689,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 379
+  "items": 376
  }
 }
