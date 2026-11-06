@@ -1,7 +1,7 @@
 {
   "month": "2026-11",
-  "updated_at": "2026-11-06T08:18:14+08:00",
-  "count": 95,
+  "updated_at": "2026-11-06T08:56:34+08:00",
+  "count": 96,
   "news": [
     {
       "id": "b4a1acfe96fa",
@@ -24,6 +24,27 @@
       "last_seen": "2026-11-06",
       "region": "国内",
       "orig_category": "并购与投资"
+    },
+    {
+      "id": "8d3718a1dd11",
+      "title": "矿业审批提速始于更优前期规划，BBA 称",
+      "url": "https://www.mining.com/faster-mine-approvals-start-with-better-project-planning-bba-says",
+      "source": "MINING.COM",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-06",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "工程咨询机构 BBA 指出，尽管监管审批流程的不确定性仍是行业痛点，矿业企业可通过更早厘清关键问题、让技术、环境与社会（社区）团队尽早协同介入，改善项目获批前景、缩短矿山建设核准周期。（原题：Faster mine approvals start with better project planning, BBA says）",
+      "embed": "ok",
+      "tags": [
+        "政策",
+        "技术"
+      ],
+      "first_seen": "2026-11-06",
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "857d2ac433f0",

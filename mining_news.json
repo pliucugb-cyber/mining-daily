@@ -1,12 +1,12 @@
 {
   "meta": {
     "report_date": "2026-11-06",
-    "generated_at": "2026-11-06T08:18:14+08:00",
-    "total": 544,
-    "new_today": 20,
+    "generated_at": "2026-11-06T08:56:34+08:00",
+    "total": 545,
+    "new_today": 21,
     "archive": 524,
-    "page_total": 544,
-    "page_new_count": 20,
+    "page_total": 545,
+    "page_new_count": 21,
     "sources": [
       "MINING.COM",
       "SMM 国际站",
@@ -102,7 +102,7 @@
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
       "report_date": "2026-11-06",
-      "category": "政策与监管",
+      "category": "行业动态",
       "is_new": true,
       "summary": "10 月 28 日至 29 日，第二十一届全国地质勘查行业改革与发展大会在陕西西安召开，主题为“深耕地勘改革攻坚，协同创新开发资源”。大会聚焦地勘行业改革发展面临的新形势、新任务，交流改革创新经验，为保障国家能源资源安全、推动地质勘查行业高质量发展提供支撑。",
       "embed": "ok",
@@ -110,6 +110,58 @@
         "找矿",
         "技术",
         "安全"
+      ]
+    },
+    {
+      "id": "d5915145a5e0",
+      "title": "金力永磁前三季度净利增 47.48%，机器人电机转子爬坡上量",
+      "url": "https://news.smm.cn/news/104203989",
+      "source": "上海有色网",
+      "orig_date": "11-04",
+      "orig_date_full": "2026-11-04",
+      "report_date": "2026-11-06",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "金力永磁 2026 年前三季度净利润同比增长 47.48%，公司称具身机器人电机转子按客户订单爬坡上量，并按期新建 2 万吨磁材产能。11 月 4 日公司股价收涨 3.81% 至 24.22 元/股。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "市场"
+      ]
+    },
+    {
+      "id": "48fef76cab9d",
+      "title": "中信戴卡与有色网交易中心启动 2027 年度铝锭长协线上竞价",
+      "url": "https://news.smm.cn/news/104202782",
+      "source": "上海有色网",
+      "orig_date": "11-04",
+      "orig_date_full": "2026-11-04",
+      "report_date": "2026-11-06",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "中信戴卡携手上海有色网交易中心启动 2027 年度铝锭长协线上竞价，将年度长单采购移至线上平台集中竞价，以市场化方式形成长协价格，为铝锭长单定价提供新的交易场景。",
+      "embed": "ok",
+      "tags": [
+        "铝",
+        "市场"
+      ]
+    },
+    {
+      "id": "b6882687914d",
+      "title": "全球锌精矿加工费刷新低，SMM 预计 2027 年供应紧张缓解",
+      "url": "https://news.smm.cn/news/104202309",
+      "source": "上海有色网",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-06",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "SMM 高级分析师李函玉在 2026 SMM 铅锌年会上表示，全球锌精矿加工费已刷新低点；随着国内外矿山进入投产高峰、海外新增产能体量更大，2027 年锌精矿供应紧张局面将相对缓解，2027 至 2030 年维持紧平衡，但矿端扰动增多、波动风险仍存。",
+      "embed": "ok",
+      "tags": [
+        "铅",
+        "锌",
+        "国际"
       ]
     },
     {
@@ -165,58 +217,6 @@
       "tags": [
         "锂",
         "市场"
-      ]
-    },
-    {
-      "id": "d5915145a5e0",
-      "title": "金力永磁前三季度净利增 47.48%，机器人电机转子爬坡上量",
-      "url": "https://news.smm.cn/news/104203989",
-      "source": "上海有色网",
-      "orig_date": "11-04",
-      "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
-      "category": "行业动态",
-      "is_new": true,
-      "summary": "金力永磁 2026 年前三季度净利润同比增长 47.48%，公司称具身机器人电机转子按客户订单爬坡上量，并按期新建 2 万吨磁材产能。11 月 4 日公司股价收涨 3.81% 至 24.22 元/股。",
-      "embed": "ok",
-      "tags": [
-        "金",
-        "市场"
-      ]
-    },
-    {
-      "id": "48fef76cab9d",
-      "title": "中信戴卡与有色网交易中心启动 2027 年度铝锭长协线上竞价",
-      "url": "https://news.smm.cn/news/104202782",
-      "source": "上海有色网",
-      "orig_date": "11-04",
-      "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
-      "category": "行业动态",
-      "is_new": true,
-      "summary": "中信戴卡携手上海有色网交易中心启动 2027 年度铝锭长协线上竞价，将年度长单采购移至线上平台集中竞价，以市场化方式形成长协价格，为铝锭长单定价提供新的交易场景。",
-      "embed": "ok",
-      "tags": [
-        "铝",
-        "市场"
-      ]
-    },
-    {
-      "id": "b6882687914d",
-      "title": "全球锌精矿加工费刷新低，SMM 预计 2027 年供应紧张缓解",
-      "url": "https://news.smm.cn/news/104202309",
-      "source": "上海有色网",
-      "orig_date": "11-05",
-      "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
-      "category": "行业动态",
-      "is_new": true,
-      "summary": "SMM 高级分析师李函玉在 2026 SMM 铅锌年会上表示，全球锌精矿加工费已刷新低点；随着国内外矿山进入投产高峰、海外新增产能体量更大，2027 年锌精矿供应紧张局面将相对缓解，2027 至 2030 年维持紧平衡，但矿端扰动增多、波动风险仍存。",
-      "embed": "ok",
-      "tags": [
-        "铅",
-        "锌",
-        "国际"
       ]
     },
     {
@@ -372,6 +372,23 @@
         "铜",
         "政策",
         "市场"
+      ]
+    },
+    {
+      "id": "8d3718a1dd11",
+      "title": "矿业审批提速始于更优前期规划，BBA 称",
+      "url": "https://www.mining.com/faster-mine-approvals-start-with-better-project-planning-bba-says",
+      "source": "MINING.COM",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-06",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "工程咨询机构 BBA 指出，尽管监管审批流程的不确定性仍是行业痛点，矿业企业可通过更早厘清关键问题、让技术、环境与社会（社区）团队尽早协同介入，改善项目获批前景、缩短矿山建设核准周期。（原题：Faster mine approvals start with better project planning, BBA says）",
+      "embed": "ok",
+      "tags": [
+        "政策",
+        "技术"
       ]
     },
     {
@@ -1764,83 +1781,6 @@
         "找矿",
         "技术",
         "安全"
-      ]
-    },
-    {
-      "id": "d30701dc6f81",
-      "title": "Tusker 喀麦隆 9,152 平方公里金红石项目获探矿权推荐授予",
-      "url": "https://news.metal.com/newscontent/104205218-tusker-advances-9152-km2-central-rutile-project-in-cameroon-towards-exploration-licences",
-      "source": "SMM 国际站",
-      "orig_date": "11-05",
-      "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
-      "category": "矿权交易",
-      "is_new": false,
-      "summary": "Tusker Minerals 10 月 30 日公告，喀麦隆部际委员会已建议授予其 Central Rutile 项目探矿权申请，申请范围约 9,152 平方公里，含公司瞄准残余天然金红石的雅温得西部项目区。公司同时在雅温得实验室处理早期土壤与螺旋钻样品，Mineral Technologies 提供矿物分离与质量控制支持。该推荐仍属许可里程碑，其余申请尚需更新资料、签署勘查合同并取得部长级批文，公司尚未建立商业资源量或产量预测。（原题：Tusker advances 9,152 km² Central Rutile project in Cameroon towards exploration licences）",
-      "embed": "ok",
-      "tags": [
-        "金",
-        "政策",
-        "找矿",
-        "矿权",
-        "市场"
-      ]
-    },
-    {
-      "id": "c4b61be2a85f",
-      "title": "五家联合体竞标肯尼亚 Mrima Hill 铌稀土项目",
-      "url": "https://news.metal.com/newscontent/104200266-five-groups-bid-for-kenyas-mrima-hill-niobium-project",
-      "source": "SMM 国际站",
-      "orig_date": "11-02",
-      "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
-      "category": "矿权交易",
-      "is_new": false,
-      "summary": "肯尼亚矿业部长 Joho 10 月 30 日对路透表示，已有五家联合体提交开发 Mrima Hill 铌稀土矿床的投标，预计两到三周内确定优先竞标人；投标仅体现投资意向，项目授标、融资与新增矿供应仍取决于技术研究、审批与可行价格。（原题：Five groups bid for Kenya’s Mrima Hill niobium project）",
-      "embed": "ok",
-      "tags": [
-        "稀土",
-        "铌",
-        "找矿",
-        "市场",
-        "技术"
-      ]
-    },
-    {
-      "id": "2b0b520532cb",
-      "title": "哥伦比亚签署 9 宗铜金磷矿勘查开发合同，预计投资 1,680 万美元",
-      "url": "https://news.metal.com/en/newscontent/104150512-colombia-signs-168m-contracts-for-copper-gold-and-phosphate-exploration-and-exploitation",
-      "source": "SMM 国际站",
-      "orig_date": "10-11",
-      "orig_date_full": "2026-10-11",
-      "report_date": "2026-11-06",
-      "category": "矿权交易",
-      "is_new": false,
-      "summary": "SMM 国际站报道，哥伦比亚国家矿业局（ANM）称已签署 9 宗战略矿产勘查开发特殊合同，涉及铜、金和磷矿，预计投资近 54 亿比索（约合 1,680 万美元）。这些合同在 2026 年矿业招标轮框架下签署，对应塞萨尔、拉瓜希拉、安蒂奥基亚、托利马和乌伊拉省的战略矿业区，其中 8 宗来自铜、金及多金属招标轮，1 宗来自磷矿招标轮。（原题：Colombia Signs $16.8M Contracts for Copper, Gold, and Phosphate Exploration and Exploitation）",
-      "embed": "ok",
-      "tags": [
-        "铜",
-        "金",
-        "找矿",
-        "国际"
-      ]
-    },
-    {
-      "id": "6f6b782737a2",
-      "title": "关于子公司收购沙金河金矿探矿权的进展公告",
-      "url": "https://static.cninfo.com.cn/finalpage/2026-10-08/1225589910.PDF",
-      "source": "巨潮资讯网·盛达资源",
-      "orig_date": "10-08",
-      "orig_date_full": "2026-10-08",
-      "report_date": "2026-11-06",
-      "category": "矿权交易",
-      "is_new": false,
-      "summary": "盛达资源（000603）披露《关于子公司收购沙金河金矿探矿权的进展公告》，涉及矿业权交易。",
-      "embed": "ok",
-      "tags": [
-        "金",
-        "政策",
-        "矿权"
       ]
     },
     {
@@ -9785,6 +9725,83 @@
         "锂",
         "政策",
         "国际"
+      ]
+    },
+    {
+      "id": "d30701dc6f81",
+      "title": "Tusker 喀麦隆 9,152 平方公里金红石项目获探矿权推荐授予",
+      "url": "https://news.metal.com/newscontent/104205218-tusker-advances-9152-km2-central-rutile-project-in-cameroon-towards-exploration-licences",
+      "source": "SMM 国际站",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-06",
+      "category": "矿权交易",
+      "is_new": false,
+      "summary": "Tusker Minerals 10 月 30 日公告，喀麦隆部际委员会已建议授予其 Central Rutile 项目探矿权申请，申请范围约 9,152 平方公里，含公司瞄准残余天然金红石的雅温得西部项目区。公司同时在雅温得实验室处理早期土壤与螺旋钻样品，Mineral Technologies 提供矿物分离与质量控制支持。该推荐仍属许可里程碑，其余申请尚需更新资料、签署勘查合同并取得部长级批文，公司尚未建立商业资源量或产量预测。（原题：Tusker advances 9,152 km² Central Rutile project in Cameroon towards exploration licences）",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "政策",
+        "找矿",
+        "矿权",
+        "市场"
+      ]
+    },
+    {
+      "id": "c4b61be2a85f",
+      "title": "五家联合体竞标肯尼亚 Mrima Hill 铌稀土项目",
+      "url": "https://news.metal.com/newscontent/104200266-five-groups-bid-for-kenyas-mrima-hill-niobium-project",
+      "source": "SMM 国际站",
+      "orig_date": "11-02",
+      "orig_date_full": "2026-11-02",
+      "report_date": "2026-11-06",
+      "category": "矿权交易",
+      "is_new": false,
+      "summary": "肯尼亚矿业部长 Joho 10 月 30 日对路透表示，已有五家联合体提交开发 Mrima Hill 铌稀土矿床的投标，预计两到三周内确定优先竞标人；投标仅体现投资意向，项目授标、融资与新增矿供应仍取决于技术研究、审批与可行价格。（原题：Five groups bid for Kenya’s Mrima Hill niobium project）",
+      "embed": "ok",
+      "tags": [
+        "稀土",
+        "铌",
+        "找矿",
+        "市场",
+        "技术"
+      ]
+    },
+    {
+      "id": "2b0b520532cb",
+      "title": "哥伦比亚签署 9 宗铜金磷矿勘查开发合同，预计投资 1,680 万美元",
+      "url": "https://news.metal.com/en/newscontent/104150512-colombia-signs-168m-contracts-for-copper-gold-and-phosphate-exploration-and-exploitation",
+      "source": "SMM 国际站",
+      "orig_date": "10-11",
+      "orig_date_full": "2026-10-11",
+      "report_date": "2026-11-06",
+      "category": "矿权交易",
+      "is_new": false,
+      "summary": "SMM 国际站报道，哥伦比亚国家矿业局（ANM）称已签署 9 宗战略矿产勘查开发特殊合同，涉及铜、金和磷矿，预计投资近 54 亿比索（约合 1,680 万美元）。这些合同在 2026 年矿业招标轮框架下签署，对应塞萨尔、拉瓜希拉、安蒂奥基亚、托利马和乌伊拉省的战略矿业区，其中 8 宗来自铜、金及多金属招标轮，1 宗来自磷矿招标轮。（原题：Colombia Signs $16.8M Contracts for Copper, Gold, and Phosphate Exploration and Exploitation）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "找矿",
+        "国际"
+      ]
+    },
+    {
+      "id": "6f6b782737a2",
+      "title": "关于子公司收购沙金河金矿探矿权的进展公告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-08/1225589910.PDF",
+      "source": "巨潮资讯网·盛达资源",
+      "orig_date": "10-08",
+      "orig_date_full": "2026-10-08",
+      "report_date": "2026-11-06",
+      "category": "矿权交易",
+      "is_new": false,
+      "summary": "盛达资源（000603）披露《关于子公司收购沙金河金矿探矿权的进展公告》，涉及矿业权交易。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "政策",
+        "矿权"
       ]
     }
   ]

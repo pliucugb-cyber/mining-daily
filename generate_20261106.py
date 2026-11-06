@@ -311,6 +311,12 @@ new_items = [
                 '长江有色网', '11-04',
                 '摩根大通：美国铜矿产量有望翻倍，新增 130 万吨产能',
                 '摩根大通研判，在本土关键矿产保供政策推动下，依托新建矿山与现有产能扩建，美国年度矿产铜产量具备翻倍以上潜力，有望扭转数十年下滑趋势；新增产能约 130 万吨，但多数项目 2030 年前难以落地。')),
+
+    (CAT_GJ, ni('https://www.mining.com/faster-mine-approvals-start-with-better-project-planning-bba-says',
+                'MINING.COM', '11-06',
+                '矿业审批提速始于更优前期规划，BBA 称',
+                '工程咨询机构 BBA 指出，尽管监管审批流程的不确定性仍是行业痛点，矿业企业可通过更早厘清关键问题、让技术、环境与社会（社区）团队尽早协同介入，改善项目获批前景、缩短矿山建设核准周期。',
+                orig_title='Faster mine approvals start with better project planning, BBA says')),
 ]
 
 
