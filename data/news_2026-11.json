@@ -1,8 +1,95 @@
 {
   "month": "2026-11",
-  "updated_at": "2026-11-06T08:56:34+08:00",
-  "count": 96,
+  "updated_at": "2026-11-07T05:39:10+08:00",
+  "count": 125,
   "news": [
+    {
+      "id": "620f16a4c97a",
+      "title": "中国铝业拟签订几内亚氧化铝项目 EPC 总承包合同",
+      "url": "http://static.cninfo.com.cn/finalpage/2026-11-07/1225661574.PDF",
+      "source": "巨潮资讯",
+      "orig_date": "11-07",
+      "orig_date_full": "2026-11-07",
+      "report_date": "2026-11-07",
+      "category": "并购与投资",
+      "is_new": true,
+      "summary": "中国铝业公告，拟与中铝国际签署几内亚氧化铝项目 EPC 总承包合同，该交易构成关联交易；中铝国际同日就同一合同发布关连交易公告。合同金额、工期与建设规模以公告正文为准。",
+      "embed": "ok",
+      "tags": [
+        "铝",
+        "金",
+        "政策",
+        "国际"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "国内"
+    },
+    {
+      "id": "edb327feb04d",
+      "title": "印尼要求矿物与棕榈油直接出口，绕开邻国中转",
+      "url": "https://news.smm.cn/news/104210278",
+      "source": "上海有色网",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "category": "政策与监管",
+      "is_new": true,
+      "summary": "印尼粮食统筹部长祖基菲里 11 月 4 日在巴淡岛表示，印尼希望棕榈油、矿物等自然资源直接运往最终买家，不再经邻国转售加价；他称毛棕榈油在国内每公斤 27,000 印尼盾、卖给邻国仅 15,000 印尼盾，每公斤损失 12,000 印尼盾。能源与矿产资源部长巴赫利尔此前警告，中转国可能将这些大宗商品申报为本国出口，从中获取税收与统计收益。",
+      "embed": "ok",
+      "tags": [
+        "国际"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
+      "id": "d696e6d498f5",
+      "url": "https://ky.mnr.gov.cn/kyqcrgg/tkq/202611/t20261106_10355610.htm",
+      "title": "内蒙巴林右旗会庙嘎查银矿探矿权挂牌出让，起始价 15 万元",
+      "source": "矿业权市场",
+      "category": "矿权交易",
+      "region": "国内",
+      "summary": "赤峰市自然资源局委托赤峰市公共资源交易中心以网上挂牌方式出让巴林右旗会庙嘎查银矿勘查探矿权：面积 4.7884 平方千米，勘查矿种银矿，出让年限 5 年，起始价 15 万元、出让收益率 2.3%，竞买保证金 1,000 万元。挂牌期为 2026 年 12 月 21 日至 2027 年 1 月 5 日，无底价挂牌、增价报价，每次加价 10 万元或其整数倍。",
+      "content": "赤峰市自然资源局委托赤峰市公共资源交易中心以网上挂牌方式出让巴林右旗会庙嘎查银矿勘查探矿权：面积 4.7884 平方千米，勘查矿种银矿，出让年限 5 年，起始价 15 万元、出让收益率 2.3%，竞买保证金 1,000 万元。挂牌期为 2026 年 12 月 21 日至 2027 年 1 月 5 日，无底价挂牌、增价报价，每次加价 10 万元或其整数倍。",
+      "content_len": 178,
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "is_new": true,
+      "tags": [
+        "银矿",
+        "内蒙古"
+      ],
+      "embed": "ok",
+      "foreign": false
+    },
+    {
+      "id": "cc7b28f062d3",
+      "url": "https://ky.mnr.gov.cn/kyqcrgg/tkq/202611/t20261106_10355609.htm",
+      "title": "内蒙巴林左旗白音诺尔铅矿探矿权挂牌出让，起始价 11 万元",
+      "source": "矿业权市场",
+      "category": "矿权交易",
+      "region": "国内",
+      "summary": "赤峰市自然资源局以网上挂牌方式出让巴林左旗白音诺尔铅矿勘查探矿权：面积 3.5105 平方千米，勘查矿种铅矿，出让年限 5 年，起始价 11 万元、出让收益率 2.3%，竞买保证金 1,000 万元。挂牌期为 2026 年 12 月 21 日至 2027 年 1 月 5 日，无底价增价报价。",
+      "content": "赤峰市自然资源局以网上挂牌方式出让巴林左旗白音诺尔铅矿勘查探矿权：面积 3.5105 平方千米，勘查矿种铅矿，出让年限 5 年，起始价 11 万元、出让收益率 2.3%，竞买保证金 1,000 万元。挂牌期为 2026 年 12 月 21 日至 2027 年 1 月 5 日，无底价增价报价。",
+      "content_len": 146,
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "is_new": true,
+      "tags": [
+        "铅矿",
+        "内蒙古"
+      ],
+      "embed": "ok",
+      "foreign": false
+    },
     {
       "id": "b4a1acfe96fa",
       "title": "天赐材料与亿纬锂能签订长期供货协议",
@@ -10,9 +97,9 @@
       "source": "巨潮资讯",
       "orig_date": "11-06",
       "orig_date_full": "2026-11-06",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "企业经营",
-      "is_new": true,
+      "is_new": false,
       "summary": "天赐材料公告与亿纬锂能签订长期供货协议，双方就锂电材料长期供应达成合作，锁定下游客户长单需求。",
       "embed": "ok",
       "tags": [
@@ -21,9 +108,47 @@
         "技术"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "并购与投资"
+    },
+    {
+      "id": "9fe6b40f9ea9",
+      "title": "Adani Kutch Copper 上调产能利用率目标至 80-85%",
+      "url": "https://news.metal.com/newscontent/104210267-adanis-kutch-copper-raises-utilisation-target-to-80",
+      "source": "SMM 国际站",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Adani 旗下 Kutch Copper 计划在本财年（至 3 月）末将 500,000 吨/年铜冶炼产能利用率提升至 80-85%，高于 7 月提出的 75% 目标。长协覆盖约 50-60% 的铜精矿需求、另有约 20% 通过现货采购；9 月季度利用率为 64%，产铜 80,200 吨、销售 80,600 吨。（原题：Adani’s Kutch Copper Raises Utilisation Target to 80–85% as Feedstock Deals Support Ramp-Up）",
+      "embed": "ok",
+      "tags": [
+        "铜"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
+      "id": "9a9b515fd6a6",
+      "title": "章源钨业上调 11 月上半月长单报价，黑钨精矿升至 37.5 万元/标吨",
+      "url": "https://news.smm.cn/news/104207757",
+      "source": "上海有色网",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "category": "市场与价格",
+      "is_new": true,
+      "summary": "崇义章源钨业 11 月 5 日发布 11 月上半月长单采购报价：55% 黑钨精矿 37.5 万元/标吨、55% 白钨精矿 37.4 万元/标吨，均较上轮上调 3.1 万元/标吨；仲钨酸铵（国标零级）55 万元/吨，较上轮上调 5 万元/吨。",
+      "embed": "ok",
+      "tags": [
+        "钨"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "国内"
     },
     {
       "id": "8d3718a1dd11",
@@ -32,9 +157,9 @@
       "source": "MINING.COM",
       "orig_date": "11-06",
       "orig_date_full": "2026-11-06",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "行业动态",
-      "is_new": true,
+      "is_new": false,
       "summary": "工程咨询机构 BBA 指出，尽管监管审批流程的不确定性仍是行业痛点，矿业企业可通过更早厘清关键问题、让技术、环境与社会（社区）团队尽早协同介入，改善项目获批前景、缩短矿山建设核准周期。（原题：Faster mine approvals start with better project planning, BBA says）",
       "embed": "ok",
       "tags": [
@@ -42,7 +167,7 @@
         "技术"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -53,9 +178,9 @@
       "source": "巨潮资讯",
       "orig_date": "11-06",
       "orig_date_full": "2026-11-06",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
-      "is_new": true,
+      "is_new": false,
       "summary": "兴业银锡披露对外投资收购威领股份的进展公告：公司已取得威领股份控制权，本次收购由此进入实质控制阶段。",
       "embed": "ok",
       "tags": [
@@ -64,9 +189,131 @@
         "政策"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "并购与投资"
+    },
+    {
+      "id": "6c0aa6d1b2d0",
+      "title": "高盛下调金价预测：2026 年底 4,150 美元、2027 年底 4,800 美元",
+      "url": "https://news.smm.cn/news/104210296",
+      "source": "上海有色网",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "category": "市场与价格",
+      "is_new": true,
+      "summary": "高盛 11 月 5 日报告将 2026 年底金价目标由 4,650 美元/盎司下调至 4,150 美元，2027 年底由 5,400 美元下调至 4,800 美元，理由是其基准情景假设美联储 2026 年 12 月加息，压制投资者的货币贬值对冲需求。高盛维持央行购金长期看多判断，预计 2026 至 2027 年央行月均购金 60 吨，远高于 2022 年前每月 17 吨的均值。",
+      "embed": "ok",
+      "tags": [
+        "金"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
+      "id": "5f750e2936f7",
+      "title": "Eloro 玻利维亚 Iska Iska 银锡矿见 87.1 米厚银矿体",
+      "url": "https://news.metal.com/newscontent/104207955-eloro-reports-high-grade-silver-tin-drilling-at-bolivias-iska-iska-advances-40000-m-expansion",
+      "source": "SMM 国际站",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "category": "找矿成果与勘查技术",
+      "is_new": true,
+      "summary": "Eloro Resources 公布玻利维亚波托西 Iska Iska 银锡多金属项目首批扩边钻探成果：DSB-96 孔自 40.4 米见矿 87.1 米、银品位 73.26 克/吨、锡 0.18%，其中近地表 17.9 米银品位 190.5 克/吨、锡 0.45%。公司正推进 40,000 米钻探计划，初步经济评价（PEA）计划于 2027 年二季度完成。（原题：Eloro reports high-grade silver-tin drilling at Bolivia’s Iska Iska, advances 40,000 m expansion）",
+      "embed": "ok",
+      "tags": [
+        "银",
+        "锡"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
+      "id": "4acb38f47042",
+      "title": "世纪铝业三季度净利 3.026 亿美元，电力成本拖累业绩",
+      "url": "https://news.smm.cn/news/104207915",
+      "source": "上海有色网",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "世纪铝业 2026 年三季度归属净利润 3.026 亿美元、环比增 5,330 万美元，调整后净利润 2.716 亿美元、调整后 EBITDA 3.316 亿美元。业绩受冰岛格伦达坦吉 2 号线复产带动出货量提升与售价走高支撑，但被极端高温推高电价、电力结算成本走弱以及 1,510 万美元设备故障税后损失部分抵消。",
+      "embed": "ok",
+      "tags": [
+        "铝",
+        "市场"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
+      "id": "4016d6710ed5",
+      "url": "https://ky.mnr.gov.cn/zrgs/tkzrgs/202611/t20261106_10355598.htm",
+      "title": "内蒙扎赉特旗黑大山金铜多金属矿探矿权以 801.25 万元转让",
+      "source": "矿业权市场",
+      "category": "矿权交易",
+      "region": "国内",
+      "summary": "内蒙古自治区扎赉特旗黑大山金铜多金属矿勘查探矿权转让公示：勘查范围面积 34.417 平方千米，转让价格 801.25 万元，转让方式为出售。公示期为 2026 年 11 月 6 日起。",
+      "content": "内蒙古自治区扎赉特旗黑大山金铜多金属矿勘查探矿权转让公示：勘查范围面积 34.417 平方千米，转让价格 801.25 万元，转让方式为出售。公示期为 2026 年 11 月 6 日起。",
+      "content_len": 93,
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "is_new": true,
+      "tags": [
+        "金矿",
+        "铜矿",
+        "内蒙古"
+      ],
+      "embed": "ok",
+      "foreign": false
+    },
+    {
+      "id": "32dbd994ef15",
+      "title": "加拿大预算将矿产勘查税收抵免延长五年，勘查界仍嫌不足",
+      "url": "https://www.mining.com/budget-extends-tax-relief-but-leaves-explorers-wanting",
+      "source": "MINING.COM",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "category": "政策与监管",
+      "is_new": true,
+      "summary": "加拿大联邦 2026 年预算将矿产勘查税收抵免延长五年，但勘查业界认为延长期限与覆盖范围仍不足，难以支撑早期草根勘探融资。预算于 11 月 5 日由总理卡尼与财长商鹏飞在渥太华发布。（原题：Canada’s budget extends tax relief but leaves mineral explorers wanting）",
+      "embed": "ok",
+      "tags": [
+        "找矿"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
+      "id": "30e8960d6c0d",
+      "title": "七成 LME 铜库存存放于美国仓库，占比创 2019 年 3 月以来最高",
+      "url": "https://news.smm.cn/news/104207743",
+      "source": "上海有色网",
+      "orig_date": "11-06",
+      "orig_date_full": "2026-11-06",
+      "report_date": "2026-11-07",
+      "category": "市场与价格",
+      "is_new": true,
+      "summary": "LME 数据显示，新奥尔良、巴尔的摩与莫比尔三地库存合计 223,300 吨，占 LME 铜总库存 318,675 吨的 70.1%，为 2019 年 3 月以来最高；其中新奥尔良 172,500 吨，创 2014 年 4 月以来新高。市场预计美国自 2027 年起对精炼铜征收 15% 关税，推动金属持续流入；LME 亚洲仓库占比降至 23.2%，为 2024 年 4 月以来最低。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "市场"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
     },
     {
       "id": "fe6570543ab2",
@@ -75,16 +322,16 @@
       "source": "MINING.COM",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "项目与产能",
-      "is_new": true,
+      "is_new": false,
       "summary": "AngloGold Ashanti 计划投资至多 9 亿美元扩建既有矿山，目标 2030 年前增产 30 万至 45 万盎司，项目实际内部收益率预计超 35%。其中坦桑尼亚 Geita 获投至多 5.8 亿美元、产量提升至 60 万盎司；巴西 Cuiabá 投资 2 亿至 2.5 亿美元、增产约 7.5 万盎司；几内亚 Siguiri 投入 7000 万美元、增产 10 万盎司。三季度 EBITDA 同比增 12% 至 15.68 亿美元。（原题：AngloGold plans $900 million mine expansion amid stronger profit）",
       "embed": "ok",
       "tags": [
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -114,7 +361,7 @@
       "source": "MINING.COM",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "MetalMiner 报告显示，受出口管制与美国供应链政策影响，西方钨价已升至接近中国的四倍：10 月鹿特丹仲钨酸铵（APT）成交价 278.22 美元/公斤，中国出厂价为 74.43 美元/公斤，价差 3.74 倍；而 2021 年 9 月至 2025 年 6 月的平均价差仅 1.24 倍。报告认为价差扩大反映市场按合规、地理可获得性与加工能力分层，而非全球性短缺；经历 14 轮关税措施后，西方溢价在 12 个月内扩大约 11%，常规时段约为 7%。（原题：Western tungsten prices nearly quadruple China’s: report）",
@@ -125,7 +372,7 @@
         "国际"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -136,7 +383,7 @@
       "source": "SMM 国际站",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
       "is_new": false,
       "summary": "据路透社 11 月 4 日报道，Appian Capital Advisory 已部署国际金融公司（IFC）首期 1 亿美元矿业投资承诺的约 70%，投向三个项目：加纳 Asante Gold 金矿、纳米比亚 Omico Copper 铜矿以及巴西 Atlantic Nickel 的镍铜钴资产。Appian 与 IFC 的合作总额宣布为 10 亿美元，公司预计 2026 年底前投完首期余额，并继续在非洲与拉美寻找机会。（原题：Appian deploys 70% of IFC’s initial US$100 million mining commitment across Ghana and Namibia）",
@@ -149,7 +396,7 @@
         "国际"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "并购与投资"
     },
@@ -160,9 +407,9 @@
       "source": "SMM 国际站",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "技术与勘查",
-      "is_new": true,
+      "is_new": false,
       "summary": "Cora Gold 公告，马里南部 Sanankoro 项目 Dakounkoura South 踏勘钻探发现走向长约 500 米的氧化金矿化带，4 个钻孔见矿，其中 16 米见矿段金品位 0.85 克/吨（自 20 米起）、35 米段 0.40 克/吨（自 5 米起）。靶区紧邻规划选厂且在现有资源量之外；公司已累计完成 14,081 米反循环钻探，现有资源量 104.4 万盎司、品位 1.04 克/吨。（原题：Cora identifies new oxide gold mineralisation near planned Sanankoro plant）",
       "embed": "ok",
       "tags": [
@@ -170,9 +417,29 @@
         "政策"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "找矿成果与勘查技术"
+    },
+    {
+      "id": "d3707d9ca5be",
+      "title": "松下新竹湖口厂爆炸起火，全球高端 CCL 供给约 4% 面临中断",
+      "url": "https://news.smm.cn/news/104207638",
+      "source": "上海有色网",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "中国台湾松下多层材料（PIDMTW）新竹湖口厂 11 月 4 日凌晨发生爆炸火灾，燃烧面积逾 1 万平方米、约占厂区三分之一，5 名员工受伤、2 名台籍员工失联。业界评估受损产能约占全球高端 CCL 供给的 4%——松下 MEGTRON 系列约占全球高端 CCL 市场 20%，湖口厂又约占该系列全球产能两成；台光电、台燿等厂商有望承接转单。",
+      "embed": "ok",
+      "tags": [
+        "技术",
+        "国际"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "国内"
     },
     {
       "id": "d30701dc6f81",
@@ -181,7 +448,7 @@
       "source": "SMM 国际站",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "矿权出让",
       "is_new": false,
       "summary": "Tusker Minerals 10 月 30 日公告，喀麦隆部际委员会已建议授予其 Central Rutile 项目探矿权申请，申请范围约 9,152 平方公里，含公司瞄准残余天然金红石的雅温得西部项目区。公司同时在雅温得实验室处理早期土壤与螺旋钻样品，Mineral Technologies 提供矿物分离与质量控制支持。该推荐仍属许可里程碑，其余申请尚需更新资料、签署勘查合同并取得部长级批文，公司尚未建立商业资源量或产量预测。（原题：Tusker advances 9,152 km² Central Rutile project in Cameroon towards exploration licences）",
@@ -194,7 +461,7 @@
         "市场"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "找矿成果与勘查技术"
     },
@@ -205,9 +472,9 @@
       "source": "上海有色网",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
-      "is_new": true,
+      "is_new": false,
       "summary": "SMM 高级分析师李函玉在 2026 SMM 铅锌年会上表示，全球锌精矿加工费已刷新低点；随着国内外矿山进入投产高峰、海外新增产能体量更大，2027 年锌精矿供应紧张局面将相对缓解，2027 至 2030 年维持紧平衡，但矿端扰动增多、波动风险仍存。",
       "embed": "ok",
       "tags": [
@@ -216,9 +483,29 @@
         "国际"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
+    },
+    {
+      "id": "b55671ec1bec",
+      "title": "印度批准 2.97 亿美元锂镍加工资本补贴计划",
+      "url": "https://news.smm.cn/news/104205434",
+      "source": "上海有色网",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "category": "政策与监管",
+      "is_new": true,
+      "summary": "印度内阁批准“促进关键矿产加工资本支出支持计划”，总额 281.4 亿卢比（约 2.97 亿美元），实施期为 2026-27 至 2030-31 财年，对符合条件的投资提供 30% 资本补贴。计划支持建设两座锂加工厂（每座最低产能 3 万吨）与两座镍加工厂（每座最低产能 5 万吨），旨在降低对外部供应链的依赖。",
+      "embed": "ok",
+      "tags": [
+        "镍",
+        "锂"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
     },
     {
       "id": "aa3f0d802ade",
@@ -227,9 +514,9 @@
       "source": "MINING.COM",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "企业经营",
-      "is_new": true,
+      "is_new": false,
       "summary": "Codelco 董事长在向股东通报的临时会议上披露，报表中被人为虚增的铜产量达 42,100 吨，另有 17,000 吨铜库存存在核算偏差。公司将在产品错列为产成品以完成指标，已对 3 座矿山及总部启动审计并解雇 9 名员工；过去八年投入 320 亿美元，年产量却由约 160 万吨降至 120 万吨。（原题：Codelco's inflated copper output scandal hits 42,100 tonnes）",
       "embed": "ok",
       "tags": [
@@ -237,9 +524,51 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
+    },
+    {
+      "id": "936381cd8764",
+      "title": "Perpetua 在 Stibnite 项目发现新金矿，见矿 109.7 米、金 3.2 克/吨",
+      "url": "https://www.mining.com/new-gold-discovery-boosts-perpetuas-stibnite-project",
+      "source": "MINING.COM",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "category": "找矿成果与勘查技术",
+      "is_new": true,
+      "summary": "Perpetua Resources 在美国爱达荷州 Stibnite 金矿项目 2026 年勘查钻探中发现 Fiddle 新矿体，发现孔 SB633 见矿 109.7 米、金品位 3.2 克/吨、锑 1.1%，位于已获批 Yellow Pine 采坑以南约 750 米。项目累计完成逾 16,000 米岩心钻探，建成后年产金约 450,000 盎司，锑储量 1.48 亿磅。（原题：New gold discovery boosts Perpetua’s Stibnite project）",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "锑",
+        "找矿"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
+      "id": "886ecb5df0eb",
+      "title": "自由港批准 45 亿美元巴格达铜钼矿扩建，年铜产能提高逾一倍",
+      "url": "https://news.smm.cn/news/104207629",
+      "source": "上海有色网",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "自由港麦克莫兰董事会批准 45 亿美元的巴格达（Bagdad）铜钼矿区扩建与现代化计划，将使开采与选矿产能提高逾一倍，长期年铜产量提升至 4 亿磅以上（年增量约 2.25 亿磅）、钼产量提升至每年 2,000 万磅以上（年增量约 1,200 万磅）。扩建后该矿将成为美国第二大铜矿；约 20% 投资在 2027 年投入、30% 至 35% 在 2028 年投入。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "钼",
+        "市场"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
     },
     {
       "id": "87e35412265d",
@@ -248,9 +577,9 @@
       "source": "自然资源部",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "政策与监管",
-      "is_new": true,
+      "is_new": false,
       "summary": "自然资源部公告，《关于规范探矿权招标出让的通知（征求意见稿）》于 2026 年 10 月 8 日至 10 月 23 日向社会公开征求意见，共收到意见建议 107 条，将认真研究并最大程度吸收采纳。该通知为落实《矿产资源法》及实施条例、助推新一轮找矿突破、支撑战略性矿产增储上产而起草。",
       "embed": "ok",
       "tags": [
@@ -259,9 +588,30 @@
         "矿权"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "政策与监管"
+    },
+    {
+      "id": "86df88d85348",
+      "title": "Lundin 两月内二度下调铜指引，Caserones 受智利冬季风暴拖累",
+      "url": "https://www.mining.com/lundin-cuts-copper-outlook-again-as-wild-chile-weather-bites",
+      "source": "MINING.COM",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Lundin Mining 将智利 Caserones 矿 2026 年产量指引由 120,000 至 130,000 吨下调至 105,000 至 115,000 吨，公司全年铜产量指引随之降至 285,000 至 310,000 吨，为两个月内第二次下调。三季度冬季风暴致该矿停产约 30 天，融雪持续限制运输与矿石入厂；公司称减少的产量属递延而非损失，预计 2027 年恢复。（原题：Lundin cuts copper outlook again as wild Chile weather bites）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "市场",
+        "国际"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
     },
     {
       "id": "6aba804d553a",
@@ -270,9 +620,9 @@
       "source": "全球矿产资源信息系统",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "技术与勘查",
-      "is_new": true,
+      "is_new": false,
       "summary": "瓦拉塔矿产公司（Waratah Minerals）新南威尔士州斯珀（Spur）项目首个资源量公布：金 310 万盎司、平均品位 1.2 克/吨，另有 1000 万盎司勘探潜力。露天坑采资源量约 230 万盎司、地下 76 万盎司，资源量仅覆盖 6 公里矿带中的 2 公里；发现成本 14.62 澳元/盎司，27% 属推定资源量。公司勘探目标为 500 万至 1000 万盎司、品位 0.6 至 0.9 克/吨。",
       "embed": "ok",
       "tags": [
@@ -280,7 +630,7 @@
         "找矿"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "找矿成果与勘查技术"
     },
@@ -291,9 +641,9 @@
       "source": "长江有色网",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
-      "is_new": true,
+      "is_new": false,
       "summary": "LME 基本金属涨跌不一：伦镍涨幅近 3% 领涨，伦锡进一步下跌，伦铜收于两个半月低位。市场在宏观情绪与产业基本面之间反复定价，镍价受印尼供给端扰动支撑明显强于铜。",
       "embed": "ok",
       "tags": [
@@ -304,9 +654,32 @@
         "国际"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "市场与价格"
+    },
+    {
+      "id": "5f04961b6536",
+      "url": "https://ky.mnr.gov.cn/xycrgs/tkq/202611/t20261106_10355641.htm",
+      "title": "敖汉旗宇丰金厂梁金矿采矿权深部普查探矿权协议出让",
+      "source": "矿业权市场",
+      "category": "矿权交易",
+      "region": "国内",
+      "summary": "赤峰市自然资源局公示敖汉旗宇丰矿业有限责任公司金厂梁金矿采矿权垂直投影范围深部普查探矿权协议出让（赤自然资矿公示〔2026〕052 号），矿区位于赤峰市敖汉旗贝子府镇大庙村，依据已设采矿权深部可协议出让的规定办理。",
+      "content": "赤峰市自然资源局公示敖汉旗宇丰矿业有限责任公司金厂梁金矿采矿权垂直投影范围深部普查探矿权协议出让（赤自然资矿公示〔2026〕052 号），矿区位于赤峰市敖汉旗贝子府镇大庙村，依据已设采矿权深部可协议出让的规定办理。",
+      "content_len": 107,
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "is_new": true,
+      "tags": [
+        "金矿",
+        "内蒙古"
+      ],
+      "embed": "ok",
+      "foreign": false
     },
     {
       "id": "53c876bd1fed",
@@ -315,9 +688,9 @@
       "source": "MINING.COM",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "项目与产能",
-      "is_new": true,
+      "is_new": false,
       "summary": "Codelco 因尾矿输送系统发生部分泄漏、可能进入布兰科河，暂停 Andina 分部选厂作业与尾矿输送，将水改道至 Piuquenitos 水库并持续监测水质。智利水务公司 Esval 预防性关闭阿空加瓜河地表取水口、启用地下水源与备用系统。事故原因与下游环境影响仍在调查，复产时间未定。（原题：Codelco halts Andina mine as tailings spill threatens river）",
       "embed": "ok",
       "tags": [
@@ -325,7 +698,7 @@
         "国际"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -336,9 +709,9 @@
       "source": "中国有色金属报",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "会议会展",
-      "is_new": true,
+      "is_new": false,
       "summary": "10 月 28 日至 29 日，第二十一届全国地质勘查行业改革与发展大会在陕西西安召开，主题为“深耕地勘改革攻坚，协同创新开发资源”。大会聚焦地勘行业改革发展面临的新形势、新任务，交流改革创新经验，为保障国家能源资源安全、推动地质勘查行业高质量发展提供支撑。",
       "embed": "ok",
       "tags": [
@@ -347,9 +720,29 @@
         "安全"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "政策与监管"
+    },
+    {
+      "id": "3e44766566e8",
+      "title": "巨龙铜业知不拉矿区 45 辆无人驾驶矿卡规模化运行",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=475221",
+      "source": "中国有色金属报",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "西藏巨龙铜业知不拉矿区目前约 45 辆无人驾驶矿卡承担装载、运输与翻卸作业，低电量时自动返回充电；矿卡采用“雷达+图像识别”双重技术，驾驶员转为室内调度员，作业地点由海拔 5,000 多米的采场移至 3,800 多米的调度室。公司 2024 年启动无人驾驶矿卡项目，并同步拓宽平整运输道路、加宽装卸作业面、设置矿区红绿灯与通行规则。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "技术"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "国内"
     },
     {
       "id": "37a31dedbbde",
@@ -358,7 +751,7 @@
       "source": "SMM 国际站",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "项目与产能",
       "is_new": false,
       "summary": "Montage Gold 公告，其科特迪瓦 Koné 矿 10 月处理约 88 万吨氧化矿，产金约 23,460 盎司；选厂平均运行在 1,100 万吨/年名义产能的 90% 以上，10 月最后一周达到 104%，入选品位 0.82 克/吨、回收率约 95%。该矿 9 月 26 日完成首次浇金，预计四季度宣布商业化生产；勘查钻探已圈定 12 个矿床（2024 年可研时为 2 个），年内钻探进尺超过 12 万米。（原题：Montage Gold reports 23,460 ounces from October ramp-up at Côte d’Ivoire’s Koné mine）",
@@ -369,7 +762,7 @@
         "找矿"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "行业动态"
     },
@@ -380,7 +773,7 @@
       "source": "MINING.COM",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "项目与产能",
       "is_new": false,
       "summary": "Ivanhoe Mines 将刚果（金）Kamoa-Kakula 铜矿 2027 年产量指引由 38 万至 42 万吨下调至 30 万至 35 万吨，中点减少 7.5 万吨，远低于 3 月谨慎采矿计划前的 50 万至 54 万吨目标；2027 年现金成本（C1）指引由 2.10 至 2.50 美元/磅上调至 2.50 至 3.00 美元/磅，主因柴油价格高企、矿石品位下降与产量减少。公司计划 2027 年一季度启动第四期选厂扩建详细设计，目标将年产能提升至约 50 万吨，但项目尚未获批，获批后建设需 18 至 24 个月。（原题：Copper's biggest new mine stumbles again as costs soar）",
@@ -391,9 +784,33 @@
         "市场"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
+    },
+    {
+      "id": "28bee3c1fea5",
+      "url": "https://ky.mnr.gov.cn/xycrgs/tkq/202611/t20261106_10355642.htm",
+      "title": "敖汉聚鑫白马石沟铜钼矿采矿权深部普查探矿权协议出让",
+      "source": "矿业权市场",
+      "category": "矿权交易",
+      "region": "国内",
+      "summary": "赤峰市自然资源局公示敖汉聚鑫矿业有限公司白马石沟铜钼矿采矿权垂直投影范围深部普查探矿权协议出让（赤自然资矿公示〔2026〕053 号）。依据“已设采矿权平面垂直投影深部或上部可以协议方式出让矿业权”的规定，基于矿山安全生产与矿业权设置合理性要求直接协议出让。",
+      "content": "赤峰市自然资源局公示敖汉聚鑫矿业有限公司白马石沟铜钼矿采矿权垂直投影范围深部普查探矿权协议出让（赤自然资矿公示〔2026〕053 号）。依据“已设采矿权平面垂直投影深部或上部可以协议方式出让矿业权”的规定，基于矿山安全生产与矿业权设置合理性要求直接协议出让。",
+      "content_len": 129,
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "is_new": true,
+      "tags": [
+        "铜矿",
+        "钼矿",
+        "内蒙古"
+      ],
+      "embed": "ok",
+      "foreign": false
     },
     {
       "id": "256dec99e943",
@@ -434,22 +851,82 @@
       "fetch_src": "miningrights"
     },
     {
+      "id": "14da8790349d",
+      "title": "美国 9 月铜进口环比降 3.1%，仍近去年同期两倍",
+      "url": "https://news.smm.cn/news/104205282",
+      "source": "上海有色网",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "category": "市场与价格",
+      "is_new": true,
+      "summary": "美国 9 月进口精炼铜及铜合金 194,284 吨，低于 8 月的 200,519 吨和 7 月创纪录的 225,094 吨，环比降 3.1%，但仍是 2025 年 9 月 102,279 吨的近两倍。今年前九个月累计进口 152 万吨、同比增长 17%，市场等待美国是否自 2027 年起对精炼铜征收 15% 关税的明确信号。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
+      "id": "0f50f2257c0e",
+      "title": "艾芬豪再下调卡莫阿-卡库拉 2027 年产量指引至 30-35 万吨",
+      "url": "https://news.smm.cn/news/104207630",
+      "source": "上海有色网",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "艾芬豪矿业今年第二次下调刚果（金）卡莫阿-卡库拉铜矿 2027 年产量指引至 30-35 万吨（此前 38-42 万吨），并将 2027 年 C1 现金成本指引由每磅 2.10-2.50 美元上调至 2.50-3.00 美元。卡库拉东侧正式复产推迟至 2028 年 3 月末；三季度可销售铜产量 76,401 吨，公司预计 2026 年全年产量约 29 万吨。",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "市场"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
+      "id": "08e590d76420",
+      "title": "哥伦比亚废除 530 万公顷采矿限制区，或释放 47 亿美元投资",
+      "url": "https://news.smm.cn/news/104207632",
+      "source": "上海有色网",
+      "orig_date": "11-05",
+      "orig_date_full": "2026-11-05",
+      "report_date": "2026-11-07",
+      "category": "政策与监管",
+      "is_new": true,
+      "summary": "哥伦比亚矿业部 10 月 22 日废除 15 个特殊采矿分区、覆盖 530 万公顷（约占国土 5%），农业部门同时撤销四个地区的粮食生产保护区。矿业协会主席估计，更有利的投资环境可释放 47 亿美元矿山建设投资、每年吸引 3.5 亿美元勘探支出，并支持行业年增长最高 10%。取消限制并不自动授权采矿，企业仍须满足环境、许可与其他用地要求。",
+      "embed": "ok",
+      "tags": [
+        "找矿"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
       "id": "03043317901b",
       "title": "力拓向 Resolution Copper 追加 1.44 亿美元，推进井下开拓",
       "url": "https://www.mining.com/rio-tinto-injects-144m-into-resolution-copper-after-land-battle-win",
       "source": "MINING.COM",
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
-      "is_new": true,
+      "is_new": false,
       "summary": "力拓向美国亚利桑那州 Resolution Copper 项目追加 1.44 亿美元，资金将用于推进工程设计与井下开发。该项目在土地交换获批后重启推进，但法律与人文争议仍未平息。（原题：Rio Tinto injects $144M into Resolution Copper after land battle win）",
       "embed": "ok",
       "tags": [
         "金"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "并购与投资"
     },
@@ -460,7 +937,7 @@
       "source": "MINING.COM",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "政策与监管",
       "is_new": false,
       "summary": "哥伦比亚撤销前总统佩特罗时期的两项主要矿业限制，10 月 22 日解除覆盖 530 万公顷（近 5% 国土）的禁令，农业部另于 10 月撤销四个大区的粮食生产保护区，为矿产开发移除障碍。哥伦比亚矿业协会估计，更友好的投资环境可解锁 47 亿美元矿山建设投资、每年吸引 3.5 亿美元勘查支出，支撑行业年增速最高达 10%；但取消限制并不等于自动获批，企业仍须满足环境与用地审批要求。（原题：Colombia's mining rules reset puts billions back in play）",
@@ -469,7 +946,7 @@
         "找矿"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -480,7 +957,7 @@
       "source": "长江有色网",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "政策与监管",
       "is_new": false,
       "summary": "印尼国家经济委员会（DEN）表态，明确支持能源与矿产资源部（ESDM）依托 RKAB 开采配额机制削减镍产量，该国镍供给调控政策进入跨部门协同落地阶段。此前市场已因配额收紧消息带动镍价上涨近 20%，政策落地意味着印尼对镍供应的行政调节从部门层面上升到跨部门协同。",
@@ -492,7 +969,7 @@
         "国际"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "政策与监管"
     },
@@ -503,9 +980,9 @@
       "source": "上海有色网",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "企业经营",
-      "is_new": true,
+      "is_new": false,
       "summary": "金力永磁 2026 年前三季度净利润同比增长 47.48%，公司称具身机器人电机转子按客户订单爬坡上量，并按期新建 2 万吨磁材产能。11 月 4 日公司股价收涨 3.81% 至 24.22 元/股。",
       "embed": "ok",
       "tags": [
@@ -513,7 +990,7 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
     },
@@ -585,7 +1062,7 @@
       "source": "长江有色网",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "花旗集团发布锂市场最新研判，大幅下调未来两年锂系产品价格预测，最高降幅达 40%，覆盖碳酸锂、氢氧化锂与锂辉石精矿三大上游原料，并将价格预估延伸下调至 2028 年底。其中碳酸锂目标价下探至 1.2 万美元，给本就偏弱的锂市场再添悲观预期。",
@@ -595,7 +1072,7 @@
         "市场"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "市场与价格"
     },
@@ -606,7 +1083,7 @@
       "source": "MINING.COM",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
       "is_new": false,
       "summary": "Gordon Mining Group（CSE: GORD）完成收购新墨西哥州 Sierra 县 Tungsten Tail 钨项目，该矿权共 41 个单元、约 847 英亩。交割时公司向卖方支付现金 12.5 万加元（约 8.9 万美元）并向 Strata Mine Technologies 发行 150 万股普通股，同时授予其 2.0% 净冶炼收益权，公司可以 100 万美元回购其中 1.0%。项目历史上曾在 1942 年与 1955 年有白钨矿小规模出货记录，公司计划以 AI 辅助靶区圈定结合 USGS 地球物理与紫外白钨矿测量确定首批钻孔。（原题：Gordon Mining acquires Tungsten Tail project in New Mexico）",
@@ -617,7 +1094,7 @@
         "矿权"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "并购与投资"
     },
@@ -628,9 +1105,9 @@
       "source": "全球矿产资源信息系统",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "政策与监管",
-      "is_new": true,
+      "is_new": false,
       "summary": "刚果（金）司法部称，警方、军方与矿业部组成的联合工作组在卢阿拉巴省和上加丹加省调查后，查扣 500 多辆卡车及其他车辆机械、数千吨铜和钴，司法部长已下令深入调查，最终可能指向欺诈、非法采矿与矿产品走私。此前联合国电台报道称 60 多名外国公民在卢阿拉巴门达被拘留。",
       "embed": "ok",
       "tags": [
@@ -639,9 +1116,54 @@
         "钴"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
+    },
+    {
+      "id": "8e5743c04271",
+      "title": "戈登矿业完成收购美国新墨西哥州钨尾矿项目",
+      "url": "https://news.smm.cn/news/104203329",
+      "source": "上海有色网",
+      "orig_date": "11-04",
+      "orig_date_full": "2026-11-04",
+      "report_date": "2026-11-07",
+      "category": "并购与投资",
+      "is_new": true,
+      "summary": "戈登矿业集团完成对美国新墨西哥州塞拉县钨尾矿（TT）项目并购，项目面积 847 英亩、含 41 个矿权。交易对价包括 12.5 万加元（8.9 万美元）现金及向斯特拉塔矿山技术公司出让 150 万股普通股，后者保留 2.0% 冶炼厂净收益权利金，公司可以 100 万美元回购其中 1.0%。公司称将以人工智能辅助定位结合 USGS 地球物理与填图数据确定首个钻探目标。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "钨",
+        "矿权",
+        "技术"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
+    },
+    {
+      "id": "80e595e3d0e2",
+      "url": "https://ky.mnr.gov.cn/jggs/jjgs/202611/t20261105_10354390.htm",
+      "title": "新疆托里成吉思汗山安山岩矿二区探矿权以 27.56 万元成交",
+      "source": "矿业权市场",
+      "category": "矿权交易",
+      "region": "国内",
+      "summary": "新疆托里县成吉思汗山安山岩矿二区普查探矿权挂牌出让结果公示：面积 0.1049 平方千米，出让年限 5 年，起始价 7.56 万元，成交价 27.56 万元。公示期为 2026 年 11 月 4 日至 11 月 17 日。",
+      "content": "新疆托里县成吉思汗山安山岩矿二区普查探矿权挂牌出让结果公示：面积 0.1049 平方千米，出让年限 5 年，起始价 7.56 万元，成交价 27.56 万元。公示期为 2026 年 11 月 4 日至 11 月 17 日。",
+      "content_len": 111,
+      "orig_date": "11-04",
+      "orig_date_full": "2026-11-04",
+      "report_date": "2026-11-07",
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "is_new": true,
+      "tags": [
+        "安山岩",
+        "新疆"
+      ],
+      "embed": "ok",
+      "foreign": false
     },
     {
       "id": "7f10fa13bacc",
@@ -650,7 +1172,7 @@
       "source": "上海有色网",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "上期所数据显示，10 月 30 日当周沪铝库存继续下降，已连降二十周，周度库存减少 10.26% 至 191,018 吨，降至逾九个月新低。库存持续去化反映节后消费与到货节奏偏紧，为铝价提供一定支撑。",
@@ -660,7 +1182,7 @@
         "市场"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "市场与价格"
     },
@@ -671,9 +1193,9 @@
       "source": "SMM 国际站",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
-      "is_new": true,
+      "is_new": false,
       "summary": "11 月 3 日鹿特丹仓库钼氧化物报 33.65 美元/磅（EXW），11 月 4 日釜山报 33.60 美元/磅，折人民币约 5,598 元/吨度；两地价差收窄至 0.05 美元/磅，欧洲与亚洲现货基本并轨。欧洲钼铁报 78.30 美元/公斤钼，成交与付款条件尚未披露。（原题：Rotterdam and Busan Molybdenum Oxide Prices Converge Above $33.60/lb Mo）",
       "embed": "ok",
       "tags": [
@@ -682,7 +1204,7 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "市场与价格"
     },
@@ -693,9 +1215,9 @@
       "source": "SMM 国际站",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "项目与产能",
-      "is_new": true,
+      "is_new": false,
       "summary": "Implats 2027 财年开局产量下滑：2026 年 7 至 9 月集团 6E 产量同比下降 3% 至 85.4 万盎司，精炼及可售产量下降 8% 至 76.3 万盎司。当季发生五起死亡事故、安全停产及加工中断，导致在制品与成品库存上升。（原题：Implats Q1 FY2027: Production Falls 3% as Processing Disruptions Lift Inventories）",
       "embed": "ok",
       "tags": [
@@ -703,7 +1225,7 @@
         "安全"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -714,7 +1236,7 @@
       "source": "自然资源部",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "政策与监管",
       "is_new": false,
       "summary": "自然资源部印发《关于煤层气资源管理有关事项的通知》，明确煤层气矿业权出让由自然资源部统一负责，登记、勘查采矿许可、储量审核与探采合一计划管理一并上收。煤炭和油气矿业权人均可综合勘查开采煤层气：煤炭矿业权人开采最低可采煤层以上的浅层煤层气，作为煤炭共伴生矿种由省级自然资源主管部门管理；开采最低可采煤层以下的深层煤层气由自然资源部管理。通知同时细化矿业权重叠处理，鼓励通过合资、技术合作等方式综合勘查开采。",
@@ -726,7 +1248,7 @@
         "技术"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "政策与监管"
     },
@@ -737,7 +1259,7 @@
       "source": "巨潮资讯网",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
       "is_new": false,
       "summary": "厦门钨业 11 月 4 日发布公告，就收购江西巨通实业有限公司 30.1683% 股权暨关联交易的进展情况进行披露。该交易构成关联交易，公告未在标题层面给出对价与交割安排，具体条款以公告全文为准。",
@@ -747,7 +1269,7 @@
         "政策"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "并购与投资"
     },
@@ -796,9 +1318,9 @@
       "source": "上海有色网",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "企业经营",
-      "is_new": true,
+      "is_new": false,
       "summary": "中信戴卡携手上海有色网交易中心启动 2027 年度铝锭长协线上竞价，将年度长单采购移至线上平台集中竞价，以市场化方式形成长协价格，为铝锭长单定价提供新的交易场景。",
       "embed": "ok",
       "tags": [
@@ -806,7 +1328,7 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
     },
@@ -817,9 +1339,9 @@
       "source": "长江有色网",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
-      "is_new": true,
+      "is_new": false,
       "summary": "摩根大通研判，在本土关键矿产保供政策推动下，依托新建矿山与现有产能扩建，美国年度矿产铜产量具备翻倍以上潜力，有望扭转数十年下滑趋势；新增产能约 130 万吨，但多数项目 2030 年前难以落地。",
       "embed": "ok",
       "tags": [
@@ -828,7 +1350,7 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -881,7 +1403,7 @@
       "source": "上海有色网",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "11 月 4 日沪锡夜盘大幅下跌、早间延续弱势，主力合约跌幅超过 3%，期价落至逾七个月低位。市场持续担心 AI 硬科技投资回报率，海外科技股偏弱运行，利空锡需求预期；同时海外流动性收紧压力仍在，多项风险事件即将落地，市场不确定性较强、风险偏好偏弱。",
@@ -892,7 +1414,7 @@
         "国际"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "市场与价格"
     },
@@ -903,7 +1425,7 @@
       "source": "全球矿产资源信息系统",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "技术与勘查",
       "is_new": false,
       "summary": "纳纳迪（Nanadi）项目钻探在北部过渡带 44 米深处见矿 10 米，铜品位 9.4%、金 2.13 克/吨、银 23.4 克/吨；19 米深处见矿 41 米，铜品位 2.79%、金 0.7 克/吨；77 米深处见矿 56 米，铜品位 0.62%、金 0.19 克/吨。北部采样显示矿体厚 89 米、铜品位 0.93%，其中含 11 米厚、铜品位 2.67% 的高品位段。项目现有矿石资源量 4,040 万吨，铜品位 0.4%、金 0.1 克/吨；另一孔在 137 米深处见矿 256 米，铜品位 0.36%、金 0.21 克/吨，终孔未穿透矿体。长 1.5 公里矿带的资源量更新将于 2027 年完成。",
@@ -915,7 +1437,7 @@
         "国际"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "找矿成果与勘查技术"
     },
@@ -926,14 +1448,14 @@
       "source": "MINING.COM",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "政策与监管",
       "is_new": false,
       "summary": "民主党在中期选举中赢得众议院与参议院控制权，明年 1 月起形成分治政府，美国矿业与能源议程面临更严格审视。BMO 与伍德麦肯兹认为，投资者需面对数据中心建设监管收紧、联邦投资被更仔细审查的可能，同时审批改革仍可能成为两党在能源可负担性上的共识议题；民主党此前已质疑联邦政府在矿业公司的持股与相关交易条款。（原题：Democrats' win puts US mining agenda under scrutiny）",
       "embed": "ok",
       "tags": [],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -944,9 +1466,9 @@
       "source": "长江有色网",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
-      "is_new": true,
+      "is_new": false,
       "summary": "碳酸锂期货震荡偏弱运行：供给端修复叠加需求转弱，社会库存虽仍在下降，但去库节奏仅能放缓跌势，难以扭转价格重心下移的格局。",
       "embed": "ok",
       "tags": [
@@ -954,9 +1476,33 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "市场与价格"
+    },
+    {
+      "id": "202da5fdb9bd",
+      "url": "https://ky.mnr.gov.cn/zrgs/tkzrgs/202611/t20261104_10353119.htm",
+      "title": "云南沧源富公铅多金属矿探矿权以 200 万元转让",
+      "source": "矿业权市场",
+      "category": "矿权交易",
+      "region": "国内",
+      "summary": "临沧市自然资源和规划局公示云南省沧源县富公铅多金属矿勘探探矿权转让：勘查范围面积 9.1019 平方千米，转让价格 200 万元，转让方式为出售。公示期为 2026 年 11 月 3 日至 11 月 16 日。",
+      "content": "临沧市自然资源和规划局公示云南省沧源县富公铅多金属矿勘探探矿权转让：勘查范围面积 9.1019 平方千米，转让价格 200 万元，转让方式为出售。公示期为 2026 年 11 月 3 日至 11 月 16 日。",
+      "content_len": 105,
+      "orig_date": "11-04",
+      "orig_date_full": "2026-11-04",
+      "report_date": "2026-11-07",
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "is_new": true,
+      "tags": [
+        "铅矿",
+        "多金属",
+        "云南"
+      ],
+      "embed": "ok",
+      "foreign": false
     },
     {
       "id": "121ab4cf40aa",
@@ -965,7 +1511,7 @@
       "source": "MINING.COM",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "项目与产能",
       "is_new": false,
       "summary": "Freeport-McMoRan 批准对亚利桑那州 Bagdad 铜矿 45 亿美元扩建，投产后该矿年产铜将超过 4 亿磅、较当前增加约 2.25 亿磅，成为美国第二大铜矿；钼产量每年增加 1,200 万磅至 2,000 万磅以上。项目将新建日处理 11.5 万吨矿石的选矿设施及破碎、输送与配套基础设施，建设期约三年半，首批产量目标为 2030 年中，公司预计长期单位净现金成本下降约 20%。此次资本开支较 2023 年 35 亿美元的估算高出约 10 亿美元、即 29%。（原题：Freeport approves $4.5 billion Bagdad copper expansion）",
@@ -977,7 +1523,7 @@
         "市场"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "行业动态"
     },
@@ -988,7 +1534,7 @@
       "source": "全球矿产资源信息系统",
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "行业动态",
       "is_new": false,
       "summary": "安永《采矿与金属行业十大商业风险与机遇》报告将运营复杂性列为行业 2027 年最大风险，其后依次为资本可得性、供应链中断、成本上升与地缘政治，结论基于对全球 400 位采矿与金属高管的调查。监管审批滞后是造成运营复杂性的首要因素（29% 受访者），矿石品位不稳居次；44% 企业寻求设备制造商资本，39% 寻求主权财富基金与政府投资。为降低风险，53% 矿企投入技术提升供应链透明度、52% 通过增加库存保障运营；67% 的矿业与金属资产处于网络安全「脆弱地带」。",
@@ -1001,7 +1547,7 @@
         "国际"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -1035,7 +1581,7 @@
       "source": "中国有色金属报",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "技术与勘查",
       "is_new": false,
       "summary": "江西省地质调查勘查院基础地质调查所与中国地质科学院联合完成的「铁下找钨：江西省莲花县新发现九曲山钨铁银多金属矿」成果，获评中国地质调查局 2025 年度地质调查十大进展。团队以重力识别隐伏岩体、磁法圈定靶区、音频大地电磁定位成矿层位的「物探+地质」路线，在厚覆盖区圈定 7 组地球物理组合异常。ZK01 设计孔深 650 米、终孔 1,035.57 米，累计见 88 层白钨矿化、边界品位以上矿体 18 条；2025 年 ZK02、ZK03 接续见矿，3 孔合计揭露白钨矿体 77 条，三氧化钨品位 0.07% 以上矿化段累计视厚度 76.29 米。2026 年 ZK05 另见铜矿化线索，ZK501 已于 9 月中旬开钻。",
@@ -1048,7 +1594,7 @@
         "找矿"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "找矿成果与勘查技术"
     },
@@ -1082,7 +1628,7 @@
       "source": "深圳证券交易所",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "企业经营",
       "is_new": false,
       "summary": "盛达资源公告，公司与富宁县方鑫黄金矿业有限责任公司及相关方签署《框架合作协议》，就黄金矿业项目合作达成初步意向。框架协议不构成正式交易安排，具体合作方式、对价与实施进度尚待后续正式协议约定，以公司后续公告为准。",
@@ -1092,9 +1638,32 @@
         "政策"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "并购与投资"
+    },
+    {
+      "id": "f1a2567bbd35",
+      "url": "https://ky.mnr.gov.cn/zrgs/ckzrgs/202611/t20261103_10351663.htm",
+      "title": "湖南临武鸡脚山矿采矿权以作价出资方式转让",
+      "source": "矿业权市场",
+      "category": "矿权交易",
+      "region": "国内",
+      "summary": "郴州市城泰矿业投资有限责任公司湖南省临武县鸡脚山矿采矿权转让公示：开采范围面积 4.9316 平方千米，转让价格 0 万元，转让方式为作价出资。公示期为 2026 年 11 月 3 日至 11 月 16 日。",
+      "content": "郴州市城泰矿业投资有限责任公司湖南省临武县鸡脚山矿采矿权转让公示：开采范围面积 4.9316 平方千米，转让价格 0 万元，转让方式为作价出资。公示期为 2026 年 11 月 3 日至 11 月 16 日。",
+      "content_len": 104,
+      "orig_date": "11-03",
+      "orig_date_full": "2026-11-03",
+      "report_date": "2026-11-07",
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "is_new": true,
+      "tags": [
+        "多金属",
+        "湖南"
+      ],
+      "embed": "ok",
+      "foreign": false
     },
     {
       "id": "eb77baf07cca",
@@ -1103,7 +1672,7 @@
       "source": "MINING.COM",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "项目与产能",
       "is_new": false,
       "summary": "Standard Lithium（TSXV/NYSE-A: SLI）计划在年底前就其 South West Arkansas 锂项目作出最终投资决定，项目资本开支约 14.5 亿美元，建成后将成为 Smackover 层系首个大型锂生产项目。该项目由公司与挪威油气生产商 Equinor 合资的 Smackover Lithium 推进，采用直接提锂（DLE）工艺。（原题：Standard nears lithium investment decision）",
@@ -1112,7 +1681,7 @@
         "锂"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "并购与投资"
     },
@@ -1146,7 +1715,7 @@
       "source": "上海有色网",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "印尼 9 月镍铁出口量为 975,848 吨，其中对中国出口 941,411 吨、占比 96.47%。同期镍锍出口 34,111 吨，对中国出口 20,658 吨、占比 60.56%；镍湿法冶炼中间产品出口 156,926 吨，全部流向中国；未锻轧的非合金镍出口 11,619 吨，对中国出口 7,969 吨、占比 68.59%。",
@@ -1158,9 +1727,32 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "市场与价格"
+    },
+    {
+      "id": "cdc9452f9558",
+      "title": "芝商所拟 2027 年一季度挂牌全球首只钨 APT 期货",
+      "url": "https://www.cnmn.com.cn/ShowNews1.aspx?id=475152",
+      "source": "中国有色金属报",
+      "orig_date": "11-03",
+      "orig_date_full": "2026-11-03",
+      "report_date": "2026-11-07",
+      "category": "市场与价格",
+      "is_new": true,
+      "summary": "芝商所（CME）10 月宣布计划于 2027 年一季度在 COMEX 板块挂牌全球首只钨 APT（仲钨酸铵）期货，采用现金结算、锚定 Fastmarkets 鹿特丹与巴尔的摩 CIF 价格，不设实物交割。中国占全球钨精矿产量约 78%、APT 冶炼产能 80% 以上，美国自 2015 年后已无商业钨矿开采产能；2024 至 2026 年鹿特丹 APT 现货价最大涨幅超过 200%。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "钨",
+        "矿权",
+        "市场",
+        "国际"
+      ],
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "region": "境外"
     },
     {
       "id": "c462d8884fbc",
@@ -1189,7 +1781,7 @@
       "source": "MINING.COM",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "MINING.COM TOP 50 显示，全球市值前 50 矿企自 2 月高点已下跌 26%，市值蒸发 7,120 亿美元；10 月单月缩水 2,260 亿美元、跌幅 10%，9 月缩水 2,640 亿美元，两个月蒸发近 5,000 亿美元，为今年首次低于 2025 年末水平。（原题：$712 billion wiped off world’s biggest mining companies since start of Iran war）",
@@ -1199,7 +1791,7 @@
         "国际"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -1210,7 +1802,7 @@
       "source": "巨潮资讯网",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
       "is_new": false,
       "summary": "海南矿业披露发行股份及支付现金购买资产并募集配套资金暨关联交易报告书上会稿及修订说明，并回复审核问询函与审核中心意见落实函。交易标的、对价与配套募资规模以公告正文披露为准。",
@@ -1220,7 +1812,7 @@
         "政策"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "并购与投资"
     },
@@ -1252,7 +1844,7 @@
       "source": "MINING.COM",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
       "is_new": false,
       "summary": "五矿资源（HKEX: 1208）与英美资源（LON: AAL）将 5 亿美元巴西镍矿交易的最终截止日由 10 月 31 日延长至 2026 年 12 月 31 日，以避免在未获监管批准的情况下终止交易。欧盟监管机构正在审查该交易对区域不锈钢行业的潜在影响。（原题：MMG, Anglo American extend $500 million nickel deal deadline）",
@@ -1261,7 +1853,7 @@
         "镍"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "并购与投资"
     },
@@ -1272,7 +1864,7 @@
       "source": "中国有色金属报",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "技术与勘查",
       "is_new": false,
       "summary": "大冶有色铜绿山铜铁矿通过优化磨矿分级与浮选药剂制度，截至 9 月底伴生金银回收率由长期徘徊的 75% 提升至 79.54%，矿山金产量同比增长 15.09%、银产量增长 11.04%，预计增加效益超 1,000 万元。该矿 2025 年伴生金银创造效益约 3.69 亿元、占矿产品总效益的 37.83%；矿石中金、银平均品位仅 0.5 克/吨和 3 克/吨。攻关查明中等粒级（0.025 至 0.12 毫米）回收率在 96% 以上，据此调整磨矿分级参数，旋流器分级效率提升超 5%。",
@@ -1285,7 +1877,7 @@
         "市场"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "找矿成果与勘查技术"
     },
@@ -1296,7 +1888,7 @@
       "source": "SMM 国际站",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "SMM 数据显示，2026 年 10 月 1# 白银产量环比下降 5.03%，全年累计产量约 16,000 吨、同比增长 3.72%。减产主因是国庆假期再生银基本停产，以及部分铜冶炼区检修导致副产银减量。光伏方面，10 月硝酸银产量环比降 13.48%，2026 年累计约 6,000 吨、同比下降 17.59%；截至 10 月 29 日 SMM 社会库存较上月末去库约 68 吨。（原题：[SMM Analysis] Silver Production Drops 5.03% in October 2026, PV Sector Sees 13.48% Decline）",
@@ -1307,9 +1899,32 @@
         "市场"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "市场与价格"
+    },
+    {
+      "id": "a8eae27ff883",
+      "url": "https://ky.mnr.gov.cn/zrgs/ckzrgs/202611/t20261103_10351662.htm",
+      "title": "四川达州炉坪煤矿采矿权以 6,100 万元转让，储量 276.7 万吨",
+      "source": "矿业权市场",
+      "category": "矿权交易",
+      "region": "国内",
+      "summary": "达州市炉坪煤矿采矿权转让公示：开采范围面积 5.199 平方千米，资源储量 276.7 万吨，转让价格 6,100 万元，转让方式为出售。公示期为 2026 年 11 月 3 日至 11 月 16 日。",
+      "content": "达州市炉坪煤矿采矿权转让公示：开采范围面积 5.199 平方千米，资源储量 276.7 万吨，转让价格 6,100 万元，转让方式为出售。公示期为 2026 年 11 月 3 日至 11 月 16 日。",
+      "content_len": 101,
+      "orig_date": "11-03",
+      "orig_date_full": "2026-11-03",
+      "report_date": "2026-11-07",
+      "first_seen": "2026-11-07",
+      "last_seen": "2026-11-07",
+      "is_new": true,
+      "tags": [
+        "煤矿",
+        "四川"
+      ],
+      "embed": "ok",
+      "foreign": false
     },
     {
       "id": "a211f09f6b85",
@@ -1318,7 +1933,7 @@
       "source": "上海有色网",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "世界黄金协会报告显示，2026 年三季度各国央行净购金 321 吨，同比增长 42%，创 2024 年四季度以来最高季度水平；前三季度累计净购金 675 吨，略高于去年同期，协会据此将全年预期上调至至少与 2025 年的 848 吨持平。三季度中国、波兰分别买入 63 吨和 41 吨，俄罗斯净卖出 19 吨；同期全球黄金 ETF 持仓增加 211 吨创历史新高，金条金币需求同比降 19% 至 268 吨，珠宝需求降 17% 至 313 吨，全球矿产金产量同比增 3% 至 1,071 吨。",
@@ -1329,7 +1944,7 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "市场与价格"
     },
@@ -1340,7 +1955,7 @@
       "source": "MINING.COM",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
       "is_new": false,
       "summary": "伦敦上市的 ACG Metals 宣布以 2.2 亿美元全股票交易收购 Blue Moon Metals 的挪威资产，其中包括北挪威 Nussir 铜矿 94.52% 股权，与公司位于土耳其的 Gediktepe 矿山形成两大核心资产。公司预计合并后年产铜将超过 5 万吨。（原题：ACG's $220 million Blue Moon deal creates European copper giant）",
@@ -1349,7 +1964,7 @@
         "铜"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "并购与投资"
     },
@@ -1360,7 +1975,7 @@
       "source": "中国有色金属报",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "企业经营",
       "is_new": false,
       "summary": "云南铜业三季报显示，前三季度实现营业收入 1,638.55 亿元、同比增长 24.78%，归母净利润 26.0 亿元、同比增长 47.86%。公司称铜综合加工成本、铜精矿单位生产成本两项核心指标持续优化；重点地质勘探项目有序推进，资源储备基础不断夯实，一批关键产业升级项目建设加速落地。",
@@ -1371,7 +1986,7 @@
         "市场"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
     },
@@ -1382,7 +1997,7 @@
       "source": "MINING.COM",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "世界黄金协会数据显示，加拿大三季度黄金产量同比增长 22%，跑赢全球增速，新投产矿山是主要推手。Equinox Gold 位于纽芬兰与拉布拉多的 Valentine 矿山、B2Gold 位于努纳武特的 Goose 矿山投产带动产量上升，同时成本上行推高单盎司生产成本。（原题：Canada gold output jumps 22% as global supply slips）",
@@ -1393,7 +2008,7 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -1404,7 +2019,7 @@
       "source": "中国有色金属报",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "中国有色金属工业协会陈学森表示，在地缘冲突持续、大宗商品价格波动加剧的外部环境下，依托完备的产业体系，叠加人工智能产业快速扩容与能源转型推进，前三季度行业生产、外贸、效益等核心指标均呈积极向好态势，运行基本面稳固。外贸规模大幅攀升，黄金产品成为核心增量，前三季度有色金属产品进出口总额持续增长。",
@@ -1415,7 +2030,7 @@
         "技术"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
     },
@@ -1426,7 +2041,7 @@
       "source": "MINING.COM",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "项目与产能",
       "is_new": false,
       "summary": "I-80 Gold（TSX/NYSE: IAU）预计全年产量落在 40,000 至 50,000 盎司指引区间的下半区，主因内华达州工人流动导致采矿进度放缓，公司股价下跌。公司维持产量指引不变，但 Granite Creek 高品位矿石接续延迟，Archimedes 矿山部分黄金产量将推迟至 2027 年初。（原题：I-80 Gold's growth faces Nevada labour squeeze）",
@@ -1436,7 +2051,7 @@
         "市场"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -1447,16 +2062,16 @@
       "source": "上海有色网",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "技术与勘查",
-      "is_new": true,
+      "is_new": false,
       "summary": "廿九金属公司（XXIX Metal）启动 6.5 万米钻探计划，覆盖魁北克奥佩米斯卡（Opemiska）、库克（Cooke）与安大略蒂埃里（Thierry）三个铜矿项目；其中奥佩米斯卡详勘约 2 万米。7 月以来已有 2 台钻机在蒂埃里施工，12 月至次年 1 月初将在奥佩米斯卡和库克再增 4 台。公司称这是其历史上规模最大的一次钻探。",
       "embed": "ok",
       "tags": [
         "铜"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "找矿成果与勘查技术"
     },
@@ -1509,7 +2124,7 @@
       "source": "MINING.COM",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "智利铜业委员会 Cochilco 将 2027 年铜均价预测由 5.10 美元/磅上调 17% 至 5.95 美元/磅（约 1.31 万美元/吨、≈9.4 万元/吨），并将今年均价预测由 5.95 上调至 6.18 美元/磅；同时下调产量预期，预计智利今年铜产量降 8.4%（8 月预测为降 2.6%）至 494 万吨、明年 508 万吨（8 月预测 527 万、555 万吨）。今年前 9 个月智利产铜 363 万吨、同比降 8.5%，BMO 称或录得逾 20 年来最弱年度产量。Cochilco 预计今年精炼铜过剩 14.4 万吨、明年扩至 21.5 万吨。（原题：Chile copper outlook worsens as price forecast rises）",
@@ -1520,7 +2135,7 @@
         "国际"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "市场与价格"
     },
@@ -1576,7 +2191,7 @@
       "source": "中国有色金属报",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "技术与勘查",
       "is_new": false,
       "summary": "10 月 23 日，云铝股份委托中国有色金属工业协会召开科技成果评价会，对申报的 6 项科技成果开展评价鉴定。经专家组综合评价，3 项达到国际领先水平、3 项达到国际先进水平，成果覆盖绿色铝电解节能降碳、交通结构件用高强铝合金与锻造轮毂、超大规格扁锭绿色智造、铝电解槽底清渣机器人等方向。",
@@ -1587,7 +2202,7 @@
         "国际"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
     },
@@ -1598,7 +2213,7 @@
       "source": "全球矿产资源信息系统",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "智利铜业委员会（Cochilco）大幅下调 2026 年该国铜产量预期：预计下降 8.4%（此前预测降幅 2.6%），产量降至 494 万吨，8 月时预计为 527 万吨。前三季度智利铜产量 363 万吨、同比下降 8.5%，要达成全年目标，四季度需月产 43.4 万吨、比前九个月均值高 7.6%。Cochilco 指出必和必拓埃斯康迪达等矿山净减产占全国减产量的 77%，同时将 2026、2027 年铜均价预期分别上调至 6.18 美元/磅和 5.95 美元/磅。",
@@ -1609,7 +2224,7 @@
         "国际"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -1620,7 +2235,7 @@
       "source": "SMM 国际站",
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "政策与监管",
       "is_new": false,
       "summary": "11 月 2 日，刚果（金）矿业部长 Louis Watum Kabamba 监督采矿合作社 COMIKAN 成员在卢阿拉巴省 Mutshatsha 地区 Mulondo 矿区恢复作业，该矿距科卢韦齐东南约 42 公里。此前新运营方 PAJECLEM 接手 Chemaf 原有矿权后，手工采矿者被迫撤离并闲置一年有余；经协商，PAJECLEM 让出两个采矿区块给 COMIKAN 矿工，以划清作业范围、避免用地纠纷。（原题：DRC Mines Ministry Facilitates Return of Artisanal Miners to Mulondo Site Through Negotiated Arrangement）",
@@ -1630,7 +2245,7 @@
         "矿权"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -1641,7 +2256,7 @@
       "source": "中国有色金属报",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "行业动态",
       "is_new": false,
       "summary": "铜冠铜箔三季报显示，前三季度营业收入 65.33 亿元、同比增 37.99%，归母净利润 3.39 亿元、同比增 439.75%，扣非净利润 3.28 亿元、同比增 582.38%；第三季度营收、归母净利、扣非净利环比分别增 15.27%、13.95%、14.25%。公司将有限产能优先配置到 HVLP 铜箔表面处理等关键工序。",
@@ -1651,7 +2266,7 @@
         "市场"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
     },
@@ -1662,7 +2277,7 @@
       "source": "MINING.COM",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "政策与监管",
       "is_new": false,
       "summary": "Gold Fields 宣布其魁北克高品位 Windfall 金矿项目获魁北克环境部颁发的环境许可证书，确认项目已按《环境质量法》完成环境与社会影响评价，可在满足监管条件后开工建设，为 2027 年最终投资决策扫清主要监管障碍。（原题：Gold Fields clears major hurdle for Quebec’s Windfall gold mine）",
@@ -1671,7 +2286,7 @@
         "金"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -1682,7 +2297,7 @@
       "source": "MINING.COM",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "Ninety One 最新报告认为，大宗商品已从 2000 年代中国主导的超级周期转向供应约束、地缘碎片化与区域资源安全主导的格局；美国拟建数据中心项目对应约 200 吉瓦电力需求，约相当于旧金山市用电量的 200 倍；过去十年生产商重现金流轻增长，叠加供应链碎片化，使压力难以逆转。（原题：Global resource squeeze signals market shift: report）",
@@ -1693,7 +2308,7 @@
         "国际"
       ],
       "first_seen": "2026-11-02",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -1704,7 +2319,7 @@
       "source": "上海有色网",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "政策与监管",
       "is_new": false,
       "summary": "宜春市生态环境局公示，拟受理宜春国轩矿业有限责任公司江西省宜丰县水南矿区锂矿项目环境影响评价文件，公示期为 2026 年 11 月 2 日至 11 月 13 日，共 10 个工作日。公众可通过环评科电话 0795-3998291 反馈意见；按环评政府信息公开指南，公示文本不含涉及国家秘密、商业秘密、个人隐私的内容。",
@@ -1714,7 +2329,7 @@
         "政策"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "政策与监管"
     },
@@ -1725,7 +2340,7 @@
       "source": "SMM 国际站",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "矿权出让",
       "is_new": false,
       "summary": "肯尼亚矿业部长 Joho 10 月 30 日对路透表示，已有五家联合体提交开发 Mrima Hill 铌稀土矿床的投标，预计两到三周内确定优先竞标人；投标仅体现投资意向，项目授标、融资与新增矿供应仍取决于技术研究、审批与可行价格。（原题：Five groups bid for Kenya’s Mrima Hill niobium project）",
@@ -1738,7 +2353,7 @@
         "技术"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "矿权交易"
     },
@@ -1749,7 +2364,7 @@
       "source": "MINING.COM",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
       "is_new": false,
       "summary": "加拿大勘探公司 Pecoy Copper 与 Hudbay 及另一名投资者达成协议，募资 4,980 万加元（约 3,570 万美元），用于秘鲁南部铜金项目钻探与技术研究；其中 Hudbay 出资 3,010 万加元、另一投资者出资 1,970 万加元，交割后各持股略低于 10%。（原题：Hudbay leads $49.8M investment in Pecoy Copper）",
@@ -1762,7 +2377,7 @@
         "国际"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "并购与投资"
     },
@@ -1773,7 +2388,7 @@
       "source": "上海有色网",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "政策与监管",
       "is_new": false,
       "summary": "11 月 2 日上期所公告，同意中远海运物流有限公司取消位于天津市滨海高新区的锌期货存放点，核定库容锌 2 万吨；自公告之日起该存放点不再开展锌期货交割业务，交易所要求各有关单位确保交割业务正常有序进行。",
@@ -1784,7 +2399,7 @@
         "市场"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "政策与监管"
     },
@@ -1795,7 +2410,7 @@
       "source": "上海有色网",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "市场与价格",
       "is_new": false,
       "summary": "印尼统计局数据显示，9 月该国铝出口量环比下降 37%，当月主要出口目的地为克罗地亚、泰国、土耳其和韩国。8 月印尼铝出口量为 157,222 吨；今年 1—9 月，该国原铝和未加工铝合金出口总量为 799,199 吨。",
@@ -1806,7 +2421,7 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "市场与价格"
     },
@@ -1817,7 +2432,7 @@
       "source": "上海有色网",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
       "is_new": false,
       "summary": "翔鹭钨业三季报显示，前三季度营业收入 38.67 亿元、同比增 139.30%，归母净利润 4.93 亿元、同比增 851.48%，主因钨价上涨带动销售收入增加；11 月 2 日收盘股价涨 1.3%，报 22.54 元/股。",
@@ -1827,7 +2442,7 @@
         "市场"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "并购与投资"
     },
@@ -1838,7 +2453,7 @@
       "source": "SMM 国际站",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "技术与勘查",
       "is_new": false,
       "summary": "Amaroq 于 11 月 2 日公布格陵兰西部 Maarmorilik 地区「珍珠链」开发策略，该区含曾开采的 Black Angel 锌铅银矿；10 月已向格陵兰政府提交项目环评与社会影响评价工作大纲。新取样中 Garde 见 3.1 米厚 17.49% 锌、8.08% 铅、36 克/吨银，Wedge 见 4.1 米厚 10.05% 锌，岩屑样最高锌品位 62.2%。（原题：Amaroq Unveils 'String of Pearls' Strategy for Greenland Zinc-Lead-Silver Project, Reports High-Grade Samples）",
@@ -1850,7 +2465,7 @@
         "国际"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "找矿成果与勘查技术"
     },
@@ -1861,7 +2476,7 @@
       "source": "中国有色金属报",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "企业经营",
       "is_new": false,
       "summary": "株洲冶炼集团全资子公司深圳市锃科合金有限公司首批压铸锌合金产品启运发往东南亚市场，实现火炬牌锌合金出口零的突破。锃科公司 1994 年成立于深圳宝安沙井，压铸锌合金年产能已从初创的 2,000 吨增至 5 万吨、营收超 10 亿元，此次订单标志其正式构建「国内+海外」双市场格局。",
@@ -1873,7 +2488,7 @@
         "国际"
       ],
       "first_seen": "2026-11-05",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
     },
@@ -1884,7 +2499,7 @@
       "source": "全球矿产资源信息系统",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "技术与勘查",
       "is_new": false,
       "summary": "据 Mining.com 报道，廿九金属公司启动 6.5 万米钻探计划，覆盖魁北克奥佩米斯卡铜矿三个并行项目及安大略蒂埃里项目；7 月以来两台钻机已在蒂埃里施工，12 月至次年 1 月初将在奥佩米斯卡和库克再增 4 台钻机。奥佩米斯卡计划钻探约 2 万米，以升级 2025 年 6 月资源量（矿石量 1.412 亿吨、铜 15 亿磅、金 105 万盎司），为预可行性研究扩大基础。",
@@ -1894,7 +2509,7 @@
         "金"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "找矿成果与勘查技术"
     },
@@ -1905,7 +2520,7 @@
       "source": "中国有色金属报",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "技术与勘查",
       "is_new": false,
       "summary": "长沙有色冶金设计研究院自主研发的「炼锌渣绿色协同处置及资源高效利用技术」通过中国有色金属工业协会组织的专家评价，整体达到国际领先水平。我国每年产出湿法炼锌渣超 500 万吨，该技术以铅精矿为贵金属捕集剂，使铜、银、铅等有价金属高效进入粗铅。2022 年 6 月该技术在深圳市中金岭南丹霞冶炼厂落地，建成一条年处理 28.7 万吨废渣废料的生产线并运行至今。",
@@ -1920,7 +2535,7 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
     },
@@ -1931,7 +2546,7 @@
       "source": "上海有色网",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "项目与产能",
       "is_new": false,
       "summary": "10 月 30 日，天赐材料（宜昌）新能源有限公司年产 30 万吨（一期 15 万吨）电解液项目环境影响报告书（征求意见稿）公示。项目位于湖北省宜昌市枝江市姚家港化工园，总投资 67,000 万元，一期建设规模 15 万吨电解液，二期作为规划预留、不纳入本次评价。公司印尼 2 万吨电解液项目预计 2026 年 12 月进入试生产。",
@@ -1942,7 +2557,7 @@
         "国际"
       ],
       "first_seen": "2026-11-04",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
     },
@@ -1976,7 +2591,7 @@
       "source": "中国有色金属报",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "行业动态",
       "is_new": false,
       "summary": "中铝郑州研究院「铝灰渣多场景全量化循环利用关键技术开发及应用」在第 51 届日内瓦国际发明展上从全球 40 个国家和地区、千余项成果中获金奖；该技术实现铝灰渣全量化无害处置与资源化利用，消除危废倾倒填埋带来的土壤与水体污染风险，已落地工业产线。",
@@ -1988,7 +2603,7 @@
         "国际"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国内",
       "orig_category": "行业动态"
     },
@@ -1999,7 +2614,7 @@
       "source": "SMM 国际站",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "行业动态",
       "is_new": false,
       "summary": "据外媒报道，11 月 2 日上午韩国锌业温山冶炼厂 2 号厂发生火灾，厂区附近浓烟升起；蔚山消防部门出动约 30 辆消防车、70 名人员，下午 1 时 55 分解除一级应急响应，无人员伤亡报告。该厂此前已处于停产状态，事故原因仍在调查。（原题：Fire Erupts at Korea Zinc's Onsan Smelter, No Casualties Reported Amid Investigation）",
@@ -2009,7 +2624,7 @@
         "安全"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "行业动态"
     },
@@ -2020,7 +2635,7 @@
       "source": "全球矿产资源信息系统",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "并购与投资",
       "is_new": false,
       "summary": "力拓高管透露，公司正评估在阿根廷建设一座新锂工厂，项目需新增约 10 亿美元投资；计划明年将菲尼克斯二期项目——拟建于卡塔马卡省翁布雷穆埃尔托盐滩——提交阿根廷大型投资激励机制办公室审批，同时考虑推进本国铜矿项目。",
@@ -2030,7 +2645,7 @@
         "锂"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "并购与投资"
     },
@@ -2041,7 +2656,7 @@
       "source": "MINING.COM",
       "orig_date": "11-02",
       "orig_date_full": "2026-11-02",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "项目与产能",
       "is_new": false,
       "summary": "Endeavour Mining 称，10 月 28 日通往 Wona 采坑的坡道部分下沉，影响 Dangouna 与 Aviera 两个井下入口，公司已暂停布基纳法索 Mana 金矿地下开采并撤离人员，无人受伤；该矿原本预计无法完成年度产量目标。（原题：Endeavour halts Burkina gold underground as ramp sinks）",
@@ -2051,7 +2666,7 @@
         "市场"
       ],
       "first_seen": "2026-11-03",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     },
@@ -2062,7 +2677,7 @@
       "source": "MINING.COM",
       "orig_date": "11-01",
       "orig_date_full": "2026-11-01",
-      "report_date": "2026-11-06",
+      "report_date": "2026-11-07",
       "category": "行业动态",
       "is_new": false,
       "summary": "前英美资源首席执行官 Mark Cutifani 在悉尼国际矿业与资源会议上表示，矿山平均每年加深 40 米、新项目审批最长需 20 年，行业未能开发应对复杂开采条件的技术；若长期投入不足，业外企业可能收购现有矿企。（原题：Cutifani warns mining sector’s failure to innovate opens door to takeovers）",
@@ -2072,7 +2687,7 @@
         "国际"
       ],
       "first_seen": "2026-11-02",
-      "last_seen": "2026-11-06",
+      "last_seen": "2026-11-07",
       "region": "国际",
       "orig_category": "国际矿业动态"
     }

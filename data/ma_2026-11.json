@@ -1,8 +1,77 @@
 {
   "month": "2026-11",
-  "updated_at": "2026-11-06T05:38:53+08:00",
-  "count": 2,
+  "updated_at": "2026-11-07T05:39:03+08:00",
+  "count": 6,
   "news": [
+    {
+      "id": "ff7d6abee02b",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-11-07/1225660844.PDF",
+      "title": "关于筹划重大资产重组事项的停牌进展公告",
+      "source": "巨潮资讯网·中国稀土",
+      "orig_date": "11-07",
+      "orig_date_full": "2026-11-07",
+      "report_date": "2026-11-07",
+      "category": "并购与投资",
+      "company": "中国稀土",
+      "sec_code": "000831",
+      "ma_type": "资产重组",
+      "summary": "中国稀土（000831）披露《关于筹划重大资产重组事项的停牌进展公告》，涉及资产重组。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "e6b14ec02de2",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-11-07/1225661052.PDF",
+      "title": "海南矿业股份有限公司关于上海证券交易所并购重组审核委员会审核公司发行股份及支付现金购买资产并募集配套资金暨关联交易事项会议安排的公告",
+      "source": "巨潮资讯网·海南矿业",
+      "orig_date": "11-07",
+      "orig_date_full": "2026-11-07",
+      "report_date": "2026-11-07",
+      "category": "并购与投资",
+      "company": "海南矿业",
+      "sec_code": "601969",
+      "ma_type": "并购",
+      "summary": "海南矿业（601969）披露《海南矿业股份有限公司关于上海证券交易所并购重组审核委员会审核公司发行股份及支付现金购买资产并募集配套资金暨关联交易事项会议安排的公告》，涉及并购。",
+      "tags": [
+        "并购",
+        "金"
+      ]
+    },
+    {
+      "id": "733f9e068676",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-11-07/1225660900.PDF",
+      "title": "关于向特定对象发行股票募集说明书（注册稿）等申请文件更新财务数据的提示性公告",
+      "source": "巨潮资讯网·山东矿机",
+      "orig_date": "11-07",
+      "orig_date_full": "2026-11-07",
+      "report_date": "2026-11-07",
+      "category": "并购与投资",
+      "company": "山东矿机",
+      "sec_code": "002526",
+      "ma_type": "投资/资本运作",
+      "summary": "山东矿机（002526）披露《关于向特定对象发行股票募集说明书（注册稿）等申请文件更新财务数据的提示性公告》，涉及投资/资本运作。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "1c81be28a7cf",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-11-07/1225662663.PDF",
+      "title": "关连交易-九冶三维股权转让",
+      "source": "巨潮资讯网·中铝国际",
+      "orig_date": "11-07",
+      "orig_date_full": "2026-11-07",
+      "report_date": "2026-11-07",
+      "category": "并购与投资",
+      "company": "中铝国际",
+      "sec_code": "601068",
+      "ma_type": "股权转让",
+      "summary": "中铝国际（601068）披露《关连交易-九冶三维股权转让》，涉及股权转让。",
+      "tags": [
+        "并购"
+      ]
+    },
     {
       "id": "5d9326f24deb",
       "url": "https://static.cninfo.com.cn/finalpage/2026-11-06/1225660317.PDF",
