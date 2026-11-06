@@ -1,33 +1,17 @@
 {
- "date": "2026-11-06",
+ "date": "2026-11-07",
  "has_history": true,
  "history_days": 15,
  "alerts": [
   {
-   "commodity": "碳酸锂",
-   "market": "GFEX 主连",
-   "move": "+5.92%",
-   "severity": "high",
-   "detail": "碳酸锂（GFEX 主连）最新收报 91,580.00，单日 +5.92%（数据日期 2026-11-05）。",
-   "type": "price"
-  },
-  {
-   "commodity": "沪镍",
+   "commodity": "沪锡",
    "market": "SHFE 主连",
-   "move": "+5.13%",
-   "severity": "high",
-   "detail": "沪镍（SHFE 主连）最新收报 122,900.00，单日 +5.13%（数据日期 2026-11-05）。",
-   "type": "price"
-  },
-  {
-   "commodity": "镍",
-   "market": "LME 03",
-   "move": "+3.40%",
+   "move": "-3.93%",
    "severity": "medium",
-   "detail": "LME 镍（LME 03）最新收报 16,315.00 美元/吨，单日 +3.40%（数据日期 11-05）。",
+   "detail": "沪锡（SHFE 主连）最新收报 343,340.00，单日 -3.93%（数据日期 2026-11-06）。",
    "type": "price"
   }
  ],
- "summary": "今日异动 3 项：碳酸锂 +5.92%（GFEX 主连）；沪镍 +5.13%（SHFE 主连）；镍 +3.40%（LME 03）。",
- "max_severity": "high"
+ "summary": "今日异动 1 项：沪锡 -3.93%（SHFE 主连）。",
+ "max_severity": "medium"
 }
