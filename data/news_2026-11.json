@@ -1,6 +1,6 @@
 {
   "month": "2026-11",
-  "updated_at": "2026-11-06T05:39:23+08:00",
+  "updated_at": "2026-11-06T08:18:14+08:00",
   "count": 95,
   "news": [
     {
@@ -11,7 +11,7 @@
       "orig_date": "11-06",
       "orig_date_full": "2026-11-06",
       "report_date": "2026-11-06",
-      "category": "并购与投资",
+      "category": "企业经营",
       "is_new": true,
       "summary": "天赐材料公告与亿纬锂能签订长期供货协议，双方就锂电材料长期供应达成合作，锁定下游客户长单需求。",
       "embed": "ok",
@@ -21,7 +21,9 @@
         "技术"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国内",
+      "orig_category": "并购与投资"
     },
     {
       "id": "857d2ac433f0",
@@ -41,7 +43,9 @@
         "政策"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国内",
+      "orig_category": "并购与投资"
     },
     {
       "id": "fe6570543ab2",
@@ -51,7 +55,7 @@
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
       "report_date": "2026-11-06",
-      "category": "国际矿业动态",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "AngloGold Ashanti 计划投资至多 9 亿美元扩建既有矿山，目标 2030 年前增产 30 万至 45 万盎司，项目实际内部收益率预计超 35%。其中坦桑尼亚 Geita 获投至多 5.8 亿美元、产量提升至 60 万盎司；巴西 Cuiabá 投资 2 亿至 2.5 亿美元、增产约 7.5 万盎司；几内亚 Siguiri 投入 7000 万美元、增产 10 万盎司。三季度 EBITDA 同比增 12% 至 15.68 亿美元。（原题：AngloGold plans $900 million mine expansion amid stronger profit）",
       "embed": "ok",
@@ -59,7 +63,9 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "f990b94969b8",
@@ -134,7 +140,7 @@
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
       "report_date": "2026-11-06",
-      "category": "找矿成果与勘查技术",
+      "category": "技术与勘查",
       "is_new": true,
       "summary": "Cora Gold 公告，马里南部 Sanankoro 项目 Dakounkoura South 踏勘钻探发现走向长约 500 米的氧化金矿化带，4 个钻孔见矿，其中 16 米见矿段金品位 0.85 克/吨（自 20 米起）、35 米段 0.40 克/吨（自 5 米起）。靶区紧邻规划选厂且在现有资源量之外；公司已累计完成 14,081 米反循环钻探，现有资源量 104.4 万盎司、品位 1.04 克/吨。（原题：Cora identifies new oxide gold mineralisation near planned Sanankoro plant）",
       "embed": "ok",
@@ -143,7 +149,9 @@
         "政策"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "d30701dc6f81",
@@ -177,7 +185,7 @@
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
       "report_date": "2026-11-06",
-      "category": "行业动态",
+      "category": "市场与价格",
       "is_new": true,
       "summary": "SMM 高级分析师李函玉在 2026 SMM 铅锌年会上表示，全球锌精矿加工费已刷新低点；随着国内外矿山进入投产高峰、海外新增产能体量更大，2027 年锌精矿供应紧张局面将相对缓解，2027 至 2030 年维持紧平衡，但矿端扰动增多、波动风险仍存。",
       "embed": "ok",
@@ -187,7 +195,9 @@
         "国际"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "aa3f0d802ade",
@@ -197,7 +207,7 @@
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
       "report_date": "2026-11-06",
-      "category": "国际矿业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "Codelco 董事长在向股东通报的临时会议上披露，报表中被人为虚增的铜产量达 42,100 吨，另有 17,000 吨铜库存存在核算偏差。公司将在产品错列为产成品以完成指标，已对 3 座矿山及总部启动审计并解雇 9 名员工；过去八年投入 320 亿美元，年产量却由约 160 万吨降至 120 万吨。（原题：Codelco's inflated copper output scandal hits 42,100 tonnes）",
       "embed": "ok",
@@ -206,7 +216,9 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "87e35412265d",
@@ -226,7 +238,9 @@
         "矿权"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国内",
+      "orig_category": "政策与监管"
     },
     {
       "id": "6aba804d553a",
@@ -236,7 +250,7 @@
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
       "report_date": "2026-11-06",
-      "category": "找矿成果与勘查技术",
+      "category": "技术与勘查",
       "is_new": true,
       "summary": "瓦拉塔矿产公司（Waratah Minerals）新南威尔士州斯珀（Spur）项目首个资源量公布：金 310 万盎司、平均品位 1.2 克/吨，另有 1000 万盎司勘探潜力。露天坑采资源量约 230 万盎司、地下 76 万盎司，资源量仅覆盖 6 公里矿带中的 2 公里；发现成本 14.62 澳元/盎司，27% 属推定资源量。公司勘探目标为 500 万至 1000 万盎司、品位 0.6 至 0.9 克/吨。",
       "embed": "ok",
@@ -245,7 +259,9 @@
         "找矿"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "5fba0f87bb57",
@@ -267,7 +283,9 @@
         "国际"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "53c876bd1fed",
@@ -277,7 +295,7 @@
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
       "report_date": "2026-11-06",
-      "category": "国际矿业动态",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "Codelco 因尾矿输送系统发生部分泄漏、可能进入布兰科河，暂停 Andina 分部选厂作业与尾矿输送，将水改道至 Piuquenitos 水库并持续监测水质。智利水务公司 Esval 预防性关闭阿空加瓜河地表取水口、启用地下水源与备用系统。事故原因与下游环境影响仍在调查，复产时间未定。（原题：Codelco halts Andina mine as tailings spill threatens river）",
       "embed": "ok",
@@ -286,7 +304,9 @@
         "国际"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "4bba89aceee1",
@@ -296,7 +316,7 @@
       "orig_date": "11-05",
       "orig_date_full": "2026-11-05",
       "report_date": "2026-11-06",
-      "category": "政策与监管",
+      "category": "会议会展",
       "is_new": true,
       "summary": "10 月 28 日至 29 日，第二十一届全国地质勘查行业改革与发展大会在陕西西安召开，主题为“深耕地勘改革攻坚，协同创新开发资源”。大会聚焦地勘行业改革发展面临的新形势、新任务，交流改革创新经验，为保障国家能源资源安全、推动地质勘查行业高质量发展提供支撑。",
       "embed": "ok",
@@ -306,7 +326,9 @@
         "安全"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国内",
+      "orig_category": "政策与监管"
     },
     {
       "id": "37a31dedbbde",
@@ -406,7 +428,9 @@
         "金"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "f7ec7229c06a",
@@ -459,7 +483,7 @@
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
       "report_date": "2026-11-06",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "金力永磁 2026 年前三季度净利润同比增长 47.48%，公司称具身机器人电机转子按客户订单爬坡上量，并按期新建 2 万吨磁材产能。11 月 4 日公司股价收涨 3.81% 至 24.22 元/股。",
       "embed": "ok",
@@ -468,7 +492,9 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "cbbece13fd38",
@@ -582,7 +608,7 @@
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
       "report_date": "2026-11-06",
-      "category": "国际矿业动态",
+      "category": "政策与监管",
       "is_new": true,
       "summary": "刚果（金）司法部称，警方、军方与矿业部组成的联合工作组在卢阿拉巴省和上加丹加省调查后，查扣 500 多辆卡车及其他车辆机械、数千吨铜和钴，司法部长已下令深入调查，最终可能指向欺诈、非法采矿与矿产品走私。此前联合国电台报道称 60 多名外国公民在卢阿拉巴门达被拘留。",
       "embed": "ok",
@@ -592,7 +618,9 @@
         "钴"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "7f10fa13bacc",
@@ -633,7 +661,9 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "6e729ff1bd22",
@@ -643,7 +673,7 @@
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
       "report_date": "2026-11-06",
-      "category": "国际矿业动态",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "Implats 2027 财年开局产量下滑：2026 年 7 至 9 月集团 6E 产量同比下降 3% 至 85.4 万盎司，精炼及可售产量下降 8% 至 76.3 万盎司。当季发生五起死亡事故、安全停产及加工中断，导致在制品与成品库存上升。（原题：Implats Q1 FY2027: Production Falls 3% as Processing Disruptions Lift Inventories）",
       "embed": "ok",
@@ -652,7 +682,9 @@
         "安全"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "632910440e6a",
@@ -744,7 +776,7 @@
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
       "report_date": "2026-11-06",
-      "category": "行业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "中信戴卡携手上海有色网交易中心启动 2027 年度铝锭长协线上竞价，将年度长单采购移至线上平台集中竞价，以市场化方式形成长协价格，为铝锭长单定价提供新的交易场景。",
       "embed": "ok",
@@ -753,7 +785,9 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国内",
+      "orig_category": "行业动态"
     },
     {
       "id": "480330801d6b",
@@ -763,7 +797,7 @@
       "orig_date": "11-04",
       "orig_date_full": "2026-11-04",
       "report_date": "2026-11-06",
-      "category": "国际矿业动态",
+      "category": "市场与价格",
       "is_new": true,
       "summary": "摩根大通研判，在本土关键矿产保供政策推动下，依托新建矿山与现有产能扩建，美国年度矿产铜产量具备翻倍以上潜力，有望扭转数十年下滑趋势；新增产能约 130 万吨，但多数项目 2030 年前难以落地。",
       "embed": "ok",
@@ -773,7 +807,9 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "400323b1ade3",
@@ -897,7 +933,9 @@
         "市场"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国内",
+      "orig_category": "市场与价格"
     },
     {
       "id": "121ab4cf40aa",
@@ -1389,7 +1427,7 @@
       "orig_date": "11-03",
       "orig_date_full": "2026-11-03",
       "report_date": "2026-11-06",
-      "category": "找矿成果与勘查技术",
+      "category": "技术与勘查",
       "is_new": true,
       "summary": "廿九金属公司（XXIX Metal）启动 6.5 万米钻探计划，覆盖魁北克奥佩米斯卡（Opemiska）、库克（Cooke）与安大略蒂埃里（Thierry）三个铜矿项目；其中奥佩米斯卡详勘约 2 万米。7 月以来已有 2 台钻机在蒂埃里施工，12 月至次年 1 月初将在奥佩米斯卡和库克再增 4 台。公司称这是其历史上规模最大的一次钻探。",
       "embed": "ok",
@@ -1397,7 +1435,9 @@
         "铜"
       ],
       "first_seen": "2026-11-06",
-      "last_seen": "2026-11-06"
+      "last_seen": "2026-11-06",
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "5ecc3bae2822",
