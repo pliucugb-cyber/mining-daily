@@ -1,11 +1,11 @@
 {
   "meta": {
     "report_date": "2026-11-07",
-    "generated_at": "2026-11-07T05:39:10+08:00",
-    "total": 552,
+    "generated_at": "2026-11-07T08:14:11+08:00",
+    "total": 551,
     "new_today": 20,
-    "archive": 532,
-    "page_total": 552,
+    "archive": 531,
+    "page_total": 551,
     "page_new_count": 20,
     "sources": [
       "MINING.COM",
@@ -2934,23 +2934,6 @@
       "embed": "ok",
       "tags": [
         "金",
-        "市场"
-      ]
-    },
-    {
-      "id": "48fef76cab9d",
-      "title": "中信戴卡与有色网交易中心启动 2027 年度铝锭长协线上竞价",
-      "url": "https://news.smm.cn/news/104202782",
-      "source": "上海有色网",
-      "orig_date": "11-04",
-      "orig_date_full": "2026-11-04",
-      "report_date": "2026-11-07",
-      "category": "行业动态",
-      "is_new": false,
-      "summary": "中信戴卡携手上海有色网交易中心启动 2027 年度铝锭长协线上竞价，将年度长单采购移至线上平台集中竞价，以市场化方式形成长协价格，为铝锭长单定价提供新的交易场景。",
-      "embed": "ok",
-      "tags": [
-        "铝",
         "市场"
       ]
     },
