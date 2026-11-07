@@ -1,12 +1,12 @@
 {
   "meta": {
     "report_date": "2026-11-07",
-    "generated_at": "2026-11-07T08:14:11+08:00",
-    "total": 551,
-    "new_today": 20,
+    "generated_at": "2026-11-07T08:34:19+08:00",
+    "total": 552,
+    "new_today": 21,
     "archive": 531,
-    "page_total": 551,
-    "page_new_count": 20,
+    "page_total": 552,
+    "page_new_count": 21,
     "sources": [
       "MINING.COM",
       "SMM 国际站",
@@ -123,6 +123,25 @@
       "embed": "ok",
       "tags": [
         "找矿"
+      ]
+    },
+    {
+      "id": "9a4a9bb5e9fd",
+      "title": "加拿大铀企瞄准并购，Rook II 铀矿勘查渐成型",
+      "url": "https://www.mining.com/canadian-uranium-eyes-acquisitions-as-rook-ii-exploration-takes-shape",
+      "source": "MINING.COM",
+      "orig_date": "11-07",
+      "orig_date_full": "2026-11-07",
+      "report_date": "2026-11-07",
+      "category": "政策与监管",
+      "is_new": true,
+      "summary": "加拿大铀企 Canadian Uranium（CSE:CANU）顾问、Titan Uranium 创始人 Arni Johannson 表示，公司资本结构专为并购设计，正就收购一家上市公司、一处资产及合资机会进行谈判，意在扩充 Athabasca 盆地铀资产组合。其 Rook II 项目位于萨斯喀彻温省、面积约 18,941 公顷，10 月 27 日提交的 NI 43-101 技术报告记录 28 处铀矿化点，历史估算最高达 4,500 万磅 U₃O₈（未经验证、非现行资源量/储量）；公司 6 月以 9,663,156 股（作价 0.75 加元/股）收购 Rook 2 Uranium Corp. 取得 100% 权益，并计划视融资推进 6,000 米钻探，同时关注沙特等海外铀机会。（原题：Canadian Uranium eyes acquisitions as Rook II exploration takes shape）",
+      "embed": "ok",
+      "tags": [
+        "铀",
+        "找矿",
+        "技术",
+        "国际"
       ]
     },
     {
