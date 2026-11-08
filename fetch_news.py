@@ -132,7 +132,10 @@ SOURCES = [
         "name": "上海有色网 SMM",
         "list_url": "https://news.smm.cn/",
         "kind": "html",
-        "link_re": r"/news/(\d+)",
+        # 2026-11-08 修：SMM 详情页 URL 由 /news/数字 改为 /news/<32~40位大写base32码>，
+        # 旧正则 (\d+) 只能命中极少数残留数字链接 ⇒ 单日 raw 从 ~90 掉到 9、kept 4（严重漏稿）。
+        # 新码与老数字码并存，两者都收。
+        "link_re": r"/news/((?:[A-Z0-9]{20,})|(?:\d{5,}))",
         "href_tpl": "https://news.smm.cn/news/{g1}",
         "category": "行业动态",
         "source": "上海有色网",
@@ -150,7 +153,9 @@ SOURCES = [
         "name": "SMM 国际站（英文）",
         "list_url": "https://news.metal.com/",
         "kind": "html",
-        "link_re": r"/en/newscontent/(\d+-[A-Za-z0-9\-]+)",
+        # 2026-11-08 修：同理，详情页由 /en/newscontent/数字-slug 改为 /en/newscontent/<32~40位码>-slug，
+        # 旧正则要求 slug 前是纯数字 ⇒ 整源 raw=0。两种前缀都收。
+        "link_re": r"/en/newscontent/((?:[A-Z0-9]{20,}|\d+)-[A-Za-z0-9\-]+)",
         "href_tpl": "https://news.metal.com/newscontent/{g1}",
         "category": "国际矿业动态",
         "source": "SMM 国际站",
