@@ -6,7 +6,7 @@
  *       note 补充信息 · v 日期可信度（ok/tbd）
  */
 window.CONFERENCE_DATA = {
-  updated: '2026-11-09',
+  updated: '2026-11-10',
   source: '多源自动抓取 + 人工维护（详见 data/conference_sources.json）',
   items: [
     { s:'2026-10-27', e:'2026-10-29', t:'IMARC 2026 国际矿业与资源大会', p:'悉尼 ICC', o:'IMARC', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'澳方年度最大矿业展会', v:'ok' },
@@ -17,8 +17,8 @@ window.CONFERENCE_DATA = {
     { s:'2026-11-17', e:'2026-11-17', t:'FT Metals & Mining Summit: India 2026', p:'印度', o:'Financial Times', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'聚焦关键矿产与矿业政策改革', v:'ok' },
     { s:'2026-11-18', e:'2026-11-30', t:'矿冶工程论坛：科技创新引领 开创矿产资源新格局', p:'湖南·长沙', o:'山东黄金 · 中南大学 · 东北大学 · 中国地大(北京) · 中国矿大(北京) · 北科大', tag:'勘查技术', u:'http://www.kygczz.com/CN/news/news962.shtml', note:'11 月中下旬，具体日期待二号通知；四大专题：成矿理论／成矿带勘查进展／金属矿开采／资源综合利用与绿色智能', v:'tbd' },
     { s:'2026-11-18', e:'2026-11-21', t:'第一届境外矿产勘查与矿业投资大会', p:'厦门悦华酒店', o:'中国地质学会 · 紫金矿业', tag:'矿业投资', u:'http://www.cnmn.com.cn/ShowNews1.aspx?id=474389', note:'18日报到、19-20 报告、21 紫金山—古田野外考察；★报名优惠截止 10-30（会员 1500／非会员 1900）', v:'ok' },
-    { s:'2026-11-19', e:'2026-11-19', t:'SMM AICE 2026 东南亚（越南）铝业大会定档，11月越南见！', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=473849', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'ok' },
     { s:'2026-12-01', e:'2026-12-01', t:'Resourcing Tomorrow 2026', p:'地点待确认', o:'Resourcing Tomorrow', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'2300+ 矿业与投资方参会', v:'ok' },
+    { s:'2027-01-07', e:'2027-01-08', t:'2027 SMM贵金属年会 500+行业人士即将集结', p:'深圳', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=475257', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'ok' },
     { s:'2027-01-12', e:'2027-01-12', t:'Future Minerals Forum 2027', p:'利雅得', o:'Future Minerals Forum', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'政府与投资方政策对接为主', v:'ok' },
     { s:'2027-01-24', e:'2027-01-25', t:'Vancouver Resource Investment Conference', p:'温哥华会展中心', o:'VRIC', tag:'矿业投资', u:'https://www.pdac.ca/members/member-resources/industry-events', v:'ok' },
     { s:'2027-01-25', e:'2027-01-28', t:'AME Roundup 2027', p:'温哥华会展中心', o:'AME', tag:'矿业投资', u:'https://www.pdac.ca/members/member-resources/industry-events', note:'矿业投资与并购路演', v:'ok' },
@@ -31,16 +31,15 @@ window.CONFERENCE_DATA = {
     { s:'2027-06-29', e:'2027-06-30', t:'Future of Mining Australia 2027', p:'珀斯 Crown', o:'Future of Mining', tag:'国际矿业', u:'https://www.mining-journal.com/events', v:'ok' },
     { s:'2027-10-23', e:'2027-10-28', t:'Exploration 27', p:'多伦多 MTCC', o:'Exploration 27', tag:'勘查技术', u:'https://www.pdac.ca/members/member-resources/industry-events', note:'勘探技术年度大会', v:'ok' },
     { t:'2026 SMM 第十一届导体线缆工业展览会暨电工材料产业年会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474462', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
-    { t:'2026 SMM金属矿业大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474298', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2026 SMM（第十一届）亚太镍铬锰不锈钢大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474482', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
+    { t:'2026SMM金属矿业大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=475260', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2026SMM铅锌年会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474575', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2026年全国铀矿地质会议', p:'待定', o:'中国地质学会', tag:'铀矿', u:'https://geosociety.org.cn/', note:'一号通知已发（2026-07-29），日期待公告', v:'tbd' },
     { t:'2026年国际纳米地球科学大会暨第四届中国纳米地球科学学术研讨会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6adb39652d357&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于举办2026年国际纳米地球科学大会暨第四届中国纳米地球科学学术研讨会的通知（二号通知）', v:'tbd' },
     { t:'2026年第三届有色金属行业贸易物流高质量发展论坛', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=475003', note:'有色行业会议/年会/展会预告，标题常自带日期与地点 · 原标题：关于召开2026年第三届有色金属行业贸易物流高质量发展论坛的通知', v:'tbd' },
     { t:'2026高碑店国际绿色智慧健康建筑博览会启幕', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474140', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
-    { t:'2027 SMM贵金属年会暨金银产业峰会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474042', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
-    { t:'2027 SMM铂族金属供需交易大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474043', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
-    { t:'9月10日，上海开幕！SMM（第八届）汽车供应链大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=473755', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
+    { t:'2027 SMM焊锡技术与应用创新论坛', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=475261', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
+    { t:'SMM LZE 2027（第二十二届）铅锌大会暨产业博览会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=475258', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'中国地质学会2026年度全国地学科普研讨会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6a8e48ca73d2c&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于召开中国地质学会2026年度全国地学科普研讨会的通知（二号通知）', v:'tbd' },
     { t:'中国地质学会地质学史专业委员会第34届学术年会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6abdc00c46646&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于召开中国地质学会地质学史专业委员会第34届学术年会的通知（第二号）', v:'tbd' },
     { t:'中国地质学会桩基无损检测专业委员会2026年学术研讨会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6aeae3cc1633b&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于召开中国地质学会桩基无损检测专业委员会2026年学术研讨会的通知（二号通知）', v:'tbd' },

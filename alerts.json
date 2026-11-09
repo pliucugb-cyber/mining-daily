@@ -1,17 +1,17 @@
 {
- "date": "2026-11-09",
+ "date": "2026-11-10",
  "has_history": true,
  "history_days": 15,
  "alerts": [
   {
-   "commodity": "沪锡",
-   "market": "SHFE 主连",
-   "move": "-3.93%",
-   "severity": "medium",
-   "detail": "沪锡（SHFE 主连）最新收报 343,340.00，单日 -3.93%（数据日期 2026-11-06）。",
+   "commodity": "碳酸锂",
+   "market": "GFEX 主连",
+   "move": "-5.79%",
+   "severity": "high",
+   "detail": "碳酸锂（GFEX 主连）最新收报 87,480.00，单日 -5.79%（数据日期 2026-11-09）。",
    "type": "price"
   }
  ],
- "summary": "今日异动 1 项：沪锡 -3.93%（SHFE 主连）。",
- "max_severity": "medium"
+ "summary": "今日异动 1 项：碳酸锂 -5.79%（GFEX 主连）。",
+ "max_severity": "high"
 }
