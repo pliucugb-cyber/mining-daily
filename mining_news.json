@@ -1,12 +1,12 @@
 {
   "meta": {
     "report_date": "2026-11-10",
-    "generated_at": "2026-11-10T05:38:41+08:00",
-    "total": 545,
-    "new_today": 22,
+    "generated_at": "2026-11-10T08:51:34+08:00",
+    "total": 547,
+    "new_today": 24,
     "archive": 523,
-    "page_total": 545,
-    "page_new_count": 22,
+    "page_total": 547,
+    "page_new_count": 24,
     "sources": [
       "MINING.COM",
       "SMM 国际站",
@@ -217,6 +217,40 @@
       "tags": [
         "铜",
         "国际"
+      ]
+    },
+    {
+      "id": "bd55230db404",
+      "title": "淡水河谷基础金属拟将 2026 年盈利提升至 50 亿美元",
+      "url": "https://www.mining.com/vale-base-metals-to-triple-earnings-to-5b-for-2026-ceo-says",
+      "source": "MINING.COM",
+      "orig_date": "11-10",
+      "orig_date_full": "2026-11-10",
+      "report_date": "2026-11-10",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "淡水河谷基础金属（VBM）CEO 表示，公司计划到 2026 年将年度盈利提升至 50 亿美元（约 360 亿元），约为当前三倍。2025 年 VBM 产铜 38.23 万吨、镍 17.72 万吨，分别同比增长 10% 与 11%。（原题：Vale Base Metals to triple earnings to $5B for 2026, CEO says）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "镍"
+      ]
+    },
+    {
+      "id": "6655c4cba6c4",
+      "title": "Alphamin 将刚果（金）锡矿定向供应美国新建冶炼厂",
+      "url": "https://www.mining.com/alphamin-directs-congo-tin-to-new-us-smelter",
+      "source": "MINING.COM",
+      "orig_date": "11-10",
+      "orig_date_full": "2026-11-10",
+      "report_date": "2026-11-10",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Alphamin 与一家美国新建冶炼厂签署初始两年协议，每年最多供应来自其刚果（金）Bisie 锡矿的 3,600 吨金属量锡，以契合美国关键矿产供应链本土化趋势。（原题：Alphamin directs Congo tin to new US smelter）",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "锡"
       ]
     },
     {
