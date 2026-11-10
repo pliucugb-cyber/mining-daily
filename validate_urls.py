@@ -20,6 +20,8 @@ validate_urls.py — 扫描 output/mining-daily/index.html 中所有新闻 URL�
 import re
 import sys
 import time
+import gzip
+import zlib
 from urllib.parse import urlparse
 from pathlib import Path
 import urllib.request
@@ -102,6 +104,34 @@ def keywords_of(title):
     return uniq
 
 
+def _decompress(body, headers):
+    """按 Content-Encoding / 魔数解压。
+
+    背景：news.smm.cn、news.metal.com 等即使请求未声明 gzip 也会回 gzip 体，
+    原实现直接把压缩字节按 utf-8 解码 → 只剩十几 KB 乱码、取不到 <title>，
+    导致「标题关键词 0/N 命中」的一整批假失效。见 REFERENCE.md §42.10。
+    """
+    if not body:
+        return body
+    enc = ''
+    try:
+        if headers is not None:
+            enc = (headers.get('Content-Encoding') or '').lower()
+    except Exception:
+        enc = ''
+    try:
+        if 'gzip' in enc or body[:2] == b'\x1f\x8b':
+            return gzip.decompress(body)
+        if 'deflate' in enc:
+            try:
+                return zlib.decompress(body)
+            except zlib.error:
+                return zlib.decompress(body, -zlib.MAX_WBITS)
+    except Exception:
+        return body
+    return body
+
+
 def fetch(url, last_domain_ts):
     """GET 一个 URL，返回 (status, body_bytes, body_text)。"""
     domain = urlparse(url).netloc
@@ -135,11 +165,11 @@ def fetch(url, last_domain_ts):
     })
     try:
         with _OPENER.open(req, timeout=TIMEOUT) as resp:
-            body = resp.read()
+            body = _decompress(resp.read(), resp.headers)
             text = body.decode('utf-8', errors='ignore')
             return resp.status, len(body), text[:200_000]
     except urllib.error.HTTPError as e:
-        body = e.read()
+        body = _decompress(e.read(), e.headers if hasattr(e, 'headers') else None)
         text = body.decode('utf-8', errors='ignore') if body else ''
         return e.code, len(body), text[:200_000]
     except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
@@ -183,8 +213,14 @@ def check_one(item, last_domain_ts):
     keywords = keywords_of(title)
     if status_code == 200 and keywords and not is_pdf:
         hit = sum(1 for k in keywords if k in body_text)
+        body_has_cjk = bool(re.search(r'[\u4e00-\u9fff]', body_text))
         if hit == 0:
-            findings.append(f'❌ 标题关键词 0/{len(keywords)} 命中（{keywords[:3]}…）——可能错挂源或 URL 错配')
+            if not body_has_cjk:
+                # 境外译文条目：我们存中文标题、原页是纯英文，中文关键词天然不命中。
+                # 属结构性误判，降级为警告（是否错挂由境外专项 1b 的英文原题核对负责）。
+                findings.append('⚠️ 中文标题 vs 纯英文原文页（译文条目，关键词不适用）')
+            else:
+                findings.append(f'❌ 标题关键词 0/{len(keywords)} 命中（{keywords[:3]}…）——可能错挂源或 URL 错配')
         elif hit / len(keywords) < 0.4:
             findings.append(f'⚠️ 标题关键词只命中 {hit}/{len(keywords)}（{keywords}）——疑似错挂')
 
