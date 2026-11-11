@@ -264,6 +264,19 @@ new_items = [
                 '智利国家铜业与 Pucobre 的合资铜矿项目通过关键审批环节，项目投资 8.7 亿美元，计划 2027 年开工建设，配套太阳能供电与海水供水系统。',
                 orig_title='Codelco, Pucobre clear key hurdle for $870 million copper mine')),
 
+    # ── 🌐 国际矿业动态（08:20 并集补稿追加，不删 05:30 已选项）──
+    (CAT_GJ, ni('https://www.mining.com/vale-base-metals-to-triple-earnings-to-5b-for-2026-ceo-says',
+                'MINING.COM', '11-10',
+                '淡水河谷基础金属拟将 2026 年盈利提升至 50 亿美元',
+                '淡水河谷基础金属（VBM）CEO 表示，公司计划到 2026 年将年度盈利提升至 50 亿美元（约 360 亿元），约为当前三倍。2025 年 VBM 产铜 38.23 万吨、镍 17.72 万吨，分别同比增长 10% 与 11%。',
+                orig_title='Vale Base Metals to triple earnings to $5B for 2026, CEO says')),
+
+    (CAT_GJ, ni('https://www.mining.com/alphamin-directs-congo-tin-to-new-us-smelter',
+                'MINING.COM', '11-10',
+                'Alphamin 将刚果（金）锡矿定向供应美国新建冶炼厂',
+                'Alphamin 与一家美国新建冶炼厂签署初始两年协议，每年最多供应来自其刚果（金）Bisie 锡矿的 3,600 吨金属量锡，以契合美国关键矿产供应链本土化趋势。',
+                orig_title='Alphamin directs Congo tin to new US smelter')),
+
     # ── 🔍 找矿成果与勘查技术 ───────────────────────────────────
     (CAT_ZK, ni('https://news.metal.com/newscontent/6UODXYMN4YRCRIEGBAOL4LC6X6ACDIVSFGOAAIQ-smm-news-brunswick-exploration-drills-302m-173-li2o-at-anais-dyke-in-qu',
                 'SMM 国际站', '11-09',

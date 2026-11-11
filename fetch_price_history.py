@@ -10,6 +10,9 @@ fetch_price_history.py — 拉取各品种近 15 个交易日日 K 收盘价，�
 注意: 电解钴为 SMM 现货报价，无连续日 K，不入图（前端该卡片不可点击）。
 """
 import json, time, subprocess, datetime, os, sys, re
+import urllib.request
+
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
@@ -60,11 +63,12 @@ SINA_GLOBAL_API = ("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var
 
 
 def curl(url, timeout=20):
-    r = subprocess.run(
-        ["curl", "-s", "-m", str(timeout), "-A", UA,
-         "-H", "Accept: */*", "-H", "Referer: https://finance.sina.com.cn/", url],
-        capture_output=True, timeout=timeout + 5)
-    return r.stdout.decode("utf-8", errors="replace")
+    # 2026-11-11：本机 curl 全部 http=000 / size=0（系统代理已死，curl 吃不到空 ProxyHandler），
+    # python 直连正常 ⇒ 改用直连 opener；函数名保留（调用点多，不必改名）。
+    req = urllib.request.Request(url, headers={
+        "User-Agent": UA, "Accept": "*/*", "Referer": "https://finance.sina.com.cn/"})
+    with _OPENER.open(req, timeout=timeout) as r:
+        return r.read().decode("utf-8", errors="replace")
 
 
 def fetch_sina(sym, retry=3):

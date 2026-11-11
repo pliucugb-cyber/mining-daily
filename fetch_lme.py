@@ -57,6 +57,10 @@ METALS = [
 ]
 
 
+# 直连 opener（绕开注册表死代理，见 MEMORY §9）
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+
 def fetch_page(page_index):
     url = API_URL + "?" + urllib.parse.urlencode({
         "orderBy": "dm",
@@ -71,7 +75,10 @@ def fetch_page(page_index):
         "Accept": "application/json, text/plain, */*",
         "Referer": "https://quote.eastmoney.com/",
     })
-    with urllib.request.urlopen(req, timeout=45) as r:
+    # 本机注册表常驻死代理（127.0.0.1:7890 未监听）会让 urlopen 报 WinError 10061，
+    # 环境变量清不掉（urllib 读注册表）⇒ 显式空 ProxyHandler 直连。
+    global _OPENER
+    with _OPENER.open(req, timeout=45) as r:
         return json.loads(r.read().decode("utf-8"))
 
 

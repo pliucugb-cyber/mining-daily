@@ -301,6 +301,12 @@ new_items = [
                 'Adani 旗下 Kutch Copper 计划在本财年（至 3 月）末将 500,000 吨/年铜冶炼产能利用率提升至 80-85%，高于 7 月提出的 75% 目标。长协覆盖约 50-60% 的铜精矿需求、另有约 20% 通过现货采购；9 月季度利用率为 64%，产铜 80,200 吨、销售 80,600 吨。',
                 orig_title='Adani\u2019s Kutch Copper Raises Utilisation Target to 80\u201385% as Feedstock Deals Support Ramp-Up')),
 
+    (CAT_GJ, ni('https://www.mining.com/canadian-uranium-eyes-acquisitions-as-rook-ii-exploration-takes-shape',
+                'MINING.COM', '11-07',
+                '加拿大铀企瞄准并购，Rook II 铀矿勘查渐成型',
+                '加拿大铀企 Canadian Uranium（CSE:CANU）顾问、Titan Uranium 创始人 Arni Johannson 表示，公司资本结构专为并购设计，正就收购一家上市公司、一处资产及合资机会进行谈判，意在扩充 Athabasca 盆地铀资产组合。其 Rook II 项目位于萨斯喀彻温省、面积约 18,941 公顷，10 月 27 日提交的 NI 43-101 技术报告记录 28 处铀矿化点，历史估算最高达 4,500 万磅 U₃O₈（未经验证、非现行资源量/储量）；公司 6 月以 9,663,156 股（作价 0.75 加元/股）收购 Rook 2 Uranium Corp. 取得 100% 权益，并计划视融资推进 6,000 米钻探，同时关注沙特等海外铀机会。',
+                orig_title='Canadian Uranium eyes acquisitions as Rook II exploration takes shape')),
+
     # ── 💰 并购与投资 ───────────────────────────────────────────
     (CAT_MA, ni('https://news.smm.cn/news/104203329',
                 '上海有色网', '11-04',
