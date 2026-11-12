@@ -1,12 +1,12 @@
 {
   "meta": {
     "report_date": "2026-11-12",
-    "generated_at": "2026-11-12T08:34:29+08:00",
-    "total": 526,
-    "new_today": 20,
+    "generated_at": "2026-11-12T08:46:16+08:00",
+    "total": 528,
+    "new_today": 22,
     "archive": 506,
-    "page_total": 526,
-    "page_new_count": 20,
+    "page_total": 528,
+    "page_new_count": 22,
     "sources": [
       "MINING.COM",
       "SMM 国际站",
@@ -166,6 +166,24 @@
       ]
     },
     {
+      "id": "a35e3d8f5bf6",
+      "title": "Troilus 在魁北克原金铜矿「废石」区探获金矿体",
+      "url": "https://www.mining.com/troilus-hits-gold-in-quebec-ground-marked-as-waste",
+      "source": "MINING.COM",
+      "orig_date": "11-12",
+      "orig_date_full": "2026-11-12",
+      "report_date": "2026-11-12",
+      "category": "找矿成果与勘查技术",
+      "is_new": true,
+      "summary": "Troilus 在魁北克一处原金铜矿旧址此前被标记为废石的区域内探获金矿体，该勘探进展正值公司为旧址再开发项目筹措融资之际。（原题：Troilus hits gold in Quebec ground marked as waste）",
+      "embed": "ok",
+      "tags": [
+        "铜",
+        "金",
+        "找矿"
+      ]
+    },
+    {
       "id": "b428bf64e9d1",
       "title": "津巴布韦维持 2027 年 1 月锂精矿出口禁令",
       "url": "https://news.smm.cn/news/6PDHDXYSNR5DW542KHQXEFICFF5YLFDG6SD7QQY",
@@ -296,6 +314,23 @@
       "tags": [
         "金",
         "锂"
+      ]
+    },
+    {
+      "id": "0f1eeda68862",
+      "title": "Minerals 260 获 4.10 亿澳元融资推进卡尔古利金矿项目",
+      "url": "https://www.mining.com/minerals-260-lines-up-a410m-for-gold-project",
+      "source": "MINING.COM",
+      "orig_date": "11-12",
+      "orig_date_full": "2026-11-12",
+      "report_date": "2026-11-12",
+      "category": "国际矿业动态",
+      "is_new": true,
+      "summary": "Minerals 260 获得 4.10 亿澳元（约合 19 亿元）融资支持，推进西澳卡尔古利附近一座潜在年产 15 万盎司（1 盎司≈31.1035 克）黄金的生产项目建设，最终建设决策延至 2027 年。（原题：Minerals 260 lines up A$410M for gold project）",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "国际"
       ]
     },
     {
