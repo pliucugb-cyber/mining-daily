@@ -1,6 +1,6 @@
 {
   "month": "2026-11",
-  "updated_at": "2026-11-12T08:28:28+08:00",
+  "updated_at": "2026-11-12T08:34:29+08:00",
   "count": 244,
   "news": [
     {
@@ -156,7 +156,7 @@
       "orig_date": "11-11",
       "orig_date_full": "2026-11-11",
       "report_date": "2026-11-12",
-      "category": "国际矿业动态",
+      "category": "政策与监管",
       "is_new": true,
       "summary": "津巴布韦矿业和矿业发展部长 Polite Kambamura 表示，政府维持 2027 年 1 月起只出口硫酸锂的期限，未给锂精矿出口留延期空间；生产商曾主张需到 2027 年 6 月才能建成当地加工设施。",
       "embed": "ok",
@@ -165,7 +165,8 @@
       ],
       "first_seen": "2026-11-12",
       "last_seen": "2026-11-12",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "af9705f3fcdb",
@@ -175,7 +176,7 @@
       "orig_date": "11-11",
       "orig_date_full": "2026-11-11",
       "report_date": "2026-11-12",
-      "category": "国际矿业动态",
+      "category": "行业动态",
       "is_new": true,
       "summary": "据当地媒体 11 月 9 日报道，支持 Highland Valley 铜矿罢工工人的纠察线已出现在温哥华港，覆盖该矿铜精矿、钼精矿等产品；工会称正阻止相关物料外运，但尚无具体码头、钼精矿货载或装运延迟得到确认。（原题：Flash: Highland Valley Strike Reaches Vancouver Port Picket Lines, Deepening Molybdenum Logistics Risk）",
       "embed": "ok",
@@ -185,7 +186,8 @@
       ],
       "first_seen": "2026-11-12",
       "last_seen": "2026-11-12",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "ac08787e1b39",
@@ -338,7 +340,7 @@
       "orig_date": "11-11",
       "orig_date_full": "2026-11-11",
       "report_date": "2026-11-12",
-      "category": "国际矿业动态",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "Lithium Americas 把内华达州 Thacker Pass 锂项目一期成本上调 31% 至 38.3 亿美元，资本开支增加 8.95 亿美元、资金需求增加约 9.95 亿美元；2026 年一期支出指引升至 17 亿—20 亿美元，仍维持 2028 年投产、满产年产 4 万吨电池级碳酸锂。（原题：Lithium Americas flagship Thacker Pass costs jump 31%）",
       "embed": "ok",
@@ -348,7 +350,8 @@
       ],
       "first_seen": "2026-11-12",
       "last_seen": "2026-11-12",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "873964dccddd",
@@ -400,7 +403,7 @@
       "orig_date": "11-11",
       "orig_date_full": "2026-11-11",
       "report_date": "2026-11-12",
-      "category": "国际矿业动态",
+      "category": "项目与产能",
       "is_new": true,
       "summary": "宝武西芒杜矿山第二系列 CS 区下坡输送系统全线重载试运行一次成功，标志北段项目矿山、铁路、港口全产业链建成投产，由生产建设期转入生产运营期。（原题：Milestone! Simandou North Mine Project Fully Completed and Put into Production!）",
       "embed": "ok",
@@ -409,7 +412,8 @@
       ],
       "first_seen": "2026-11-12",
       "last_seen": "2026-11-12",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "61c64b1ed26d",
@@ -419,7 +423,7 @@
       "orig_date": "11-11",
       "orig_date_full": "2026-11-11",
       "report_date": "2026-11-12",
-      "category": "国际矿业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "巴林铝业（Alba）三季度铝产品销量 207,430 吨、环比降 26%，产量回升至 214,192 吨、环比增 38%；前三季度销量 800,792 吨、同比降 33%，三季度净利润 1,850 万巴林第纳尔（约 4,905 万美元）、同比降 72.5%。",
       "embed": "ok",
@@ -429,7 +433,8 @@
       ],
       "first_seen": "2026-11-12",
       "last_seen": "2026-11-12",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "561969c4945a",
@@ -459,7 +464,7 @@
       "orig_date": "11-11",
       "orig_date_full": "2026-11-11",
       "report_date": "2026-11-12",
-      "category": "国际矿业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "USA Rare Earth（USAR）已从巴西 Serra Verde 的 Pela Ema 矿山向美国国防部资助的专设实体 US SIIE LLC 发运混合稀土碳酸盐，10 月启动商业规模发运、首批销售定于本月，属 15 年期 100% 包销协议；协议为钕镨设 110 美元/公斤、镝 575 美元/公斤、铽 2,050 美元/公斤底价。（原题：USA Rare Earth begins Brazil shipments to Pentagon）",
       "embed": "ok",
@@ -468,7 +473,8 @@
       ],
       "first_seen": "2026-11-12",
       "last_seen": "2026-11-12",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "43f7b1633c24",
@@ -502,7 +508,7 @@
       "orig_date": "11-11",
       "orig_date_full": "2026-11-11",
       "report_date": "2026-11-12",
-      "category": "国际矿业动态",
+      "category": "政策与监管",
       "is_new": true,
       "summary": "刚果（金）经济部长穆科科·桑巴在巴黎联合指导委员会会议后表示，衡量美刚战略矿产伙伴关系成功与否的标准是落地项目而非协议本身；双方联合声明称美国私企兴趣上升、项目链在扩大，但未出现新的投资承诺。",
       "embed": "ok",
@@ -511,7 +517,8 @@
       ],
       "first_seen": "2026-11-12",
       "last_seen": "2026-11-12",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "3a18f011a425",
@@ -629,7 +636,7 @@
       "orig_date": "11-11",
       "orig_date_full": "2026-11-11",
       "report_date": "2026-11-12",
-      "category": "国际矿业动态",
+      "category": "企业经营",
       "is_new": true,
       "summary": "住友金属矿山把 2026 财年净利润预期下调 26% 至 1,610 亿日元（约 10 亿美元），因菲律宾 Coral Bay Nickel 计提 426 亿日元减值、该资产计划 2028—2030 财年停产；年精炼铜产量指引下调至约 40 万吨。",
       "embed": "ok",
@@ -640,7 +647,8 @@
       ],
       "first_seen": "2026-11-12",
       "last_seen": "2026-11-12",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "0517757d7e57",
