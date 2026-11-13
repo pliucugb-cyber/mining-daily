@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-12",
+  "updated": "2026-11-14",
   "note": "唯一数据源。manual=人工维护（fetch_conferences.py 永不覆盖/删除）；auto=自动抓取（脚本重写）。conference-data.js 由本文件生成，勿直接改。",
   "manual": [
     {
@@ -397,6 +397,18 @@
       "src": "geosociety"
     },
     {
+      "t": "2026 SMM 锂电回收产业年会",
+      "s": "",
+      "e": "",
+      "p": "",
+      "o": "中国有色金属报",
+      "tag": "会议",
+      "u": "https://www.cnmn.com.cn/ShowNews1.aspx?id=475352",
+      "note": "有色行业会议/年会/展会预告，标题常自带日期与地点",
+      "v": "tbd",
+      "src": "cnmn_expo"
+    },
+    {
       "t": "2027 SMM焊锡技术与应用创新论坛",
       "s": "",
       "e": "",
@@ -539,35 +551,23 @@
       "note": "有色行业会议/年会/展会预告，标题常自带日期与地点 · 原标题：关于召开第三届 “新一轮找矿突破战略行动绿色勘查高质量发展大会” 的通知",
       "v": "tbd",
       "src": "cnmn_expo"
-    },
-    {
-      "t": "2026高碑店国际绿色智慧健康建筑博览会启幕",
-      "s": "",
-      "e": "",
-      "p": "",
-      "o": "中国有色金属报",
-      "tag": "会议",
-      "u": "https://www.cnmn.com.cn/ShowNews1.aspx?id=474140",
-      "note": "有色行业会议/年会/展会预告，标题常自带日期与地点",
-      "v": "tbd",
-      "src": "cnmn_expo"
     }
   ],
   "source_stats": [
     {
       "id": "miningjournal",
       "status": "OK",
-      "count": 3
+      "count": 0
     },
     {
       "id": "gmr",
       "status": "OK",
-      "count": 2
+      "count": 0
     },
     {
       "id": "geosociety",
       "status": "OK",
-      "count": 16
+      "count": 14
     },
     {
       "id": "cnmn_expo",
