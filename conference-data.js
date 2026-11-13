@@ -6,7 +6,7 @@
  *       note 补充信息 · v 日期可信度（ok/tbd）
  */
 window.CONFERENCE_DATA = {
-  updated: '2026-11-12',
+  updated: '2026-11-14',
   source: '多源自动抓取 + 人工维护（详见 data/conference_sources.json）',
   items: [
     { s:'2026-10-27', e:'2026-10-29', t:'IMARC 2026 国际矿业与资源大会', p:'悉尼 ICC', o:'IMARC', tag:'国际矿业', u:'https://globalminingreview.com/events', note:'澳方年度最大矿业展会', v:'ok' },
@@ -31,6 +31,7 @@ window.CONFERENCE_DATA = {
     { s:'2027-06-29', e:'2027-06-30', t:'Future of Mining Australia 2027', p:'珀斯 Crown', o:'Future of Mining', tag:'国际矿业', u:'https://www.mining-journal.com/events', v:'ok' },
     { s:'2027-10-23', e:'2027-10-28', t:'Exploration 27', p:'多伦多 MTCC', o:'Exploration 27', tag:'勘查技术', u:'https://www.pdac.ca/members/member-resources/industry-events', note:'勘探技术年度大会', v:'ok' },
     { t:'2026 SMM 第十一届导体线缆工业展览会暨电工材料产业年会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474462', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
+    { t:'2026 SMM 锂电回收产业年会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=475352', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2026 SMM（第十一届）亚太镍铬锰不锈钢大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474482', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2026SMM金属矿业大会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=475260', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2026SMM铅锌年会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474575', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
@@ -38,7 +39,6 @@ window.CONFERENCE_DATA = {
     { t:'2026年国际纳米地球科学大会暨第四届中国纳米地球科学学术研讨会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6adb39652d357&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于举办2026年国际纳米地球科学大会暨第四届中国纳米地球科学学术研讨会的通知（二号通知）', v:'tbd' },
     { t:'2026年第三届有色金属行业贸易物流高质量发展论坛', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=475003', note:'有色行业会议/年会/展会预告，标题常自带日期与地点 · 原标题：关于召开2026年第三届有色金属行业贸易物流高质量发展论坛的通知', v:'tbd' },
     { t:'2026年第五届全国地学研究生论坛', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6af38a6189ee8&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于举办2026年第五届全国地学研究生论坛的通知（二号通知）', v:'tbd' },
-    { t:'2026高碑店国际绿色智慧健康建筑博览会启幕', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=474140', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'2027 SMM焊锡技术与应用创新论坛', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=475261', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'SMM LZE 2027（第二十二届）铅锌大会暨产业博览会', o:'中国有色金属报', tag:'会议', u:'https://www.cnmn.com.cn/ShowNews1.aspx?id=475258', note:'有色行业会议/年会/展会预告，标题常自带日期与地点', v:'tbd' },
     { t:'中国地质学会地质学史专业委员会第34届学术年会', o:'中国地质学会', tag:'会议通知', u:'https://geosociety.org.cn/?v1=v14&v4=v21&v2=6abdc00c46646&v3=v41&v6=1', note:'官方通知 · 日期待定 · 原标题：关于召开中国地质学会地质学史专业委员会第34届学术年会的通知（第二号）', v:'tbd' },

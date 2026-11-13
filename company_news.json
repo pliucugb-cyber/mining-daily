@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-12",
+ "updated_at": "2026-11-14",
  "companies": [
   {
    "name": "紫金矿业",
@@ -17,6 +17,13 @@
    "stale": false,
    "rank": 1,
    "items": [
+    {
+     "t": "说图04 | 一场面向社区儿童的暑期守护",
+     "d": "2026-11-12",
+     "u": "https://www.zjky.cn/news/news-detail-123026.htm",
+     "s": "“反复告诉孩子不要去危险区域，效果有限，不如在假期给他们一个有人照看、可以安排活动的地方。”2022年，在经过充分的社区调研和沟通后，穆索诺伊在月度社区协商会议上提出这一方案，得到了社区各方的一致认可，随后公司启动紫金穆索诺伊夏令营。",
+     "k": "news"
+    },
     {
      "t": "图说03丨玉米丰收时",
      "d": "2026-11-10",
@@ -36,20 +43,6 @@
      "d": "2026-11-03",
      "u": "https://www.zjky.cn/news/news-detail-123011.htm",
      "s": "2025年12月，国家矿山安全监察局官网发布《高寒高海拔露天矿无人驾驶技术应用实践》，巨龙铜业无人驾驶应用案例被收入其中，成为全国高寒高海拔非煤露天矿无人驾驶推广的可借鉴参考范本，推动行业向“少人则安、无人则安”的安全生产模式转型。",
-     "k": "news"
-    },
-    {
-     "t": "巨龙铜业:探索高海拔矿山数智转型 多项智能化应用落地见效",
-     "d": "2026-10-28",
-     "u": "https://www.zjky.cn/news/news-detail-123008.htm",
-     "s": "磨矿浮选参数自主调控、运输台账自动采集、化验检测全程留痕……在地处世界屋脊的巨龙铜业，一项项智慧化建设正从蓝图变为现实，在高海拔特殊工况下，探索出一条属于高原矿山的数智转型之路。",
-     "k": "news"
-    },
-    {
-     "t": "紫金矿业向巴青灾区捐赠1000万元 矿山救援队连夜奔抵震区",
-     "d": "2026-10-24",
-     "u": "https://www.zjky.cn/news/news-detail-123000.htm",
-     "s": "10月23日，紫金矿业董事会审议通过临时议案，决定向西藏那曲巴青地震灾区捐赠1000万元，用于抢险救援、群众安置及灾后恢复工作。",
      "k": "news"
     },
     {
@@ -145,6 +138,27 @@
    "rank": 11,
    "items": [
     {
+     "t": "金隆铜业多维度开展经营测算工作",
+     "d": "2026-11-13",
+     "u": "http://www.tlys.cn/news.aspx?cid=26709&classid=383",
+     "s": "一是结合产品价格走势、加工费与原料到货等情况，分场景、分负荷测算各生产方案成本收益，统筹原料结构、冷铜处理、检修与资金平衡等因素，形成多套比选方案，支撑生产决策。二是紧跟市场变化，滚动编制月度生产计划，动态优化生产负荷与投料结构，协同生产部门持续降低能耗与物耗。",
+     "k": "news"
+    },
+    {
+     "t": "产业研究院召开科创经营形势研讨会",
+     "d": "2026-11-13",
+     "u": "http://www.tlys.cn/news.aspx?cid=26708&classid=383",
+     "s": "一是要立足发展大局，围绕“转变思想观念、强化担当作为、优化体制机制、深化融合发展”四个维度深入谋划推进。二是要正确认识科技创新贵在久久为功，面对新阶段发展任务，全体干部职工要进一步强化责任意识，主动攻坚克难。三是要结合产业发展实际，持续完善研究院体制机制，找准制度落地的平衡点。",
+     "k": "news"
+    },
+    {
+     "t": "金冠铜业多金属回收系统单月烟灰处理量创新高",
+     "d": "2026-11-12",
+     "u": "http://www.tlys.cn/news.aspx?cid=26703&classid=383",
+     "s": "10月份，金冠铜业多金属回收系统烟灰处理量超计划18.87%，创下投产以来月度最好水平。一是抓实生产组织，建立关键指标动态跟踪调整机制，持续优化工艺参数，确保烟灰浸出渣含铜指标稳定可控。二是紧盯运行工况，扎实推进设备预防性维保，严格设备操作规程，充分挖掘设备潜力，以设备稳定运行保障产能充分释放。",
+     "k": "news"
+    },
+    {
      "t": "铜冠铜箔加强新进博士培养",
      "d": "2026-11-11",
      "u": "http://www.tlys.cn/news.aspx?cid=25704&classid=383",
@@ -206,34 +220,6 @@
      "u": "http://www.tlys.cn/news.aspx?cid=25687&classid=383",
      "s": "日前，米拉多铜矿邀请厄瓜多尔社保局到矿山为中方员工集中办理社保业务，帮助中方员工完善护照号、银行账户等系统信息。同时，社保局工作人员还就社保政策进行讲解答疑。本次活动有效保障中方员工权益，提升矿山依法合规经营水平。",
      "k": "news"
-    },
-    {
-     "t": "张家港铜业推行岗位“双确认”安全管理模式",
-     "d": "2026-11-04",
-     "u": "http://www.tlys.cn/news.aspx?cid=25678&classid=383",
-     "s": "张家港铜业针对冶金生产高风险特点，持续深化现场安全精细化管控，推行岗位手指口述+人员定位智能管控“双确认”模式，构建人防和技防立体防护体系，为企业安全生产持续筑牢坚实屏障。",
-     "k": "news"
-    },
-    {
-     "t": "米拉多铜矿召开三季度经济活动分析会",
-     "d": "2026-11-04",
-     "u": "http://www.tlys.cn/news.aspx?cid=25677&classid=383",
-     "s": "一是守牢安全合规底线。压紧压实各层级安全责任，深化隐患排查整治，强化重点灾害防控，坚决防范各类安全事故，切实防范舆情、意识形态等各类风险。二是冲刺全年经营目标。科学组织生产，逐级分解落实指标，抓实铜精矿销售，科学调配电力，保障柴油供应。三是持续深化降本增效。",
-     "k": "news"
-    },
-    {
-     "t": "铜冠铜箔强化员工职业健康管理",
-     "d": "2026-11-04",
-     "u": "http://www.tlys.cn/news.aspx?cid=25676&classid=383",
-     "s": "一是完善防护基础。规范配备劳保用品，定期维护通风、除尘等设备，设置职业病危害告知与警示标识，改善作业环境。二是抓实健康监测。组织职业病危害岗位员工开展岗前、岗中、离岗职业健康体检，建立个人健康档案，动态跟踪健康状况，做到早发现、早干预。三是强化宣传培训。",
-     "k": "news"
-    },
-    {
-     "t": "天马山矿开展“三禁止”专项行动",
-     "d": "2026-11-03",
-     "u": "http://www.tlys.cn/news.aspx?cid=25674&classid=383",
-     "s": "一是明确禁令范围，在生产区域全面禁止流动吸烟、接打电话和阅览手机等行为，并划定重点管控点位。二是强化宣传教育，通过班前会、警示教育等方式，宣传不安全行为的危害，进一步增强安全意识。三是加强巡查检查，实行网格化包保和动态抽查，及时制止纠正违规行为。",
-     "k": "news"
     }
    ]
   },
@@ -253,6 +239,34 @@
    "stale": false,
    "rank": 19,
    "items": [
+    {
+     "t": "云南铜业：续签中矿国际三年股权托管协议",
+     "d": "2026-11-13",
+     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-11-13/doc-iniyqfwf1247706.shtml",
+     "s": "投资者提问：请问贵司就中矿国际托管到期后的后续安排是什么？以及贵司是否还有其他同业竞争资产有注入的预期？董秘回答(云南铜业SZ000878)：尊敬的投资者您好，感谢您对公司的关注。2026年6月，公司已与中国铜业续签《股权托管协议》，继续受...",
+     "k": "news"
+    },
+    {
+     "t": "云南铜业：说明公司存货构成及相关销售安排",
+     "d": "2026-11-13",
+     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-11-13/doc-iniyqfwi3668292.shtml",
+     "s": "尊敬的投资者您好，感谢您对公司的关注。公司存货主要包括原材料、在产品和库存商品，其中占比较大的为满足连续生产所必须的原材料和处于冶炼流程中的在产品，为保障连续生产所必需的流程性占用，其中原材料和在产品将随冶炼加工流程逐步转化为最终产品并实现销售，库存商品按正常销售节奏出售。",
+     "k": "news"
+    },
+    {
+     "t": "云南铜业羊拉乡核桃油帮扶案例入选2026全球减贫伙伴研讨会推荐案例",
+     "d": "2026-11-13",
+     "u": "https://finance.sina.com.cn/stock/s/2026-11-13/doc-iniypzqm3720123.shtml",
+     "s": "（来源：云南铜业股份有限公司）11月11日，2026全球减贫伙伴研讨会在北京召开，本次会议由中国国际减贫中心、联合国粮食及农业组织等机构联合主办，会上正式发布第七届全球减贫案例征集活动推荐案例名单。中铝集团报送的2个案例从31个国家和地区投...",
+     "k": "news"
+    },
+    {
+     "t": "云南铜业：关于召开2026年第三次临时股东会的通知",
+     "d": "2026-11-11",
+     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-11-11/doc-iniykqvx2258732.shtml",
+     "s": "郑重声明：东方财富发布此内容旨在传播更多信息，与本站立场无关，不构成投资建议。据此操作，风险自担。 ...",
+     "k": "news"
+    },
     {
      "t": "云南铜业：凉山矿业相关股份已完成注入",
      "d": "2026-10-30",
@@ -289,6 +303,13 @@
      "k": "news"
     },
     {
+     "t": "云南铜业股份有限公司2026年第三季度报告",
+     "d": "2026-10-27",
+     "u": "https://finance.sina.com.cn/roll/2026-10-27/doc-iniwqtpi5126691.shtml",
+     "s": "证券代码：000878 证券简称：云南铜业 公告编号：2026-073本公司及董事会全体成员保证信息披露的内容真实、准确、完整，没有虚假记载、误导性陈述或重大遗漏。重要内容提示：1.董事会及董事、高级管理人员保证季度报告的真实、准确、完整...",
+     "k": "news"
+    },
+    {
      "t": "云南铜业(000878.SZ)发布前三季度业绩，归母净利润26亿元，同比增长47.86%",
      "d": "2026-10-27",
      "u": "https://finance.sina.com.cn/stock/hkstock/ggscyd/2026-10-27/doc-iniwreay2145611.shtml",
@@ -321,20 +342,6 @@
      "d": "2026-10-26",
      "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-10-26/doc-iniwqhxp5320127.shtml",
      "s": "证券日报网讯 10月26日，云南铜业发布公告称，公司计划于2026年11月6日15:00-16:00举行2026年第三季度业绩说明会。...",
-     "k": "news"
-    },
-    {
-     "t": "云南铜业股份有限公司2026年中期分红派息实施公告",
-     "d": "2026-10-21",
-     "u": "https://finance.sina.com.cn/jjxw/2026-10-21/doc-inivxrnv5562343.shtml",
-     "s": "公司以总股本2,425,184,040股为基数，向全体股东每10股派发现金红利0.40元（含税），向全体股东合计派发现金97,007,361.60元（含税），不送红股，不以公积金转增股本。",
-     "k": "news"
-    },
-    {
-     "t": "云南铜业：主营阴极铜 铜精矿伴生含金银及少量钨金属",
-     "d": "2026-10-16",
-     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-10-16/doc-inivmpqz6911960.shtml",
-     "s": "尊敬的投资者您好，感谢您对公司的关注。公司主要生产和销售的产品为阴极铜，矿山企业自产铜精矿中含有黄金、白银及稀散金属；在铜精矿开采过程中，会伴生少量钨金属。",
      "k": "news"
     }
    ]
@@ -491,7 +498,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "chrome",
+   "method": "html",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -700,13 +707,6 @@
      "u": "https://finance.sina.com.cn/roll/2026-10-27/doc-iniwrqsv8911501.shtml",
      "s": "10月23日，云铝股份委托中国有色金属工业协会召开科技成果评价会，对公司申报的六项科技成果开展评价鉴定。经综合评价，公司三项科技成果达到国际领先水平，三项科技成果达到国际先进水平，标志着公司在绿色铝冶炼、高端铝合金材料、铝产业智能化装备...",
      "k": "news"
-    },
-    {
-     "t": "云铝股份：在建工程以存量项目为主 后续将依规披露新项目计划",
-     "d": "2026-10-26",
-     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-10-26/doc-iniwqpfm5199172.shtml",
-     "s": "投资者提问：公司半年报显示有4亿多在建工程，这些工程是老项目的维修还是新建项目？公司还有新项目投资计划吗？董秘回答(云铝股份SZ000807)：您好，首先感谢您对云铝股份的关心、支持和信任。公司半年报披露的在建工程以存量项目为主，本期投入主...",
-     "k": "news"
     }
    ]
   },
@@ -759,24 +759,31 @@
    "rank": 20,
    "items": [
     {
+     "t": "石河子市人民法院与天山铝业开展主题党日活动",
+     "d": "2026-11-13",
+     "u": "http://www.tslyjt.com/info/1133",
+     "s": "活动中，石河子市人民法院第一党支部党员一行 20多人先后参观了公司电池铝箔生产线、党建阵地、职工之家，实地调研了解天山铝业生产经营、党建工作、企业文化、内控管理及法律风险防控体系建设等情况，近距离感受企业发展历程，对公司坚持党建引领促发展、常态化推进法律风险防控、以党建引领凝聚发展合力的做法给予充分…",
+     "k": "news"
+    },
+    {
+     "t": "天山铝业认真开展2026年消防宣传月活动",
+     "d": "2026-11-13",
+     "u": "http://www.tslyjt.com/info/1132",
+     "s": "2026年11月9日是第35个全国消防日，今年消防宣传月主题为“全民消防 生命至上——提高自防自救能力”。",
+     "k": "news"
+    },
+    {
+     "t": "天山铝业全力冲刺四季度生产任务目标",
+     "d": "2026-11-13",
+     "u": "http://www.tslyjt.com/info/1131",
+     "s": "碳素板块紧盯阳极供应保障，扛稳上游原料保供职责。预焙阳极生产线科学排产，严把煅烧、成型、焙烧各道工序质量关口，严控阳极密度、电阻率等核心指标，持续提升阳极成品合格率，稳定供给集团内部电解铝生产需求，充分发挥一体化产业链成本优势。",
+     "k": "news"
+    },
+    {
      "t": "天山铝业再次入围中国民营企业500强",
      "d": "2026-10-10",
      "u": "http://www.tslyjt.com/info/1123",
      "s": "近日，2026中国民营企业500强发布会在天津隆重举行。天山铝业集团凭借扎实的经营底盘与稳健的综合实力，位列中国民营企业500强第449位、中国制造业民营企业500强第322位。",
-     "k": "news"
-    },
-    {
-     "t": "天山铝业获批设立国家级博士后科研工作站",
-     "d": "2026-10-10",
-     "u": "http://www.tslyjt.com/info/1119",
-     "s": "近日，天山铝业有限公司成功获批设立国家级博士后科研工作站，标志着企业高层次人才引育、产学研协同创新平台建设迈上新台阶。工作站将立足电解铝全产业链发展需求，紧扣安全生产、技术创新、节能降耗、绿色发展主线，持续培育壮大新质生产力，为企业高质量发展注入强劲智力动能。",
-     "k": "news"
-    },
-    {
-     "t": "天山铝业公司生产稳定高效运行车间一线热火朝天赶产保供",
-     "d": "2026-04-03",
-     "u": "http://www.tslyjt.com/info/1102",
-     "s": "目前，公司 140万吨电解铝绿色低碳能效提升改造项目首批电解槽顺利达产，新槽建设全面铺开。",
      "k": "news"
     }
    ]
@@ -857,6 +864,13 @@
    "stale": false,
    "rank": 7,
    "items": [
+    {
+     "t": "中国黄金集团与新疆维吾尔自治区人民政府举行会谈...",
+     "d": "2026-11-01",
+     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/11/I1570202464169230336.html",
+     "s": "11月11日，中国黄金集团有限公司与新疆维吾尔自治区人民政府在集团公司总部举行会谈并签署战略合作框架协议。双方围绕深化矿产资源开发、产业链建设、服务国家资源安全等领域进行深入交流。自治区党委副书记、自治区人民政府主席艾尔肯·吐尼亚孜与集团公司党委书记、董事长周洲举行会谈并见证签约。",
+     "k": "news"
+    },
     {
      "t": "中国黄金集团有限公司与中国能源建设集团有限公司...",
      "d": "2026-11-01",
@@ -1073,6 +1087,13 @@
    "rank": 9,
    "items": [
     {
+     "t": "共赴绿色共赢之路：天齐锂业中澳产业协作故事亮相央视主题纪录片《闪亮的APEC之旅》",
+     "d": "2026-11-12",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1127",
+     "s": "2026年亚太经合组织（APEC）第三十三次领导人非正式会议将于11月18-19日在深圳举行。值此盛会召开之际，由中央广播电视总台、中共广东省委宣传部、中共深圳市委宣传部联合出品的大型纪录片《闪亮的APEC之旅》，于11月9日至16日在CCTV-9纪录频道播出。",
+     "k": "news"
+    },
+    {
      "t": "实力认可 再添殊荣｜ 天齐锂业创新实验研究院通过CNAS检测实验室认可",
      "d": "2026-10-30",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1126",
@@ -1111,7 +1132,7 @@
      "t": "一图看懂 | 天齐锂业2026年半年度报告 查看详情 ",
      "d": "2026-08-28",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1106",
-     "s": "Tripartite Joint Venture Agreement Signing Ceremony of Tianqi Lithium, CATL, and Shengtun Group Successfully Held",
+     "s": "创新引领未来，专利赋能发展 | 天齐锂业研发创新中心成功举办首期专利质量提升工作坊培训",
      "k": "news"
     },
     {
@@ -1126,13 +1147,6 @@
      "d": "2026-08-24",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1104",
      "s": "助力全球锂业互联互通:天齐锂业牵头制定的ISO 7819:2025《锂术语》国际标准正式发布",
-     "k": "news"
-    },
-    {
-     "t": "天齐锂业伦交所ESG评级维持A，位居A股同行业公司第1名",
-     "d": "2026-08-13",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1100",
-     "s": "近期，伦敦证券交易所集团（简称“伦交所”）发布最新ESG评级结果，天齐锂业凭借在环境、社会及治理（ESG）领域的综合表现，获得A级。 查看详情 ",
      "k": "news"
     }
    ]
@@ -1227,6 +1241,13 @@
    "stale": false,
    "rank": 8,
    "items": [
+    {
+     "t": "华友钴业牵头起草钴盐产品碳足迹国家标准正式发布 近日，由华友钴业旗下衢州华友钴新材料有限公司牵头起草的国家标准GB/T",
+     "d": "2026-11-13",
+     "u": "https://www.huayou.com/news/corporate-news/780",
+     "s": "48437-2026 《温室气体 产品碳足迹量化方法与要求 钴盐》经国家市场监督管理总局、国家标准化管理委员会批准发布，填补了钴领域产品碳足迹国家标准的空白，为",
+     "k": "news"
+    },
     {
      "t": "华友钴业再添2家省级企业技术中心",
      "d": "2026-11-04",
@@ -1339,13 +1360,6 @@
      "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/846560006280/index.phtml",
      "s": "",
      "k": "news"
-    },
-    {
-     "t": "北方稀土(600111)：量价齐升助力前三季度盈利同比高增",
-     "d": "2026-10-26",
-     "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/846322153565/index.phtml",
-     "s": "",
-     "k": "news"
     }
    ]
   },
@@ -1362,26 +1376,15 @@
    "news_url": "https://www.regcc.cn/zgxtjt/jtnew/list_9.shtml",
    "method": "html",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 22,
    "items": [
     {
-     "t": "中国稀土集团与中国科学院宁波材料所举行工作会谈",
-     "d": "2026-02-05",
-     "u": "https://www.regcc.cn/zgxtjt/jtnew/202602/feea221748d646699946dbfc00912888.shtml",
-     "s": "2月5日，中国稀土集团党委书记、董事长刘雷云在总部与中国科学院宁波材料所所长王立平一行举行工作会谈。中国科学院院士沈保根，集团公司董事会秘书杨杰，中国科学院宁波材料所党委书记张家元出席。"
-    },
-    {
-     "t": "中国稀土集团召开2026年科技工作会",
-     "d": "2026-01-24",
-     "u": "https://www.regcc.cn/zgxtjt/jtnew/202601/ef7caedf431140d58ffd6f0e1b774540.shtml",
-     "s": "1月23日，中国稀土集团在总部召开2026年科技工作会，深入贯彻落实党中央关于科技创新的决策部署和国务院国资委有关工作要求，统筹谋划全年科技创新重点工作。集团公司党委书记、董事长刘雷云出席会议并讲话，党委副书记、董事、总经理李志辉主持会议。集团公司党委领导杨国安、刘华斌、王涛、郭良金、谢志宏出席。"
-    },
-    {
-     "t": "中国稀土集团和福建省工控集团举行工作会谈",
-     "d": "2026-01-20",
-     "u": "https://www.regcc.cn/zgxtjt/jtnew/202601/70d999dc99124f9da7b203d0c3761b91.shtml",
-     "s": "1月20日，中国稀土集团党委书记、董事长刘雷云在总部与福建省工业控股集团有限公司党委书记、董事长杨方一行举行工作会谈。集团公司党委副书记、董事、总经理李志辉，党委委员、总会计师郭良金；"
+     "t": "中国稀土集团召开2026年一季度经济运行分析会",
+     "d": "2026-04-17",
+     "u": "https://www.regcc.cn/zgxtjt/jtnew/202604/402626d16a4e460b9a35f52a7b274a40.shtml",
+     "s": "4月17日，中国稀土集团召开2026年一季度经济运行分析会，总结一季度生产经营成效，部署下一阶段重点任务。集团公司党委书记、董事长刘雷云出席会议，党委副书记、董事、总经理李志辉在会上作工作部署，党委委员、总会计师郭良金主持会议并作一季度经济运行分析报告，党委领导刘华斌、王涛、谢志宏出席。",
+     "k": "news"
     }
    ]
   },
@@ -1666,24 +1669,6 @@
    "rank": 25,
    "items": [
     {
-     "t": "Newmont对Red Chris的扩张定价高达$ 4.8B",
-     "d": "2026-10-23",
-     "u": "https://www.mining.com/newmont-prices-red-chris-expansion-at-up-to-4-8b/",
-     "s": "从2035年到2040年，不列颠哥伦比亚省的项目将平均每年生产275,000-325,000盎司黄金和65,000-85,000吨铜。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Newmont prices Red Chris expansion at up to $4.8B"
-    },
-    {
-     "t": "Newmont在金价上涨的情况下超越季度利润预期",
-     "d": "2026-10-22",
-     "u": "https://www.mining.com/web/newmont-beats-quarterly-profit-estimates-on-higher-gold-prices/",
-     "s": "该项目预计将在最初的13年洞穴寿命中生产约300万盎司的黄金和超过85万吨的铜。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Newmont beats quarterly profit estimates on higher gold prices"
-    },
-    {
      "t": "纽蒙特报告2026年第三季度业绩，第三季度调整后净收入创纪录；",
      "d": "2026-10-22",
      "u": "https://www.stocktitan.net/news/NEM/newmont-reports-third-quarter-2026-results-with-record-third-quarter-ldp1hb4lilt7.html",
@@ -1711,15 +1696,6 @@
      "t_en": ""
     },
     {
-     "t": "纽蒙特首席执行官敦促黄金行业遵守纪律，尽管价格上涨",
-     "d": "2026-10-07",
-     "u": "https://www.mining.com/web/newmont-ceo-urges-discipline-in-gold-industry-despite-higher-prices/",
-     "s": "2025年，由于避险需求，黄金大幅上涨， 2026年1月创下每盎司5,595 $的历史新高，并帮助Newmont等生产商报告……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Newmont CEO urges discipline in gold industry despite higher prices"
-    },
-    {
      "t": "纽蒙特宣布2026年第三季度业绩电话会议| NEM股票新闻",
      "d": "2026-09-24",
      "u": "https://www.stocktitan.net/news/NEM/newmont-announces-third-quarter-2026-results-conference-4lzn26njfi30.html",
@@ -1736,42 +1712,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Newmont Appoints Peter Beaven to Board of Directors | NEM Stock News"
-    },
-    {
-     "t": "Newmont在内华达州第三个黄金项目上支持探险家Headwater",
-     "d": "2026-08-13",
-     "u": "https://www.mining.com/newmont-backs-explorer-headwater-on-3rd-nevada-gold-project/",
-     "s": "Newmont已同意通过支付勘探成本来获得木星黄金项目的控制权。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Newmont backs explorer Headwater on 3rd Nevada gold project"
-    },
-    {
-     "t": "巴里克，纽蒙特与$ 19.5亿的交易解决纠纷",
-     "d": "2026-08-10",
-     "u": "https://www.mining.com/barrick-newmont-settle-dispute-with-1-95b-deal/",
-     "s": "争议结束时，巴里克报告第二季度调整后的盈利与分析师的估计相匹配，因为生产成本较高， …",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick, Newmont settle dispute with $1.95B deal"
-    },
-    {
-     "t": "来自Lihir金矿的Newmont EYES 500万盎司BOOST",
-     "d": "2026-07-24",
-     "u": "https://www.mining.com/newmont-eyes-5m-ounce-boost-from-lihir-gold-mine/",
-     "s": "管理层注意到增长项目的进展，包括Red Chris的监管批准和Cadia恢复生产。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Newmont eyes 5M-ounce boost from Lihir gold mine"
-    },
-    {
-     "t": "纽蒙特在金价上涨的情况下超越利润预期，产量稳定",
-     "d": "2026-07-23",
-     "u": "https://www.mining.com/web/newmont-beats-second-quarter-profit-estimates/",
-     "s": "Newmont表示，预计第三季度单位成本将增加，主要是由于持续的资本支出增加，也可能受到以下因素的影响……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Newmont tops profit estimates on higher gold prices, sees steady output"
     },
     {
      "t": "纽蒙特公布强劲的2026年第二季度业绩；仍有望实现全年指引| NEM股票新闻",
@@ -1792,13 +1732,13 @@
      "t_en": "Newmont Announces Second Quarter 2026 Results Conference Call | NEM Stock News"
     },
     {
-     "t": "纽蒙特的红色克里斯地下扩建项目获得监管绿灯",
+     "t": "Newmont的红色Chris Block洞穴项目获得重大监管批准| NEM股票新闻",
      "d": "2026-06-19",
-     "u": "https://www.mining.com/newmonts-red-chris-underground-expansion-gets-regulatory-green-light-in-bc/",
-     "s": "这家美国巨头在以170亿美元的价格收购Newcrest Mining时，增加了其在加拿大省的业务和铜的风险敞口。",
+     "u": "https://www.stocktitan.net/news/NEM/newmont-s-red-chris-block-cave-project-receives-major-regulatory-hslmxocmbblw.html",
+     "s": "",
      "k": "news",
-     "src": "mining",
-     "t_en": "Newmont’s Red Chris underground expansion gets regulatory green light"
+     "src": "agg",
+     "t_en": "Newmont’s Red Chris Block Cave Project Receives Major Regulatory Approvals | NEM Stock News"
     }
    ]
   },
@@ -1819,22 +1759,13 @@
    "rank": 27,
    "items": [
     {
-     "t": "美国巴里克（ American Barrick ）申请IPO",
-     "d": "2026-11-10",
-     "u": "https://www.mining.com/american-barrick-files-for-proposed-ipo/",
-     "s": "巴里克矿业周二宣布，其计划中的新上市公司将被命名为美国巴里克黄金公司。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "American Barrick files for proposed IPO"
-    },
-    {
-     "t": "Barrick's Marquee gold项目面临模糊的研究时机",
-     "d": "2026-11-10",
-     "u": "https://www.mining.com/web/barricks-marquee-gold-project-faces-hazy-study-timing/",
-     "s": "巴里克称Fourmile是“本世纪最伟大的黄金发现之一。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick’s Marquee gold project faces hazy study timing"
+     "t": "SEC 6-K（外资发行人报告）",
+     "d": "2026-11-13",
+     "u": "https://www.sec.gov/Archives/edgar/data/756894/000119312526459727/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
     },
     {
      "t": "Barrick宣布为拟议的首次公开募股提交美国Barrick和S-1申请| B股新闻",
@@ -1844,24 +1775,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Barrick Announces American Barrick and S-1 Filing for Proposed Initial Public Offering | B Stock News"
-    },
-    {
-     "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-11-10",
-     "u": "https://www.sec.gov/Archives/edgar/data/756894/000119312526455707/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
-    },
-    {
-     "t": "Barrick计划于11月提交北美IPO申请",
-     "d": "2026-11-09",
-     "u": "https://www.mining.com/barrick-targets-november-filing-for-north-american-ipo/",
-     "s": "此次发行是在8月份与Newmont达成协议，为其内华达金矿合资企业做出贡献之后。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick targets November filing for North American IPO"
     },
     {
      "t": "Barrick公布2026年第三季度业绩| B股新闻",
@@ -1891,33 +1804,6 @@
      "t_en": "Barrick to Report Third Quarter 2026 Results on November 9 | B Stock News"
     },
     {
-     "t": "Barrick在坦桑尼亚获得15年北马拉采矿许可证",
-     "d": "2026-10-05",
-     "u": "https://www.mining.com/barrick-secures-15-year-north-mara-mining-licences-in-tanzania/",
-     "s": "北马拉是多多马西北约540公里和肯尼亚边境以南20公里的露天和地下综合作业。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick secures 15-year North Mara mining licences in Tanzania"
-    },
-    {
-     "t": "Barrick Mining标志着北美IPO的潜在延迟",
-     "d": "2026-09-29",
-     "u": "https://www.mining.com/web/barrick-mining-flags-potential-delay-for-north-american-ipo/",
-     "s": "这家总部位于多伦多的矿业公司今年早些时候宣布计划分离其北美资产，并在2026年底之前在纽约上市。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick Mining flags potential delay for North American IPO"
-    },
-    {
-     "t": "巴里克矿业与马里金矿工会达成协议，缓解罢工威胁",
-     "d": "2026-09-27",
-     "u": "https://www.mining.com/web/barrick-mining-reaches-deal-with-unions-at-mali-gold-mine-easing-strike-threat/",
-     "s": "发言人说： “我们确认我们已与LG工会签署了新的集体谈判协议。”",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick Mining reaches deal with unions at Mali gold mine, easing strike threat"
-    },
-    {
      "t": "Avathon获选为Barrick北美业务的AI原生采矿运营模式提供支持| B股票新闻",
      "d": "2026-09-23",
      "u": "https://www.stocktitan.net/news/B/avathon-selected-to-power-an-ai-native-mining-operating-model-for-73hh6u7orvof.html",
@@ -1925,42 +1811,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Avathon Selected to Power an AI-Native Mining Operating Model for Barrick's North American Business | B Stock News"
-    },
-    {
-     "t": "Barrick ，道明考恩最佳股票精选中的Equinox",
-     "d": "2026-09-22",
-     "u": "https://www.mining.com/barrick-equinox-among-td-cowens-best-stock-picks/",
-     "s": "与此同时， Equinox在收购加拿大较小的生产商Orla Mining后，有可能“成为投资者的核心控股公司”。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick, Equinox among TD Cowen’s best stock picks"
-    },
-    {
-     "t": "文件显示，多个工会威胁对巴里克的旗舰马里金矿进行罢工",
-     "d": "2026-09-20",
-     "u": "https://www.mining.com/web/multiple-unions-threaten-strikes-at-barricks-flagship-mali-gold-mine-documents-show/",
-     "s": "工会表示，如果与加班费、任务费用报销和……有关的要求，他们将在本月底开始罢工行动。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Multiple unions threaten strikes at Barrick’s flagship Mali gold mine, documents show"
-    },
-    {
-     "t": "Agnico Eagle没有加入Barrick IPO的计划",
-     "d": "2026-09-15",
-     "u": "https://www.mining.com/agnico-eagle-has-no-plans-to-join-barricks-ipo/",
-     "s": "Agnico Eagle 是全球三大黄金生产商之一，无意参与Barrick Mining",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle has no plans to join Barrick’s IPO"
-    },
-    {
-     "t": "据称，巴里克将把北美黄金IPO推迟到2027年",
-     "d": "2026-09-02",
-     "u": "https://www.mining.com/web/barrick-is-said-to-weigh-delaying-north-america-gold-ipo-to-2027/",
-     "s": "据彭博社报道，巴里克正在与高盛集团(Goldman Sachs Group Inc.)就这笔交易进行合作。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick is said to weigh delaying North America gold IPO to 2027"
     }
    ]
   },
@@ -1990,15 +1840,6 @@
      "t_en": "Strong Copper Prices Show Up in Miners' Quarterly Results Alongside New Capacity Plans | FCX Stock News"
     },
     {
-     "t": "SEC 10-Q（季度报告）",
-     "d": "2026-11-06",
-     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000051/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
-    },
-    {
      "t": "Freeport宣布计划提高美国铜和钼产量| FCX股票新闻",
      "d": "2026-11-04",
      "u": "https://www.stocktitan.net/news/FCX/freeport-announces-plans-to-boost-u-s-copper-molybdenum-u9wh3s7sqygu.html",
@@ -2006,15 +1847,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Freeport Announces Plans to Boost U.S. Copper & Molybdenum Production | FCX Stock News"
-    },
-    {
-     "t": "SEC 8-K（重大事项披露）",
-     "d": "2026-11-04",
-     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000048/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
     },
     {
      "t": "Freeport 2026年第三季度和九个月财务和运营业绩发布于其网站| FCX股票新闻",
@@ -2051,69 +1883,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Freeport Second-Quarter and Six-Month 2026 Financial and Operating Results Release Available on Its Website | FCX Stock News"
-    },
-    {
-     "t": "图：格拉斯伯格斜坡加速延迟上的Freeport-McMoRan库存陨石坑",
-     "d": "2026-04-23",
-     "u": "https://www.mining.com/freeport-mcmoran-joins-100b-mining-company-club/",
-     "s": "在财报中， Freeport证实，虽然Grasberg区块洞穴的分阶段重启始于2026年3月下旬，但通往全…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "CHART: Freeport-McMoRan stock craters on Grasberg ramp-up delay"
-    },
-    {
-     "t": "首席执行官表示，尽管伊朗存在冲突，但Freeport-McMoRan对铜需求充满信心",
-     "d": "2026-03-23",
-     "u": "https://www.mining.com/web/freeport-mcmoran-confident-in-copper-demand-despite-iran-conflict-ceo-says/",
-     "s": "全球最大的上市铜公司生产了1.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Freeport-McMoRan confident in copper demand despite Iran conflict, CEO says"
-    },
-    {
-     "t": "铜价上涨帮助Freeport-McMoRan抵消Grasberg产量下降",
-     "d": "2026-01-22",
-     "u": "https://www.mining.com/web/freeport-mcmoran-profit-beats-as-high-copper-prices-offset-grasberg-hit/",
-     "s": "铜矿商Freeport-McMoRan周四公布的第四季度利润好于预期，原因是铜和黄金价格上涨抵消了产量……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rising copper prices help Freeport-McMoRan offset Grasberg production dip"
-    },
-    {
-     "t": "印度尼西亚预计很快将与Freeport-McMoRan就撤资计划达成协议",
-     "d": "2025-10-01",
-     "u": "https://www.mining.com/web/indonesia-expects-deal-soon-with-freeport-mcmoran-on-divestment-plan/",
-     "s": "印度尼西亚预计很快将与Freeport-McMoRan签署协议，向当地合作伙伴授予其印度尼西亚子公司PT Freeport Indonesia 12%的股份。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Indonesia expects deal soon with Freeport-McMoRan on divestment plan"
-    },
-    {
-     "t": "Freeport-McMoRan仍在与印度尼西亚就Grasberg矿权进行谈判",
-     "d": "2025-09-30",
-     "u": "https://www.mining.com/web/freeport-mcmoran-still-in-talks-with-indonesia-over-grasberg-mine-rights-company-says/",
-     "s": "周二早些时候的新闻报道显示，总部位于凤凰城的Freeport已同意剥离其印尼子公司PT Freepor 12%的股份……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Freeport-McMoRan still in talks with Indonesia over Grasberg mine rights"
-    },
-    {
-     "t": "首席执行官表示， Freeport-McMoRan仍在等待美国铜关税细节",
-     "d": "2025-07-23",
-     "u": "https://www.mining.com/web/freeport-mcmoran-beats-quarterly-profit-estimates-on-higher-copper-prices/",
-     "s": "特朗普本月早些时候宣布征收关税，作为推动美国生产对电动汽车、军事硬件等至关重要的金属的计划的一部分。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Freeport-McMoRan still waiting for US copper tariff details, CEO says"
-    },
-    {
-     "t": "Freeport-McMoRan首席执行官在美国加征关税之际标志着对全球经济增长的担忧",
-     "d": "2025-04-07",
-     "u": "https://www.mining.com/web/freeport-mcmoran-ceo-flags-concern-over-global-growth-amid-us-tariffs/",
-     "s": "铜生产商Freeport-McMoRan的首席执行官周一表示，她担心全球经济的健康状况以及经济衰退的可能性。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Freeport-McMoRan CEO flags concern over global growth amid US tariffs"
     }
    ]
   },
@@ -2143,15 +1912,6 @@
      "t_en": ""
     },
     {
-     "t": "南部铜矿重量$ 6.8亿Cuajone矿扩建",
-     "d": "2026-10-22",
-     "u": "https://www.mining.com/southern-copper-weighs-680m-cuajone-mine-expansion/",
-     "s": "拟议的铣削升级可以提高秘鲁业务的铜和钼产量。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper weighs $680M Cuajone mine expansion"
-    },
-    {
      "t": "SEC 8-K（重大事项披露）",
      "d": "2026-10-21",
      "u": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926117588/",
@@ -2159,96 +1919,6 @@
      "src": "edgar",
      "k": "reg",
      "t_en": ""
-    },
-    {
-     "t": "到2029年，南方铜矿的路线图将超过100万吨",
-     "d": "2026-07-23",
-     "u": "https://www.mining.com/southern-copper-maps-route-to-1-06m-tonnes-by-2029/",
-     "s": "该公司将其2026年产量指引上调至91.7万吨，比原定目标高出约1% ，并表示产量应保持大致稳定。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper maps route to over 1M tonnes by 2029"
-    },
-    {
-     "t": "Southern Copper计划$ 3.19亿Cuajone矿山大修",
-     "d": "2026-05-21",
-     "u": "https://www.mining.com/southern-copper-plans-319m-cuajone-mine-overhaul/",
-     "s": "南方铜业的目标是到2033年将年铜产量提高到160万吨。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper plans $319M Cuajone mine overhaul"
-    },
-    {
-     "t": "Southern Copper为Tia Maria保留了2027年底的启动日期",
-     "d": "2026-04-27",
-     "u": "https://www.mining.com/web/southern-copper-maintains-start-up-date-for-tia-maria-for-end-2027/",
-     "s": "墨西哥矿业集团Grupo的一家分支机构Southern Copper仍预计将在其延迟已久的Tia Maria铜矿项目开采。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper maintains start up date for Tia Maria for end-2027"
-    },
-    {
-     "t": "在选举混乱中，秘鲁重新授权Southern Copper的$ 18亿项目",
-     "d": "2026-04-20",
-     "u": "https://www.mining.com/peru-reauthorizes-southern-coppers-1-8b-project-amid-election-chaos/",
-     "s": "右翼分子Aliaga发出了类似的语气，警告说未使用的采矿许可证可能会恢复到该州—此举将标志着潜在的改组......",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Peru reauthorizes Southern Copper’s $1.8B project amid election chaos"
-    },
-    {
-     "t": "随着白银反弹成为焦点，南方铜业产量下降",
-     "d": "2026-01-28",
-     "u": "https://www.mining.com/web/southern-copper-sees-lower-output-as-silver-rally-grabs-focus/",
-     "s": "该公司预计，随着秘鲁关键矿山的矿石品位下降，未来两年铜产量将下降。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper sees lower output as silver rally grabs focus"
-    },
-    {
-     "t": "Southern Copper称秘鲁Tia Maria项目已完成23%",
-     "d": "2025-10-28",
-     "u": "https://www.mining.com/web/southern-copper-says-tia-maria-project-in-peru-is-23-complete/",
-     "s": "该项目预计每年生产12万吨铜阴极。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper says Tia Maria project in Peru is 23% complete"
-    },
-    {
-     "t": "Southern Copper的$ 18亿Tía María矿获得绿灯",
-     "d": "2025-10-21",
-     "u": "https://www.mining.com/southern-coppers-1-8b-tia-maria-mine-gets-green-light/",
-     "s": "秘鲁能源和矿业部（ MINEM ）上周批准了采矿许可证，为该项目进入开采阶段扫清了道路。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper’s $1.8B Tía María mine gets green light"
-    },
-    {
-     "t": "Southern Copper的Tía María将提升当地收入40 ％",
-     "d": "2025-09-26",
-     "u": "https://www.mining.com/southern-coppers-tia-maria-to-lift-local-revenue-40/",
-     "s": "Southern Copper (NYSE, LON: SCCO)表示，其在秘鲁推迟已久的Tía María铜矿项目将增加阿雷基帕的地区收入，该提案……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper’s Tía María to lift local revenue 40%"
-    },
-    {
-     "t": "Southern Copper EYES $ 102亿墨西哥投资待谈判",
-     "d": "2025-07-31",
-     "u": "https://www.mining.com/southern-copper-eyes-10-2b-mexico-investment-pending-talks/",
-     "s": "该公司在本周的第二季度财报中表示，谈判旨在确保在此之前陷入停滞的许可证和许可证。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper eyes $10.2B Mexico investment pending talks"
-    },
-    {
-     "t": "南方铜业警告美中贸易战可能在短期内打击铜",
-     "d": "2025-07-30",
-     "u": "https://www.mining.com/web/southern-copper-expects-turmoil-from-us-china-trade-war-to-hit-copper/",
-     "s": "南方铜业是秘鲁第三大铜生产商，秘鲁本身也是全球第三大红色金属生产商。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Southern Copper warns US-China trade war could hit copper in short-term"
     }
    ]
   },
@@ -2287,15 +1957,6 @@
      "t_en": ""
     },
     {
-     "t": "Teck Resources在铜产量和价格走强的情况下超越利润预期",
-     "d": "2026-07-23",
-     "u": "https://www.mining.com/web/teck-resources-tops-profit-estimates-on-stronger-copper-production-and-prices/",
-     "s": "北美最大的锗生产商Teck去年表示，它正在考虑增加金属产量的选择，并正在讨论......",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Teck Resources tops profit estimates on stronger copper production and prices"
-    },
-    {
      "t": "随着军事技术繁荣将市场推向40亿美元，锑需求激增| TECK股票新闻",
      "d": "2026-03-09",
      "u": "https://www.stocktitan.net/news/TECK/antimony-demand-surges-as-military-tech-boom-pushes-market-toward-4-kcr4egy67us2.html",
@@ -2303,33 +1964,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Antimony Demand Surges as Military Tech Boom Pushes Market Toward $4 Billion | TECK Stock News"
-    },
-    {
-     "t": "由于铜价上涨， Teck Resources的季度利润高于季度利润，产量",
-     "d": "2026-02-19",
-     "u": "https://www.mining.com/web/teck-resources-beats-quarterly-profit-on-higher-copper-prices-output/",
-     "s": "这一节拍凸显了Teck对铜的不断增长的杠杆作用，铜是电气化和能源转型需求的核心金属，而该公司则致力于……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Teck Resources beats quarterly profit on higher copper prices, output"
-    },
-    {
-     "t": "Anglo American接近达成收购Teck Resources的交易",
-     "d": "2025-09-09",
-     "u": "https://www.mining.com/web/anglo-american-nears-deal-to-acquire-teck-resources/",
-     "s": "Anglo American Plc即将达成收购加拿大Teck Resources Ltd.的交易。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Anglo American nears deal to acquire Teck Resources"
-    },
-    {
-     "t": "Grid Metals与Teck Resources合作探索曼尼托巴省的硫化镍项目",
-     "d": "2024-12-12",
-     "u": "https://www.mining.com/grid-metals-teck-resources-team-up-to-explore-nickel-sulphide-project-in-manitoba/",
-     "s": "Teck可以通过在项目上花费1570万加元并分阶段支付总计1加元的现金来收购该项目高达70 ％的权益。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Grid Metals, Teck Resources team up to explore nickel sulphide project in Manitoba"
     }
    ]
   },
@@ -2386,15 +2020,6 @@
      "t_en": "Scout Discoveries Announces 14.9% Strategic Investment by Agnico Eagle and an Earn-In Agreement in Idaho; Electrum Increases to 30% Ownership in Combined US$25 Million Private Placement | AEM Stock News"
     },
     {
-     "t": "Agnico Eagle没有加入Barrick IPO的计划",
-     "d": "2026-09-15",
-     "u": "https://www.mining.com/agnico-eagle-has-no-plans-to-join-barricks-ipo/",
-     "s": "Agnico Eagle 是全球三大黄金生产商之一，无意参与Barrick Mining",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle has no plans to join Barrick’s IPO"
-    },
-    {
      "t": "AGNICO EAGLE宣布处置DELTA和Helm BAY项目以及对VIZSLA铜的投资| AEM股票新闻",
      "d": "2026-09-08",
      "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-announces-disposition-of-delta-and-helm-bay-projects-knsbvfl6yiff.html",
@@ -2420,60 +2045,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "AGNICO EAGLE ANNOUNCES INVESTMENT IN RADISSON MINING RESOURCES INC. | AEM Stock News"
-    },
-    {
-     "t": "Agnico Eagle保持2026年的目标，尽管亏损37万盎司",
-     "d": "2026-07-31",
-     "u": "https://www.mining.com/agnico-eagle-keeps-2026-target-despite-370000-ounce-loss/",
-     "s": "Agnico重申了增长计划，因为现金流和回购抵消了Barnt坑壁运动造成的生产损失。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle keeps 2026 target despite 370,000-ounce loss"
-    },
-    {
-     "t": "Agnico Eagle暂停魁北克矿坑开采，旗帜生产受到打击",
-     "d": "2026-07-02",
-     "u": "https://www.mining.com/web/agnico-eagle-suspends-quebec-pit-mining-flags-production-hit/",
-     "s": "该公司表示，该事件没有造成人员伤亡、设备损坏或环境影响。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle suspends Quebec pit mining, flags production hit"
-    },
-    {
-     "t": "Agnico Eagle发布创纪录的储备金，加息支出",
-     "d": "2026-02-13",
-     "u": "https://www.mining.com/agnico-eagle-posts-record-reserves-hikes-payout/",
-     "s": "加拿大最大的金矿公司Agnico Eagle Mines 报告称， 2025年贵金属储量创纪录，年利润飙升135% ……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle posts record reserves, hikes payout"
-    },
-    {
-     "t": "Agnico Eagle以1.66亿美元的价格将Barsele的股份出售给Goldsky",
-     "d": "2026-01-28",
-     "u": "https://www.mining.com/agnico-eagle-sells-barsele-stake-to-goldsky-for-166m/",
-     "s": "交易完成后， Agnico Eagle对Goldsky的持股比例将从未摊薄的约4.1%上升至约32.5%。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle sells Barsele stake to Goldsky for $166M"
-    },
-    {
-     "t": "Agnico Eagle、艾芬豪电气和地区金属MDC 11月矿业股排名第一",
-     "d": "2025-12-03",
-     "u": "https://www.mining.com/agnico-eagle-ivanhoe-electric-and-district-metals-top-mdc-november-mining-stock-rankings/",
-     "s": "从突破性的财务业绩到重大项目进展和市场变动公告， 11月的获奖者代表了塑造…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle, Ivanhoe Electric and District Metals top MDC November mining stock rankings"
-    },
-    {
-     "t": "Agnico Eagle推出价值$ 1.3亿美元的关键矿物Avenir装置",
-     "d": "2025-10-30",
-     "u": "https://www.mining.com/agnico-eagle-launches-130m-avenir-unit-for-critical-minerals/",
-     "s": "Agnico计划投入8000万美元的非黄金和非铜战略投资，外加5000万美元的现金为Avenir Minerals提供资金。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle launches $130M Avenir unit for critical minerals"
     }
    ]
   },
@@ -2490,14 +2061,14 @@
    "news_url": "https://www.albemarle.com/news",
    "method": "html",
    "unreach": "",
-   "stale": false,
+   "stale": true,
    "rank": 31,
    "items": [
     {
      "t": "新闻稿2026年11月4日Albemarle公布2026年第三季度业绩北卡罗来纳州夏洛特2026年11月4日",
      "d": "2026-11-04",
      "u": "https://www.albemarle.com/global/en/news/albemarle-reports-third-quarter-2026-results",
-     "s": "归属于Albemarle的净收入为$ 2.97亿，同比增长$ 4.57亿。",
+     "s": "归属于Albemarle的净收入为2.97亿美元，同比增长4.57亿美元。",
      "k": "news",
      "t_en": "Press Releases November 04, 2026 Albemarle Reports Third Quarter 2026 Results CHARLOTTE, N.C., Nov. 4, 2026 /PRNewswire/ -- Albemarle Corpor"
     },
@@ -2576,17 +2147,17 @@
    "rank": 99,
    "items": [
     {
+     "t": "中矿资源集团副总裁王治伟在赞比亚开展系列拜访",
+     "d": "2026-11-12",
+     "u": "http://www.sinomine.cn/xwdti/438.html",
+     "s": "会谈中，王治伟对各位部长履新表示祝贺，对赞比亚各政府部门长期以来给予卡通巴项目的大力支持表示感谢，并详细介绍项目整体建设推进情况。",
+     "k": "news"
+    },
+    {
      "t": "中矿卡通巴矿业举行师徒带教拜师会以“传帮带”筑牢人才培养根基",
      "d": "2026-11-05",
      "u": "http://www.sinomine.cn/xwdti/436.html",
      "s": "此次拜师会的举行，标志着卡通巴矿业师徒带教培养工作进入实质性执行阶段。公司将以师徒结对为抓手，持续完善人才培养体系，为公司高质量发展提供有力的人才支撑。",
-     "k": "news"
-    },
-    {
-     "t": "Bikita矿业持续推进校园营养项目 | 助力属地教育民生发展",
-     "d": "2026-10-31",
-     "u": "http://www.sinomine.cn/xwdti/434.html",
-     "s": "下一步，Bikita矿业将持续对接校方及社区代表，扎实推进各项社区帮扶项目落地见效。企业坚信，持续投入儿童营养与教育事业，是深化企地融合、共促社区长远发展的重要实践。",
      "k": "news"
     }
    ]
@@ -2604,7 +2175,7 @@
    "news_url": "http://www.bynmc.com/",
    "method": "html",
    "unreach": "",
-   "stale": false,
+   "stale": true,
    "rank": 99,
    "items": [
     {
@@ -2728,6 +2299,13 @@
    "rank": 99,
    "items": [
     {
+     "t": "中稀有色：关于召开2026年第三次临时股东会的通知",
+     "d": "2026-11-12",
+     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-11-12/doc-iniyntuz3794066.shtml",
+     "s": "郑重声明：东方财富发布此内容旨在传播更多信息，与本站立场无关，不构成投资建议。据此操作，风险自担。 ...",
+     "k": "news"
+    },
+    {
      "t": "中稀有色(600259)：业绩超预期 有望受益行业整合",
      "d": "2026-10-31",
      "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/846769986929/index.phtml",
@@ -2775,13 +2353,6 @@
      "u": "https://finance.sina.com.cn/jjxw/2026-10-30/doc-iniwzazv4653580.shtml",
      "s": "（来源：财闻）10月30日，中稀有色（600259.SH）公告，2026年第三季度营业收入11.79亿元，同比下降39.75%；归属于上市公司股东的净利润3.48亿元，同比增长532.33%；扣除非经常性损益的净利润3.21亿元，同比增长3...",
      "k": "news"
-    },
-    {
-     "t": "中稀有色金属股份有限公司 关于对全资子公司增资的公告",
-     "d": "2026-09-29",
-     "u": "https://finance.sina.com.cn/jjxw/2026-09-29/doc-initmuyr3170791.shtml",
-     "s": "2026-09-28 18:40 V观财报丨中稀有色：拟向全资子公司增资3.06亿元",
-     "k": "news"
     }
    ]
   },
@@ -2801,6 +2372,13 @@
    "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "五矿资源收购英美资源镍业务，将修改补救方案",
+     "d": "2026-11-12",
+     "u": "https://finance.sina.com.cn/roll/2026-11-12/doc-iniymwrm3897860.shtml",
+     "s": "在香港上市的五矿资源表示，将修改向欧盟反垄断监管机构提交的补救方案，进行最后努力，以争取其5亿美元收购英美资源集团巴西镍业务的交易获得批准。",
+     "k": "news"
+    },
     {
      "t": "五矿资源(01208)收购英美资源镍业务 欧盟审查延至第二阶段",
      "d": "2026-11-03",
@@ -2950,24 +2528,6 @@
    "rank": 99,
    "items": [
     {
-     "t": "力拓在陆战胜利后向Resolution Copper注资1.44亿美元$",
-     "d": "2026-11-05",
-     "u": "https://www.mining.com/rio-tinto-injects-144m-into-resolution-copper-after-land-battle-win/",
-     "s": "力拓（ ASX ， LON ： RIO ）在获得……的控制权几个月后，批准了一项1.44亿美元的投资，以推进其在亚利桑那州的Resolution Copper项目。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto injects $144 million into Resolution Copper after land battle win"
-    },
-    {
-     "t": "力拓支持2000万$的努力，以阻止皮尔巴拉甘蔗蟾蜍",
-     "d": "2026-11-03",
-     "u": "https://www.mining.com/rio-tinto-backs-20m-effort-to-halt-pilbara-cane-toad-invasion/",
-     "s": "该项目将修改或包含六个牧场站的685个水利基础设施项目，创造一个干燥的走廊，旨在防止两栖……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto backs $20 million effort to stop Pilbara cane toads"
-    },
-    {
      "t": "SEC 6-K（外资发行人报告）",
      "d": "2026-11-02",
      "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000043/",
@@ -2975,105 +2535,6 @@
      "src": "edgar",
      "k": "reg",
      "t_en": ""
-    },
-    {
-     "t": "力拓在地震事件后开始重启奥尤陶勒盖地下作业",
-     "d": "2026-10-30",
-     "u": "https://www.mining.com/web/rio-tinto-begins-restarting-oyu-tolgoi-underground-operations-after-seismic-event/",
-     "s": "这名矿工说，有三名员工受伤，没有死亡报告，其中两人继续接受非生命治疗。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto begins restarting Oyu Tolgoi underground operations after seismic event"
-    },
-    {
-     "t": "力拓向阿根廷锂矿项目注资14 $十亿",
-     "d": "2026-10-29",
-     "u": "https://www.mining.com/rio-tinto-pumps-1-4b-into-lithium-projects-in-argentina/",
-     "s": "在扩张的同时，生产商也面临着控制成本和展示新开采技术的商业可行性的压力。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto pumps $1.4 billion into lithium projects in Argentina"
-    },
-    {
-     "t": "力拓（ Rio Tinto ）在人才短缺的情况下关注56 ％的首席执行官加薪",
-     "d": "2026-10-28",
-     "u": "https://www.mining.com/rio-tinto-eyes-56-ceo-pay-hike-amid-talent-crunch/",
-     "s": "根据德勤4月份的一份报告，富时100指数公司的首席执行官薪酬中位数在2025年同比增长18% ，达到589万英镑。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto eyes 56% CEO pay hike amid talent crunch"
-    },
-    {
-     "t": "力拓将向昆士兰铝土矿项目投资19亿$",
-     "d": "2026-10-22",
-     "u": "https://www.mining.com/web/rio-tinto-to-invest-1-9-billion-in-queensland-bauxite-project/",
-     "s": "该公告是在力拓上个月同意从嘉能可（ Glencore ） （ LON ： GLEN ）和三菱（ Mitsubishi ）收购相邻的Aurukun铝土矿项目之后发布的。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto to invest $1.9 billion in Queensland bauxite project"
-    },
-    {
-     "t": "力拓和中国国有买家就铁矿石供应协议达成一致",
-     "d": "2026-10-22",
-     "u": "https://www.mining.com/web/rio-tinto-and-chinas-state-buyer-agree-iron-ore-supply-deal/",
-     "s": "CMRG还与Kumba Iron Ore Ltd.达成了一项协议，与Anglo American Plc关联的生产商从4月到2027年3月达成协议。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto and China’s state buyer agree on iron ore supply deal"
-    },
-    {
-     "t": "消息人士称， CMRG同意与力拓签订新的年度供应合同",
-     "d": "2026-10-21",
-     "u": "https://www.mining.com/web/cmrg-agrees-to-new-annual-supply-contract-with-rio-tinto-sources-say/",
-     "s": "这家中国铁矿石买家已与力拓(Rio Tinto)就关键炼钢原料达成新的供应协议。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "CMRG agrees to new annual supply contract with Rio Tinto, sources say"
-    },
-    {
-     "t": "前英美资源集团高管力拓任命ICMM首位女性首席执行官",
-     "d": "2026-10-14",
-     "u": "https://www.mining.com/former-rio-tinto-anglo-american-executive-named-icmms-first-woman-ceo/",
-     "s": "ICMM表示， Cameron-Johansson是在经过“严格的竞争”遴选程序后被任命的。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Former Rio Tinto, Anglo American executive named ICMM’s first woman CEO"
-    },
-    {
-     "t": "力拓有望在第三季度铁矿石销售额高于预期后释放50 $的资本",
-     "d": "2026-10-13",
-     "u": "https://www.mining.com/web/rio-tinto-on-track-to-release-5-billion-in-capital-after-q3-iron-ore-sales-top-estimates/",
-     "s": "这家全球最大的铁矿石生产商售出了85块。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto on track to release $5 billion in capital after Q3 iron ore sales top estimates"
-    },
-    {
-     "t": "Rio Tinto ，创始人工厂支持五家采矿初创公司",
-     "d": "2026-10-05",
-     "u": "https://www.mining.com/rio-tinto-founders-factory-back-five-mining-startups/",
-     "s": "力拓（ ASX ， LON ： RIO ）和Founders Factory将通过其采矿技术加速器计划投资于五家采矿初创公司，以支持早期...",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto, Founders Factory back five mining startups"
-    },
-    {
-     "t": "力拓确保贝尔湾铝冶炼厂运营至2031年",
-     "d": "2026-09-30",
-     "u": "https://www.mining.com/web/rio-tinto-secures-bell-bay-aluminum-smelter-operations-till-2031/",
-     "s": "全球矿业公司力拓(Rio Tinto) 周四表示，已与澳大利亚和塔斯马尼亚政府达成协议，以确保正在进行的歌剧……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto secures Bell Bay aluminum smelter operations till 2031"
-    },
-    {
-     "t": "马达加斯加村民就矿山污染指控向力拓提出索赔",
-     "d": "2026-09-30",
-     "u": "https://www.mining.com/web/madagascar-villagers-file-claim-against-rio-tinto-over-alleged-mine-contamination/",
-     "s": "该公司表示， QMM进行了广泛的水监测，并每年发布结果。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Madagascar villagers file claim against Rio Tinto over alleged mine contamination"
     }
    ]
   },
@@ -3094,139 +2555,40 @@
    "rank": 99,
    "items": [
     {
-     "t": "必和必拓Codelco在智利北部发起$ 4000万铜矿开采",
-     "d": "2026-10-26",
-     "u": "https://www.mining.com/codelco-bhp-launch-40m-copper-hunt-in-northern-chile/",
-     "s": "随着对关键矿物的需求加速，两家公司已合作进一步探索Anillo铜矿项目。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Codelco, BHP launch $40M copper hunt in northern Chile"
-    },
-    {
-     "t": "必和必拓主席指出加拿大的税收激励措施呼吁进行投资改革",
-     "d": "2026-10-22",
-     "u": "https://www.mining.com/web/bhp-chair-points-to-canada-tax-incentives-in-call-for-investment-reforms/",
-     "s": "必和必拓目前从其南澳大利亚业务中生产的铀约占全球铀供应量的5%。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP chair points to Canada tax incentives in call for investment reforms"
-    },
-    {
      "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-10-22",
-     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526428335/",
+     "d": "2026-11-12",
+     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526456631/",
      "s": "",
      "src": "edgar",
      "k": "reg",
      "t_en": ""
     },
     {
-     "t": "必和必拓错过了对智利产能中断的季度铜产量估计",
-     "d": "2026-10-19",
-     "u": "https://www.mining.com/web/bhp-misses-quarterly-copper-output-estimates-on-chile-disruptions/",
-     "s": "必和必拓集团 周二报告称，由于恶劣天气和致命事故，第一季度铜产量大幅下降，迫使临时工...",
+     "t": "必和必拓在其迄今为止最大的Xplor引进中支持下一波勘探和技术人才|必和必拓股票新闻",
+     "d": "2026-02-01",
+     "u": "https://www.stocktitan.net/news/BHP/bhp-backs-the-next-wave-of-exploration-and-technology-talent-in-its-ccn3bdyki9ed.html",
+     "s": "",
      "k": "news",
-     "src": "mining",
-     "t_en": "BHP misses quarterly copper output estimates on Chile disruptions"
+     "src": "agg",
+     "t_en": "BHP backs the next wave of exploration and technology talent in its biggest Xplor intake yet | BHP Stock News"
     },
     {
-     "t": "必和必拓起诉斯彭斯铜矿工会“非法”停产",
-     "d": "2026-10-15",
-     "u": "https://www.mining.com/web/bhp-sues-union-at-spence-copper-mine-over-illegal-stoppages/",
-     "s": "在诉讼中，必和必拓声称，由于6月和7月的“两次非法停工” ，矿山作业受到“重大”影响，并寻求合作……",
+     "t": "必和必拓Xplor为2026年人群开放申请，提供无股权融资和全球支持|必和必拓股票新闻",
+     "d": "2025-09-09",
+     "u": "https://www.stocktitan.net/news/BHP/bhp-xplor-opens-applications-for-2026-cohort-offering-equity-free-engbqef3pt63.html",
+     "s": "",
      "k": "news",
-     "src": "mining",
-     "t_en": "BHP sues union at Spence copper mine over ‘illegal’ stoppages"
+     "src": "agg",
+     "t_en": "BHP Xplor Opens Applications for 2026 Cohort, Offering Equity-Free Funding and Global Support | BHP Stock News"
     },
     {
-     "t": "必和必拓避免对全球最大铜矿进行罢工",
-     "d": "2026-10-14",
-     "u": "https://www.mining.com/bhp-averts-strike-at-worlds-biggest-copper-mine-2/",
-     "s": "智利业务部门在11小时内达成的劳动协议缓解了当务之急的供应问题，因为全国范围内的采矿中断日益严重。",
+     "t": "G Mining Ventures提供企业最新动态|必和必拓股票新闻",
+     "d": "2024-12-20",
+     "u": "https://www.stocktitan.net/news/BHP/g-mining-ventures-provides-corporate-w0x71zv2rap2.html",
+     "s": "",
      "k": "news",
-     "src": "mining",
-     "t_en": "BHP averts strike at world’s biggest copper mine"
-    },
-    {
-     "t": "必和必拓智利埃斯孔迪达矿井主管在合同谈判失败后罢工",
-     "d": "2026-10-14",
-     "u": "https://www.mining.com/web/supervisors-at-bhps-escondida-mine-in-chile-to-strike-after-contract-talks-fail/",
-     "s": "工会表示，它提出了最终报价，其中包括90 ％的公司提案以及包括加薪和生产奖金在内的关键工会要求。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Supervisors at BHP’s Escondida mine in Chile to strike after contract talks fail"
-    },
-    {
-     "t": "必和必拓将关闭的澳大利亚镍厂出售给Gold Fields",
-     "d": "2026-10-07",
-     "u": "https://www.mining.com/web/bhp-sells-shuttered-australian-nickel-plant-to-gold-fields/",
-     "s": "Gold Fields一直在寻求收购该地区的黄金开采基础设施和矿山。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP sells shuttered Australian nickel plant to Gold Fields"
-    },
-    {
-     "t": "必和必拓智利Escondida矿的主管拒绝了报价，为罢工铺平了道路",
-     "d": "2026-09-30",
-     "u": "https://www.mining.com/web/supervisors-at-bhps-escondida-mine-in-chile-reject-offer-paving-the-way-for-a-strike/",
-     "s": "根据智利法律，双方现在必须进入强制性的为期五天的政府主导的调解程序，该程序可以通过双方协议延长，以...",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Supervisors at BHP’s Escondida mine in Chile reject offer, paving the way for a strike"
-    },
-    {
-     "t": "必和必拓智利埃斯孔迪达矿工会在发生致命事故后拒绝暂停合同谈判",
-     "d": "2026-09-27",
-     "u": "https://www.mining.com/web/union-at-bhps-escondida-mine-in-chile-refuses-to-pause-contract-talks-after-fatal-accident/",
-     "s": "由于事故，这家澳大利亚矿业公司要求暂时中止与主管和工作人员的谈判。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Union at BHP’s Escondida mine in Chile refuses to pause contract talks after fatal accident"
-    },
-    {
-     "t": "必和必拓的Escondida重启缓解铜市场紧张",
-     "d": "2026-09-25",
-     "u": "https://www.mining.com/bhps-escondida-restart-eases-tight-copper-market/",
-     "s": "矿山停产、中国库存低迷和即将到来的假期暂停使铜市场几乎没有供应中断的空间。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP’s Escondida restart eases tight copper market"
-    },
-    {
-     "t": "必和必拓在埃斯孔迪达发生致命事故后停止运营",
-     "d": "2026-09-23",
-     "u": "https://www.mining.com/fatal-accident-reported-at-bhps-escondida-mine/",
-     "s": "Chile’s Sernageomin confirmed the fatal accident, and deployed a regional team to investigate.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP halts operations at Escondida following fatal accident"
-    },
-    {
-     "t": "必和必拓Escondida矿业主管工会敦促拒绝合同要约，罢工迫在眉睫",
-     "d": "2026-09-23",
-     "u": "https://www.mining.com/web/bhp-escondida-mine-supervisors-union-urges-rejection-of-contract-offer-strike-looms/",
-     "s": "Unionized supervisors at BHP’s Escondida copper mine in Chile will urge members to reject the company’s latest contract offer, paving the way for a st…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP Escondida mine supervisors’ union urges rejection of contract offer, strike looms"
-    },
-    {
-     "t": "必和必拓的埃斯孔迪达矿业主管表示，集体合同交易遥遥无期",
-     "d": "2026-09-22",
-     "u": "https://www.mining.com/web/bhps-escondida-mine-supervisors-say-collective-contract-deal-far-off/",
-     "s": "Unionized supervisors at BHP’s Escondida copper mine in Chile remain far from reaching a new collective contract agreement as time quickly runs out be…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP’s Escondida mine supervisors say collective contract deal far off"
-    },
-    {
-     "t": "必和必拓在黑德兰港工资纠纷中面临仲裁",
-     "d": "2026-09-15",
-     "u": "https://www.mining.com/bhp-faces-arbitration-in-port-hedland-wage-dispute/",
-     "s": "The Combined BHP Ports Unions said Tuesday it will ask Australia’s Fair Work Commission to determine pay and conditions after more than nine months of…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP faces arbitration in Port Hedland wage dispute"
+     "src": "agg",
+     "t_en": "G Mining Ventures Provides Corporate Update | BHP Stock News"
     }
    ]
   },
@@ -3254,105 +2616,6 @@
      "src": "edgar",
      "k": "reg",
      "t_en": ""
-    },
-    {
-     "t": "首席执行官表示，淡水河谷贱金属将在2026年将收入增加三倍至50亿$",
-     "d": "2026-11-09",
-     "u": "https://www.mining.com/vale-base-metals-to-triple-earnings-to-5b-for-2026-ceo-says/",
-     "s": "2025年， VBM生产了382,300吨铜和177,200吨镍，分别增长了10%和11%。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale Base Metals to triple earnings to $5B for 2026, CEO says"
-    },
-    {
-     "t": "淡水河谷第三季度利润暴跌，铁矿石产量低于预期",
-     "d": "2026-10-30",
-     "u": "https://www.mining.com/web/vale-third-quarter-profit-tumbles-iron-ore-output-misses-forecasts/",
-     "s": "然而，全球最大的铁矿石生产商之一淡水河谷表示，它有信心到达2026年铁矿石的低端……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale third-quarter profit tumbles, iron ore output misses forecasts"
-    },
-    {
-     "t": "Exiro领导的集团控制淡水河谷的曼尼托巴镍矿",
-     "d": "2026-10-16",
-     "u": "https://www.mining.com/exiro-led-group-takes-control-of-vales-manitoba-nickel-complex/",
-     "s": "VBM还签署了一项为期多年的协议，购买汤普森工厂生产的镍精矿，与该公司保持商业联系……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Exiro-led group takes control of Vale’s Manitoba nickel complex"
-    },
-    {
-     "t": "淡水河谷表示，成本飙升使10%的铁矿石陷入赤字",
-     "d": "2026-10-16",
-     "u": "https://www.mining.com/vale-says-soaring-costs-put-10-of-iron-ore-in-the-red/",
-     "s": "由于中国需求疲软和新供应将价格推至两年低点，不断上涨的燃料和运输费用挤压了生产商。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale says soaring costs put 10% of iron ore in the red"
-    },
-    {
-     "t": "淡水河谷以$ 1.9亿的交易收购Ligga铁矿石矿30%的股份",
-     "d": "2026-09-22",
-     "u": "https://www.mining.com/vale-takes-30-of-ligga-iron-ore-mine-in-190m-deal/",
-     "s": "淡水河谷（纽约证券交易所代码： VALE ） (B3: VALE3)确认将收购Ligga S.A. 30%的少数股权。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale takes 30% of Ligga iron ore mine in $190M deal"
-    },
-    {
-     "t": "在巴西遭遇挫折之际淡水河谷贱金属IPO ：报告",
-     "d": "2026-09-04",
-     "u": "https://www.mining.com/vale-shelves-base-metals-ipo-amid-brazil-pushback-report/",
-     "s": "根据该报告，该房源仍可能在稍后的日期恢复。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale shelves base metals IPO amid Brazil pushback: report"
-    },
-    {
-     "t": "淡水河谷研究从采矿废物中提取稀土和黄金",
-     "d": "2026-08-27",
-     "u": "https://www.mining.com/web/vale-studies-extracting-rare-earths-gold-from-mining-waste/",
-     "s": "该战略是公司减少废物产生和增加已提取材料再利用目标的一部分。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale studies extracting rare earths, gold from mining waste"
-    },
-    {
-     "t": "马里亚纳，另外18个巴西城市加入淡水河谷-必和必拓大坝倒塌赔偿协议",
-     "d": "2026-08-20",
-     "u": "https://www.mining.com/web/mariana-18-more-brazil-cities-join-vale-bhp-dam-collapse-compensation-deal/",
-     "s": "因此，该协议于2024年10月签署和批准，现在得到了49个有资格获得资金的城市中的45个的支持。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Mariana, 18 more Brazil cities join Vale-BHP dam collapse compensation deal"
-    },
-    {
-     "t": "巴西的Vibra押注在淡水河谷测试后向矿工销售利润率更高的柴油",
-     "d": "2026-08-19",
-     "u": "https://www.mining.com/web/brazils-vibra-bets-on-higher-margin-diesel-sales-to-miners-after-vale-tests/",
-     "s": "在淡水河谷的支持下， Vibra Energia正在寻求扩大其柴油产品在该国采矿业的销售。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Brazil’s Vibra bets on higher-margin diesel sales to miners after Vale tests"
-    },
-    {
-     "t": "淡水河谷加速Salobo铜扩张，降低成本",
-     "d": "2026-08-13",
-     "u": "https://www.mining.com/vale-speeds-salobo-copper-expansion-cuts-costs/",
-     "s": "新项目的融资协议取代了现有Salobo贵金属流协议下的潜在未来里程碑付款。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale speeds Salobo copper expansion, cuts costs"
-    },
-    {
-     "t": "淡水河谷、ABB在巴西铁矿石领域扩展人工智能和自动化",
-     "d": "2026-08-12",
-     "u": "https://www.mining.com/vale-abb-expand-ai-automation-across-brazil-iron-ore/",
-     "s": "该战略联盟旨在扩大自动化和人工智能(AI)技术的使用，以提高安全性、生产力和可持续性……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale, ABB expand AI, automation across Brazil iron ore"
     }
    ]
   },
@@ -3369,7 +2632,7 @@
    "news_url": "https://www.glencore.com/",
    "method": "mining",
    "unreach": "",
-   "stale": false,
+   "stale": true,
    "rank": 99,
    "items": [
     {
@@ -3477,7 +2740,7 @@
    "news_url": "https://www.angloamerican.com/",
    "method": "mining",
    "unreach": "",
-   "stale": false,
+   "stale": true,
    "rank": 99,
    "items": [
     {
@@ -3576,14 +2839,14 @@
    "news_url": "https://www.first-quantum.com/rss",
    "method": "rss",
    "unreach": "",
-   "stale": false,
+   "stale": true,
    "rank": 99,
    "items": [
     {
      "t": "第一批Quantum Minerals公布2026年第三季度业绩",
      "d": "2026-10-28",
      "u": "https://www.first-quantum.com/news/first-quantum-minerals-reports-third-quarter-2026-results/",
-     "s": "安大略省多伦多（ 2026年10月28日） – First Quantum Minerals Ltd.",
+     "s": "安大略省多伦多（2026年10月28日）– First Quantum Minerals Ltd.",
      "k": "news",
      "t_en": "First Quantum Minerals Reports Third Quarter 2026 Results"
     },
@@ -3599,7 +2862,7 @@
      "t": "First Quantum公布2026年第三季度业绩",
      "d": "2026-09-29",
      "u": "https://www.first-quantum.com/news/first-quantum-provides-notice-of-third-quarter-2026-results/",
-     "s": "安大略省多伦多（ 2026年9月29日） - First Quantum Minerals Ltd.",
+     "s": "安大略省多伦多（ 2026年年9月月29日日） - First Quantum Minerals Ltd.",
      "k": "news",
      "t_en": "First Quantum Provides Notice of Third Quarter 2026 Results"
     },
@@ -3615,7 +2878,7 @@
      "t": "First Quantum发布2026年第二季度业绩公告",
      "d": "2026-06-30",
      "u": "https://www.first-quantum.com/news/first-quantum-provides-notice-of-second-quarter-2026-results/",
-     "s": "安大略省多伦多（ 2026年6月30日） - First Quantum Minerals Ltd.",
+     "s": "安大略省多伦多（ 2026年年6月月30日日） - First Quantum Minerals Ltd.",
      "k": "news",
      "t_en": "First Quantum Provides Notice of Second Quarter 2026 Results"
     },
@@ -3639,7 +2902,7 @@
      "t": "首届Quantum Minerals公布董事选举投票结果",
      "d": "2026-05-07",
      "u": "https://www.first-quantum.com/news/first-quantum-minerals-announces-voting-results-for-the-election-of-directors-may-2026/",
-     "s": "安大略省多伦多（ 2026年5月7日） - First Quantum Minerals Ltd.",
+     "s": "安大略省多伦多（ 2026年年5月月7日日） - First Quantum Minerals Ltd.",
      "k": "news",
      "t_en": "First Quantum Minerals Announces Voting Results for the Election of Directors"
     }
@@ -3651,6 +2914,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 370
+  "items": 288
  }
 }
