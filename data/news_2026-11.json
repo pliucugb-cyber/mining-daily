@@ -1,8 +1,30 @@
 {
   "month": "2026-11",
-  "updated_at": "2026-11-16T00:19:03+08:00",
-  "count": 282,
+  "updated_at": "2026-11-16T10:55:45+08:00",
+  "count": 283,
   "news": [
+    {
+      "id": "a4f8b95fae79",
+      "title": "西部黄金新疆美盛继续停产，尾矿库二三期工程受强降雪影响",
+      "url": "http://static.cninfo.com.cn/finalpage/2026-11-14/1225671007.PDF",
+      "source": "巨潮资讯网",
+      "orig_date": "11-14",
+      "orig_date_full": "2026-11-14",
+      "report_date": "2026-11-16",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "西部黄金（601069）公告全资子公司新疆美盛因矿区持续强降雪、道路与电力供应受限，尾矿库二、三期合建工程无法继续施工，决定继续停产，待具备安全生产条件后复产，复产时间尚不确定。新疆美盛主要产品为金精矿，2025 年营业收入 168,777.27 万元、占公司 12.44%，净利润 17,616.55 万元、占 38.07%；2026 年 1—9 月营业收入 121,870.56 万元、占 8.41%。",
+      "embed": "pdf",
+      "tags": [
+        "金",
+        "政策",
+        "市场",
+        "安全"
+      ],
+      "first_seen": "2026-11-14",
+      "last_seen": "2026-11-16",
+      "region": "国内"
+    },
     {
       "id": "9be8040ab285",
       "title": "常铝股份控制权变更获济南市国资委批复，转让价 5.79 元/股",
@@ -23,8 +45,48 @@
       ],
       "first_seen": "2026-11-16",
       "last_seen": "2026-11-16",
-      "orig_category": "行业动态",
+      "region": "国内",
+      "orig_category": "行业动态"
+    },
+    {
+      "id": "7ca024c82513",
+      "title": "西藏矿业预挂牌转让白银扎布耶锂业 100% 股权",
+      "url": "http://static.cninfo.com.cn/finalpage/2026-11-14/1225671318.PDF",
+      "source": "巨潮资讯网",
+      "orig_date": "11-14",
+      "orig_date_full": "2026-11-14",
+      "report_date": "2026-11-16",
+      "category": "并购与投资",
+      "is_new": true,
+      "summary": "西藏矿业（000762）拟通过上海联合产权交易所公开挂牌转让控股子公司白银扎布耶锂业 100% 股权，其中公司持股 63.125%、控股子公司西藏日喀则扎布耶锂业持股 36.875%，标的注册资本 32,000 万元。目前仅为正式挂牌前的预披露、征寻意向受让方，审计评估尚未完成，预计不构成重大资产重组；交易完成后白银扎布耶不再纳入公司合并报表范围。",
+      "embed": "pdf",
+      "tags": [
+        "银",
+        "锂",
+        "矿权"
+      ],
+      "first_seen": "2026-11-14",
+      "last_seen": "2026-11-16",
       "region": "国内"
+    },
+    {
+      "id": "2e13a7cdde08",
+      "title": "中国稀土 39.41 元/股发行股份收购中稀凉山 51% 股权，重组预案出炉",
+      "url": "http://static.cninfo.com.cn/finalpage/2026-11-14/1225671885.PDF",
+      "source": "巨潮资讯网",
+      "orig_date": "11-14",
+      "orig_date_full": "2026-11-14",
+      "report_date": "2026-11-16",
+      "category": "并购与投资",
+      "is_new": true,
+      "summary": "中国稀土（000831）披露发行股份购买资产并募集配套资金暨关联交易预案：向控股股东中国稀土集团发行股份购买中稀（凉山）稀土有限公司 51% 股权，发行价 39.41 元/股，并向不超过 35 名特定对象募集配套资金。标的公司主营稀土矿采选与冶炼分离，产品为稀土精矿、碳酸稀土及稀土氧化物系列。公司股票自 11 月 2 日开市起停牌，将于预案披露后复牌；交易旨在解决同业竞争、履行集团公开承诺。",
+      "embed": "pdf",
+      "tags": [
+        "金",
+        "稀土"
+      ],
+      "first_seen": "2026-11-16",
+      "last_seen": "2026-11-16"
     },
     {
       "id": "1f6599b93099",
@@ -45,8 +107,8 @@
       ],
       "first_seen": "2026-11-16",
       "last_seen": "2026-11-16",
-      "orig_category": "市场与价格",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "fa19661a36c3",
@@ -174,8 +236,8 @@
       ],
       "first_seen": "2026-11-16",
       "last_seen": "2026-11-16",
-      "orig_category": "并购与投资",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "并购与投资"
     },
     {
       "id": "c9451d1418bd",
@@ -195,8 +257,8 @@
       ],
       "first_seen": "2026-11-16",
       "last_seen": "2026-11-16",
-      "orig_category": "政策与监管",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "政策与监管"
     },
     {
       "id": "c9187179cff8",
@@ -240,8 +302,8 @@
       ],
       "first_seen": "2026-11-16",
       "last_seen": "2026-11-16",
-      "orig_category": "市场与价格",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "市场与价格"
     },
     {
       "id": "b827e5cf24b4",
@@ -280,8 +342,8 @@
       "tags": [],
       "first_seen": "2026-11-16",
       "last_seen": "2026-11-16",
-      "orig_category": "国际矿业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "国际矿业动态"
     },
     {
       "id": "aaf4d6bb9644",
@@ -305,26 +367,6 @@
       "orig_category": "找矿成果与勘查技术"
     },
     {
-      "id": "a4f8b95fae79",
-      "title": "西部黄金子公司新疆美盛停产进展公告",
-      "url": "http://static.cninfo.com.cn/finalpage/2026-11-14/1225671007.PDF",
-      "source": "巨潮资讯网",
-      "orig_date": "11-13",
-      "orig_date_full": "2026-11-13",
-      "report_date": "2026-11-16",
-      "category": "行业动态",
-      "is_new": false,
-      "summary": "西部黄金就子公司新疆美盛停产事项披露进展公告，说明停产原因、复产安排及对公司生产经营的影响。",
-      "embed": "pdf",
-      "tags": [
-        "金",
-        "政策"
-      ],
-      "first_seen": "2026-11-14",
-      "last_seen": "2026-11-16",
-      "region": "国内"
-    },
-    {
       "id": "9f5c7f91e8a1",
       "title": "Capstone 下调铜产量指引下限至 19.5 万吨，Pinto Valley 复产推迟",
       "url": "https://www.mining.com/capstone-cuts-copper-outlook-as-restart-slips/",
@@ -343,8 +385,8 @@
       ],
       "first_seen": "2026-11-16",
       "last_seen": "2026-11-16",
-      "orig_category": "行业动态",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "行业动态"
     },
     {
       "id": "9a6d639ba6e3",
@@ -446,28 +488,6 @@
       ],
       "first_seen": "2026-11-14",
       "last_seen": "2026-11-14",
-      "region": "国内"
-    },
-    {
-      "id": "7ca024c82513",
-      "title": "西藏矿业拟预挂牌转让白银扎布耶锂业 100% 股权",
-      "url": "http://static.cninfo.com.cn/finalpage/2026-11-14/1225671318.PDF",
-      "source": "巨潮资讯网",
-      "orig_date": "11-13",
-      "orig_date_full": "2026-11-13",
-      "report_date": "2026-11-16",
-      "category": "并购与投资",
-      "is_new": false,
-      "summary": "西藏矿业公告，拟通过产权交易所预挂牌转让控股子公司白银扎布耶锂业有限公司 100% 股权，公开征集意向受让方。",
-      "embed": "pdf",
-      "tags": [
-        "银",
-        "锂",
-        "政策",
-        "矿权"
-      ],
-      "first_seen": "2026-11-14",
-      "last_seen": "2026-11-16",
       "region": "国内"
     },
     {
@@ -780,8 +800,8 @@
       ],
       "first_seen": "2026-11-16",
       "last_seen": "2026-11-16",
-      "orig_category": "找矿成果与勘查技术",
-      "region": "国际"
+      "region": "国际",
+      "orig_category": "找矿成果与勘查技术"
     },
     {
       "id": "0f1eeda68862",
