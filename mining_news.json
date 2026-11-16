@@ -1,12 +1,12 @@
 {
   "meta": {
     "report_date": "2026-11-16",
-    "generated_at": "2026-11-16T00:19:04+08:00",
-    "total": 491,
-    "new_today": 11,
-    "archive": 480,
-    "page_total": 491,
-    "page_new_count": 11,
+    "generated_at": "2026-11-16T10:55:45+08:00",
+    "total": 492,
+    "new_today": 14,
+    "archive": 478,
+    "page_total": 492,
+    "page_new_count": 14,
     "sources": [
       "MINING.COM",
       "SMM 国际站",
@@ -155,6 +155,24 @@
       ]
     },
     {
+      "id": "7ca024c82513",
+      "title": "西藏矿业预挂牌转让白银扎布耶锂业 100% 股权",
+      "url": "http://static.cninfo.com.cn/finalpage/2026-11-14/1225671318.PDF",
+      "source": "巨潮资讯网",
+      "orig_date": "11-14",
+      "orig_date_full": "2026-11-14",
+      "report_date": "2026-11-16",
+      "category": "矿权交易",
+      "is_new": true,
+      "summary": "西藏矿业（000762）拟通过上海联合产权交易所公开挂牌转让控股子公司白银扎布耶锂业 100% 股权，其中公司持股 63.125%、控股子公司西藏日喀则扎布耶锂业持股 36.875%，标的注册资本 32,000 万元。目前仅为正式挂牌前的预披露、征寻意向受让方，审计评估尚未完成，预计不构成重大资产重组；交易完成后白银扎布耶不再纳入公司合并报表范围。",
+      "embed": "pdf",
+      "tags": [
+        "银",
+        "锂",
+        "矿权"
+      ]
+    },
+    {
       "id": "9f5c7f91e8a1",
       "title": "Capstone 下调铜产量指引下限至 19.5 万吨，Pinto Valley 复产推迟",
       "url": "https://www.mining.com/capstone-cuts-copper-outlook-as-restart-slips/",
@@ -192,6 +210,25 @@
       ]
     },
     {
+      "id": "a4f8b95fae79",
+      "title": "西部黄金新疆美盛继续停产，尾矿库二三期工程受强降雪影响",
+      "url": "http://static.cninfo.com.cn/finalpage/2026-11-14/1225671007.PDF",
+      "source": "巨潮资讯网",
+      "orig_date": "11-14",
+      "orig_date_full": "2026-11-14",
+      "report_date": "2026-11-16",
+      "category": "行业动态",
+      "is_new": true,
+      "summary": "西部黄金（601069）公告全资子公司新疆美盛因矿区持续强降雪、道路与电力供应受限，尾矿库二、三期合建工程无法继续施工，决定继续停产，待具备安全生产条件后复产，复产时间尚不确定。新疆美盛主要产品为金精矿，2025 年营业收入 168,777.27 万元、占公司 12.44%，净利润 17,616.55 万元、占 38.07%；2026 年 1—9 月营业收入 121,870.56 万元、占 8.41%。",
+      "embed": "pdf",
+      "tags": [
+        "金",
+        "政策",
+        "市场",
+        "安全"
+      ]
+    },
+    {
       "id": "d86931ce4ec0",
       "title": "Freeport 以 7,720 万美元收购 TDG 旗下 Aurora West 项目 51% 权益",
       "url": "https://www.mining.com/freeport-strikes-110m-deal-for-bc-copper-stake/",
@@ -208,6 +245,23 @@
         "金",
         "找矿",
         "矿权"
+      ]
+    },
+    {
+      "id": "2e13a7cdde08",
+      "title": "中国稀土 39.41 元/股发行股份收购中稀凉山 51% 股权，重组预案出炉",
+      "url": "http://static.cninfo.com.cn/finalpage/2026-11-14/1225671885.PDF",
+      "source": "巨潮资讯网",
+      "orig_date": "11-14",
+      "orig_date_full": "2026-11-14",
+      "report_date": "2026-11-16",
+      "category": "并购与投资",
+      "is_new": true,
+      "summary": "中国稀土（000831）披露发行股份购买资产并募集配套资金暨关联交易预案：向控股股东中国稀土集团发行股份购买中稀（凉山）稀土有限公司 51% 股权，发行价 39.41 元/股，并向不超过 35 名特定对象募集配套资金。标的公司主营稀土矿采选与冶炼分离，产品为稀土精矿、碳酸稀土及稀土氧化物系列。公司股票自 11 月 2 日开市起停牌，将于预案披露后复牌；交易旨在解决同业竞争、履行集团公开承诺。",
+      "embed": "pdf",
+      "tags": [
+        "金",
+        "稀土"
       ]
     },
     {
@@ -1430,6 +1484,23 @@
       "embed": "ok",
       "tags": [
         "铝"
+      ]
+    },
+    {
+      "id": "daeccbab71a1",
+      "title": "几内亚西吉里金矿整治冲突致 10 人死亡，逾 1200 人被捕",
+      "url": "https://www.mining.com/guinea-gold-mining-crackdown-leaves-10-dead-sparks-exodus",
+      "source": "MINING.COM",
+      "orig_date": "11-13",
+      "orig_date_full": "2026-11-13",
+      "report_date": "2026-11-16",
+      "category": "政策与监管",
+      "is_new": false,
+      "summary": "几内亚 11 月 2 日实施非法采金禁令后展开整治，西吉里金矿区冲突造成 10 人死亡、13 人受伤，其中 5 人为外国公民；安全部队已逮捕超 1200 名涉嫌非法采矿人员，约 10 万人涌入马里首都巴马科，布基纳法索已接回 45406 名公民。（原题：Guinea gold mining crackdown leaves 10 dead, sparks exodus）",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "安全"
       ]
     },
     {
@@ -4859,23 +4930,6 @@
       ]
     },
     {
-      "id": "a4f8b95fae79",
-      "title": "西部黄金子公司新疆美盛停产进展公告",
-      "url": "http://static.cninfo.com.cn/finalpage/2026-11-14/1225671007.PDF",
-      "source": "巨潮资讯网",
-      "orig_date": "11-13",
-      "orig_date_full": "2026-11-13",
-      "report_date": "2026-11-16",
-      "category": "行业动态",
-      "is_new": false,
-      "summary": "西部黄金就子公司新疆美盛停产事项披露进展公告，说明停产原因、复产安排及对公司生产经营的影响。",
-      "embed": "pdf",
-      "tags": [
-        "金",
-        "政策"
-      ]
-    },
-    {
       "id": "8d0b7c2172ea",
       "title": "河南巩义集中启动 38 个铝基新材料项目，聚焦板带箔与节能熔铸产线",
       "url": "https://news.metal.com/newscontent/5B3IRMVOPEI2M3BGMZDRI4YSHRAWVRB77PFSWEA-gongyi-city-launches-38-projects-worth-rmb-838bn-focusing-on-aluminium-based-new-materials",
@@ -6121,25 +6175,6 @@
       ]
     },
     {
-      "id": "7ca024c82513",
-      "title": "西藏矿业拟预挂牌转让白银扎布耶锂业 100% 股权",
-      "url": "http://static.cninfo.com.cn/finalpage/2026-11-14/1225671318.PDF",
-      "source": "巨潮资讯网",
-      "orig_date": "11-13",
-      "orig_date_full": "2026-11-13",
-      "report_date": "2026-11-16",
-      "category": "并购与投资",
-      "is_new": false,
-      "summary": "西藏矿业公告，拟通过产权交易所预挂牌转让控股子公司白银扎布耶锂业有限公司 100% 股权，公开征集意向受让方。",
-      "embed": "pdf",
-      "tags": [
-        "银",
-        "锂",
-        "政策",
-        "矿权"
-      ]
-    },
-    {
       "id": "2c1ecff4d7e6",
       "title": "新宙邦与亿纬锂能签订长期供货协议",
       "url": "http://disc.szse.cn/download/disc/disk03/finalpage/2026-11-13/7b5f8620-1865-41d7-8141-61902c718fef.PDF",
@@ -7184,20 +7219,21 @@
       ]
     },
     {
-      "id": "daeccbab71a1",
-      "title": "几内亚西吉里金矿整治冲突致 10 人死亡，逾 1200 人被捕",
-      "url": "https://www.mining.com/guinea-gold-mining-crackdown-leaves-10-dead-sparks-exodus",
-      "source": "MINING.COM",
+      "id": "e770046379c6",
+      "title": "Codelco 与印度阿达尼集团签约，共同勘探开发卡伯卡拉铜矿",
+      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202611/t20261113_10363267.htm",
+      "source": "全球矿产资源信息系统",
       "orig_date": "11-13",
       "orig_date_full": "2026-11-13",
       "report_date": "2026-11-16",
-      "category": "国际矿业动态",
+      "category": "并购与投资",
       "is_new": false,
-      "summary": "几内亚 11 月 2 日实施非法采金禁令后展开整治，西吉里金矿区冲突造成 10 人死亡、13 人受伤，其中 5 人为外国公民；安全部队已逮捕超 1200 名涉嫌非法采矿人员，约 10 万人涌入马里首都巴马科，布基纳法索已接回 45406 名公民。（原题：Guinea gold mining crackdown leaves 10 dead, sparks exodus）",
+      "summary": "智利国家铜业公司（Codelco）与印度阿达尼集团签署协议，双方将共同勘探开发智利北部安托法加斯塔大区的卡伯卡拉（Cabecera）铜矿项目。",
       "embed": "ok",
       "tags": [
-        "金",
-        "安全"
+        "铜",
+        "找矿",
+        "国际"
       ]
     },
     {
@@ -7231,24 +7267,6 @@
       "summary": "Titan Mining 与美国陆军就其安尼斯顿基地石墨加工设施达成商业条款清单，租期初始 50 年；纽约 Kilbourne 矿按初步经济评估可年产石墨精矿约 4 万吨、矿山寿命 13 年，净化微粉石墨初始产能 1 万吨。（原题：Titan, US military team up on graphite）",
       "embed": "ok",
       "tags": []
-    },
-    {
-      "id": "e770046379c6",
-      "title": "Codelco 与印度阿达尼集团签约，共同勘探开发卡伯卡拉铜矿",
-      "url": "https://geoglobal.mnr.gov.cn/zx/kygs/kygsrtz/202611/t20261113_10363267.htm",
-      "source": "全球矿产资源信息系统",
-      "orig_date": "11-13",
-      "orig_date_full": "2026-11-13",
-      "report_date": "2026-11-16",
-      "category": "国际矿业动态",
-      "is_new": false,
-      "summary": "智利国家铜业公司（Codelco）与印度阿达尼集团签署协议，双方将共同勘探开发智利北部安托法加斯塔大区的卡伯卡拉（Cabecera）铜矿项目。",
-      "embed": "ok",
-      "tags": [
-        "铜",
-        "找矿",
-        "国际"
-      ]
     },
     {
       "id": "08237e9230bd",
