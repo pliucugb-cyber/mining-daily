@@ -1,8 +1,25 @@
 {
- "date": "2026-11-16",
+ "date": "2026-11-17",
  "has_history": true,
- "history_days": 14,
- "alerts": [],
- "summary": "15 个品种单日涨跌幅均未超过 3%，无显著异动。",
- "max_severity": "none"
+ "history_days": 15,
+ "alerts": [
+  {
+   "commodity": "白银",
+   "market": "上金所 Ag(T+D)",
+   "move": "-5.83%",
+   "severity": "high",
+   "detail": "白银（上金所 Ag(T+D)）最新收报 11,286.00，单日 -5.83%（数据日期 2026-11-16）。",
+   "type": "price"
+  },
+  {
+   "commodity": "沪锡",
+   "market": "SHFE 主连",
+   "move": "-3.04%",
+   "severity": "medium",
+   "detail": "沪锡（SHFE 主连）最新收报 343,230.00，单日 -3.04%（数据日期 2026-11-16）。",
+   "type": "price"
+  }
+ ],
+ "summary": "今日异动 2 项：白银 -5.83%（上金所 Ag(T+D)）；沪锡 -3.04%（SHFE 主连）。",
+ "max_severity": "high"
 }
