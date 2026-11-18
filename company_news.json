@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-17",
+ "updated_at": "2026-11-19",
  "companies": [
   {
    "name": "紫金矿业",
@@ -131,6 +131,20 @@
    "rank": 11,
    "items": [
     {
+     "t": "冬瓜山铜矿加强防寒防冻工作",
+     "d": "2026-11-18",
+     "u": "http://www.tlys.cn/news.aspx?cid=26726&classid=383",
+     "s": "一是全面排查极端低温对生产生活的影响，建立问题清单，明确措施、时限和责任人，统筹做好检修与生产组织。二是抓实设备设施防寒防冻，开展房屋检漏和重点设备保温，加强提升系统、供配电设施维护，清理易燃物，提高巡检频次。",
+     "k": "news"
+    },
+    {
+     "t": "米拉多铜矿加强内部审计工作",
+     "d": "2026-11-18",
+     "u": "http://www.tlys.cn/news.aspx?cid=26727&classid=383",
+     "s": "",
+     "k": "news"
+    },
+    {
      "t": "金新铜业以效益化最大化生产模式应对行业新形势",
      "d": "2026-11-17",
      "u": "http://www.tlys.cn/news.aspx?cid=26720&classid=383",
@@ -191,20 +205,6 @@
      "d": "2026-11-11",
      "u": "http://www.tlys.cn/news.aspx?cid=25704&classid=383",
      "s": "铜冠铜箔高度重视高层次人才成长，多维度搭建培养平台，助力新进博士快速融入、施展才干。一是领导班子成员亲自指导，结合生产实际传经验、带思路，帮助博士尽快熟悉业务、找准定位。二是紧扣高端铜箔研发攻关需求，为博士量身匹配科研课题，明确阶段目标与考核指标，配备研发团队与实验资源，推动科研成果落地转化。",
-     "k": "news"
-    },
-    {
-     "t": "金通铜业通过工业产品生产许可证延续换证审核",
-     "d": "2026-11-11",
-     "u": "http://www.tlys.cn/news.aspx?cid=25703&classid=383",
-     "s": "日前，经内蒙古自治区市场监督管理局评审专家组综合评议，金通铜业各项指标均达到工业产品生产许可证延续换证要求，正式获批新的生产许可证，为该公司持续合规生产经营提供坚实保障。下一步，该公司将严格落实质量安全主体责任，提升生产管理水平和产品质量保障能力，为可持续发展奠定坚实基础。",
-     "k": "news"
-    },
-    {
-     "t": "金隆铜业完成安全阀现场检验工作",
-     "d": "2026-11-10",
-     "u": "http://www.tlys.cn/news.aspx?cid=25700&classid=383",
-     "s": "日前，金隆铜业严格对标新规要求，联合省特种设备监督检验中心，完成70余台安全阀检测校验。本次校验围绕计划排程、现场检测、问题处置等规范推进，逐台核验安全阀性能指标，并对发现的问题进行清单化闭环整改。",
      "k": "news"
     }
    ]
@@ -484,7 +484,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -691,7 +691,7 @@
      "t": "云铝股份6项科技成果通过评价",
      "d": "2026-10-27",
      "u": "https://finance.sina.com.cn/roll/2026-10-27/doc-iniwrqsv8911501.shtml",
-     "s": "10月23日，云铝股份委托中国有色金属工业协会召开科技成果评价会，对公司申报的六项科技成果开展评价鉴定。经综合评价，公司三项科技成果达到国际领先水平，三项科技成果达到国际先进水平，标志着公司在绿色铝冶炼、高端铝合金材料、铝产业智能化装备...",
+     "s": "2026-10-27 10:44 铜矿罢工叠加冶炼减产，铜价有望高位运行，工业有色ETF博时(159171)跟踪指数涨超1%",
      "k": "news"
     }
    ]
@@ -845,13 +845,6 @@
      "u": "https://www.sd-gold.com/cmscontent/5825.html",
      "s": "-380m中段是嵩县山金当前基建标高最深的中段，也是26.41万t/年采矿扩建项目的核心控制性工程。作为衔接盲主竖井与南翼回风井的关键枢纽，该中段的开拓进度直接决定盲主竖井、南翼回风井井筒装备的进场时间，影响整体工程的建成节奏，是项目工期管控的核心环节。",
      "k": "news"
-    },
-    {
-     "t": "华澳矿业东沟铅锌矿地质勘查项目首钻顺利启动",
-     "d": "2026-09-30",
-     "u": "https://www.sd-gold.com/cmscontent/5824.html",
-     "s": "初秋的东沟矿区，晨露还沾在坡地的草叶上，钻机的轰鸣声便撞碎了山壑的沉寂，山东黄金华澳矿业东沟铅锌矿地质勘查项目全面启动。",
-     "k": "news"
     }
    ]
   },
@@ -984,9 +977,16 @@
    "news_url": "https://www.cfgold.com/col36/list",
    "method": "html",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 12,
    "items": [
+    {
+     "t": "赤峰黄金完成第十届董事会换届选举及高管团队聘任",
+     "d": "2026-11-16",
+     "u": "https://www.cfgold.com/col36/997",
+     "s": "依托紫金矿业成熟的矿山管理、资源勘查、工程建设及全球化运营经验，赤峰黄金有望在境内外矿山资源增储、产能提升、成本管控与产业协同上取得突破，推动资源禀赋转化为实际产能效益，实现公司高质量可持续发展。",
+     "k": "news"
+    },
     {
      "t": "自治区首家、首日落地！赤峰黄金获批本外币跨境资金集中运营业务",
      "d": "2026-09-18",
@@ -1012,6 +1012,13 @@
    "stale": false,
    "rank": 23,
    "items": [
+    {
+     "t": "湖南黄金：本次重组项目正有序推进 进展以公告为准",
+     "d": "2026-11-17",
+     "u": "https://finance.sina.com.cn/stock/relnews/dongmiqa/2026-11-17/doc-iniyzswf7617795.shtml",
+     "s": "尊敬的投资者，您好！本次重组项目正在有序推进中，相关进展请以公司公告为准，感谢您对公司的关注！",
+     "k": "news"
+    },
     {
      "t": "金价暴涨暴跌！002155，近300页回应重要收购",
      "d": "2026-11-08",
@@ -1101,6 +1108,13 @@
    "rank": 9,
    "items": [
     {
+     "t": "天齐锂业1000 吨 / 年高能锂电材料电池级金属锂项目竣工助推高能锂电材料产业提质升级",
+     "d": "2026-11-12",
+     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1128",
+     "s": "重庆铜梁项目是全国首个全自动电池级金属锂工厂，集大型化、自动化、节能化于一体。项目投产后，天齐锂业重庆金属锂总产能将提升至1600吨/年，成为全球单体产能规模领先的金属锂生产基地。",
+     "k": "news"
+    },
+    {
      "t": "共赴绿色共赢之路：天齐锂业中澳产业协作故事亮相央视主题纪录片《闪亮的APEC之旅》",
      "d": "2026-11-12",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1127",
@@ -1154,13 +1168,6 @@
      "d": "2026-08-28",
      "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1105",
      "s": "钽、铌是高端制造、精密电子、先进新材料领域不可或缺的核心稀有金属，具备独特的材料性能，其产业附加值高、应用场景广阔，在全球新材料产业体系中占据重要地位。 查看详情 ",
-     "k": "news"
-    },
-    {
-     "t": "智汇天齐 共赢锂程 | 第五届天齐锂业创新季正式启动 查看详情 ",
-     "d": "2026-08-24",
-     "u": "https://www.tianqilithium.com/infoList.aspx?t=27&id=1104",
-     "s": "助力全球锂业互联互通:天齐锂业牵头制定的ISO 7819:2025《锂术语》国际标准正式发布",
      "k": "news"
     }
    ]
@@ -1683,15 +1690,6 @@
    "rank": 25,
    "items": [
     {
-     "t": "纽蒙特报告2026年第三季度业绩，第三季度调整后净收入创纪录；",
-     "d": "2026-10-22",
-     "u": "https://www.stocktitan.net/news/NEM/newmont-reports-third-quarter-2026-results-with-record-third-quarter-ldp1hb4lilt7.html",
-     "s": "有望实现全年指引；提供红色Chris Block洞穴项目的最新情况| NEM股票新闻",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Newmont Reports Third Quarter 2026 Results with Record Third Quarter Adjusted Net Income; Positioned to Achieve Full-Year Guidance; Provides Update on Red Chris Block Cave Project | NEM Stock News"
-    },
-    {
      "t": "SEC 10-Q（季度报告）",
      "d": "2026-10-22",
      "u": "https://www.sec.gov/Archives/edgar/data/1164727/000116472726000043/",
@@ -1708,51 +1706,6 @@
      "src": "edgar",
      "k": "reg",
      "t_en": ""
-    },
-    {
-     "t": "纽蒙特宣布2026年第三季度业绩电话会议| NEM股票新闻",
-     "d": "2026-09-24",
-     "u": "https://www.stocktitan.net/news/NEM/newmont-announces-third-quarter-2026-results-conference-4lzn26njfi30.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Newmont Announces Third Quarter 2026 Results Conference Call | NEM Stock News"
-    },
-    {
-     "t": "Newmont任命Peter Beaven为董事会成员| NEM股票新闻",
-     "d": "2026-08-20",
-     "u": "https://www.stocktitan.net/news/NEM/newmont-appoints-peter-beaven-to-board-of-x4qyau1twtcs.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Newmont Appoints Peter Beaven to Board of Directors | NEM Stock News"
-    },
-    {
-     "t": "纽蒙特公布强劲的2026年第二季度业绩；仍有望实现全年指引| NEM股票新闻",
-     "d": "2026-07-23",
-     "u": "https://www.stocktitan.net/news/NEM/newmont-reports-robust-second-quarter-2026-results-remains-on-track-q08iit98n9be.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Newmont Reports Robust Second Quarter 2026 Results; Remains on Track to Achieve Full Year Guidance | NEM Stock News"
-    },
-    {
-     "t": "纽蒙特宣布2026年第二季度业绩电话会议| NEM股票新闻",
-     "d": "2026-07-01",
-     "u": "https://www.stocktitan.net/news/NEM/newmont-announces-second-quarter-2026-results-conference-jd2504ptc0xj.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Newmont Announces Second Quarter 2026 Results Conference Call | NEM Stock News"
-    },
-    {
-     "t": "Newmont的红色Chris Block洞穴项目获得重大监管批准| NEM股票新闻",
-     "d": "2026-06-19",
-     "u": "https://www.stocktitan.net/news/NEM/newmont-s-red-chris-block-cave-project-receives-major-regulatory-hslmxocmbblw.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Newmont’s Red Chris Block Cave Project Receives Major Regulatory Approvals | NEM Stock News"
     }
    ]
   },
@@ -1773,15 +1726,6 @@
    "rank": 27,
    "items": [
     {
-     "t": "巴里克宣布根据与Hercules Metals的投资者权利协议行使反摊薄权 | B股新闻",
-     "d": "2026-11-16",
-     "u": "https://www.stocktitan.net/news/B/barrick-announces-exercise-of-anti-dilution-rights-under-investor-nk1bodczpzob.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Barrick Announces Exercise of Anti-Dilution Rights Under Investor Rights Agreement With Hercules Metals | B Stock News"
-    },
-    {
      "t": "SEC 6-K（外资发行人报告）",
      "d": "2026-11-13",
      "u": "https://www.sec.gov/Archives/edgar/data/756894/000119312526459727/",
@@ -1789,42 +1733,6 @@
      "src": "edgar",
      "k": "reg",
      "t_en": ""
-    },
-    {
-     "t": "Barrick宣布为拟议的首次公开募股提交美国Barrick和S-1申请| B股新闻",
-     "d": "2026-11-10",
-     "u": "https://www.stocktitan.net/news/B/barrick-announces-american-barrick-and-s-1-filing-for-proposed-7aptt53vwfbg.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Barrick Announces American Barrick and S-1 Filing for Proposed Initial Public Offering | B Stock News"
-    },
-    {
-     "t": "Barrick公布2026年第三季度业绩| B股新闻",
-     "d": "2026-11-09",
-     "u": "https://www.stocktitan.net/news/B/barrick-reports-third-quarter-2026-0jiyarujpwqk.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Barrick Reports Third Quarter 2026 Results | B Stock News"
-    },
-    {
-     "t": "Barrick宣布第三季度股息| B股新闻",
-     "d": "2026-11-09",
-     "u": "https://www.stocktitan.net/news/B/barrick-declares-q3-kmaqn90pyzfk.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Barrick Declares Q3 Dividend | B Stock News"
-    },
-    {
-     "t": "Barrick将于11月9日公布2026年第三季度业绩| B股新闻",
-     "d": "2026-10-09",
-     "u": "https://www.stocktitan.net/news/B/barrick-to-report-third-quarter-2026-results-on-november-myy5xzslmc4k.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Barrick to Report Third Quarter 2026 Results on November 9 | B Stock News"
     }
    ]
   },
@@ -1845,31 +1753,13 @@
    "rank": 26,
    "items": [
     {
-     "t": "PT Freeport Indonesia宣布发行高级票据 | FCX股票新闻",
-     "d": "2026-11-16",
-     "u": "https://www.stocktitan.net/news/FCX/pt-freeport-indonesia-announces-senior-notes-mo97o65i9t9j.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "PT Freeport Indonesia Announces Senior Notes Offering | FCX Stock News"
-    },
-    {
      "t": "SEC 8-K（重大事项披露）",
-     "d": "2026-11-16",
-     "u": "https://www.sec.gov/Archives/edgar/data/831259/000119312526462249/",
+     "d": "2026-11-18",
+     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000053/",
      "s": "",
      "src": "edgar",
      "k": "reg",
      "t_en": ""
-    },
-    {
-     "t": "强劲的铜价出现在矿工的季度业绩中，同时还有新的产能计划| FCX股票新闻",
-     "d": "2026-11-10",
-     "u": "https://www.stocktitan.net/news/FCX/strong-copper-prices-show-up-in-miners-quarterly-results-alongside-egezopm1abf9.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Strong Copper Prices Show Up in Miners' Quarterly Results Alongside New Capacity Plans | FCX Stock News"
     },
     {
      "t": "SEC 10-Q（季度报告）",
@@ -1879,42 +1769,6 @@
      "src": "edgar",
      "k": "reg",
      "t_en": ""
-    },
-    {
-     "t": "Freeport宣布计划提高美国铜和钼产量| FCX股票新闻",
-     "d": "2026-11-04",
-     "u": "https://www.stocktitan.net/news/FCX/freeport-announces-plans-to-boost-u-s-copper-molybdenum-u9wh3s7sqygu.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Freeport Announces Plans to Boost U.S. Copper & Molybdenum Production | FCX Stock News"
-    },
-    {
-     "t": "Freeport 2026年第三季度和九个月财务和运营业绩发布于其网站| FCX股票新闻",
-     "d": "2026-10-27",
-     "u": "https://www.stocktitan.net/news/FCX/freeport-third-quarter-and-nine-month-2026-financial-and-operating-l58z387e0kn6.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Freeport Third-Quarter and Nine-Month 2026 Financial and Operating Results Release Available on Its Website | FCX Stock News"
-    },
-    {
-     "t": "Freeport提供2026年第三季度运营更新| FCX股票新闻",
-     "d": "2026-10-02",
-     "u": "https://www.stocktitan.net/news/FCX/freeport-provides-third-quarter-2026-operational-vkuik38lgh0h.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Freeport Provides Third-Quarter 2026 Operational Update | FCX Stock News"
-    },
-    {
-     "t": "Freeport宣布发放普通股季度现金股息| FCX股票新闻",
-     "d": "2026-09-23",
-     "u": "https://www.stocktitan.net/news/FCX/freeport-declares-quarterly-cash-dividends-on-common-06u3omh06l56.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Freeport Declares Quarterly Cash Dividends on Common Stock | FCX Stock News"
     }
    ]
   },
@@ -1971,22 +1825,13 @@
    "rank": 30,
    "items": [
     {
-     "t": "强劲的铜价出现在矿工的季度业绩中，同时还有新的产能计划| TECK股票新闻",
-     "d": "2026-11-10",
-     "u": "https://www.stocktitan.net/news/TECK/strong-copper-prices-show-up-in-miners-quarterly-results-alongside-egezopm1abf9.html",
+     "t": "SEC 6-K（外资发行人报告）",
+     "d": "2026-11-05",
+     "u": "https://www.sec.gov/Archives/edgar/data/886986/000095014226002959/",
      "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Strong Copper Prices Show Up in Miners' Quarterly Results Alongside New Capacity Plans | TECK Stock News"
-    },
-    {
-     "t": "随着军事技术繁荣将市场推向40亿美元，锑需求激增| TECK股票新闻",
-     "d": "2026-03-09",
-     "u": "https://www.stocktitan.net/news/TECK/antimony-demand-surges-as-military-tech-boom-pushes-market-toward-4-kcr4egy67us2.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Antimony Demand Surges as Military Tech Boom Pushes Market Toward $4 Billion | TECK Stock News"
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
     }
    ]
   },
@@ -2014,60 +1859,6 @@
      "src": "edgar",
      "k": "reg",
      "t_en": ""
-    },
-    {
-     "t": "AGNICO EAGLE报告2026年第三季度业绩-稳健的运营业绩推动了强劲的自由现金流生成；",
-     "d": "2026-10-28",
-     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-reports-third-quarter-2026-results-strong-free-cash-hew7o0uvs8fv.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "AGNICO EAGLE REPORTS THIRD QUARTER 2026 RESULTS - STRONG FREE CASH FLOW GENERATION DRIVEN BY SOLID OPERATIONAL PERFORMANCE; ON TRACK TO ACHIEVE 2026 PRODUCTION AND COST GUIDANCE | AEM Stock News"
-    },
-    {
-     "t": "AGNICO EAGLE提供2026年第三季度业绩发布通知和电话会议| AEM股票新闻",
-     "d": "2026-09-28",
-     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-provides-notice-of-release-of-third-quarter-2026-ilsfs6lqllhj.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "AGNICO EAGLE PROVIDES NOTICE OF RELEASE OF THIRD QUARTER 2026 RESULTS AND CONFERENCE CALL | AEM Stock News"
-    },
-    {
-     "t": "Scout Discoveries宣布Agnico Eagle进行14.9%的战略投资，并在爱达荷州达成盈利协议；",
-     "d": "2026-09-18",
-     "u": "https://www.stocktitan.net/news/AEM/scout-discoveries-announces-14-9-strategic-investment-by-agnico-nrbu6avw4pxv.html",
-     "s": "Electrum在2500万美元私募中的持股比例增至30% | AEM股票新闻",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Scout Discoveries Announces 14.9% Strategic Investment by Agnico Eagle and an Earn-In Agreement in Idaho; Electrum Increases to 30% Ownership in Combined US$25 Million Private Placement | AEM Stock News"
-    },
-    {
-     "t": "AGNICO EAGLE宣布处置DELTA和Helm BAY项目以及对VIZSLA铜的投资| AEM股票新闻",
-     "d": "2026-09-08",
-     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-announces-disposition-of-delta-and-helm-bay-projects-knsbvfl6yiff.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "AGNICO EAGLE ANNOUNCES DISPOSITION OF DELTA AND HELM BAY PROJECTS AND INVESTMENT IN VIZSLA COPPER | AEM Stock News"
-    },
-    {
-     "t": "AVENIR MINERALS LIMITED对加拿大NICKEL COMPANY INC.的额外投资| AEM股票新闻",
-     "d": "2026-08-28",
-     "u": "https://www.stocktitan.net/news/AEM/additional-investment-in-canada-nickel-company-inc-by-avenir-caaqihf97lve.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "ADDITIONAL INVESTMENT IN CANADA NICKEL COMPANY INC. BY AVENIR MINERALS LIMITED | AEM Stock News"
-    },
-    {
-     "t": "AGNICO EAGLE宣布投资RADISSON Mining RESOURCES Inc. | AEM股票新闻",
-     "d": "2026-08-24",
-     "u": "https://www.stocktitan.net/news/AEM/agnico-eagle-announces-investment-in-radisson-mining-resources-308fu3uov5ut.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "AGNICO EAGLE ANNOUNCES INVESTMENT IN RADISSON MINING RESOURCES INC. | AEM Stock News"
     }
    ]
   },
@@ -2269,31 +2060,24 @@
      "k": "news"
     },
     {
-     "t": "中色股份绿色发展实践荣获行业专业评价与丝路企业ESG评选“双上榜...",
+     "t": "刘宇与托克集团金属、矿业及大宗商品部全球总裁Gonzalo先生举行会...",
      "d": "2026-11-01",
-     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/11/I1568286558488887296.html",
-     "s": "在有色金属行业ESG实践案例征集活动中，中色股份所属赤峰中色白音诺尔矿业有限公司以“绿染塞北矿山实干书写ESG答卷——中色白矿绿色矿山建设实践案例”入选“绿色发展”方向收录名单。该案例聚焦绿色矿山建设，展现了公司在生态保护、绿色低碳转型方面的扎实探索，为行业绿色矿山建设提供了可借鉴的实践样本。",
+     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/11/I1572557151925174272.html",
+     "s": "刘宇董事长对Gonzalo总裁一行的到访表示热烈欢迎，并介绍了中色股份的发展历程、业务布局以及在国际工程承包、有色金属资源开发等领域开展业务的情况。",
      "k": "news"
     },
     {
-     "t": "中色股份召开2026年第三季度业绩说明会",
+     "t": "抢抓政策窗口 打通直接融资新通道",
      "d": "2026-11-01",
-     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/11/I1567559149380698112.html",
-     "s": "10月30日下午，中色股份通过中国证券报·中证网之“中证路演”平台召开2026年第三季度业绩说明会。公司董事长刘宇、总经理谭耀宇、财务总监朱国胜及董事会秘书朱国祥出席会议，就投资者关切问题进行了深入解答。",
+     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/11/I1572244678206554112.html",
+     "s": "2026年11月12日，中色股份2026年度第一期中期票据（债券简称：26中国有色MTN001）圆满落地发行，发行规模5亿元，期限3年，票面利率1.68%，较同期贷款基准利率低61BP、较同品种中债收益率低10BP。",
      "k": "news"
     },
     {
-     "t": "中色股份总承包越南多农电解铝项目二期成功产出首批液态原铝",
+     "t": "中色大冶邵志村荣膺2026年大国工匠人才",
      "d": "2026-11-01",
-     "u": "http://www.nfc.com.cn/jsjs/xwzx/gsxw/2026/11/I1566847572067221504.html",
-     "s": "2026年10月31日，由中色股份总承包建设的越南多农45万吨/年电解铝项目二期成功产出首批液态原铝，较合同约定的二期首次出铝里程碑节点提前4个月零3天，标志着项目二期正式由建设阶段转入试生产阶段。",
-     "k": "news"
-    },
-    {
-     "t": "文岗与香港特区政府投资推广署署长刘凯旋举...",
-     "d": "2026-11-01",
-     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/11/I1569652363600330752.html",
-     "s": "文岗对 刘凯旋 一行的到来表示热烈欢迎，并简要介绍了中国有色集团整体发展情况和在香港的业务布局。",
+     "u": "http://www.nfc.com.cn/cnmc/xwzx/jtxw/2026/11/I1572550066105745408.html",
+     "s": "邵志村深耕铜冶炼火法一线29载，参与四代冶炼工艺迭代升级。面对澳斯麦特炉炉寿偏短的行业共性难题，他带领团队攻关革新操作工艺，将炉寿提升至788天，刷新全球同类炉型运行最高纪录，打破海外技术垄断。",
      "k": "news"
     },
     {
@@ -2353,28 +2137,7 @@
      "t": "稀土产品业绩稳步提升，中稀有色Q3净利润同比增长532%",
      "d": "2026-10-30",
      "u": "https://finance.sina.com.cn/jjxw/2026-10-30/doc-iniwziit4606608.shtml",
-     "s": "（来源：财闻）10月30日，中稀有色（600259.SH）公告称，前三季度实现营业收入36.85亿元，同比下降20.47%；归属于上市公司股东的净利润7.52亿元，同比增长489.24%。第三季度实现营业收入11.79亿元，同比下降39.7...",
-     "k": "news"
-    },
-    {
-     "t": "中稀有色前三季度营收36.85亿元同比降20.47%，归母净利润7.52亿元同比增489.24%，销售费用同比增长16.61%",
-     "d": "2026-10-30",
-     "u": "https://finance.sina.com.cn/stock/aiassist/yjbg/2026-10-30/doc-iniwziin5420454.shtml",
-     "s": "10月30日，中稀有色发布2026年三季报。报告显示，公司前三季度营业收入为36.85亿元，同比下降20.47%；归母净利润为7.52亿元，同比增长489.24%；扣非归母净利润为7.25亿元，同比增长360.06%；基本每股收益2.23元...",
-     "k": "news"
-    },
-    {
-     "t": "中稀有色(600259.SH)：第三季度归母净利润3.48亿元，同比增加532.33%",
-     "d": "2026-10-30",
-     "u": "https://finance.sina.com.cn/stock/bxjj/2026-10-30/doc-iniwzazs2296898.shtml",
-     "s": "格隆汇10月30日丨中稀有色(600259.SH)公布2026年第三季度报告，报告期内，公司实现营业收入11.79亿元，同比下降39.75%；归属于上市公司股东的净利润3.48亿元，同比增加532.33%；归属于上市公司股东的扣非净利润3....",
-     "k": "news"
-    },
-    {
-     "t": "稀土市场行情整体上涨，中稀有色2026年第三季度净利润同比增长532.33%",
-     "d": "2026-10-30",
-     "u": "https://finance.sina.com.cn/jjxw/2026-10-30/doc-iniwzazv4653580.shtml",
-     "s": "（来源：财闻）10月30日，中稀有色（600259.SH）公告，2026年第三季度营业收入11.79亿元，同比下降39.75%；归属于上市公司股东的净利润3.48亿元，同比增长532.33%；扣除非经常性损益的净利润3.21亿元，同比增长3...",
+     "s": "2026-10-30 21:07 中稀有色：Q3净利润同比增长532%环比增长49% 稀土产品业绩稳步提升",
      "k": "news"
     }
    ]
@@ -2522,14 +2285,7 @@
      "t": "港股异动 | 中国有色矿业(01258)涨超4% 完成发行3亿美元零息可转换债券 中远期自有铜产能有望翻倍",
      "d": "2026-09-03",
      "u": "https://finance.sina.com.cn/stock/hkstock/marketalerts/2026-09-03/doc-iniqpeke2282095.shtml",
-     "s": "中国有色矿业(01258)涨超4%，截至发稿，涨4.41%，报16.74港元，成交额2747.33万港元。消息面上，中国有色矿业发布公告，认购协议所有关于发行债券的先决条件均已达成，而本金总额3亿美元的债券已于2026年9月2日完成发行。扣...",
-     "k": "news"
-    },
-    {
-     "t": "中国有色矿业(01258)完成发行于2031年到期的3亿美元零息可转换债券",
-     "d": "2026-09-02",
-     "u": "https://finance.sina.com.cn/stock/hkstock/ggscyd/2026-09-02/doc-iniqmwqq4585209.shtml",
-     "s": "2026-08-31 23:04 中国有色矿业(01258)：王晓婧获委任为联席公司秘书及授权代表",
+     "s": "2026-09-02 20:58 【集团新闻】文岗与哈萨克矿业集团董事会主席奥列格·诺瓦丘克举行会谈",
      "k": "news"
     }
    ]
@@ -2585,33 +2341,6 @@
      "src": "edgar",
      "k": "reg",
      "t_en": ""
-    },
-    {
-     "t": "必和必拓在其迄今为止最大的Xplor引进中支持下一波勘探和技术人才|必和必拓股票新闻",
-     "d": "2026-02-01",
-     "u": "https://www.stocktitan.net/news/BHP/bhp-backs-the-next-wave-of-exploration-and-technology-talent-in-its-ccn3bdyki9ed.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "BHP backs the next wave of exploration and technology talent in its biggest Xplor intake yet | BHP Stock News"
-    },
-    {
-     "t": "必和必拓Xplor为2026年人群开放申请，提供无股权融资和全球支持|必和必拓股票新闻",
-     "d": "2025-09-09",
-     "u": "https://www.stocktitan.net/news/BHP/bhp-xplor-opens-applications-for-2026-cohort-offering-equity-free-engbqef3pt63.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "BHP Xplor Opens Applications for 2026 Cohort, Offering Equity-Free Funding and Global Support | BHP Stock News"
-    },
-    {
-     "t": "G Mining Ventures提供企业最新动态|必和必拓股票新闻",
-     "d": "2024-12-20",
-     "u": "https://www.stocktitan.net/news/BHP/g-mining-ventures-provides-corporate-w0x71zv2rap2.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "G Mining Ventures Provides Corporate Update | BHP Stock News"
     }
    ]
   },
@@ -2937,6 +2666,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 291
+  "items": 260
  }
 }
