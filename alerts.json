@@ -1,49 +1,25 @@
 {
- "date": "2026-11-19",
+ "date": "2026-11-20",
  "has_history": true,
- "history_days": 15,
+ "history_days": 14,
  "alerts": [
-  {
-   "commodity": "沪铜",
-   "market": "SHFE 主连",
-   "move": "-5.40%",
-   "severity": "high",
-   "detail": "沪铜（SHFE 主连）最新收报 97,920.00，单日 -5.40%（数据日期 2026-11-18）。",
-   "type": "price"
-  },
-  {
-   "commodity": "铜",
-   "market": "LME 03",
-   "move": "-4.54%",
-   "severity": "medium",
-   "detail": "LME 铜（LME 03）最新收报 12,626.00 美元/吨，单日 -4.54%（数据日期 11-18）。",
-   "type": "price"
-  },
-  {
-   "commodity": "锌",
-   "market": "LME 03",
-   "move": "-3.96%",
-   "severity": "medium",
-   "detail": "LME 锌（LME 03）最新收报 3,529.50 美元/吨，单日 -3.96%（数据日期 11-18）。",
-   "type": "price"
-  },
   {
    "commodity": "沪锡",
    "market": "SHFE 主连",
-   "move": "-3.80%",
-   "severity": "medium",
-   "detail": "沪锡（SHFE 主连）最新收报 335,760.00，单日 -3.80%（数据日期 2026-11-18）。",
+   "move": "-6.17%",
+   "severity": "high",
+   "detail": "沪锡（SHFE 主连）最新收报 315,050.00，单日 -6.17%（数据日期 2026-11-19）。",
    "type": "price"
   },
   {
-   "commodity": "铝",
-   "market": "LME 03",
-   "move": "-3.37%",
+   "commodity": "沪铜",
+   "market": "SHFE 主连",
+   "move": "-3.27%",
    "severity": "medium",
-   "detail": "LME 铝（LME 03）最新收报 2,835.00 美元/吨，单日 -3.37%（数据日期 11-18）。",
+   "detail": "沪铜（SHFE 主连）最新收报 94,720.00，单日 -3.27%（数据日期 2026-11-19）。",
    "type": "price"
   }
  ],
- "summary": "今日异动 5 项：沪铜 -5.40%（SHFE 主连）；铜 -4.54%（LME 03）；锌 -3.96%（LME 03）；沪锡 -3.80%（SHFE 主连）；铝 -3.37%（LME 03）。",
+ "summary": "今日异动 2 项：沪锡 -6.17%（SHFE 主连）；沪铜 -3.27%（SHFE 主连）。",
  "max_severity": "high"
 }
