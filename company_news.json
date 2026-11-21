@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-20",
+ "updated_at": "2026-11-21",
  "companies": [
   {
    "name": "紫金矿业",
@@ -14,7 +14,7 @@
    "news_url": "https://www.zjky.cn/news/news_list.jsp",
    "method": "html",
    "unreach": "",
-   "stale": false,
+   "stale": true,
    "rank": 1,
    "items": [
     {
@@ -698,7 +698,7 @@
      "t": "云铝股份前三季度营收526.16亿元同比增19.39%，归母净利润116.12亿元同比增164.01%",
      "d": "2026-10-29",
      "u": "https://finance.sina.com.cn/stock/aiassist/yjbg/2026-10-29/doc-iniwwyaq6018154.shtml",
-     "s": "10月29日，云铝股份发布2026年三季报。报告显示，公司前三季度营业收入为526.16亿元，同比增长19.39%；归母净利润为116.12亿元，同比增长164.01%；扣非归母净利润为115.37亿元，同比增长163.45%；基本每股收益...",
+     "s": "2026-10-29 19:06 云铝股份(000807.SZ)：第三季度净利润39.28亿元 同比增长140.92%",
      "k": "news"
     },
     {
@@ -1185,56 +1185,56 @@
      "t": "赣锋锂业《可持续发展之路》系列纪录短片正式上线",
      "d": "2025-05-26",
      "u": "https://www.ganfenglithium.com/new_detail/id/186.html",
-     "s": "如今，Mariana项目已顺利投产，成为推动全球能源可持续发展的重要力量。对于一面是地球赋予的矿产资源，一面是自然赋予的珍稀物种，赣锋如何解算这道生态难题？南美高原的可持续发展承诺如何践行？",
+     "s": "",
      "k": "news"
     },
     {
      "t": "赣锋锂业正式加入联合国全球契约组织",
      "d": "2025-05-26",
      "u": "https://www.ganfenglithium.com/new_detail/id/184.html",
-     "s": "近日，赣锋锂业正式加入联合国全球契约组织（United Nations Global Compact, UNGC），以更坚定的承诺推进企业社会责任与可持续发展，助力联合国可持续发展目标实现。",
+     "s": "",
      "k": "news"
     },
     {
      "t": "赣锋锂业锂生态产业链一体化产品亮相2025CLNB新能源产业博览会",
      "d": "2025-05-26",
      "u": "https://www.ganfenglithium.com/new_detail/id/183.html",
-     "s": "赣锋持续推进固态锂电池的研发、生产和商业化应用，积极布局和开发高能量密度、高功率的动力电芯与电源系统产品，以满足不同领域需求。氧化物路线的高能量密度电源产品已经应用于低空经济领域，原理样件已经通过审核。",
+     "s": "",
      "k": "news"
     },
     {
      "t": "ESIE2025圆满收官！赣锋全新6.25MWh储能系统成焦点，储能...",
      "d": "2025-05-26",
      "u": "https://www.ganfenglithium.com/new_detail/id/182.html",
-     "s": "在展会期间中关村储能产业技术联盟发布的2024年度中国储能企业系列榜单中，赣锋锂电入围2024年度全球市场储能电池出货量排行榜top10。",
+     "s": "",
      "k": "news"
     },
     {
      "t": "丰城赣锋入选江西省2025年首批“数智工厂”示范企业",
      "d": "2025-05-26",
      "u": "https://www.ganfenglithium.com/new_detail/id/181.html",
-     "s": "在数字化领域，丰城赣锋基于集团统一的数据采集平台，通过遍布于各个环节的先进传感器、条码等组件，实时采集工厂各项数据，为工厂运行“把脉”；",
+     "s": "",
      "k": "news"
     },
     {
      "t": "赣锋锂业一体化布局固态电池，关键原料硫化锂已具备量产能力",
      "d": "2025-05-26",
      "u": "https://www.ganfenglithium.com/new_detail/id/180.html",
-     "s": "在负极层面， 赣锋超薄锂带同样具备量产能力，可针对循环性能、加工性能、电化学稳定性等各类需求提供定制化解决方案。赣锋已实现300mm宽度的超宽幅超薄锂带量产，铜锂复合带中锂箔厚度可达到3微米。",
+     "s": "",
      "k": "news"
     },
     {
      "t": "赣锋锂业推出长续航全地形机器人电池",
      "d": "2025-05-26",
      "u": "https://www.ganfenglithium.com/new_detail/id/179.html",
-     "s": "在阿西莫夫写出《机器人系列》的80年后，科幻作品中的机器人时代已在我们面前。四足机器人、人形机器人等新品层出不穷，具身智能产业发展不断提速，2025年《政府工作报告》中也明文指出：“大力发展智能机器人等新一代智能终端以及智能制造装备”。",
+     "s": "",
      "k": "news"
     },
     {
      "t": "赣锋锂业牵头制定的这项标准入选工信部标准应用推广典型案例",
      "d": "2025-05-26",
      "u": "https://www.ganfenglithium.com/new_detail/id/178.html",
-     "s": "近期，国家工信部发布2024年百项团体标准应用推广典型案例名单，由赣锋锂业主持制定的团体标准《锂盐加工行业绿色工厂评价要求》（T/CNIA0159-2022）经过专家层层遴选成功入选。",
+     "s": "",
      "k": "news"
     }
    ]
@@ -1510,7 +1510,7 @@
    "news_url": "https://www.nonfemet.com/channel/74",
    "method": "html",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 24,
    "items": [
     {
@@ -1780,6 +1780,15 @@
    "rank": 27,
    "items": [
     {
+     "t": "巴里克建议股东拒绝New York Stock and Bond LLC对普通股发出的低于市价的“迷你要约收购” | B股新闻",
+     "d": "2026-11-20",
+     "u": "https://www.stocktitan.net/news/B/barrick-recommends-shareholders-reject-new-york-stock-and-bond-llc-s-hlejdj4tlvzf.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Barrick Recommends Shareholders Reject New York Stock and Bond LLC’s Below-Market “Mini-Tender” Offer for Common Shares | B Stock News"
+    },
+    {
      "t": "巴里克宣布根据与Hercules Metals的投资者权利协议行使反摊薄权 | B股新闻",
      "d": "2026-11-16",
      "u": "https://www.stocktitan.net/news/B/barrick-announces-exercise-of-anti-dilution-rights-under-investor-nk1bodczpzob.html",
@@ -1938,7 +1947,7 @@
    "news_url": "https://www.southerncoppercorp.com/",
    "method": "agg",
    "unreach": "",
-   "stale": false,
+   "stale": true,
    "rank": 28,
    "items": [
     {
@@ -2185,6 +2194,13 @@
    "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "中矿锂业14.8MWp分布式光伏项目开工，绿电降本再落一子",
+     "d": "2026-11-19",
+     "u": "http://www.sinomine.cn/xwdti/439.html",
+     "s": "本次开工的14.8MWp项目由中矿锂业统筹推进，选址于新余市高新区生产基地厂区屋顶及附属场地。项目设计装机容量14.8MWp，建成后预计年发电量将满足生产基地大部分用电需求，采用“自发自用、余电上网”模式消纳，优先保障锂盐生产环节用电。",
+     "k": "news"
+    },
     {
      "t": "中矿资源集团副总裁王治伟在赞比亚开展系列拜访",
      "d": "2026-11-12",
@@ -2445,13 +2461,6 @@
      "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-09-14/doc-iniruhxe4058002.shtml",
      "s": "消息面上，澳新银行研究部分析师在报告中称，近期有报道显示特朗普政府推迟了对精炼铜进口关税的决定，铜价因此走低。交易商此前因预期可能加征关税而在美国大量囤积铜。澳新银行表示，通胀担忧升温仍使白宫对关税计划犹豫不决。",
      "k": "news"
-    },
-    {
-     "t": "铜矿股盘初走强 五矿资源（01208）涨4.82% 机构称铜价依然具备强劲上行潜力",
-     "d": "2026-09-08",
-     "u": "https://finance.sina.com.cn/stock/relnews/hk/2026-09-08/doc-inirapza6069689.shtml",
-     "s": "金吾财讯|港股铜矿股盘初走强，截至发稿，五矿资源(01208)涨4.82%，洛阳钼业(03993)涨4.52%，江西铜业股份(00358)涨4.26%，紫金矿业(02899)涨2.56%，中国有色矿业(01258)涨2.07%，中国黄金...",
-     "k": "news"
     }
    ]
   },
@@ -2489,7 +2498,7 @@
      "t": "港股异动 | 中国有色矿业(01258)涨超4% 完成发行3亿美元零息可转换债券 中远期自有铜产能有望翻倍",
      "d": "2026-09-03",
      "u": "https://finance.sina.com.cn/stock/hkstock/marketalerts/2026-09-03/doc-iniqpeke2282095.shtml",
-     "s": "2026-09-02 20:58 【集团新闻】文岗与哈萨克矿业集团董事会主席奥列格·诺瓦丘克举行会谈",
+     "s": "中国有色矿业(01258)涨超4%，截至发稿，涨4.41%，报16.74港元，成交额2747.33万港元。消息面上，中国有色矿业发布公告，认购协议所有关于发行债券的先决条件均已达成，而本金总额3亿美元的债券已于2026年9月2日完成发行。扣...",
      "k": "news"
     }
    ]
@@ -2509,17 +2518,7 @@
    "unreach": "",
    "stale": false,
    "rank": 99,
-   "items": [
-    {
-     "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-11-02",
-     "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000043/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
-    }
-   ]
+   "items": []
   },
   {
    "name": "必和必拓",
