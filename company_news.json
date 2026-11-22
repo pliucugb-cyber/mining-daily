@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-21",
+ "updated_at": "2026-11-22",
  "companies": [
   {
    "name": "紫金矿业",
@@ -14,7 +14,7 @@
    "news_url": "https://www.zjky.cn/news/news_list.jsp",
    "method": "html",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 1,
    "items": [
     {
@@ -498,7 +498,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -1947,7 +1947,7 @@
    "news_url": "https://www.southerncoppercorp.com/",
    "method": "agg",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 28,
    "items": [
     {
@@ -2518,7 +2518,17 @@
    "unreach": "",
    "stale": false,
    "rank": 99,
-   "items": []
+   "items": [
+    {
+     "t": "SEC 6-K（外资发行人报告）",
+     "d": "2026-11-02",
+     "u": "https://www.sec.gov/Archives/edgar/data/863064/000086306426000043/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    }
+   ]
   },
   {
    "name": "必和必拓",
@@ -2598,6 +2608,114 @@
      "src": "edgar",
      "k": "reg",
      "t_en": ""
+    },
+    {
+     "t": "首席执行官表示，淡水河谷贱金属将在2026年将收入增加三倍至50亿$",
+     "d": "2026-11-09",
+     "u": "https://www.mining.com/vale-base-metals-to-triple-earnings-to-5b-for-2026-ceo-says/",
+     "s": "2025年， VBM生产了382,300吨铜和177,200吨镍，分别增长了10%和11%。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale Base Metals to triple earnings to $5B for 2026, CEO says"
+    },
+    {
+     "t": "淡水河谷第三季度利润暴跌，铁矿石产量低于预期",
+     "d": "2026-10-30",
+     "u": "https://www.mining.com/web/vale-third-quarter-profit-tumbles-iron-ore-output-misses-forecasts/",
+     "s": "然而，全球最大的铁矿石生产商之一淡水河谷表示，它有信心到达2026年铁矿石的低端……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale third-quarter profit tumbles, iron ore output misses forecasts"
+    },
+    {
+     "t": "Exiro领导的集团控制淡水河谷的曼尼托巴镍矿",
+     "d": "2026-10-16",
+     "u": "https://www.mining.com/exiro-led-group-takes-control-of-vales-manitoba-nickel-complex/",
+     "s": "VBM还签署了一项为期多年的协议，购买汤普森工厂生产的镍精矿，与该公司保持商业联系……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Exiro-led group takes control of Vale’s Manitoba nickel complex"
+    },
+    {
+     "t": "淡水河谷表示，成本飙升使10%的铁矿石陷入赤字",
+     "d": "2026-10-16",
+     "u": "https://www.mining.com/vale-says-soaring-costs-put-10-of-iron-ore-in-the-red/",
+     "s": "由于中国需求疲软和新供应将价格推至两年低点，不断上涨的燃料和运输费用挤压了生产商。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale says soaring costs put 10% of iron ore in the red"
+    },
+    {
+     "t": "淡水河谷以$ 1.9亿的交易收购Ligga铁矿石矿30%的股份",
+     "d": "2026-09-22",
+     "u": "https://www.mining.com/vale-takes-30-of-ligga-iron-ore-mine-in-190m-deal/",
+     "s": "淡水河谷（纽约证券交易所代码： VALE ） (B3: VALE3)确认将收购Ligga S.A. 30%的少数股权。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale takes 30% of Ligga iron ore mine in $190M deal"
+    },
+    {
+     "t": "在巴西遭遇挫折之际淡水河谷贱金属IPO ：报告",
+     "d": "2026-09-04",
+     "u": "https://www.mining.com/vale-shelves-base-metals-ipo-amid-brazil-pushback-report/",
+     "s": "根据该报告，该房源仍可能在稍后的日期恢复。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale shelves base metals IPO amid Brazil pushback: report"
+    },
+    {
+     "t": "淡水河谷研究从采矿废物中提取稀土和黄金",
+     "d": "2026-08-27",
+     "u": "https://www.mining.com/web/vale-studies-extracting-rare-earths-gold-from-mining-waste/",
+     "s": "该战略是公司减少废物产生和增加已提取材料再利用目标的一部分。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale studies extracting rare earths, gold from mining waste"
+    },
+    {
+     "t": "马里亚纳，另外18个巴西城市加入淡水河谷-必和必拓大坝倒塌赔偿协议",
+     "d": "2026-08-20",
+     "u": "https://www.mining.com/web/mariana-18-more-brazil-cities-join-vale-bhp-dam-collapse-compensation-deal/",
+     "s": "因此，该协议于2024年10月签署和批准，现在得到了49个有资格获得资金的城市中的45个的支持。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Mariana, 18 more Brazil cities join Vale-BHP dam collapse compensation deal"
+    },
+    {
+     "t": "巴西的Vibra押注在淡水河谷测试后向矿工销售利润率更高的柴油",
+     "d": "2026-08-19",
+     "u": "https://www.mining.com/web/brazils-vibra-bets-on-higher-margin-diesel-sales-to-miners-after-vale-tests/",
+     "s": "在淡水河谷的支持下， Vibra Energia正在寻求扩大其柴油产品在该国采矿业的销售。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Brazil’s Vibra bets on higher-margin diesel sales to miners after Vale tests"
+    },
+    {
+     "t": "淡水河谷加速Salobo铜扩张，降低成本",
+     "d": "2026-08-13",
+     "u": "https://www.mining.com/vale-speeds-salobo-copper-expansion-cuts-costs/",
+     "s": "新项目的融资协议取代了现有Salobo贵金属流协议下的潜在未来里程碑付款。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale speeds Salobo copper expansion, cuts costs"
+    },
+    {
+     "t": "淡水河谷、ABB在巴西铁矿石领域扩展人工智能和自动化",
+     "d": "2026-08-12",
+     "u": "https://www.mining.com/vale-abb-expand-ai-automation-across-brazil-iron-ore/",
+     "s": "该战略联盟旨在扩大自动化和人工智能(AI)技术的使用，以提高安全性、生产力和可持续性……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale, ABB expand AI, automation across Brazil iron ore"
+    },
+    {
+     "t": "淡水河谷认为，尽管中国价格下跌，但铁矿石市场仍具有弹性",
+     "d": "2026-07-31",
+     "u": "https://www.mining.com/web/vale-sees-iron-ore-market-resilient-despite-lower-prices-in-china/",
+     "s": "全球最大的铁矿石生产商之一巴西矿业公司淡水河谷周五表示，该大宗商品的市场基本面仍然具有弹性。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale sees iron ore market resilient despite lower prices in China"
     }
    ]
   },
@@ -2614,7 +2732,7 @@
    "news_url": "https://www.glencore.com/",
    "method": "mining",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 99,
    "items": [
     {
@@ -2722,9 +2840,27 @@
    "news_url": "https://www.angloamerican.com/",
    "method": "mining",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "巴西对欧盟审查英美镍矿交易提出异议",
+     "d": "2026-11-18",
+     "u": "https://www.mining.com/brazil-pushes-back-on-eu-review-of-anglo-american-nickel-deal/",
+     "s": "巴西对欧盟在对中国收购案的管辖权提出异议，而英美资源集团则警告称其两座镍矿可能关闭。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Brazil pushes back on EU review of Anglo American nickel deal"
+    },
+    {
+     "t": "英美资源集团警告客户，如果交易被否决，镍铁供应可能中断",
+     "d": "2026-11-17",
+     "u": "https://www.mining.com/web/anglo-american-warns-customers-of-possible-ferronickel-supply-disruption-if-deal-rejected/",
+     "s": "欧盟监管机构的主要担忧是，MMG可能会将镍铁供应从欧洲转向中国，这可能会损害该集团的不锈钢……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Anglo American warns customers of possible ferronickel supply disruption if deal rejected"
+    },
     {
      "t": "英美资源集团退出澳大利亚标志着一个时代的结束",
      "d": "2026-11-13",
@@ -2796,15 +2932,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Anglo American threatens to close Brazilian nickel operation if EU blocks sale to MMG"
-    },
-    {
-     "t": "英美矿业合资企业Codelco重组团队",
-     "d": "2026-10-06",
-     "u": "https://www.mining.com/web/codelco-restructures-team-for-anglo-american-mine-jv-document-says/",
-     "s": "两家公司于6月下旬达成最终协议，共同运营这些矿床，目标是平均增加约12万吨...",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Codelco restructures team for Anglo American mine JV"
     }
    ]
   },
@@ -2896,6 +3023,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 285
+  "items": 299
  }
 }
