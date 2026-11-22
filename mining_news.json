@@ -1,12 +1,12 @@
 {
   "meta": {
     "report_date": "2026-11-22",
-    "generated_at": "2026-11-22T11:03:09+08:00",
-    "total": 435,
-    "new_today": 10,
+    "generated_at": "2026-11-22T11:20:29+08:00",
+    "total": 436,
+    "new_today": 11,
     "archive": 425,
-    "page_total": 435,
-    "page_new_count": 10,
+    "page_total": 436,
+    "page_new_count": 11,
     "sources": [
       "MINING.COM",
       "SMM 国际站",
@@ -96,6 +96,23 @@
       "embed": "ok",
       "tags": [
         "钨"
+      ]
+    },
+    {
+      "id": "17a3e62da18d",
+      "title": "高盛：2027年底金价看4650美元/盎司，短期谨防大幅回撤",
+      "url": "https://news.smm.cn/news/LFI5ZMCVWGQUSDACT264EF7Y623FWWNRS7EIV2Q",
+      "source": "上海有色网",
+      "orig_date": "11-18",
+      "orig_date_full": "2026-11-18",
+      "report_date": "2026-11-22",
+      "category": "市场与价格",
+      "is_new": true,
+      "summary": "高盛在 2027 年贵金属策略中预计，到 2027 年 12 月黄金价格将达每盎司 4650 美元，2028 年 12 月进一步升至 5600 美元，但提醒长期看涨并不等于短期上涨。该行预计美联储 2026 年 12 月与 2027 年 3 月各加息 25 个基点，将压制西方黄金 ETF 需求、加大投机盘平仓风险；若累计加息四次，2027 年底金价预测下调至约 4585 美元，若 ETF 额外流出 300 吨则降至 4265 美元。央行持续购金被视为金价的主要支撑力量。",
+      "embed": "ok",
+      "tags": [
+        "金",
+        "市场"
       ]
     },
     {
