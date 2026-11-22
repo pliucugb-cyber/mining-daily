@@ -1,8 +1,61 @@
 {
   "month": "2026-11",
-  "updated_at": "2026-11-16T00:18:57+08:00",
-  "count": 13,
+  "updated_at": "2026-11-21T12:57:07+08:00",
+  "count": 16,
   "news": [
+    {
+      "id": "f0405f745e41",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-11-21/1225682084.PDF",
+      "title": "关于关联方拟以债权转股权的方式对公司参股公司增资暨关联交易的进展公告",
+      "source": "巨潮资讯网·亿纬锂能",
+      "orig_date": "11-21",
+      "orig_date_full": "2026-11-21",
+      "report_date": "2026-11-21",
+      "category": "并购与投资",
+      "company": "亿纬锂能",
+      "sec_code": "300014",
+      "ma_type": "增资/认购",
+      "summary": "亿纬锂能（300014）披露《关于关联方拟以债权转股权的方式对公司参股公司增资暨关联交易的进展公告》，涉及增资/认购。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "875a720f6f96",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-11-21/1225680505.PDF",
+      "title": "河南豫光金铅股份有限公司2026年度向特定对象发行A股股票募集说明书（注册稿）",
+      "source": "巨潮资讯网·豫光金铅",
+      "orig_date": "11-21",
+      "orig_date_full": "2026-11-21",
+      "report_date": "2026-11-21",
+      "category": "并购与投资",
+      "company": "豫光金铅",
+      "sec_code": "600531",
+      "ma_type": "投资/资本运作",
+      "summary": "豫光金铅（600531）披露《河南豫光金铅股份有限公司2026年度向特定对象发行A股股票募集说明书（注册稿）》，涉及投资/资本运作。",
+      "tags": [
+        "并购",
+        "金",
+        "铅"
+      ]
+    },
+    {
+      "id": "859b289b6ed4",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-11-21/1225680974.PDF",
+      "title": "关于向全资子公司增资的公告",
+      "source": "巨潮资讯网·华峰铝业",
+      "orig_date": "11-21",
+      "orig_date_full": "2026-11-21",
+      "report_date": "2026-11-21",
+      "category": "并购与投资",
+      "company": "华峰铝业",
+      "sec_code": "601702",
+      "ma_type": "增资/认购",
+      "summary": "华峰铝业（601702）披露《关于向全资子公司增资的公告》，涉及增资/认购。",
+      "tags": [
+        "并购"
+      ]
+    },
     {
       "id": "e8cc3ab174be",
       "url": "https://static.cninfo.com.cn/finalpage/2026-11-14/1225671889.PDF",

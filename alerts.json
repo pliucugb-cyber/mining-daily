@@ -1,25 +1,25 @@
 {
- "date": "2026-11-20",
+ "date": "2026-11-21",
  "has_history": true,
- "history_days": 14,
+ "history_days": 15,
  "alerts": [
   {
-   "commodity": "沪锡",
-   "market": "SHFE 主连",
-   "move": "-6.17%",
+   "commodity": "白银",
+   "market": "上金所 Ag(T+D)",
+   "move": "-7.10%",
    "severity": "high",
-   "detail": "沪锡（SHFE 主连）最新收报 315,050.00，单日 -6.17%（数据日期 2026-11-19）。",
+   "detail": "白银（上金所 Ag(T+D)）最新收报 10,038.00，单日 -7.10%（数据日期 2026-11-20）。",
    "type": "price"
   },
   {
-   "commodity": "沪铜",
-   "market": "SHFE 主连",
-   "move": "-3.27%",
+   "commodity": "上海金",
+   "market": "上金所 Au99.99",
+   "move": "-4.45%",
    "severity": "medium",
-   "detail": "沪铜（SHFE 主连）最新收报 94,720.00，单日 -3.27%（数据日期 2026-11-19）。",
+   "detail": "上海金（上金所 Au99.99）最新收报 768.56，单日 -4.45%（数据日期 2026-11-20）。",
    "type": "price"
   }
  ],
- "summary": "今日异动 2 项：沪锡 -6.17%（SHFE 主连）；沪铜 -3.27%（SHFE 主连）。",
+ "summary": "今日异动 2 项：白银 -7.10%（上金所 Ag(T+D)）；上海金 -4.45%（上金所 Au99.99）。",
  "max_severity": "high"
 }
