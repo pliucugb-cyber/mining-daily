@@ -1,25 +1,17 @@
 {
- "date": "2026-11-23",
+ "date": "2026-11-24",
  "has_history": true,
  "history_days": 14,
  "alerts": [
   {
-   "commodity": "白银",
-   "market": "上金所 Ag(T+D)",
-   "move": "-7.10%",
-   "severity": "high",
-   "detail": "白银（上金所 Ag(T+D)）最新收报 10,038.00，单日 -7.10%（数据日期 2026-11-20）。",
-   "type": "price"
-  },
-  {
-   "commodity": "上海金",
-   "market": "上金所 Au99.99",
-   "move": "-4.45%",
+   "commodity": "锡",
+   "market": "LME 03",
+   "move": "+3.78%",
    "severity": "medium",
-   "detail": "上海金（上金所 Au99.99）最新收报 768.56，单日 -4.45%（数据日期 2026-11-20）。",
+   "detail": "LME 锡（LME 03）最新收报 42,050.00 美元/吨，单日 +3.78%（数据日期 11-23）。",
    "type": "price"
   }
  ],
- "summary": "今日异动 2 项：白银 -7.10%（上金所 Ag(T+D)）；上海金 -4.45%（上金所 Au99.99）。",
- "max_severity": "high"
+ "summary": "今日异动 1 项：锡 +3.78%（LME 03）。",
+ "max_severity": "medium"
 }
