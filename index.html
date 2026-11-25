@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20261126-0000" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20261126-0100" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2359,64 +2359,64 @@ body:not(.ec-on) #eventCalendar{display:none}
   window.mdShowInfo=mdShowInfo;
   // 外部脚本取不到/执行失败时立即提示，不必等看门狗超时
   window.mdScriptFail=function(name){ showBootWarn(name); };
-  // ===== app.js 加载失败自动重试（2026-11-25 根治 github.io 弱网卡红条）=====
-  // 事故链：app.js 约 320KB 单文件 → 某次请求失败/HTTP 缓存残留残缺响应 → __mdBooted 永远 false
-  //   → 红条「app.js 未执行」；用户点「强制重新加载」仍请求同一个 app.js?v=<固定指纹>，
-  //   缓存里的残缺文件被反复读取，所以三种手动方法都无效。
-  // 策略：用全新 ?__mdretry=<时间戳> URL 动态注入绕过 HTTP 缓存；失败退避重试，
-  //   成功自动同步横幅清红条。全程用户无感。
-  // ⚠️ 刻意不改上方 <script src="app.js?v=22ea1702"...> 标签：多个测试靠匹配它做隔离。
+  // ===== app.js 加载失败自动重试 v2（2026-11-26 根治）=====
+  // v1 教训：用新查询串重载 <script src> 无效——SW 的 matchFlexible() 会忽略查询串，
+  //   命中同一个被污染的缓存条目；且 onload 只代表响应到达，不代表脚本真的求值成功。
+  // v2 策略：复用本页已验证的「fetch(cache:reload) + 内联注入」自愈机制（同 mdRepairData）：
+  //   ① fetch 拿源码（跳过 HTTP 缓存）② 校验启动信标（拒绝残缺响应）
+  //   ③ 内联 script 执行（不再发资源请求 → 连 SW 缓存一起绕开）
+  //   ④ 校验 __mdBooted + __mdAppEvaluated 双信标，成功即同步隐藏红条。
   (function(){
     if(window.__mdAppRetryReady)return;
     window.__mdAppRetryReady=true;
     var S={tries:0,busy:false,max:3,timer:null};
     window.__mdAppRetryState=S;
-
-    function _syncWhenReady(){
-      var n=0;
-      var iv=setInterval(function(){
-        n++;
-        if(window.__mdBooted||n>60){
-          clearInterval(iv); S.busy=false;
-          try{ if(window.mdSyncBanner)window.mdSyncBanner(); }catch(e){}
-        }
-      },200);
-    }
-    function _inject(){
-      if(window.__mdBooted||S.busy||S.tries>=S.max)return;
-      S.busy=true; S.tries++;
-      try{ console.info('[md] app.js 加载失败，自动重试 '+S.tries+'/'+S.max+'（新 URL 绕缓存）'); }catch(e){}
+    function log(m){ try{ console.info('[md] app.js 自愈 '+m); }catch(e){} }
+    function injectInline(code){
       var s=document.createElement('script');
       s.charset='utf-8';
-      s.src='app.js?__mdretry='+Date.now()+'-'+S.tries;
-      s.onload=_syncWhenReady;
-      s.onerror=function(){
-        S.busy=false;
-        if(window.__mdBooted){ try{window.mdSyncBanner();}catch(e){} return; }
-        if(S.tries>=S.max){
-          try{ if(window.mdScriptFailOrig)window.mdScriptFailOrig('app.js'); }catch(e){}
-          return;
-        }
-        S.timer=setTimeout(function(){ S.timer=null; _inject(); }, S.tries*1500);
-      };
+      s.textContent=code;
       (document.head||document.body).appendChild(s);
     }
-    // 保留原钩子给其他脚本名；app.js 走重试链
-    window.mdScriptFailOrig=window.mdScriptFail;
+    function repair(){
+      if(window.__mdBooted&&window.__mdAppEvaluated)return Promise.resolve(true);
+      if(S.busy||S.tries>=S.max)return Promise.resolve(false);
+      S.busy=true; S.tries++;
+      log('第 '+S.tries+'/'+S.max+' 次：fetch(cache:reload) + 内联执行');
+      return fetch('app.js?__mdrepair='+Date.now()+'-'+S.tries,{cache:'reload'})
+        .then(function(r){ if(!r.ok)throw new Error('HTTP '+r.status); return r.text(); })
+        .then(function(t){
+          if(!t||t.indexOf('__mdBooted=true')<0)throw new Error('源码不完整');
+          injectInline(t);
+          if(!window.__mdBooted)throw new Error('启动信标未置位');
+          if(!window.__mdAppEvaluated)throw new Error('执行中途抛错');
+          S.busy=false;
+          log('恢复成功');
+          try{ if(window.mdSyncBanner)window.mdSyncBanner(); }catch(e){}
+          return true;
+        })
+        .catch(function(e){
+          S.busy=false;
+          log('失败：'+((e&&e.message)||e));
+          if(S.tries>=S.max)return false;
+          return new Promise(function(res){
+            S.timer=setTimeout(function(){ S.timer=null; res(repair()); },S.tries*1500);
+          });
+        });
+    }
+    window.mdAppRetry=repair;
+    window.mdScriptFailOrig=window.mdScriptFail||function(){};
     window.mdScriptFail=function(name){
-      if(name==='app.js'){ window.mdAppRetry(); return; }
+      if(name==='app.js'){ repair(); return; }
       window.mdScriptFailOrig(name);
     };
-    window.mdAppRetry=function(){
-      if(window.__mdBooted||S.busy||S.timer)return;
-      _inject();
-    };
-    // 请求挂起（既无 onload 也无 onerror）时兜底：8s 后页面确有 app.js 标签仍未 booted → 重试
-    setTimeout(function(){
-      if(window.__mdBooted)return;
-      try{ if(!document.querySelector('script[src*="app.js"]'))return; }catch(e){ return; }
-      window.mdAppRetry();
-    },8000);
+    // 多级看门狗：覆盖「请求挂起无回调」与「onload 但脚本没真跑」两种形态
+    [8000,20000,45000].forEach(function(ms){
+      setTimeout(function(){
+        if(window.__mdBooted&&window.__mdAppEvaluated)return;
+        repair();
+      },ms);
+    });
   })();
 
   // ② 版本自愈：本次 HTML 的 build-version 与本机上次记录不同 → 清缓存重载一次。
