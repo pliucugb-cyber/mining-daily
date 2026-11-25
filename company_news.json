@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-24",
+ "updated_at": "2026-11-25",
  "companies": [
   {
    "name": "紫金矿业",
@@ -17,6 +17,20 @@
    "stale": false,
    "rank": 1,
    "items": [
+    {
+     "t": "院士谈“新”丨唐菊兴：紫金物探助力全国新一轮找矿突破",
+     "d": "2026-11-25",
+     "u": "https://www.zjky.cn/news/news-detail-123044.htm",
+     "s": "",
+     "k": "news"
+    },
+    {
+     "t": "说图07丨雨林深处，矿山与万物共生长",
+     "d": "2026-11-25",
+     "u": "https://www.zjky.cn/news/news-detail-123043.htm",
+     "s": "2020 年，紫金矿业收购奥罗拉金矿，同年启动生物多样性管理专项：投入自有资金60万美元，联合圭亚那环保部门、当地高校及专业机构，在矿区布设28个固定监测点位，通过红外相机、样线调查和网捕等方式，定期为这片土地“体检”——追踪鸟类、哺乳动物、两栖爬行类和鱼类的踪迹，同步记录水质与栖息地变化，监测数据…",
+     "k": "news"
+    },
     {
      "t": "院士谈“新”丨沈政昌：紫金走出了一条依靠科技进步推动高质量发展之路",
      "d": "2026-11-19",
@@ -131,6 +145,41 @@
    "rank": 11,
    "items": [
     {
+     "t": "安庆铜矿持续加强顶帮板管理",
+     "d": "2026-11-25",
+     "u": "http://www.tlys.cn/news.aspx?cid=26750&classid=383",
+     "s": "一是严格落实顶帮板管理制度，抓实支护工序管控和工程验收，动态跟踪围岩变化，及时修复失效支护，筑牢安全防护屏障。二是健全隐患排查机制，完善巷道巡回检查制度，采取工区自查、专业督查相结合的方式，常态化开展顶帮板检查，推动隐患闭环销号。",
+     "k": "news"
+    },
+    {
+     "t": "铜冠铜箔谋划部署防寒防冻工作",
+     "d": "2026-11-25",
+     "u": "http://www.tlys.cn/news.aspx?cid=26749&classid=383",
+     "s": "一是强化物资储备，按实际需求提前摸底，备足防寒防冻、消防、融雪防滑等物资，分类存放、专人管理，定期核查补充。二是抓实设备防护，对管路闸阀、电气、供配电等设施落实保温防冻措施，加强维护保养，加密易冻部位巡检，发现问题当场处置。",
+     "k": "news"
+    },
+    {
+     "t": "铜冠电工开展“双师岗”工作交流活动",
+     "d": "2026-11-25",
+     "u": "http://www.tlys.cn/news.aspx?cid=26748&classid=383",
+     "s": "日前，铜冠电工组织开展“双师岗”工作交流活动。各“双师岗”员工依次汇报思想状况、复盘阶段工作；各“双师岗”导师对日常培养工作进行总结，肯定岗位员工的成长变化和业绩亮点，同时也指出短板弱项和下一步培养方向。",
+     "k": "news"
+    },
+    {
+     "t": "米拉多铜矿三端发力降本增效",
+     "d": "2026-11-24",
+     "u": "http://www.tlys.cn/news.aspx?cid=26744&classid=383",
+     "s": "今年以来，米拉多铜矿坚持以“精益管理、效益优先”为导向，扎实开展全岗位节约行动，年初制定的15项降本增效目标已完成84.37%。一是技术端挖潜，源头降本出实招。统筹设备改型、工艺优化和技术攻关，精准识别降本切入点，力争每一项微创新都转化为实打实的效益增长点。二是管理端从严，刚性约束压支出。",
+     "k": "news"
+    },
+    {
+     "t": "安庆铜矿加强精细化管理",
+     "d": "2026-11-24",
+     "u": "http://www.tlys.cn/news.aspx?cid=26743&classid=383",
+     "s": "一是坚持向管理要效益，不断提升精细化管理能力，盘活存量资产，强化过程管控，优化人力资源配置。二是持续推进全面预算管理，严控预算外、超预算费用，减少非生产性支出。三是加强井下采掘成本精细化管理，优化采切工程设计方案，多环节发力降低出矿成本。",
+     "k": "news"
+    },
+    {
      "t": "安庆铜矿大力开展创新创效活动",
      "d": "2026-11-23",
      "u": "http://www.tlys.cn/news.aspx?cid=26737&classid=383",
@@ -177,41 +226,6 @@
      "d": "2026-11-18",
      "u": "http://www.tlys.cn/news.aspx?cid=26726&classid=383",
      "s": "一是全面排查极端低温对生产生活的影响，建立问题清单，明确措施、时限和责任人，统筹做好检修与生产组织。二是抓实设备设施防寒防冻，开展房屋检漏和重点设备保温，加强提升系统、供配电设施维护，清理易燃物，提高巡检频次。",
-     "k": "news"
-    },
-    {
-     "t": "米拉多铜矿加强内部审计工作",
-     "d": "2026-11-18",
-     "u": "http://www.tlys.cn/news.aspx?cid=26727&classid=383",
-     "s": "",
-     "k": "news"
-    },
-    {
-     "t": "金新铜业以效益化最大化生产模式应对行业新形势",
-     "d": "2026-11-17",
-     "u": "http://www.tlys.cn/news.aspx?cid=26720&classid=383",
-     "s": "",
-     "k": "news"
-    },
-    {
-     "t": "铜冠电工开展漆包线检验员技术比武",
-     "d": "2026-11-17",
-     "u": "http://www.tlys.cn/news.aspx?cid=26719&classid=383",
-     "s": "",
-     "k": "news"
-    },
-    {
-     "t": "金冠铜业部署年内重点工作",
-     "d": "2026-11-16",
-     "u": "http://www.tlys.cn/news.aspx?cid=26714&classid=383",
-     "s": "",
-     "k": "news"
-    },
-    {
-     "t": "米拉多铜矿推行AB角工作制打造业务多面手",
-     "d": "2026-11-16",
-     "u": "http://www.tlys.cn/news.aspx?cid=26715&classid=383",
-     "s": "",
      "k": "news"
     }
    ]
@@ -313,7 +327,7 @@
      "t": "云南铜业公布三季报 前三季净利增加47.86%",
      "d": "2026-10-27",
      "u": "https://finance.sina.com.cn/stock/ggzz/2026-10-27/doc-iniwqtpf9084798.shtml",
-     "s": "10月27日消息，云南铜业发布三季度报告。 公告显示，公司前三季度营业收入163,854,783,064.93元，同比增加24.78%，归属上市公司股东的净利润2,600,066,958.49元，同比增加47.86%。...",
+     "s": "2026-10-26 22:00 云南铜业(000878.SZ)：前三季净利润26亿元，同比增长47.86%",
      "k": "news"
     },
     {
@@ -321,20 +335,6 @@
      "d": "2026-10-26",
      "u": "https://finance.sina.com.cn/stock/bxjj/2026-10-26/doc-iniwqhxp5321856.shtml",
      "s": "格隆汇10月26日丨云南铜业(000878.SZ)公布三季度报告，2026年前三季度营业收入1638.55亿元，同比增长24.78%；归母净利润26亿元，同比增长47.86%；扣非净利润25.18亿元，同比增长79.90%。...",
-     "k": "news"
-    },
-    {
-     "t": "云南铜业：第十届董事会第十七次会议决议公告",
-     "d": "2026-10-26",
-     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-10-26/doc-iniwqhxp5320133.shtml",
-     "s": "2026-10-26 21:23 云南铜业：关于召开2026年三季度网上业绩说明会的公告",
-     "k": "news"
-    },
-    {
-     "t": "云南铜业：关于召开2026年三季度网上业绩说明会的公告",
-     "d": "2026-10-26",
-     "u": "https://finance.sina.com.cn/stock/relnews/cn/2026-10-26/doc-iniwqhxp5320127.shtml",
-     "s": "证券日报网讯 10月26日，云南铜业发布公告称，公司计划于2026年11月6日15:00-16:00举行2026年第三季度业绩说明会。...",
      "k": "news"
     }
    ]
@@ -491,7 +491,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "chrome",
+   "method": "html",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -686,20 +686,6 @@
      "u": "https://finance.sina.com.cn/stock/aigc/stockfs/2026-10-30/doc-inixkzyh6823982.shtml",
      "s": "营业收入同比增长近两成 2026年前三季度云铝股份实现营业收入526.16亿元，较上年同期的440.72亿元同比增长19.39%，其中单第三季度营收达到176.35亿元，同比增幅17.62%。营收增长核心驱动因素为报告期内铝商品销售价格同...",
      "k": "news"
-    },
-    {
-     "t": "云铝股份前三季度营收526.16亿元同比增19.39%，归母净利润116.12亿元同比增164.01%",
-     "d": "2026-10-29",
-     "u": "https://finance.sina.com.cn/stock/aiassist/yjbg/2026-10-29/doc-iniwwyaq6018154.shtml",
-     "s": "2026-10-29 19:06 云铝股份(000807.SZ)：第三季度净利润39.28亿元 同比增长140.92%",
-     "k": "news"
-    },
-    {
-     "t": "云铝股份(000807.SZ)：第三季度净利润39.28亿元 同比增长140.92%",
-     "d": "2026-10-29",
-     "u": "https://finance.sina.com.cn/stock/bxjj/2026-10-29/doc-iniwwyav5207171.shtml",
-     "s": "格隆汇10月29日丨 云铝股份 (000807.SZ)发布2026年第三季度报告，实现营业收入176.35亿元，同比增长17.62%；归属于上市公司股东的净利润39.28亿元，同比增长140.92%；归属于上市公司股东的扣除非经常性损益的净利润39.17亿元，同比增长141.29%；基本每股收益1.",
-     "k": "news"
     }
    ]
   },
@@ -813,7 +799,7 @@
     },
     {
      "t": "矿山作画卷 绿意染春秋 归来庄公司的生态答卷",
-     "d": "2026-11-09",
+     "d": "2026-11-06",
      "u": "https://www.sd-gold.com/cmscontent/5853.html",
      "s": "先后投入专项资金逾亿元用于绿色矿山建设和生态恢复，构建“公司统筹、部门负责、全员参与”的工作体系。全员生态意识在常态化教育培训中持续深化：从《生态环境监测条例》专项培训，到“六五环境日”全员学习《中华人民共和国生态环境法典》，绿色理念如春风化雨，浸润矿山每一个角落。",
      "k": "news"
@@ -872,13 +858,6 @@
      "k": "news"
     },
     {
-     "t": "钟金评：让战新成势，让未来可期",
-     "d": "2026-11-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/jtyw/2026/11/I1569410185322037248.html",
-     "s": "11月6日，为深化落实习近平总书记“11·6”重要指示精神，中国黄金集团召开战新产业和未来产业发展工作推进会，再学习再领会习近平总书记关于发展新质生产力、培育壮大战略性新兴产业和未来产业的系列重要论述，宣贯国务院国资委有关政策，解读集团指导意见和工作机制，8家单位现场签署责任状。",
-     "k": "news"
-    },
-    {
      "t": "央视财经| 博物馆内全方位体验黄金开采全流程",
      "d": "2026-09-01",
      "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551959640089034752.html",
@@ -932,13 +911,6 @@
      "d": "2026-09-01",
      "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1551173253865668608.html",
      "s": "会上，中国工程院院士唐菊兴、李夕兵、刘炯天、葛世荣分别围绕铜金地质勘查、硬岩资源安全高效开采、关键金属新材料、矿山智能化建设等领域作主旨报告，立足行业发展大势、聚焦产业核心痛点，为集团公司科技创新、产业升级、人才培育提供智力支撑和专业指导。",
-     "k": "news"
-    },
-    {
-     "t": "光明网| 人才与科创双轮驱动 中国黄金集团打通人才与科技双向赋能通道...",
-     "d": "2026-09-01",
-     "u": "https://www.chinagoldgroup.com/zghj/xwzx/mtgz/2026/9/I1550537771259527168.html",
-     "s": "会上，中国工程院院士唐菊兴、李夕兵、刘炯天、葛世荣分别围绕铜金地质勘查、硬岩资源安全高效开采、关键金属新材料、矿山智能化建设等领域作主旨报告，立足行业发展大势、聚焦产业核心痛点，为集团公司科技创新、产业升级、人才培育提供权威智力支撑和专业指导。",
      "k": "news"
     }
    ]
@@ -1052,20 +1024,6 @@
      "d": "2026-10-23",
      "u": "https://finance.sina.com.cn/roll/2026-10-23/doc-iniweqhw1973802.shtml",
      "s": "来源：上海证券报·中国证券网上证报中国证券网讯 10月22日晚间，湖南黄金披露2026年第三季度报告。公司前三季度实现营业收入393.71亿元；归属于上市公司股东的净利润11.61亿元，同比增长12.87%；扣非净利润11.64亿元，同比增...",
-     "k": "news"
-    },
-    {
-     "t": "湖南黄金公布三季报 前三季净利增加12.87%",
-     "d": "2026-10-23",
-     "u": "https://finance.sina.com.cn/stock/ggzz/2026-10-23/doc-iniwcnve8223397.shtml",
-     "s": "10月23日消息，湖南黄金发布三季度报告。 公告显示，公司前三季度营业收入39,370,863,796.03元，同比减少4.43%，归属上市公司股东的净利润1,161,187,780.29元，同比增加12.87%。 公告显示，十大流...",
-     "k": "news"
-    },
-    {
-     "t": "湖南黄金：前三季度净利润约11.61亿元，同比增长12.87%",
-     "d": "2026-10-22",
-     "u": "https://finance.sina.com.cn/roll/2026-10-22/doc-iniwcnvc5867232.shtml",
-     "s": "2026-10-22 21:47 两大金矿上市公司Q3业绩均现下滑：四川黄金净利同比降约25%、湖南黄金降约45%",
      "k": "news"
     }
    ]
@@ -1281,6 +1239,13 @@
    "rank": 17,
    "items": [
     {
+     "t": "藏格锂业傅铃麟建言获省政协办公厅致谢",
+     "d": "2026-11-25",
+     "u": "http://www.zanggekuangye.com/news/cropnews/2125508298210349058.html",
+     "s": "该信息刊发于省政协办公厅《社情民意》第34期，是傅铃麟在藏格矿业党委领导和支持下，立足企业海外业务实践、履行智库专家职责形成的成果。信息聚焦盐湖产业海外专利布局、技术标准国际化、出海公共服务和产业协同输出等方面短板提出建议，助力盐湖企业“走出去”和世界级盐湖产业基地建设。",
+     "k": "news"
+    },
+    {
      "t": "藏格矿业入选2026年上市公司内部控制典型案例",
      "d": "2026-10-19",
      "u": "http://www.zanggekuangye.com/news/cropnews/2112116264276094978.html",
@@ -1345,13 +1310,6 @@
      "d": "2026-11-10",
      "u": "https://finance.sina.com.cn/roll/2026-11-10/doc-iniyfuyz2628230.shtml",
      "s": "来源：上海证券报·中国证券网上证报中国证券网讯（记者 武斌）近日，北方稀土旗下两家子公司再获高端技术突破。其中，北方嘉轩自主研发的2.2千瓦稀土永磁电机实现批量下线，打破了高效电机依赖昂贵高性能材料的行业惯性；天骄清美自主研发的纳米氧化铈精...",
-     "k": "news"
-    },
-    {
-     "t": "【稀土要闻】北方稀土两项高端技术同时突围",
-     "d": "2026-11-09",
-     "u": "https://finance.sina.com.cn/roll/2026-11-09/doc-iniycwiw3238231.shtml",
-     "s": "（来源：你好北方稀土）北方稀土两项高端技术同时突围电机长期依赖昂贵高性能材料，高端光学抛光液长期依赖进口——这两个行业格局，正在被北方稀土的两家企业打破。近日，北方嘉轩自主研发的2.2千瓦稀土永磁电机批量下线，天骄清美自主研发的纳米氧化铈精...",
      "k": "news"
     }
    ]
@@ -1822,6 +1780,15 @@
    "rank": 27,
    "items": [
     {
+     "t": "巴里克建议股东拒绝New York Stock and Bond LLC对普通股发出的低于市价的“迷你要约收购” | B股新闻",
+     "d": "2026-11-20",
+     "u": "https://www.stocktitan.net/news/B/barrick-recommends-shareholders-reject-new-york-stock-and-bond-llc-s-hlejdj4tlvzf.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Barrick Recommends Shareholders Reject New York Stock and Bond LLC’s Below-Market “Mini-Tender” Offer for Common Shares | B Stock News"
+    },
+    {
      "t": "出于对埃博拉疫情的担忧，巴里克黄金公司让刚果部分矿山员工休假",
      "d": "2026-11-17",
      "u": "https://www.mining.com/web/barrick-furloughing-some-congo-mine-personnel-over-ebola-concerns/",
@@ -1829,6 +1796,24 @@
      "k": "news",
      "src": "mining",
      "t_en": "Barrick furloughing some Congo mine personnel over Ebola concerns"
+    },
+    {
+     "t": "巴里克宣布根据与Hercules Metals的投资者权利协议行使反摊薄权 | B股新闻",
+     "d": "2026-11-16",
+     "u": "https://www.stocktitan.net/news/B/barrick-announces-exercise-of-anti-dilution-rights-under-investor-nk1bodczpzob.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Barrick Announces Exercise of Anti-Dilution Rights Under Investor Rights Agreement With Hercules Metals | B Stock News"
+    },
+    {
+     "t": "SEC 6-K（外资发行人报告）",
+     "d": "2026-11-13",
+     "u": "https://www.sec.gov/Archives/edgar/data/756894/000119312526459727/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
     },
     {
      "t": "备忘录称，巴里克黄金公司出于埃博拉预防措施，让刚果矿场的部分员工休假。",
@@ -1858,6 +1843,15 @@
      "t_en": "Barrick’s Marquee gold project faces hazy study timing"
     },
     {
+     "t": "Barrick宣布为拟议的首次公开募股提交美国Barrick和S-1申请| B股新闻",
+     "d": "2026-11-10",
+     "u": "https://www.stocktitan.net/news/B/barrick-announces-american-barrick-and-s-1-filing-for-proposed-7aptt53vwfbg.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Barrick Announces American Barrick and S-1 Filing for Proposed Initial Public Offering | B Stock News"
+    },
+    {
      "t": "Barrick计划于11月提交北美IPO申请",
      "d": "2026-11-09",
      "u": "https://www.mining.com/barrick-targets-november-filing-for-north-american-ipo/",
@@ -1865,6 +1859,33 @@
      "k": "news",
      "src": "mining",
      "t_en": "Barrick targets November filing for North American IPO"
+    },
+    {
+     "t": "Barrick公布2026年第三季度业绩| B股新闻",
+     "d": "2026-11-09",
+     "u": "https://www.stocktitan.net/news/B/barrick-reports-third-quarter-2026-0jiyarujpwqk.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Barrick Reports Third Quarter 2026 Results | B Stock News"
+    },
+    {
+     "t": "Barrick宣布第三季度股息| B股新闻",
+     "d": "2026-11-09",
+     "u": "https://www.stocktitan.net/news/B/barrick-declares-q3-kmaqn90pyzfk.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Barrick Declares Q3 Dividend | B Stock News"
+    },
+    {
+     "t": "Barrick将于11月9日公布2026年第三季度业绩| B股新闻",
+     "d": "2026-10-09",
+     "u": "https://www.stocktitan.net/news/B/barrick-to-report-third-quarter-2026-results-on-november-myy5xzslmc4k.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "Barrick to Report Third Quarter 2026 Results on November 9 | B Stock News"
     },
     {
      "t": "Barrick在坦桑尼亚获得15年北马拉采矿许可证",
@@ -1901,51 +1922,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Barrick, Equinox among TD Cowen’s best stock picks"
-    },
-    {
-     "t": "文件显示，多个工会威胁对巴里克的旗舰马里金矿进行罢工",
-     "d": "2026-09-20",
-     "u": "https://www.mining.com/web/multiple-unions-threaten-strikes-at-barricks-flagship-mali-gold-mine-documents-show/",
-     "s": "",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Multiple unions threaten strikes at Barrick’s flagship Mali gold mine, documents show"
-    },
-    {
-     "t": "Agnico Eagle没有加入Barrick IPO的计划",
-     "d": "2026-09-15",
-     "u": "https://www.mining.com/agnico-eagle-has-no-plans-to-join-barricks-ipo/",
-     "s": "Agnico Eagle 是全球三大黄金生产商之一，无意参与Barrick Mining",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle has no plans to join Barrick’s IPO"
-    },
-    {
-     "t": "据称，巴里克将把北美黄金IPO推迟到2027年",
-     "d": "2026-09-02",
-     "u": "https://www.mining.com/web/barrick-is-said-to-weigh-delaying-north-america-gold-ipo-to-2027/",
-     "s": "",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick is said to weigh delaying North America gold IPO to 2027"
-    },
-    {
-     "t": "维多利亚湖（ Lake Victoria ）的天宝（ Tembo ）拥有60万盎司黄金，位于巴里克（",
-     "d": "2026-08-11",
-     "u": "https://www.mining.com/lake-victorias-tembo-holds-600k-oz-gold-beside-barrick/",
-     "s": "",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Lake Victoria’s Tembo holds 600K oz. gold beside Barrick"
-    },
-    {
-     "t": "Fortuna Mining以2亿美元收购IAMGOLD塞内加尔项目Barrick",
-     "d": "2026-08-11",
-     "u": "https://www.mining.com/fortuna-mining-buys-barrick-iamgold-senegal-project-for-200m/",
-     "s": "",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Fortuna Mining buys Barrick, IAMGOLD Senegal project for $200M"
     }
    ]
   },
@@ -1962,13 +1938,31 @@
    "news_url": "https://www.fcx.com/",
    "method": "agg",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 26,
    "items": [
     {
+     "t": "PT Freeport Indonesia宣布赎回2027年到期的4.763%优先票据 | FCX股票新闻",
+     "d": "2026-11-24",
+     "u": "https://www.stocktitan.net/news/FCX/pt-freeport-indonesia-announces-redemption-of-4-763-senior-notes-due-0bd59rp1azx8.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "PT Freeport Indonesia Announces Redemption of 4.763% Senior Notes Due 2027 | FCX Stock News"
+    },
+    {
+     "t": "PT Freeport Indonesia完成7.5亿美元优先票据的出售|FCX股票新闻",
+     "d": "2026-11-24",
+     "u": "https://www.stocktitan.net/news/FCX/pt-freeport-indonesia-completes-sale-of-u-s-750-0-million-of-senior-a64lhmjt6t1b.html",
+     "s": "",
+     "k": "news",
+     "src": "agg",
+     "t_en": "PT Freeport Indonesia Completes Sale of U.S.$750.0 Million of Senior Notes | FCX Stock News"
+    },
+    {
      "t": "SEC 8-K（重大事项披露）",
-     "d": "2026-11-18",
-     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000053/",
+     "d": "2026-11-24",
+     "u": "https://www.sec.gov/Archives/edgar/data/831259/000083125926000055/",
      "s": "",
      "src": "edgar",
      "k": "reg",
@@ -2027,24 +2021,6 @@
      "k": "news",
      "src": "agg",
      "t_en": "Freeport Announces Plans to Boost U.S. Copper & Molybdenum Production | FCX Stock News"
-    },
-    {
-     "t": "Freeport 2026年第三季度和九个月财务和运营业绩发布于其网站| FCX股票新闻",
-     "d": "2026-10-27",
-     "u": "https://www.stocktitan.net/news/FCX/freeport-third-quarter-and-nine-month-2026-financial-and-operating-l58z387e0kn6.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Freeport Third-Quarter and Nine-Month 2026 Financial and Operating Results Release Available on Its Website | FCX Stock News"
-    },
-    {
-     "t": "Freeport提供2026年第三季度运营更新| FCX股票新闻",
-     "d": "2026-10-02",
-     "u": "https://www.stocktitan.net/news/FCX/freeport-provides-third-quarter-2026-operational-vkuik38lgh0h.html",
-     "s": "",
-     "k": "news",
-     "src": "agg",
-     "t_en": "Freeport Provides Third-Quarter 2026 Operational Update | FCX Stock News"
     },
     {
      "t": "图：格拉斯伯格斜坡加速延迟上的Freeport-McMoRan库存陨石坑",
@@ -2115,7 +2091,7 @@
    "news_url": "https://www.southerncoppercorp.com/",
    "method": "agg",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 28,
    "items": [
     {
@@ -2250,7 +2226,7 @@
    "news_url": "https://www.teck.com/news/",
    "method": "agg",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 30,
    "items": [
     {
@@ -2331,9 +2307,18 @@
    "news_url": "https://www.agnicoeagle.com/English/news-and-media/news-releases/default.aspx",
    "method": "agg",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 29,
    "items": [
+    {
+     "t": "SEC 6-K（外资发行人报告）",
+     "d": "2026-11-02",
+     "u": "https://www.sec.gov/Archives/edgar/data/2809/000110465926121185/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
     {
      "t": "AGNICO EAGLE报告2026年第三季度业绩-稳健的运营业绩推动了强劲的自由现金流生成；",
      "d": "2026-10-28",
@@ -2450,51 +2435,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Agnico Eagle launches $130M Avenir unit for critical minerals"
-    },
-    {
-     "t": "摩根大通和Agnico Eagle向Perpetua Resources注资2.55亿美元",
-     "d": "2025-10-27",
-     "u": "https://www.mining.com/jpmorgan-agnico-eagle-pour-255m-into-perpetua/",
-     "s": "美国进出口银行也在考虑为该项目提供贷款，该项目预计每年将产出45万盎司黄金，并满足美国超过35%的……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "JPMorgan, Agnico Eagle pour $255M into Perpetua Resources"
-    },
-    {
-     "t": "LaRonde：铸就Agnico Eagle的深层矿山",
-     "d": "2025-08-13",
-     "u": "https://www.mining.com/laronde-the-deep-mine-that-built-agnico-eagle/",
-     "s": "LaRonde mine in Quebec transformed Agnico Eagle from a small gold producer into a global mining leader through risk and innovation.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "LaRonde: The deep mine that built Agnico Eagle"
-    },
-    {
-     "t": "视频：Agnico Eagle首席执行官承诺返还未动用现金，不追逐疲软的交易",
-     "d": "2025-07-19",
-     "u": "https://www.mining.com/video-agnico-eagle-ceo-vows-to-return-unused-cash-not-chase-weak-deals/",
-     "s": "Agnico报告称，2025年第一季度净利润创纪录地达到8.15亿美元，自由现金流接近6亿美元。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Video: Agnico Eagle CEO vows to return unused cash, not chase weak deals"
-    },
-    {
-     "t": "Agnico Eagle首席执行官认为只有一种理由值得买入黄金股",
-     "d": "2025-06-23",
-     "u": "https://www.mining.com/web/agnico-eagle-ceo-sees-only-one-reason-to-buy-a-gold-stock/",
-     "s": "Agnico是去年少数几只跑赢金条的大盘黄金矿业股之一。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle CEO sees only one reason to buy a gold stock"
-    },
-    {
-     "t": "Agnico Eagle成为最有价值的黄金股，助力保尔森",
-     "d": "2025-05-27",
-     "u": "https://www.mining.com/web/agnico-eagles-ascent-to-most-valuable-gold-stock-lifts-paulson/",
-     "s": "当Paulson & Co.入股Agnico Eagle时，该公司的市值约为79亿美元。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Agnico Eagle’s ascent to most valuable gold stock lifts Paulson"
     }
    ]
   },
@@ -2773,7 +2713,7 @@
      "t": "中稀有色(600259)：业绩超预期 有望受益行业整合",
      "d": "2026-10-31",
      "u": "http://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/846769986929/index.phtml",
-     "s": "",
+     "s": "2026-10-31 13:15 中稀有色十大流通股东格局生变：银华心佳两年持有期混合等退出，广东稀土集团等减持",
      "k": "news"
     }
    ]
@@ -2909,13 +2849,6 @@
      "u": "https://finance.sina.com.cn/stock/relnews/hk/2026-09-15/doc-inirwwmu8616643.shtml",
      "s": "金吾财讯 | 中邮证券发布研报指，中国有色矿业（01258）2026年上半年实现营业收入22.61亿美元，同比+29.1%，归母净利润4.34亿美元，同比+64.7%，略超7月正面盈利预告指引4.20亿美元。铜价与硫酸双轮驱动下毛利率跃升至...",
      "k": "news"
-    },
-    {
-     "t": "港股异动 | 中国有色矿业(01258)涨超4% 完成发行3亿美元零息可转换债券 中远期自有铜产能有望翻倍",
-     "d": "2026-09-03",
-     "u": "https://finance.sina.com.cn/stock/hkstock/marketalerts/2026-09-03/doc-iniqpeke2282095.shtml",
-     "s": "中国有色矿业(01258)涨超4%，截至发稿，涨4.41%，报16.74港元，成交额2747.33万港元。消息面上，中国有色矿业发布公告，认购协议所有关于发行债券的先决条件均已达成，而本金总额3亿美元的债券已于2026年9月2日完成发行。扣...",
-     "k": "news"
     }
    ]
   },
@@ -2932,7 +2865,7 @@
    "news_url": "https://www.riotinto.com/",
    "method": "agg",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 99,
    "items": [
     {
@@ -3076,9 +3009,36 @@
    "news_url": "https://www.bhp.com/",
    "method": "agg",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "必和必拓基金会与加拿大原住民主要项目联盟达成390万加元协议",
+     "d": "2026-11-24",
+     "u": "https://www.mining.com/bhp-foundation-canadas-first-nations-major-projects-coalition-strike-3-9-million-deal/",
+     "s": "FNMPC表示，目标是制定更好的原住民与项目方协议，尊重自由、事先和知情同意。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "BHP Foundation, Canada’s First Nations Major Projects Coalition strike $3.9 million deal"
+    },
+    {
+     "t": "必和必拓斥资174亿美元押注南澳铜产量翻番",
+     "d": "2026-11-23",
+     "u": "https://www.mining.com/bhp-bets-17-4b-on-doubling-south-australian-copper-output/",
+     "s": "该战略将奥林匹克坝矿山和冶炼综合体、安卡塔矿床以及必和必拓通过90亿澳元收购的资产整合在一起。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "BHP bets $17.4 billion on doubling South Australian copper output"
+    },
+    {
+     "t": "SEC 6-K（外资发行人报告）",
+     "d": "2026-11-23",
+     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526470868/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
     {
      "t": "必和必拓计划全面调整澳大利亚铁矿石业务以削减成本",
      "d": "2026-11-12",
@@ -3087,15 +3047,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "BHP plans overhaul of Australia iron ore business to cut costs"
-    },
-    {
-     "t": "SEC 6-K（外资发行人报告）",
-     "d": "2026-11-12",
-     "u": "https://www.sec.gov/Archives/edgar/data/811809/000119312526456631/",
-     "s": "",
-     "src": "edgar",
-     "k": "reg",
-     "t_en": ""
     },
     {
      "t": "必和必拓Codelco在智利北部发起$ 4000万铜矿开采",
@@ -3186,24 +3137,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "BHP’s Escondida restart eases tight copper market"
-    },
-    {
-     "t": "必和必拓在埃斯孔迪达发生致命事故后停止运营",
-     "d": "2026-09-23",
-     "u": "https://www.mining.com/fatal-accident-reported-at-bhps-escondida-mine/",
-     "s": "Chile’s Sernageomin confirmed the fatal accident, and deployed a regional team to investigate.",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP halts operations at Escondida following fatal accident"
-    },
-    {
-     "t": "必和必拓Escondida矿业主管工会敦促拒绝合同要约，罢工迫在眉睫",
-     "d": "2026-09-23",
-     "u": "https://www.mining.com/web/bhp-escondida-mine-supervisors-union-urges-rejection-of-contract-offer-strike-looms/",
-     "s": "Unionized supervisors at BHP’s Escondida copper mine in Chile will urge members to reject the company’s latest contract offer, paving the way for a st…",
-     "k": "news",
-     "src": "mining",
-     "t_en": "BHP Escondida mine supervisors’ union urges rejection of contract offer, strike looms"
     }
    ]
   },
@@ -3220,9 +3153,27 @@
    "news_url": "https://www.vale.com/",
    "method": "agg",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "淡水河谷将恢复Viga铁矿的运营",
+     "d": "2026-11-24",
+     "u": "https://www.mining.com/vale-to-resume-operations-at-viga-iron-ore-mine/",
+     "s": "溢水影响了位于米纳斯吉拉斯州中部的Viga和Fábrica矿山的运营。当地政府对淡水河谷处以1雷亚尔的罚款。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Vale to resume operations at Viga iron ore mine"
+    },
+    {
+     "t": "SEC 6-K（外资发行人报告）",
+     "d": "2026-11-24",
+     "u": "https://www.sec.gov/Archives/edgar/data/917851/000129281426005390/",
+     "s": "",
+     "src": "edgar",
+     "k": "reg",
+     "t_en": ""
+    },
     {
      "t": "首席执行官表示，淡水河谷贱金属将在2026年将收入增加三倍至50亿$",
      "d": "2026-11-09",
@@ -3321,15 +3272,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Vale, ABB expand AI, automation across Brazil iron ore"
-    },
-    {
-     "t": "淡水河谷认为，尽管中国价格下跌，但铁矿石市场仍具有弹性",
-     "d": "2026-07-31",
-     "u": "https://www.mining.com/web/vale-sees-iron-ore-market-resilient-despite-lower-prices-in-china/",
-     "s": "全球最大的铁矿石生产商之一巴西矿业公司淡水河谷周五表示，该大宗商品的市场基本面仍然具有弹性。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Vale sees iron ore market resilient despite lower prices in China"
     }
    ]
   },
@@ -3346,9 +3288,18 @@
    "news_url": "https://www.glencore.com/",
    "method": "mining",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "Empower EIT与嘉能可签署10年锂产品包销协议",
+     "d": "2026-11-23",
+     "u": "https://www.mining.com/empower-eit-inks-10-year-lithium-offtake-deal-with-glencore/",
+     "s": "Empower EIT周一宣布与嘉能可（LON：GLEN）达成一项具有约束力的包销协议，涉及10年内10万吨锂，以及一项战略股权……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Empower EIT inks 10 year lithium offtake deal with Glencore"
+    },
     {
      "t": "印尼瞄准前Glencore交易员Kurniawan的镍矿帝国",
      "d": "2026-11-05",
@@ -3429,15 +3380,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Glencore sees electrification trend driving strong uptake for Australia listing"
-    },
-    {
-     "t": "嘉能可表示，今年的交易利润将超过50 $",
-     "d": "2026-10-02",
-     "u": "https://www.mining.com/web/glencore-says-trading-profits-will-top-5-billion-this-year/",
-     "s": "2026年，由于伊朗战争助长了能源价格的剧烈波动和区域市场之间的重大混乱，贸易商再次获得巨额收益。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Glencore says trading profits will top $5 billion this year"
     }
    ]
   },
@@ -3454,7 +3396,7 @@
    "news_url": "https://www.angloamerican.com/",
    "method": "mining",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 99,
    "items": [
     {
@@ -3637,6 +3579,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 367
+  "items": 359
  }
 }
