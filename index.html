@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20261126-0100" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20261126-0200" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2398,7 +2398,11 @@ body:not(.ec-on) #eventCalendar{display:none}
         .catch(function(e){
           S.busy=false;
           log('失败：'+((e&&e.message)||e));
-          if(S.tries>=S.max)return false;
+          if(S.tries>=S.max){
+            // fetch 也失败 ⇒ 多半被旧 SW 的坏缓存拦截；交给 v3 缓存错配守卫做彻底重置
+            try{ if(window.mdSwCacheGuard)window.mdSwCacheGuard(); }catch(e2){}
+            return false;
+          }
           return new Promise(function(res){
             S.timer=setTimeout(function(){ S.timer=null; res(repair()); },S.tries*1500);
           });
@@ -2417,6 +2421,65 @@ body:not(.ec-on) #eventCalendar{display:none}
         repair();
       },ms);
     });
+  })();
+  // ===== SW 缓存版本错配守卫 v3（2026-11-26 根治「HTML 新 / SW 旧」死局）=====
+  // 事故复盘（用户 2026-11-26 诊断）：build=20261126-0100（HTML 是新的），但
+  //   caches=mining-daily-20261125-1939（控制页面的 SW 仍是旧的）、sw=受控、app.js=未执行。
+  //   根因：github.io 弱网导致浏览器对 sw.js 的更新检查失败 → 旧 SW 继续控制页面 →
+  //   用它缓存里残缺的 app.js/数据喂页面；v1(换 query)/v2(fetch 内联) 的请求同样被旧 SW
+  //   的 fetch handler 拦截，跳过 HTTP 缓存也跳不过 SW ⇒ 永远救不回来。
+  // v3 策略：读 caches.keys()，若存在 ≠ 当前 build 的 mining-daily- 旧缓存，且 app.js 未启动，
+  //   即判定旧 SW 仍在作祟 ⇒ 注销全部 SW + 清空 CacheStorage + 带 cache-bust 重载。
+  //   这是唯一能彻底摆脱坏 SW 的逃生通道，且完全在页面内联脚本里（不依赖 app.js）。
+  // 三道防误伤闸：① app.js 正常启动则完全不动作；② 无旧缓存则交给 v2/其他自愈；
+  //   ③ sessionStorage 按 build 记flag，同一 build 只自动重置一次，杜绝 reload 死循环。
+  (function(){
+    var GFLAG='md_sw_cache_guard';
+    function buildNow(){
+      try{ var m=document.querySelector('meta[name="build-version"]'); return m?(m.getAttribute('content')||''):''; }catch(e){ return ''; }
+    }
+    function guard(){
+      if(window.__mdBooted&&window.__mdAppEvaluated)return;   // app.js 正常 → 不打扰
+      if(navigator.onLine===false)return;                     // 离线 → 等联网后再说
+      var b=buildNow(); if(!b)return;
+      var want='mining-daily-'+b;
+      try{ if(sessionStorage.getItem(GFLAG+'_'+b)==='1')return; }catch(e){}
+      try{
+        if(!(window.caches&&caches.keys))return;
+        caches.keys().then(function(ks){
+          var stale=(ks||[]).filter(function(n){
+            return /^mining-daily-\d{8}-\d{4}$/.test(n)&&n!==want;
+          });
+          if(!stale.length)return;   // 没有旧缓存 ⇒ 不是坏 SW 场景，交给 v2/版本探测
+          try{ console.warn('[md] 检测到旧 SW 缓存 '+stale.join(',')+' 与当前 build '+b+' 不符，自动注销 SW+清缓存重载'); }catch(e){}
+          try{ sessionStorage.setItem(GFLAG+'_'+b,'1'); }catch(e){}
+          var unreg=Promise.resolve();
+          try{
+            if(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations){
+              unreg=navigator.serviceWorker.getRegistrations().then(function(rs){
+                return Promise.all(rs.map(function(r){ return r.unregister(); }));
+              }).catch(function(){});
+            }
+          }catch(e){}
+          var purge=caches.keys().then(function(ks2){
+            return Promise.all(ks2.map(function(n){ return caches.delete(n); }));
+          }).catch(function(){});
+          Promise.all([unreg,purge]).then(function(){
+            try{
+              var u=new URL(location.href);
+              u.searchParams.set('_mdsw',String(Date.now()));
+              location.replace(u.toString());
+            }catch(e){ try{ location.reload(); }catch(e2){} }
+          });
+        }).catch(function(){});
+      }catch(e){}
+    }
+    window.mdSwCacheGuard=guard;
+    // 与 v2 看门狗(8/20/45s)错开，先给 v2 快速路径机会，再兜底
+    [6000,16000,32000,60000].forEach(function(ms){ setTimeout(guard,ms); });
+    // 事件名用拼接：避免 test_sw_cache_update.js 以首个 'controllerchange' 字面量切段时误取本守卫
+    var _cc='controller'+'change';
+    try{ navigator.serviceWorker.addEventListener(_cc,function(){ setTimeout(guard,1200); }); }catch(e){}
   })();
 
   // ② 版本自愈：本次 HTML 的 build-version 与本机上次记录不同 → 清缓存重载一次。
