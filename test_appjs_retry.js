@@ -1,19 +1,17 @@
 // test_appjs_retry.js
-// 2026-11-25 事故回归 —— app.js 加载失败后「永久红条」的根治守护
+// 2026-11-25/26 事故回归 —— app.js 加载失败后「永久红条」的根治守护
 //
-// 用户现象：手机打开日报持续显示「页面脚本出错（app.js 未执行）」，
-//   点「立即重试加载」「强制重新加载（清缓存）」、关标签页重开三种方法都无效。
-// 根因链：
-//   ① github.io 国内访问极不稳（实测单请求卡满 25s、传输被截断）；
-//   ② app.js 约 320KB 单文件，某次请求失败/HTTP 缓存残留残缺响应 → __mdBooted 永远 false；
-//   ③ 用户三个手动方法请求的仍是同一个 app.js?v=<固定指纹> → 缓存里残缺文件被反复读取；
-//   ④ 自动自愈又被 sessionStorage 的 RESET_FLAG 会话级锁死，试一次就放弃。
-// 修复：index.html 内联重试器包装 mdScriptFail，app.js 加载失败时用
-//   全新 ?__mdretry=<时间戳> URL 动态注入绕过 HTTP 缓存；退避重试 3 次，
-//   成功自动同步横幅清红条。用户全程无感。
+// 用户现象：手机与电脑都显示「页面脚本出错（app.js 未执行）」，
+//   点「立即重试加载」「强制重新加载（清缓存）」、关标签页重开都无效，
+//   今日简报 / 要闻 / 热榜永久停在「加载中…」。
+// v1 教训（2026-11-25）：用新查询串重载 <script src> 无效——
+//   SW 的 matchFlexible() 忽略查询串，命中同一个被污染的缓存条目；
+//   且 onload 只代表响应到达，不代表脚本真的求值成功。
+// v2 修复（2026-11-26）：复用页面已验证的 mdRepairData 机制——
+//   fetch(cache:'reload') 拿源码 → 校验启动信标 → 内联 script 执行（不再发资源请求，
+//   连 SW 缓存一起绕开）→ 校验双信标 → 成功同步横幅清红条。
 //
-// 本测试抽取 index.html 里的重试器 IIFE 到 jsdom 沙箱独立跑，不依赖整页加载，
-// 也不受其它内联脚本干扰。
+// 本测试抽取 index.html 里的重试器 IIFE 到 jsdom 沙箱独立跑，mock fetch 精确控制每条链。
 //
 // 运行：node test_appjs_retry.js
 const fs = require('fs');
@@ -28,127 +26,159 @@ function check(name, cond, why) {
   if (cond) { pass++; console.log('  PASS  ' + name + (why ? '  → ' + why : '')); }
   else { fail++; console.log('  FAIL  ' + name + (why ? '  → ' + why : '')); }
 }
+function flush() { return new Promise(r => setImmediate(r)); }
 
-// ── 从 index.html 抽取重试器 IIFE ──────────────────────────────────────────
+// ── 抽取重试器 IIFE ───────────────────────────────────────────────────────
 const START = '  // ===== app.js 加载失败自动重试';
 const END = '  })();';
 const s = HTML.indexOf(START);
 const e = s < 0 ? -1 : HTML.indexOf(END, s);
 const block = (s >= 0 && e >= 0) ? HTML.slice(s, e + END.length) : '';
 
+const APP_SRC = 'window.__mdBooted=true; window.__mdAppEvaluated=true;';
+
 console.log('\n=== A. 静态结构守护 ===');
-check('A1 index.html 含 app.js 重试器 IIFE', block.length > 200, 'block=' + block.length + ' chars');
-check('A2 重试器使用唯一 query 绕缓存', block.indexOf('__mdretry') >= 0);
-check('A3 有重试次数上限（防无限循环）', /S\.tries>=S\.max/.test(block));
-check('A4 成功后主动同步横幅清红条', /window\.mdSyncBanner\(\)/.test(block));
-check('A5 保留原 app.js script 标签（测试隔离依赖）',
+check('A1 index.html 含 v2 重试器 IIFE', block.indexOf('重试 v2') >= 0, 'block=' + block.length);
+check('A2 用 fetch(cache:reload) 绕 HTTP 缓存', block.indexOf("{cache:'reload'}") >= 0);
+check('A3 用唯一 query 标记（日志/穿透）', block.indexOf('__mdrepair') >= 0);
+check('A4 校验源码含启动信标（拒绝残缺响应）', block.indexOf("t.indexOf('__mdBooted=true')<0") >= 0);
+check('A5 内联 script 执行（不产生资源请求，绕开 SW）', block.indexOf('s.textContent=code') >= 0);
+check('A6 校验双信标 __mdBooted + __mdAppEvaluated',
+  block.indexOf('if(!window.__mdBooted)throw') >= 0 && block.indexOf('if(!window.__mdAppEvaluated)throw') >= 0);
+check('A7 有重试次数上限（防无限循环）', /S\.tries>=S\.max/.test(block));
+check('A8 多级看门狗覆盖挂起/假 onload', block.indexOf('[8000,20000,45000]') >= 0);
+check('A9 成功后主动同步横幅清红条', /window\.mdSyncBanner\(\)/.test(block));
+check('A10 保留原 app.js script 标签（测试隔离依赖）',
   /<script src="app\.js"[^>]*><\/script>/.test(HTML));
-check('A6 onerror 仍走 mdScriptFail 钩子', /mdScriptFail&&window\.mdScriptFail\('app\.js'\)/.test(HTML));
-check('A7 8 秒看门狗覆盖「请求挂起无回调」', /\},8000\)/.test(block) && /script\[src\*="app\.js"\]/.test(block));
+check('A11 onerror 仍走 mdScriptFail 钩子', /mdScriptFail&&window\.mdScriptFail\('app\.js'\)/.test(HTML));
+check('A12 v1 的 __mdretry 方案已彻底移除', block.indexOf('__mdretry') < 0);
 
-// ── jsdom 沙箱实测重试链 ───────────────────────────────────────────────────
-function makeSandbox() {
+// ── jsdom 沙箱 ────────────────────────────────────────────────────────────
+function makeSandbox(fetchImpl, recorder) {
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
     { runScripts: 'outside-only' });
   const w = dom.window;
-  // 假定时器：退避立即执行，看门狗(>=8000ms)不自动触发；setInterval 只跑一次
-  w.setTimeout = function (fn, ms) { if (ms >= 8000) return 0; fn(); return 0; };
-  w.setInterval = function (fn) { fn(); return 1; };
-  w.clearInterval = function () {};
-  // 捕获动态注入的 script，但不真的发起网络
-  const injected = [];
-  const origCreate = w.document.createElement.bind(w.document);
-  w.document.createElement = function (tag) {
-    const el = origCreate(tag);
-    if (String(tag).toLowerCase() === 'script') injected.push(el);
-    return el;
-  };
-  // 原钩子与横幅打点
-  const calls = { origFail: [], banner: 0 };
-  w.mdScriptFail = function (name) { calls.origFail.push(name); };
-  w.mdSyncBanner = function () { calls.banner++; };
-  w.eval(block);
-  return { w, injected, calls };
-}
-
-console.log('\n=== B. 重试链行为实测 ===');
-{
-  const { w, injected, calls } = makeSandbox();
-  check('B1 重试器已注册', typeof w.mdAppRetry === 'function');
-  check('B2 原 mdScriptFail 钩子被保留', typeof w.mdScriptFailOrig === 'function');
-
-  // 非 app.js 的失败仍走原钩子（不误伤其它资源）
-  w.mdScriptFail('sw.js');
-  check('B3 其它脚本名仍走原提示钩子',
-    calls.origFail.join(',') === 'sw.js', 'origFail=' + calls.origFail.join(','));
-  check('B4 其它脚本名不触发 app.js 重试', injected.length === 0);
-
-  // app.js 失败 → 第一次重试，URL 带唯一 query
-  w.mdScriptFail('app.js');
-  check('B5 app.js 失败触发动态重试', injected.length === 1, 'injected=' + injected.length);
-  const u1 = injected[0] && injected[0].src || '';
-  check('B6 重试 URL 带 __mdretry 时间戳', /app\.js\?__mdretry=\d+-\d+/.test(u1), u1);
-
-  // 第一次 onerror → 退避后立即注入第二次，URL 必须不同（绕缓存关键）
-  injected[0].onerror();
-  check('B7 失败后自动重试第二次', injected.length === 2);
-  const u2 = injected[1] && injected[1].src || '';
-  check('B8 每次重试 URL 都不同（绕开损坏缓存）', u1 !== u2, u1 + ' vs ' + u2);
-
-  // 第二次 onerror → 第三次
-  injected[1].onerror();
-  check('B9 失败后自动重试第三次', injected.length === 3);
-
-  // 第三次 onerror → 达上限，不再注入，回落原提示
-  injected[2].onerror();
-  check('B10 达到上限后停止重试（防无限循环）', injected.length === 3);
-  check('B11 三次全失败后回落原红条提示',
-    calls.origFail.indexOf('app.js') >= 0, 'origFail=' + calls.origFail.join(','));
-}
-
-console.log('\n=== C. 成功恢复 / 防重入 ===');
-{
-  const { w, injected, calls } = makeSandbox();
-  w.mdScriptFail('app.js');
-  check('C1 重试进行中拒绝重复触发', (function () {
-    w.mdAppRetry();
-    return injected.length === 1;
-  })(), 'injected=' + injected.length);
-
-  // 模拟 app.js 这次加载成功并执行
-  w.__mdBooted = true;
-  injected[0].onload();
-  check('C2 加载成功后主动同步横幅（清红条）', calls.banner >= 1, 'banner=' + calls.banner);
-  check('C3 成功后 busy 标志复位', w.__mdAppRetryState.busy === false);
-
-  // 已 booted 后不再重试
-  w.mdAppRetry();
-  check('C4 已执行后不再注入脚本', injected.length === 1);
-}
-
-console.log('\n=== D. 看门狗不误伤测试环境 ===');
-{
-  // 页面里没有 app.js 标签时（多数测试会 replace 掉），8s 看门狗不得注入
-  const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
-    { runScripts: 'outside-only' });
-  const w = dom.window;
-  const fired = [];
-  w.setTimeout = function (fn, ms) { if (ms >= 8000) { fired.push(fn); return 1; } fn(); return 0; };
+  const timers = [];
+  w.setTimeout = function (fn, ms) { timers.push({ fn: fn, ms: ms || 0 }); return timers.length; };
+  w.clearTimeout = function () {};
   w.setInterval = function () { return 1; };
   w.clearInterval = function () {};
   const injected = [];
   const origCreate = w.document.createElement.bind(w.document);
   w.document.createElement = function (tag) {
     const el = origCreate(tag);
-    if (String(tag).toLowerCase() === 'script') injected.push(el);
+    if (String(tag).toLowerCase() === 'script') {
+      injected.push(el);
+      // jsdom outside-only 不执行内联脚本：拦截 textContent 赋值时手动 eval
+      let code = '';
+      Object.defineProperty(el, 'textContent', {
+        get: function () { return code; },
+        set: function (v) { code = String(v); try { w.eval(code); } catch (err) { w.__inlineErr = String(err); } },
+        configurable: true
+      });
+    }
     return el;
   };
+  const calls = recorder || { origFail: [], banner: 0, fetch: [] };
+  w.mdScriptFail = function (name) { calls.origFail.push(name); };
+  w.mdSyncBanner = function () { calls.banner++; };
+  w.fetch = fetchImpl || function (url, opts) {
+    calls.fetch.push({ url: url, opts: opts });
+    return Promise.resolve({ ok: true, text: function () { return Promise.resolve(APP_SRC); } });
+  };
   w.eval(block);
-  check('D1 看门狗已注册', fired.length === 1);
-  fired[0]();  // 模拟 8s 到点
-  check('D2 无 app.js 标签时不误触发重试', injected.length === 0, 'injected=' + injected.length);
+  return { w, injected, calls, timers };
 }
 
-console.log('\n────────────────────────────────');
-console.log('PASS=' + pass + '  FAIL=' + fail);
-process.exit(fail ? 1 : 0);
+(async function () {
+  console.log('\n=== B. 重试链行为实测 ===');
+  {
+    const c = { origFail: [], banner: 0, fetch: [] };
+    const sb = makeSandbox(null, c);
+    const { w, injected } = sb;
+    check('B1 重试器已注册', typeof w.mdAppRetry === 'function');
+    check('B2 原 mdScriptFail 钩子被保留', typeof w.mdScriptFailOrig === 'function');
+
+    w.mdScriptFail('sw.js');
+    check('B3 其它脚本名仍走原提示钩子', c.origFail.join(',') === 'sw.js', 'origFail=' + c.origFail.join(','));
+    check('B4 其它脚本名不触发 app.js 自愈', c.fetch.length === 0);
+
+    w.mdScriptFail('app.js');
+    await flush(); await flush();
+    check('B5 app.js 失败触发 fetch 自愈', c.fetch.length === 1, 'fetch=' + c.fetch.length);
+    check('B6 fetch URL 带 __mdrepair 标记', /app\.js\?__mdrepair=/.test(c.fetch[0].url), c.fetch[0].url);
+    check('B7 fetch 使用 cache:reload', c.fetch[0].opts && c.fetch[0].opts.cache === 'reload');
+    check('B8 源码内联执行（无 src 资源请求）', injected.length === 1 && !injected[0].src);
+    check('B9 双信标置位后判定恢复成功', w.__mdBooted === true && w.__mdAppEvaluated === true);
+    check('B10 成功后同步横幅清红条', c.banner >= 1, 'banner=' + c.banner);
+    check('B11 成功后 busy 复位', w.__mdAppRetryState.busy === false);
+    check('B12 已恢复后不再重复 fetch', (w.mdAppRetry(), c.fetch.length === 1));
+  }
+
+  console.log('\n=== C. 残缺响应 / 失败重试 / 上限 ===');
+  {
+    let n = 0;
+    const c = { origFail: [], banner: 0, fetch: [] };
+    const sb = makeSandbox(function (url, opts) {
+      c.fetch.push({ url: url, opts: opts });
+      n++;
+      return Promise.resolve({ ok: true, text: function () {
+        // 前两次返回残缺源码（无启动信标），第三次给完整源码
+        return Promise.resolve(n < 3 ? 'var broken=1;' : APP_SRC);
+      } });
+    }, c);
+    const { w, injected, timers } = sb;
+    w.mdScriptFail('app.js');
+    await flush(); await flush();
+    check('C1 残缺源码不注入执行', injected.length === 0, 'injected=' + injected.length);
+    check('C2 残缺源码不算恢复，横幅未被清', c.banner === 0);
+    // 手动触发退避定时器
+    const backoff = timers.filter(t => t.ms > 0 && t.ms < 8000);
+    check('C3 失败后排了退避重试定时器', backoff.length === 1, 'timers=' + backoff.length);
+    backoff[0].fn();
+    await flush(); await flush();
+    check('C4 第二次残缺仍未注入', injected.length === 0);
+    const backoff2 = timers.filter(t => t.ms > 0 && t.ms < 8000 && !t.done);
+    backoff2[0].fn();
+    await flush(); await flush();
+    check('C5 第三次完整源码成功内联执行', injected.length === 1 && w.__mdBooted === true);
+    check('C6 恢复后清红条', c.banner >= 1);
+  }
+  {
+    const c = { origFail: [], banner: 0, fetch: [] };
+    const sb = makeSandbox(function (url, opts) {
+      c.fetch.push({ url: url, opts: opts });
+      return Promise.resolve({ ok: false, status: 503 });
+    }, c);
+    const { w } = sb;
+    w.mdScriptFail('app.js');
+    await flush(); await flush();
+    const t1 = sb.timers.filter(t => t.ms > 0 && t.ms < 8000);
+    check('C7 HTTP 失败后排退避', t1.length === 1);
+    t1[0].fn(); await flush(); await flush();
+    const t2 = sb.timers.filter(t => t.ms > 0 && t.ms < 8000).slice(1);
+    t2[0].fn(); await flush(); await flush();
+    check('C8 三次失败后达到上限', w.__mdAppRetryState.tries === 3, 'tries=' + w.__mdAppRetryState.tries);
+    const before = c.fetch.length;
+    w.mdAppRetry(); await flush();
+    check('C9 达上限后不再发起新 fetch（防死循环）', c.fetch.length === before);
+  }
+
+  console.log('\n=== D. 看门狗不误伤 ===');
+  {
+    const sb = makeSandbox();
+    const { w, timers } = sb;
+    const wd = timers.filter(t => t.ms >= 8000);
+    check('D1 注册了三级看门狗', wd.length === 3, 'count=' + wd.length);
+    check('D2 看门狗延迟为 8s/20s/45s',
+      wd[0].ms === 8000 && wd[1].ms === 20000 && wd[2].ms === 45000);
+    wd[0].fn(); await flush(); await flush();
+    check('D3 首级看门狗完成一次自愈', sb.calls.fetch.length === 1, 'fetch=' + sb.calls.fetch.length);
+    wd[1].fn(); wd[2].fn(); await flush(); await flush();
+    check('D4 双信标已置位，后两级看门狗跳过（不重复执行）', sb.calls.fetch.length === 1);
+  }
+
+  console.log('\n────────────────────────────────');
+  console.log('PASS=' + pass + '  FAIL=' + fail);
+  process.exit(fail ? 1 : 0);
+})();
