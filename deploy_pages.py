@@ -130,12 +130,23 @@ BUST_FILES = ['app.js', 'news-data.js', 'conference-data.js', 'event-data.js', '
 
 
 def bust_asset_versions():
-    """把工作副本 index.html 里的脚本引用改写为带内容指纹的 URL。"""
+    """把工作副本 index.html 里的脚本引用改写为带指纹的 URL。
+
+    2026-11-26 二次事故修复：指纹从「纯内容 md5」改为「md5(内容 + build-version)」。
+    旧算法下 app.js 内容长期不变 → URL 长期不变 → 弱网一次截断写进的残缺响应
+    被浏览器 HTTP 缓存 + SW 缓存长期命中，用户端 app.js 永久加载不全（数据在、
+    唯独 app.js 未执行就是它的特征）；v1/v2/v3 自愈全在「同一 URL」上打转救不回来。
+    掺入 build-version 后，每次发版所有脚本 URL 必变，残缺缓存一次失效。
+    取前 8 位 hex 保持与 verify_online 的 [0-9a-f]+ 验收正则兼容。
+    """
     idx = os.path.join(WORK, 'index.html')
     if not os.path.isfile(idx):
         raise RuntimeError('工作副本缺少 index.html，无法打脚本指纹')
     with io.open(idx, encoding='utf-8', newline='') as f:
         src = f.read()
+    # build-version 作为指纹盐：从工作副本 index.html 读（与 sync_sw_cache_name 同源）
+    _bm = re.search(r'<meta name="build-version" content="([^"]+)"', src)
+    build_salt = (_bm.group(1) if _bm else '').encode('utf-8')
     out = src
     marks = []
     for name in BUST_FILES:
@@ -143,7 +154,7 @@ def bust_asset_versions():
         if not os.path.isfile(p):
             raise RuntimeError('缺少 %s，无法打脚本指纹（拒绝部署）' % name)
         with open(p, 'rb') as f:
-            h = hashlib.md5(f.read()).hexdigest()[:8]
+            h = hashlib.md5(f.read() + build_salt).hexdigest()[:8]
         # 先吞掉可能残留的旧指纹，避免出现 app.js?v=aaa?v=bbb
         pat = re.compile(r'src="%s(\?v=[^"]*)?"' % re.escape(name))
         out, n = pat.subn(lambda _m, _n=name, _h=h: 'src="%s?v=%s"' % (_n, _h), out)

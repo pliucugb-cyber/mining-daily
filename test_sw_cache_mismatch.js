@@ -50,8 +50,15 @@ check('A11 多级定时器错开 v2 看门狗', block.indexOf('[6000,16000,32000
 check('A12 监听 controllerchange 复查（拼接写法避免与旧守卫切段冲突）',
   block.indexOf("addEventListener(_cc") >= 0 && block.indexOf("'controller'+'change'") >= 0);
 check('A13 v2 三次失败后兜底调用守卫', HTML.indexOf('if(window.mdSwCacheGuard)window.mdSwCacheGuard()') >= 0);
-check('A14 build 已 bump 到 20261126-0200', /name="build-version" content="20261126-0200"/.test(HTML));
+check('A14 build 已 bump 到 20261126-0300', /name="build-version" content="20261126-0300"/.test(HTML));
 check('A15 v1 的 __mdretry 方案无残留', HTML.indexOf('__mdretry') < 0);
+// 2026-11-26 二次事故：同 build「只清一次」在旧 SW 复活时把后续全挡死。
+check('A16 守卫支持 force 参数（v2 终极兜底跳过冷却）', block.indexOf('function guard(force)') >= 0);
+check('A17 同 build 最多清 3 次（防旧 SW 复活后无第二次机会）', block.indexOf('st.n>=3') >= 0);
+check('A18 20 秒冷却期（防 reload 死循环）', block.indexOf('(Date.now()-st.t)<20000') >= 0);
+check('A19 对外暴露 force 变体', HTML.indexOf('window.mdSwCacheGuardForce=function(){ guard(true); }') >= 0);
+check('A20 诊断含自愈状态字段 appRetry/guard',
+  HTML.indexOf('appRetry:') >= 0 && HTML.indexOf('guard:(window.__mdGuardState') >= 0);
 
 // ── 沙箱：把 location 换导航换成可观测桩，避免 jsdom 真导航 ────────────────
 function makeSandbox(opts) {
@@ -133,7 +140,10 @@ console.log('\n=== B. 错配场景：应触发彻底重置 ===');
     sb.guard(); await flush(); await flush();
     const after1 = sb.nav.length;
     sb.guard(); await flush(); await flush();
-    check('D1 同一 build 只自动重置一次', sb.nav.length === after1 && after1 === 1, 'nav=' + sb.nav.length);
+    check('D1 同一 build 冷却期内不重复重置', sb.nav.length === after1 && after1 === 1, 'nav=' + sb.nav.length);
+    // 2026-11-26 二次事故核心：冷却期内 force 必须能突破（旧 SW 复活时 v2 终极兜底靠它）
+    sb.w.mdSwCacheGuardForce(); await flush(); await flush();
+    check('D1b force 在冷却期内仍强制重置（救旧 SW 复活）', sb.nav.length === 2, 'nav=' + sb.nav.length);
     check('D2 注册 4 级错开定时器', sb.timers.length === 4, 'timers=' + sb.timers.length);
     check('D3 定时器延迟与 v2 错开（6/16/32/60s）',
       sb.timers.map(function (t) { return t.ms; }).join(',') === '6000,16000,32000,60000');
