@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" data-page-node-id="rjmGw0Oox9dxKhIA09RhtG">
 <meta http-equiv="Pragma" content="no-cache" data-page-node-id="yydkeub3p2AFAWEd0lDixM">
 <meta http-equiv="Expires" content="0" data-page-node-id="wEyqwq7ixZjycQgU9ZBN1s">
-<meta name="build-version" content="20261126-0200" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
+<meta name="build-version" content="20261126-0300" data-page-node-id="Or8MMXVChjPjb6rSx8wH8w">
 <script>try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}</script>
 <link rel="manifest" href="manifest.json" data-page-node-id="qX7SRne27JwXj7N8CGk4bO">
 <!-- 2026-09-12 PWA 安装加固：iOS「添加到主屏幕」后要独立全屏运行，靠这三个 apple-* 声明；
@@ -2400,7 +2400,7 @@ body:not(.ec-on) #eventCalendar{display:none}
           log('失败：'+((e&&e.message)||e));
           if(S.tries>=S.max){
             // fetch 也失败 ⇒ 多半被旧 SW 的坏缓存拦截；交给 v3 缓存错配守卫做彻底重置
-            try{ if(window.mdSwCacheGuard)window.mdSwCacheGuard(); }catch(e2){}
+            try{ if(window.mdSwCacheGuardForce)window.mdSwCacheGuardForce(); else if(window.mdSwCacheGuard)window.mdSwCacheGuard(); }catch(e2){}
             return false;
           }
           return new Promise(function(res){
@@ -2438,12 +2438,25 @@ body:not(.ec-on) #eventCalendar{display:none}
     function buildNow(){
       try{ var m=document.querySelector('meta[name="build-version"]'); return m?(m.getAttribute('content')||''):''; }catch(e){ return ''; }
     }
-    function guard(){
+    function guard(force){
       if(window.__mdBooted&&window.__mdAppEvaluated)return;   // app.js 正常 → 不打扰
       if(navigator.onLine===false)return;                     // 离线 → 等联网后再说
       var b=buildNow(); if(!b)return;
       var want='mining-daily-'+b;
-      try{ if(sessionStorage.getItem(GFLAG+'_'+b)==='1')return; }catch(e){}
+      // 防循环闸3（2026-11-26 二次升级）：旧版「同 build 只清一次」在「清完旧 SW 又复活」时
+      //   把后续所有重试全挡死（用户诊断：href 带 _mdsw 但 caches 又回 0100）。
+      //   改为计数+冷却：同一 build 最多 3 次、两次间隔 ≥20s；force（v2 终极兜底）跳过冷却但仍受上限。
+      // 状态迁移：旧的单次 flag '1' 视作 n=1（不是硬挡——否则旧 SW 复活时永远没有第二次机会）
+      var st={n:0,t:0};
+      try{
+        var raw=sessionStorage.getItem(GFLAG+'_s_'+b);
+        if(raw){ st=JSON.parse(raw); }
+        else if(sessionStorage.getItem(GFLAG+'_'+b)==='1'){ st={n:1,t:Date.now()}; }
+      }catch(e){}
+      if(!st||typeof st.n!=='number')st={n:0,t:0};
+      if(st.n>=3)return;                                       // 硬上限：同 build 最多 3 次
+      if(!force&&st.t&&(Date.now()-st.t)<20000)return;         // 冷却期 20s（force 跳过）
+      window.__mdGuardState=st;
       try{
         if(!(window.caches&&caches.keys))return;
         caches.keys().then(function(ks){
@@ -2452,7 +2465,12 @@ body:not(.ec-on) #eventCalendar{display:none}
           });
           if(!stale.length)return;   // 没有旧缓存 ⇒ 不是坏 SW 场景，交给 v2/版本探测
           try{ console.warn('[md] 检测到旧 SW 缓存 '+stale.join(',')+' 与当前 build '+b+' 不符，自动注销 SW+清缓存重载'); }catch(e){}
-          try{ sessionStorage.setItem(GFLAG+'_'+b,'1'); }catch(e){}
+          try{
+            var ns={n:(st.n||0)+1,t:Date.now()};
+            sessionStorage.setItem(GFLAG+'_s_'+b,JSON.stringify(ns));
+            sessionStorage.setItem(GFLAG+'_'+b,'1');
+            window.__mdGuardState=ns;
+          }catch(e){}
           var unreg=Promise.resolve();
           try{
             if(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations){
@@ -2474,7 +2492,8 @@ body:not(.ec-on) #eventCalendar{display:none}
         }).catch(function(){});
       }catch(e){}
     }
-    window.mdSwCacheGuard=guard;
+    window.mdSwCacheGuard=guard;             // 无参：守冷却期，定时器/controllerchange 用
+    window.mdSwCacheGuardForce=function(){ guard(true); };  // 强制：v2 三次失败终极兜底跳过冷却
     // 与 v2 看门狗(8/20/45s)错开，先给 v2 快速路径机会，再兜底
     [6000,16000,32000,60000].forEach(function(ms){ setTimeout(guard,ms); });
     // 事件名用拼接：避免 test_sw_cache_update.js 以首个 'controllerchange' 字面量切段时误取本守卫
@@ -2675,7 +2694,9 @@ body:not(.ec-on) #eventCalendar{display:none}
             qaRows:(window.QA_ROWS&&window.QA_ROWS.length)||0},
       regions:{hot:mdOk('hotListBody'),brief:mdOk('briefMain'),digest:mdOk('digestStrip')},
       sw:(navigator.serviceWorker&&navigator.serviceWorker.controller)?'受控':'未受控',
-      errors:(window.__mdErrors||[]).slice(0,8)
+      errors:(window.__mdErrors||[]).slice(0,8),
+      appRetry:(window.__mdAppRetryState?{tries:window.__mdAppRetryState.tries,busy:window.__mdAppRetryState.busy}:null),
+      guard:(window.__mdGuardState||null)
     });
   }
   function mdDiagLine(){
@@ -3404,12 +3425,12 @@ body.dark .co-star,.co-star:hover{color:#e11d48}
 </div>
 </div>
 <!-- 全库新闻数据（供问答检索条使用；文件缺失时自动降级为页面内检索，不影响日报本身） -->
-<script src="news-data.js?v=ce541b69" defer></script>
-<script src="conference-data.js?v=df93ec7f" defer></script>
-<script src="event-data.js?v=08dcdd6d" defer></script>
-<script src="lme-data.js?v=e92ba85a" defer></script>
-<script src="price-history.js?v=e6121e6c" defer></script>
-<script src="app.js?v=22ea1702" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
+<script src="news-data.js?v=bb52215a" defer></script>
+<script src="conference-data.js?v=cb60b7c2" defer></script>
+<script src="event-data.js?v=e681ae46" defer></script>
+<script src="lme-data.js?v=94493883" defer></script>
+<script src="price-history.js?v=69764b9c" defer></script>
+<script src="app.js?v=b320cf55" defer onerror="window.mdScriptFail&&window.mdScriptFail('app.js')"></script>
 
 
 <!-- ==================== 价格走势图弹层（移出 container，确保在所有层叠上下文之上）==================== -->
