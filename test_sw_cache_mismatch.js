@@ -50,7 +50,8 @@ check('A11 多级定时器错开 v2 看门狗', block.indexOf('[6000,16000,32000
 check('A12 监听 controllerchange 复查（拼接写法避免与旧守卫切段冲突）',
   block.indexOf("addEventListener(_cc") >= 0 && block.indexOf("'controller'+'change'") >= 0);
 check('A13 v2 三次失败后兜底调用守卫', HTML.indexOf('if(window.mdSwCacheGuard)window.mdSwCacheGuard()') >= 0);
-check('A14 build 已 bump 到 20261126-0300', /name="build-version" content="20261126-0300"/.test(HTML));
+const _bv=(HTML.match(/name="build-version" content="(\d{8}-\d{4})"/)||[])[1]||'';
+check('A14 build 已 bump 到 20261126-0300 或更新（当前 '+_bv+'）', _bv >= '20261126-0300');
 check('A15 v1 的 __mdretry 方案无残留', HTML.indexOf('__mdretry') < 0);
 // 2026-11-26 二次事故：同 build「只清一次」在旧 SW 复活时把后续全挡死。
 check('A16 守卫支持 force 参数（v2 终极兜底跳过冷却）', block.indexOf('function guard(force)') >= 0);

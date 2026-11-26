@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-25",
+ "updated_at": "2026-11-26",
  "companies": [
   {
    "name": "紫金矿业",
@@ -491,7 +491,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -1780,6 +1780,15 @@
    "rank": 27,
    "items": [
     {
+     "t": "巴里克国际首席执行官在僵局后的首次访问中会晤马里总理",
+     "d": "2026-11-25",
+     "u": "https://www.mining.com/web/barrick-international-ceo-meets-mali-pm-in-first-visit-since-standoff/",
+     "s": "2023年至2025年间，马里政府与巴里克就黄金矿区的利润分配和控制权问题发生冲突。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Barrick International CEO meets Mali PM in first visit since standoff"
+    },
+    {
      "t": "巴里克建议股东拒绝New York Stock and Bond LLC对普通股发出的低于市价的“迷你要约收购” | B股新闻",
      "d": "2026-11-20",
      "u": "https://www.stocktitan.net/news/B/barrick-recommends-shareholders-reject-new-york-stock-and-bond-llc-s-hlejdj4tlvzf.html",
@@ -1913,15 +1922,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Barrick Mining reaches deal with unions at Mali gold mine, easing strike threat"
-    },
-    {
-     "t": "Barrick ，道明考恩最佳股票精选中的Equinox",
-     "d": "2026-09-22",
-     "u": "https://www.mining.com/barrick-equinox-among-td-cowens-best-stock-picks/",
-     "s": "与此同时， Equinox在收购加拿大较小的生产商Orla Mining后，有可能“成为投资者的核心控股公司”。",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick, Equinox among TD Cowen’s best stock picks"
     }
    ]
   },
@@ -3292,6 +3292,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "嘉能可任命前首席执行官的侄子领导煤炭部门",
+     "d": "2026-11-25",
+     "u": "https://www.mining.com/glencore-taps-former-ceos-nephew-to-lead-coal-unit/",
+     "s": "嘉能可（伦敦证券交易所股票代码：GLEN）已任命前首席执行官兼公司最大股东伊万·格拉森伯格（Ivan Glasenberg）的侄子科林·格拉森伯格（Colin Glasenberg）……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Glencore taps former CEO’s nephew to lead coal unit"
+    },
+    {
      "t": "Empower EIT与嘉能可签署10年锂产品包销协议",
      "d": "2026-11-23",
      "u": "https://www.mining.com/empower-eit-inks-10-year-lithium-offtake-deal-with-glencore/",
@@ -3371,15 +3380,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Glencore shares to start trading in Australia as miner hopes to boost valuation"
-    },
-    {
-     "t": "嘉能可看到电气化趋势推动澳大利亚房源的强劲增长",
-     "d": "2026-10-09",
-     "u": "https://www.mining.com/web/glencore-sees-electrification-trend-driving-strong-uptake-for-australia-listing/",
-     "s": "它也是世界上最大的动力煤生产商之一，由于授权限制，前几年可能阻碍了煤炭的吸收，但Nagle表示……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Glencore sees electrification trend driving strong uptake for Australia listing"
     }
    ]
   },
@@ -3502,16 +3502,32 @@
    "origin": "rss",
    "home": "https://www.first-quantum.com/rss",
    "news_url": "https://www.first-quantum.com/rss",
-   "method": "html",
+   "method": "rss",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 99,
    "items": [
+    {
+     "t": "First Quantum报告坎桑希发生死亡事故",
+     "d": "2026-11-24",
+     "u": "https://www.first-quantum.com/news/first-quantum-reports-fatality-at-kansanshi-2/",
+     "s": "安大略省多伦多（2026年11月24日）– 第一量子矿业有限公司",
+     "k": "news",
+     "t_en": "First Quantum reports fatality at Kansanshi"
+    },
+    {
+     "t": "Cobre Panamá最新消息：正式讨论新协议的启动",
+     "d": "2026-11-17",
+     "u": "https://www.first-quantum.com/news/cobre-panama-update-commencement-of-formal-discussions-for-a-new-agreement/",
+     "s": "安大略省多伦多（2026年11月17日）——第一量子矿业有限公司",
+     "k": "news",
+     "t_en": "Cobre Panamá Update: Commencement of formal discussions for a new agreement"
+    },
     {
      "t": "第一批Quantum Minerals公布2026年第三季度业绩",
      "d": "2026-10-28",
      "u": "https://www.first-quantum.com/news/first-quantum-minerals-reports-third-quarter-2026-results/",
-     "s": "安大略省多伦多（2026年10月28日）– 第一量子矿业有限公司",
+     "s": "安大略省多伦多（ 2026年10月28日） – First Quantum Minerals Ltd.",
      "k": "news",
      "t_en": "First Quantum Minerals Reports Third Quarter 2026 Results"
     },
@@ -3527,7 +3543,7 @@
      "t": "First Quantum公布2026年第三季度业绩",
      "d": "2026-09-29",
      "u": "https://www.first-quantum.com/news/first-quantum-provides-notice-of-third-quarter-2026-results/",
-     "s": "安大略省多伦多（2026年9月29日）——First Quantum Minerals Ltd.",
+     "s": "安大略省多伦多（ 2026年9月29日） - First Quantum Minerals Ltd.",
      "k": "news",
      "t_en": "First Quantum Provides Notice of Third Quarter 2026 Results"
     },
@@ -3543,7 +3559,7 @@
      "t": "First Quantum发布2026年第二季度业绩公告",
      "d": "2026-06-30",
      "u": "https://www.first-quantum.com/news/first-quantum-provides-notice-of-second-quarter-2026-results/",
-     "s": "安大略省多伦多（ 2026年年年年6月月月月30日日日日） - First Quantum Minerals Ltd.",
+     "s": "安大略省多伦多（ 2026年6月30日） - First Quantum Minerals Ltd.",
      "k": "news",
      "t_en": "First Quantum Provides Notice of Second Quarter 2026 Results"
     },
@@ -3554,22 +3570,6 @@
      "s": "Toronto, Ontario (May 14, 2026) - First Quantum Minerals has published its sustainability reports for 2025.",
      "k": "news",
      "t_en": "First Quantum Publishes 2025 Sustainability Reports and Commits to Global Industry Standard on Tailings Management"
-    },
-    {
-     "t": "La Granja的第一份Quantum文件NI 43-101技术报告",
-     "d": "2026-05-11",
-     "u": "https://www.first-quantum.com/news/first-quantum-files-ni-43-101-technical-report-for-la-granja/",
-     "s": "The Project currently operates under an approved Thirteenth Amendment to the Semi‑Detailed Environmental Impact Study, which governs advanced explorat…",
-     "k": "news",
-     "t_en": "First Quantum Files NI 43-101 Technical Report for La Granja"
-    },
-    {
-     "t": "首届Quantum Minerals公布董事选举投票结果",
-     "d": "2026-05-07",
-     "u": "https://www.first-quantum.com/news/first-quantum-minerals-announces-voting-results-for-the-election-of-directors-may-2026/",
-     "s": "安大略省多伦多（ 2026年年年年5月月月月7日日日日） - First Quantum Minerals Ltd.",
-     "k": "news",
-     "t_en": "First Quantum Minerals Announces Voting Results for the Election of Directors"
     }
    ]
   }
