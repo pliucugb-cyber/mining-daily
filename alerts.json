@@ -1,5 +1,5 @@
 {
- "date": "2026-11-25",
+ "date": "2026-11-26",
  "has_history": true,
  "history_days": 14,
  "alerts": [
@@ -30,9 +30,9 @@
   {
    "commodity": "锡",
    "market": "LME 03",
-   "move": "-6.28%",
+   "move": "-5.29%",
    "severity": "high",
-   "detail": "LME 锡（LME 03）最新收报 39,410.00 美元/吨，单日 -6.28%（数据日期 11-24）。",
+   "detail": "LME 锡（LME 03）最新收报 37,485.00 美元/吨，单日 -5.29%（数据日期 11-25）。",
    "type": "price"
   },
   {
@@ -44,14 +44,6 @@
    "type": "price"
   },
   {
-   "commodity": "铜",
-   "market": "LME 03",
-   "move": "-4.74%",
-   "severity": "medium",
-   "detail": "LME 铜（LME 03）最新收报 11,879.00 美元/吨，单日 -4.74%（数据日期 11-24）。",
-   "type": "price"
-  },
-  {
    "commodity": "沪铝",
    "market": "SHFE 主连",
    "move": "-3.69%",
@@ -60,6 +52,6 @@
    "type": "price"
   }
  ],
- "summary": "今日异动 7 项：沪锡 -7.88%（SHFE 主连）；碳酸锂 -7.11%（GFEX 主连）；白银 -6.29%（上金所 Ag(T+D)）；锡 -6.28%（LME 03）；沪铜 -4.83%（SHFE 主连）；铜 -4.74%（LME 03）；沪铝 -3.69%（SHFE 主连）。",
+ "summary": "今日异动 6 项：沪锡 -7.88%（SHFE 主连）；碳酸锂 -7.11%（GFEX 主连）；白银 -6.29%（上金所 Ag(T+D)）；锡 -5.29%（LME 03）；沪铜 -4.83%（SHFE 主连）；沪铝 -3.69%（SHFE 主连）。",
  "max_severity": "high"
 }
