@@ -1,8 +1,44 @@
 {
   "month": "2026-11",
-  "updated_at": "2026-11-25T19:40:00+08:00",
-  "count": 19,
+  "updated_at": "2026-11-27T10:19:23+08:00",
+  "count": 21,
   "news": [
+    {
+      "id": "610d4f231428",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-11-27/1225690376.PDF",
+      "title": "关于向H股限制性股份（新股）计划合资格参与者首批授予股份的公告",
+      "source": "巨潮资讯网·天齐锂业",
+      "orig_date": "11-27",
+      "orig_date_full": "2026-11-27",
+      "report_date": "2026-11-27",
+      "category": "并购与投资",
+      "company": "天齐锂业",
+      "sec_code": "002466",
+      "ma_type": "投资/资本运作",
+      "summary": "天齐锂业（002466）披露《关于向H股限制性股份（新股）计划合资格参与者首批授予股份的公告》，涉及投资/资本运作。",
+      "tags": [
+        "并购"
+      ]
+    },
+    {
+      "id": "34fc5e49ba13",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-11-27/1225691089.PDF",
+      "title": "厦门钨业关于注销部分2023年度向特定对象发行股票募集资金专项账户的公告",
+      "source": "巨潮资讯网·厦门钨业",
+      "orig_date": "11-27",
+      "orig_date_full": "2026-11-27",
+      "report_date": "2026-11-27",
+      "category": "并购与投资",
+      "company": "厦门钨业",
+      "sec_code": "600549",
+      "ma_type": "投资/资本运作",
+      "summary": "厦门钨业（600549）披露《厦门钨业关于注销部分2023年度向特定对象发行股票募集资金专项账户的公告》，涉及投资/资本运作。",
+      "tags": [
+        "并购",
+        "金",
+        "钨"
+      ]
+    },
     {
       "id": "8cb450bc44f7",
       "url": "https://static.cninfo.com.cn/finalpage/2026-11-25/1225686988.PDF",
