@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-11-27T10:19:29+08:00",
+  "updated_at": "2026-11-28T08:41:13+08:00",
   "schema_version": "1.1",
-  "total": 1820,
+  "total": 1844,
   "months": [
     {
       "month": "2026-08",
@@ -26,10 +26,10 @@
     },
     {
       "month": "2026-11",
-      "count": 455,
+      "count": 479,
       "date_from": "2026-11-01",
-      "date_to": "2026-11-27",
-      "days_covered": 27
+      "date_to": "2026-11-28",
+      "days_covered": 28
     }
   ]
 }

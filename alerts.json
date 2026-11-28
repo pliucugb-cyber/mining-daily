@@ -1,8 +1,57 @@
 {
- "date": "2026-11-27",
+ "date": "2026-11-28",
  "has_history": true,
- "history_days": 14,
- "alerts": [],
- "summary": "15 个品种单日涨跌幅均未超过 3%，无显著异动。",
- "max_severity": "none"
+ "history_days": 15,
+ "alerts": [
+  {
+   "commodity": "白银",
+   "market": "上金所 Ag(T+D)",
+   "move": "+8.68%",
+   "severity": "high",
+   "detail": "白银（上金所 Ag(T+D)）最新收报 10,483.00，单日 +8.68%（数据日期 2026-11-27）。",
+   "type": "price"
+  },
+  {
+   "commodity": "锡",
+   "market": "LME 03",
+   "move": "+8.65%",
+   "severity": "high",
+   "detail": "LME 锡（LME 03）最新收报 41,170.00 美元/吨，单日 +8.65%（数据日期 11-27）。",
+   "type": "price"
+  },
+  {
+   "commodity": "沪锡",
+   "market": "SHFE 主连",
+   "move": "+7.32%",
+   "severity": "high",
+   "detail": "沪锡（SHFE 主连）最新收报 311,880.00，单日 +7.32%（数据日期 2026-11-27）。",
+   "type": "price"
+  },
+  {
+   "commodity": "沪铜",
+   "market": "SHFE 主连",
+   "move": "+4.88%",
+   "severity": "medium",
+   "detail": "沪铜（SHFE 主连）最新收报 93,660.00，单日 +4.88%（数据日期 2026-11-27）。",
+   "type": "price"
+  },
+  {
+   "commodity": "碳酸锂",
+   "market": "GFEX 主连",
+   "move": "+3.31%",
+   "severity": "medium",
+   "detail": "碳酸锂（GFEX 主连）最新收报 84,220.00，单日 +3.31%（数据日期 2026-11-27）。",
+   "type": "price"
+  },
+  {
+   "commodity": "铜",
+   "market": "LME 03",
+   "move": "+3.29%",
+   "severity": "medium",
+   "detail": "LME 铜（LME 03）最新收报 12,262.00 美元/吨，单日 +3.29%（数据日期 11-27）。",
+   "type": "price"
+  }
+ ],
+ "summary": "今日异动 6 项：白银 +8.68%（上金所 Ag(T+D)）；锡 +8.65%（LME 03）；沪锡 +7.32%（SHFE 主连）；沪铜 +4.88%（SHFE 主连）；碳酸锂 +3.31%（GFEX 主连）；铜 +3.29%（LME 03）。",
+ "max_severity": "high"
 }
