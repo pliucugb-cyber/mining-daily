@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-27",
+ "updated_at": "2026-11-28",
  "companies": [
   {
    "name": "紫金矿业",
@@ -498,7 +498,7 @@
    "origin": "official",
    "home": "https://www.chalco.com.cn/",
    "news_url": "https://www.chalco.com.cn/",
-   "method": "html",
+   "method": "chrome",
    "unreach": "spa",
    "stale": true,
    "rank": 2,
@@ -596,9 +596,16 @@
    "news_url": "https://www.nanshan.com.cn/news.html",
    "method": "html",
    "unreach": "",
-   "stale": true,
+   "stale": false,
    "rank": 14,
    "items": [
+    {
+     "t": "南山智尚亮相上海国际功能性纺织品展览会",
+     "d": "2026-11-23",
+     "u": "https://www.nanshan.com.cn/News_1/512.html",
+     "s": "作为第八届功能性纺织品精品专业展，2026上海国际功能性纺织品展览会（FTS）集结250多家海内外优质展商，集中展示高性能功能面料、可持续环保材料、功能纱线及辅料产品，覆盖户外、运动休闲、防护工装、医疗纺织等应用领域。",
+     "k": "news"
+    },
     {
      "t": "烟台南山庄园葡萄酒有限公司 1.5吨天然气蒸汽锅炉项目竣工环保验收公示",
      "d": "2026-05-18",
@@ -1794,6 +1801,15 @@
    "rank": 27,
    "items": [
     {
+     "t": "巴里克让矿场经理在目标方面拥有更多发言权",
+     "d": "2026-11-27",
+     "u": "https://www.mining.com/barrick-gives-mine-managers-more-say-on-targets/",
+     "s": "经过多年来屡次未能达到预期，导致投资者信心受损，巴里克已赋予矿山经理更多责任，让他们负责设定和实现生产目标……",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Barrick gives mine managers more say on targets"
+    },
+    {
      "t": "巴里克国际首席执行官在僵局后的首次访问中会晤马里总理",
      "d": "2026-11-25",
      "u": "https://www.mining.com/web/barrick-international-ceo-meets-mali-pm-in-first-visit-since-standoff/",
@@ -1927,15 +1943,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Barrick Mining flags potential delay for North American IPO"
-    },
-    {
-     "t": "巴里克矿业与马里金矿工会达成协议，缓解罢工威胁",
-     "d": "2026-09-27",
-     "u": "https://www.mining.com/web/barrick-mining-reaches-deal-with-unions-at-mali-gold-mine-easing-strike-threat/",
-     "s": "发言人说： “我们确认我们已与LG工会签署了新的集体谈判协议。”",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Barrick Mining reaches deal with unions at Mali gold mine, easing strike threat"
     }
    ]
   },
@@ -2897,6 +2904,15 @@
    "rank": 99,
    "items": [
     {
+     "t": "力拓将首批锡曼杜铁矿石货物运往欧洲",
+     "d": "2026-11-27",
+     "u": "https://www.mining.com/rio-tinto-ships-first-simandou-iron-ore-cargo-to-europe/",
+     "s": "一艘载有79,081吨铁矿石粉的船舶于11月从西芒杜的莫雷巴亚港启航。",
+     "k": "news",
+     "src": "mining",
+     "t_en": "Rio Tinto ships first Simandou iron ore cargo to Europe"
+    },
+    {
      "t": "Nemaska暂停运营为力拓的魁北克锂项目蒙上阴影",
      "d": "2026-11-12",
      "u": "https://www.mining.com/nemaska-pause-clouds-quebec-lithium-plans/",
@@ -3012,15 +3028,6 @@
      "k": "news",
      "src": "mining",
      "t_en": "Rio Tinto, Founders Factory back five mining startups"
-    },
-    {
-     "t": "力拓确保贝尔湾铝冶炼厂运营至2031年",
-     "d": "2026-09-30",
-     "u": "https://www.mining.com/web/rio-tinto-secures-bell-bay-aluminum-smelter-operations-till-2031/",
-     "s": "全球矿业公司力拓(Rio Tinto) 周四表示，已与澳大利亚和塔斯马尼亚政府达成协议，以确保正在进行的歌剧……",
-     "k": "news",
-     "src": "mining",
-     "t_en": "Rio Tinto secures Bell Bay aluminum smelter operations till 2031"
     }
    ]
   },
@@ -3607,6 +3614,6 @@
   "hk": 2,
   "foreign": 13,
   "total": 43,
-  "items": 363
+  "items": 364
  }
 }
